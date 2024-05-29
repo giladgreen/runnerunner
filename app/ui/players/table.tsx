@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { UpdatePlayer, DeletePlayer } from '@/app/ui/players/buttons';
-import PlayerStatus from '@/app/ui/players/status';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredPlayers } from '@/app/lib/data';
 
