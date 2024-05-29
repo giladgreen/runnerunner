@@ -23,6 +23,11 @@ export default async function Page({ params }: { params: { id: string } }) {
                         href: `/dashboard/players/${id}/edit`,
                         active: true,
                     },
+                    {
+                        label: player.name,
+                        img: player.image_url,
+                        active: true
+                    }
                 ]}
             />
             <Form player={player} />

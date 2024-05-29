@@ -1,11 +1,13 @@
 import { clsx } from 'clsx';
 import Link from 'next/link';
 import { lusitana } from '@/app/ui/fonts';
+import Image from "next/image";
 
 interface Breadcrumb {
   label: string;
-  href: string;
+  href?: string;
   active?: boolean;
+  img?: string;
 }
 
 export default function Breadcrumbs({
@@ -18,13 +20,20 @@ export default function Breadcrumbs({
       <ol className={clsx(lusitana.className, 'flex text-xl md:text-2xl')}>
         {breadcrumbs.map((breadcrumb, index) => (
           <li
-            key={breadcrumb.href}
+            key={breadcrumb.href ?? ''}
             aria-current={breadcrumb.active}
             className={clsx(
               breadcrumb.active ? 'text-gray-900' : 'text-gray-500',
             )}
           >
-            <Link href={breadcrumb.href}>{breadcrumb.label}</Link>
+              {breadcrumb.label && !breadcrumb.img && <Link href={breadcrumb.href ?? ''}>{breadcrumb.label}</Link>}
+              {breadcrumb.img &&  <div style={{display:'flex'}}> <Image
+                  src={breadcrumb.img}
+                  className="mr-2 rounded-full zoom-on-hover"
+                  width={28}
+                  height={28}
+                  alt={`profile picture`}
+              />{breadcrumb.label}</div>}
             {index < breadcrumbs.length - 1 ? (
               <span className="mx-3 inline-block">/</span>
             ) : null}

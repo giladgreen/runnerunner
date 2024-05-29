@@ -6,6 +6,7 @@ import { PlayerForm } from '@/app/lib/definitions';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import {useFormState} from "react-dom";
+import Image from "next/image";
 
 export default function EditPlayerForm({
   player,
@@ -103,6 +104,7 @@ export default function EditPlayerForm({
           </div>
 
         </div>
+
         <div className="mt-6 flex justify-end gap-4">
           <Link
               href="/dashboard/players"
