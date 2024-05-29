@@ -1,6 +1,6 @@
 const { db } = require('@vercel/postgres');
 const {
-  invoices,
+  players,
   customers,
   revenue,
   users,
@@ -46,42 +46,43 @@ async function seedUsers(client) {
   }
 }
 
-async function seedInvoices(client) {
+async function seedPlayers(client) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
-    // Create the "invoices" table if it doesn't exist
+    // Create the "players" table if it doesn't exist
     const createTable = await client.sql`
-    CREATE TABLE IF NOT EXISTS invoices (
+    CREATE TABLE IF NOT EXISTS players (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    customer_id UUID NOT NULL,
-    amount INT NOT NULL,
-    status VARCHAR(255) NOT NULL,
-    date DATE NOT NULL
+    name VARCHAR(255) NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    balance INT NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    updated_at DATE NOT NULL
   );
 `;
 
-    console.log(`Created "invoices" table`);
+    console.log(`Created "players" table`);
 
-    // Insert data into the "invoices" table
-    const insertedInvoices = await Promise.all(
-      invoices.map(
-        (invoice) => client.sql`
-        INSERT INTO invoices (customer_id, amount, status, date)
-        VALUES (${invoice.customer_id}, ${invoice.amount}, ${invoice.status}, ${invoice.date})
+    // Insert data into the "players" table
+    const insertedPlayers = await Promise.all(
+      players.map(
+        (player) => client.sql`
+        INSERT INTO players (name, phone_number, balance, updated_at, image_url)
+        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.updated_at}, ${player.image_url})
         ON CONFLICT (id) DO NOTHING;
       `,
       ),
     );
 
-    console.log(`Seeded ${insertedInvoices.length} invoices`);
+    console.log(`Seeded ${insertedPlayers.length} players`);
 
     return {
       createTable,
-      invoices: insertedInvoices,
+      players: insertedPlayers,
     };
   } catch (error) {
-    console.error('Error seeding invoices:', error);
+    console.error('Error seeding players:', error);
     throw error;
   }
 }
@@ -163,10 +164,10 @@ async function seedRevenue(client) {
 async function main() {
   const client = await db.connect();
 
-  await seedUsers(client);
-  await seedCustomers(client);
-  await seedInvoices(client);
-  await seedRevenue(client);
+   await seedUsers(client);
+  // await seedCustomers(client);
+  await seedPlayers(client);
+  // await seedRevenue(client);
 
   await client.end();
 }

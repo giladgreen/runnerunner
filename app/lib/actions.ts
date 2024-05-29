@@ -6,121 +6,134 @@ import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 
+
 const FormSchema = z.object({
     id: z.string(),
-    customerId: z.string({
-        invalid_type_error: 'Please select a customer.',
-    }),
-    amount: z.coerce
-        .number()
-        .gt(0, { message: 'Please enter an amount greater than 0.' }),
-    status: z.enum(['pending', 'paid'], {
-        invalid_type_error: 'Please select an invoice status.',
-    }),
-    date: z.string(),
+    image_url: z.string(),
+    name: z.string().min(1, 'name can not be left empty'),
+    balance: z.coerce.number(),
+    phone_number: z.string().min(1, 'name can not be left empty'),
+    updated_at: z.string(),
 });
-const CreateInvoice = FormSchema.omit({ id: true, date: true });
-const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+const CreatePlayer = FormSchema.omit({ id: true, updated_at: true, image_url: true});
+const UpdatePlayer = FormSchema.omit({ id: true, updated_at: true, image_url: true });
 export type State = {
     errors?: {
-        customerId?: string[];
-        amount?: string[];
-        status?: string[];
+        name?: string[];
+        balance?: string[];
+        phone_number?: string[];
     };
     message?: string | null;
 };
 
-export async function createInvoice(prevState: State, formData: FormData) {
-    const validatedFields = CreateInvoice.safeParse({
-        customerId: formData.get('customerId'),
-        amount: formData.get('amount'),
-        status: formData.get('status'),
+async function validateAdmin(){
+
+}
+export async function createPlayer(prevState: State, formData: FormData) {
+    await validateAdmin();
+    const validatedFields = CreatePlayer.safeParse({
+        name: formData.get('name'),
+        balance: formData.get('balance'),
+        phone_number: formData.get('phone_number'),
     });
+
     if (!validatedFields.success) {
         return {
             errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Create Invoice.',
+            message: 'Missing Fields. Failed to Create Player.',
         };
     }
-    const { customerId, amount, status } = validatedFields.data;
 
-    const amountInCents = amount * 100;
-    const date = new Date().toISOString().split('T')[0];
+    const {  name, balance, phone_number } = validatedFields.data;
+
+
+    const updated_at = new Date().toISOString().split('T')[0];
+
     try {
         await sql`
-      INSERT INTO invoices (customer_id, amount, status, date)
-      VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+      INSERT INTO players (name, balance, phone_number, updated_at, image_url)
+      VALUES (${name}, ${balance}, ${phone_number}, ${updated_at}, '/players/default.png')
     `;
     } catch (error) {
+        console.log('## createPlayer error', error)
         return {
-            message: 'Database Error: Failed to Create Invoice.',
+            message: 'Database Error: Failed to Create Player.',
         };
     }
-    revalidatePath('/dashboard/invoices');
-    redirect('/dashboard/invoices');
+    revalidatePath('/dashboard/players');
+    redirect('/dashboard/players');
 
 
 }
 
 
-export async function updateInvoice(
+export async function updatePlayer(
     id: string,
     prevState: State,
     formData: FormData,
 ) {
-    const validatedFields = UpdateInvoice.safeParse({
-        customerId: formData.get('customerId'),
-        amount: formData.get('amount'),
-        status: formData.get('status'),
+    await validateAdmin();
+    console.log('## updatePlayer id', id)
+    console.log('## updatePlayer formData', formData)
+
+    const validatedFields = UpdatePlayer.safeParse({
+        name: formData.get('name'),
+        balance: formData.get('balance'),
+        phone_number: formData.get('phone_number'),
     });
 
     if (!validatedFields.success) {
+        console.log('## updatePlayer error', validatedFields.error.flatten().fieldErrors);
         return {
             errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Update Invoice.',
+            message: 'Missing Fields. Failed to Update Player.',
         };
     }
 
-    const { customerId, amount, status } = validatedFields.data;
-    const amountInCents = amount * 100;
+    const { name, balance, phone_number } = validatedFields.data;
+    const date = new Date().toISOString().split('T')[0];
+
+    console.log('## updatePlayer id', id)
 
     try {
         await sql`
-      UPDATE invoices
-      SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+      UPDATE players
+      SET name = ${name}, balance = ${balance}, phone_number = ${phone_number}, updated_at=${date}
       WHERE id = ${id}
     `;
     } catch (error) {
-        return { message: 'Database Error: Failed to Update Invoice.' };
+        console.log('## updatePlayer error', error)
+        return { message: 'Database Error: Failed to Update Player.' };
     }
 
-    revalidatePath('/dashboard/invoices');
-    redirect('/dashboard/invoices');
+    revalidatePath('/dashboard/players');
+    redirect('/dashboard/players');
 }
 
-export async function deleteInvoice(id: string) {
+export async function deletePlayer(id: string) {
+    await validateAdmin();
     try {
-        await sql`DELETE FROM invoices WHERE id = ${id}`;
-        revalidatePath('/dashboard/invoices');
-        return { message: 'Deleted Invoice.' };
+        await sql`DELETE FROM players WHERE id = ${id}`;
+        revalidatePath('/dashboard/players');
+        return { message: 'Deleted Player.' };
     } catch (error) {
-        return { message: 'Database Error: Failed to Delete Invoice.' };
+        return { message: 'Database Error: Failed to Delete Player.' };
     }
 }
 
 export async function authenticate(
     prevState: string | undefined,
     formData: FormData,
-) {
+): Promise<string | undefined> {
     try {
         await signIn('credentials', formData);
     } catch (error) {
         if (error instanceof AuthError) {
             switch (error.type) {
                 case 'CredentialsSignin':
-                    return 'Invalid credentials.';
+                    return 'name or password is incorrect';
                 default:
-                    return 'Something went wrong.';
+                    return 'An error occurred.';
             }
         }
         throw error;

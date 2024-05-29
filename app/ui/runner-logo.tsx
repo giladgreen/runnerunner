@@ -4,14 +4,9 @@ import Image from "next/image";
 export default function RunnerLogo() {
   return (
     <div
-      className={`${lusitana.className} flex flex-row items-center leading-none text-white`}
+      className={`top-header`}
     >
-      <Image
-          src="/runner.png"
-          width={798}
-          height={738}
-          alt="icon"
-      />
+      Runner Runner
     </div>
   );
 }

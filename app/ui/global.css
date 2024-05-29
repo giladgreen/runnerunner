@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/*body{*/
+/*  direction: rtl;*/
+/*}*/
+
+.top-header {
+  color: white;
+  /*direction: ltr;*/
+  font-size: xxx-large;
+  font-family: Abraham;
+}
+.homepage-top-header{
+  padding-left: 40px;
+}
+.zoom-on-hover:hover {
+  transform: scale(1.6);
+  transition: transform 0.5s;
+
+}
+
+.login-top-header{
+  padding-left: 20px;
+}
+
+.homepage-welcome{
+  margin-bottom: 90px;
+}
 input[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;

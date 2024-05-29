@@ -3,166 +3,103 @@
 const users = [
   {
     id: '410544b2-4001-4271-9855-fec4b6a6442a',
-    name: 'User',
-    email: 'user@nextmail.com',
-    password: '123456',
+    name: 'Gilad Green',
+    email: 'green.gilad@gmail.com',
+    password: 'kush1984',
   },
 ];
 
-const customers = [
-  {
-    id: '3958dc9e-712f-4377-85e9-fec4b6a6442a',
-    name: 'Delba de Oliveira',
-    email: 'delba@oliveira.com',
-    image_url: '/customers/delba-de-oliveira.png',
-  },
-  {
-    id: '3958dc9e-742f-4377-85e9-fec4b6a6442a',
-    name: 'Lee Robinson',
-    email: 'lee@robinson.com',
-    image_url: '/customers/lee-robinson.png',
-  },
-  {
-    id: '3958dc9e-737f-4377-85e9-fec4b6a6442a',
-    name: 'Hector Simpson',
-    email: 'hector@simpson.com',
-    image_url: '/customers/hector-simpson.png',
-  },
-  {
-    id: '50ca3e18-62cd-11ee-8c99-0242ac120002',
-    name: 'Steven Tey',
-    email: 'steven@tey.com',
-    image_url: '/customers/steven-tey.png',
-  },
-  {
-    id: '3958dc9e-787f-4377-85e9-fec4b6a6442a',
-    name: 'Steph Dietz',
-    email: 'steph@dietz.com',
-    image_url: '/customers/steph-dietz.png',
-  },
-  {
-    id: '76d65c26-f784-44a2-ac19-586678f7c2f2',
-    name: 'Michael Novotny',
-    email: 'michael@novotny.com',
-    image_url: '/customers/michael-novotny.png',
-  },
-  {
-    id: 'd6e15727-9fe1-4961-8c5b-ea44a9bd81aa',
-    name: 'Evil Rabbit',
-    email: 'evil@rabbit.com',
-    image_url: '/customers/evil-rabbit.png',
-  },
-  {
-    id: '126eed9c-c90c-4ef6-a4a8-fcf7408d3c66',
-    name: 'Emil Kowalski',
-    email: 'emil@kowalski.com',
-    image_url: '/customers/emil-kowalski.png',
-  },
-  {
-    id: 'CC27C14A-0ACF-4F4A-A6C9-D45682C144B9',
-    name: 'Amy Burns',
-    email: 'amy@burns.com',
-    image_url: '/customers/amy-burns.png',
-  },
-  {
-    id: '13D07535-C59E-4157-A011-F8D2EF4E0CBB',
-    name: 'Balazs Orban',
-    email: 'balazs@orban.com',
-    image_url: '/customers/balazs-orban.png',
-  },
-];
 
-const invoices = [
+const players = [
   {
-    customer_id: customers[0].id,
-    amount: 15795,
-    status: 'pending',
-    date: '2022-12-06',
+    name: 'Amy Burnz',
+    balance: 3050,
+    phone_number: '0565-4567890',
+    updated_at: '2023-10-29',
+    image_url: '/players/amy-burns.png',
+
   },
   {
-    customer_id: customers[1].id,
-    amount: 20348,
-    status: 'pending',
-    date: '2022-11-14',
+    name: 'Delba De-Oliveira',
+    balance: 1200,
+    phone_number: '0565-4567777',
+    updated_at: '2022-11-29',
+    image_url: '/players/delba-de-oliveira.png',
   },
   {
-    customer_id: customers[4].id,
-    amount: 3040,
-    status: 'paid',
-    date: '2022-10-29',
+    name: 'steven-tey',
+    balance: 4400,
+    phone_number: '0565-4567123',
+    updated_at: '2022-10-12',
+    image_url: '/players/steven-tey.png',
+  },
+{
+    name: 'balazs-orban',
+    balance: 200,
+  phone_number: '0565-4567256',
+    updated_at: '2022-10-29',
+    image_url: '/players/balazs-orban.png',
+
   },
   {
-    customer_id: customers[3].id,
-    amount: 44800,
-    status: 'paid',
-    date: '2023-09-10',
+    name: 'evil rabbit',
+    balance: 450,
+    phone_number: '0565-4567890',
+    updated_at: '2022-10-29',
+    image_url: '/players/evil-rabbit.png',
   },
   {
-    customer_id: customers[5].id,
-    amount: 34577,
-    status: 'pending',
-    date: '2023-08-05',
+    name: 'guillermo rauch',
+    balance: -100,
+    phone_number: '0566-4567890',
+    updated_at: '2021-10-29',
+    image_url: '/players/guillermo-rauch.png',
+  },
+{
+    name: 'hector simpson',
+    balance: 1250,
+    phone_number: '0550-4567890',
+    updated_at: '2023-10-29',
+    image_url: '/players/hector-simpson.png',
+
   },
   {
-    customer_id: customers[7].id,
-    amount: 54246,
-    status: 'pending',
-    date: '2023-07-16',
+    name: 'jared palmer',
+    balance: 7800,
+    phone_number: '0583-4567777',
+    updated_at: '2022-11-29',
+    image_url: '/players/jared-palmer.png',
   },
   {
-    customer_id: customers[6].id,
-    amount: 666,
-    status: 'pending',
-    date: '2023-06-27',
+    name: 'lee-robinson',
+    balance: 2500,
+    phone_number: '0586-4567123',
+    updated_at: '2022-10-12',
+    image_url: '/players/lee-robinson.png',
+  },
+{
+    name: 'michael novotny',
+    balance: 0,
+  phone_number: '0587-4567256',
+    updated_at: '2022-10-29',
+    image_url: '/players/michael-novotny.png',
+
   },
   {
-    customer_id: customers[3].id,
-    amount: 32545,
-    status: 'paid',
-    date: '2023-06-09',
+    name: 'steph dietz',
+    balance: 780,
+    phone_number: '0587-2567890',
+    updated_at: '2022-10-29',
+    image_url: '/players/steph-dietz.png',
   },
   {
-    customer_id: customers[4].id,
-    amount: 1250,
-    status: 'paid',
-    date: '2023-06-17',
+    name: 'Gilad Green',
+    balance: 5500,
+    phone_number: '0587-869910',
+    updated_at: '2024-05-30',
+    image_url: '/players/default.png',
   },
-  {
-    customer_id: customers[5].id,
-    amount: 8546,
-    status: 'paid',
-    date: '2023-06-07',
-  },
-  {
-    customer_id: customers[1].id,
-    amount: 500,
-    status: 'paid',
-    date: '2023-08-19',
-  },
-  {
-    customer_id: customers[5].id,
-    amount: 8945,
-    status: 'paid',
-    date: '2023-06-03',
-  },
-  {
-    customer_id: customers[2].id,
-    amount: 8945,
-    status: 'paid',
-    date: '2023-06-18',
-  },
-  {
-    customer_id: customers[0].id,
-    amount: 8945,
-    status: 'paid',
-    date: '2023-10-04',
-  },
-  {
-    customer_id: customers[2].id,
-    amount: 1000,
-    status: 'paid',
-    date: '2022-06-05',
-  },
+
 ];
 
 const revenue = [
@@ -182,7 +119,7 @@ const revenue = [
 
 module.exports = {
   users,
-  customers,
-  invoices,
+  customers:[],
+  players,
   revenue,
 };
