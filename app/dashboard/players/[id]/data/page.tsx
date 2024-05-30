@@ -2,7 +2,7 @@ import Breadcrumbs from '@/app/ui/players/breadcrumbs';
 import { fetchPlayerById } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 import {formatCurrency, formatDateToLocal, getTime} from "@/app/lib/utils";
-import Form from "@/app/ui/player/create-form";
+import Form from "@/app/ui/players/create-log-form";
 
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
