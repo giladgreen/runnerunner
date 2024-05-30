@@ -23,8 +23,20 @@ export type MVPPlayer = {
   balance: number;
 };
 
+export type DebtPlayer = {
+  id: string;
+  name: string;
+  phone_number: string;
+  image_url: string;
+  updated_at: string;
+  balance: number;
+};
+
 // The database returns a number for amount, but we later format it to a string with the formatCurrency function
 export type MVPPlayerRaw = Omit<MVPPlayer, 'balance'> & {
+  balance: number;
+};
+export type DebtPlayerRaw = Omit<DebtPlayer, 'balance'> & {
   balance: number;
 };
 

@@ -2,6 +2,7 @@ import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
 
 import {
+  DebtPlayerRaw,
   MVPPlayerRaw,
   PlayerForm,
   PlayersTable,
@@ -46,29 +47,53 @@ export async function fetchMVPPlayers() {
   }
 }
 
+export async function fetchDebtPlayers() {
+  noStore();
+  try {
+    const data = await sql<DebtPlayerRaw>`
+      SELECT players.balance, players.name, players.image_url, players.phone_number, players.id
+      FROM players
+      WHERE players.balance < 0
+      ORDER BY players.balance ASC
+      LIMIT 5`;
+
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch the latest players.');
+  }
+}
+
 export async function fetchCardData() {
   noStore();
-  //numberOfPlayers,
-  //     totalDebt,
+
   try {
     // You can probably combine these into a single SQL query
     // However, we are intentionally splitting them to demonstrate
     // how to initialize multiple queries in parallel with JS.
     const playerCountPromise = sql`SELECT COUNT(*) FROM players`;
-    const totalDebtPromise = sql`SELECT SUM(balance) as debt FROM players`;
+    const playerWithDebtCountPromise = sql`SELECT COUNT(*) FROM players WHERE players.balance < 0`;
+    const totalRunnerDebtPromise = sql`SELECT SUM(balance) as debt FROM players WHERE players.balance > 0`;
+    const totalPlayersDebtPromise = sql`SELECT SUM(balance) as debt FROM players WHERE players.balance < 0`;
 
     const data = await Promise.all([
       playerCountPromise,
-      totalDebtPromise
+      playerWithDebtCountPromise,
+      totalRunnerDebtPromise,
+      totalPlayersDebtPromise
     ]);
 
-    const numberOfPlayers = Number(data[0].rows[0].count ?? '0');
-    const totalDebt = Number(data[1].rows[0].debt ?? '0');
+    const totalNumberOfPlayers = Number(data[0].rows[0].count ?? '0');
+    const numberOfPlayersWithDebt = Number(data[1].rows[0].count ?? '0');
+    const totalRunnerDebt = Number(data[2].rows[0].debt ?? '0');
+    const totalPlayersDebt = Number(data[3].rows[0].debt ?? '0');
 
 
     return {
-      totalDebt,
-      numberOfPlayers,
+      totalNumberOfPlayers,
+      numberOfPlayersWithDebt,
+      totalRunnerDebt,
+      totalPlayersDebt
     };
   } catch (error) {
     console.error('Database Error:', error);

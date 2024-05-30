@@ -1,9 +1,10 @@
 
 import MVPPlayers from '@/app/ui/dashboard/mvp-players';
 import { Suspense } from 'react';
-import { MVPPlayersSkeleton, RevenueChartSkeleton, CardsSkeleton} from '@/app/ui/skeletons';
+import {CardsSkeleton, PlayersSkeleton} from '@/app/ui/skeletons';
 import { lusitana } from '@/app/ui/fonts';
 import CardWrapper from '@/app/ui/dashboard/cards';
+import DebtPlayers from "@/app/ui/dashboard/debt-players";
 
 export default async function Page() {
     return (
@@ -18,8 +19,11 @@ export default async function Page() {
             </div>
             <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
 
-                <Suspense fallback={<MVPPlayersSkeleton />}>
+                <Suspense fallback={<PlayersSkeleton />}>
                     <MVPPlayers />
+                </Suspense>
+                <Suspense fallback={<PlayersSkeleton />}>
+                    <DebtPlayers />
                 </Suspense>
 
             </div>
