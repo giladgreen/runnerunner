@@ -12,7 +12,7 @@ export default async function DebtPlayers() {
 
     <div className="flex w-full flex-col md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-         Players in Debt
+         Players with Debt
       </h2>
       <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
 

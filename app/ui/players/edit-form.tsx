@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import {useFormState} from "react-dom";
 import Image from "next/image";
+import {PencilIcon, PhoneIcon} from "@heroicons/react/24/outline";
 
 export default function EditPlayerForm({
   player,
@@ -36,6 +37,8 @@ export default function EditPlayerForm({
                             aria-describedby="name-error"
                         />
                     </div>
+                    <PencilIcon
+                        className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
                     <div id="name-error" aria-live="polite" aria-atomic="true">
                         {state.errors?.name &&
                             state.errors.name.map((error: string) => (
@@ -63,6 +66,8 @@ export default function EditPlayerForm({
                             aria-describedby="phone_number-error"
                         />
                     </div>
+                    <PhoneIcon
+                        className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
                     <div id="phone_number-error" aria-live="polite" aria-atomic="true">
                         {state.errors?.phone_number &&
                             state.errors.phone_number.map((error: string) => (
@@ -73,36 +78,6 @@ export default function EditPlayerForm({
                     </div>
                 </div>
             </div>
-
-          {/* player balance */}
-          <div className="mb-4">
-            <label htmlFor="balance" className="mb-2 block text-sm font-medium">
-              Balance
-            </label>
-            <div className="relative mt-2 rounded-md">
-              <div className="relative">
-                <input
-                    id="balance"
-                    name="balance"
-                    type="number"
-                    step="10"
-                    defaultValue={player.balance}
-                    placeholder="Enter ILS balance"
-                    className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                    aria-describedby="balance-error"
-                />
-               </div>
-              <div id="balance-error" aria-live="polite" aria-atomic="true">
-                {state.errors?.balance &&
-                    state.errors.balance.map((error: string) => (
-                        <p className="mt-2 text-sm text-red-500" key={error}>
-                          {error}
-                        </p>
-                    ))}
-              </div>
-            </div>
-          </div>
-
         </div>
 
         <div className="mt-6 flex justify-end gap-4">

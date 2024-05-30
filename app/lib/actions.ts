@@ -14,14 +14,16 @@ const FormSchema = z.object({
     balance: z.coerce.number(),
     phone_number: z.string().min(1, 'name can not be left empty'),
     updated_at: z.string(),
+    reason: z.string(),
 });
-const CreatePlayer = FormSchema.omit({ id: true, updated_at: true, image_url: true});
-const UpdatePlayer = FormSchema.omit({ id: true, updated_at: true, image_url: true });
+const CreatePlayer = FormSchema.omit({ id: true, updated_at: true, image_url: true });
+const UpdatePlayer = FormSchema.omit({ id: true, updated_at: true, image_url: true, balance:true, reason: true });
 export type State = {
     errors?: {
         name?: string[];
         balance?: string[];
         phone_number?: string[];
+        reason?: string[];
     };
     message?: string | null;
 };
@@ -45,14 +47,14 @@ export async function createPlayer(prevState: State, formData: FormData) {
     }
 
     const {  name, balance, phone_number } = validatedFields.data;
-
+    const phoneNumber = phone_number.replaceAll('-', '');
 
     const updated_at = new Date().toISOString().split('T')[0];
 
     try {
         await sql`
       INSERT INTO players (name, balance, phone_number, updated_at, image_url)
-      VALUES (${name}, ${balance}, ${phone_number}, ${updated_at}, '/players/default.png')
+      VALUES (${name}, ${balance}, ${phoneNumber}, ${updated_at}, '/players/default.png')
     `;
     } catch (error) {
         console.log('## createPlayer error', error)
@@ -78,7 +80,6 @@ export async function updatePlayer(
 
     const validatedFields = UpdatePlayer.safeParse({
         name: formData.get('name'),
-        balance: formData.get('balance'),
         phone_number: formData.get('phone_number'),
     });
 
@@ -90,15 +91,15 @@ export async function updatePlayer(
         };
     }
 
-    const { name, balance, phone_number } = validatedFields.data;
+    const { name, phone_number } = validatedFields.data;
     const date = new Date().toISOString().split('T')[0];
-
+    const phoneNumber = phone_number.replaceAll('-', '');
     console.log('## updatePlayer id', id)
 
     try {
         await sql`
       UPDATE players
-      SET name = ${name}, balance = ${balance}, phone_number = ${phone_number}, updated_at=${date}
+      SET name = ${name}, phone_number = ${phoneNumber}, updated_at=${date}
       WHERE id = ${id}
     `;
     } catch (error) {
