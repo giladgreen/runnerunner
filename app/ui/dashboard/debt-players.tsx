@@ -21,6 +21,7 @@ export default async function DebtPlayers() {
           {debtPlayers.map((player: DebtPlayerRaw, i) => {
             return (
                 <Link
+                    key={player.id}
                     href={`/dashboard/players/${player.id}/data`}
                 >
               <div

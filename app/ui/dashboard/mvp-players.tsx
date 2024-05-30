@@ -22,6 +22,7 @@ export default async function MVPPlayers() {
           {mvpPlayers.map((player: MVPPlayerRaw, i) => {
             return (
                 <Link
+                    key={player.id}
                     href={`/dashboard/players/${player.id}/data`}
                 >
               <div
