@@ -2,7 +2,7 @@ import Breadcrumbs from '@/app/ui/players/breadcrumbs';
 import { fetchPlayerById } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 import {formatCurrency, formatDateToLocal, getTime} from "@/app/lib/utils";
-import CreateLogForm from "@/app/ui/logs/create-form";
+import Form from "@/app/ui/logs/create-form";
 
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <div> {player.notes}  </div>
                 <h1 style={{ zoom: 2 }}><b>Current Balance: {formatCurrency(player.balance)}</b></h1>
                 <hr style={{marginTop: 10, marginBottom: 20}}/>
-                <CreateLogForm player={player} />
+                <Form player={player} />
 
                 <hr style={{marginTop: 20, marginBottom: 20}}/>
 
