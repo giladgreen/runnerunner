@@ -1,5 +1,7 @@
 import { Revenue } from './definitions';
 
+const HOUR = 60 * 60 * 1000;
+
 export const formatCurrency = (balance: number) => {
   const res = (balance).toLocaleString('en-US', {
     style: 'currency',
@@ -28,7 +30,9 @@ export const formatDateToLocal = (
 export const getTime = (
   dateStr: string,
 ) => {
-  return  new Date(dateStr).toLocaleString("en-GB").split(',')[1].trim().substring(0, 5);
+  const date = new Date(dateStr);
+  const modifiedDate = new Date(date.getTime() + 3 * HOUR);
+  return  modifiedDate.toLocaleString("en-GB").split(',')[1].trim().substring(0, 5);
 
 };
 
