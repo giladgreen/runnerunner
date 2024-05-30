@@ -173,7 +173,8 @@ export async function fetchPlayerById(id: string) {
         history.id,
         history.change,
         history.note,
-        history.updated_at
+        history.updated_at,
+        history.updated_by
       FROM history
       WHERE history.phone_number = ${player.phone_number}
       order by history.updated_at asc;

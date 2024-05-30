@@ -1,14 +1,13 @@
 import Breadcrumbs from '@/app/ui/players/breadcrumbs';
 import { fetchPlayerById } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
-import {formatCurrency, formatDateTimeToLocal, formatDateToLocal, getTime} from "@/app/lib/utils";
+import {formatCurrency, formatDateToLocal, getTime} from "@/app/lib/utils";
 import CreateLogForm from "@/app/ui/logs/create-form";
 
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
     const [player] = await Promise.all([
         fetchPlayerById(id),
-
     ]);
     if (!player) {
         notFound();
@@ -91,7 +90,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                                 {log.note}
                             </td>
                             <td className="whitespace-nowrap px-3 py-3">
-                                ADMIN
+                                {log.updated_by}
                             </td>
                             <td className="whitespace-nowrap px-3 py-3">
                                 {formatCurrency(log.currentBalance)}

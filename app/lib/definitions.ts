@@ -70,6 +70,7 @@ export type LogDB = {
   change: number;
   note: string;
   updated_at: string;
+  updated_by: string;
 //updated by
 };
 export type PlayerDB = {
