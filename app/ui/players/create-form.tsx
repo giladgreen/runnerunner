@@ -85,7 +85,7 @@ export default function Form() {
                     id="balance"
                     name="balance"
                     type="number"
-                    step="0.01"
+                    step="10"
                     placeholder="Enter ILS balance"
                     className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                     aria-describedby="balance-error"
