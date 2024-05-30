@@ -5,6 +5,7 @@ import { lusitana } from '@/app/ui/fonts';
 import {fetchMVPPlayers} from "@/app/lib/data";
 import {MVPPlayerRaw} from "@/app/lib/definitions";
 import {formatCurrency} from "@/app/lib/utils";
+import Link from "next/link";
 
 export default async function MVPPlayers() {
     const mvpPlayers = await fetchMVPPlayers();
@@ -20,6 +21,9 @@ export default async function MVPPlayers() {
          <div className="bg-white px-6">
           {mvpPlayers.map((player: MVPPlayerRaw, i) => {
             return (
+                <Link
+                    href={`/dashboard/players/${player.id}/data`}
+                >
               <div
                 key={player.id}
                 className={clsx(
@@ -52,6 +56,7 @@ export default async function MVPPlayers() {
                   {formatCurrency(player.balance)}
                 </p>
               </div>
+                </Link>
             );
           })}
         </div>

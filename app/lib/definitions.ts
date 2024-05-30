@@ -47,6 +47,7 @@ export type PlayersTable = {
   image_url: string;
   updated_at: string;
   balance: number;
+  notes: string;
 };
 
 
@@ -58,4 +59,27 @@ export type PlayerForm = {
   image_url: string;
   updated_at: string;
   balance: number;
+  note: string;
+  notes: string;
+};
+
+
+export type LogDB = {
+  id: string;
+  phone_number: string;
+  change: number;
+  note: string;
+  updated_at: string;
+//updated by
+};
+export type PlayerDB = {
+  id: string;
+  name: string;
+  phone_number: string;
+  image_url: string;
+  updated_at: string;
+  balance: number;
+  note: string;
+  notes: string;
+  historyLog: LogDB[]
 };

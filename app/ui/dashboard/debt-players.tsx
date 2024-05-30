@@ -5,6 +5,7 @@ import { lusitana } from '@/app/ui/fonts';
 import {fetchDebtPlayers, fetchMVPPlayers} from "@/app/lib/data";
 import {DebtPlayerRaw} from "@/app/lib/definitions";
 import {formatCurrency} from "@/app/lib/utils";
+import Link from "next/link";
 
 export default async function DebtPlayers() {
     const debtPlayers = await fetchDebtPlayers();
@@ -19,6 +20,9 @@ export default async function DebtPlayers() {
          <div className="bg-white px-6">
           {debtPlayers.map((player: DebtPlayerRaw, i) => {
             return (
+                <Link
+                    href={`/dashboard/players/${player.id}/data`}
+                >
               <div
                 key={player.id}
                 className={clsx(
@@ -51,6 +55,7 @@ export default async function DebtPlayers() {
                   {formatCurrency(player.balance)}
                 </p>
               </div>
+                </Link>
             );
           })}
         </div>

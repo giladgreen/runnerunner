@@ -2,6 +2,8 @@ import Image from 'next/image';
 import { UpdatePlayer, DeletePlayer } from '@/app/ui/players/buttons';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredPlayers } from '@/app/lib/data';
+import Link from "next/link";
+import {PencilIcon} from "@heroicons/react/24/outline";
 
 export default async function PlayersTable({
   query,
@@ -22,28 +24,34 @@ export default async function PlayersTable({
                 key={player.id}
                 className="mb-2 w-full rounded-md bg-white p-4"
               >
-                <div className="flex items-center justify-between border-b pb-4">
-                  <div>
-                    <div className="mb-2 flex items-center">
-                      <Image
-                        src={player.image_url}
-                        className="mr-2 rounded-full zoom-on-hover"
-                        width={28}
-                        height={28}
-                        alt={`${player.name}'s profile picture`}
-                      />
-                      <p>{player.name}</p>
+                <Link href={`/dashboard/players/${player.id}/data`}>
+                  <div className="flex items-center justify-between border-b pb-4">
+                    <div>
+                      <div className="mb-2 flex items-center">
+                        <Image
+                          src={player.image_url}
+                          className="mr-2 rounded-full zoom-on-hover"
+                          width={28}
+                          height={28}
+                          alt={`${player.name}'s profile picture`}
+                        />
+                        <p>
+                            {player.name}
+                        </p>
+                      </div>
+                      <p className="text-sm text-gray-500">{player.phone_number}</p>
                     </div>
-                    <p className="text-sm text-gray-500">{player.phone_number}</p>
                   </div>
+                </Link>
 
-                </div>
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
                     <p className="text-xl font-medium">
-                      {formatCurrency(player.balance)}
+                      balance: {formatCurrency(player.balance)}
                     </p>
-                    <p>{formatDateToLocal(player.updated_at)}</p>
+                    <p className="text-l font-medium">
+                      {player.notes}
+                    </p>
                   </div>
                   <div className="flex justify-end gap-2">
                     <UpdatePlayer id={player.id} />
@@ -66,6 +74,9 @@ export default async function PlayersTable({
                   Balance
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
+                  Notes
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
                   Updated At
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
@@ -80,6 +91,9 @@ export default async function PlayersTable({
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                    <Link
+                        href={`/dashboard/players/${player.id}/data`}
+                    >
                     <div className="flex items-center gap-3">
                       <Image
                         src={player.image_url}
@@ -88,17 +102,39 @@ export default async function PlayersTable({
                         height={28}
                         alt={`${player.name}'s profile picture`}
                       />
-                      <p>{player.name}</p>
+                      <p>
+                        {player.name}
+                      </p>
                     </div>
+                    </Link>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
+                    <Link
+                        href={`/dashboard/players/${player.id}/data`}
+                    >
                     {player.phone_number}
+                    </Link>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
+                    <Link
+                        href={`/dashboard/players/${player.id}/data`}
+                    >
                     {formatCurrency(player.balance)}
+                    </Link>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
+                    <Link
+                        href={`/dashboard/players/${player.id}/data`}
+                    >
+                    {player.notes}
+                    </Link>
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    <Link
+                        href={`/dashboard/players/${player.id}/data`}
+                    >
                     {formatDateToLocal(player.updated_at)}
+                    </Link>
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">

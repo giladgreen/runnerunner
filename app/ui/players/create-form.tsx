@@ -107,28 +107,57 @@ export default function Form() {
             </div>
           </div>
 
-          {/* reason */}
+          {/* note */}
           <div className="mb-4">
-            <label htmlFor="reason" className="mb-2 block text-sm font-medium">
-              Balance Reason
+            <label htmlFor="note" className="mb-2 block text-sm font-medium">
+              Balance Note
             </label>
             <div className="relative">
               <input
-                  id="reason"
-                  name="reason"
+                  id="note"
+                  name="note"
                   type="text"
-                  placeholder="Enter reason"
+                  placeholder="Enter note"
                   className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                  aria-describedby="reason-error"
+                  aria-describedby="note-error"
 
               />
 
               <PencilIcon
                   className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
             </div>
-            <div id="reason-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.reason &&
-                  state.errors.reason.map((error: string) => (
+            <div id="note-error" aria-live="polite" aria-atomic="true">
+              {state.errors?.note &&
+                  state.errors.note.map((error: string) => (
+                      <p className="mt-2 text-sm text-red-500" key={error}>
+                        {error}
+                      </p>
+                  ))}
+            </div>
+          </div>
+
+          {/* general notes */}
+          <div className="mb-4">
+            <label htmlFor="notes" className="mb-2 block text-sm font-medium">
+               Notes
+            </label>
+            <div className="relative">
+              <input
+                  id="notes"
+                  name="notes"
+                  type="text"
+                  placeholder="Enter notes"
+                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  aria-describedby="note-error"
+
+              />
+
+              <PencilIcon
+                  className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
+            </div>
+            <div id="notes-error" aria-live="polite" aria-atomic="true">
+              {state.errors?.notes &&
+                  state.errors.notes.map((error: string) => (
                       <p className="mt-2 text-sm text-red-500" key={error}>
                         {error}
                       </p>

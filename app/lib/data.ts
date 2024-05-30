@@ -2,8 +2,8 @@ import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
 
 import {
-  DebtPlayerRaw,
-  MVPPlayerRaw,
+  DebtPlayerRaw, LogDB,
+  MVPPlayerRaw, PlayerDB,
   PlayerForm,
   PlayersTable,
 } from './definitions';
@@ -117,7 +117,8 @@ export async function fetchFilteredPlayers(
         players.phone_number,
         players.image_url,
         players.balance,
-        players.updated_at
+        players.updated_at,
+        players.notes
       FROM players
       WHERE
         players.name::text ILIKE ${`%${query}%`} OR
@@ -154,18 +155,34 @@ export async function fetchPlayersPages(query: string) {
 export async function fetchPlayerById(id: string) {
   noStore();
   try {
-    const data = await sql<PlayerForm>`
+    const data = await sql<PlayerDB>`
       SELECT
         players.name,
         players.phone_number,
         players.image_url,
         players.balance,
-        players.updated_at
+        players.updated_at,
+        players.notes
       FROM players
       WHERE players.id = ${id};
     `;
 
-    return data.rows[0];
+    const player = data.rows[0];
+    const historyData = await sql<LogDB>`
+      SELECT
+        history.id,
+        history.change,
+        history.note,
+        history.updated_at
+      FROM history
+      WHERE history.phone_number = ${player.phone_number}
+      order by history.updated_at asc;
+    `;
+
+    player.historyLog = historyData.rows;
+
+    return player;
+
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch player.');

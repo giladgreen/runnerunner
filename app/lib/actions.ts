@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
+import {PlayerForm} from "@/app/lib/definitions";
 
 
 const FormSchema = z.object({
@@ -14,16 +15,27 @@ const FormSchema = z.object({
     balance: z.coerce.number(),
     phone_number: z.string().min(1, 'name can not be left empty'),
     updated_at: z.string(),
-    reason: z.string(),
+    note: z.string().min(1, 'balance note can not be left empty'),
+    notes: z.string(),
 });
 const CreatePlayer = FormSchema.omit({ id: true, updated_at: true, image_url: true });
-const UpdatePlayer = FormSchema.omit({ id: true, updated_at: true, image_url: true, balance:true, reason: true });
+const CreateUsageLog =  z.object({
+    change: z.coerce.number(),
+    note: z.string().min(1, 'change note can not be left empty'),
+});
+const CreateCreditLog =  z.object({
+    change: z.coerce.number(),
+    note: z.string().min(1, 'change note can not be left empty'),
+});
+const UpdatePlayer = FormSchema.omit({ id: true, updated_at: true, image_url: true, balance:true, note: true , phone_number: true });
 export type State = {
     errors?: {
         name?: string[];
         balance?: string[];
+        change?: string[];
         phone_number?: string[];
-        reason?: string[];
+        note?: string[];
+        notes?: string[];
     };
     message?: string | null;
 };
@@ -36,6 +48,8 @@ export async function createPlayer(prevState: State, formData: FormData) {
     const validatedFields = CreatePlayer.safeParse({
         name: formData.get('name'),
         balance: formData.get('balance'),
+        note: formData.get('note'),
+        notes: formData.get('notes'),
         phone_number: formData.get('phone_number'),
     });
 
@@ -46,16 +60,21 @@ export async function createPlayer(prevState: State, formData: FormData) {
         };
     }
 
-    const {  name, balance, phone_number } = validatedFields.data;
+    const {  name, balance, note, phone_number, notes } = validatedFields.data;
     const phoneNumber = phone_number.replaceAll('-', '');
 
-    const updated_at = new Date().toISOString().split('T')[0];
-
+//YYYY-MM-DD HH:MI:SS
     try {
         await sql`
-      INSERT INTO players (name, balance, phone_number, updated_at, image_url)
-      VALUES (${name}, ${balance}, ${phoneNumber}, ${updated_at}, '/players/default.png')
+      INSERT INTO players (name, balance, phone_number, image_url, notes)
+      VALUES (${name}, ${balance}, ${phoneNumber}, '/players/default.png', ${notes ?? ''})
     `;
+
+        await sql`
+      INSERT INTO history (phone_number, change, note)
+      VALUES (${phoneNumber}, ${balance}, ${note})
+    `;
+
     } catch (error) {
         console.log('## createPlayer error', error)
         return {
@@ -69,18 +88,63 @@ export async function createPlayer(prevState: State, formData: FormData) {
 }
 
 
+export async function createPlayerLog(player: PlayerForm, prevState: State, formData: FormData, usage: boolean = true){
+    await validateAdmin();
+    const validatedFields = CreateUsageLog.safeParse({
+        change: formData.get('change'),
+        note: formData.get('note'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Create Player.',
+        };
+    }
+
+    const change = validatedFields.data.change * (usage ? -1 : 1);
+    const currentBalance = player.balance;
+    const newBalance = currentBalance + change;
+    try {
+        await sql`
+      INSERT INTO history (phone_number, change, note)
+      VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note})
+    `;
+        const date = new Date().toISOString();
+        await sql`
+      UPDATE players
+      SET balance = ${newBalance}, updated_at=${date}
+      WHERE id = ${player.id}
+    `;
+
+    } catch (error) {
+        console.log('## create log error', error)
+        return {
+            message: 'Database Error: Failed to Create log.',
+        };
+    }
+    revalidatePath('/dashboard/players');
+  //  redirect('/dashboard/players');
+
+
+}
+
+export async function createPlayerUsageLog(player: PlayerForm, prevState: State, formData: FormData){
+    return createPlayerLog(player, prevState, formData, true);
+}
+export async function createPlayerNewCreditLog(player: PlayerForm, prevState: State, formData: FormData){
+    return createPlayerLog(player, prevState, formData, false);
+}
 export async function updatePlayer(
     id: string,
     prevState: State,
     formData: FormData,
 ) {
     await validateAdmin();
-    console.log('## updatePlayer id', id)
-    console.log('## updatePlayer formData', formData)
 
     const validatedFields = UpdatePlayer.safeParse({
         name: formData.get('name'),
-        phone_number: formData.get('phone_number'),
+        notes: formData.get('notes'),
     });
 
     if (!validatedFields.success) {
@@ -91,15 +155,13 @@ export async function updatePlayer(
         };
     }
 
-    const { name, phone_number } = validatedFields.data;
-    const date = new Date().toISOString().split('T')[0];
-    const phoneNumber = phone_number.replaceAll('-', '');
-    console.log('## updatePlayer id', id)
+    const { name, notes } = validatedFields.data;
+    const date = new Date().toISOString();
 
     try {
         await sql`
       UPDATE players
-      SET name = ${name}, phone_number = ${phoneNumber}, updated_at=${date}
+      SET name = ${name}, notes = ${notes}, updated_at=${date}
       WHERE id = ${id}
     `;
     } catch (error) {

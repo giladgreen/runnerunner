@@ -13,17 +13,25 @@ export const formatCurrency = (balance: number) => {
 
 export const formatDateToLocal = (
   dateStr: string,
-  locale: string = 'en-US',
+  locale: string = 'he',
 ) => {
   const date = new Date(dateStr);
   const options: Intl.DateTimeFormatOptions = {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
+    dateStyle: 'full',
+    // timeStyle: 'long',
+    timeZone: 'Asia/Jerusalem',
   };
   const formatter = new Intl.DateTimeFormat(locale, options);
   return formatter.format(date);
 };
+
+export const getTime = (
+  dateStr: string,
+) => {
+  return  new Date(dateStr).toLocaleString("en-GB").split(',')[1].trim().substring(0, 5);
+
+};
+
 
 export const generateYAxis = (revenue: Revenue[]) => {
   // Calculate what labels we need to display on the y-axis
