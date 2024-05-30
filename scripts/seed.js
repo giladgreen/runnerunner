@@ -48,6 +48,30 @@ async function seedUsers(client) {
   }
 }
 
+async function createBugReportTable(client) {
+  try {
+    console.log(`createBugReportTable start`);
+
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+
+    // Create the "players" table if it doesn't exist
+    const createTable = await client.sql`
+    CREATE TABLE IF NOT EXISTS bugs (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    description VARCHAR(500) NOT NULL,
+    updated_at timestamp NOT NULL DEFAULT now()
+  );
+`;
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('stack:', error.stack);
+    console.error('message', error.message);
+    throw error;
+  }
+}
 async function seedPlayers(client) {
   try {
     console.log(`seedPlayers start`);
@@ -140,6 +164,7 @@ if (dropTablesBefore){
     await client.sql`DROP TABLE IF EXISTS history`;
 }
 
+  await createBugReportTable(client);
   await seedPlayers(client);
 
   await seedHistory(client);

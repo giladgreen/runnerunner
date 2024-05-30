@@ -36,12 +36,30 @@ export type State = {
         phone_number?: string[];
         note?: string[];
         notes?: string[];
+        description?: string[];
     };
     message?: string | null;
 };
 
 async function validateAdmin(){
 
+}
+export async function createReport(formData: FormData) {
+    const description = formData.get('description') as string;
+    try {
+        await sql`
+      INSERT INTO bugs (description)
+      VALUES (${description})
+    `;
+
+
+    } catch (error) {
+        console.log('## createReport error', error)
+        return {
+            message: 'Database Error: Failed to Create report.',
+        };
+    }
+    redirect('/dashboard');
 }
 export async function createPlayer(prevState: State, formData: FormData) {
     await validateAdmin();
@@ -63,7 +81,6 @@ export async function createPlayer(prevState: State, formData: FormData) {
     const {  name, balance, note, phone_number, notes } = validatedFields.data;
     const phoneNumber = phone_number.replaceAll('-', '');
 
-//YYYY-MM-DD HH:MI:SS
     try {
         await sql`
       INSERT INTO players (name, balance, phone_number, image_url, notes)

@@ -5,10 +5,7 @@ import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
-    const [player] = await Promise.all([
-        fetchPlayerById(id),
-
-    ]);
+    const player = await fetchPlayerById(id);
     if (!player) {
         notFound();
     }

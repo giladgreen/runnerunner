@@ -84,3 +84,9 @@ export type PlayerDB = {
   notes: string;
   historyLog: LogDB[]
 };
+
+export type BugDB = {
+  id: string;
+  description: string;
+  updated_at: string;
+};

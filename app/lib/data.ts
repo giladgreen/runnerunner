@@ -2,6 +2,7 @@ import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
 
 import {
+  BugDB,
   DebtPlayerRaw, LogDB,
   MVPPlayerRaw, PlayerDB,
   PlayerForm,
@@ -152,6 +153,25 @@ export async function fetchPlayersPages(query: string) {
   }
 }
 
+export async function fetchAllBugs() {
+  noStore();
+  try {
+    const data = await sql<BugDB>`
+      SELECT
+        id,
+        description,
+        updated_at
+      FROM bugs
+    `;
+
+
+    return data.rows;
+
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch bugs.');
+  }
+}
 export async function fetchPlayerById(id: string) {
   noStore();
   try {
