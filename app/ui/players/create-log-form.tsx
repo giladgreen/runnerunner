@@ -9,7 +9,44 @@ import {createPlayerNewCreditLog, createPlayerUsageLog} from '@/app/lib/actions'
 import { useFormState } from 'react-dom';
 import {PlayerForm} from "@/app/lib/definitions";
 import {useState} from "react";
-import {getInitialText, getInitialAmount} from "@/app/ui/players/helper";
+const TEXTS = {
+  Sunday: 'טורניר קיסריה - כניסה',
+  Monday: 'טורניר תל אביב - כניסה',
+  Tuesday: 'טורניר רעננה - כניסה',
+  Wednesday: 'טורניר כפר סבא - כניסה',
+  Thursday: 'טורניר ראשל״צ - כניסה',
+  Saturday: 'טורניר ראשל״צ - כניסה',
+}
+
+const AMOUNTS = {
+  Sunday: 250,
+  Monday: 300,
+  Tuesday: 300,
+  Wednesday: 250,
+  Thursday: 400,
+  Saturday: 300,
+}
+
+function getInitialText(): string {
+  const now = new Date();
+  const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+
+  // @ts-ignore
+  const result: string = TEXTS[dayOfTheWeek] ? TEXTS[dayOfTheWeek] as string : '';
+
+  return result;
+}
+
+function getInitialAmount(): number {
+  const now = new Date();
+  const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+
+  // @ts-ignore
+  const result: number = AMOUNTS[dayOfTheWeek] ? AMOUNTS[dayOfTheWeek] as number : 300;
+
+  return result;
+}
+
 
 export default function Form({player} : {player: PlayerForm}) {
   const initialState = { message: null, errors: {} };
