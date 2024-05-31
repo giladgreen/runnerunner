@@ -5,7 +5,8 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import {PlayerForm} from "@/app/lib/definitions";
+import {PlayerDB, PlayerForm} from "@/app/lib/definitions";
+import {players} from "@/app/lib/placeholder-data";
 
 
 const FormSchema = z.object({
@@ -59,7 +60,8 @@ export async function createReport(formData: FormData) {
             message: 'Database Error: Failed to Create report.',
         };
     }
-    redirect('/dashboard');
+    revalidatePath('/dashboard/configurations');
+    redirect('/dashboard/configurations');
 }
 export async function createPlayer(prevState: State, formData: FormData) {
     await validateAdmin();
@@ -102,6 +104,40 @@ export async function createPlayer(prevState: State, formData: FormData) {
     redirect('/dashboard/players');
 
 
+}
+
+
+export async function importPlayers(players: { name: string; phone_number: string; balance: number, notes:string }[]) {
+    await validateAdmin();
+    const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
+    try {
+
+        const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
+        await Promise.all(
+            playersToInsert.map(
+                (player) => sql<PlayerDB>`
+        INSERT INTO players (name, phone_number, balance, notes)
+        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes});
+      `,
+            ),
+        );
+
+        await Promise.all(
+             playersToInsert.map(
+                (player) => sql`
+        INSERT INTO history (phone_number, change, note)
+        VALUES (${player.phone_number}, ${player.balance}, 'imported balance');
+      `
+            ),
+        );
+    } catch (error) {
+        console.log('## importPlayers error', error)
+        return {
+            message: 'Database Error: Failed to import Players.',
+        };
+    }
+    revalidatePath('/dashboard/players');
+    redirect('/dashboard/players');
 }
 
 

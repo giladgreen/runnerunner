@@ -10,7 +10,7 @@ export default async function Page() {
         <div className="w-full">
             <div><u>Import players from CSV file</u></div>
             <div>each line in the file should be in the form of:</div>
-            <div><b>name, phone number, balance</b></div>
+            <div><b>name, phone number, balance, notes</b></div>
 
             <ImportPlayers/>
             <hr className="my-4"/>

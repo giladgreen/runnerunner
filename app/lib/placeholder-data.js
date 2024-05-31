@@ -77,13 +77,13 @@ const players = [
   {
     name: 'steph dietz',
     balance: -150,
-    phone_number: '0587-2567890',
+    phone_number: '05872567890',
     image_url: '/players/steph-dietz.png',
   },
   {
     name: 'Gilad Green',
     balance: 5500,
-    phone_number: '0587-869910',
+    phone_number: '0587869910',
     image_url: '/players/default.png',
     notes: 'admin',
   },

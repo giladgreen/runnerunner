@@ -1,13 +1,11 @@
 const { db } = require('@vercel/postgres');
 const {
   players,
-  customers,
-  revenue,
   users,
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
-const dropTablesBefore = false;
+const dropTablesBefore = process.argv[2] === 'drop';
 
 async function seedUsers(client) {
   try {
@@ -160,6 +158,7 @@ async function seedHistory(client) {
 async function main() {
   const client = await db.connect();
 if (dropTablesBefore){
+  console.log('## drop tables')
     await client.sql`DROP TABLE IF EXISTS players`;
     await client.sql`DROP TABLE IF EXISTS history`;
 }

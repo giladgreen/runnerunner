@@ -1,7 +1,7 @@
 "use client";
 
 import { TrashIcon } from '@heroicons/react/24/outline';
-import { deletePlayer } from '@/app/lib/actions';
+import {deletePlayer, importPlayers} from '@/app/lib/actions';
 import {Button} from "@/app/ui/button";
 import React from "react";
 
@@ -26,13 +26,52 @@ export function DeletePlayer({ id }: { id: string }) {
 }
 
 export function ImportPlayers() {
+
     return (
-        <Button
-            onClick={()=>{
-                alert('TBD');
+        <>
+            <Button
+            onClick={() => {
+
+                // @ts-ignore
+                const element = document?.getElementById('fileInput');
+                element?.addEventListener('change', function(e){
+                    // @ts-ignore
+                    let file = e?.target?.files[0];
+
+                    let reader = new FileReader();
+                    reader.onload = async function(e){
+                        const fileContent = (e?.target?.result ?? '') as string;
+                        const players = fileContent.split('\n').map((line: string) => {
+                            console.log('line:', line)
+
+                            const player = {
+                                name: line.split(',')[0].trim(),
+                                phone_number: line.split(',')[1].trim(),
+                                balance: Number(line.split(',')[2]),
+                                notes: line.split(',')[3],
+                            }
+                            if (!player.notes){
+                                player.notes = 'imported player'
+                            }else{
+                                player.notes = player.notes.trim()
+                            }
+                            return player;
+                        })
+
+                        console.log('players:', players)
+                        await importPlayers(players);
+                    };
+                    reader.readAsText(file);
+                });
+                element?.click();
+
             }}
-        >
+                >
+
             <span className="hidden md:block">import</span>
-        </Button>
-    );
-}
+            </Button>
+            <input type="file" id="fileInput" style={{ display:'none'}} accept=".csv"/>
+
+        </>
+            );
+            }
