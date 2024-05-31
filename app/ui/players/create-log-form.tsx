@@ -20,12 +20,12 @@ const TEXTS = {
 }
 
 const AMOUNTS = {
-  Sunday: 250,
+  Sunday: 300,
   Monday: 300,
   Tuesday: 300,
   Wednesday: 250,
   Thursday: 400,
-  Saturday: 300,
+  Saturday: 250,
 }
 
 function getInitialText(): string {

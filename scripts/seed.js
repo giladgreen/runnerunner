@@ -150,7 +150,7 @@ async function seedHistory(client) {
       insertedHistoryLogs
     };
   } catch (error) {
-    console.error('Error seeding revenue:', error);
+    console.error('Error seeding history:', error);
     throw error;
   }
 }

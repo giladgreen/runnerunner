@@ -37,7 +37,7 @@ export default async function DebtPlayers() {
                   <Image
                     src={player.image_url}
                     alt={`${player.name}'s profile picture`}
-                    className="mr-4 rounded-full"
+                    className="mr-4 rounded-full zoom-on-hover"
                     width={32}
                     height={32}
                   />

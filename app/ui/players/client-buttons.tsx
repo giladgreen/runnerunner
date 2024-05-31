@@ -4,6 +4,7 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import {deletePlayer, importPlayers} from '@/app/lib/actions';
 import {Button} from "@/app/ui/button";
 import React from "react";
+import {PlayerDB} from "@/app/lib/definitions";
 
 export function DeletePlayer({ id }: { id: string }) {
   const deletePlayerWithId = deletePlayer.bind(null, id);
@@ -72,6 +73,40 @@ export function ImportPlayers() {
                 >
 
             <span className="hidden md:block">import</span>
+            </Button>
+            <input type="file" id="fileInput" style={{ display:'none'}} accept=".csv"/>
+
+        </>
+            );
+            }
+
+export function ExportPlayers({ players}: { players: PlayerDB[]}) {
+
+    return (
+        <>
+            <Button
+            onClick={() => {
+                const data = players.map((player) => {
+                    return `${player.name},${player.phone_number},${player.balance},${player.notes}`
+                }).join('\n');
+                const filename = "players_data.csv";
+
+                const blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+
+                const link = document.createElement("a");
+                link.download = filename;
+                link.href = window.URL.createObjectURL(blob);
+                link.style.display = 'none';
+
+                document.body.appendChild(link);
+
+                link.click();
+
+                document.body.removeChild(link);
+            }}
+                >
+
+            <span className="hidden md:block">export</span>
             </Button>
             <input type="file" id="fileInput" style={{ display:'none'}} accept=".csv"/>
 

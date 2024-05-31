@@ -230,6 +230,13 @@ export async function deletePlayer(id: string) {
     await validateAdmin();
 
     try {
+        const playerResult  =await sql<PlayerDB>`SELECT * FROM players WHERE id = ${id}`;
+        const player = playerResult.rows[0];
+        if (!player) {
+            return;
+        }
+        const {phone_number} = player;
+        await sql`DELETE FROM history WHERE phone_number = ${phone_number}`;
         await sql`DELETE FROM players WHERE id = ${id}`;
         revalidatePath('/dashboard/players');
         return { message: 'Deleted Player.' };

@@ -17,6 +17,7 @@ export default function EditPlayerForm({
   console.log(' player.id', player.id)
   const updatePlayerWithId = updatePlayer.bind(null, player.id);
   const [state, dispatch] = useFormState(updatePlayerWithId, initialState);
+
   return (
       <form action={dispatch}>
           <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -77,6 +78,7 @@ export default function EditPlayerForm({
                       </div>
                   </div>
               </div>
+
           </div>
 
           <div className="mt-6 flex justify-end gap-4">
