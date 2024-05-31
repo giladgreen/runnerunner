@@ -6,7 +6,9 @@ export type User = {
   id: string;
   name: string;
   email: string;
+  phone: string;
   password: string;
+  is_admin: string;
 };
 
 export type MVPPlayer = {

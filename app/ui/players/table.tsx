@@ -32,8 +32,8 @@ export default async function PlayersTable({
                         <Image
                           src={player.image_url}
                           className="mr-2 rounded-full zoom-on-hover"
-                          width={28}
-                          height={28}
+                          width={40}
+                          height={40}
                           alt={`${player.name}'s profile picture`}
                         />
                         <p>
@@ -99,8 +99,8 @@ export default async function PlayersTable({
                       <Image
                         src={player.image_url}
                         className="rounded-full zoom-on-hover"
-                        width={28}
-                        height={28}
+                        width={40}
+                        height={40}
                         alt={`${player.name}'s profile picture`}
                       />
                       <p>

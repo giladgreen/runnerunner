@@ -72,7 +72,7 @@ export function ImportPlayers() {
             }}
                 >
 
-            <span className="hidden md:block">import</span>
+            <span >import</span>
             </Button>
             <input type="file" id="fileInput" style={{ display:'none'}} accept=".csv"/>
 
@@ -106,7 +106,7 @@ export function ExportPlayers({ players}: { players: PlayerDB[]}) {
             }}
                 >
 
-            <span className="hidden md:block">export</span>
+            <span >export</span>
             </Button>
             <input type="file" id="fileInput" style={{ display:'none'}} accept=".csv"/>
 

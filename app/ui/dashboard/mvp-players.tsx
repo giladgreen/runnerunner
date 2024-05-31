@@ -39,8 +39,8 @@ export default async function MVPPlayers() {
                     src={player.image_url}
                     alt={`${player.name}'s profile picture`}
                     className="mr-4 rounded-full zoom-on-hover"
-                    width={32}
-                    height={32}
+                    width={55}
+                    height={55}
                   />
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold md:text-base">

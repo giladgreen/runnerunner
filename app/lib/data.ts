@@ -5,7 +5,7 @@ import {
   BugDB, Counts,
   DebtPlayerRaw, LogDB,
   MVPPlayerRaw, PlayerDB,
-  PlayersTable,
+  PlayersTable,User
 } from './definitions';
 
 export async function fetchMVPPlayers() {
@@ -200,6 +200,61 @@ export async function fetchPlayerById(id: string) {
     `;
 
     const player = data.rows[0];
+    const historyData = await sql<LogDB>`
+      SELECT
+        history.id,
+        history.change,
+        history.note,
+        history.updated_at,
+        history.updated_by
+      FROM history
+      WHERE history.phone_number = ${player.phone_number}
+      order by history.updated_at asc;
+    `;
+
+    player.historyLog = historyData.rows;
+
+    return player;
+
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch player.');
+  }
+}
+
+export async function fetchPlayerByEmail(urlEmail: string) {
+  noStore();
+  try {
+    console.log('urlEmail', urlEmail)
+    const email = urlEmail  .replace('%40', '@');
+    console.log('email', email)
+
+    const userData = await sql<User>`
+      SELECT *
+      FROM users
+      WHERE email = ${email};
+    `;
+
+    const userFromDb = userData.rows[0];
+    console.log('userFromDb', userFromDb)
+    const phone_number = userFromDb!.phone;
+    console.log('phone_number', phone_number)
+
+ const data = await sql<PlayerDB>`
+      SELECT
+        name,
+        phone_number,
+        image_url,
+        balance,
+        updated_at,
+        notes
+      FROM players
+      WHERE phone_number = ${phone_number};
+    `;
+
+    const player = data.rows[0];
+    console.log('player', player)
+
     const historyData = await sql<LogDB>`
       SELECT
         history.id,
