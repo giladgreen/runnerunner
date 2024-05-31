@@ -136,8 +136,8 @@ export async function importPlayers(players: { name: string; phone_number: strin
             message: 'Database Error: Failed to import Players.',
         };
     }
-    revalidatePath('/dashboard/players');
-    redirect('/dashboard/players');
+    revalidatePath('/dashboard');
+    redirect('/dashboard');
 }
 
 

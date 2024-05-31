@@ -12,10 +12,10 @@ const users = [
 
 const players = [
   {
-    name: 'Amy Burnz',
-    balance: 3050,
-    phone_number: '05654567890',
-    image_url: '/players/amy-burns.png',
+    name: 'Rami Charanga (fake)',
+    balance: 5600,
+    phone_number: '05424567890',
+    image_url: '/players/rami-charanga.png',
   },
   {
     name: 'Delba De-Oliveira',
