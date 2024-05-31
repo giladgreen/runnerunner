@@ -47,7 +47,14 @@ export type PlayersTable = {
   image_url: string;
   updated_at: string;
   balance: number;
+  historyCount: number;
   notes: string;
+};
+
+
+export type Counts = {
+  phone_number: string;
+  count: number;
 };
 
 

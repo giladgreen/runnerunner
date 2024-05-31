@@ -15,6 +15,17 @@
 .homepage-top-header{
   padding-left: 40px;
 }
+.bold{
+  font-weight: bold;
+}
+.form-control {
+  border: 1px solid rgb(0, 112, 243);
+  border-radius:6px;
+  padding:12px;
+}
+.form-inner-control{
+background: rgb(0, 112, 243, 0.2);
+}
 .zoom-on-hover:hover {
   transform: scale(1.6);
   transition: transform 0.5s;

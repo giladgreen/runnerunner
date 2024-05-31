@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { UpdatePlayer, DeletePlayer } from '@/app/ui/players/buttons';
+import { UpdatePlayer  } from '@/app/ui/players/buttons';
+import {  DeletePlayer } from '@/app/ui/players/client-buttons';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredPlayers } from '@/app/lib/data';
 import Link from "next/link";
@@ -13,7 +14,7 @@ export default async function PlayersTable({
   currentPage: number;
 }) {
   const players = await fetchFilteredPlayers(query, currentPage);
-// console.log('### players:', players)
+ //console.log('### players:', players)
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
@@ -115,7 +116,7 @@ export default async function PlayersTable({
                     {player.phone_number}
                     </Link>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className={`whitespace-nowrap px-3 py-3 ${player.historyCount > 1 ? 'bold':''}`}>
                     <Link
                         href={`/dashboard/players/${player.id}/data`}
                     >

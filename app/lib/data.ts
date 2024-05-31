@@ -2,7 +2,7 @@ import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
 
 import {
-  BugDB,
+  BugDB, Counts,
   DebtPlayerRaw, LogDB,
   MVPPlayerRaw, PlayerDB,
   PlayerForm,
@@ -111,7 +111,7 @@ export async function fetchFilteredPlayers(
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
-    const players = await sql<PlayersTable>`
+    const playersResultPromise = await sql<PlayersTable>`
       SELECT
         players.id,
         players.name,
@@ -128,7 +128,23 @@ export async function fetchFilteredPlayers(
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
 
-    return players.rows;
+    const playersHistoryCountResultPromise = sql<Counts>`
+      SELECT
+       phone_number, 
+       count(phone_number) 
+        FROM history 
+         GROUP BY phone_number
+    `;
+
+    const [playersHistoryCountResult, playersResult] = await Promise.all([playersHistoryCountResultPromise, playersResultPromise]);
+    const playersHistoryCount = playersHistoryCountResult.rows;
+    const players = playersResult.rows;
+
+    players.forEach((player) => {
+      const historyCount = playersHistoryCount.find(({ phone_number}) => phone_number === player.phone_number);
+      player.historyCount = historyCount?.count ?? 0;
+    });
+    return players;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch Players.');

@@ -192,6 +192,7 @@ export async function updatePlayer(
 
 export async function deletePlayer(id: string) {
     await validateAdmin();
+
     try {
         await sql`DELETE FROM players WHERE id = ${id}`;
         revalidatePath('/dashboard/players');

@@ -1,8 +1,9 @@
 import { PencilIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { deletePlayer } from '@/app/lib/actions';
+import React from "react";
+import {Button} from "@/app/ui/button";
 
-export function CreatePlayer() {
+export function CreateNewPlayer() {
   return (
     <Link
       href="/dashboard/players/create"
@@ -13,6 +14,8 @@ export function CreatePlayer() {
     </Link>
   );
 }
+
+
 
 export function UpdatePlayer({ id }: { id: string }) {
   return (
@@ -25,14 +28,3 @@ export function UpdatePlayer({ id }: { id: string }) {
   );
 }
 
-export function DeletePlayer({ id }: { id: string }) {
-  const deletePlayerWithId = deletePlayer.bind(null, id);
-  return (
-      <form action={deletePlayerWithId}>
-        <button className="rounded-md border p-2 hover:bg-gray-100">
-          <span className="sr-only">Delete</span>
-          <TrashIcon className="w-5"/>
-        </button>
-      </form>
-  );
-}

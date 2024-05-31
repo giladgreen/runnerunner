@@ -51,7 +51,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <hr style={{marginTop: 20, marginBottom: 20}}/>
 
 
-                <table className="hidden min-w-full text-gray-900 md:table">
+                <table className=" min-w-full text-gray-900 md:table">
                     <thead className="rounded-lg text-left text-sm font-normal">
                     <tr>
 

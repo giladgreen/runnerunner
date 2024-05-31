@@ -1,7 +1,7 @@
 import Pagination from '@/app/ui/players/pagination';
 import Search from '@/app/ui/search';
 import Table from '@/app/ui/players/table';
-import { CreatePlayer } from '@/app/ui/players/buttons';
+import { CreateNewPlayer, ImportPlayers } from '@/app/ui/players/buttons';
 import { lusitana } from '@/app/ui/fonts';
 import { PlayersTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
@@ -26,7 +26,8 @@ export default async function Page({
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Search placeholder="search players" />
-                <CreatePlayer />
+                <CreateNewPlayer />
+
             </div>
             <Suspense key={query + currentPage} fallback={<PlayersTableSkeleton />}>
                 <Table query={query} currentPage={currentPage} />

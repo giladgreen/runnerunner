@@ -8,7 +8,7 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import {BugAntIcon} from "@heroicons/react/20/solid";
+import {BugAntIcon, WrenchScrewdriverIcon} from "@heroicons/react/20/solid";
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
@@ -20,9 +20,9 @@ const links = [
     icon: UserGroupIcon,
   },
   {
-    name: 'Report a Bug',
-    href: '/dashboard/bugs',
-    icon: BugAntIcon,
+    name: 'configurations',
+    href: '/dashboard/configurations',
+    icon: WrenchScrewdriverIcon,
   }
 ];
 

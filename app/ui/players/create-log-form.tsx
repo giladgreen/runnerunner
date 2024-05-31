@@ -15,6 +15,7 @@ const TEXTS = {
   Tuesday: 'טורניר רעננה - כניסה',
   Wednesday: 'טורניר כפר סבא - כניסה',
   Thursday: 'טורניר ראשל״צ - כניסה',
+  Friday: 'טורניר ראשל״צ - כניסה',
   Saturday: 'טורניר ראשל״צ - כניסה',
 }
 
@@ -32,8 +33,15 @@ function getInitialText(): string {
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
 
   // @ts-ignore
-  const result: string = TEXTS[dayOfTheWeek] ? TEXTS[dayOfTheWeek] as string : '';
+  let result: string = TEXTS[dayOfTheWeek] ? TEXTS[dayOfTheWeek] as string : '';
 
+  const storedText = localStorage.getItem('use-balance-note-text');
+
+  if (!storedText){
+    localStorage.setItem('use-balance-note-text', result);
+  }else{
+    result = storedText;
+  }
   return result;
 }
 
@@ -42,8 +50,14 @@ function getInitialAmount(): number {
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
 
   // @ts-ignore
-  const result: number = AMOUNTS[dayOfTheWeek] ? AMOUNTS[dayOfTheWeek] as number : 300;
+  let result: number = AMOUNTS[dayOfTheWeek] ? AMOUNTS[dayOfTheWeek] as number : 300;
+  const storedText = localStorage.getItem('use-balance-amount');
 
+  if (!storedText){
+    localStorage.setItem('use-balance-amount', `${result}`);
+  }else{
+    result = Number(storedText);
+  }
   return result;
 }
 
@@ -63,13 +77,12 @@ export default function Form({player} : {player: PlayerForm}) {
   const [state2, dispatch2] = useFormState(createPlayerNewCreditLogWithPlayerData, initialState);
 
   return (
-      <div style={{ display: 'flex'}}>
-
-        <form action={dispatch1}>
+      <div style={{ display: 'flex' , justifyContent: 'space-between'}} >
+        <form action={dispatch1} className="form-control">
           <label className="mb-2 block text-sm font-medium">
-            Balance usage
+            Use Balance
           </label>
-          <div className="rounded-md bg-gray-50 p-4 md:p-6">
+          <div className="rounded-md  p-4 md:p-6 form-inner-control">
             {/*  balance change */}
             <div className="mb-4">
               <label htmlFor="change" className="mb-2 block text-sm font-medium">
@@ -86,7 +99,10 @@ export default function Form({player} : {player: PlayerForm}) {
                       placeholder="Enter ILS amount"
                       className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                       aria-describedby="change-error"
-                      onChange={(e) => setAmount(Number(e.target.value))}
+                      onChange={(e) => {
+                        setAmount(Number(e.target.value))
+                        localStorage.setItem('use-balance-amount', e.target.value);
+                      }}
                       value={amount}
                   />
                   <BanknotesIcon
@@ -116,7 +132,12 @@ export default function Form({player} : {player: PlayerForm}) {
                     placeholder="Enter note"
                     className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                     aria-describedby="note-error"
-                    onChange={(e) => setNote(e.target.value)}
+                    onChange={(e) => {
+                      setNote(e.target.value);
+                      localStorage.setItem('use-balance-note-text', e.target.value);
+
+                    }}
+                    required
                     value={note}
                 />
 
@@ -134,14 +155,14 @@ export default function Form({player} : {player: PlayerForm}) {
             </div>
           </div>
           <div className="mt-6 flex justify-end gap-4">
-            <Button type="submit">Use Balance</Button>
+            <Button type="submit">Use</Button>
           </div>
         </form>
-        <form action={dispatch2} style={{ marginLeft: 100}}>
+        <form action={dispatch2} className="form-control">
           <label className="mb-2 block text-sm font-medium">
-            Player Credit
+            Add to Balance
           </label>
-          <div className="rounded-md bg-gray-50 p-4 md:p-6">
+          <div className="rounded-md p-4 md:p-6 form-inner-control">
 
             {/*  balance change */}
             <div className="mb-4">
@@ -155,7 +176,8 @@ export default function Form({player} : {player: PlayerForm}) {
                       name="change"
                       type="number"
                       step="10"
-                      min={0}
+                      min={10}
+                      required
                       placeholder="Enter ILS change"
                       className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                       aria-describedby="change-error"
@@ -204,7 +226,7 @@ export default function Form({player} : {player: PlayerForm}) {
             </div>
           </div>
           <div className="mt-6 flex justify-end gap-4">
-            <Button type="submit">Add To Balance</Button>
+            <Button type="submit">Add</Button>
           </div>
         </form>
       </div>
