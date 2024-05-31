@@ -43,12 +43,15 @@ export function ImportPlayers() {
                         const fileContent = (e?.target?.result ?? '') as string;
                         const players = fileContent.split('\n').map((line: string) => {
                             console.log('line:', line)
-
+                            if (line.trim().length === 0){
+                                return false;
+                            }
+                            const parts = line.split(',');
                             const player = {
-                                name: line.split(',')[0].trim(),
-                                phone_number: line.split(',')[1].trim(),
-                                balance: Number(line.split(',')[2]),
-                                notes: line.split(',')[3],
+                                name: parts[0].trim(),
+                                phone_number: parts[1].trim().replaceAll('-', ''),
+                                balance: Number(parts[2]),
+                                notes: parts[3],
                             }
                             if (!player.notes){
                                 player.notes = 'imported player'
@@ -56,7 +59,7 @@ export function ImportPlayers() {
                                 player.notes = player.notes.trim()
                             }
                             return player;
-                        })
+                        }).filter(Boolean) as { name: string; phone_number: string; balance: number, notes:string }[];
 
                         console.log('players:', players)
                         await importPlayers(players);
