@@ -12,40 +12,40 @@ const users = [
 
 const players = [
   {
-    name: 'Rami Charanga (fake)',
+    name: 'Rami Charanga (🥸)',
     balance: 5600,
     phone_number: '05424567890',
     image_url: '/players/rami-charanga.png',
   },
   {
-    name: 'Delba De-Oliveira',
-    balance: 1200,
-    phone_number: '05654567777',
-    image_url: '/players/delba-de-oliveira.png',
+    name: 'David Takala (🥸)',
+    balance: 4700,
+    phone_number: '05654167777',
+    image_url: '/players/david-takala.png',
   },
   {
-    name: 'steven-tey',
-    balance: 4400,
-    phone_number: '05654567123',
-    image_url: '/players/steven-tey.png',
+    name: 'Gilad Green ✔️',
+    balance: 5300,
+    phone_number: '0587869910',
+    image_url: '/players/default.png',
+    notes: 'admin',
   },
 {
-    name: 'balazs-orban',
-    balance: 200,
-  phone_number: '05654567256',
-    image_url: '/players/balazs-orban.png',
-
+    name: 'Yoel Nagrin (🥸)',
+    balance: 4700,
+    phone_number: '05654561256',
+    image_url: '/players/yoel-nagrin.png',
   },
   {
-    name: 'evil rabbit',
-    balance: -450,
-    phone_number: '05654567891',
-    image_url: '/players/evil-rabbit.png',
+    name: 'Yaniv Malichi (🥸)',
+    balance: 9200,
+    phone_number: '05654556891',
+    image_url: '/players/yaniv-malichi.png',
   },
   {
-    name: 'guillermo rauch',
+    name: 'Guillermo Rauch',
     balance: -100,
-    phone_number: '05664567890',
+    phone_number: '05611567890',
     image_url: '/players/guillermo-rauch.png',
   },
 {
@@ -80,13 +80,7 @@ const players = [
     phone_number: '05872567890',
     image_url: '/players/steph-dietz.png',
   },
-  {
-    name: 'Gilad Green',
-    balance: 5500,
-    phone_number: '0587869910',
-    image_url: '/players/default.png',
-    notes: 'admin',
-  },
+
 
   {
     name: 'Avi asraf',
