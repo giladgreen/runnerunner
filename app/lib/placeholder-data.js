@@ -99,100 +99,17 @@ const players = [
     phone_number: '0587869922',
     image_url: '/players/dimitri-bekon.png',
   }
+,
+  {
+    name: 'מלור מלאדזה (🥸)',
+    balance: 2650,
+    phone_number: '0587869923',
+    image_url: '/players/melor-maladaza.png',
 
-];
-
-const players2 = [
-  {
-    name: 'Avi Asraf',
-    balance: 15000,
-    phone_number: '+144',
-    image_url: '/players/default.png',
-    notes: 'admin',
-  },
-  {
-    name: 'Gilad Green ✔️',
-    balance: 5300,
-    phone_number: '0587869910',
-    image_url: '/players/gilad-green.png',
-    notes: 'admin',
-  },
-  {
-    name: 'Rami Charanga (🥸)',
-    balance: 5600,
-    phone_number: '0567869911',
-    image_url: '/players/rami-charanga.png',
-  },
-  {
-    name: 'David Takala (🥸)',
-    balance: 4700,
-    phone_number: '0557869912',
-    image_url: '/players/david-takala.png',
-  },
-
-{
-    name: 'Yoel Nagrin (🥸)',
-    balance: 4700,
-    phone_number: '0547869913',
-    image_url: '/players/yoel-nagrin.png',
-  },
-  {
-    name: 'Yaniv Malichi (🥸)',
-    balance: 9200,
-    phone_number: '0537869914',
-    image_url: '/players/yaniv-malichi.png',
-  },
-  {
-    name: 'Guillermo Rauch (🥸)',
-    balance: -100,
-    phone_number: '0527869915',
-    image_url: '/players/guillermo-rauch.png',
-  },
-{
-    name: 'Yaacob Cohen (🥸)',
-    balance: 4250,
-    phone_number: '0587869916',
-    image_url: '/players/yaacob-cohen.png',
-
-  },
-  {
-    name: 'Shmulik Mizrahi (🥸)',
-    balance: 7800,
-    phone_number: '0587869917',
-    image_url: '/players/shmulik-mizrahi.png',
-  },
-  {
-    name: 'Roei Abramobich (🥸)',
-    balance: 2500,
-    phone_number: '0587869918',
-    image_url: '/players/roei-abramobich.png',
-  },
-  {
-    name: 'Michael Novotny (🥸)',
-    balance: -50,
-  phone_number: '0587869919',
-    image_url: '/players/michael-novotny.png',
-  },
-  {
-    name: 'Steph Dietz (🥸)',
-    balance: -150,
-    phone_number: '0587869920',
-    image_url: '/players/steph-dietz.png',
-  },
-  {
-    name: 'Bar Biton (🥸)',
-    balance: 8200,
-    phone_number: '0587869921',
-    image_url: '/players/bar-biton.png',
-  },
-  {
-    name: 'Dima Bacon (🥸)',
-    balance: 6250,
-    phone_number: '0587869922',
-    image_url: '/players/dimitri-bekon.png',
   }
 
 ];
+
 
 
 module.exports = {
