@@ -128,6 +128,43 @@ const players = [
     image_url: '/players/eli-ziv.png',
 
   }
+,
+  {
+    name: 'קובי סולימני (🥸)',
+    balance: 3450,
+    phone_number: '0587869925',
+    image_url: '/players/koby-sulimani.png',
+
+  }
+,
+  {
+    name: 'ירון חמאבי (🥸)',
+    balance: 7200,
+    phone_number: '0587869926',
+    image_url: '/players/yaron-hamabi.png',
+
+  },
+  {
+    name: 'רועי ברטמן (🥸)',
+    balance: 2450,
+    phone_number: '0587869927',
+    image_url: '/players/roei-bertman.png',
+
+  },
+  {
+    name: 'תומר בראופמן (🥸)',
+    balance: 8850,
+    phone_number: '0587869928',
+    image_url: '/players/tomer-braufman.png',
+
+  },
+  {
+    name: 'מיכאל לון (🥸)',
+    balance: 7400,
+    phone_number: '0587869929',
+    image_url: '/players/michael-lon.png',
+
+  }
 
 ];
 const logs = [

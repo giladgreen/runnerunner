@@ -58,14 +58,15 @@ export default async function Page({ params }: { params: { id: string } }) {
                             <th scope="col" className="px-3 py-5 font-medium">
                                 Note
                             </th>
-                            <th scope="col" className="px-3 py-5 font-medium">
-                                Updated By
-                            </th>
+
                             <th scope="col" className="px-3 py-5 font-medium">
                                 Current Balance
                             </th>
                             <th scope="col" className="px-3 py-5 font-medium">
                                 Date & Time
+                            </th>
+                            <th scope="col" className="px-3 py-5 font-medium">
+                                Updated By
                             </th>
                         </tr>
                         </thead>
@@ -83,14 +84,15 @@ export default async function Page({ params }: { params: { id: string } }) {
                                 <td className="whitespace-nowrap px-3 py-3">
                                     {log.note}
                                 </td>
-                                <td className="whitespace-nowrap px-3 py-3">
-                                    {log.updated_by}
-                                </td>
+
                                 <td className="whitespace-nowrap px-3 py-3">
                                     {formatCurrency(log.currentBalance)}
                                 </td>
                                 <td className="whitespace-nowrap py-3 pl-6 pr-3">
                                     {formatDateToLocal(log.updated_at)}, {getTime(log.updated_at)}
+                                </td>
+                                <td className="whitespace-nowrap px-3 py-3">
+                                    {log.updated_by}
                                 </td>
                             </tr>
                         ))}
