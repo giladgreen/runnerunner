@@ -3,11 +3,51 @@ const {
   players,
   users,
   logs,
+  templates,
   DEMO_USER_PHONE
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
 const dropTablesBefore = process.argv[2] === 'drop';
+
+async function seedTemplates(client) {
+  try {
+    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
+    // Create the "users" table if it doesn't exist
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS templates (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        day TEXT NOT NULL UNIQUE,
+        template TEXT NOT NULL,
+        i INT NOT NULL,
+        amount INT NOT NULL,
+        updated_at timestamp NOT NULL DEFAULT now()
+      );
+    `;
+
+    console.log(`Created "templates" table`);
+
+    // Insert data into the "users" table
+    const insertedTemplates = await Promise.all(
+      templates.map(async (template, index) => {
+        return client.sql`
+        INSERT INTO templates (day, template, amount, i)
+        VALUES (${template.day}, ${template.template}, ${template.amount}, ${index+1});
+      `;
+      }),
+    );
+
+    console.log(`Seeded ${insertedTemplates.length} templates`);
+
+    return {
+      createTable,
+      insertedTemplates
+    };
+  } catch (error) {
+    console.error('Error seeding users:', error);
+    throw error;
+  }
+}
 
 async function seedUsers(client) {
   try {
@@ -49,7 +89,6 @@ async function seedUsers(client) {
 
 async function createBugReportTable(client) {
   try {
-    console.log(`createBugReportTable start`);
 
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
 
@@ -175,11 +214,13 @@ async function main() {
 
   if (dropTablesBefore){
     console.log('## drop tables')
+      await client.sql`DROP TABLE IF EXISTS templates`;
       await client.sql`DROP TABLE IF EXISTS users`;
       await client.sql`DROP TABLE IF EXISTS players`;
       await client.sql`DROP TABLE IF EXISTS history`;
   }
 
+  await seedTemplates(client);
   await seedUsers(client);
   await createBugReportTable(client);
   await seedPlayers(client);

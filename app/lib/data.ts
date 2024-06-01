@@ -5,7 +5,7 @@ import {
   BugDB, Counts,
   DebtPlayerRaw, LogDB,
   MVPPlayerRaw, PlayerDB,
-  PlayersTable,User
+  PlayersTable, TemplateDB, User
 } from './definitions';
 
 export async function fetchMVPPlayers() {
@@ -175,9 +175,20 @@ export async function fetchAllPlayersForExport() {
         notes
       FROM players
     `;
-
-
     return data.rows;
+
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch bugs.');
+  }
+}
+export async function fetchTemplates() {
+  noStore();
+  try {
+    const templatesResult = await sql<TemplateDB>`
+      SELECT * FROM templates ORDER BY i ASC`;
+
+    return templatesResult.rows;
 
   } catch (error) {
     console.error('Database Error:', error);
@@ -219,6 +230,24 @@ export async function fetchPlayerById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetchPlayerById.');
+  }
+}
+
+export async function fetchTemplateById(id: string) {
+  noStore();
+  try {
+    const data = await sql<TemplateDB>`
+      SELECT
+        *
+      FROM templates
+      WHERE id = ${id};
+    `;
+
+    return data.rows[0];
+
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetchTemplateById.');
   }
 }
 

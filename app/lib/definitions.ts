@@ -9,6 +9,7 @@ export type User = {
   is_admin: string;
 };
 
+
 export type MVPPlayer = {
   id: string;
   name: string;
@@ -54,6 +55,13 @@ export type Counts = {
 
 
 
+export type TemplateForm = {
+  id: string;
+  template: string;
+  day: string;
+  amount: number;
+};
+
 export type PlayerForm = {
   id: string;
   name: string;
@@ -86,7 +94,12 @@ export type PlayerDB = {
   notes: string;
   historyLog: LogDB[]
 };
-
+export type TemplateDB = {
+  id: string;
+  template: string;
+  day: string;
+  amount: number;
+};
 export type BugDB = {
   id: string;
   description: string;

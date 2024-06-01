@@ -202,10 +202,46 @@ const logs = [
   }
 ]
 
+const templates = [{
+  day: 'Sunday',
+  template: 'טורניר קיסריה - כניסה',
+  amount: 300
+},
+  {
+    day: 'Monday',
+    template: 'טורניר תל אביב - כניסה',
+    amount: 300
+  },
+  {
+    day: 'Tuesday',
+    template: 'טורניר רעננה - כניסה',
+    amount: 300
+  },
+  {
+    day: 'Wednesday',
+    template: 'טורניר כפר סבא - כניסה',
+    amount: 250
+  },
+  {
+    day: 'Thursday',
+    template: 'טורניר ראשל״צ - כניסה',
+    amount: 400
+  },
+  {
+    day: 'Friday',
+    template: '',
+    amount: 0
+  },
+  {
+    day: 'Saturday',
+    template: 'טורניר ראשל״צ - כניסה',
+    amount: 250
+  }]
 
 module.exports = {
   users,
   players,
   logs,
+  templates,
   DEMO_USER_PHONE
 };

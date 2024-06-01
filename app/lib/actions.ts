@@ -5,8 +5,9 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import {PlayerDB, PlayerForm, User} from "@/app/lib/definitions";
+import {PlayerDB, PlayerForm, User, TemplateDB} from "@/app/lib/definitions";
 import bcrypt from "bcrypt";
+import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/unstable-no-store";
 
 
 const FormSchema = z.object({
@@ -28,6 +29,12 @@ const CreateCreditLog =  z.object({
     change: z.coerce.number(),
     note: z.string().min(1, 'change note can not be left empty'),
 });
+
+const UpdateTemplate =  z.object({
+    amount: z.coerce.number(),
+    template: z.string()
+});
+
 const UpdatePlayer = FormSchema.omit({ id: true, updated_at: true, image_url: true, balance:true, note: true , phone_number: true });
 export type State = {
     errors?: {
@@ -38,6 +45,8 @@ export type State = {
         note?: string[];
         notes?: string[];
         description?: string[];
+        template?: string[];
+        amount?: string[];
     };
     message?: string | null;
 };
@@ -225,6 +234,61 @@ export async function updatePlayer(
     revalidatePath('/dashboard/players');
     redirect('/dashboard/players');
 }
+export async function updateTemplate(
+    id: string,
+    prevState: State,
+    formData: FormData,
+) {
+    await validateAdmin();
+
+    const validatedFields = UpdateTemplate.safeParse({
+        template: formData.get('template'),
+        amount: formData.get('amount'),
+    });
+
+    if (!validatedFields.success) {
+        console.log('## updateTemplate error', validatedFields.error.flatten().fieldErrors);
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Update Template.',
+        };
+    }
+
+    const { template, amount } = validatedFields.data;
+    const date = new Date().toISOString();
+
+    try {
+        await sql`
+      UPDATE templates
+      SET template = ${template}, amount = ${amount}, updated_at=${date}
+      WHERE id = ${id}
+    `;
+    } catch (error) {
+        console.log('## updateTemplate error', error)
+        return { message: 'Database Error: Failed to Update Template.' };
+    }
+
+    revalidatePath('/dashboard/configurations');
+    redirect('/dashboard/configurations');
+}
+
+export async function fetchTemplates(
+
+) {
+    await validateAdmin();
+
+    try {
+        const data = await sql<TemplateDB>`
+      SELECT * FROM templates ORDER BY i ASC
+     `;
+
+        return data.rows;
+    } catch (error) {
+        console.log('## fetchTemplates error', error)
+        return { message: 'Database Error: Failed to fetch Templates .' };
+    }
+}
+
 
 export async function deletePlayer(id: string) {
     await validateAdmin();
@@ -290,3 +354,4 @@ export async function signUp(
     redirect('/signin');
     return;
 }
+

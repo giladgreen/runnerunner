@@ -5,29 +5,29 @@ import {
   BanknotesIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import {createPlayerNewCreditLog, createPlayerUsageLog} from '@/app/lib/actions';
+import {createPlayerNewCreditLog, createPlayerUsageLog, fetchTemplates} from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import {PlayerForm} from "@/app/lib/definitions";
+import {PlayerForm, TemplateDB} from "@/app/lib/definitions";
 import {useState} from "react";
 const TEXTS = {
-  Sunday: 'טורניר קיסריה - כניסה',
-  Monday: 'טורניר תל אביב - כניסה',
-  Tuesday: 'טורניר רעננה - כניסה',
-  Wednesday: 'טורניר כפר סבא - כניסה',
-  Thursday: 'טורניר ראשל״צ - כניסה',
-  Friday: 'טורניר ראשל״צ - כניסה',
-  Saturday: 'טורניר ראשל״צ - כניסה',
 }
 
 const AMOUNTS = {
-  Sunday: 300,
-  Monday: 300,
-  Tuesday: 300,
-  Wednesday: 250,
-  Thursday: 400,
-  Saturday: 250,
 }
 
+function initialTemplates(templates: TemplateDB[]) {
+  if (Object.keys(TEXTS).length !== 0) {
+    return;
+  }
+
+  templates.forEach((template) => {
+    // @ts-ignore
+    TEXTS[template.day] = template.template;
+    // @ts-ignore
+    AMOUNTS[template.day] = template.amount;
+  })
+
+}
 function getInitialText(): string {
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
@@ -61,8 +61,8 @@ function getInitialAmount(): number {
   return result;
 }
 
-
-export default function Form({player} : {player: PlayerForm}) {
+export default function Form({player, templates} : {player: PlayerForm, templates:TemplateDB[]}) {
+  initialTemplates(templates);
   const initialState = { message: null, errors: {} };
   const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, player);
   const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, player);

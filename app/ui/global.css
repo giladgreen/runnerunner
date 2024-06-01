@@ -35,7 +35,14 @@ background: rgb(0, 112, 243, 0.2);
 .signin-top-header{
   padding-left: 20px;
 }
-
+.config-seperator{
+    margin: 20px 0;
+    height: 20px;
+    background-color: #0070f377;
+}
+.config-section{
+    margin: 0 10px;
+}
 .homepage-welcome{
   margin-bottom: 90px;
 }
