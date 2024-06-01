@@ -5,8 +5,8 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import {PlayerDB, PlayerForm} from "@/app/lib/definitions";
-import {players} from "@/app/lib/placeholder-data";
+import {PlayerDB, PlayerForm, User} from "@/app/lib/definitions";
+import bcrypt from "bcrypt";
 
 
 const FormSchema = z.object({
@@ -250,8 +250,13 @@ export async function authenticate(
     formData: FormData,
 ): Promise<string | undefined> {
     try {
+
+
+        const phoneNumber = ((formData.get('email') as string) ?? '').trim().replaceAll('-','');
+        formData.set('email', phoneNumber);
         await signIn('credentials', formData);
     } catch (error) {
+        console.log('## error', error)
         if (error instanceof AuthError) {
             switch (error.type) {
                 case 'CredentialsSignin':
@@ -262,4 +267,26 @@ export async function authenticate(
         }
         throw error;
     }
+}
+
+export async function signUp(
+    prevState: string | undefined,
+    formData: FormData,
+): Promise<string | undefined> {
+    const phoneNumber = ((formData.get('phone_number') as string) ?? '').trim().replaceAll('-','');
+    const password = formData.get('password') as string;
+    const userResult  = await sql<User>`SELECT * FROM users WHERE phone_number = ${phoneNumber}`;
+    const existingUser = userResult.rows[0];
+    if (existingUser) {
+        return 'User with phone number already exists';
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await sql`
+      INSERT INTO users (phone_number, password)
+      VALUES (${phoneNumber}, ${hashedPassword})
+    `;
+
+    revalidatePath('/signin');
+    redirect('/signin');
+    return;
 }

@@ -1,14 +1,13 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
-import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
 
-async function getUser(email: string): Promise<User | undefined> {
+async function getUserByPhoneNumber(phone_number: string): Promise<User | undefined> {
     try {
-        const user = await sql<User>`SELECT * FROM users WHERE email=${email}`;
+        const user = await sql<User>`SELECT * FROM users WHERE phone_number=${phone_number}`;
         return user.rows[0];
     } catch (error) {
         console.error('Failed to fetch user:', error);
@@ -21,18 +20,14 @@ export const { auth, signIn, signOut } = NextAuth({
     providers: [
         Credentials({
             async authorize(credentials) {
-                const parsedCredentials = z
-                    .object({ email: z.string().email(), password: z.string().min(4) })
-                    .safeParse(credentials);
+                console.log('####   authorize');
 
-                if (parsedCredentials.success) {
-                    const { email, password } = parsedCredentials.data;
-                    const user = await getUser(email);
-                    if (!user) return null;
-                    const passwordsMatch = await bcrypt.compare(password, user.password);
-                    if (passwordsMatch) return user;
-
-                }
+                const phone_number = credentials.email as string;
+                const password = credentials.password as string;
+                const user = await getUserByPhoneNumber(phone_number);
+                if (!user) return null;
+                const passwordsMatch = await bcrypt.compare(password, user.password);
+                if (passwordsMatch) return { ...user, email: user.phone_number};
 
                 console.log('Invalid credentials');
                 return null;

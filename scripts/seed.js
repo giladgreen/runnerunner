@@ -2,6 +2,8 @@ const { db } = require('@vercel/postgres');
 const {
   players,
   users,
+  logs,
+  DEMO_USER_PHONE
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
@@ -14,9 +16,9 @@ async function seedUsers(client) {
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS users (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        email TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL
+        phone_number TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL,
+        is_admin BOOLEAN DEFAULT FALSE
       );
     `;
 
@@ -27,9 +29,8 @@ async function seedUsers(client) {
       users.map(async (user) => {
         const hashedPassword = await bcrypt.hash(user.password, 10);
         return client.sql`
-        INSERT INTO users (id, name, email, password)
-        VALUES (${user.id}, ${user.name}, ${user.email}, ${hashedPassword})
-        ON CONFLICT (id) DO NOTHING;
+        INSERT INTO users (phone_number, password, is_admin)
+        VALUES (${user.phone_number}, ${hashedPassword}, ${user.is_admin});
       `;
       }),
     );
@@ -145,6 +146,17 @@ async function seedHistory(client) {
 
     console.log(`Seeded ${insertedHistoryLogs.length} history`);
 
+
+    //update DEMO USER:
+    await client.sql`delete from history where phone_number = ${DEMO_USER_PHONE};`;
+    await Promise.all(
+        logs.map(
+            (log) => client.sql`
+        INSERT INTO history (phone_number, change, note, updated_at, updated_by)
+        VALUES (${DEMO_USER_PHONE}, ${log.change}, ${log.note}, ${log.updated_at}, ${log.updated_by}); `,
+        ),
+    );
+
     return {
       createTable,
       insertedHistoryLogs
@@ -156,13 +168,19 @@ async function seedHistory(client) {
 }
 
 async function main() {
-  const client = await db.connect();
-if (dropTablesBefore){
-  console.log('## drop tables')
-    await client.sql`DROP TABLE IF EXISTS players`;
-    await client.sql`DROP TABLE IF EXISTS history`;
-}
+  console.log('## main start')
 
+  const client = await db.connect();
+  console.log('## db connected')
+
+  if (dropTablesBefore){
+    console.log('## drop tables')
+      await client.sql`DROP TABLE IF EXISTS users`;
+      await client.sql`DROP TABLE IF EXISTS players`;
+      await client.sql`DROP TABLE IF EXISTS history`;
+  }
+
+  await seedUsers(client);
   await createBugReportTable(client);
   await seedPlayers(client);
 

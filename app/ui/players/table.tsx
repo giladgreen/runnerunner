@@ -14,7 +14,7 @@ export default async function PlayersTable({
   currentPage: number;
 }) {
   const players = await fetchFilteredPlayers(query, currentPage);
- //console.log('### players:', players)
+
   return (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">

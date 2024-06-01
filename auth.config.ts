@@ -4,24 +4,23 @@ import { User} from "@/app/lib/definitions";
 
 export const authConfig = {
     pages: {
-        signIn: '/login',
+        signIn: '/signin',
     },
     callbacks: {
         authorized: async ({ auth, request: { nextUrl } }) =>{
-
             const loggedInUser = auth?.user;
+            console.log('## loggedInUser', loggedInUser)
             const isLoggedIn = !!loggedInUser;
-
-
             let isAdmin: boolean = false;
             if (isLoggedIn) {
                 const users = (await sql<User>`SELECT * FROM users`).rows;
-                const userFromDB = users.find((user) => user.email === loggedInUser!.email);
+                // @ts-ignore
+                const userFromDB = users.find((user) => user.phone_number === loggedInUser!.email);
                 isAdmin = Boolean(userFromDB && userFromDB.is_admin);
             }
             const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
             const isOnPersonal = nextUrl.pathname.startsWith('/personal');
-
+            console.log('## isAdmin', isAdmin)
             if (isOnDashboard) {
                 return isAdmin;
             }else if (isOnPersonal) {
@@ -31,6 +30,7 @@ export const authConfig = {
                     return Response.redirect(new URL('/dashboard', nextUrl));
                 }
 
+                // @ts-ignore
                 return Response.redirect(new URL(`/personal/${loggedInUser.email}`, nextUrl));
             }
             return true;

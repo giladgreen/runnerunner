@@ -3,7 +3,6 @@ import NavLinks from '@/app/ui/dashboard/nav-links';
 import RunnerLogo from '@/app/ui/runner-logo';
 import { PowerIcon } from '@heroicons/react/24/outline';
 import { signOut } from '@/auth';
-import {getSession} from "next-auth/react";
 
 export default function SideNav() {
   return (
@@ -22,6 +21,8 @@ export default function SideNav() {
             <form
                 action={async () => {
                     'use server';
+                    console.log('## signing out..')
+
                     await signOut();
                 }}
             >

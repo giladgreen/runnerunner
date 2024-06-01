@@ -1,21 +1,27 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 // https://nextjs.org/learn/dashboard-app/fetching-data
+const DEMO_USER_PHONE = '0542609910'
+
 const users = [
   {
-    id: '410544b2-4001-4271-9855-fec4b6a6442a',
-    name: 'Gilad Green',
-    email: 'green.gilad@gmail.com',
+    phone_number: '0587869910',
     password: 'kush1984',
+    is_admin: true
+  },
+  {
+    phone_number: '0542609910',
+    password: '123456',
+    is_admin: false
   },
 ];
 
 
 const players = [
   {
-    name: 'אבי אסרף',
+    name: ' (🥸) אבי אסרף',
     balance: 15000,
-    phone_number: '+144',
-    image_url: '/players/default.png',
+    phone_number: '144',
+    image_url: '/players/avi-asraf.png',
     notes: 'admin',
   },
   {
@@ -24,6 +30,13 @@ const players = [
     phone_number: '0587869910',
     image_url: '/players/gilad-green.png',
     notes: 'admin',
+  },
+  {
+    name: 'ישראל ישראלי',
+    balance: 3550,
+    phone_number: DEMO_USER_PHONE,
+    image_url: '/players/default.png',
+    notes: '',
   },
   {
     name: 'רמי צרנגה (🥸)',
@@ -107,12 +120,71 @@ const players = [
     image_url: '/players/melor-maladaza.png',
 
   }
+,
+  {
+    name: 'אלי זיו (🥸)',
+    balance: 2950,
+    phone_number: '0587869924',
+    image_url: '/players/eli-ziv.png',
+
+  }
 
 ];
-
+const logs = [
+  {
+    change: 2200,
+    note: 'טורניר רעננה - מקום חמישי',
+    updated_at: '2024-01-02T10:00:00.000Z',
+    updated_by: 'חדווה'
+  },
+  {
+    change: -300,
+    note: 'טורניר תל אביב - כניסה',
+    updated_at: '2024-01-12T20:00:00.000Z',
+    updated_by: 'תרצה'
+  },
+  {
+    change: -200,
+    note: 'טורניר תל אביב - כניסה שנייה',
+    updated_at: '2024-01-12T20:50:00.000Z',
+    updated_by: 'תרצה'
+  },
+  {
+    change: -400,
+    note: 'טורניר ראשון לציון - כניסה',
+    updated_at: '2024-01-14T20:00:00.000Z',
+    updated_by: 'חדווה'
+  },
+  {
+    change: 1000,
+    note: 'טורניר ראשון לציון באונטי - מעטפה',
+    updated_at: '2024-01-14T21:30:00.000Z',
+    updated_by: 'חדווה'
+  },
+  {
+    change: -2000,
+    note: 'ניצול קרדיט לפרס - דייסוןי',
+    updated_at: '2024-01-15T10:00:00.000Z',
+    updated_by: 'חדווה'
+  },
+  {
+    change: -250,
+    note: 'טורניר קיסריה - כניסה',
+    updated_at: '2024-01-17T20:00:00.000Z',
+    updated_by: 'תרצה'
+  },
+  {
+    change: 3500,
+    note: 'טורניר קיסריה - מקום ראשון',
+    updated_at: '2024-01-18T10:00:00.000Z',
+    updated_by: 'תרצה'
+  }
+]
 
 
 module.exports = {
   users,
   players,
+  logs,
+  DEMO_USER_PHONE
 };

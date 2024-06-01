@@ -123,7 +123,7 @@ export async function fetchFilteredPlayers(
     return players;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch Players.');
+    throw new Error('Failed to fetch FilteredPlayers.');
   }
 }
 
@@ -218,27 +218,14 @@ export async function fetchPlayerById(id: string) {
 
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch player.');
+    throw new Error('Failed to fetchPlayerById.');
   }
 }
 
-export async function fetchPlayerByEmail(urlEmail: string) {
+export async function fetchPlayerByPhoneNumber(phoneNumber: string) {
   noStore();
   try {
-    console.log('urlEmail', urlEmail)
-    const email = urlEmail  .replace('%40', '@');
-    console.log('email', email)
-
-    const userData = await sql<User>`
-      SELECT *
-      FROM users
-      WHERE email = ${email};
-    `;
-
-    const userFromDb = userData.rows[0];
-    console.log('userFromDb', userFromDb)
-    const phone_number = userFromDb!.phone;
-    console.log('phone_number', phone_number)
+    console.log('phoneNumber', phoneNumber)
 
  const data = await sql<PlayerDB>`
       SELECT
@@ -249,7 +236,7 @@ export async function fetchPlayerByEmail(urlEmail: string) {
         updated_at,
         notes
       FROM players
-      WHERE phone_number = ${phone_number};
+      WHERE phone_number = ${phoneNumber};
     `;
 
     const player = data.rows[0];
@@ -273,6 +260,6 @@ export async function fetchPlayerByEmail(urlEmail: string) {
 
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch player.');
+    throw new Error('Failed to fetchPlayerByPhoneNumber.');
   }
 }
