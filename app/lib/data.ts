@@ -139,17 +139,6 @@ export async function fetchPlayersPages(query: string) {
   }
 }
 
-export async function updateIsUserAdmin(id:string, isAdmin:boolean) {
-  noStore();
-  try {
-    await sql`UPDATE users SET is_admin = ${isAdmin} WHERE id = ${id}`;
-
-    return true;
-  } catch (error) {
-    console.error('Database Error:', error);
-    return false;
-  }
-}
 
 
 export async function fetchAllUsers() {

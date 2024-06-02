@@ -356,35 +356,10 @@ export async function updateIsUserAdmin(id:string) {
         const users = await sql<User>`SELECT * FROM users WHERE id = ${id}`;
         const user = users.rows[0];
         await sql`UPDATE users SET is_admin = ${!user.is_admin} WHERE id = ${id}`;
-
-        revalidatePath('/dashboard/users');
-        redirect('/dashboard/users');
     } catch (error) {
         console.error('Database Error:', error);
         return false;
     }
-}
-
-
-export async function fetchAllUsers() {
-    noStore();
-    try {
-
-        const playersResults = await sql<PlayerDB>`SELECT * FROM players`;
-        const userResults = await sql<User>`SELECT * FROM users`;
-        const users = userResults.rows;
-        const players = playersResults.rows;
-        users.forEach(user => {
-            const player = players.find(p => p.phone_number === user.phone_number);
-            if (player){
-                user.name = player.name;
-            }
-        });
-
-        return users;
-    } catch (error) {
-        console.error('Database Error:', error);
-        throw new Error('Failed to fetch total number of users.');
-    }
+    redirect('/dashboard/users');
 }
 

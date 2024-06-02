@@ -115,20 +115,3 @@ export function ExportPlayers({ players}: { players: PlayerDB[]}) {
             );
             }
 
-export function UpdateUser({ user }: { user: User}) {
-    const updateIsUserAdminWithId = updateIsUserAdmin.bind(null, user.id);
-
-    const onSubmit = (_formData: FormData) => {
-        updateIsUserAdminWithId();
-    };
-
-
-    return (
-        <form action={onSubmit}>
-            <button className="">
-                <CheckCircleIcon width={20} color={user.is_admin ? 'green' : 'gray'}
-                                 className={'CheckCircleIcon'}/>
-            </button>
-        </form>
-    );
-}

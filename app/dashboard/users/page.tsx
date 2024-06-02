@@ -1,8 +1,10 @@
-"use client";
 import { lusitana } from '@/app/ui/fonts';
-import { fetchAllUsers } from '@/app/lib/actions';
+import { fetchAllUsers } from '@/app/lib/data';
 import React from "react";
-import {UpdateUser} from "@/app/ui/players/client-buttons";
+import {User} from "@/app/lib/definitions";
+import {updateIsUserAdmin} from "@/app/lib/actions";
+import {CheckCircleIcon} from "@heroicons/react/24/solid";
+import {router} from "next/client";
 
 export default async function Page() {
     const users = await fetchAllUsers();
@@ -10,8 +12,9 @@ export default async function Page() {
     return (
         <div className="w-full">
             <div className="flex w-full items-center justify-between">
-                <h1 className={`${lusitana.className} text-2xl`}>{users.length } Users</h1>
+                <h1 className={`${lusitana.className} text-2xl`}><b><u>{users.length} Users</u></b></h1>
             </div>
+
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <table className="hidden  text-gray-900 md:table">
                     <thead className="rounded-lg text-left text-sm font-normal">
@@ -51,3 +54,21 @@ export default async function Page() {
     );
 }
 
+function UpdateUser({user}: { user: User }) {
+    const updateIsUserAdminWithId = updateIsUserAdmin.bind(null, user.id);
+
+    const onSubmit = async (_formData: FormData) => {
+        'use server'
+        await updateIsUserAdminWithId();
+    };
+
+
+    return (
+        <form action={onSubmit}>
+            <button className="">
+                <CheckCircleIcon width={20} color={user.is_admin ? 'green' : 'gray'}
+                                 className={'CheckCircleIcon'}/>
+            </button>
+        </form>
+    );
+}
