@@ -12,9 +12,9 @@ export async function fetchMVPPlayers() {
   noStore();
   try {
     const data = await sql<MVPPlayerRaw>`
-      SELECT players.balance, players.name, players.image_url, players.phone_number, players.id
+      SELECT *
       FROM players
-      ORDER BY players.balance DESC
+      ORDER BY balance DESC
       LIMIT 5`;
 
     return data.rows;
@@ -28,10 +28,10 @@ export async function fetchDebtPlayers() {
   noStore();
   try {
     const data = await sql<DebtPlayerRaw>`
-      SELECT players.balance, players.name, players.image_url, players.phone_number, players.id
+      SELECT *
       FROM players
-      WHERE players.balance < 0
-      ORDER BY players.balance ASC
+      WHERE balance < 0
+      ORDER BY balance ASC
       LIMIT 5`;
 
     return data.rows;
@@ -49,9 +49,9 @@ export async function fetchCardData() {
     // However, we are intentionally splitting them to demonstrate
     // how to initialize multiple queries in parallel with JS.
     const playerCountPromise = sql`SELECT COUNT(*) FROM players`;
-    const playerWithDebtCountPromise = sql`SELECT COUNT(*) FROM players WHERE players.balance < 0`;
-    const totalRunnerDebtPromise = sql`SELECT SUM(balance) as debt FROM players WHERE players.balance > 0`;
-    const totalPlayersDebtPromise = sql`SELECT SUM(balance) as debt FROM players WHERE players.balance < 0`;
+    const playerWithDebtCountPromise = sql`SELECT COUNT(*) FROM players WHERE balance < 0`;
+    const totalRunnerDebtPromise = sql`SELECT SUM(balance) as debt FROM players WHERE balance > 0`;
+    const totalPlayersDebtPromise = sql`SELECT SUM(balance) as debt FROM players WHERE balance < 0`;
 
     const data = await Promise.all([
       playerCountPromise,
@@ -89,18 +89,12 @@ export async function fetchFilteredPlayers(
   try {
     const playersResultPromise = await sql<PlayersTable>`
       SELECT
-        players.id,
-        players.name,
-        players.phone_number,
-        players.image_url,
-        players.balance,
-        players.updated_at,
-        players.notes
+        *
       FROM players
       WHERE
-        players.name::text ILIKE ${`%${query}%`} OR
-        players.phone_number::text ILIKE ${`%${query}%`}
-      ORDER BY players.updated_at DESC
+        name::text ILIKE ${`%${query}%`} OR
+        phone_number::text ILIKE ${`%${query}%`}
+      ORDER BY updated_at DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
 
@@ -133,8 +127,8 @@ export async function fetchPlayersPages(query: string) {
     const count = await sql`SELECT COUNT(*)
     FROM players
     WHERE
-      players.name ILIKE ${`%${query}%`} OR
-      players.phone_number ILIKE ${`%${query}%`}
+      name ILIKE ${`%${query}%`} OR
+      phone_number ILIKE ${`%${query}%`}
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
@@ -161,10 +155,18 @@ export async function updateIsUserAdmin(id:string, isAdmin:boolean) {
 export async function fetchAllUsers() {
   noStore();
   try {
+    const playersResults = await sql<PlayerDB>`SELECT * FROM players`;
+    const userResults = await sql<User>`SELECT * FROM users`;
+    const users = userResults.rows;
+    const players = playersResults.rows;
+    users.forEach(user => {
+      const player = players.find(p => p.phone_number === user.phone_number);
+      if (player){
+        user.name = player.name;
+      }
+    });
 
-    const results = await sql<User>`SELECT * FROM users`;
-
-    return results.rows;
+    return users;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of users.');
@@ -175,15 +177,7 @@ export async function fetchAllUsers() {
 export async function fetchAllBugs() {
   noStore();
   try {
-    const data = await sql<BugDB>`
-      SELECT
-        id,
-        description,
-        updated_at
-      FROM bugs
-    `;
-
-
+    const data = await sql<BugDB>`  SELECT  * FROM bugs  `;
     return data.rows;
 
   } catch (error) {
@@ -227,14 +221,9 @@ export async function fetchPlayerById(id: string) {
   try {
     const data = await sql<PlayerDB>`
       SELECT
-        players.name,
-        players.phone_number,
-        players.image_url,
-        players.balance,
-        players.updated_at,
-        players.notes
+        *
       FROM players
-      WHERE players.id = ${id};
+      WHERE id = ${id};
     `;
 
     const player = data.rows[0];
@@ -285,12 +274,7 @@ export async function fetchPlayerByPhoneNumber(phoneNumber: string) {
 
  const data = await sql<PlayerDB>`
       SELECT
-        name,
-        phone_number,
-        image_url,
-        balance,
-        updated_at,
-        notes
+        *
       FROM players
       WHERE phone_number = ${phoneNumber};
     `;
