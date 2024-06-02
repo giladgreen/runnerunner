@@ -31,6 +31,9 @@ background: rgb(0, 112, 243, 0.2);
   transition: transform 0.5s;
 
 }
+.spend{
+  width: 100%;
+}
 .thin-column{
   max-width: 160px !important;
 }

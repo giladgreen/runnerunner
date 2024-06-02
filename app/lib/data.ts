@@ -45,32 +45,26 @@ export async function fetchCardData() {
   noStore();
 
   try {
-    // You can probably combine these into a single SQL query
-    // However, we are intentionally splitting them to demonstrate
-    // how to initialize multiple queries in parallel with JS.
-    const playerCountPromise = sql`SELECT COUNT(*) FROM players`;
-    const playerWithDebtCountPromise = sql`SELECT COUNT(*) FROM players WHERE balance < 0`;
-    const totalRunnerDebtPromise = sql`SELECT SUM(balance) as debt FROM players WHERE balance > 0`;
-    const totalPlayersDebtPromise = sql`SELECT SUM(balance) as debt FROM players WHERE balance < 0`;
+    const now = new Date();
+    const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+    const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
 
-    const data = await Promise.all([
-      playerCountPromise,
-      playerWithDebtCountPromise,
-      totalRunnerDebtPromise,
-      totalPlayersDebtPromise
-    ]);
+    const allPlayersResult = await sql`SELECT * FROM players`;
+    const allPlayers = allPlayersResult.rows;
 
-    const totalNumberOfPlayers = Number(data[0].rows[0].count ?? '0');
-    const numberOfPlayersWithDebt = Number(data[1].rows[0].count ?? '0');
-    const totalRunnerDebt = Number(data[2].rows[0].debt ?? '0');
-    const totalPlayersDebt = Number(data[3].rows[0].debt ?? '0');
-
+    const totalNumberOfPlayers = allPlayers.length;
+    const playersWithDebt = allPlayers.filter((player) => player.balance < 0);
+    const numberOfPlayersWithDebt = playersWithDebt.length;
+    const totalRunnerDebt = allPlayers.filter((player) => player.balance > 0).reduce((acc, player) => acc + player.balance, 0);
+    const totalPlayersDebt = playersWithDebt.reduce((acc, player) => acc + player.balance, 0);
+    const rsvpForToday = allPlayers.filter(player => player[rsvpPropName]).length
 
     return {
       totalNumberOfPlayers,
       numberOfPlayersWithDebt,
       totalRunnerDebt,
-      totalPlayersDebt
+      totalPlayersDebt,
+      rsvpForToday
     };
   } catch (error) {
     console.error('Database Error:', error);

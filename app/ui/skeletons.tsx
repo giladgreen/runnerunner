@@ -18,13 +18,12 @@ export function CardSkeleton() {
   );
 }
 
-export function CardsSkeleton() {
+export function CardsSkeleton({ count}: { count: number }) {
   return (
     <>
-      <CardSkeleton />
-      <CardSkeleton />
-      <CardSkeleton />
-      <CardSkeleton />
+      {Array.from({ length: count }).map((_, i) => (
+        <CardSkeleton key={i} />
+      ))}
     </>
   );
 }
