@@ -9,7 +9,6 @@ import {PlayerDB, PlayerForm, User, TemplateDB} from "@/app/lib/definitions";
 import bcrypt from "bcrypt";
 import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/unstable-no-store";
 
-
 const FormSchema = z.object({
     id: z.string(),
     image_url: z.string(),
@@ -22,10 +21,6 @@ const FormSchema = z.object({
 });
 const CreatePlayer = FormSchema.omit({ id: true, updated_at: true, image_url: true });
 const CreateUsageLog =  z.object({
-    change: z.coerce.number(),
-    note: z.string().min(1, 'change note can not be left empty'),
-});
-const CreateCreditLog =  z.object({
     change: z.coerce.number(),
     note: z.string().min(1, 'change note can not be left empty'),
 });
@@ -353,5 +348,43 @@ export async function signUp(
     revalidatePath('/signin');
     redirect('/signin');
     return;
+}
+
+export async function updateIsUserAdmin(id:string) {
+    noStore();
+    try {
+        const users = await sql<User>`SELECT * FROM users WHERE id = ${id}`;
+        const user = users.rows[0];
+        await sql`UPDATE users SET is_admin = ${!user.is_admin} WHERE id = ${id}`;
+
+        revalidatePath('/dashboard/users');
+        redirect('/dashboard/users');
+    } catch (error) {
+        console.error('Database Error:', error);
+        return false;
+    }
+}
+
+
+export async function fetchAllUsers() {
+    noStore();
+    try {
+
+        const playersResults = await sql<PlayerDB>`SELECT * FROM players`;
+        const userResults = await sql<User>`SELECT * FROM users`;
+        const users = userResults.rows;
+        const players = playersResults.rows;
+        users.forEach(user => {
+            const player = players.find(p => p.phone_number === user.phone_number);
+            if (player){
+                user.name = player.name;
+            }
+        });
+
+        return users;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch total number of users.');
+    }
 }
 

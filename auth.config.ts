@@ -17,6 +17,7 @@ export const authConfig = {
                 // @ts-ignore
                 const userFromDB = users.find((user) => user.phone_number === loggedInUser!.email);
                 isAdmin = Boolean(userFromDB && userFromDB.is_admin);
+
             }
             const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
             const isOnPersonal = nextUrl.pathname.startsWith('/personal');

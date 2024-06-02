@@ -145,6 +145,33 @@ export async function fetchPlayersPages(query: string) {
   }
 }
 
+export async function updateIsUserAdmin(id:string, isAdmin:boolean) {
+  noStore();
+  try {
+    await sql`UPDATE users SET is_admin = ${isAdmin} WHERE id = ${id}`;
+
+    return true;
+  } catch (error) {
+    console.error('Database Error:', error);
+    return false;
+  }
+}
+
+
+export async function fetchAllUsers() {
+  noStore();
+  try {
+
+    const results = await sql<User>`SELECT * FROM users`;
+
+    return results.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of users.');
+  }
+}
+
+
 export async function fetchAllBugs() {
   noStore();
   try {

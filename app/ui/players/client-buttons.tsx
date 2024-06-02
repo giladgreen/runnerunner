@@ -1,10 +1,11 @@
 "use client";
 
 import { TrashIcon } from '@heroicons/react/24/outline';
-import {deletePlayer, importPlayers} from '@/app/lib/actions';
+import {deletePlayer, importPlayers, updateIsUserAdmin} from '@/app/lib/actions';
 import {Button} from "@/app/ui/button";
 import React from "react";
-import {PlayerDB} from "@/app/lib/definitions";
+import {PlayerDB, User} from "@/app/lib/definitions";
+import {CheckCircleIcon} from "@heroicons/react/24/solid";
 
 export function DeletePlayer({ id }: { id: string }) {
   const deletePlayerWithId = deletePlayer.bind(null, id);
@@ -113,3 +114,21 @@ export function ExportPlayers({ players}: { players: PlayerDB[]}) {
         </>
             );
             }
+
+export function UpdateUser({ user }: { user: User}) {
+    const updateIsUserAdminWithId = updateIsUserAdmin.bind(null, user.id);
+
+    const onSubmit = (_formData: FormData) => {
+        updateIsUserAdminWithId();
+    };
+
+
+    return (
+        <form action={onSubmit}>
+            <button className="">
+                <CheckCircleIcon width={20} color={user.is_admin ? 'green' : 'gray'}
+                                 className={'CheckCircleIcon'}/>
+            </button>
+        </form>
+    );
+}

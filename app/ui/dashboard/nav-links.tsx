@@ -20,6 +20,11 @@ const links = [
     icon: UserGroupIcon,
   },
   {
+    name: 'users',
+    href: '/dashboard/users',
+    icon: UserGroupIcon,
+  },
+  {
     name: 'configurations',
     href: '/dashboard/configurations',
     icon: WrenchScrewdriverIcon,
