@@ -31,11 +31,20 @@ function initialTemplates(templates: TemplateDB[]) {
 function getInitialText(): string {
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+  const savedDayOfTheWeek = localStorage.getItem('day-of-the-week');
+  let newDay = true;
+  if (savedDayOfTheWeek){
+   if (savedDayOfTheWeek === dayOfTheWeek){
+     newDay = false;
+   }
+  } else{
+    localStorage.setItem('day-of-the-week', dayOfTheWeek);
+  }
 
   // @ts-ignore
   let result: string = TEXTS[dayOfTheWeek] ? TEXTS[dayOfTheWeek] as string : '';
 
-  const storedText = localStorage.getItem('use-balance-note-text');
+  const storedText = newDay ? result : localStorage.getItem('use-balance-note-text');
 
   if (!storedText){
     localStorage.setItem('use-balance-note-text', result);
