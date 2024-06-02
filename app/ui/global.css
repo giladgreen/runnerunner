@@ -34,6 +34,14 @@ background: rgb(0, 112, 243, 0.2);
 .thin-column{
   max-width: 160px !important;
 }
+.rsvp-section{
+  svg {
+    visibility: hidden;
+  }
+}
+.rsvp-icon{
+  font-size: xx-large;
+}
 .CheckCircleIcon{
   cursor: pointer;
 }

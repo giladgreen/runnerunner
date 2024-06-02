@@ -14,6 +14,9 @@ export default async function PlayersTable({
   currentPage: number;
 }) {
   const players = await fetchFilteredPlayers(query, currentPage);
+  const now = new Date();
+  const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+  const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
 
   return (
     <div className="mt-6 flow-root">
@@ -80,6 +83,9 @@ export default async function PlayersTable({
                 <th scope="col" className="px-3 py-5 font-medium">
                   Updated At
                 </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  RSVP - {dayOfTheWeek}
+                </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -136,6 +142,13 @@ export default async function PlayersTable({
                     >
                     {formatDateToLocal(player.updated_at)}
                     </Link>
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3 rsvp-icon">
+
+                        {
+                        // @ts-ignore
+                          player[rsvpPropName] as boolean ? '✅' : '🤞🏽'
+                        }
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">

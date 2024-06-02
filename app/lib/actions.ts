@@ -30,7 +30,18 @@ const UpdateTemplate =  z.object({
     template: z.string()
 });
 
-const UpdatePlayer = FormSchema.omit({ id: true, updated_at: true, image_url: true, balance:true, note: true , phone_number: true });
+const UpdatePlayer = z.object({
+    name: z.string().min(1, 'name can not be left empty'),
+    notes: z.string(),
+    sunday_rsvp: z.boolean().optional(),
+    monday_rsvp: z.boolean().optional(),
+    tuesday_rsvp: z.boolean().optional(),
+    wednesday_rsvp: z.boolean().optional(),
+    thursday_rsvp: z.boolean().optional(),
+    saturday_rsvp: z.boolean().optional()
+});
+
+
 export type State = {
     errors?: {
         name?: string[];
@@ -211,14 +222,21 @@ export async function updatePlayer(
             message: 'Missing Fields. Failed to Update Player.',
         };
     }
+    const sunday_rsvp = !!formData.get('sunday_rsvp');
+    const monday_rsvp = !!formData.get('monday_rsvp');
+    const tuesday_rsvp = !!formData.get('tuesday_rsvp');
+    const wednesday_rsvp = !!formData.get('wednesday_rsvp');
+    const thursday_rsvp = !!formData.get('thursday_rsvp');
+    const saturday_rsvp = !!formData.get('saturday_rsvp');
 
     const { name, notes } = validatedFields.data;
-    const date = new Date().toISOString();
+   console.log('# query:', `SET name = ${name}, notes = ${notes} , sunday_rsvp = ${!!sunday_rsvp}, monday_rsvp = ${!!monday_rsvp}, tuesday_rsvp = ${!!tuesday_rsvp}, wednesday_rsvp = ${!!wednesday_rsvp}, thursday_rsvp = ${!!thursday_rsvp}, saturday_rsvp = ${!!saturday_rsvp}`);
 
+    const date = new Date().toISOString();
     try {
         await sql`
       UPDATE players
-      SET name = ${name}, notes = ${notes}, updated_at=${date}
+      SET name = ${name}, notes = ${notes}, updated_at=${date} , sunday_rsvp = ${!!sunday_rsvp}, monday_rsvp = ${!!monday_rsvp}, tuesday_rsvp = ${!!tuesday_rsvp}, wednesday_rsvp = ${!!wednesday_rsvp}, thursday_rsvp = ${!!thursday_rsvp}, saturday_rsvp = ${!!saturday_rsvp}
       WHERE id = ${id}
     `;
     } catch (error) {
@@ -285,6 +303,17 @@ export async function fetchTemplates(
 }
 
 
+export async function resetAllRsvp() {
+    await validateAdmin();
+
+    try {
+        await sql`UPDATE players SET sunday_rsvp = false, monday_rsvp = false, tuesday_rsvp = false, wednesday_rsvp = false, thursday_rsvp = false, saturday_rsvp = false`;
+    } catch (error) {
+        return { message: 'Database Error: Failed to resetAllRsvp.' };
+    }
+    revalidatePath('/dashboard/players');
+    redirect('/dashboard/players');
+}
 export async function deletePlayer(id: string) {
     await validateAdmin();
 

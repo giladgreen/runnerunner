@@ -11,6 +11,14 @@ export type User = {
 };
 
 
+export type rsvp = {
+  sunday_rsvp: boolean;
+  monday_rsvp: boolean;
+  tuesday_rsvp: boolean;
+  wednesday_rsvp: boolean;
+  thursday_rsvp: boolean;
+  saturday_rsvp: boolean;
+}
 export type MVPPlayer = {
   id: string;
   name: string;
@@ -18,7 +26,7 @@ export type MVPPlayer = {
   image_url: string;
   updated_at: string;
   balance: number;
-};
+} & rsvp;
 
 export type DebtPlayer = {
   id: string;
@@ -27,7 +35,7 @@ export type DebtPlayer = {
   image_url: string;
   updated_at: string;
   balance: number;
-};
+} & rsvp;;
 
 // The database returns a number for amount, but we later format it to a string with the formatCurrency function
 export type MVPPlayerRaw = Omit<MVPPlayer, 'balance'> & {
@@ -46,6 +54,12 @@ export type PlayersTable = {
   balance: number;
   historyCount: number;
   notes: string;
+  sunday_rsvp: boolean;
+  monday_rsvp: boolean;
+  tuesday_rsvp: boolean;
+  wednesday_rsvp: boolean;
+  thursday_rsvp: boolean;
+  saturday_rsvp: boolean;
 };
 
 
@@ -72,6 +86,12 @@ export type PlayerForm = {
   balance: number;
   note: string;
   notes: string;
+  sunday_rsvp?: boolean;
+  monday_rsvp?: boolean;
+  tuesday_rsvp?: boolean;
+  wednesday_rsvp?: boolean;
+  thursday_rsvp?: boolean;
+  saturday_rsvp?: boolean;
 };
 
 

@@ -1,7 +1,7 @@
 import Form from '@/app/ui/players/create-bug-form';
 import {fetchAllBugs, fetchAllPlayersForExport, fetchTemplates} from "@/app/lib/data";
 import {formatCurrency, formatDateToLocal} from "@/app/lib/utils";
-import {ImportPlayers, ExportPlayers} from "@/app/ui/players/client-buttons";
+import {ImportPlayers, ExportPlayers, ResetRSVP} from "@/app/ui/players/client-buttons";
 import {PlayerDB} from "@/app/lib/definitions";
 import React from "react";
 import { PencilIcon } from '@heroicons/react/24/outline';
@@ -21,7 +21,7 @@ export default async function Page() {
             <div className="config-seperator"/>
 
             <div className="config-section">
-                <div><u>Import players from CSV file</u></div>
+                <div><u><b>Import players from CSV file</b></u></div>
                 <div>each line in the file should be in the form of:</div>
                 <div style={{marginBottom: 15}}><b>name, phone number, balance, notes</b></div>
                 <ImportPlayers/>
@@ -30,10 +30,17 @@ export default async function Page() {
             <div className="config-seperator"/>
 
             <div className="config-section">
-                <div style={{marginBottom: 20}}>Export players data to CSV file</div>
+                <div style={{marginBottom: 20}}><b>Export players data to CSV file</b></div>
                 <ExportPlayers players={players as PlayerDB[]}/>
             </div>
 
+            <div className="config-seperator"/>
+
+            <div className="config-section">
+                <div style={{marginBottom: 20}}><b>Reset all RSVPs</b></div>
+                <ResetRSVP/>
+                *should be performed at the beginning of each week
+            </div>
             <div className="config-seperator"/>
 
             <div className="config-section">
@@ -77,7 +84,7 @@ export default async function Page() {
                                         href={`/dashboard/configurations/templates/${template.id}/edit`}
                                         className="rounded-md border p-2 hover:bg-gray-100"
                                     >
-                                        <PencilIcon className="w-5" />
+                                        <PencilIcon className="w-5"/>
                                     </Link>
                                 </div>
                             </td>
