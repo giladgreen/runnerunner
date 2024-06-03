@@ -32,21 +32,21 @@ const users = [
 const players = [
   {
     name: 'ישראל ישראלי',
-    balance: 3550,
+    balance: 9550,
     phone_number: DEMO_USER_PHONE,
     image_url: '/players/default.png',
     notes: '',
   },
   {
     name: '  אבי אסרף',
-    balance: 3550,
+    balance: 9550,
     phone_number: AVI_PHONE,
     image_url: '/players/avi-asraf.png',
     notes: 'admin',
   },
   {
     name: ' עוז שנלינג',
-    balance: 3550,
+    balance: 9550,
     phone_number: OZ_PHONE,
     image_url: '/players/oz_shneling.png',
     notes: 'admin',
@@ -167,7 +167,18 @@ const players = [
     balance: 2400,
     phone_number: '0587869931',
     image_url: '/players/eitan-male.png',
-
+  },
+  {
+    name: 'ויקטור חסון',
+    balance: -50,
+    phone_number: '0587869912',
+    image_url: '/players/victor-hason.png',
+  },
+  {
+    name: 'סרג׳ו קונסטנזה',
+    balance: -150,
+    phone_number: '0587869912',
+    image_url: '/players/serjo-kostanza.png',
   }
 
 ];
@@ -175,6 +186,12 @@ const logs = [
   {
     change: 2200,
     note: 'טורניר רעננה - מקום חמישי',
+    updated_at: '2024-01-01T10:00:00.000Z',
+    updated_by: 'אבי'
+  },
+  {
+    change: 6000,
+    note: 'טורניר ראשון לציון - מקום ראשון',
     updated_at: '2024-01-02T10:00:00.000Z',
     updated_by: 'חדווה'
   },
