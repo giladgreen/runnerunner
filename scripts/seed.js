@@ -4,7 +4,7 @@ const {
   users,
   logs,
   templates,
-  DEMO_USER_PHONE
+  DEMO_USERS_PHONES
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
@@ -193,14 +193,15 @@ async function seedHistory(client) {
 
 
     //update DEMO USER:
-    await client.sql`delete from history where phone_number = ${DEMO_USER_PHONE};`;
-    await Promise.all(
+    await client.sql`delete from history where phone_number in (${DEMO_USERS_PHONES.join(',')});`;
+    await Promise.all(DEMO_USERS_PHONES.map(phoneNumber => Promise.all(
         logs.map(
             (log) => client.sql`
         INSERT INTO history (phone_number, change, note, updated_at, updated_by)
-        VALUES (${DEMO_USER_PHONE}, ${log.change}, ${log.note}, ${log.updated_at}, ${log.updated_by}); `,
+        VALUES (${phoneNumber}, ${log.change}, ${log.note}, ${log.updated_at}, ${log.updated_by}); `,
         ),
-    );
+    )))
+
 
     return {
       createTable,

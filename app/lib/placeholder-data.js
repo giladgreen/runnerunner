@@ -1,11 +1,24 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 // https://nextjs.org/learn/dashboard-app/fetching-data
-const DEMO_USER_PHONE = '0542609910'
+const DEMO_USER_PHONE = '0542609910';
+const AVI_PHONE = '0524803571';
+const OZ_PHONE = '0524803571';
+const DEMO_USERS_PHONES = [DEMO_USER_PHONE,AVI_PHONE,OZ_PHONE];
 
 const users = [
   {
     phone_number: '0587869910',
     password: 'kush1984',
+    is_admin: true
+  },
+  {
+    phone_number: '0524803571',
+    password: '123456',
+    is_admin: true
+  },
+  {
+    phone_number: '0524803577',
+    password: '123456',
     is_admin: true
   },
   {
@@ -26,9 +39,16 @@ const players = [
   },
   {
     name: '  אבי אסרף',
-    balance: 15000,
-    phone_number: '144',
+    balance: 3550,
+    phone_number: AVI_PHONE,
     image_url: '/players/avi-asraf.png',
+    notes: 'admin',
+  },
+  {
+    name: ' עוז שנלינג',
+    balance: 3550,
+    phone_number: OZ_PHONE,
+    image_url: '/players/oz_shneling.png',
     notes: 'admin',
   },
   {
@@ -202,7 +222,8 @@ const logs = [
   }
 ]
 
-const templates = [{
+const templates = [
+    {
   day: 'Sunday',
   template: 'טורניר קיסריה - כניסה',
   amount: 300
@@ -243,5 +264,5 @@ module.exports = {
   players,
   logs,
   templates,
-  DEMO_USER_PHONE
+  DEMO_USERS_PHONES
 };
