@@ -9,6 +9,10 @@ import Link from "next/link";
 
 export default async function DebtPlayers() {
     const debtPlayers = await fetchDebtPlayers();
+    const now = new Date();
+    const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+    const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
+
   return (
 
     <div className="flex w-full flex-col md:col-span-4">
@@ -19,7 +23,8 @@ export default async function DebtPlayers() {
 
          <div className="bg-white px-6">
           {debtPlayers.map((player: DebtPlayerRaw, i) => {
-            return (
+
+              return (
                 <Link
                     key={player.id}
                     href={`/dashboard/players/${player.id}/data`}
@@ -55,6 +60,13 @@ export default async function DebtPlayers() {
                 >
                   {formatCurrency(player.balance)}
                 </p>
+                  <p>
+
+                      {
+                          // @ts-ignore
+                           player[rsvpPropName] ? '𓀙':''
+                          }
+                  </p>
               </div>
                 </Link>
             );
