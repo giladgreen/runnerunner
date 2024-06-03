@@ -177,8 +177,14 @@ const players = [
   {
     name: 'סרג׳ו קונסטנזה',
     balance: -150,
-    phone_number: '0587869912',
+    phone_number: '0587869913',
     image_url: '/players/serjo-kostanza.png',
+  },
+  {
+    name: 'רפאל מוקד',
+    balance: -350,
+    phone_number: '0587869914',
+    image_url: '/players/rafael-moked.png',
   }
 
 ];
