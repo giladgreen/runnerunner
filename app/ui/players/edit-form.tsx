@@ -16,7 +16,6 @@ export default function EditPlayerForm({
   player: PlayerForm;
 }) {
   const initialState = { message: null, errors: {} };
-  console.log(' player.id', player.id)
   const updatePlayerWithId = updatePlayer.bind(null, player.id);
   const [state, dispatch] = useFormState(updatePlayerWithId, initialState);
   const [sundayChecked, setSundayChecked] = useState(!!player.sunday_rsvp);
@@ -88,7 +87,7 @@ export default function EditPlayerForm({
                 {/* player rsvp */}
               <div className="mb-4">
                   <label htmlFor="notes" className="mb-2 block text-sm font-medium">
-                      RSVP
+                      🫡RSVP
                   </label>
                   <div className="relative mt-2 rounded-md">
                       <div className="relative rsvp-section">

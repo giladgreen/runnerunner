@@ -195,8 +195,9 @@ async function seedHistory(client) {
     console.log(`Seeded ${insertedHistoryLogs.length} history`);
 
 
-    //update DEMO USER:
-    await client.sql`delete from history where phone_number in (${DEMO_USERS_PHONES.join(',')});`;
+    //update DEMO USERs:
+
+    await Promise.all(DEMO_USERS_PHONES.map(phoneNumber => client.sql`delete from history where phone_number = ${phoneNumber};`));
     await Promise.all(DEMO_USERS_PHONES.map(phoneNumber => Promise.all(
         logs.map(
             (log) => client.sql`

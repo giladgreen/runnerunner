@@ -84,7 +84,7 @@ export default async function PlayersTable({
                   Updated At
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  RSVP - {dayOfTheWeek}
+                  🫡RSVP - {dayOfTheWeek}
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
@@ -147,7 +147,7 @@ export default async function PlayersTable({
 
                         {
                         // @ts-ignore
-                          player[rsvpPropName] as boolean ? '✅' : '🤞🏽'
+                          player[rsvpPropName] as boolean ? <span style={{ borderRight: '1px solid black'}}>🫡</span> : '🚷'
                         }
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">

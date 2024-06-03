@@ -24,14 +24,11 @@ export default async function Page({ params }: { params: { id: string } }) {
         }
 
         let currentBalance = balances[balances.length -1]
-
-
         return {
             ...log,
             currentBalance
         }
     })
-
     return (
         <main>
             <Breadcrumbs

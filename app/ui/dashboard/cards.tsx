@@ -11,7 +11,7 @@ const iconMap = {
   money: BanknotesIcon,
   players: UserGroupIcon,
   debt: UserIcon,
-    rsvp: undefined
+  rsvp: undefined
 };
 
 export async function CardWrapper() {
@@ -39,9 +39,7 @@ export async function RSVPCardWrapper() {
   } = await fetchCardData();
   return (
     <>
-
-       <Card title="RSVP for Today" value={rsvpForToday} type="rsvp" spend />
-
+       <Card title="🫡RSVP for Today" value={rsvpForToday} type="rsvp" spend />
     </>
   );
 }
@@ -63,7 +61,6 @@ export function Card({
     <div className={`rounded-xl bg-blue-200 p-2 shadow-sm ${spend ? 'spend':''}`}>
       <div className="flex p-4">
         {Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null}
-        {type === 'rsvp' ? '𓀙':''}
         <h3 className="ml-2 text-sm font-medium">{title}</h3>
       </div>
       <p

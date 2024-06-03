@@ -64,7 +64,7 @@ export default async function DebtPlayers() {
 
                       {
                           // @ts-ignore
-                           player[rsvpPropName] ? '𓀙':''
+                           player[rsvpPropName] ? '🫡':''
                           }
                   </p>
               </div>

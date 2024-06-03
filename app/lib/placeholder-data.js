@@ -2,7 +2,7 @@
 // https://nextjs.org/learn/dashboard-app/fetching-data
 const DEMO_USER_PHONE = '0542609910';
 const AVI_PHONE = '0524803571';
-const OZ_PHONE = '0524803571';
+const OZ_PHONE = '0524803577';
 const DEMO_USERS_PHONES = [DEMO_USER_PHONE,AVI_PHONE,OZ_PHONE];
 
 const users = [
@@ -171,19 +171,19 @@ const players = [
   {
     name: 'ויקטור חסון',
     balance: -50,
-    phone_number: '0587869912',
+    phone_number: '0587869112',
     image_url: '/players/victor-hason.png',
   },
   {
     name: 'סרג׳ו קונסטנזה',
     balance: -150,
-    phone_number: '0587869913',
+    phone_number: '0587869113',
     image_url: '/players/serjo-kostanza.png',
   },
   {
     name: 'רפאל מוקד',
     balance: -350,
-    phone_number: '0587869914',
+    phone_number: '0587869114',
     image_url: '/players/rafael-moked.png',
   }
 

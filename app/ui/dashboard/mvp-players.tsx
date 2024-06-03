@@ -63,7 +63,7 @@ export default async function MVPPlayers() {
                   <p>
                   {
                       // @ts-ignore
-                      player[rsvpPropName] ? '𓀙':''
+                      player[rsvpPropName] ? '🫡':''
                   }
                   </p>
               </div>
