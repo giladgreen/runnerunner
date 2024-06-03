@@ -37,7 +37,8 @@ export default async function Page() {
             <div className="config-seperator"/>
 
             <div className="config-section">
-                <div style={{marginBottom: 20}}><b>Reset all 🫡RSVPs</b></div>
+                <div style={{marginBottom: 20}}><b>Reset all <span style={{ borderRight: '1px solid black'}}>🫡</span>RSVPs</b>
+                </div>
                 <ResetRSVP/>
                 *should be performed at the beginning of each week
             </div>

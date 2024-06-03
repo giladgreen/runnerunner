@@ -9,9 +9,6 @@ import DebtPlayers from "@/app/ui/dashboard/debt-players";
 export default async function Page() {
     return (
         <main>
-            <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-                Dashboard
-            </h1>
             <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1" style={{marginBottom:20}}>
                 <Suspense fallback={<CardsSkeleton count={1} />}>
                     <RSVPCardWrapper />

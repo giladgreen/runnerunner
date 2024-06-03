@@ -64,8 +64,8 @@ export default async function DebtPlayers() {
 
                       {
                           // @ts-ignore
-                           player[rsvpPropName] ? '🫡':''
-                          }
+                          player[rsvpPropName] ? <span style={{borderRight: '1px solid black', fontSize: 'xx-large'}}>🫡</span> : ''
+                      }
                   </p>
               </div>
                 </Link>
