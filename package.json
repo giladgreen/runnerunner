@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "deploy": "git add . && git commit -am 'refactor: bla' --no-verify && push",
     "build": "next build",
     "dev": "next dev",
     "prettier": "prettier --write --ignore-unknown .",

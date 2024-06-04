@@ -94,20 +94,29 @@ export async function createPlayer(prevState: State, formData: FormData) {
             message: 'Missing Fields. Failed to Create Player.',
         };
     }
-
+    const sunday_rsvp = !!formData.get('sunday_rsvp');
+    const monday_rsvp = !!formData.get('monday_rsvp');
+    const tuesday_rsvp = !!formData.get('tuesday_rsvp');
+    const wednesday_rsvp = !!formData.get('wednesday_rsvp');
+    const thursday_rsvp = !!formData.get('thursday_rsvp');
+    const saturday_rsvp = !!formData.get('saturday_rsvp');
     const {  name, balance, note, phone_number, notes } = validatedFields.data;
     const phoneNumber = phone_number.replaceAll('-', '');
 
     try {
+        console.log('### before insert into player query')
         await sql`
-      INSERT INTO players (name, balance, phone_number, image_url, notes)
-      VALUES (${name}, ${balance}, ${phoneNumber}, '/players/default.png', ${notes ?? ''})
+      INSERT INTO players (name, balance, phone_number, image_url, notes, sunday_rsvp, monday_rsvp, tuesday_rsvp, wednesday_rsvp, thursday_rsvp, saturday_rsvp)
+      VALUES (${name}, ${balance}, ${phoneNumber}, '/players/default.png', ${notes ?? ''}, ${sunday_rsvp}, ${monday_rsvp}, ${tuesday_rsvp}, ${wednesday_rsvp}, ${thursday_rsvp}, ${saturday_rsvp})
     `;
+        console.log('### after insert into player query')
+        console.log('### before insert into history query')
 
         await sql`
       INSERT INTO history (phone_number, change, note)
       VALUES (${phoneNumber}, ${balance}, ${note})
     `;
+        console.log('### after insert into history query')
 
     } catch (error) {
         console.log('## createPlayer error', error)
@@ -230,13 +239,12 @@ export async function updatePlayer(
     const saturday_rsvp = !!formData.get('saturday_rsvp');
 
     const { name, notes } = validatedFields.data;
-   console.log('# query:', `SET name = ${name}, notes = ${notes} , sunday_rsvp = ${!!sunday_rsvp}, monday_rsvp = ${!!monday_rsvp}, tuesday_rsvp = ${!!tuesday_rsvp}, wednesday_rsvp = ${!!wednesday_rsvp}, thursday_rsvp = ${!!thursday_rsvp}, saturday_rsvp = ${!!saturday_rsvp}`);
 
     const date = new Date().toISOString();
     try {
         await sql`
       UPDATE players
-      SET name = ${name}, notes = ${notes}, updated_at=${date} , sunday_rsvp = ${!!sunday_rsvp}, monday_rsvp = ${!!monday_rsvp}, tuesday_rsvp = ${!!tuesday_rsvp}, wednesday_rsvp = ${!!wednesday_rsvp}, thursday_rsvp = ${!!thursday_rsvp}, saturday_rsvp = ${!!saturday_rsvp}
+      SET name = ${name}, notes = ${notes}, updated_at=${date} , sunday_rsvp = ${sunday_rsvp}, monday_rsvp = ${monday_rsvp}, tuesday_rsvp = ${tuesday_rsvp}, wednesday_rsvp = ${wednesday_rsvp}, thursday_rsvp = ${thursday_rsvp}, saturday_rsvp = ${saturday_rsvp}
       WHERE id = ${id}
     `;
     } catch (error) {

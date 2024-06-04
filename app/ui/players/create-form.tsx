@@ -9,12 +9,19 @@ import {
 import { Button } from '@/app/ui/button';
 import { createPlayer } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
+import {Checkbox} from "primereact/checkbox";
+import {useState} from "react";
 
 export default function Form() {
   const initialState = { message: null, errors: {} };
 
   const [state, dispatch] = useFormState(createPlayer, initialState);
-
+  const [sundayChecked, setSundayChecked] = useState(false);
+  const [mondayChecked, setMondayChecked] = useState(false);
+  const [tuesdayChecked, setTuesdayChecked] = useState(false);
+  const [wednesdayChecked, setWednesdayChecked] = useState(false);
+  const [thursdayChecked, setThursdayChecked] = useState(false);
+  const [saturdayChecked, setSaturdayChecked] = useState(false);
   return (
       <form action={dispatch}>
         <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -76,7 +83,7 @@ export default function Form() {
             </div>
           </div>
 
-          {/* player balance */}
+          {/* player initial balance */}
           <div className="mb-4">
             <label htmlFor="balance" className="mb-2 block text-sm font-medium">
               Initial Balance
@@ -87,7 +94,7 @@ export default function Form() {
                     id="balance"
                     name="balance"
                     type="number"
-                    step="10"
+                    step="1"
                     placeholder="Enter ILS balance"
                     className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                     aria-describedby="balance-error"
@@ -162,6 +169,61 @@ export default function Form() {
                         {error}
                       </p>
                   ))}
+            </div>
+          </div>
+
+          {/* player rsvp */}
+          <div className="mb-4">
+            <label htmlFor="notes" className="mb-2 block text-sm font-medium">
+              <span style={{ borderRight: '1px solid black'}}>🫡</span>RSVP
+            </label>
+            <div className="relative mt-2 rounded-md">
+              <div className="relative rsvp-section">
+                <div className="flex flex-wrap justify-content-center gap-3">
+                  <div className="flex align-items-center">
+                    <Checkbox inputId="sunday_rsvp" name="sunday_rsvp" value="sunday_rsvp"
+                              checked={sundayChecked}
+                              onChange={(e) => setSundayChecked(!!e.checked)}
+                    />
+                    <label htmlFor="sunday_rsvp" className="ml-2">Sunday</label>
+                  </div>
+                  <div className="flex align-items-center">
+                    <Checkbox inputId="monday_rsvp" name="monday_rsvp" value="monday_rsvp"
+                              checked={mondayChecked}
+                              onChange={(e) => setMondayChecked(!!e.checked)}
+                    />
+                    <label htmlFor="monday_rsvp" className="ml-2">Monday</label>
+                  </div>
+                  <div className="flex align-items-center">
+                    <Checkbox inputId="tuesday_rsvp" name="tuesday_rsvp" value="tuesday_rsvp"
+                              checked={tuesdayChecked}
+                              onChange={(e) => setTuesdayChecked(!!e.checked)}
+                    />
+                    <label htmlFor="tuesday_rsvp" className="ml-2">Tuesday</label>
+                  </div>
+                  <div className="flex align-items-center">
+                    <Checkbox inputId="wednesday_rsvp" name="wednesday_rsvp" value="wednesday_rsvp"
+                              checked={wednesdayChecked}
+                              onChange={(e) => setWednesdayChecked(!!e.checked)}
+                    />
+                    <label htmlFor="wednesday_rsvp" className="ml-2">Wednesday</label>
+                  </div>
+                  <div className="flex align-items-center">
+                    <Checkbox inputId="thursday_rsvp" name="thursday_rsvp" value="thursday_rsvp"
+                              checked={thursdayChecked}
+                              onChange={(e) => setThursdayChecked(!!e.checked)}
+                    />
+                    <label htmlFor="thursday_rsvp" className="ml-2">Thursday</label>
+                  </div>
+                  <div className="flex align-items-center">
+                    <Checkbox inputId="saturday_rsvp" name="saturday_rsvp" value="saturday_rsvp"
+                              checked={saturdayChecked}
+                              onChange={(e) => setSaturdayChecked(!!e.checked)}
+                    />
+                    <label htmlFor="saturday_rsvp" className="ml-2">Saturday</label>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
