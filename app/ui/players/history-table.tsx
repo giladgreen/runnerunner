@@ -19,8 +19,7 @@ export default async function HistoryTable({
         }
 
         let currentBalance = balances[balances.length -1];
-        console.log('balances', balances.join(','))
-        console.log('currentBalance', currentBalance)
+
         return {
             ...log,
             currentBalance

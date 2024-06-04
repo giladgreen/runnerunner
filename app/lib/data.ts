@@ -72,6 +72,7 @@ export async function fetchCardData() {
   }
 }
 
+
 const ITEMS_PER_PAGE = 8;
 export async function fetchFilteredPlayers(
   query: string,

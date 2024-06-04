@@ -406,3 +406,20 @@ export async function updateIsUserAdmin(id:string) {
     redirect('/dashboard/users');
 }
 
+
+export async function rsvpPlayerForDay(phone_number:string, rsvpAttribute: string, val: boolean) {
+    noStore();
+    const playerResult = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phone_number}`;
+    const player = playerResult.rows[0]
+    console.log('## query:', player)
+    try {
+        // @ts-ignore
+        await sql`UPDATE players SET sunday_rsvp = ${rsvpAttribute === 'sunday_rsvp' ? val : player['sunday_rsvp'] as boolean}, monday_rsvp = ${rsvpAttribute === 'monday_rsvp' ? val : player['monday_rsvp'] as boolean}, tuesday_rsvp = ${rsvpAttribute === 'tuesday_rsvp' ? val : player['tuesday_rsvp'] as boolean}, wednesday_rsvp = ${rsvpAttribute === 'wednesday_rsvp' ? val : player['wednesday_rsvp'] as boolean}, thursday_rsvp = ${rsvpAttribute === 'thursday_rsvp' ? val : player['thursday_rsvp'] as boolean}, saturday_rsvp = ${rsvpAttribute === 'saturday_rsvp' ? val : player['saturday_rsvp'] as boolean} where phone_number = ${phone_number};`;
+    } catch (error) {
+        console.error('rsvpPlayerForDay Error:', error);
+        return false;
+    }
+
+    revalidatePath('/dashboard/players');
+    redirect('/dashboard/players');
+}

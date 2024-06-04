@@ -49,6 +49,9 @@ background: rgb(0, 112, 243, 0.2);
 .CheckCircleIcon{
   cursor: pointer;
 }
+.pointer{
+  cursor: pointer;
+}
 .signin-top-header{
   padding-left: 20px;
 }

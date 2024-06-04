@@ -71,27 +71,25 @@ function getInitialAmount(): number {
   return result;
 }
 
-export default function Form({player, templates} : {player: PlayerForm, templates:TemplateDB[]}) {
+export function PayUpForm({player, templates} : {player: PlayerForm, templates:TemplateDB[]}) {
+
   initialTemplates(templates);
   const initialState = { message: null, errors: {} };
   const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, player);
-  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, player);
 
   const initialText = getInitialText();
   const initialAmount = getInitialAmount();
   const [note, setNote] = useState(initialText);
   const [amount, setAmount] = useState(initialAmount);
   // @ts-ignore
-  const [state1, dispatch1] = useFormState(createPlayerUsageLogWithPlayerData, initialState);
-  // @ts-ignore
-  const [state2, dispatch2] = useFormState(createPlayerNewCreditLogWithPlayerData, initialState);
+  const [state1, dispatch] = useFormState(createPlayerUsageLogWithPlayerData, initialState);
 
-  const [type, setType] = useState('credit');
-  //add radio buttons: credit / cash / bank transfer
+
+  const useCredit = initialAmount < player.balance;
+  const [type, setType] = useState(useCredit ? 'credit' : 'cash');
 
   return (
-      <div style={{ display: 'flex' , justifyContent: 'space-between'}} >
-        <form action={dispatch1} className="form-control">
+        <form action={dispatch} className="form-control">
           <label className="mb-2 block text-sm font-medium">
             Pay up
           </label>
@@ -201,7 +199,17 @@ export default function Form({player, templates} : {player: PlayerForm, template
             <Button type="submit">Use</Button>
           </div>
         </form>
-        <form action={dispatch2} className="form-control">
+  );
+}
+
+export function AddToBalanceForm({player} : {player: PlayerForm}) {
+  const initialState = { message: null, errors: {} };
+  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, player);
+  // @ts-ignore
+  const [state2, dispatch] = useFormState(createPlayerNewCreditLogWithPlayerData, initialState);
+
+  return (
+      <form action={dispatch} className="form-control">
           <label className="mb-2 block text-sm font-medium">
             Add to Balance
           </label>
@@ -272,6 +280,14 @@ export default function Form({player, templates} : {player: PlayerForm, template
             <Button type="submit">Add</Button>
           </div>
         </form>
+  );
+}
+
+export default function Form({player, templates} : {player: PlayerForm, templates:TemplateDB[]}) {
+  return (
+      <div style={{ display: 'flex' , justifyContent: 'space-between'}} >
+        <PayUpForm player={player} templates={templates}/>
+        <AddToBalanceForm player={player}/>
       </div>
   );
 }

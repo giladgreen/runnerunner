@@ -2,9 +2,10 @@ import Image from 'next/image';
 import { UpdatePlayer  } from '@/app/ui/players/buttons';
 import {  DeletePlayer } from '@/app/ui/players/client-buttons';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
-import { fetchFilteredPlayers } from '@/app/lib/data';
+import { fetchFilteredPlayers, fetchTemplates } from '@/app/lib/data';
 import Link from "next/link";
-import {PencilIcon} from "@heroicons/react/24/outline";
+import {TemplateDB} from "@/app/lib/definitions";
+import RSVPButton from "@/app/ui/players/rsvp-button";
 
 export default async function PlayersTable({
   query,
@@ -13,6 +14,8 @@ export default async function PlayersTable({
   query: string;
   currentPage: number;
 }) {
+  const templates: TemplateDB[] = (await fetchTemplates()) as TemplateDB[];
+
   const players = await fetchFilteredPlayers(query, currentPage);
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
@@ -143,12 +146,9 @@ export default async function PlayersTable({
                     {formatDateToLocal(player.updated_at)}
                     </Link>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3 rsvp-icon">
+                  <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
+                      <RSVPButton player={player} />
 
-                        {
-                        // @ts-ignore
-                          player[rsvpPropName] as boolean ? <span style={{ borderRight: '1px solid black'}}>🫡</span> : '🚷'
-                        }
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
