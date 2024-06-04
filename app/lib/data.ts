@@ -7,6 +7,7 @@ import {
   MVPPlayerRaw, PlayerDB,
   PlayersTable, TemplateDB, User
 } from './definitions';
+import {GeneralPlayersCardWrapper} from "@/app/ui/dashboard/cards";
 
 export async function fetchMVPPlayers() {
   noStore();
@@ -17,7 +18,14 @@ export async function fetchMVPPlayers() {
       ORDER BY balance DESC
       LIMIT 5`;
 
-    return data.rows;
+    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
+    const todayHistory =  todayHistoryResults.rows;
+
+    const players = data.rows;
+    players.forEach((player) => {
+      player.arrived = !!todayHistory.find(({ phone_number}) => phone_number === player.phone_number);
+    });
+    return players;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the latest players.');
@@ -34,21 +42,24 @@ export async function fetchDebtPlayers() {
       ORDER BY balance ASC
       LIMIT 5`;
 
-    return data.rows;
+    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
+    const todayHistory =  todayHistoryResults.rows;
+
+    const players = data.rows;
+    players.forEach((player) => {
+      player.arrived = !!todayHistory.find(({ phone_number}) => phone_number === player.phone_number);
+    });
+    return players;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the latest players.');
   }
 }
 
-export async function fetchCardData() {
+export async function fetchGeneralPlayersCardData() {
   noStore();
 
   try {
-    const now = new Date();
-    const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
-    const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
-
     const allPlayersResult = await sql`SELECT * FROM players`;
     const allPlayers = allPlayersResult.rows;
 
@@ -57,14 +68,39 @@ export async function fetchCardData() {
     const numberOfPlayersWithDebt = playersWithDebt.length;
     const totalRunnerDebt = allPlayers.filter((player) => player.balance > 0).reduce((acc, player) => acc + player.balance, 0);
     const totalPlayersDebt = playersWithDebt.reduce((acc, player) => acc + player.balance, 0);
-    const rsvpForToday = allPlayers.filter(player => player[rsvpPropName]).length
 
     return {
       totalNumberOfPlayers,
       numberOfPlayersWithDebt,
       totalRunnerDebt,
       totalPlayersDebt,
-      rsvpForToday
+    };
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch card data.');
+  }
+}
+
+export async function fetchRSVPAndArrivalData() {
+  noStore();
+
+  try {
+    const now = new Date();
+    const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+    const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
+
+    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
+    const todayHistory =  todayHistoryResults.rows;
+    const todayHistoryCount =  todayHistory.length;
+
+    const allPlayersResult = await sql`SELECT * FROM players`;
+    const allPlayers = allPlayersResult.rows;
+    const arrivedToday = todayHistoryCount;
+    const rsvpForToday = allPlayers.filter(player => player[rsvpPropName]).length
+
+    return {
+      rsvpForToday,
+      arrivedToday
     };
   } catch (error) {
     console.error('Database Error:', error);

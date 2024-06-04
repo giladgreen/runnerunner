@@ -40,9 +40,11 @@ export type DebtPlayer = {
 // The database returns a number for amount, but we later format it to a string with the formatCurrency function
 export type MVPPlayerRaw = Omit<MVPPlayer, 'balance'> & {
   balance: number;
+  arrived: boolean;
 };
 export type DebtPlayerRaw = Omit<DebtPlayer, 'balance'> & {
   balance: number;
+  arrived: boolean;
 };
 
 export type PlayersTable = {

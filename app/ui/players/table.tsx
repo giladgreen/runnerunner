@@ -87,7 +87,7 @@ export default async function PlayersTable({
                   Updated At
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  <span style={{ borderRight: '1px solid black'}}>🫡</span>RSVP - {dayOfTheWeek}
+                  RSVP - {dayOfTheWeek}
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>

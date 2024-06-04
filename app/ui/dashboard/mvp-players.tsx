@@ -6,13 +6,14 @@ import {fetchMVPPlayers} from "@/app/lib/data";
 import {MVPPlayerRaw} from "@/app/lib/definitions";
 import {formatCurrency} from "@/app/lib/utils";
 import Link from "next/link";
+import {TickIcon, DoubleTicksIcon} from "@/app/ui/icons";
 
 export default async function MVPPlayers() {
     const mvpPlayers = await fetchMVPPlayers();
     const now = new Date();
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
     const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
-
+console.log('mvpPlayers',mvpPlayers)
     return (
 
     <div className="flex w-full flex-col md:col-span-4">
@@ -61,10 +62,14 @@ export default async function MVPPlayers() {
                   {formatCurrency(player.balance)}
                 </p>
                   <p>
-                  {
-                      // @ts-ignore
-                      player[rsvpPropName] ? <span style={{borderRight: '1px solid black',  fontSize: 'xx-large'}}>🫡</span> : ''
-                  }
+                      {
+                          // @ts-ignore
+                          player[rsvpPropName] && !player.arrived && <TickIcon size={24}/>
+                      }
+                      {
+                          // @ts-ignore
+                          player[rsvpPropName] && player.arrived && <DoubleTicksIcon size={24}/>
+                      }
                   </p>
               </div>
                 </Link>

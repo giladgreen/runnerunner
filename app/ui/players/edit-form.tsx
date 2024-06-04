@@ -87,7 +87,7 @@ export default function EditPlayerForm({
                 {/* player rsvp */}
               <div className="mb-4">
                   <label htmlFor="notes" className="mb-2 block text-sm font-medium">
-                      <span style={{ borderRight: '1px solid black'}}>🫡</span>RSVP
+                      RSVP
                   </label>
                   <div className="relative mt-2 rounded-md">
                       <div className="relative rsvp-section">

@@ -4,23 +4,25 @@ import {
   UserIcon,
 } from '@heroicons/react/24/outline';
 import { lusitana } from '@/app/ui/fonts';
-import { fetchCardData } from '@/app/lib/data';
+import { fetchGeneralPlayersCardData, fetchRSVPAndArrivalData} from '@/app/lib/data';
 import {formatCurrency} from "@/app/lib/utils";
+import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 
 const iconMap = {
   money: BanknotesIcon,
   players: UserGroupIcon,
   debt: UserIcon,
-  rsvp: undefined
+  rsvp: TickIcon,
+  arrived: DoubleTicksIcon
 };
 
-export async function CardWrapper() {
+export async function GeneralPlayersCardWrapper() {
   const {
       totalNumberOfPlayers,
       numberOfPlayersWithDebt,
       totalRunnerDebt,
       totalPlayersDebt,
-  } = await fetchCardData();
+  } = await fetchGeneralPlayersCardData();
   return (
     <>
         <Card title="Total players" value={totalNumberOfPlayers} type="players" />
@@ -31,14 +33,22 @@ export async function CardWrapper() {
   );
 }
 
-export async function RSVPCardWrapper() {
-  const {
-      rsvpForToday
-  } = await fetchCardData();
-  return  <Card title={<span style={{  fontSize: 'large'}}><span style={{borderRight: '1px solid black'}}>🫡</span>RSVP for Today</span>} value={<span style={{  fontSize: 'xx-large'}}><span style={{borderRight: '1px solid black'}}>🫡</span>{rsvpForToday}</span>}
-                spend/>
+export async function RSVPAndArrivalCardWrapper() {
+    const {
+        rsvpForToday,
+        arrivedToday
+    } = await fetchRSVPAndArrivalData();
 
+
+    return (
+    <>
+    <Card title={'RSVP for Today'} value={rsvpForToday} type="rsvp"/>
+        <Card title={'Arrived Today'} value={arrivedToday} type="arrived"/>
+
+    </>
+  );
 }
+
 
 export function Card({
   title,
@@ -48,7 +58,7 @@ export function Card({
 }: {
   title: string | JSX.Element;
   value: number | string | JSX.Element;
-  type?: 'players' | 'debt' | 'money' |'rsvp'
+  type?: 'players' | 'debt' | 'money' |'rsvp'|'arrived';
   spend?:boolean
 }) {
   const Icon = type ? iconMap[type] : undefined;
@@ -56,7 +66,7 @@ export function Card({
   return (
     <div className={`rounded-xl bg-blue-200 p-2 shadow-sm ${spend ? 'spend':''}`}>
       <div className="flex p-4 text-center">
-        {Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null}
+        {Icon ? <Icon className="h-5 w-5 text-gray-700" size={18} /> : null}
         <h3 className={`ml-2 text-sm font-medium text-center ${spend ? 'center-text' :'' }`}>{title}</h3>
       </div>
       <p

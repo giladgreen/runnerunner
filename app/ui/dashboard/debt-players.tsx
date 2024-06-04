@@ -6,6 +6,7 @@ import {fetchDebtPlayers, fetchMVPPlayers} from "@/app/lib/data";
 import {DebtPlayerRaw} from "@/app/lib/definitions";
 import {formatCurrency} from "@/app/lib/utils";
 import Link from "next/link";
+import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 
 export default async function DebtPlayers() {
     const debtPlayers = await fetchDebtPlayers();
@@ -61,10 +62,13 @@ export default async function DebtPlayers() {
                   {formatCurrency(player.balance)}
                 </p>
                   <p>
-
                       {
                           // @ts-ignore
-                          player[rsvpPropName] ? <span style={{borderRight: '1px solid black', fontSize: 'xx-large'}}>🫡</span> : ''
+                          player[rsvpPropName] && !player.arrived && <TickIcon size={24}/>
+                      }
+                      {
+                          // @ts-ignore
+                          player[rsvpPropName] && player.arrived && <DoubleTicksIcon size={24}/>
                       }
                   </p>
               </div>
