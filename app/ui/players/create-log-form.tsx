@@ -9,6 +9,7 @@ import {createPlayerNewCreditLog, createPlayerUsageLog, fetchTemplates} from '@/
 import { useFormState } from 'react-dom';
 import {PlayerForm, TemplateDB} from "@/app/lib/definitions";
 import {useState} from "react";
+import {Checkbox} from "primereact/checkbox";
 const TEXTS = {
 }
 
@@ -85,11 +86,14 @@ export default function Form({player, templates} : {player: PlayerForm, template
   // @ts-ignore
   const [state2, dispatch2] = useFormState(createPlayerNewCreditLogWithPlayerData, initialState);
 
+  const [type, setType] = useState('credit');
+  //add radio buttons: credit / cash / bank transfer
+
   return (
       <div style={{ display: 'flex' , justifyContent: 'space-between'}} >
         <form action={dispatch1} className="form-control">
           <label className="mb-2 block text-sm font-medium">
-            Use Balance
+            Pay up
           </label>
           <div className="rounded-md  p-4 md:p-6 form-inner-control">
             {/*  balance change */}
@@ -162,6 +166,36 @@ export default function Form({player, templates} : {player: PlayerForm, template
                     ))}
               </div>
             </div>
+
+            {/* type */}
+            <div className="relative mt-2 rounded-md">
+              <div className="relative rsvp-section">
+                <div className="flex flex-wrap justify-content-center gap-3 radio" >
+                  <div className="flex align-items-center">
+                    <input type="radio" value="credit" name="type"
+                           checked={type === 'credit'}
+                           onChange={()=>setType('credit')}
+                    />
+                    <label htmlFor="credit" className="ml-2">Credit</label>
+                  </div>
+                  <div className="flex align-items-center">
+                    <input type="radio" value="cash" name="type"
+                           checked={type === 'cash'}
+                           onChange={()=>setType('cash')}
+                    />
+                    <label htmlFor="cash" className="ml-2">Cash</label>
+                  </div>
+                  <div className="flex align-items-center">
+                    <input type="radio" value="bank" name="type"
+                           checked={type === 'bank'}
+                           onChange={()=>setType('bank')}
+                    />
+                    <label htmlFor="cash" className="ml-2">Bank Transfer</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
           <div className="mt-6 flex justify-end gap-4">
             <Button type="submit">Use</Button>
@@ -184,8 +218,8 @@ export default function Form({player, templates} : {player: PlayerForm, template
                       id="change"
                       name="change"
                       type="number"
-                      step="10"
-                      min={10}
+                      step="1"
+                      min={0}
                       required
                       placeholder="Enter ILS change"
                       className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"

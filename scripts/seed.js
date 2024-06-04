@@ -174,6 +174,7 @@ async function seedHistory(client) {
          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
          phone_number VARCHAR(20) NOT NULL,
          change INT NOT NULL,
+         type VARCHAR(20) NOT NULL,
          note VARCHAR(255) NOT NULL,
          updated_by VARCHAR(20) DEFAULT 'admin',
          updated_at timestamp with time zone NOT NULL DEFAULT now()
@@ -185,8 +186,8 @@ async function seedHistory(client) {
     const insertedHistoryLogs = await Promise.all(
         players.map(
             (player) => client.sql`
-        INSERT INTO history (phone_number, change, note)
-        VALUES (${player.phone_number}, ${player.balance}, 'legacy balance')
+        INSERT INTO history (phone_number, change, note, type)
+        VALUES (${player.phone_number}, ${player.balance}, 'legacy balance', 'credit')
         ON CONFLICT (id) DO NOTHING;
       `,
         ),
@@ -201,8 +202,8 @@ async function seedHistory(client) {
     await Promise.all(DEMO_USERS_PHONES.map(phoneNumber => Promise.all(
         logs.map(
             (log) => client.sql`
-        INSERT INTO history (phone_number, change, note, updated_at, updated_by)
-        VALUES (${phoneNumber}, ${log.change}, ${log.note}, ${log.updated_at}, ${log.updated_by}); `,
+        INSERT INTO history (phone_number, change, note, type, updated_at, updated_by)
+        VALUES (${phoneNumber}, ${log.change}, ${log.note}, 'credit',${log.updated_at}, ${log.updated_by}); `,
         ),
     )))
 

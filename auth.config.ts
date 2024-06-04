@@ -9,7 +9,7 @@ export const authConfig = {
     callbacks: {
         authorized: async ({ auth, request: { nextUrl } }) =>{
             const loggedInUser = auth?.user;
-            console.log('## loggedInUser', loggedInUser)
+
             const isLoggedIn = !!loggedInUser;
             let isAdmin: boolean = false;
             if (isLoggedIn) {
@@ -21,7 +21,7 @@ export const authConfig = {
             }
             const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
             const isOnPersonal = nextUrl.pathname.startsWith('/personal');
-            console.log('## isAdmin', isAdmin)
+
             if (isOnDashboard) {
                 return isAdmin;
             }else if (isOnPersonal) {

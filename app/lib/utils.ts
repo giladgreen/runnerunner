@@ -12,6 +12,20 @@ export const formatCurrency = (balance: number) => {
   return shortenedString;
 };
 
+export const formatType = (type: string) => {
+  if (type === 'credit') {
+    return 'Credit';
+  }
+  if (type === 'bank') {
+    return 'Bank Transfer';
+  }
+  if (type === 'cash') {
+    return 'Cash';
+  }
+
+  return type;
+};
+
 export const formatDateToLocal = (
   dateStr: string,
   locale: string = 'he',

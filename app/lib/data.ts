@@ -211,12 +211,7 @@ export async function fetchPlayerById(id: string) {
 
     const player = data.rows[0];
     const historyData = await sql<LogDB>`
-      SELECT
-        history.id,
-        history.change,
-        history.note,
-        history.updated_at,
-        history.updated_by
+      SELECT *
       FROM history
       WHERE history.phone_number = ${player.phone_number}
       order by history.updated_at asc;
@@ -266,13 +261,7 @@ export async function fetchPlayerByPhoneNumber(phoneNumber: string) {
     console.log('player', player)
 
     const historyData = await sql<LogDB>`
-      SELECT
-        history.id,
-        history.change,
-        history.note,
-        history.updated_at,
-        history.updated_by
-      FROM history
+      SELECT * FROM history
       WHERE history.phone_number = ${player.phone_number}
       order by history.updated_at asc;
     `;

@@ -104,19 +104,15 @@ export async function createPlayer(prevState: State, formData: FormData) {
     const phoneNumber = phone_number.replaceAll('-', '');
 
     try {
-        console.log('### before insert into player query')
         await sql`
       INSERT INTO players (name, balance, phone_number, image_url, notes, sunday_rsvp, monday_rsvp, tuesday_rsvp, wednesday_rsvp, thursday_rsvp, saturday_rsvp)
       VALUES (${name}, ${balance}, ${phoneNumber}, '/players/default.png', ${notes ?? ''}, ${sunday_rsvp}, ${monday_rsvp}, ${tuesday_rsvp}, ${wednesday_rsvp}, ${thursday_rsvp}, ${saturday_rsvp})
     `;
-        console.log('### after insert into player query')
-        console.log('### before insert into history query')
 
         await sql`
       INSERT INTO history (phone_number, change, note)
       VALUES (${phoneNumber}, ${balance}, ${note})
     `;
-        console.log('### after insert into history query')
 
     } catch (error) {
         console.log('## createPlayer error', error)
@@ -180,33 +176,43 @@ export async function createPlayerLog(player: PlayerForm, prevState: State, form
     }
 
     const change = validatedFields.data.change * (usage ? -1 : 1);
+    const type = usage ? formData.get('type') as string :  'credit' ;
     const currentBalance = player.balance;
-    const newBalance = currentBalance + change;
-    try {
+    try{
         await sql`
-      INSERT INTO history (phone_number, change, note)
-      VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note})
+      INSERT INTO history (phone_number, change, note, type)
+      VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type})
     `;
-        const date = new Date().toISOString();
-        await sql`
-      UPDATE players
-      SET balance = ${newBalance}, updated_at=${date}
-      WHERE id = ${player.id}
-    `;
-
-    } catch (error) {
+    }catch(error){
         console.log('## create log error', error)
         return {
             message: 'Database Error: Failed to Create log.',
         };
     }
+    if (type === 'credit') {
+        const newBalance = currentBalance + change;
+        try {
+
+            const date = new Date().toISOString();
+            await sql`
+      UPDATE players
+      SET balance = ${newBalance}, updated_at=${date}
+      WHERE id = ${player.id}
+    `;
+
+        } catch (error) {
+            console.log('## create log error', error)
+            return {
+                message: 'Database Error: Failed to update player balance on credit change.',
+            };
+        }
+    }
+
     revalidatePath('/dashboard/players');
-  //  redirect('/dashboard/players');
-
-
 }
 
 export async function createPlayerUsageLog(player: PlayerForm, prevState: State, formData: FormData){
+
     return createPlayerLog(player, prevState, formData, true);
 }
 export async function createPlayerNewCreditLog(player: PlayerForm, prevState: State, formData: FormData){

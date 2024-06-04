@@ -102,6 +102,7 @@ export type LogDB = {
   note: string;
   updated_at: string;
   updated_by: string;
+  type: string;
 //updated by
 };
 export type PlayerDB = {

@@ -20,7 +20,7 @@ export const { auth, signIn, signOut } = NextAuth({
     providers: [
         Credentials({
             async authorize(credentials) {
-                console.log('####   authorize');
+
 
                 const phone_number = credentials.email as string;
                 const password = credentials.password as string;
