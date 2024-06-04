@@ -151,7 +151,6 @@ export async function fetchFilteredPlayers(
     throw new Error('Failed to fetch FilteredPlayers.');
   }
 }
-
 export async function fetchPlayersPages(query: string) {
   noStore();
   try {
@@ -167,6 +166,31 @@ export async function fetchPlayersPages(query: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of players.');
+  }
+}
+export async function fetchTodayPlayers() {
+  try {
+    const now = new Date();
+    const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+    const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
+
+    const data = await sql<PlayersTable>`
+      SELECT *
+      FROM players`;
+
+    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
+    const todayHistory =  todayHistoryResults.rows;
+
+    const players = data.rows;
+    players.forEach((player) => {
+      player.arrived = !!todayHistory.find(({ phone_number}) => phone_number === player.phone_number);
+    });
+
+    // @ts-ignore
+    return players.filter(p => p.arrived || !!p[rsvpPropName]);
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch the fetchTodayPlayers.');
   }
 }
 

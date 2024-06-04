@@ -62,6 +62,7 @@ export type PlayersTable = {
   wednesday_rsvp: boolean;
   thursday_rsvp: boolean;
   saturday_rsvp: boolean;
+  arrived: boolean;
 };
 
 
@@ -116,7 +117,8 @@ export type PlayerDB = {
   balance: number;
   note: string;
   notes: string;
-  historyLog: LogDB[]
+  historyLog: LogDB[],
+  arrived: boolean;
 };
 export type TemplateDB = {
   id: string;

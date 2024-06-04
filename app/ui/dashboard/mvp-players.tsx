@@ -13,7 +13,6 @@ export default async function MVPPlayers() {
     const now = new Date();
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
     const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
-console.log('mvpPlayers',mvpPlayers)
     return (
 
     <div className="flex w-full flex-col md:col-span-4">

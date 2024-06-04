@@ -66,8 +66,7 @@ function UpdateUser({user}: { user: User }) {
     return (
         <form action={onSubmit}>
             <button className="">
-                <CheckCircleIcon width={20} color={user.is_admin ? 'green' : 'gray'}
-                                 className={'CheckCircleIcon'}/>
+                {user.is_admin ? '✅' : '☑️'}
             </button>
         </form>
     );

@@ -3,12 +3,11 @@
 import {
   UserGroupIcon,
   HomeIcon,
-  UserCircleIcon,
+  UserCircleIcon,UsersIcon, WrenchScrewdriverIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import {BugAntIcon, WrenchScrewdriverIcon} from "@heroicons/react/20/solid";
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
@@ -20,9 +19,14 @@ const links = [
     icon: UserGroupIcon,
   },
   {
+    name: "today's players",
+    href: '/dashboard/todayplayers',
+    icon: UsersIcon
+  },
+  {
     name: 'users',
     href: '/dashboard/users',
-    icon: UserGroupIcon,
+    icon: UserCircleIcon
   },
   {
     name: 'configurations',

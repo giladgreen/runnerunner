@@ -407,7 +407,7 @@ export async function updateIsUserAdmin(id:string) {
 }
 
 
-export async function rsvpPlayerForDay(phone_number:string, rsvpAttribute: string, val: boolean) {
+export async function rsvpPlayerForDay(phone_number:string, rsvpAttribute: string, val: boolean, prevPage: string){
     noStore();
     const playerResult = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phone_number}`;
     const player = playerResult.rows[0]
@@ -420,6 +420,6 @@ export async function rsvpPlayerForDay(phone_number:string, rsvpAttribute: strin
         return false;
     }
 
-    revalidatePath('/dashboard/players');
-    redirect('/dashboard/players');
+    revalidatePath(prevPage);
+    redirect(prevPage);
 }
