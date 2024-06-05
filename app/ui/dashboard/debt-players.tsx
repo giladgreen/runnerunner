@@ -7,6 +7,8 @@ import {DebtPlayerRaw} from "@/app/lib/definitions";
 import {formatCurrency} from "@/app/lib/utils";
 import Link from "next/link";
 import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
+import {Suspense} from "react";
+import {PlayersSkeleton} from "@/app/ui/skeletons";
 
 export default async function DebtPlayers() {
     const debtPlayers = await fetchDebtPlayers();
@@ -15,6 +17,8 @@ export default async function DebtPlayers() {
     const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
 
   return (
+      <Suspense fallback={<PlayersSkeleton />}>
+
 
     <div className="flex w-full flex-col md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
@@ -82,5 +86,6 @@ export default async function DebtPlayers() {
         </div>
       </div>
     </div>
+      </Suspense>
   );
 }

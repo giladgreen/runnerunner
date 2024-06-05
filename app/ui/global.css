@@ -31,8 +31,23 @@ background: rgb(0, 112, 243, 0.2);
   transition: transform 0.5s;
 
 }
-.spend{
-  width: 45%;
+.table-text-item{
+  text-align: center;
+}
+.card-table{
+  table {
+    width: 100%;
+    th {
+      width: 110px
+    }
+  }
+}
+.table-item{
+
+  text-align: center;
+align-items: center;
+ display:grid;
+    justify-content: center;
 }
 .thin-column{
   max-width: 160px !important;

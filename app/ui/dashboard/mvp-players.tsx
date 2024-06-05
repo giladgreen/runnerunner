@@ -7,14 +7,17 @@ import {MVPPlayerRaw} from "@/app/lib/definitions";
 import {formatCurrency} from "@/app/lib/utils";
 import Link from "next/link";
 import {TickIcon, DoubleTicksIcon} from "@/app/ui/icons";
+import {Suspense} from "react";
+import {PlayersSkeleton} from "@/app/ui/skeletons";
 
 export default async function MVPPlayers() {
     const mvpPlayers = await fetchMVPPlayers();
     const now = new Date();
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
-    const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
-    return (
+    const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`;
 
+    return (
+        <Suspense fallback={<PlayersSkeleton />}>
     <div className="flex w-full flex-col md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         MVP Players
@@ -81,5 +84,6 @@ export default async function MVPPlayers() {
         </div>
       </div>
     </div>
+        </Suspense>
   );
 }

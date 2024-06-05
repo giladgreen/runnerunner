@@ -89,18 +89,23 @@ export async function fetchRSVPAndArrivalData() {
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
     const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
 
-    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
+    const todayHistoryResults = await sql`SELECT phone_number, type, change FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour'`;
     const todayHistory =  todayHistoryResults.rows;
-    const todayHistoryCount =  todayHistory.length;
+    const todayCreditIncome = todayHistory.filter(({ type }) => type === 'cash').reduce((acc, { change }) => acc + change, 0);
+    const todayCashIncome = todayHistory.filter(({ type }) => type === 'credit').reduce((acc, { change }) => acc + change, 0);
+    const todayTransferIncome = todayHistory.filter(({ type }) => type === 'bank').reduce((acc, { change }) => acc + change, 0);
 
     const allPlayersResult = await sql`SELECT * FROM players`;
     const allPlayers = allPlayersResult.rows;
-    const arrivedToday = todayHistoryCount;
+    const arrivedToday =  (Array.from(new Set(todayHistory.map(({ phone_number }) => phone_number)))).length;
     const rsvpForToday = allPlayers.filter(player => player[rsvpPropName]).length
 
     return {
       rsvpForToday,
-      arrivedToday
+      arrivedToday,
+      todayCreditIncome: todayCreditIncome < 0 ? -1 * todayCreditIncome : todayCreditIncome,
+      todayCashIncome: todayCashIncome < 0 ? -1 * todayCashIncome : todayCashIncome,
+      todayTransferIncome: todayTransferIncome < 0 ? -1 * todayTransferIncome : todayTransferIncome
     };
   } catch (error) {
     console.error('Database Error:', error);
