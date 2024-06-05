@@ -203,7 +203,7 @@ async function seedHistory(client) {
         logs.map(
             (log) => client.sql`
         INSERT INTO history (phone_number, change, note, type, updated_at, updated_by)
-        VALUES (${phoneNumber}, ${log.change}, ${log.note}, 'credit',${log.updated_at}, ${log.updated_by}); `,
+        VALUES (${phoneNumber}, ${log.change}, ${log.note}, ${log.type ?? 'credit'},${log.updated_at}, ${log.updated_by}); `,
         ),
     )))
 

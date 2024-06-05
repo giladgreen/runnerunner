@@ -17,8 +17,8 @@ export default function EditTemplateForm({
   console.log(' template.id', template.id)
   const updateTemplateWithId = updateTemplate.bind(null, template.id);
   const updateTemplateWithIdAndLocalStorageChanges = (prevState: State, formData: FormData)=>{
-      localStorage.setItem('use-balance-note-text', formData.get('template') as string);
-      localStorage.setItem('use-balance-amount', `${formData.get('amount') as string}`);
+      localStorage && localStorage.setItem('use-balance-note-text', formData.get('template') as string);
+      localStorage && localStorage.setItem('use-balance-amount', `${formData.get('amount') as string}`);
       return updateTemplateWithId(prevState, formData);
   }
 

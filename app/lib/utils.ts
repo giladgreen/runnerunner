@@ -23,6 +23,10 @@ export const formatType = (type: string) => {
     return 'Cash';
   }
 
+  if (type === 'prize') {
+    return 'Prize';
+  }
+
   return type;
 };
 

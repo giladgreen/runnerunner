@@ -9,7 +9,7 @@ export default async function HistoryTable({
     isRestrictedData: boolean
 }) {
     const balances = [] as number[];
-    console.log('player.historyLog',player.historyLog)
+
     const historyLog = player.historyLog?.filter(log => !isRestrictedData || log.type === 'credit').map((log, index) => {
         if (index === 0) {
             balances.push(log.change);

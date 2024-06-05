@@ -18,7 +18,7 @@ export async function fetchMVPPlayers() {
       ORDER BY balance DESC
       LIMIT 5`;
 
-    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
+    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE type != 'prize' AND change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
     const todayHistory =  todayHistoryResults.rows;
 
     const players = data.rows;
@@ -42,7 +42,7 @@ export async function fetchDebtPlayers() {
       ORDER BY balance ASC
       LIMIT 5`;
 
-    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
+    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE type != 'prize' AND change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
     const todayHistory =  todayHistoryResults.rows;
 
     const players = data.rows;
@@ -89,7 +89,7 @@ export async function fetchRSVPAndArrivalData() {
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
     const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
 
-    const todayHistoryResults = await sql`SELECT phone_number, type, change FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour'`;
+    const todayHistoryResults = await sql`SELECT phone_number, type, change FROM history WHERE type != 'prize' AND change < 0 AND updated_at > now() - interval '6 hour'`;
     const todayHistory =  todayHistoryResults.rows;
     const todayCreditIncome = todayHistory.filter(({ type }) => type === 'cash').reduce((acc, { change }) => acc + change, 0);
     const todayCashIncome = todayHistory.filter(({ type }) => type === 'credit').reduce((acc, { change }) => acc + change, 0);
@@ -183,7 +183,7 @@ export async function fetchTodayPlayers() {
       SELECT *
       FROM players`;
 
-    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
+    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE type != 'prize' AND change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
     const todayHistory =  todayHistoryResults.rows;
 
     const players = data.rows;

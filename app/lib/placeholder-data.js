@@ -205,37 +205,42 @@ const logs = [
     change: -300,
     note: 'טורניר תל אביב - כניסה',
     updated_at: '2024-01-12T20:00:00.000Z',
-    updated_by: 'תרצה'
+    updated_by: 'תרצה',
+    type: 'credit'
   },
   {
     change: -200,
     note: 'טורניר תל אביב - כניסה שנייה',
     updated_at: '2024-01-12T20:50:00.000Z',
-    updated_by: 'תרצה'
+    updated_by: 'תרצה',
+    type: 'credit'
   },
   {
     change: -400,
     note: 'טורניר ראשון לציון - כניסה',
     updated_at: '2024-01-14T20:00:00.000Z',
-    updated_by: 'חדווה'
+    updated_by: 'חדווה',
+    type: 'credit'
   },
   {
     change: 1000,
     note: 'טורניר ראשון לציון באונטי - מעטפה',
     updated_at: '2024-01-14T21:30:00.000Z',
-    updated_by: 'חדווה'
+    updated_by: 'חדווה',
   },
   {
     change: -2000,
     note: 'ניצול קרדיט לפרס - דייסוןי',
     updated_at: '2024-01-15T10:00:00.000Z',
-    updated_by: 'חדווה'
+    updated_by: 'חדווה',
+    type: 'prize'
   },
   {
     change: -250,
     note: 'טורניר קיסריה - כניסה',
     updated_at: '2024-01-17T20:00:00.000Z',
-    updated_by: 'תרצה'
+    updated_by: 'תרצה',
+    type: 'credit'
   },
   {
     change: 3500,

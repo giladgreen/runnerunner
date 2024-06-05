@@ -176,7 +176,9 @@ export async function createPlayerLog(player: PlayerForm, prevState: State, form
     }
 
     const change = validatedFields.data.change * (usage ? -1 : 1);
-    const type = usage ? formData.get('type') as string :  'credit' ;
+    const type = usage ? (formData.get('type') as string ?? 'prize') :  'credit' ;
+    console.log('### usage', usage)
+    console.log('### type', type)
     const currentBalance = player.balance;
     try{
         await sql`
@@ -184,12 +186,12 @@ export async function createPlayerLog(player: PlayerForm, prevState: State, form
       VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type})
     `;
     }catch(error){
-        console.log('## create log error', error)
+        console.log('### create log error', error)
         return {
             message: 'Database Error: Failed to Create log.',
         };
     }
-    if (type === 'credit') {
+    if (type === 'credit' || type === 'prize') {
         const newBalance = currentBalance + change;
         try {
 
@@ -212,7 +214,6 @@ export async function createPlayerLog(player: PlayerForm, prevState: State, form
 }
 
 export async function createPlayerUsageLog(player: PlayerForm, prevState: State, formData: FormData){
-
     return createPlayerLog(player, prevState, formData, true);
 }
 export async function createPlayerNewCreditLog(player: PlayerForm, prevState: State, formData: FormData){
