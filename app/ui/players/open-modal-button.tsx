@@ -17,7 +17,7 @@ export default function OpenModalButton({
 
     const [show,setShow] = React.useState(false);
 
-    const close = (e: any)=>{
+    const close = ()=>{
         setShow(false);
     }
     return (
