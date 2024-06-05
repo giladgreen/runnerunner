@@ -17,6 +17,9 @@ const AMOUNTS = {
 }
 
 function initialTemplates(templates: TemplateDB[]) {
+  if (!templates) {
+    return;
+  }
   if (Object.keys(TEXTS).length !== 0) {
     return;
   }
@@ -71,7 +74,7 @@ function getInitialAmount(): number {
   return result;
 }
 
-export function UseCreditForm({player, templates} : {player: PlayerForm, templates:TemplateDB[]}) {
+export function UseCreditForm({player, templates, hide} : {player: PlayerForm, templates:TemplateDB[], hide?: ()=>void}) {
 
   initialTemplates(templates);
   const initialState = { message: null, errors: {} };
@@ -196,7 +199,9 @@ export function UseCreditForm({player, templates} : {player: PlayerForm, templat
 
           </div>
           <div className="mt-6 flex justify-end gap-4">
-            <Button type="submit">Use</Button>
+            {hide && <Button onClick={hide}>Cancel</Button>}
+            <Button type="submit" onClick={()=> hide?.()}>Use</Button>
+
           </div>
         </form>
   );

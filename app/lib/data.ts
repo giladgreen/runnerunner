@@ -192,7 +192,7 @@ export async function fetchTodayPlayers() {
     });
 
     // @ts-ignore
-    return players.filter(p => p.arrived || !!p[rsvpPropName]);
+    return players.filter(p => p.arrived || !!p[rsvpPropName]).sort((a,b)=> a.id < b.id ? -1 : 1);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the fetchTodayPlayers.');

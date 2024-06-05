@@ -1,6 +1,6 @@
 import Pagination from '@/app/ui/players/pagination';
 import Search from '@/app/ui/search';
-import Table from '@/app/ui/players/players-table';
+import PlayersTable from '@/app/ui/players/players-table';
 import { CreateNewPlayer } from '@/app/ui/players/buttons';
 import { lusitana } from '@/app/ui/fonts';
 import { PlayersTableSkeleton } from '@/app/ui/skeletons';
@@ -30,7 +30,7 @@ export default async function Page({
 
             </div>
             <Suspense key={query + currentPage} fallback={<PlayersTableSkeleton />}>
-                <Table query={query} currentPage={currentPage} />
+                <PlayersTable query={query} currentPage={currentPage} />
             </Suspense>
             <div className="mt-5 flex w-full justify-center">
                 <Pagination totalPages={totalPages} />

@@ -1,6 +1,6 @@
 import { CreateNewPlayer } from '@/app/ui/players/buttons';
 import { lusitana } from '@/app/ui/fonts';
-import Table from '@/app/ui/players/today-players-table';
+import TodaysPlayersTable from "@/app/ui/players/today-players-table";
 export default async function Page() {
 
     return (
@@ -13,9 +13,9 @@ export default async function Page() {
                 <CreateNewPlayer />
 
             </div>
- <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+            <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
 
-                <Table/>
+                <TodaysPlayersTable/>
             </div>
 
         </div>

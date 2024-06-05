@@ -42,6 +42,18 @@ background: rgb(0, 112, 243, 0.2);
     }
   }
 }
+.edit-player-modal{
+  background: white;
+  z-index:10;
+  position: fixed;
+  top: 20px;
+  right: 50px;
+  display: flex;
+  justify-content: center;
+}
+.edit-player-modal-hidden{
+  visibility: hidden;
+}
 .revenue-table{
   table {
     width: 100%;
