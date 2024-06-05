@@ -35,23 +35,23 @@ function initialTemplates(templates: TemplateDB[]) {
 function getInitialText(): string {
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
-  const savedDayOfTheWeek = localStorage ? localStorage.getItem('day-of-the-week') : dayOfTheWeek;
+  const savedDayOfTheWeek =/* localStorage ? localStorage.getItem('day-of-the-week') :*/ dayOfTheWeek;
   let newDay = true;
   if (savedDayOfTheWeek){
    if (savedDayOfTheWeek === dayOfTheWeek){
      newDay = false;
    }
   } else{
-    localStorage && localStorage.setItem('day-of-the-week', dayOfTheWeek);
+    //localStorage && localStorage.setItem('day-of-the-week', dayOfTheWeek);
   }
 
   // @ts-ignore
   let result: string = TEXTS[dayOfTheWeek] ? TEXTS[dayOfTheWeek] as string : '';
 
-  const storedText = newDay ? result : localStorage ? localStorage.getItem('use-balance-note-text') : result;
+  const storedText = result;//newDay ? result : localStorage ? localStorage.getItem('use-balance-note-text') : result;
 
   if (!storedText){
-    localStorage && localStorage.setItem('use-balance-note-text', result);
+   // localStorage && localStorage.setItem('use-balance-note-text', result);
   }else{
     result = storedText;
   }
@@ -64,10 +64,10 @@ function getInitialAmount(): number {
 
   // @ts-ignore
   let result: number = AMOUNTS[dayOfTheWeek] ? AMOUNTS[dayOfTheWeek] as number : 300;
-  const storedText = localStorage ? localStorage.getItem('use-balance-amount') : result;
+  const storedText = result;//localStorage ? localStorage.getItem('use-balance-amount') : result;
 
   if (!storedText){
-    localStorage && localStorage.setItem('use-balance-amount', `${result}`);
+    //localStorage && localStorage.setItem('use-balance-amount', `${result}`);
   }else{
     result = Number(storedText);
   }
@@ -115,7 +115,7 @@ export function UseCreditForm({player, templates, hide} : {player: PlayerForm, t
                       aria-describedby="change-error"
                       onChange={(e) => {
                         setAmount(Number(e.target.value))
-                        localStorage && localStorage.setItem('use-balance-amount', e.target.value);
+                        //localStorage && localStorage.setItem('use-balance-amount', e.target.value);
                       }}
                       value={amount}
                   />
@@ -148,7 +148,7 @@ export function UseCreditForm({player, templates, hide} : {player: PlayerForm, t
                     aria-describedby="note-error"
                     onChange={(e) => {
                       setNote(e.target.value);
-                      localStorage && localStorage.setItem('use-balance-note-text', e.target.value);
+                      //localStorage && localStorage.setItem('use-balance-note-text', e.target.value);
 
                     }}
                     required
@@ -245,7 +245,7 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:
                       aria-describedby="change-error"
                       onChange={(e) => {
                         setAmount(Number(e.target.value))
-                        localStorage && localStorage.setItem('use-balance-amount', e.target.value);
+                        //localStorage && localStorage.setItem('use-balance-amount', e.target.value);
                       }}
                       value={amount}
                   />
@@ -278,7 +278,7 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:
                     aria-describedby="note-error"
                     onChange={(e) => {
                       setNote(e.target.value);
-                      localStorage && localStorage.setItem('use-balance-note-text', e.target.value);
+                      //localStorage && localStorage.setItem('use-balance-note-text', e.target.value);
 
                     }}
                     required
