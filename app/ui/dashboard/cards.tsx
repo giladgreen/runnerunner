@@ -58,13 +58,13 @@ export async function RSVPAndArrivalCardWrapper() {
             <table  style={{fontSize: 15, width:'100%'}}>
                 <thead>
                 <tr>
-                      <th scope="col" className="table-text-item">
+                      <th scope="col" className="table-text-item" data-tooltip="Credit" title="Credit">
                         <b>{formatCurrency(todayCreditIncome)}</b>
                     </th>
-                    <th scope="col" className="table-text-item">
+                    <th scope="col" className="table-text-item" data-tooltip="Cash" title="Cash">
                         <b>{formatCurrency(todayCashIncome)}</b>
                     </th>
-                    <th scope="col" className="table-text-item">
+                    <th scope="col" className="table-text-item" data-tooltip="Wire transfer" title="Wire transfer">
                         <b>{formatCurrency(todayTransferIncome)}</b>
                     </th>
                 </tr>
@@ -72,17 +72,17 @@ export async function RSVPAndArrivalCardWrapper() {
                 <tbody>
                 <tr>
                     <th scope="col" >
-                        <div className="table-item">
+                        <div className="table-item" data-tooltip="Credit" title="Credit">
                             <CreditCardIcon className="h-6 w-6 text-gray-700"/>
                         </div>
                     </th>
                     <th scope="col" >
-                        <div className="table-item">
+                        <div className="table-item" data-tooltip="Cash" title="Cash">
                             <WalletIcon className="h-6 w-6 text-gray-700"/>
                         </div>
                     </th>
                     <th scope="col" >
-                        <div className="table-item">
+                        <div className="table-item" data-tooltip="Wire transfer" title="Wire transfer">
                             <ArrowLeftOnRectangleIcon className="h-6 w-6 text-gray-700"/>
                         </div>
                     </th>
