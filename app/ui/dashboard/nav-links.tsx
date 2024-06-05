@@ -24,11 +24,6 @@ const links = [
     icon: UsersIcon
   },
   {
-    name: 'users',
-    href: '/dashboard/users',
-    icon: UserCircleIcon
-  },
-  {
     name: 'configurations',
     href: '/dashboard/configurations',
     icon: WrenchScrewdriverIcon,

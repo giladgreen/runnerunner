@@ -1,7 +1,7 @@
 "use client";
 
 import { TrashIcon } from '@heroicons/react/24/outline';
-import {deletePlayer, importPlayers, resetAllRsvp, updateIsUserAdmin} from '@/app/lib/actions';
+import {deletePlayer, importPlayers, resetAllRsvp} from '@/app/lib/actions';
 import {Button} from "@/app/ui/button";
 import React from "react";
 import {PlayerDB} from "@/app/lib/definitions";
