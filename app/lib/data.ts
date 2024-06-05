@@ -9,6 +9,9 @@ import {
 } from './definitions';
 import {GeneralPlayersCardWrapper} from "@/app/ui/dashboard/cards";
 
+export async function fetchDateInServer() {
+  return new Date().toISOString();
+}
 export async function fetchMVPPlayers() {
   noStore();
   try {

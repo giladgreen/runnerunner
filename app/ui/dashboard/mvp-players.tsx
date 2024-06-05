@@ -2,7 +2,7 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
-import {fetchMVPPlayers} from "@/app/lib/data";
+import {fetchDateInServer, fetchMVPPlayers} from "@/app/lib/data";
 import {MVPPlayerRaw} from "@/app/lib/definitions";
 import {formatCurrency} from "@/app/lib/utils";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import {Suspense} from "react";
 import {PlayersSkeleton} from "@/app/ui/skeletons";
 
 export default async function MVPPlayers() {
+    const dateInServer = await fetchDateInServer();
     const mvpPlayers = await fetchMVPPlayers();
     const now = new Date();
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
@@ -20,7 +21,7 @@ export default async function MVPPlayers() {
         <Suspense fallback={<PlayersSkeleton />}>
     <div className="flex w-full flex-col md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-        MVP Players
+        MVP Players - {dateInServer}
       </h2>
       <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
         {/* NOTE: comment in this code when you get to this point in the course */}
