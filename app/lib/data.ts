@@ -10,7 +10,9 @@ import {
 import {GeneralPlayersCardWrapper} from "@/app/ui/dashboard/cards";
 
 export async function fetchDateInServer() {
-  return new Date().toISOString();
+  const now = new Date();
+  now.setHours(now.getHours()+3);
+  return now.toISOString();
 }
 export async function fetchMVPPlayers() {
   noStore();
