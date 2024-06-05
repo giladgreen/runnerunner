@@ -194,7 +194,6 @@ export async function createPlayerLog(player: PlayerForm, prevState: State, form
     if (type === 'credit' || type === 'prize') {
         const newBalance = currentBalance + change;
         try {
-
             const date = new Date().toISOString();
             await sql`
       UPDATE players

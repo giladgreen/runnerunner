@@ -93,7 +93,7 @@ export async function fetchRSVPAndArrivalData() {
     const todayHistory =  todayHistoryResults.rows;
     const todayCreditIncome = todayHistory.filter(({ type }) => type === 'cash').reduce((acc, { change }) => acc + change, 0);
     const todayCashIncome = todayHistory.filter(({ type }) => type === 'credit').reduce((acc, { change }) => acc + change, 0);
-    const todayTransferIncome = todayHistory.filter(({ type }) => type === 'bank').reduce((acc, { change }) => acc + change, 0);
+    const todayTransferIncome = todayHistory.filter(({ type }) => type === 'wire').reduce((acc, { change }) => acc + change, 0);
 
     const allPlayersResult = await sql`SELECT * FROM players`;
     const allPlayers = allPlayersResult.rows;
@@ -196,6 +196,36 @@ export async function fetchTodayPlayers() {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the fetchTodayPlayers.');
+  }
+}
+
+
+export async function fetchRevenues() {
+  try {
+    const historyResults = await sql`SELECT * FROM history WHERE type != 'prize' AND change < 0 ORDER BY updated_at DESC`;
+    const todayHistory =  historyResults.rows;
+    return todayHistory.reduce((acc, { change, type, updated_at }) => {
+      const dateAsString = updated_at.toISOString();
+      const date = dateAsString.slice(0,10);
+      if (!acc[date]){
+        acc[date] = {
+          cash: 0,
+          credit: 0,
+          wire: 0,
+          total: 0,
+          date
+        }
+      }
+      const amount = -1 * change;
+      acc[date].total += amount;
+      acc[date][type] += amount;
+
+      return acc;
+    }, {});
+
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch the fetch revenue.');
   }
 }
 

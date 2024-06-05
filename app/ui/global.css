@@ -42,6 +42,16 @@ background: rgb(0, 112, 243, 0.2);
     }
   }
 }
+.revenue-table{
+  table {
+    width: 100%;
+    th {
+      border: 1px solid #444444;
+      width: 110px;
+      text-align: left;
+    }
+  }
+}
 .table-item{
 
   text-align: center;

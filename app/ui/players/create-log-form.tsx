@@ -184,11 +184,11 @@ export function UseCreditForm({player, templates} : {player: PlayerForm, templat
                     <label htmlFor="cash" className="ml-2">Cash</label>
                   </div>
                   <div className="flex align-items-center">
-                    <input type="radio" value="bank" name="type"
-                           checked={type === 'bank'}
-                           onChange={()=>setType('bank')}
+                    <input type="radio" value="wire" name="type"
+                           checked={type === 'wire'}
+                           onChange={()=>setType('wire')}
                     />
-                    <label htmlFor="cash" className="ml-2">Bank Transfer</label>
+                    <label htmlFor="cash" className="ml-2">Money wire</label>
                   </div>
                 </div>
               </div>

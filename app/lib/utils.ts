@@ -16,8 +16,8 @@ export const formatType = (type: string) => {
   if (type === 'credit') {
     return 'Credit';
   }
-  if (type === 'bank') {
-    return 'Bank Transfer';
+  if (type === 'wire') {
+    return 'Money wire';
   }
   if (type === 'cash') {
     return 'Cash';
