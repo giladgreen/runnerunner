@@ -34,7 +34,111 @@ const players = [
     name: 'ישראל ישראלי',
     balance: 9550,
     phone_number: DEMO_USER_PHONE,
-    image_url: '/players/default.png',
+    notes: '',
+  },
+  {
+    name: 'רפאל',
+    balance: 8200,
+    phone_number: '1800101010',
+    image_url: '/players/rafael.png',
+    notes: '',
+  },
+  {
+    name: `מיכאל אנג׳לו`,
+    balance: 9100,
+    phone_number: '1800101020',
+    image_url: '/players/michaelangelo.png',
+    notes: '',
+  },
+  {
+    name: 'דונטלו',
+    balance: 7700,
+    phone_number: '1800101030',
+    image_url: '/players/donatelo.png',
+    notes: '',
+  },
+  {
+    name: 'לאונרדו',
+    balance: 6800,
+    phone_number: '1800101040',
+    image_url: '/players/leonardo.png',
+    notes: '',
+  },
+  {
+    name: 'אבי אסרף',
+    balance: 5550,
+    phone_number: AVI_PHONE,
+    image_url: '/players/avi-asraf.png',
+    notes: 'admin',
+  },
+  {
+    name: 'עוז שנלינג',
+    balance: 5550,
+    phone_number: OZ_PHONE,
+    image_url: '/players/oz_shneling.png',
+    notes: 'admin',
+  },
+  {
+    name: 'גלעד גרין',
+    balance: 5300,
+    phone_number: '0587869910',
+    image_url: '/players/gilad-green.png',
+    notes: 'admin',
+  },
+  {
+    name: 'ויקטור חסון',
+    balance: -50,
+    phone_number: '0587869112',
+    image_url: '/players/victor-hason.png',
+  },
+  {
+    name: 'סרג׳ו קונסטנזה',
+    balance: -150,
+    phone_number: '0587869113',
+    image_url: '/players/serjo-kostanza.png',
+  },
+  {
+    name: 'רפאל מוקד',
+    balance: -350,
+    phone_number: '0587869114',
+    image_url: '/players/rafael-moked.png',
+  },
+
+
+  {
+    name: 'שרדר',
+    balance: -400,
+    phone_number: '0587869115',
+    image_url: '/players/shreder.png',
+  },
+  {
+    name: 'ספלינטר',
+    balance: -250,
+    phone_number: '0587869116',
+    image_url: '/players/splinter.png',
+  },
+  {
+    name: 'רוקסטדי',
+    balance: 200,
+    phone_number: '0587869117',
+    image_url: '/players/rocksteady.png',
+  },
+
+  {
+    name: 'ביבופ',
+    balance: 550,
+    phone_number: '0587869118',
+    image_url: '/players/bebop.png',
+  }
+
+
+
+];
+const players_backup = [
+  {
+    name: 'ישראל ישראלי',
+    balance: 9550,
+    phone_number: DEMO_USER_PHONE,
     notes: '',
   },
   {
@@ -76,7 +180,7 @@ const players = [
     phone_number: '0537869914',
     image_url: '/players/yaniv-malichi.png',
   },
-{
+  {
     name: 'יעקב כהן ',
     balance: 4250,
     phone_number: '0587869916',
@@ -188,6 +292,7 @@ const players = [
   }
 
 ];
+
 const logs = [
   {
     change: 2200,

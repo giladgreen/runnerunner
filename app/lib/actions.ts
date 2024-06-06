@@ -131,7 +131,6 @@ export async function importPlayers(players: { name: string; phone_number: strin
     await validateAdmin();
     const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
     try {
-
         const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
         await Promise.all(
             playersToInsert.map(
@@ -145,8 +144,8 @@ export async function importPlayers(players: { name: string; phone_number: strin
         await Promise.all(
              playersToInsert.map(
                 (player) => sql`
-        INSERT INTO history (phone_number, change, note)
-        VALUES (${player.phone_number}, ${player.balance}, 'imported balance');
+        INSERT INTO history (phone_number, change, note, type)
+        VALUES (${player.phone_number}, ${player.balance}, 'imported balance', 'credit');
       `
             ),
         );

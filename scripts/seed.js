@@ -145,7 +145,7 @@ async function seedPlayers(client) {
           const rsvp = index % 2 === 0 ? true : false;
           return client.sql`
         INSERT INTO players (name, phone_number, balance, image_url, notes, sunday_rsvp, monday_rsvp, tuesday_rsvp, wednesday_rsvp, thursday_rsvp, saturday_rsvp)
-        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.image_url}, ${player.notes ?? ''}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp})
+        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.image_url ?? '/players/default.png'}, ${player.notes ?? ''}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp})
         ON CONFLICT (id) DO NOTHING;
       `
         },
