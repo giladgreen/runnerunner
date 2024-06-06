@@ -9,11 +9,7 @@ import {
 } from './definitions';
 import {GeneralPlayersCardWrapper} from "@/app/ui/dashboard/cards";
 
-export async function fetchDateInServer() {
-  const now = new Date();
-  now.setHours(now.getHours()+3);
-  return now.toISOString();
-}
+
 export async function fetchMVPPlayers() {
   noStore();
   try {
@@ -209,7 +205,8 @@ export async function fetchRevenues() {
   try {
     const historyResults = await sql`SELECT * FROM history WHERE type != 'prize' AND change < 0 ORDER BY updated_at DESC`;
     const todayHistory =  historyResults.rows;
-    return todayHistory.reduce((acc, { change, type, updated_at }) => {
+    const dateToPlayerMap = {};
+    return todayHistory.reduce((acc, { phone_number, change, type, updated_at }) => {
       const dateAsString = updated_at.toISOString();
       const date = dateAsString.slice(0,10);
       if (!acc[date]){
@@ -218,12 +215,27 @@ export async function fetchRevenues() {
           credit: 0,
           wire: 0,
           total: 0,
+          players: 0,
+          entries: 0,
           date
         }
       }
       const amount = -1 * change;
       acc[date].total += amount;
+      acc[date].entries += 1;
       acc[date][type] += amount;
+
+      // @ts-ignore
+      const datePlayers = dateToPlayerMap[date];
+      if (datePlayers){
+        if (!datePlayers.includes(phone_number)){
+          datePlayers.push(phone_number);
+          acc[date].players += 1;
+        }
+      }else{
+        // @ts-ignore
+        dateToPlayerMap[date] = [phone_number];
+      }
 
       return acc;
     }, {});

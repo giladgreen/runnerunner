@@ -27,6 +27,12 @@ export default async function RevenuesPage() {
                     <th  className="px-3 py-5 font-medium">
                         Money Wire
                     </th>
+                    <th  className="px-3 py-5 font-medium">
+                        Entries
+                    </th>
+                    <th  className="px-3 py-5 font-medium">
+                        Players Count
+                    </th>
                 </tr>
                 </thead>
                 <tbody className="bg-white">
@@ -49,6 +55,12 @@ export default async function RevenuesPage() {
                         </th>
                         <th  className="px-3 py-5 font-medium">
                             {formatCurrency(dateItem.wire)}
+                        </th>
+                        <th  className="px-3 py-5 font-medium">
+                            {dateItem.entries}
+                        </th>
+                        <th  className="px-3 py-5 font-medium">
+                            {dateItem.players}
                         </th>
                     </tr>
                 ))}
