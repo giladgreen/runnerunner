@@ -19,8 +19,8 @@ export async function fetchMVPPlayers() {
       ORDER BY balance DESC
       LIMIT 5`;
 
-    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE type != 'prize' AND change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
-    const todayHistory =  todayHistoryResults.rows;
+    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' );
 
     const players = data.rows;
     players.forEach((player) => {
@@ -43,8 +43,8 @@ export async function fetchDebtPlayers() {
       ORDER BY balance ASC
       LIMIT 5`;
 
-    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE type != 'prize' AND change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
-    const todayHistory =  todayHistoryResults.rows;
+    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' )
 
     const players = data.rows;
     players.forEach((player) => {
@@ -90,8 +90,8 @@ export async function fetchRSVPAndArrivalData() {
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
     const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
 
-    const todayHistoryResults = await sql`SELECT phone_number, type, change FROM history WHERE type != 'prize' AND change < 0 AND updated_at > now() - interval '6 hour'`;
-    const todayHistory =  todayHistoryResults.rows;
+    const todayHistoryResults = await sql`SELECT phone_number, type, change FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour'`;
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' )
     const todayCreditIncome = todayHistory.filter(({ type }) => type === 'cash').reduce((acc, { change }) => acc + change, 0);
     const todayCashIncome = todayHistory.filter(({ type }) => type === 'credit').reduce((acc, { change }) => acc + change, 0);
     const todayTransferIncome = todayHistory.filter(({ type }) => type === 'wire').reduce((acc, { change }) => acc + change, 0);
@@ -184,8 +184,8 @@ export async function fetchTodayPlayers(query?: string) {
       SELECT *
       FROM players`;
 
-    const todayHistoryResults = await sql`SELECT * FROM history WHERE type != 'prize' AND change < 0 AND updated_at > now() - interval '12 hour'`;
-    const todayHistory =  todayHistoryResults.rows;
+    const todayHistoryResults = await sql`SELECT * FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' )
 
     const players = playersResults.rows;
     players.forEach((player) => {
@@ -208,15 +208,18 @@ export async function fetchTodayPlayers(query?: string) {
   }
 }
 
-
 export async function fetchRevenues() {
   try {
-    const historyResults = await sql`SELECT * FROM history WHERE type != 'prize' AND change < 0 ORDER BY updated_at DESC`;
-    const todayHistory =  historyResults.rows;
+    const historyResults = await sql`SELECT * FROM history WHERE change < 0 ORDER BY updated_at DESC`;
+    const history =  historyResults.rows.filter(({ type }) => type !== 'prize');
+    // history.forEach((item) => {
+    //   console.log('## history item, date:',item.updated_at.toISOString().slice(0,10), ' phone_number:', item.phone_number, ' change:', item.change, ' type:', item.type);
+    // });
     const dateToPlayerMap = {};
-    return todayHistory.reduce((acc, { phone_number, change, type, updated_at }) => {
+    return history.reduce((acc, { phone_number, change, type, updated_at }) => {
       const dateAsString = updated_at.toISOString();
       const date = dateAsString.slice(0,10);
+       console.log('## date:',date, ' phone_number:', phone_number, ' change:', change, ' type:', type);
       if (!acc[date]){
         acc[date] = {
           cash: 0,

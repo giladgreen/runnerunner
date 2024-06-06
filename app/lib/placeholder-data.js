@@ -348,11 +348,26 @@ const logs = [
     type: 'credit'
   },
   {
+    change: -150,
+    note: 'טורניר קיסריה - כניסה שנייה',
+    updated_at: '2024-01-17T20:00:00.000Z',
+    updated_by: 'תרצה',
+    type: 'cash'
+  },
+  {
+    change: -150,
+    note: 'טורניר קיסריה - כניסה שלישית ',
+    updated_at: '2024-01-17T20:00:00.000Z',
+    updated_by: 'תרצה',
+    type: 'wire'
+  },
+  {
     change: 3500,
     note: 'טורניר קיסריה - מקום ראשון',
     updated_at: '2024-01-18T10:00:00.000Z',
     updated_by: 'תרצה'
-  }
+  },
+
 ]
 
 const templates = [
