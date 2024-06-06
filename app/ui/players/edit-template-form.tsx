@@ -58,9 +58,9 @@ export default function EditTemplateForm({
                       <div id="template-error" aria-live="polite" aria-atomic="true">
                           {state.errors?.template &&
                               state.errors.template.map((error: string) => (
-                                  <p className="mt-2 text-sm text-red-500" key={error}>
+                                  <div className="mt-2 text-sm text-red-500" key={error}>
                                       {error}
-                                  </p>
+                                  </div>
                               ))}
                       </div>
                   </div>
@@ -87,9 +87,9 @@ export default function EditTemplateForm({
                       <div id="amount-error" aria-live="polite" aria-atomic="true">
                           {state.errors?.amount &&
                               state.errors.amount.map((error: string) => (
-                                  <p className="mt-2 text-sm text-red-500" key={error}>
+                                  <div className="mt-2 text-sm text-red-500" key={error}>
                                       {error}
-                                  </p>
+                                  </div>
                               ))}
                       </div>
                   </div>

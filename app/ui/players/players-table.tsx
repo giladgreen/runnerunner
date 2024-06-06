@@ -38,23 +38,23 @@ export default async function PlayersTable({
                           height={40}
                           alt={`${player.name}'s profile picture`}
                         />
-                        <p>
+                        <div>
                             {player.name}
-                        </p>
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-500">{player.phone_number}</p>
+                      <div className="text-sm text-gray-500">{player.phone_number}</div>
                     </div>
                   </div>
                 </Link>
 
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
-                    <p className="text-xl font-medium">
+                    <div className="text-xl font-medium">
                       balance: {formatCurrency(player.balance)}
-                    </p>
-                    <p className="text-l font-medium">
+                    </div>
+                    <div className="text-l font-medium">
                       {player.notes}
-                    </p>
+                    </div>
                   </div>
                   <div className="flex justify-end gap-2">
                     <UpdatePlayer id={player.id} />
@@ -108,9 +108,9 @@ export default async function PlayersTable({
                         height={40}
                         alt={`${player.name}'s profile picture`}
                       />
-                      <p>
+                      <div>
                         {player.name}
-                      </p>
+                      </div>
                     </div>
                     </Link>
                   </td>

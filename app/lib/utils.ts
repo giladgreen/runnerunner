@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 
 const HOUR = 60 * 60 * 1000;
 
@@ -43,6 +45,8 @@ export const formatDateToLocal = (
   const formatter = new Intl.DateTimeFormat(locale, options);
   return formatter.format(date);
 };
+
+
 
 export const getTime = (
   dateStr: string,

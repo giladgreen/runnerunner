@@ -1,9 +1,9 @@
 'use client';
 
 import {PlayerForm, PlayersTable, TemplateDB} from '@/app/lib/definitions';
-import {rsvpPlayerForDay} from "@/app/lib/actions";
 import {UseCreditForm} from "@/app/ui/players/create-log-form";
 import React from "react";
+import Image from "next/image";
 
 export default function OpenModalButton({
   player,
@@ -24,9 +24,18 @@ export default function OpenModalButton({
       <div>
           <div onClick={() => {
               setShow(true);
-          }} style={{ fontSize:'24', cursor: 'pointer'}}>🪙</div>
+          }} style={{ fontSize:'24', cursor: 'pointer'}}>
+              <Image
+                  title={'pay'}
+                  src={`/pay.png`}
+                  alt={`pay`}
+                  className="mr-4 zoom-on-hover"
+                  width={35}
+                  height={35}
+                  />
+          </div>
           <div className={show ? 'edit-player-modal' : 'hidden'}>
-              <UseCreditForm player={player as unknown as PlayerForm} templates={templates} hide={close}/>
+              <UseCreditForm player={player as unknown as PlayerForm} templates={templates} hide={close} redirectAddress={prevPage}/>
           </div>
       </div>
   );

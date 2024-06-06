@@ -50,20 +50,20 @@ export default async function MVPPlayers() {
                     height={55}
                   />
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold md:text-base">
+                    <div className="truncate text-sm font-semibold md:text-base">
                       {player.name}
-                    </p>
-                    <p className="hidden text-sm text-gray-500 sm:block">
+                    </div>
+                    <div className="hidden text-sm text-gray-500 sm:block">
                       {player.phone_number}
-                    </p>
+                    </div>
                   </div>
                 </div>
-                <p
+                <div
                   className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
                 >
                   {formatCurrency(player.balance)}
-                </p>
-                  <p>
+                </div>
+                  <div>
                       {
                           // @ts-ignore
                           player[rsvpPropName] && !player.arrived && <TickIcon size={24}/>
@@ -72,7 +72,7 @@ export default async function MVPPlayers() {
                           // @ts-ignore
                           player[rsvpPropName] && player.arrived && <DoubleTicksIcon size={24}/>
                       }
-                  </p>
+                  </div>
               </div>
                 </Link>
             );

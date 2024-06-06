@@ -1,7 +1,7 @@
 import Breadcrumbs from '@/app/ui/players/breadcrumbs';
 import { fetchPlayerById } from '@/app/lib/data';
 import { notFound } from 'next/navigation';
-import {formatCurrency, formatDateToLocal, getTime} from "@/app/lib/utils";
+import {formatCurrency} from "@/app/lib/utils";
 import Form from "@/app/ui/players/create-log-form";
 import {TemplateDB} from "@/app/lib/definitions";
 import {fetchTemplates} from "@/app/lib/actions";

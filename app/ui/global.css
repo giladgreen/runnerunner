@@ -33,15 +33,38 @@ background: rgb(0, 112, 243, 0.2);
 }
 .table-text-item{
   text-align: center;
+  padding: 0;
 }
 .card-table{
   table {
+    border-spacing: 1px;
+    border: 0;
+    padding:0;
+    margin:0;
+    border-collapse: collapse;
+
     width: 100%;
+    td{
+      border-spacing: 1px;
+      border: 0;
+      padding:0;
+      margin:0;
+      border-collapse: collapse;
+      max-height: 15px;
+      line-height: 15px;
+    }
     th {
-      width: 110px
+      border-spacing: 1px;
+      border: 0;
+      padding:0;
+      margin:0;
+      border-collapse: collapse;
+      width: 110px;
     }
   }
 }
+
+
 .edit-player-modal{
   background: white;
   z-index:10;
@@ -54,22 +77,17 @@ background: rgb(0, 112, 243, 0.2);
 .edit-player-modal-hidden{
   visibility: hidden;
 }
-.revenue-table{
-  table {
-    width: 100%;
-    th {
-      border: 1px solid #444444;
-      width: 110px;
-      text-align: left;
-    }
-  }
-}
+
 .table-item{
 
   text-align: center;
 align-items: center;
  display:grid;
     justify-content: center;
+}
+.smaller-test{
+    font-size: smaller;
+
 }
 .thin-column{
   max-width: 160px !important;
@@ -116,4 +134,25 @@ input[type='number']::-webkit-inner-spin-button {
 input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.revenue-table{
+  table {
+    width: 100%;
+    th {
+      border: 1px solid #44444455;
+      width: 110px;
+      text-align: left;
+    }
+  }
+}
+
+.revenue-table-revenue-cell{
+  table {
+    width: 100%;
+    th {
+      border: none;
+      text-align: center;
+    }
+  }
 }

@@ -48,9 +48,9 @@ export default function EditPlayerForm({
                       <div id="name-error" aria-live="polite" aria-atomic="true">
                           {state.errors?.name &&
                               state.errors.name.map((error: string) => (
-                                  <p className="mt-2 text-sm text-red-500" key={error}>
+                                  <div className="mt-2 text-sm text-red-500" key={error}>
                                       {error}
-                                  </p>
+                                  </div>
                               ))}
                       </div>
                   </div>
@@ -77,9 +77,9 @@ export default function EditPlayerForm({
                       <div id="notes-error" aria-live="polite" aria-atomic="true">
                           {state.errors?.notes &&
                               state.errors.notes.map((error: string) => (
-                                  <p className="mt-2 text-sm text-red-500" key={error}>
+                                  <div className="mt-2 text-sm text-red-500" key={error}>
                                       {error}
-                                  </p>
+                                  </div>
                               ))}
                       </div>
                   </div>

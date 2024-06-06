@@ -74,11 +74,11 @@ function getInitialAmount(): number {
   return result;
 }
 
-export function UseCreditForm({player, templates, hide} : {player: PlayerForm, templates:TemplateDB[], hide?: ()=>void}) {
 
+export function UseCreditForm({player, templates, hide, redirectAddress} : {redirectAddress:string, player: PlayerForm, templates:TemplateDB[], hide?: ()=>void}) {
   initialTemplates(templates);
   const initialState = { message: null, errors: {} };
-  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, player);
+  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null,{ player, redirectAddress })
 
   const initialText = getInitialText();
   const initialAmount = getInitialAmount();
@@ -125,9 +125,9 @@ export function UseCreditForm({player, templates, hide} : {player: PlayerForm, t
                 <div id="change-error" aria-live="polite" aria-atomic="true">
                   {state1?.errors?.change &&
                       state1?.errors.change.map((error: string) => (
-                          <p className="mt-2 text-sm text-red-500" key={error}>
+                          <div className="mt-2 text-sm text-red-500" key={error}>
                             {error}
-                          </p>
+                          </div>
                       ))}
                 </div>
               </div>
@@ -161,9 +161,9 @@ export function UseCreditForm({player, templates, hide} : {player: PlayerForm, t
               <div id="note-error" aria-live="polite" aria-atomic="true">
                 {state1?.errors?.note &&
                     state1?.errors.note.map((error: string) => (
-                        <p className="mt-2 text-sm text-red-500" key={error}>
+                        <div className="mt-2 text-sm text-red-500" key={error}>
                           {error}
-                        </p>
+                        </div>
                     ))}
               </div>
             </div>
@@ -209,7 +209,7 @@ export function UseCreditForm({player, templates, hide} : {player: PlayerForm, t
 
 export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:TemplateDB[]}) {
   const initialState = { message: null, errors: {} };
-  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, player);
+  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, { player, redirectAddress: '/dashboard/players' });
 
   const initialText = `שחקן המיר קרדיט בפרס`;
   const initialAmount = 1000;
@@ -255,9 +255,9 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:
                 <div id="change-error" aria-live="polite" aria-atomic="true">
                   {state1?.errors?.change &&
                       state1?.errors.change.map((error: string) => (
-                          <p className="mt-2 text-sm text-red-500" key={error}>
+                          <div className="mt-2 text-sm text-red-500" key={error}>
                             {error}
-                          </p>
+                          </div>
                       ))}
                 </div>
               </div>
@@ -291,9 +291,9 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:
               <div id="note-error" aria-live="polite" aria-atomic="true">
                 {state1?.errors?.note &&
                     state1?.errors.note.map((error: string) => (
-                        <p className="mt-2 text-sm text-red-500" key={error}>
+                        <div className="mt-2 text-sm text-red-500" key={error}>
                           {error}
-                        </p>
+                        </div>
                     ))}
               </div>
             </div>
@@ -325,7 +325,7 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:
 
 export function AddToBalanceForm({player}: { player: PlayerForm }) {
   const initialState = {message: null, errors: {}};
-  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, player);
+  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, { player, redirectAddress: '/dashboard/players' });
   // @ts-ignore
   const [state2, dispatch] = useFormState(createPlayerNewCreditLogWithPlayerData, initialState);
 
@@ -361,9 +361,9 @@ export function AddToBalanceForm({player}: { player: PlayerForm }) {
                 <div id="change-error" aria-live="polite" aria-atomic="true">
                   {state2?.errors?.change &&
                       state2?.errors?.change.map((error: string) => (
-                          <p className="mt-2 text-sm text-red-500" key={error}>
+                          <div className="mt-2 text-sm text-red-500" key={error}>
                             {error}
-                          </p>
+                          </div>
                       ))}
                 </div>
               </div>
@@ -390,9 +390,9 @@ export function AddToBalanceForm({player}: { player: PlayerForm }) {
               <div id="note-error" aria-live="polite" aria-atomic="true">
                 {state2?.errors?.note &&
                     state2?.errors.note.map((error: string) => (
-                        <p className="mt-2 text-sm text-red-500" key={error}>
+                        <div className="mt-2 text-sm text-red-500" key={error}>
                           {error}
-                        </p>
+                        </div>
                     ))}
               </div>
             </div>
@@ -407,7 +407,7 @@ export function AddToBalanceForm({player}: { player: PlayerForm }) {
 export default function CreateLogForm({player, templates} : {player: PlayerForm, templates:TemplateDB[]}) {
   return (
       <div style={{ display: 'flex' , justifyContent: 'space-between'}} >
-        <UseCreditForm player={player} templates={templates}/>
+        <UseCreditForm player={player} templates={templates} redirectAddress={'/dashboard/players'}/>
         <UseCreditForPrizeForm player={player} templates={templates}/>
         <AddToBalanceForm player={player}/>
       </div>

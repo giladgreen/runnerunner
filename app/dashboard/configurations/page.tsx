@@ -10,7 +10,6 @@ import Link from 'next/link';
 export default async function Page() {
     const bugs = await fetchAllBugs();
     const players = await fetchAllPlayersForExport();
-    const templates = await fetchTemplates();
 
     return (
         <div className="w-full">

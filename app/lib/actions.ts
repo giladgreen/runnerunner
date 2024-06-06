@@ -161,7 +161,7 @@ export async function importPlayers(players: { name: string; phone_number: strin
 }
 
 
-export async function createPlayerLog(player: PlayerForm, prevState: State, formData: FormData, usage: boolean = true){
+export async function createPlayerLog(player: PlayerForm, prevState: State, formData: FormData, redirectAddress:string ,usage: boolean = true){
     await validateAdmin();
     const validatedFields = CreateUsageLog.safeParse({
         change: formData.get('change'),
@@ -177,10 +177,10 @@ export async function createPlayerLog(player: PlayerForm, prevState: State, form
 
     const change = validatedFields.data.change * (usage ? -1 : 1);
     const type = usage ? (formData.get('type') as string ?? 'prize') :  'credit' ;
-    console.log('### usage', usage)
-    console.log('### type', type)
+
     const currentBalance = player.balance;
-    try{
+    try
+    {
         await sql`
       INSERT INTO history (phone_number, change, note, type)
       VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type})
@@ -195,6 +195,7 @@ export async function createPlayerLog(player: PlayerForm, prevState: State, form
         const newBalance = currentBalance + change;
         try {
             const date = new Date().toISOString();
+
             await sql`
       UPDATE players
       SET balance = ${newBalance}, updated_at=${date}
@@ -209,14 +210,15 @@ export async function createPlayerLog(player: PlayerForm, prevState: State, form
         }
     }
 
-    revalidatePath('/dashboard/players');
+    revalidatePath(redirectAddress);
+    redirect(redirectAddress);
 }
 
-export async function createPlayerUsageLog(player: PlayerForm, prevState: State, formData: FormData){
-    return createPlayerLog(player, prevState, formData, true);
+export async function createPlayerUsageLog(data : {player: PlayerForm, redirectAddress:string}, prevState: State, formData: FormData){
+    return createPlayerLog(data.player, prevState, formData, data.redirectAddress, true);
 }
-export async function createPlayerNewCreditLog(player: PlayerForm, prevState: State, formData: FormData){
-    return createPlayerLog(player, prevState, formData, false);
+export async function createPlayerNewCreditLog(data : {player: PlayerForm, redirectAddress:string}, prevState: State, formData: FormData){
+    return createPlayerLog(data.player, prevState, formData, data.redirectAddress, false);
 }
 export async function updatePlayer(
     id: string,
@@ -411,7 +413,6 @@ export async function rsvpPlayerForDay(phone_number:string, rsvpAttribute: strin
     noStore();
     const playerResult = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phone_number}`;
     const player = playerResult.rows[0]
-    console.log('## query:', player)
     try {
         // @ts-ignore
         await sql`UPDATE players SET sunday_rsvp = ${rsvpAttribute === 'sunday_rsvp' ? val : player['sunday_rsvp'] as boolean}, monday_rsvp = ${rsvpAttribute === 'monday_rsvp' ? val : player['monday_rsvp'] as boolean}, tuesday_rsvp = ${rsvpAttribute === 'tuesday_rsvp' ? val : player['tuesday_rsvp'] as boolean}, wednesday_rsvp = ${rsvpAttribute === 'wednesday_rsvp' ? val : player['wednesday_rsvp'] as boolean}, thursday_rsvp = ${rsvpAttribute === 'thursday_rsvp' ? val : player['thursday_rsvp'] as boolean}, saturday_rsvp = ${rsvpAttribute === 'saturday_rsvp' ? val : player['saturday_rsvp'] as boolean} where phone_number = ${phone_number};`;

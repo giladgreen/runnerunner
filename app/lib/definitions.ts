@@ -63,6 +63,7 @@ export type PlayersTable = {
   thursday_rsvp: boolean;
   saturday_rsvp: boolean;
   arrived: boolean;
+  entries: number;
 };
 
 

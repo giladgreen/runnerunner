@@ -174,26 +174,34 @@ export async function fetchPlayersPages(query: string) {
     throw new Error('Failed to fetch total number of players.');
   }
 }
-export async function fetchTodayPlayers() {
+export async function fetchTodayPlayers(query?: string) {
   try {
     const now = new Date();
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
     const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
 
-    const data = await sql<PlayersTable>`
+    const playersResults = await sql<PlayersTable>`
       SELECT *
       FROM players`;
 
-    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE type != 'prize' AND change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
+    const todayHistoryResults = await sql`SELECT * FROM history WHERE type != 'prize' AND change < 0 AND updated_at > now() - interval '12 hour'`;
     const todayHistory =  todayHistoryResults.rows;
 
-    const players = data.rows;
+    const players = playersResults.rows;
     players.forEach((player) => {
-      player.arrived = !!todayHistory.find(({ phone_number}) => phone_number === player.phone_number);
+      const playerItems = todayHistory.filter(({ phone_number}) => phone_number === player.phone_number);
+
+
+      player.arrived = playerItems.length > 0;
+      player.entries = playerItems.length;
+      player.name = player.name.trim()
     });
 
     // @ts-ignore
-    return players.filter(p => p.arrived || !!p[rsvpPropName]).sort((a,b)=> a.id < b.id ? -1 : 1);
+    const results = players.filter(p => p.arrived || !!p[rsvpPropName]).filter(p => !query || query.length === 0 ||  p.name.includes(query) ||  p.phone_number.includes(query))
+    results.sort((a,b)=> a.name < b.name ? -1 : 1);
+
+    return results;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the fetchTodayPlayers.');

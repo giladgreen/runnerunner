@@ -1,22 +1,48 @@
 import Image from 'next/image';
 import Link from "next/link";
-
-import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
+import {formatDateToLocal, formatCurrency} from '@/app/lib/utils';
 import { fetchTodayPlayers} from '@/app/lib/data';
 import RSVPButton from "@/app/ui/players/rsvp-button";
 import OpenModalButton from "@/app/ui/players/open-modal-button";
 import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
-import {TemplateDB} from "@/app/lib/definitions";
+import {PlayersTable, TemplateDB} from "@/app/lib/definitions";
 import {fetchTemplates} from "@/app/lib/actions";
 
-export default async function TodaysPlayersTable() {
-  const players = await fetchTodayPlayers();
+const formatPlayerEntries = (
+    entries: number,
+) => {
+  if (entries < 1) {
+    return '';
+  }
+  if (entries >5 ) {
+    return entries;
+  }
+
+  const map = ['','one', 'two', 'three', 'four', 'five'];
+  return <Image
+      src={`/${map[entries]}.png`}
+      alt={`platers entries: ${entries}`}
+      className="mr-4 zoom-on-hover"
+      width={35}
+      height={35}
+  />
+};
+
+export default async function TodaysPlayersTable({ players}:{players: PlayersTable[]}) {
+
   const templates: TemplateDB[] = (await fetchTemplates()) as TemplateDB[];
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
   const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`;
+  const arrivedPlayers = players.filter((player) => player.arrived).length;
+  // @ts-ignore
+  const rsvpPlayers = players.filter((player) => !!player[rsvpPropName]).length;
   return (
-    <div className="mt-6 flow-root">
+    <div className="mt-6 flow-root" style={{ width: '100%'}}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        {rsvpPlayers} players RSVPed, {arrivedPlayers} arrived.
+      </div>
+
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0 w-full">
           <div className="md:hidden">
@@ -35,28 +61,28 @@ export default async function TodaysPlayersTable() {
                           height={40}
                           alt={`${player.name}'s profile picture`}
                         />
-                        <p>
+                        <div>
                             {player.name}
-                        </p>
+                        </div>
                       </div>
-                      <p className="text-sm text-gray-500">{player.phone_number}</p>
+                      <div className="text-sm text-gray-500">{player.phone_number}</div>
                     </div>
                   </div>
 
 
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
-                    <p className="text-xl font-medium">
+                    <div className="text-xl font-medium">
                       <Link href={`/dashboard/players/${player.id}/data`}>
                       balance: {formatCurrency(player.balance)}
                       </Link>
-                    </p>
-                    <p className="text-l font-medium">
+                    </div>
+                    <div className="text-l font-medium">
                       {player.notes}
-                    </p>
+                    </div>
                   </div>
                   <div>
-                    <p>
+                    <div>
                       {
                         // @ts-ignore
                           player[rsvpPropName] && !player.arrived && <TickIcon size={24}/>
@@ -65,7 +91,7 @@ export default async function TodaysPlayersTable() {
                         // @ts-ignore
                           player[rsvpPropName] && player.arrived && <DoubleTicksIcon size={24}/>
                       }
-                    </p>
+                    </div>
 
                   </div>
                 </div>
@@ -87,14 +113,15 @@ export default async function TodaysPlayersTable() {
                 <th scope="col" className="px-3 py-5 font-medium">
                   Notes
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Updated At
-                </th>
+
                 <th scope="col" className="px-3 py-5 font-medium">
                   RSVP
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Arrived
+                </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                  Entries
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
@@ -117,9 +144,9 @@ export default async function TodaysPlayersTable() {
                         height={40}
                         alt={`${player.name}'s profile picture`}
                       />
-                      <p>
+                      <div>
                         {player.name}
-                      </p>
+                      </div>
                     </div>
 
                   </td>
@@ -138,16 +165,15 @@ export default async function TodaysPlayersTable() {
                     {player.notes}
 
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
 
-                    {formatDateToLocal(player.updated_at)}
-
-                  </td>
                   <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
                     <RSVPButton player={player} prevPage={'/dashboard/todayplayers'} />
                   </td>
                   <td className="whitespace-nowrap px-3 py-3 rsvp-icon ">
                     {player.arrived ? '✅' : ''}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3 ">
+                    {formatPlayerEntries(player.entries)}
                   </td>
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">

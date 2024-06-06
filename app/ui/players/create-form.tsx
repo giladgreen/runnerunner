@@ -47,9 +47,9 @@ export default function Form() {
             <div id="player-error" aria-live="polite" aria-atomic="true">
               {state.errors?.name &&
                   state.errors.name.map((error: string) => (
-                      <p className="mt-2 text-sm text-red-500" key={error}>
+                      <div className="mt-2 text-sm text-red-500" key={error}>
                         {error}
-                      </p>
+                      </div>
                   ))}
             </div>
           </div>
@@ -76,9 +76,9 @@ export default function Form() {
             <div id="phone_number-error" aria-live="polite" aria-atomic="true">
               {state.errors?.phone_number &&
                   state.errors.phone_number.map((error: string) => (
-                      <p className="mt-2 text-sm text-red-500" key={error}>
+                      <div className="mt-2 text-sm text-red-500" key={error}>
                         {error}
-                      </p>
+                      </div>
                   ))}
             </div>
           </div>
@@ -106,9 +106,9 @@ export default function Form() {
               <div id="balance-error" aria-live="polite" aria-atomic="true">
                 {state.errors?.balance &&
                     state.errors.balance.map((error: string) => (
-                        <p className="mt-2 text-sm text-red-500" key={error}>
+                        <div className="mt-2 text-sm text-red-500" key={error}>
                           {error}
-                        </p>
+                        </div>
                     ))}
               </div>
             </div>
@@ -136,9 +136,9 @@ export default function Form() {
             <div id="note-error" aria-live="polite" aria-atomic="true">
               {state.errors?.note &&
                   state.errors.note.map((error: string) => (
-                      <p className="mt-2 text-sm text-red-500" key={error}>
+                      <div className="mt-2 text-sm text-red-500" key={error}>
                         {error}
-                      </p>
+                      </div>
                   ))}
             </div>
           </div>
@@ -165,9 +165,9 @@ export default function Form() {
             <div id="notes-error" aria-live="polite" aria-atomic="true">
               {state.errors?.notes &&
                   state.errors.notes.map((error: string) => (
-                      <p className="mt-2 text-sm text-red-500" key={error}>
+                      <div className="mt-2 text-sm text-red-500" key={error}>
                         {error}
-                      </p>
+                      </div>
                   ))}
             </div>
           </div>

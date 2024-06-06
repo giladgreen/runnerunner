@@ -31,7 +31,7 @@ export async function GeneralPlayersCardWrapper() {
         totalRunnerDebt,
         totalPlayersDebt,
     } = await fetchGeneralPlayersCardData();
-    return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+    return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" style={{width: '100%'}}>
         <Suspense fallback={<CardsSkeleton count={4}/>}>
             <Card title="Total players" value={totalNumberOfPlayers} type="players"/>
             <Card title="Our Obligations" value={formatCurrency(totalRunnerDebt)} type="money"/>
@@ -55,7 +55,7 @@ export async function RSVPAndArrivalCardWrapper() {
             <b>{formatCurrency(todayCreditIncome + todayCashIncome + todayTransferIncome)}</b>
         </div>
         <div  style={{width:'100%' }} className="card-table">
-            <table  style={{fontSize: 15, width:'100%'}}>
+            <table  style={{fontSize: 15, width:'100%'}} cellSpacing="0" cellPadding="0">
                 <thead>
                 <tr>
                       <th scope="col" className="table-text-item" data-tooltip="Credit" title="Credit">
@@ -73,17 +73,34 @@ export async function RSVPAndArrivalCardWrapper() {
                 <tr>
                     <th scope="col" >
                         <div className="table-item" data-tooltip="Credit" title="Credit">
-                            <CreditCardIcon className="h-6 w-6 text-gray-700"/>
+                            <CreditCardIcon className="h-6 w-9 text-gray-700"/>
                         </div>
                     </th>
                     <th scope="col" >
                         <div className="table-item" data-tooltip="Cash" title="Cash">
-                            <WalletIcon className="h-6 w-6 text-gray-700"/>
+                            <WalletIcon className="h-6 w-9 text-gray-700"/>
                         </div>
                     </th>
                     <th scope="col" >
                         <div className="table-item" data-tooltip="Wire transfer" title="Wire transfer">
-                            <ArrowLeftOnRectangleIcon className="h-6 w-6 text-gray-700"/>
+                            <ArrowLeftOnRectangleIcon className="h-6 w-9 text-gray-700"/>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th scope="col"  style={{ marginTop:-5}}>
+                        <div className="table-item smaller-test" data-tooltip="Credit" title="Credit">
+                           credit
+                        </div>
+                    </th>
+                    <th scope="col" >
+                        <div className="table-item smaller-test" data-tooltip="Cash" title="Cash">
+                            cash
+                        </div>
+                    </th>
+                    <th scope="col" >
+                        <div className="table-item smaller-test" data-tooltip="Wire transfer" title="Wire transfer">
+                            money wire
                         </div>
                     </th>
                 </tr>
@@ -93,10 +110,10 @@ export async function RSVPAndArrivalCardWrapper() {
 
     </div>
 
-    return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" style={{marginBottom: 20}}>
-        <Suspense fallback={<CardsSkeleton count={2}/>}>
-            <Card title={'RSVP for Today'} value={rsvpForToday} type="rsvp"/>
-            <Card title={'Arrived Today'} value={arrivedToday} type="arrived"/>
+    return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" style={{marginBottom: 20, width: '100%'}} >
+        <Suspense fallback={<CardsSkeleton count={3}/>}>
+            <Card title={'RSVP for Today'} value={<div style={{padding: 50, fontSize: 40}}>{rsvpForToday}</div>} type="rsvp"/>
+            <Card title={'Arrived Today'} value={<div  style={{padding: 50, fontSize: 40}}>{arrivedToday}</div>} type="arrived"/>
             <Card title={"Today's income"} value={todayIncome} type="money"/>
             {/*<Card title="" value={0} type="empty" empty/>*/}
 
@@ -130,12 +147,12 @@ export function Card({
         {Icon ? <Icon className="h-5 w-5 text-gray-700" size={18} /> : null}
         <h3 className={`ml-2 text-sm font-medium text-center ${spend ? 'center-text' :'' }`}>{title}</h3>
       </div>
-      <p
+      <div
         className={`${lusitana.className}
           truncate rounded-xl bg-white px-4 py-4 text-center text-2xl`}
       >
         {value}
-      </p>
+      </div>
     </div>
   );
 }

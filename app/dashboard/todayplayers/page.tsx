@@ -1,21 +1,28 @@
 import { CreateNewPlayer } from '@/app/ui/players/buttons';
 import { lusitana } from '@/app/ui/fonts';
 import TodaysPlayersTable from "@/app/ui/players/today-players-table";
-export default async function Page() {
-
+import Search from "@/app/ui/todaysearch";
+import {fetchTodayPlayers} from "@/app/lib/data";
+import {RSVPAndArrivalCardWrapper} from "@/app/ui/dashboard/cards";
+export default async function Page({
+                                       searchParams,
+                                   }: {
+    searchParams?: {
+        query?: string;
+    };
+}) {
+    const players = await fetchTodayPlayers(searchParams?.query);
     return (
-        <div className="w-full">
-            <div className="flex w-full items-center justify-between">
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
-                <h1 className={`${lusitana.className} text-2xl`}>Today's Players</h1>
+        <div className="w-full" style={{ width: '100%'}}>
+            <div className="flex w-full items-center justify-between" style={{ width: '100%'}}>
+                <RSVPAndArrivalCardWrapper />
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+                <Search placeholder="search players" />
                 <CreateNewPlayer />
-
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-
-                <TodaysPlayersTable/>
+                <TodaysPlayersTable players={players}/>
             </div>
 
         </div>

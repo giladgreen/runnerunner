@@ -25,9 +25,9 @@ export default async function Page({ params }: { params: { id: string } }) {
                         height={55}
                     />
 
-                        <p className="truncate text-sm font-semibold md:text-base">
+                        <div className="truncate text-sm font-semibold md:text-base">
                             {player.name}
-                        </p>
+                        </div>
 
                     <div>Phone number: {player.phone_number}  </div>
                     <div> {player.notes}  </div>

@@ -14,14 +14,14 @@ import clsx from 'clsx';
 const links = [
   { name: 'homepage', href: '/dashboard', icon: HomeIcon },
   {
-    name: 'players',
-    href: '/dashboard/players',
-    icon: UserGroupIcon,
-  },
-  {
     name: "today's players",
     href: '/dashboard/todayplayers',
     icon: UsersIcon
+  },
+  {
+    name: 'all players',
+    href: '/dashboard/players',
+    icon: UserGroupIcon,
   },
   {
     name: "revenues",
@@ -54,7 +54,7 @@ export default function NavLinks() {
                 },
             )}          >
             <LinkIcon className="w-6" />
-            <p className="hidden md:block">{link.name}</p>
+            <div className="hidden md:block">{link.name}</div>
           </Link>
         );
       })}
