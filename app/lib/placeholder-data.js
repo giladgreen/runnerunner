@@ -123,12 +123,17 @@ const players = [
     phone_number: '0587869117',
     image_url: '/players/rocksteady.png',
   },
-
   {
     name: 'ביבופ',
     balance: 550,
     phone_number: '0587869118',
     image_url: '/players/bebop.png',
+  },
+  {
+    name: 'אפריל',
+    balance: 1750,
+    phone_number: '0587869119',
+    image_url: '/players/april.png',
   }
 
 
