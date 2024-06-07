@@ -1,5 +1,5 @@
 'use client';
-
+import { CldImage, CldUploadWidget } from 'next-cloudinary';
 import Link from 'next/link';
 import {
   PencilIcon,
@@ -31,15 +31,15 @@ export default function Form() {
               Choose Name
             </label>
             <div className="relative">
-                <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="Enter Name"
-                    className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                    aria-describedby="name-error"
+              <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  placeholder="Enter Name"
+                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  aria-describedby="name-error"
 
-                />
+              />
 
               <PencilIcon
                   className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
@@ -102,7 +102,7 @@ export default function Form() {
                 />
                 <BanknotesIcon
                     className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
-                  </div>
+              </div>
               <div id="balance-error" aria-live="polite" aria-atomic="true">
                 {state.errors?.balance &&
                     state.errors.balance.map((error: string) => (
@@ -146,7 +146,7 @@ export default function Form() {
           {/* general notes */}
           <div className="mb-4">
             <label htmlFor="notes" className="mb-2 block text-sm font-medium">
-               Notes
+              Notes
             </label>
             <div className="relative">
               <input
@@ -227,6 +227,23 @@ export default function Form() {
             </div>
           </div>
         </div>
+        <div  className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+        style={{width: '130px'}}
+        >
+
+          <CldUploadWidget signatureEndpoint="/api/sign-image"
+                           options={{sources: ['local', 'url', 'camera', 'facebook'], cropping: true}}>
+            {
+              ({open}) => {
+                console.log('## CldUploadWidget  button')
+                return <button onClick={() => {
+                  console.log('## CldUploadWidget  button click')
+                  open();
+                }}>Upload image</button>
+              }
+            }
+
+          </CldUploadWidget></div>
 
 
         <div className="mt-6 flex justify-end gap-4">
