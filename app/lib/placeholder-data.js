@@ -412,6 +412,7 @@ const templates = [
     amount: 250
   }]
 
+
 module.exports = {
   users,
   players,
