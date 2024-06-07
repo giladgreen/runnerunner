@@ -19,7 +19,7 @@ const FormSchema = z.object({
     note: z.string().min(1, 'balance note can not be left empty'),
     notes: z.string(),
 });
-const CreatePlayer = FormSchema.omit({ id: true, updated_at: true, image_url: true });
+const CreatePlayer = FormSchema.omit({ id: true, updated_at: true });
 const CreateUsageLog =  z.object({
     change: z.coerce.number(),
     note: z.string().min(1, 'change note can not be left empty'),
@@ -57,9 +57,7 @@ export type State = {
     message?: string | null;
 };
 
-async function validateAdmin(){
 
-}
 export async function createReport(formData: FormData) {
     const description = formData.get('description') as string;
     try {
@@ -79,40 +77,33 @@ export async function createReport(formData: FormData) {
     redirect('/dashboard/configurations');
 }
 export async function createPlayer(prevState: State, formData: FormData) {
-    await validateAdmin();
-    const validatedFields = CreatePlayer.safeParse({
-        name: formData.get('name'),
-        balance: formData.get('balance'),
-        note: formData.get('note'),
-        notes: formData.get('notes'),
-        phone_number: formData.get('phone_number'),
-    });
-
-    if (!validatedFields.success) {
-        return {
-            errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Create Player.',
-        };
-    }
+    console.log('## create player', formData)
     const sunday_rsvp = !!formData.get('sunday_rsvp');
     const monday_rsvp = !!formData.get('monday_rsvp');
     const tuesday_rsvp = !!formData.get('tuesday_rsvp');
     const wednesday_rsvp = !!formData.get('wednesday_rsvp');
     const thursday_rsvp = !!formData.get('thursday_rsvp');
     const saturday_rsvp = !!formData.get('saturday_rsvp');
-    const {  name, balance, note, phone_number, notes } = validatedFields.data;
+    const name = formData.get('name') as string;
+    const balance = formData.get('balance') as string;
+    const note = formData.get('note') as string;
+    const phone_number = formData.get('phone_number') as string;
+    const notes = formData.get('notes') as string;
+    const image_url = (formData.get('image_url') as string) ?? '/players/default.png'
     const phoneNumber = phone_number.replaceAll('-', '');
 
     try {
         await sql`
       INSERT INTO players (name, balance, phone_number, image_url, notes, sunday_rsvp, monday_rsvp, tuesday_rsvp, wednesday_rsvp, thursday_rsvp, saturday_rsvp)
-      VALUES (${name}, ${balance}, ${phoneNumber}, '/players/default.png', ${notes ?? ''}, ${sunday_rsvp}, ${monday_rsvp}, ${tuesday_rsvp}, ${wednesday_rsvp}, ${thursday_rsvp}, ${saturday_rsvp})
+      VALUES (${name}, ${balance}, ${phoneNumber}, ${image_url} , ${notes ?? ''}, ${sunday_rsvp}, ${monday_rsvp}, ${tuesday_rsvp}, ${wednesday_rsvp}, ${thursday_rsvp}, ${saturday_rsvp})
     `;
+        console.log('##  player created')
 
         await sql`
-      INSERT INTO history (phone_number, change, note)
-      VALUES (${phoneNumber}, ${balance}, ${note})
+      INSERT INTO history (phone_number, change, note, type)
+      VALUES (${phoneNumber}, ${balance}, ${note}, 'credit')
     `;
+        console.log('##  log created')
 
     } catch (error) {
         console.log('## createPlayer error', error)
@@ -128,7 +119,6 @@ export async function createPlayer(prevState: State, formData: FormData) {
 
 
 export async function importPlayers(players: { name: string; phone_number: string; balance: number, notes:string }[]) {
-    await validateAdmin();
     const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
     try {
         const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
@@ -161,7 +151,6 @@ export async function importPlayers(players: { name: string; phone_number: strin
 
 
 export async function createPlayerLog(player: PlayerForm, prevState: State, formData: FormData, redirectAddress:string ,usage: boolean = true){
-    await validateAdmin();
     const validatedFields = CreateUsageLog.safeParse({
         change: formData.get('change'),
         note: formData.get('note'),
@@ -224,7 +213,6 @@ export async function updatePlayer(
     prevState: State,
     formData: FormData,
 ) {
-    await validateAdmin();
 
     const validatedFields = UpdatePlayer.safeParse({
         name: formData.get('name'),
@@ -267,7 +255,6 @@ export async function updateTemplate(
     prevState: State,
     formData: FormData,
 ) {
-    await validateAdmin();
 
     const validatedFields = UpdateTemplate.safeParse({
         template: formData.get('template'),
@@ -303,7 +290,6 @@ export async function updateTemplate(
 export async function fetchTemplates(
 
 ) {
-    await validateAdmin();
 
     try {
         const data = await sql<TemplateDB>`
@@ -319,7 +305,6 @@ export async function fetchTemplates(
 
 
 export async function resetAllRsvp() {
-    await validateAdmin();
 
     try {
         await sql`UPDATE players SET sunday_rsvp = false, monday_rsvp = false, tuesday_rsvp = false, wednesday_rsvp = false, thursday_rsvp = false, saturday_rsvp = false`;
@@ -330,7 +315,6 @@ export async function resetAllRsvp() {
     redirect('/dashboard/players');
 }
 export async function deletePlayer(id: string) {
-    await validateAdmin();
 
     try {
         const playerResult  =await sql<PlayerDB>`SELECT * FROM players WHERE id = ${id}`;
