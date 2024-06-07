@@ -7,7 +7,7 @@ export default async function Page() {
         <main>
             <Breadcrumbs
                 breadcrumbs={[
-                    { label: 'players', href: '/dashboard/players' },
+                    { label: `today's players`, href: '/dashboard/todayplayers' },
                     {
                         label: 'Create player',
                         href: '/dashboard/players/create',
@@ -15,7 +15,7 @@ export default async function Page() {
                     },
                 ]}
             />
-            <Form />
+            <Form redirectAddress={'/dashboard/todayplayers'}/>
         </main>
     );
 }

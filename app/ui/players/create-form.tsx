@@ -12,10 +12,11 @@ import { useFormState } from 'react-dom';
 import {Checkbox} from "primereact/checkbox";
 import {useState} from "react";
 
-export default function Form() {
+export default function Form({redirectAddress}:{redirectAddress:string}) {
   const initialState = { message: null, errors: {} };
-
-  const [state, dispatch] = useFormState(createPlayer, initialState);
+  const createPlayerWithRedirectAddress = createPlayer.bind(null, redirectAddress);
+  // @ts-ignore
+  const [state, dispatch] = useFormState(createPlayerWithRedirectAddress, initialState);
   const [balanceNote, setBalanceNote] = useState('new player');
   const [imageUrl, setImageUrl] = useState('');
   const [sundayChecked, setSundayChecked] = useState(false);
@@ -267,7 +268,7 @@ export default function Form() {
     >
 
       <CldUploadWidget signatureEndpoint="/api/sign-image"
-                       options={{sources: ['local', 'url', 'camera'], cropping: true}}
+                       options={{sources: ['local', 'url', 'camera']}}
                        onUpload={(response) => {
 
                          // @ts-ignore

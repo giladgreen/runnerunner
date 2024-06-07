@@ -76,8 +76,7 @@ export async function createReport(formData: FormData) {
     revalidatePath('/dashboard/configurations');
     redirect('/dashboard/configurations');
 }
-export async function createPlayer(prevState: State, formData: FormData) {
-    console.log('## create player', formData)
+export async function createPlayer(redirectAddress: string, prevState: State, formData: FormData) {
     const sunday_rsvp = !!formData.get('sunday_rsvp');
     const monday_rsvp = !!formData.get('monday_rsvp');
     const tuesday_rsvp = !!formData.get('tuesday_rsvp');
@@ -97,13 +96,11 @@ export async function createPlayer(prevState: State, formData: FormData) {
       INSERT INTO players (name, balance, phone_number, image_url, notes, sunday_rsvp, monday_rsvp, tuesday_rsvp, wednesday_rsvp, thursday_rsvp, saturday_rsvp)
       VALUES (${name}, ${balance}, ${phoneNumber}, ${image_url} , ${notes ?? ''}, ${sunday_rsvp}, ${monday_rsvp}, ${tuesday_rsvp}, ${wednesday_rsvp}, ${thursday_rsvp}, ${saturday_rsvp})
     `;
-        console.log('##  player created')
 
         await sql`
       INSERT INTO history (phone_number, change, note, type)
       VALUES (${phoneNumber}, ${balance}, ${note}, 'credit')
     `;
-        console.log('##  log created')
 
     } catch (error) {
         console.log('## createPlayer error', error)
@@ -111,8 +108,8 @@ export async function createPlayer(prevState: State, formData: FormData) {
             message: 'Database Error: Failed to Create Player.',
         };
     }
-    revalidatePath('/dashboard/players');
-    redirect('/dashboard/players');
+    revalidatePath(redirectAddress);
+    redirect(redirectAddress);
 
 
 }

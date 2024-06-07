@@ -1,4 +1,4 @@
-import { CreateNewPlayer } from '@/app/ui/players/buttons';
+import { CreateNewTodayPlayer } from '@/app/ui/players/buttons';
 import { lusitana } from '@/app/ui/fonts';
 import TodaysPlayersTable from "@/app/ui/players/today-players-table";
 import Search from "@/app/ui/todaysearch";
@@ -19,7 +19,7 @@ export default async function Page({
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Search placeholder="search players" />
-                <CreateNewPlayer />
+                <CreateNewTodayPlayer />
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <TodaysPlayersTable players={players}/>
