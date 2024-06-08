@@ -364,7 +364,7 @@ export async function resetPlayersPositions() {
 
     try {
         console.log('## resetPlayersPositions')
-        await sql`UPDATE players SET position = '0'`;
+        await sql`UPDATE players SET position = '0' WHERE position > 0`;
         console.log('## after resetPlayersPositions')
 
     } catch (error) {

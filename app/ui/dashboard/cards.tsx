@@ -125,13 +125,12 @@ export async function RSVPAndArrivalCardWrapper() {
 }
 
 
-export async function FinalTablePlayers() {
+export async function FinalTablePlayers({ title}:{title: string}) {
     const finalTablePlayers = await fetchFinalTablePlayers();
 
     if (!finalTablePlayers || finalTablePlayers.length === 0) return null;
 
-    return <div style={{marginBottom: 30, width: '100%'}}>
-        <div style={{ width: '100%', marginBottom: 10}}><u>Players positions</u></div>
+    const content = <div style={{marginBottom: 30, width: '100%'}}>
         <div style={{ width: '100%'}}>
             {finalTablePlayers.map((finalTablePlayer: any) => {
                 return <div
@@ -170,6 +169,10 @@ export async function FinalTablePlayers() {
 
             })}
         </div>
+    </div>
+
+    return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1" style={{marginBottom: 10, marginTop: -20, width: '100%'}} >
+        <Card title={title} value={content} type="players"/>
     </div>
 }
 

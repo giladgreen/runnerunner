@@ -124,6 +124,8 @@ export default async function TodaysPlayersTable({ players}:{players: PlayersTab
                 <th scope="col" className="px-3 py-5 font-medium">
                   Entries
                 </th>
+                <th scope="col" className="px-3 py-5 font-medium">
+                </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -131,59 +133,69 @@ export default async function TodaysPlayersTable({ players}:{players: PlayersTab
             </thead>
             <tbody className="bg-white">
               {players?.map((player) => (
-                <tr
-                  key={player.id}
-                  className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
-                >
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                  <tr
+                      key={player.id}
+                      className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                  >
+                    <td className="whitespace-nowrap py-3 pl-6 pr-3">
 
-                    <div className="flex items-center gap-3">
-                      <Image
-                        src={player.image_url}
-                        className="rounded-full zoom-on-hover"
-                        width={40}
-                        height={40}
-                        alt={`${player.name}'s profile picture`}
-                      />
-                      <div>
-                        {player.name}
+                      <div className="flex items-center gap-3">
+                        <Image
+                            src={player.image_url}
+                            className="rounded-full zoom-on-hover"
+                            width={40}
+                            height={40}
+                            alt={`${player.name}'s profile picture`}
+                        />
+                        <div>
+                          {player.name}
+                        </div>
                       </div>
-                    </div>
 
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3">
 
-                    {player.phone_number}
+                      {player.phone_number}
 
-                  </td>
-                  <td className={`whitespace-nowrap px-3 py-3 `}>
-                    <Link href={`/dashboard/players/${player.id}/data`}>
-                    {formatCurrency(player.balance)}
-                    </Link>
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                    </td>
+                    <td className={`whitespace-nowrap px-3 py-3 `}>
+                      <Link href={`/dashboard/players/${player.id}/data`}>
+                        {formatCurrency(player.balance)}
+                      </Link>
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3">
 
-                    {player.notes}
+                      {player.notes}
 
-                  </td>
+                    </td>
 
-                  <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
-                    <RSVPButton player={player} prevPage={'/dashboard/todayplayers'} />
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3 rsvp-icon ">
-                    {player.arrived ? '✅' : ''}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3 ">
-                    {formatPlayerEntries(player.entries)}
-                  </td>
-                  <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex justify-end gap-3">
+                    <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
+                      <RSVPButton player={player} prevPage={'/dashboard/todayplayers'}/>
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3 rsvp-icon ">
+                      {player.arrived ? '✅' : ''}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3 ">
+                      {formatPlayerEntries(player.entries)}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-3 ">
+                      {(player.position && Number(player.position) > 0) ?<div className="text-lg" style={{
+                        background: '#6666CCCC',
+                        color: 'white',
+                        width: 30,
+                        height: 30,
+                        borderRadius: 50,
+                        textAlign: 'center',
+                      }}>#{player.position}</div> : ''}
+                    </td>
+                    <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                      <div className="flex justify-end gap-3">
                         <OpenModalButton player={player} prevPage={'/dashboard/todayplayers'} templates={templates}/>
                         <OpenPositionModalButton player={player}/>
-                    </div>
+                      </div>
 
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
               ))}
             </tbody>
           </table>
