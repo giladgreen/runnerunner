@@ -19,6 +19,7 @@ export default function Form({redirectAddress}:{redirectAddress:string}) {
   const [state, dispatch] = useFormState(createPlayerWithRedirectAddress, initialState);
   const [balanceNote, setBalanceNote] = useState('new player');
   const [imageUrl, setImageUrl] = useState('');
+  const [balance, setBalance] = useState(0);
   const [sundayChecked, setSundayChecked] = useState(false);
   const [mondayChecked, setMondayChecked] = useState(false);
   const [tuesdayChecked, setTuesdayChecked] = useState(false);
@@ -99,6 +100,8 @@ export default function Form({redirectAddress}:{redirectAddress:string}) {
                   name="balance"
                   type="number"
                   step="1"
+                  value={balance}
+                  onChange={(e) => setBalance(Number(e.target.value))}
                   placeholder="Enter ILS balance"
                   className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                   aria-describedby="balance-error"
@@ -248,6 +251,7 @@ export default function Form({redirectAddress}:{redirectAddress:string}) {
                 aria-describedby="image_url-error"
             />
           </div>
+          { imageUrl && <CldImage src={imageUrl} width={60} height={60} style={{ marginTop: 20}}/> }
         </div>
       </div>
 

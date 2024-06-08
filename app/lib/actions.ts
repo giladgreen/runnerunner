@@ -146,6 +146,22 @@ export async function importPlayers(players: { name: string; phone_number: strin
     redirect('/dashboard');
 }
 
+export async function resetAllPlayersAndHistory() {
+    try {
+        await sql`DELETE FROM history`;
+        console.log('## all history deleted')
+        await sql`DELETE FROM players`;
+        console.log('## all history players')
+    } catch (error) {
+        console.log('## resetAllPlayersAndHistory error', error)
+        return {
+            message: 'Database Error: Failed to reset Players.',
+        };
+    }
+    revalidatePath('/dashboard');
+    redirect('/dashboard');
+}
+
 
 export async function createPlayerLog(player: PlayerForm, prevState: State, formData: FormData, redirectAddress:string ,usage: boolean = true){
     const validatedFields = CreateUsageLog.safeParse({
@@ -206,7 +222,7 @@ export async function createPlayerNewCreditLog(data : {player: PlayerForm, redir
     return createPlayerLog(data.player, prevState, formData, data.redirectAddress, false);
 }
 export async function updatePlayer(
-    id: string,
+    {id, redirectAddress}: {id: string, redirectAddress: string,},
     prevState: State,
     formData: FormData,
 ) {
@@ -229,6 +245,7 @@ export async function updatePlayer(
     const wednesday_rsvp = !!formData.get('wednesday_rsvp');
     const thursday_rsvp = !!formData.get('thursday_rsvp');
     const saturday_rsvp = !!formData.get('saturday_rsvp');
+    const image_url = (formData.get('image_url') as string);
 
     const { name, notes } = validatedFields.data;
 
@@ -236,7 +253,7 @@ export async function updatePlayer(
     try {
         await sql`
       UPDATE players
-      SET name = ${name}, notes = ${notes}, updated_at=${date} , sunday_rsvp = ${sunday_rsvp}, monday_rsvp = ${monday_rsvp}, tuesday_rsvp = ${tuesday_rsvp}, wednesday_rsvp = ${wednesday_rsvp}, thursday_rsvp = ${thursday_rsvp}, saturday_rsvp = ${saturday_rsvp}
+      SET name = ${name}, image_url = ${image_url}, notes = ${notes}, updated_at=${date} , sunday_rsvp = ${sunday_rsvp}, monday_rsvp = ${monday_rsvp}, tuesday_rsvp = ${tuesday_rsvp}, wednesday_rsvp = ${wednesday_rsvp}, thursday_rsvp = ${thursday_rsvp}, saturday_rsvp = ${saturday_rsvp}
       WHERE id = ${id}
     `;
     } catch (error) {
@@ -244,8 +261,8 @@ export async function updatePlayer(
         return { message: 'Database Error: Failed to Update Player.' };
     }
 
-    revalidatePath('/dashboard/players');
-    redirect('/dashboard/players');
+    revalidatePath(redirectAddress);
+    redirect(redirectAddress);
 }
 export async function updateTemplate(
     id: string,

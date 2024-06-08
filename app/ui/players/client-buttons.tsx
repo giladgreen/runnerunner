@@ -1,7 +1,7 @@
 "use client";
 
 import { TrashIcon } from '@heroicons/react/24/outline';
-import {deletePlayer, importPlayers, resetAllRsvp} from '@/app/lib/actions';
+import {deletePlayer, importPlayers, resetAllPlayersAndHistory, resetAllRsvp} from '@/app/lib/actions';
 import {Button} from "@/app/ui/button";
 import React from "react";
 import {PlayerDB} from "@/app/lib/definitions";
@@ -129,5 +129,24 @@ export function ResetRSVP() {
                 Reset
             </button>
         </form>
+    );
+}
+
+export function ResetPlayersAndHistory() {
+
+    return (
+        <>
+            <Button
+                onClick={async () => {
+                    if (confirm("Are you sure?")) {
+                        await resetAllPlayersAndHistory();
+                    }
+                }}
+            >
+                <span >Reset</span>
+            </Button>
+            <input type="file" id="fileInput" style={{ display:'none'}} accept=".csv"/>
+
+        </>
     );
 }
