@@ -115,6 +115,18 @@ export async function fetchRSVPAndArrivalData() {
 }
 
 
+export async function fetchFinalTablePlayers() {
+  noStore();
+  try {
+    const allPlayersResult = await sql<PlayerDB>`SELECT * FROM players WHERE position > 0 ORDER BY position ASC`;
+    return allPlayersResult.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch final table players data.');
+  }
+}
+
+
 const ITEMS_PER_PAGE = 8;
 export async function fetchFilteredPlayers(
   query: string,

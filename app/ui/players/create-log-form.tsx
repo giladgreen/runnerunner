@@ -3,13 +3,13 @@
 import {
   PencilIcon,
   BanknotesIcon,
+  HashtagIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import {createPlayerNewCreditLog, createPlayerUsageLog, fetchTemplates} from '@/app/lib/actions';
+import {createPlayerNewCreditLog, createPlayerUsageLog, setPlayerPosition} from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import {PlayerForm, TemplateDB} from "@/app/lib/definitions";
 import {useState} from "react";
-import {Checkbox} from "primereact/checkbox";
 const TEXTS = {
 }
 
@@ -201,6 +201,60 @@ export function UseCreditForm({player, templates, hide, redirectAddress} : {redi
           <div className="mt-6 flex justify-end gap-4">
             {hide && <Button onClick={hide}>Cancel</Button>}
             <Button type="submit" onClick={()=> hide?.()}>Use</Button>
+
+          </div>
+        </form>
+  );
+}
+
+
+export function SetPositionForm({player, hide, } : { player: PlayerForm, hide?: ()=>void}) {
+  const initialState = { message: null, errors: {} };
+  const setPlayerPositionWithPlayerId = setPlayerPosition.bind(null,player.id)
+  // @ts-ignore
+  const [state1, dispatch] = useFormState(setPlayerPositionWithPlayerId, initialState);
+
+  return (
+        <form action={dispatch} className="form-control">
+          <label className="mb-2 block text-sm font-medium">
+            Set Player Position
+          </label>
+          <div className="rounded-md  p-4 md:p-6 form-inner-control">
+            {/*  balance change */}
+            <div className="mb-4">
+              <label htmlFor="position" className="mb-2 block text-sm font-medium">
+                Position
+              </label>
+              <div className="relative mt-2 rounded-md">
+                <div className="relative">
+                  <input
+                      id="position"
+                      name="position"
+                      type="number"
+                      step="1"
+                      min={0}
+                      placeholder="Enter position"
+                      className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                      aria-describedby="position-error"
+                  />
+                  <HashtagIcon
+                      className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
+                </div>
+                <div id="change-error" aria-live="polite" aria-atomic="true">
+                  {state1?.errors?.position &&
+                      state1?.errors.position.map((error: string) => (
+                          <div className="mt-2 text-sm text-red-500" key={error}>
+                            {error}
+                          </div>
+                      ))}
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div className="mt-6 flex justify-end gap-4">
+            {hide && <Button onClick={hide}>Cancel</Button>}
+            <Button type="submit" onClick={()=> hide?.()}>Set</Button>
 
           </div>
         </form>

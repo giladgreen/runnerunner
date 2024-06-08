@@ -53,6 +53,7 @@ export type State = {
         description?: string[];
         template?: string[];
         amount?: string[];
+        position?: string[];
     };
     message?: string | null;
 };
@@ -218,6 +219,38 @@ export async function createPlayerLog(player: PlayerForm, prevState: State, form
 export async function createPlayerUsageLog(data : {player: PlayerForm, redirectAddress:string}, prevState: State, formData: FormData){
     return createPlayerLog(data.player, prevState, formData, data.redirectAddress, true);
 }
+
+export async function setPlayerPosition(playerId: string, prevState: State, formData: FormData){
+   const newPosition =  formData.get('position') as string;
+    try {
+        const date = new Date().toISOString();
+
+        await sql`
+      UPDATE players
+      SET position = ${newPosition}, updated_at=${date}
+      WHERE id = ${playerId}
+    `;
+
+    } catch (error) {
+        console.log('## create log error', error)
+        return {
+            message: 'Database Error: Failed to setPlayerPosition.',
+        };
+    }
+    revalidatePath('/dashboard/todayplayers');
+    redirect('/dashboard/todayplayers');
+}
+export async function fetchFinalTablePlayers() {
+    try {
+        const allPlayersResult = await sql<PlayerDB>`SELECT * FROM players WHERE position > 0 ORDER BY position ASC`;
+        return allPlayersResult.rows;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch final table players data.');
+    }
+}
+
+
 export async function createPlayerNewCreditLog(data : {player: PlayerForm, redirectAddress:string}, prevState: State, formData: FormData){
     return createPlayerLog(data.player, prevState, formData, data.redirectAddress, false);
 }
@@ -319,7 +352,6 @@ export async function fetchTemplates(
 
 
 export async function resetAllRsvp() {
-
     try {
         await sql`UPDATE players SET sunday_rsvp = false, monday_rsvp = false, tuesday_rsvp = false, wednesday_rsvp = false, thursday_rsvp = false, saturday_rsvp = false`;
     } catch (error) {
@@ -327,6 +359,19 @@ export async function resetAllRsvp() {
     }
     revalidatePath('/dashboard/players');
     redirect('/dashboard/players');
+}
+export async function resetPlayersPositions() {
+
+    try {
+        console.log('## resetPlayersPositions')
+        await sql`UPDATE players SET position = '0'`;
+        console.log('## after resetPlayersPositions')
+
+    } catch (error) {
+        return { message: 'Database Error: Failed to resetPlayersPositions.' };
+    }
+    revalidatePath('/dashboard/todayplayers');
+    redirect('/dashboard/todayplayers');
 }
 export async function deletePlayer(id: string) {
 

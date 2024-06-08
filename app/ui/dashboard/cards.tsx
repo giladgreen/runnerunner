@@ -9,11 +9,13 @@ import {
     ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/solid';
 import { lusitana } from '@/app/ui/fonts';
-import { fetchGeneralPlayersCardData, fetchRSVPAndArrivalData} from '@/app/lib/data';
+import {fetchFinalTablePlayers, fetchGeneralPlayersCardData, fetchRSVPAndArrivalData} from '@/app/lib/data';
 import {formatCurrency} from "@/app/lib/utils";
 import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 import {Suspense} from "react";
 import {CardsSkeleton} from "@/app/ui/skeletons";
+import Image from "next/image";
+import Link from "next/link";
 
 const iconMap = {
   money: BanknotesIcon,
@@ -123,6 +125,55 @@ export async function RSVPAndArrivalCardWrapper() {
 }
 
 
+export async function FinalTablePlayers() {
+    const finalTablePlayers = await fetchFinalTablePlayers();
+
+    if (!finalTablePlayers || finalTablePlayers.length === 0) return null;
+
+    return <div style={{marginBottom: 30, width: '100%'}}>
+        <div style={{ width: '100%', marginBottom: 10}}><u>Players positions</u></div>
+        <div style={{ width: '100%'}}>
+            {finalTablePlayers.map((finalTablePlayer: any) => {
+                return <div
+                    key={finalTablePlayer.id}
+                    className="w-full rounded-md bg-white" style={{width: '100%'}}
+                >
+                    <div className="flex items-center  border-b pb-4">
+                            <div className="text-lg" style={{
+                                background: '#6666CCAA',
+                                color: 'white',
+                                width: 30,
+                                height: 30,
+                                borderRadius: 50,
+                                textAlign: 'center',
+                                marginRight: 10
+                            }}>#{finalTablePlayer.position}</div>
+                        <Image
+                            src={finalTablePlayer.image_url}
+                            className="zoom-on-hover"
+                            style={{
+                                marginLeft: 10,
+                                marginRight: 10
+                            }}
+                            width={40}
+                            height={40}
+                            alt={`${finalTablePlayer.name}'s profile picture`}
+                        />
+                            <div className="text-sm text-gray-500">{finalTablePlayer.phone_number}</div>
+                            <div style={{ fontSize: 20, marginLeft:15}}>
+                                {finalTablePlayer.name}
+                            </div>
+
+                        </div>
+                </div>
+
+
+            })}
+        </div>
+    </div>
+}
+
+
 export function Card({
                          title,
                          value,
@@ -141,18 +192,18 @@ export function Card({
 
     const Icon = type && !empty ? iconMap[type] : undefined;
 
-  return (
-    <div className={`rounded-xl bg-blue-200 p-2 shadow-sm `}  >
-      <div className="flex p-4 text-center">
-        {Icon ? <Icon className="h-5 w-5 text-gray-700" size={18} /> : null}
-        <h3 className={`ml-2 text-sm font-medium text-center ${spend ? 'center-text' :'' }`}>{title}</h3>
-      </div>
-      <div
-        className={`${lusitana.className}
+    return (
+        <div className={`rounded-xl bg-blue-200 p-2 shadow-sm `}>
+            <div className="flex p-4 text-center">
+                {Icon ? <Icon className="h-5 w-5 text-gray-700" size={18}/> : null}
+                <h3 className={`ml-2 text-sm font-medium text-center ${spend ? 'center-text' : ''}`}>{title}</h3>
+            </div>
+            <div
+                className={`${lusitana.className}
           truncate rounded-xl bg-white px-4 py-4 text-center text-2xl`}
-      >
-        {value}
-      </div>
-    </div>
-  );
+            >
+                {value}
+            </div>
+        </div>
+    );
 }

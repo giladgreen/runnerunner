@@ -7,6 +7,7 @@ import OpenModalButton from "@/app/ui/players/open-modal-button";
 import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 import {PlayersTable, TemplateDB} from "@/app/lib/definitions";
 import {fetchTemplates} from "@/app/lib/actions";
+import OpenPositionModalButton from "@/app/ui/players/open-position-modal-button";
 
 const formatPlayerEntries = (
     entries: number,
@@ -178,7 +179,9 @@ export default async function TodaysPlayersTable({ players}:{players: PlayersTab
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
                         <OpenModalButton player={player} prevPage={'/dashboard/todayplayers'} templates={templates}/>
+                        <OpenPositionModalButton player={player}/>
                     </div>
+
                   </td>
                 </tr>
               ))}

@@ -1,7 +1,7 @@
 import Form from '@/app/ui/players/create-bug-form';
 import {fetchAllBugs, fetchAllPlayersForExport, fetchTemplates} from "@/app/lib/data";
-import {formatCurrency, formatDateToLocal} from "@/app/lib/utils";
-import {ImportPlayers, ExportPlayers, ResetRSVP} from "@/app/ui/players/client-buttons";
+import {formatDateToLocal} from "@/app/lib/utils";
+import {ImportPlayers, ExportPlayers, ResetRSVP, ResetPlayersPosition} from "@/app/ui/players/client-buttons";
 import {PlayerDB} from "@/app/lib/definitions";
 import React from "react";
 import { PencilIcon } from '@heroicons/react/24/outline';
@@ -35,6 +35,13 @@ export default async function Page() {
 
             <div className="config-seperator"/>
 
+            <div className="config-section">
+                <div style={{marginBottom: 20}}><b>Reset players position</b>
+                </div>
+                <ResetPlayersPosition/>
+
+            </div>
+            <div className="config-seperator"/>
             <div className="config-section">
                 <div style={{marginBottom: 20}}><b>Reset all RSVPs</b>
                 </div>

@@ -132,7 +132,8 @@ async function seedPlayers(client) {
     tuesday_rsvp BOOLEAN DEFAULT FALSE,
     wednesday_rsvp BOOLEAN DEFAULT FALSE,
     thursday_rsvp BOOLEAN DEFAULT FALSE,
-    saturday_rsvp BOOLEAN DEFAULT FALSE
+    saturday_rsvp BOOLEAN DEFAULT FALSE,
+    position INT DEFAULT 0
   );
 `;
 

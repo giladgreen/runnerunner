@@ -1,7 +1,12 @@
 "use client";
 
 import { TrashIcon } from '@heroicons/react/24/outline';
-import {deletePlayer, importPlayers, resetAllPlayersAndHistory, resetAllRsvp} from '@/app/lib/actions';
+import {
+    deletePlayer,
+    importPlayers,
+    resetAllPlayersAndHistory, resetAllRsvp,
+    resetPlayersPositions
+} from '@/app/lib/actions';
 import {Button} from "@/app/ui/button";
 import React from "react";
 import {PlayerDB} from "@/app/lib/definitions";
@@ -119,6 +124,21 @@ export function ResetRSVP() {
     const onSubmit = (formData: FormData) => {
         if (confirm("Are you sure?")) {
             resetAllRsvp();
+        }
+    };
+
+    return (
+        <form action={onSubmit}>
+            <button className="rounded-md border p-2 bg-orange-400 hover:bg-orange-600">
+                Reset
+            </button>
+        </form>
+    );
+}
+export function ResetPlayersPosition() {
+    const onSubmit = (formData: FormData) => {
+        if (confirm("Are you sure?")) {
+            resetPlayersPositions();
         }
     };
 

@@ -35,7 +35,7 @@ export type DebtPlayer = {
   image_url: string;
   updated_at: string;
   balance: number;
-} & rsvp;;
+} & rsvp;
 
 // The database returns a number for amount, but we later format it to a string with the formatCurrency function
 export type MVPPlayerRaw = Omit<MVPPlayer, 'balance'> & {
@@ -53,6 +53,7 @@ export type PlayersTable = {
   phone_number: string;
   image_url: string;
   updated_at: string;
+  position: number;
   balance: number;
   historyCount: number;
   notes: string;
@@ -65,20 +66,6 @@ export type PlayersTable = {
   arrived: boolean;
   entries: number;
 };
-
-
-export type Counts = {
-  phone_number: string;
-  count: number;
-};
-
-export type TemplateForm = {
-  id: string;
-  template: string;
-  day: string;
-  amount: number;
-};
-
 export type PlayerForm = {
   id: string;
   name: string;
@@ -95,6 +82,32 @@ export type PlayerForm = {
   thursday_rsvp?: boolean;
   saturday_rsvp?: boolean;
 };
+export type PlayerDB = {
+  id: string;
+  name: string;
+  phone_number: string;
+  image_url: string;
+  updated_at: string;
+  position: number;
+  balance: number;
+  note: string;
+  notes: string;
+  historyLog: LogDB[],
+  arrived: boolean;
+};
+
+export type Counts = {
+  phone_number: string;
+  count: number;
+};
+
+export type TemplateForm = {
+  id: string;
+  template: string;
+  day: string;
+  amount: number;
+};
+
 
 
 export type LogDB = {
@@ -107,18 +120,7 @@ export type LogDB = {
   type: string;
 //updated by
 };
-export type PlayerDB = {
-  id: string;
-  name: string;
-  phone_number: string;
-  image_url: string;
-  updated_at: string;
-  balance: number;
-  note: string;
-  notes: string;
-  historyLog: LogDB[],
-  arrived: boolean;
-};
+
 export type TemplateDB = {
   id: string;
   template: string;
