@@ -251,7 +251,7 @@ export default function Form({redirectAddress}:{redirectAddress:string}) {
                 aria-describedby="image_url-error"
             />
           </div>
-          { imageUrl && <CldImage src={imageUrl} width={60} height={60} style={{ marginTop: 20}}/> }
+          { imageUrl && <CldImage src={imageUrl} width={60} height={60} style={{ marginTop: 20}} alt=""/> }
         </div>
       </div>
 

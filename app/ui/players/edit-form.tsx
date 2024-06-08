@@ -161,7 +161,7 @@ export default function EditPlayerForm({
                           aria-describedby="image_url-error"
                       />
                   </div>
-                  { imageUrl && <CldImage src={imageUrl} width={60} height={60} style={{ marginTop: 20}}/> }
+                  { imageUrl && <CldImage src={imageUrl} width={60} height={60} style={{ marginTop: 20}} alt=""/> }
               </div>
               <div className="mt-6 flex justify-end gap-4">
                   <Link
