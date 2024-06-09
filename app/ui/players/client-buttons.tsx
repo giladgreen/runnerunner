@@ -48,7 +48,6 @@ export function ImportPlayers() {
                     reader.onload = async function(e){
                         const fileContent = (e?.target?.result ?? '') as string;
                         const players = fileContent.split('\n').map((line: string) => {
-                            console.log('line:', line)
                             if (line.trim().length === 0){
                                 return false;
                             }
@@ -67,7 +66,6 @@ export function ImportPlayers() {
                             return player;
                         }).filter(Boolean) as { name: string; phone_number: string; balance: number, notes:string }[];
 
-                        console.log('players:', players)
                         await importPlayers(players);
                     };
                     reader.readAsText(file);

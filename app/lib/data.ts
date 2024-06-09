@@ -231,7 +231,6 @@ export async function fetchRevenues() {
     return history.reduce((acc, { phone_number, change, type, updated_at }) => {
       const dateAsString = updated_at.toISOString();
       const date = dateAsString.slice(0,10);
-       console.log('## date:',date, ' phone_number:', phone_number, ' change:', change, ' type:', type);
       if (!acc[date]){
         acc[date] = {
           cash: 0,
@@ -384,7 +383,6 @@ export async function fetchTemplateById(id: string) {
 export async function fetchPlayerByPhoneNumber(phoneNumber: string) {
   noStore();
   try {
-    console.log('phoneNumber', phoneNumber)
 
  const data = await sql<PlayerDB>`
       SELECT
@@ -394,7 +392,6 @@ export async function fetchPlayerByPhoneNumber(phoneNumber: string) {
     `;
 
     const player = data.rows[0];
-    console.log('player', player)
 
     const historyData = await sql<LogDB>`
       SELECT * FROM history
