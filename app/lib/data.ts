@@ -90,23 +90,39 @@ export async function fetchRSVPAndArrivalData() {
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
     const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
 
+    const allPlayersResult = await sql`SELECT * FROM players`;
+    const allPlayers = allPlayersResult.rows;
+
+    const rsvpForToday = allPlayers.filter(player => player[rsvpPropName]).length
+
     const todayHistoryResults = await sql`SELECT phone_number, type, change FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour'`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' )
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' );
+    if (todayHistory.length === 0){
+      return {
+        rsvpForToday,
+        arrivedToday: 0,
+        todayCreditIncome: 0,
+        todayCashIncome: 0,
+        todayTransferIncome: 0,
+        reEntriesCount: 0
+      };
+    }
+    const minChange = todayHistory.reduce((acc, { change }) => Math.min(acc, change), 9999);
+
+    const reEntriesCount = todayHistory.filter(({ change }) => change === minChange).length;
     const todayCreditIncome = todayHistory.filter(({ type }) => type === 'cash').reduce((acc, { change }) => acc + change, 0);
     const todayCashIncome = todayHistory.filter(({ type }) => type === 'credit').reduce((acc, { change }) => acc + change, 0);
     const todayTransferIncome = todayHistory.filter(({ type }) => type === 'wire').reduce((acc, { change }) => acc + change, 0);
-
-    const allPlayersResult = await sql`SELECT * FROM players`;
-    const allPlayers = allPlayersResult.rows;
     const arrivedToday =  (Array.from(new Set(todayHistory.map(({ phone_number }) => phone_number)))).length;
-    const rsvpForToday = allPlayers.filter(player => player[rsvpPropName]).length
+
 
     return {
       rsvpForToday,
       arrivedToday,
       todayCreditIncome: todayCreditIncome < 0 ? -1 * todayCreditIncome : todayCreditIncome,
       todayCashIncome: todayCashIncome < 0 ? -1 * todayCashIncome : todayCashIncome,
-      todayTransferIncome: todayTransferIncome < 0 ? -1 * todayTransferIncome : todayTransferIncome
+      todayTransferIncome: todayTransferIncome < 0 ? -1 * todayTransferIncome : todayTransferIncome,
+      reEntriesCount
     };
   } catch (error) {
     console.error('Database Error:', error);

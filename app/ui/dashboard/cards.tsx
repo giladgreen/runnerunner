@@ -49,7 +49,8 @@ export async function RSVPAndArrivalCardWrapper() {
         arrivedToday,
         todayCreditIncome,
         todayCashIncome,
-        todayTransferIncome
+        todayTransferIncome,
+        reEntriesCount
     } = await fetchRSVPAndArrivalData();
 
     const todayIncome = <div>
@@ -112,14 +113,12 @@ export async function RSVPAndArrivalCardWrapper() {
 
     </div>
 
-    return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" style={{marginBottom: 20, width: '100%'}} >
-        <Suspense fallback={<CardsSkeleton count={3}/>}>
+    return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" style={{marginBottom: 20, width: '100%'}} >
+        <Suspense fallback={<CardsSkeleton count={4}/>}>
             <Card title={'RSVP for Today'} value={<div style={{padding: 50, fontSize: 40}}>{rsvpForToday}</div>} type="rsvp"/>
             <Card title={'Arrived Today'} value={<div  style={{padding: 50, fontSize: 40}}>{arrivedToday}</div>} type="arrived"/>
+            <Card title={'Re Entries'} value={<div  style={{padding: 50, fontSize: 40}}>{reEntriesCount}</div>} type="money"/>
             <Card title={"Today's income"} value={todayIncome} type="money"/>
-            {/*<Card title="" value={0} type="empty" empty/>*/}
-
-
         </Suspense>
     </div>
 }
