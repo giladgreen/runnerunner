@@ -209,8 +209,9 @@ export async function fetchTodayPlayers(query?: string) {
       player.name = player.name.trim()
     });
 
+
     // @ts-ignore
-    const results = players.filter(p => p.arrived || !!p[rsvpPropName]).filter(p => !query || query.length === 0 ||  p.name.includes(query) ||  p.phone_number.includes(query))
+    const results = players.filter(p => p.arrived || !!p[rsvpPropName] || (query && query.length > 0 && (p.name.includes(query) ||  p.phone_number.includes(query))))
     results.sort((a,b)=> a.name < b.name ? -1 : 1);
 
     return results;
