@@ -12,23 +12,38 @@ export const authConfig = {
 
             const isLoggedIn = !!loggedInUser;
             let isAdmin: boolean = false;
+            let isWorker: boolean = false;
             if (isLoggedIn) {
                 const users = (await sql<User>`SELECT * FROM users`).rows;
                 // @ts-ignore
                 const userFromDB = users.find((user) => user.phone_number === loggedInUser!.email);
                 isAdmin = Boolean(userFromDB && userFromDB.is_admin);
+                isWorker = Boolean(userFromDB && userFromDB.is_worker);
 
             }
             const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
+            const isOnWorker = nextUrl.pathname.startsWith('/worker');
             const isOnPersonal = nextUrl.pathname.startsWith('/personal');
 
             if (isOnDashboard) {
                 return isAdmin;
-            }else if (isOnPersonal) {
+            }
+
+            if (isOnWorker) {
+                return isWorker;
+            }
+
+            if (isOnPersonal) {
                 return isLoggedIn;
-            }else if (isLoggedIn) {
+            }
+
+            if (isLoggedIn) {
                 if (isAdmin) {
                     return Response.redirect(new URL('/dashboard', nextUrl));
+                }
+
+                if (isWorker) {
+                    return Response.redirect(new URL(`/worker/${loggedInUser.email}`, nextUrl));
                 }
 
                 // @ts-ignore

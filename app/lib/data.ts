@@ -408,3 +408,24 @@ export async function fetchPlayerByPhoneNumber(phoneNumber: string) {
     throw new Error('Failed to fetchPlayerByPhoneNumber.');
   }
 }
+
+export async function fetchUserByPhoneNumber(phoneNumber: string) {
+  noStore();
+  try {
+
+ const data = await sql<User>`
+      SELECT
+        *
+      FROM users
+      WHERE phone_number = ${phoneNumber};
+    `;
+
+    const user = data.rows[0];
+
+    return user;
+
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetchPlayerByPhoneNumber.');
+  }
+}

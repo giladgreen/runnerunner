@@ -8,6 +8,7 @@ export type User = {
   password: string;
   name?: string;
   is_admin: boolean;
+  is_worker: boolean;
 };
 
 

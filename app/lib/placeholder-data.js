@@ -8,24 +8,25 @@ const DEMO_USERS_PHONES = [DEMO_USER_PHONE,AVI_PHONE,OZ_PHONE];
 const users = [
   {
     phone_number: '0587869910',
+    name: 'gilad green',
     password: 'kush1984',
-    is_admin: true
-  },
-  {
-    phone_number: '0524803571',
-    password: '123456',
-    is_admin: true
-  },
-  {
-    phone_number: '0524803577',
-    password: '123456',
-    is_admin: true
+    is_admin: true,
+    is_worker: false
   },
   {
     phone_number: '0542609910',
+    name: 'israel israeli',
     password: '123456',
-    is_admin: false
+    is_admin: false,
+    is_worker: false
   },
+  {
+    phone_number: '144',
+    name:'worky',
+    password: '123456',
+    is_admin: false,
+    is_worker: true
+  }
 ];
 
 

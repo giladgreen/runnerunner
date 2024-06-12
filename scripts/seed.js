@@ -58,7 +58,9 @@ async function seedUsers(client) {
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         phone_number TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL,
-        is_admin BOOLEAN DEFAULT FALSE
+        name TEXT NOT NULL DEFAULT 'unknown',
+        is_admin BOOLEAN DEFAULT FALSE,
+        is_worker BOOLEAN DEFAULT FALSE
       );
     `;
 
@@ -69,8 +71,8 @@ async function seedUsers(client) {
       users.map(async (user) => {
         const hashedPassword = await bcrypt.hash(user.password, 10);
         return client.sql`
-        INSERT INTO users (phone_number, password, is_admin)
-        VALUES (${user.phone_number}, ${hashedPassword}, ${user.is_admin});
+        INSERT INTO users (phone_number, password, is_admin, is_worker, name)
+        VALUES (${user.phone_number}, ${hashedPassword}, ${user.is_admin}, ${user.is_worker}, ${user.name});
       `;
       }),
     );
