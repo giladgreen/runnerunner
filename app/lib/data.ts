@@ -1,5 +1,5 @@
 import { sql } from '@vercel/postgres';
-import { unstable_noStore as noStore } from 'next/cache';
+import {revalidatePath, unstable_noStore as noStore} from 'next/cache';
 
 import {
   BugDB, Counts,
@@ -7,7 +7,8 @@ import {
   MVPPlayerRaw, PlayerDB,
   PlayersTable, TemplateDB, User
 } from './definitions';
-import {GeneralPlayersCardWrapper} from "@/app/ui/dashboard/cards";
+
+import {redirect} from "next/navigation";
 
 
 export async function fetchMVPPlayers() {
@@ -84,7 +85,6 @@ export async function fetchGeneralPlayersCardData() {
 
 export async function fetchRSVPAndArrivalData() {
   noStore();
-
   try {
     const now = new Date();
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
@@ -95,7 +95,7 @@ export async function fetchRSVPAndArrivalData() {
 
     const rsvpForToday = allPlayers.filter(player => player[rsvpPropName]).length
 
-    const todayHistoryResults = await sql`SELECT phone_number, type, change FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour'`;
+    const todayHistoryResults = await sql`SELECT phone_number, type, change FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
     const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' );
     if (todayHistory.length === 0){
       return {
@@ -107,9 +107,8 @@ export async function fetchRSVPAndArrivalData() {
         reEntriesCount: 0
       };
     }
-    const minChange = todayHistory.reduce((acc, { change }) => Math.min(acc, change), 9999);
+    const reEntriesCount = todayHistory.length - (Array.from(new Set(todayHistory.map(({ phone_number }) => phone_number)))).length;
 
-    const reEntriesCount = todayHistory.filter(({ change }) => change === minChange).length;
     const todayCreditIncome = todayHistory.filter(({ type }) => type === 'cash').reduce((acc, { change }) => acc + change, 0);
     const todayCashIncome = todayHistory.filter(({ type }) => type === 'credit').reduce((acc, { change }) => acc + change, 0);
     const todayTransferIncome = todayHistory.filter(({ type }) => type === 'wire').reduce((acc, { change }) => acc + change, 0);
@@ -203,6 +202,8 @@ export async function fetchPlayersPages(query: string) {
   }
 }
 export async function fetchTodayPlayers(query?: string) {
+
+  noStore();
   try {
     const now = new Date();
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
@@ -211,23 +212,24 @@ export async function fetchTodayPlayers(query?: string) {
     const playersResults = await sql<PlayersTable>`
       SELECT *
       FROM players`;
-
+    const players = playersResults.rows;
     const todayHistoryResults = await sql`SELECT * FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
     const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' )
 
-    const players = playersResults.rows;
+
     players.forEach((player) => {
       const playerItems = todayHistory.filter(({ phone_number}) => phone_number === player.phone_number);
 
 
       player.arrived = playerItems.length > 0;
       player.entries = playerItems.length;
-      player.name = player.name.trim()
+      player.name = player.name.trim();
+
     });
 
 
     // @ts-ignore
-    const results = players.filter(p => p.arrived || !!p[rsvpPropName] || (query && query.length > 0 && (p.name.includes(query) ||  p.phone_number.includes(query))))
+    const results = players.filter(p => (!query && p.arrived) || (!query && !!p[rsvpPropName]) || (query && query.length > 0 && (p.name.includes(query) ||  p.phone_number.includes(query))))
     results.sort((a,b)=> a.name < b.name ? -1 : 1);
 
     return results;
@@ -238,6 +240,7 @@ export async function fetchTodayPlayers(query?: string) {
 }
 
 export async function fetchRevenues() {
+  noStore();
   try {
     const historyResults = await sql`SELECT * FROM history WHERE change < 0 ORDER BY updated_at DESC`;
     const history =  historyResults.rows.filter(({ type }) => type !== 'prize');

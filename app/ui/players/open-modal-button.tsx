@@ -8,10 +8,12 @@ import Image from "next/image";
 export default function OpenModalButton({
   player,
   prevPage,
-  templates
+  templates,
+  username
 }: {
   player: PlayersTable;
   prevPage: string;
+  username?: string;
   templates: TemplateDB[]
 }) {
 
@@ -35,7 +37,7 @@ export default function OpenModalButton({
                   />
           </div>
           <div className={show ? 'edit-player-modal' : 'hidden'}>
-              <UseCreditForm player={player as unknown as PlayerForm} templates={templates} hide={close} redirectAddress={prevPage}/>
+              <UseCreditForm player={player as unknown as PlayerForm} templates={templates} hide={close} prevPage={prevPage} username={username}/>
           </div>
       </div>
   );

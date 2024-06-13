@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     }
                 ]}
             />
-            <Form player={player} redirectAddress={'/dashboard/players'}/>
+            <Form player={player} prevPage={'/dashboard/players'}/>
         </main>
     );
 }

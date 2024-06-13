@@ -13,13 +13,13 @@ import {useState} from "react";
 
 export default function EditPlayerForm({
   player,
-  redirectAddress
+  prevPage
 }: {
   player: PlayerForm;
-  redirectAddress: string
+  prevPage: string
 }) {
   const initialState = { message: null, errors: {} };
-  const updatePlayerWithId = updatePlayer.bind(null, {id: player.id, redirectAddress});
+  const updatePlayerWithId = updatePlayer.bind(null, {id: player.id, prevPage});
     const [imageUrl, setImageUrl] = useState(player.image_url ?? '');
 
     const [state, dispatch] = useFormState(updatePlayerWithId, initialState);

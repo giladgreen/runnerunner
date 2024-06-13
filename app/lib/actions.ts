@@ -77,7 +77,8 @@ export async function createReport(formData: FormData) {
     revalidatePath('/dashboard/configurations');
     redirect('/dashboard/configurations');
 }
-export async function createPlayer(redirectAddress: string, prevState: State, formData: FormData) {
+export async function createPlayer(prevPage: string, prevState: State, formData: FormData) {
+
     const sunday_rsvp = !!formData.get('sunday_rsvp');
     const monday_rsvp = !!formData.get('monday_rsvp');
     const tuesday_rsvp = !!formData.get('tuesday_rsvp');
@@ -109,8 +110,8 @@ export async function createPlayer(redirectAddress: string, prevState: State, fo
             message: 'Database Error: Failed to Create Player.',
         };
     }
-    revalidatePath(redirectAddress);
-    redirect(redirectAddress);
+    revalidatePath(prevPage);
+    redirect(prevPage);
 
 
 }
@@ -164,7 +165,7 @@ export async function resetAllPlayersAndHistory() {
 }
 
 
-export async function createPlayerLog(player: PlayerForm, prevState: State, formData: FormData, redirectAddress:string ,usage: boolean = true){
+export async function createPlayerLog(player: PlayerForm, formData: FormData, prevPage:string ,usage: boolean, username?:string){
     const validatedFields = CreateUsageLog.safeParse({
         change: formData.get('change'),
         note: formData.get('note'),
@@ -184,8 +185,8 @@ export async function createPlayerLog(player: PlayerForm, prevState: State, form
     try
     {
         await sql`
-      INSERT INTO history (phone_number, change, note, type)
-      VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type})
+      INSERT INTO history (phone_number, change, note, type, updated_by)
+      VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type}, ${username ?? 'super-admin'})
     `;
     }catch(error){
         console.log('### create log error', error)
@@ -212,16 +213,22 @@ export async function createPlayerLog(player: PlayerForm, prevState: State, form
         }
     }
 
-    revalidatePath(redirectAddress);
-    redirect(redirectAddress);
+    revalidatePath(prevPage);
+    redirect(prevPage);
 }
 
-export async function createPlayerUsageLog(data : {player: PlayerForm, redirectAddress:string}, prevState: State, formData: FormData){
-    return createPlayerLog(data.player, prevState, formData, data.redirectAddress, true);
+export async function createPlayerUsageLog(data : {player: PlayerForm, prevPage:string, username?: string}, _prevState: State, formData: FormData){
+    return createPlayerLog(data.player, formData, data.prevPage, true, data.username);
 }
 
-export async function setPlayerPosition(playerId: string, prevState: State, formData: FormData){
+export async function setPlayerPosition({playerId, prevPage}:{playerId: string, prevPage: string}, prevState: State, formData: FormData){
    const newPosition =  formData.get('position') as string;
+   const newPositionNumber = Number(newPosition);
+   if (isNaN(newPositionNumber) || newPositionNumber < 1){
+         return {
+              message: 'Invalid Position. Failed to set Player Position.',
+         };
+   }
     try {
         const date = new Date().toISOString();
 
@@ -237,10 +244,11 @@ export async function setPlayerPosition(playerId: string, prevState: State, form
             message: 'Database Error: Failed to setPlayerPosition.',
         };
     }
-    revalidatePath('/dashboard/todayplayers');
-    redirect('/dashboard/todayplayers');
+    revalidatePath(prevPage);
+    redirect(prevPage);
 }
 export async function fetchFinalTablePlayers() {
+    noStore();
     try {
         const allPlayersResult = await sql<PlayerDB>`SELECT * FROM players WHERE position > 0 ORDER BY position ASC`;
         return allPlayersResult.rows;
@@ -251,11 +259,11 @@ export async function fetchFinalTablePlayers() {
 }
 
 
-export async function createPlayerNewCreditLog(data : {player: PlayerForm, redirectAddress:string}, prevState: State, formData: FormData){
-    return createPlayerLog(data.player, prevState, formData, data.redirectAddress, false);
+export async function createPlayerNewCreditLog(data : {player: PlayerForm, prevPage:string}, _prevState: State, formData: FormData){
+    return createPlayerLog(data.player, formData, data.prevPage, false, 'super-admin');
 }
 export async function updatePlayer(
-    {id, redirectAddress}: {id: string, redirectAddress: string,},
+    {id, prevPage}: {id: string, prevPage: string,},
     prevState: State,
     formData: FormData,
 ) {
@@ -294,8 +302,8 @@ export async function updatePlayer(
         return { message: 'Database Error: Failed to Update Player.' };
     }
 
-    revalidatePath(redirectAddress);
-    redirect(redirectAddress);
+    revalidatePath(prevPage);
+    redirect(prevPage);
 }
 export async function updateTemplate(
     id: string,
@@ -337,7 +345,7 @@ export async function updateTemplate(
 export async function fetchTemplates(
 
 ) {
-
+    noStore();
     try {
         const data = await sql<TemplateDB>`
       SELECT * FROM templates ORDER BY i ASC
@@ -355,17 +363,20 @@ export async function resetAllRsvp() {
     try {
         await sql`UPDATE players SET sunday_rsvp = false, monday_rsvp = false, tuesday_rsvp = false, wednesday_rsvp = false, thursday_rsvp = false, saturday_rsvp = false`;
     } catch (error) {
+        console.log('## resetAllRsvp error', error)
+
         return { message: 'Database Error: Failed to resetAllRsvp.' };
     }
     revalidatePath('/dashboard/players');
     redirect('/dashboard/players');
 }
+
 export async function resetPlayersPositions() {
-
     try {
-        await sql`UPDATE players SET position = '0' WHERE position > 0`;
-
+        await sql`UPDATE players SET position = 0`;
     } catch (error) {
+        console.log('## resetPlayersPositions error', error)
+
         return { message: 'Database Error: Failed to resetPlayersPositions.' };
     }
     revalidatePath('/dashboard/todayplayers');

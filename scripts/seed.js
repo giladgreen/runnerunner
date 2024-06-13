@@ -189,8 +189,8 @@ async function seedHistory(client) {
     const insertedHistoryLogs = await Promise.all(
         players.map(
             (player) => client.sql`
-        INSERT INTO history (phone_number, change, note, type)
-        VALUES (${player.phone_number}, ${player.balance}, 'legacy balance', 'credit')
+        INSERT INTO history (phone_number, change, note, type, updated_at, updated_by)
+        VALUES (${player.phone_number}, ${player.balance}, 'legacy balance', 'credit', '2024-01-01T10:00:00.000Z','super-admin')
         ON CONFLICT (id) DO NOTHING;
       `,
         ),

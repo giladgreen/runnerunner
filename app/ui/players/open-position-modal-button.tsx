@@ -7,8 +7,10 @@ import Image from "next/image";
 
 export default function OpenPositionModalButton({
   player,
+                                                    prevPage
 }: {
   player: PlayersTable;
+    prevPage: string;
 }) {
     const [show,setShow] = React.useState(false);
 
@@ -30,7 +32,7 @@ export default function OpenPositionModalButton({
                   />
           </div>
           <div className={show ? 'edit-player-modal' : 'hidden'}>
-              <SetPositionForm player={player as unknown as PlayerForm} hide={close} />
+              <SetPositionForm player={player as unknown as PlayerForm} hide={close} prevPage={prevPage}/>
           </div>
       </div>
   );

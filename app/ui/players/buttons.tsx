@@ -16,10 +16,11 @@ export function CreateNewPlayer() {
 }
 
 
-export function CreateNewTodayPlayer() {
+export function CreateNewTodayPlayer({connectedUserPhoneNumber}:{connectedUserPhoneNumber?: string}) {
+  const href = connectedUserPhoneNumber ? `/worker/${connectedUserPhoneNumber}/create` : '/dashboard/todayplayers/create';
   return (
     <Link
-      href="/dashboard/todayplayers/create"
+      href={href}
       className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
     >
       <span className="hidden md:block">create new player</span>{' '}
@@ -27,8 +28,6 @@ export function CreateNewTodayPlayer() {
     </Link>
   );
 }
-
-
 
 export function UpdatePlayer({ id }: { id: string }) {
   return (

@@ -36,7 +36,7 @@ export default async function Page() {
             <div className="config-seperator"/>
 
             <div className="config-section">
-                <div style={{marginBottom: 20}}><b>Reset players position</b>
+                <div style={{marginBottom: 20}}><b>Reset players place</b>
                 </div>
                 <ResetPlayersPosition/>
 

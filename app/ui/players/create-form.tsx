@@ -12,11 +12,11 @@ import { useFormState } from 'react-dom';
 import {Checkbox} from "primereact/checkbox";
 import {useState} from "react";
 
-export default function Form({redirectAddress}:{redirectAddress:string}) {
+export default function Form({prevPage}:{prevPage:string}) {
   const initialState = { message: null, errors: {} };
-  const createPlayerWithRedirectAddress = createPlayer.bind(null, redirectAddress);
+  const createPlayerWithPrevPage = createPlayer.bind(null, prevPage);
   // @ts-ignore
-  const [state, dispatch] = useFormState(createPlayerWithRedirectAddress, initialState);
+  const [state, dispatch] = useFormState(createPlayerWithPrevPage, initialState);
   const [balanceNote, setBalanceNote] = useState('new player');
   const [imageUrl, setImageUrl] = useState('');
   const [balance, setBalance] = useState(0);

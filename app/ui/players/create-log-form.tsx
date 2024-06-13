@@ -75,10 +75,10 @@ function getInitialAmount(): number {
 }
 
 
-export function UseCreditForm({player, templates, hide, redirectAddress} : {redirectAddress:string, player: PlayerForm, templates:TemplateDB[], hide?: ()=>void}) {
+export function UseCreditForm({player, templates, hide, prevPage, username} : {prevPage:string, player: PlayerForm, templates:TemplateDB[], hide?: ()=>void, username?:string}) {
   initialTemplates(templates);
   const initialState = { message: null, errors: {} };
-  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null,{ player, redirectAddress })
+  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null,{ player, prevPage, username })
 
   const initialText = getInitialText();
   const initialAmount = getInitialAmount();
@@ -208,22 +208,22 @@ export function UseCreditForm({player, templates, hide, redirectAddress} : {redi
 }
 
 
-export function SetPositionForm({player, hide, } : { player: PlayerForm, hide?: ()=>void}) {
+export function SetPositionForm({player, hide, prevPage} : { player: PlayerForm, hide?: ()=>void, prevPage:string}) {
   const initialState = { message: null, errors: {} };
-  const setPlayerPositionWithPlayerId = setPlayerPosition.bind(null,player.id)
+  const setPlayerPositionWithPlayerId = setPlayerPosition.bind(null,{ playerId: player.id, prevPage})
   // @ts-ignore
   const [state1, dispatch] = useFormState(setPlayerPositionWithPlayerId, initialState);
 
   return (
         <form action={dispatch} className="form-control">
           <label className="mb-2 block text-sm font-medium">
-            Set Player Position
+            Set Player Place
           </label>
           <div className="rounded-md  p-4 md:p-6 form-inner-control">
             {/*  balance change */}
             <div className="mb-4">
               <label htmlFor="position" className="mb-2 block text-sm font-medium">
-                Position
+                Place
               </label>
               <div className="relative mt-2 rounded-md">
                 <div className="relative">
@@ -233,6 +233,7 @@ export function SetPositionForm({player, hide, } : { player: PlayerForm, hide?: 
                       type="number"
                       step="1"
                       min={0}
+                      aria-valuemin={0}
                       placeholder="Enter position"
                       className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                       aria-describedby="position-error"
@@ -263,7 +264,7 @@ export function SetPositionForm({player, hide, } : { player: PlayerForm, hide?: 
 
 export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:TemplateDB[]}) {
   const initialState = { message: null, errors: {} };
-  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, { player, redirectAddress: '/dashboard/players' });
+  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, { player, prevPage: '/dashboard/players' });
 
   const initialText = `שחקן המיר קרדיט בפרס`;
   const initialAmount = 1000;
@@ -379,7 +380,7 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:
 
 export function AddToBalanceForm({player}: { player: PlayerForm }) {
   const initialState = {message: null, errors: {}};
-  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, { player, redirectAddress: '/dashboard/players' });
+  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, { player, prevPage: '/dashboard/players' });
   // @ts-ignore
   const [state2, dispatch] = useFormState(createPlayerNewCreditLogWithPlayerData, initialState);
 
@@ -461,7 +462,7 @@ export function AddToBalanceForm({player}: { player: PlayerForm }) {
 export default function CreateLogForm({player, templates} : {player: PlayerForm, templates:TemplateDB[]}) {
   return (
       <div style={{ display: 'flex' , justifyContent: 'space-between'}} >
-        <UseCreditForm player={player} templates={templates} redirectAddress={'/dashboard/players'}/>
+        <UseCreditForm player={player} templates={templates} prevPage={'/dashboard/players'}/>
         <UseCreditForPrizeForm player={player} templates={templates}/>
         <AddToBalanceForm player={player}/>
       </div>

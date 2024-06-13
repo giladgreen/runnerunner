@@ -10,7 +10,7 @@ export default async function Page() {
         <div>
             <RSVPAndArrivalCardWrapper/>
             <div style={{marginTop: 40}}>
-                <FinalTablePlayers title="Today's Game Players Position"/>
+                <FinalTablePlayers title="Today's Game Players Place"/>
             </div>
             <hr style={{marginBottom: 30, marginTop: 10}}/>
             <GeneralPlayersCardWrapper/>

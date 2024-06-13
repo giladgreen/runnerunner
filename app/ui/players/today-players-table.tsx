@@ -29,7 +29,7 @@ const formatPlayerEntries = (
   />
 };
 
-export default async function TodaysPlayersTable({ players}:{players: PlayersTable[]}) {
+export default async function TodaysPlayersTable({ players, username, prevPage}:{players: PlayersTable[], username?:string, prevPage?: string}) {
 
   const templates: TemplateDB[] = (await fetchTemplates()) as TemplateDB[];
   const now = new Date();
@@ -37,11 +37,13 @@ export default async function TodaysPlayersTable({ players}:{players: PlayersTab
   const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`;
   const arrivedPlayers = players.filter((player) => player.arrived).length;
   // @ts-ignore
-  const rsvpPlayers = players.filter((player) => !!player[rsvpPropName]).length;
+  const rsvpPlayers = players.filter((player) => !!player[rsvpPropName]);
+  const rsvpPlayersCount = rsvpPlayers.length;
+  // console.log('rsvpPlayers', rsvpPlayers);
   return (
     <div className="mt-6 flow-root" style={{ width: '100%'}}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        {rsvpPlayers} players RSVPed, {arrivedPlayers} arrived.
+        {rsvpPlayersCount} players RSVPed, {arrivedPlayers} arrived.
       </div>
 
       <div className="inline-block min-w-full align-middle">
@@ -170,7 +172,7 @@ export default async function TodaysPlayersTable({ players}:{players: PlayersTab
                     </td>
 
                     <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
-                      <RSVPButton player={player} prevPage={'/dashboard/todayplayers'}/>
+                      <RSVPButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'}/>
                     </td>
                     <td className="whitespace-nowrap px-3 py-3 rsvp-icon ">
                       {player.arrived ? '✅' : ''}
@@ -190,8 +192,8 @@ export default async function TodaysPlayersTable({ players}:{players: PlayersTab
                     </td>
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                       <div className="flex justify-end gap-3">
-                        <OpenModalButton player={player} prevPage={'/dashboard/todayplayers'} templates={templates}/>
-                        <OpenPositionModalButton player={player}/>
+                        <OpenModalButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'} templates={templates} username={username}/>
+                        <OpenPositionModalButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'}/>
                       </div>
 
                     </td>

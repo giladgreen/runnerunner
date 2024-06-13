@@ -15,7 +15,7 @@ export default async function Page() {
                     },
                 ]}
             />
-            <Form redirectAddress={'/dashboard/todayplayers'}/>
+            <Form prevPage={'/dashboard/todayplayers'}/>
         </main>
     );
 }
