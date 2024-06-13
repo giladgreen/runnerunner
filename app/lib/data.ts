@@ -411,15 +411,17 @@ export async function fetchPlayerByPhoneNumber(phoneNumber: string) {
       WHERE phone_number = ${phoneNumber};
     `;
 
-    const player = data.rows[0];
+    const player = data.rows && data.rows.length ? data.rows[0] : null;
+    if (player){
+      const historyData = await sql<LogDB>`
+          SELECT * FROM history
+          WHERE history.phone_number = ${player.phone_number}
+          order by history.updated_at asc;
+        `;
 
-    const historyData = await sql<LogDB>`
-      SELECT * FROM history
-      WHERE history.phone_number = ${player.phone_number}
-      order by history.updated_at asc;
-    `;
+      player.historyLog = historyData.rows;
+    }
 
-    player.historyLog = historyData.rows;
 
     return player;
 

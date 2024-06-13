@@ -7,7 +7,17 @@ import HistoryTable from "@/app/ui/players/history-table";
 export default async function Page({ params }: { params: { id: string } }) {
     const player = await fetchPlayerByPhoneNumber(params.id);
     if (!player) {
-        notFound();
+        return (
+            <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+                <div className="w-full flex-none md:w-64">
+                    <SideNavUser/>
+                </div>
+                <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
+                    No data for this player yet..
+
+                </div>
+            </div>
+        );
     }
 
     return (
