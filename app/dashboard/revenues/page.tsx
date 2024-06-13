@@ -107,7 +107,7 @@ export default async function RevenuesPage() {
                          {dateItem.players} players
                      </th>
                      <th className="px-3 py-5 font-medium">
-                         {dateItem.entries} times
+                         {dateItem.entries - dateItem.reentries} times {dateItem.reentries > 0 ? `(+ ${dateItem.reentries} re-entries)` : ``}
                      </th>
                  </tr>
                 })}

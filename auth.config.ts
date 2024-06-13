@@ -13,13 +13,14 @@ export const authConfig = {
             const isLoggedIn = !!loggedInUser;
             let isAdmin: boolean = false;
             let isWorker: boolean = false;
+            let userUUID: string | undefined = undefined;
             if (isLoggedIn) {
                 const users = (await sql<User>`SELECT * FROM users`).rows;
                 // @ts-ignore
                 const userFromDB = users.find((user) => user.phone_number === loggedInUser!.email);
                 isAdmin = Boolean(userFromDB && userFromDB.is_admin);
                 isWorker = Boolean(userFromDB && userFromDB.is_worker);
-
+                userUUID = userFromDB?.id;
             }
             const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
             const isOnWorker = nextUrl.pathname.startsWith('/worker');
@@ -43,11 +44,11 @@ export const authConfig = {
                 }
 
                 if (isWorker) {
-                    return Response.redirect(new URL(`/worker/${loggedInUser.email}`, nextUrl));
+                    return Response.redirect(new URL(`/worker/${userUUID}`, nextUrl));
                 }
 
                 // @ts-ignore
-                return Response.redirect(new URL(`/personal/${loggedInUser.email}`, nextUrl));
+                return Response.redirect(new URL(`/personal/${userUUID}`, nextUrl));
             }
             return true;
         },

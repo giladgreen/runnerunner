@@ -134,6 +134,7 @@ async function seedPlayers(client) {
     tuesday_rsvp BOOLEAN DEFAULT FALSE,
     wednesday_rsvp BOOLEAN DEFAULT FALSE,
     thursday_rsvp BOOLEAN DEFAULT FALSE,
+    friday_rsvp BOOLEAN DEFAULT FALSE,
     saturday_rsvp BOOLEAN DEFAULT FALSE,
     position INT DEFAULT 0
   );
@@ -147,8 +148,8 @@ async function seedPlayers(client) {
         (player, index) => {
           const rsvp = index % 2 === 0 ? true : false;
           return client.sql`
-        INSERT INTO players (name, phone_number, balance, image_url, notes, sunday_rsvp, monday_rsvp, tuesday_rsvp, wednesday_rsvp, thursday_rsvp, saturday_rsvp)
-        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.image_url ?? '/players/default.png'}, ${player.notes ?? ''}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp})
+        INSERT INTO players (name, phone_number, balance, image_url, notes, sunday_rsvp, monday_rsvp, tuesday_rsvp, wednesday_rsvp, thursday_rsvp, friday_rsvp, saturday_rsvp)
+        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.image_url ?? '/players/default.png'}, ${player.notes ?? ''}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp})
         ON CONFLICT (id) DO NOTHING;
       `
         },

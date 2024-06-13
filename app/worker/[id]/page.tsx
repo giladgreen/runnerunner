@@ -1,4 +1,4 @@
-import {fetchTodayPlayers, fetchUserByPhoneNumber} from "@/app/lib/data";
+import {fetchTodayPlayers, fetchUserById} from "@/app/lib/data";
 import {notFound} from "next/navigation";
 
 import SideNavUser from "@/app/ui/dashboard/sidenav-user";
@@ -9,8 +9,8 @@ import TodaysPlayersTable from "@/app/ui/players/today-players-table";
 export default async function Page({ params, searchParams }: { params: { id: string }, searchParams?: {
         query?: string;
     } }) {
-    const connectedUserPhoneNumber = params.id;
-    const user = await fetchUserByPhoneNumber(connectedUserPhoneNumber);
+    const connectedUserId = params.id;
+    const user = await fetchUserById(connectedUserId);
     if (!user) {
         notFound();
     }
@@ -31,10 +31,10 @@ export default async function Page({ params, searchParams }: { params: { id: str
                     </div>
                     <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                         <Search placeholder="search players"/>
-                        <CreateNewTodayPlayer connectedUserPhoneNumber={connectedUserPhoneNumber}/>
+                        <CreateNewTodayPlayer connectedUserId={connectedUserId}/>
                     </div>
                     <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                        <TodaysPlayersTable players={players} prevPage={`/worker/${connectedUserPhoneNumber}`} username={user.name}/>
+                        <TodaysPlayersTable players={players} prevPage={`/worker/${connectedUserId}`} username={user.name}/>
                     </div>
 
                 </div>

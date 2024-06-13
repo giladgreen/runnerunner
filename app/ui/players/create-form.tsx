@@ -25,6 +25,7 @@ export default function Form({prevPage}:{prevPage:string}) {
   const [tuesdayChecked, setTuesdayChecked] = useState(false);
   const [wednesdayChecked, setWednesdayChecked] = useState(false);
   const [thursdayChecked, setThursdayChecked] = useState(false);
+  const [fridayChecked, setFridayChecked] = useState(false);
   const [saturdayChecked, setSaturdayChecked] = useState(false);
   return (<>
     <form action={dispatch}>
@@ -223,6 +224,13 @@ export default function Form({prevPage}:{prevPage:string}) {
                             onChange={(e) => setThursdayChecked(!!e.checked)}
                   />
                   <label htmlFor="thursday_rsvp" className="ml-2">Thursday</label>
+                </div>
+                <div className="flex align-items-center">
+                  <Checkbox inputId="friday_rsvp" name="friday_rsvp" value="friday_rsvp"
+                            checked={fridayChecked}
+                            onChange={(e) => setFridayChecked(!!e.checked)}
+                  />
+                  <label htmlFor="friday_rsvp" className="ml-2">Friday</label>
                 </div>
                 <div className="flex align-items-center">
                   <Checkbox inputId="saturday_rsvp" name="saturday_rsvp" value="saturday_rsvp"

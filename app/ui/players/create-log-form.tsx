@@ -92,6 +92,7 @@ export function UseCreditForm({player, templates, hide, prevPage, username} : {p
   const [type, setType] = useState(useCredit ? 'credit' : 'cash');
 
   return (
+      <div>
         <form action={dispatch} className="form-control">
           <label className="mb-2 block text-sm font-medium">
             Use credit
@@ -199,11 +200,13 @@ export function UseCreditForm({player, templates, hide, prevPage, username} : {p
 
           </div>
           <div className="mt-6 flex justify-end gap-4">
-            {hide && <Button onClick={hide}>Cancel</Button>}
+
             <Button type="submit" onClick={()=> hide?.()}>Use</Button>
 
           </div>
         </form>
+        {hide && <Button onClick={hide} style={{ marginTop: -52, marginLeft:20}} >Cancel</Button>}
+      </div>
   );
 }
 
@@ -214,7 +217,7 @@ export function SetPositionForm({player, hide, prevPage} : { player: PlayerForm,
   // @ts-ignore
   const [state1, dispatch] = useFormState(setPlayerPositionWithPlayerId, initialState);
 
-  return (
+  return (<div>
         <form action={dispatch} className="form-control">
           <label className="mb-2 block text-sm font-medium">
             Set Player Place
@@ -254,11 +257,13 @@ export function SetPositionForm({player, hide, prevPage} : { player: PlayerForm,
 
           </div>
           <div className="mt-6 flex justify-end gap-4">
-            {hide && <Button onClick={hide}>Cancel</Button>}
+
             <Button type="submit" onClick={()=> hide?.()}>Set</Button>
 
           </div>
         </form>
+        {hide && <Button onClick={hide} style={{ marginTop: -52, marginLeft:20}} >Cancel</Button>}
+      </div>
   );
 }
 

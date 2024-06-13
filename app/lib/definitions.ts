@@ -18,6 +18,7 @@ export type rsvp = {
   tuesday_rsvp: boolean;
   wednesday_rsvp: boolean;
   thursday_rsvp: boolean;
+  friday_rsvp: boolean;
   saturday_rsvp: boolean;
 }
 export type MVPPlayer = {
@@ -63,6 +64,7 @@ export type PlayersTable = {
   tuesday_rsvp: boolean;
   wednesday_rsvp: boolean;
   thursday_rsvp: boolean;
+  friday_rsvp: boolean;
   saturday_rsvp: boolean;
   arrived: boolean;
   entries: number;
@@ -81,6 +83,7 @@ export type PlayerForm = {
   tuesday_rsvp?: boolean;
   wednesday_rsvp?: boolean;
   thursday_rsvp?: boolean;
+  friday_rsvp?: boolean;
   saturday_rsvp?: boolean;
 };
 export type PlayerDB = {

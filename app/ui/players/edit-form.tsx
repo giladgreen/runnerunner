@@ -28,6 +28,7 @@ export default function EditPlayerForm({
     const [tuesdayChecked, setTuesdayChecked] = useState(!!player.tuesday_rsvp);
     const [wednesdayChecked, setWednesdayChecked] = useState(!!player.wednesday_rsvp);
     const [thursdayChecked, setThursdayChecked] = useState(!!player.thursday_rsvp);
+    const [fridayChecked, setFridayChecked] = useState(!!player.friday_rsvp);
     const [saturdayChecked, setSaturdayChecked] = useState(!!player.saturday_rsvp);
   return (
       <>
@@ -132,6 +133,13 @@ export default function EditPlayerForm({
                                                 onChange={(e) => setThursdayChecked(!!e.checked)}
                                         />
                                         <label htmlFor="thursday_rsvp" className="ml-2">Thursday</label>
+                                </div>
+                                 <div className="flex align-items-center">
+                                        <Checkbox inputId="friday_rsvp" name="friday_rsvp" value="friday_rsvp"
+                                                checked={fridayChecked}
+                                                onChange={(e) => setFridayChecked(!!e.checked)}
+                                        />
+                                        <label htmlFor="friday_rsvp" className="ml-2">Friday</label>
                                 </div>
                                 <div className="flex align-items-center">
                                     <Checkbox inputId="saturday_rsvp" name="saturday_rsvp" value="saturday_rsvp"

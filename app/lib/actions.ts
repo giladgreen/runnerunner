@@ -38,6 +38,7 @@ const UpdatePlayer = z.object({
     tuesday_rsvp: z.boolean().optional(),
     wednesday_rsvp: z.boolean().optional(),
     thursday_rsvp: z.boolean().optional(),
+    friday_rsvp: z.boolean().optional(),
     saturday_rsvp: z.boolean().optional()
 });
 
@@ -84,6 +85,7 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
     const tuesday_rsvp = !!formData.get('tuesday_rsvp');
     const wednesday_rsvp = !!formData.get('wednesday_rsvp');
     const thursday_rsvp = !!formData.get('thursday_rsvp');
+    const friday_rsvp = !!formData.get('friday_rsvp');
     const saturday_rsvp = !!formData.get('saturday_rsvp');
     const name = formData.get('name') as string;
     const balance = formData.get('balance') as string;
@@ -95,8 +97,8 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
 
     try {
         await sql`
-      INSERT INTO players (name, balance, phone_number, image_url, notes, sunday_rsvp, monday_rsvp, tuesday_rsvp, wednesday_rsvp, thursday_rsvp, saturday_rsvp)
-      VALUES (${name}, ${balance}, ${phoneNumber}, ${image_url} , ${notes ?? ''}, ${sunday_rsvp}, ${monday_rsvp}, ${tuesday_rsvp}, ${wednesday_rsvp}, ${thursday_rsvp}, ${saturday_rsvp})
+      INSERT INTO players (name, balance, phone_number, image_url, notes, sunday_rsvp, monday_rsvp, tuesday_rsvp, wednesday_rsvp, thursday_rsvp, friday_rsvp,saturday_rsvp)
+      VALUES (${name}, ${balance}, ${phoneNumber}, ${image_url} , ${notes ?? ''}, ${sunday_rsvp}, ${monday_rsvp}, ${tuesday_rsvp}, ${wednesday_rsvp}, ${thursday_rsvp}, ${friday_rsvp}, ${saturday_rsvp})
     `;
 
         await sql`
@@ -285,6 +287,7 @@ export async function updatePlayer(
     const tuesday_rsvp = !!formData.get('tuesday_rsvp');
     const wednesday_rsvp = !!formData.get('wednesday_rsvp');
     const thursday_rsvp = !!formData.get('thursday_rsvp');
+    const friday_rsvp = !!formData.get('friday_rsvp');
     const saturday_rsvp = !!formData.get('saturday_rsvp');
     const image_url = (formData.get('image_url') as string);
 
@@ -294,7 +297,7 @@ export async function updatePlayer(
     try {
         await sql`
       UPDATE players
-      SET name = ${name}, image_url = ${image_url}, notes = ${notes}, updated_at=${date} , sunday_rsvp = ${sunday_rsvp}, monday_rsvp = ${monday_rsvp}, tuesday_rsvp = ${tuesday_rsvp}, wednesday_rsvp = ${wednesday_rsvp}, thursday_rsvp = ${thursday_rsvp}, saturday_rsvp = ${saturday_rsvp}
+      SET name = ${name}, image_url = ${image_url}, notes = ${notes}, updated_at=${date} , sunday_rsvp = ${sunday_rsvp}, monday_rsvp = ${monday_rsvp}, tuesday_rsvp = ${tuesday_rsvp}, wednesday_rsvp = ${wednesday_rsvp}, thursday_rsvp = ${thursday_rsvp},friday_rsvp=${friday_rsvp}, saturday_rsvp = ${saturday_rsvp}
       WHERE id = ${id}
     `;
     } catch (error) {
@@ -361,7 +364,7 @@ export async function fetchTemplates(
 
 export async function resetAllRsvp() {
     try {
-        await sql`UPDATE players SET sunday_rsvp = false, monday_rsvp = false, tuesday_rsvp = false, wednesday_rsvp = false, thursday_rsvp = false, saturday_rsvp = false`;
+        await sql`UPDATE players SET sunday_rsvp = false, monday_rsvp = false, tuesday_rsvp = false, wednesday_rsvp = false, thursday_rsvp = false, friday_rsvp=false, saturday_rsvp = false`;
     } catch (error) {
         console.log('## resetAllRsvp error', error)
 
@@ -466,7 +469,7 @@ export async function rsvpPlayerForDay(phone_number:string, rsvpAttribute: strin
     const player = playerResult.rows[0]
     try {
         // @ts-ignore
-        await sql`UPDATE players SET sunday_rsvp = ${rsvpAttribute === 'sunday_rsvp' ? val : player['sunday_rsvp'] as boolean}, monday_rsvp = ${rsvpAttribute === 'monday_rsvp' ? val : player['monday_rsvp'] as boolean}, tuesday_rsvp = ${rsvpAttribute === 'tuesday_rsvp' ? val : player['tuesday_rsvp'] as boolean}, wednesday_rsvp = ${rsvpAttribute === 'wednesday_rsvp' ? val : player['wednesday_rsvp'] as boolean}, thursday_rsvp = ${rsvpAttribute === 'thursday_rsvp' ? val : player['thursday_rsvp'] as boolean}, saturday_rsvp = ${rsvpAttribute === 'saturday_rsvp' ? val : player['saturday_rsvp'] as boolean} where phone_number = ${phone_number};`;
+        await sql`UPDATE players SET sunday_rsvp = ${rsvpAttribute === 'sunday_rsvp' ? val : player['sunday_rsvp'] as boolean}, monday_rsvp = ${rsvpAttribute === 'monday_rsvp' ? val : player['monday_rsvp'] as boolean}, tuesday_rsvp = ${rsvpAttribute === 'tuesday_rsvp' ? val : player['tuesday_rsvp'] as boolean}, wednesday_rsvp = ${rsvpAttribute === 'wednesday_rsvp' ? val : player['wednesday_rsvp'] as boolean}, thursday_rsvp = ${rsvpAttribute === 'thursday_rsvp' ? val : player['thursday_rsvp'] as boolean},friday_rsvp = ${rsvpAttribute === 'friday_rsvp' ? val : player['friday_rsvp'] as boolean}, saturday_rsvp = ${rsvpAttribute === 'saturday_rsvp' ? val : player['saturday_rsvp'] as boolean} where phone_number = ${phone_number};`;
     } catch (error) {
         console.error('rsvpPlayerForDay Error:', error);
         return false;

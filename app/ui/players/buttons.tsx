@@ -16,8 +16,8 @@ export function CreateNewPlayer() {
 }
 
 
-export function CreateNewTodayPlayer({connectedUserPhoneNumber}:{connectedUserPhoneNumber?: string}) {
-  const href = connectedUserPhoneNumber ? `/worker/${connectedUserPhoneNumber}/create` : '/dashboard/todayplayers/create';
+export function CreateNewTodayPlayer({connectedUserId}:{connectedUserId?: string}) {
+  const href = connectedUserId ? `/worker/${connectedUserId}/create` : '/dashboard/todayplayers/create';
   return (
     <Link
       href={href}

@@ -1,11 +1,10 @@
 import SideNavUser from "@/app/ui/dashboard/sidenav-user";
-import {formatCurrency, formatDateToLocal, getTime} from "@/app/lib/utils";
-import {fetchPlayerByPhoneNumber} from "@/app/lib/data";
-import {notFound} from "next/navigation";
+import {formatCurrency} from "@/app/lib/utils";
+import {fetchPlayerByUserId} from "@/app/lib/data";
 import Image from "next/image";
 import HistoryTable from "@/app/ui/players/history-table";
 export default async function Page({ params }: { params: { id: string } }) {
-    const player = await fetchPlayerByPhoneNumber(params.id);
+    const player = await fetchPlayerByUserId(params.id);
     if (!player) {
         return (
             <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
