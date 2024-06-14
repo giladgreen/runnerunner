@@ -4,7 +4,6 @@ import {formatDateToLocal} from "@/app/lib/utils";
 import {ImportPlayers, ExportPlayers, ResetRSVP, ResetPlayersPosition} from "@/app/ui/players/client-buttons";
 import {PlayerDB} from "@/app/lib/definitions";
 import React from "react";
-import { PencilIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export default async function Page() {

@@ -1,5 +1,5 @@
 import { sql } from '@vercel/postgres';
-import {revalidatePath, unstable_noStore as noStore} from 'next/cache';
+import { unstable_noStore as noStore} from 'next/cache';
 
 import {
   BugDB, Counts,
@@ -7,9 +7,6 @@ import {
   MVPPlayerRaw, PlayerDB,
   TournamentDB, User
 } from './definitions';
-
-import {redirect} from "next/navigation";
-
 
 export async function fetchMVPPlayers() {
   noStore();

@@ -2,7 +2,7 @@ import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
-import {fetchDebtPlayers, fetchMVPPlayers} from "@/app/lib/data";
+import {fetchDebtPlayers} from "@/app/lib/data";
 import {DebtPlayerRaw} from "@/app/lib/definitions";
 import {formatCurrency} from "@/app/lib/utils";
 import Link from "next/link";

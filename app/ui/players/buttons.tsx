@@ -1,7 +1,6 @@
 import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import React from "react";
-import {Button} from "@/app/ui/button";
 
 export function CreateNewPlayer() {
   return (

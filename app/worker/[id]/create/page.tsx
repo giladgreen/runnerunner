@@ -1,5 +1,4 @@
 import Form from '@/app/ui/players/create-form';
-import SideNav from "@/app/ui/dashboard/sidenav";
 import SideNavUser from "@/app/ui/dashboard/sidenav-user";
 
 export default async function Page({ params }: { params: { id: string }}) {

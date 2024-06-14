@@ -12,9 +12,6 @@ import {PlayerDB, PlayerForm, TournamentDB} from "@/app/lib/definitions";
 import {useEffect, useState} from "react";
 
 
-
-
-
 export function UseCreditForm({player, tournaments, hide, prevPage, username} : {prevPage:string, player: PlayerDB, tournaments:TournamentDB[], hide?: ()=>void, username?:string}) {
 
   const initialState = { message: null, errors: {} };

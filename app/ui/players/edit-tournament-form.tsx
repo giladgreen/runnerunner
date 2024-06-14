@@ -1,5 +1,5 @@
 'use client';
-import {State, updateTournament} from '@/app/lib/actions';
+import { updateTournament} from '@/app/lib/actions';
 
 import {TournamentForm} from '@/app/lib/definitions';
 

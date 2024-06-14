@@ -244,17 +244,6 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
     revalidatePath(prevPage);
     redirect(prevPage);
 }
-export async function fetchFinalTablePlayers() {
-    noStore();
-    try {
-        const allPlayersResult = await sql<PlayerDB>`SELECT * FROM players WHERE position > 0 ORDER BY position ASC`;
-        return allPlayersResult.rows;
-    } catch (error) {
-        console.error('Database Error:', error);
-        throw new Error('Failed to fetch final table players data.');
-    }
-}
-
 
 export async function createPlayerNewCreditLog(data : {player: PlayerForm, prevPage:string}, _prevState: State, formData: FormData){
     return createPlayerLog(data.player, formData, data.prevPage, false, 'super-admin');
@@ -342,22 +331,6 @@ export async function updateTournament(
 
     revalidatePath('/dashboard/configurations/tournaments');
     redirect('/dashboard/configurations/tournaments');
-}
-
-export async function fetchTournament(
-
-) {
-    noStore();
-    try {
-        const data = await sql<TournamentDB>`
-      SELECT * FROM tournaments ORDER BY i ASC
-     `;
-
-        return data.rows;
-    } catch (error) {
-        console.log('## fetchTournament error', error)
-        return { message: 'Database Error: Failed to fetch Tournament .' };
-    }
 }
 
 

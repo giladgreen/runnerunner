@@ -15,7 +15,6 @@ import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 import {Suspense} from "react";
 import {CardsSkeleton} from "@/app/ui/skeletons";
 import Image from "next/image";
-import Link from "next/link";
 
 const translation = {
     Sunday: 'יום ראשון',

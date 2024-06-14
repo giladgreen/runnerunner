@@ -1,5 +1,4 @@
 import { CreateNewTodayPlayer } from '@/app/ui/players/buttons';
-import { lusitana } from '@/app/ui/fonts';
 import TodaysPlayersTable from "@/app/ui/players/today-players-table";
 import Search from "@/app/ui/todaysearch";
 import {fetchTodayPlayers} from "@/app/lib/data";

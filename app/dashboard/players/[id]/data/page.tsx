@@ -2,7 +2,6 @@ import Breadcrumbs from '@/app/ui/players/breadcrumbs';
 import {fetchPlayerById, fetchTournaments} from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 import {formatCurrency} from "@/app/lib/utils";
-import Form from "@/app/ui/players/create-log-form";
 
 import HistoryTable from "@/app/ui/players/history-table";
 import CreateLogForm from "@/app/ui/players/create-log-form";

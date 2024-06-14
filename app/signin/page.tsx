@@ -1,6 +1,5 @@
 
 import SignInForm from "@/app/ui/sign-in-form";
-import SignUpForm from "@/app/ui/sign-up-form";
 
 export default function SignInPage() {
     return (

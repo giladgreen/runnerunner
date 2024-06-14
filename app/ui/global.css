@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/*body{*/
-/*  direction: rtl;*/
-/*}*/
-
 .top-header {
   color: white;
   /*direction: ltr;*/

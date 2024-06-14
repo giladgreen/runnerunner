@@ -3,8 +3,6 @@ import { fetchAllUsers } from '@/app/lib/data';
 import React from "react";
 import {User} from "@/app/lib/definitions";
 import {updateIsUserAdmin} from "@/app/lib/actions";
-import {CheckCircleIcon} from "@heroicons/react/24/solid";
-import {router} from "next/client";
 
 export default async function Page() {
     const users = await fetchAllUsers();
