@@ -25,7 +25,7 @@ export default async function RevenuesPage() {
                         <b>Players Count</b>
                     </th>
                     <th className="px-3 py-5 font-medium">
-                        <b>Entries</b>
+                        <b>Buyins</b>
                     </th>
                 </tr>
                 </thead>

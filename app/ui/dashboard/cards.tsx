@@ -125,13 +125,13 @@ export async function RSVPAndArrivalCardWrapper() {
 
     </div>
 
-    const rsvpStyle = {padding: 50, fontSize: 40}
+    const oneLinerStyle = {padding: 50, fontSize: 40}
     return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" style={{marginBottom: 20, width: '100%'}} >
         <Suspense fallback={<CardsSkeleton count={4}/>}>
-            <Card title={`${todayTournament.day} RSVP`} value={<div style={rsvpStyle}>{rsvpForTodayText}</div>} type="rsvp"/>
-            <Card title={`${todayTournament.day} Players`} value={<div  style={{padding: 50, fontSize: 40}}>{arrivedToday}</div>} type="arrived"/>
-            <Card title={'Re Entries'} value={<div  style={{padding: 50, fontSize: 40}}>{reEntriesCount}</div>} type="money"/>
-            <Card title={`${todayTournament.day}'s income`} value={todayIncome} type="money"/>
+            <Card title={`RSVP`} value={<div style={oneLinerStyle}>{rsvpForTodayText}</div>} type="rsvp"/>
+            <Card title={`Players`} value={<div  style={oneLinerStyle}>{arrivedToday}</div>} type="arrived"/>
+            <Card title={'Re Entries'} value={<div  style={oneLinerStyle}>{reEntriesCount}</div>} type="money"/>
+            <Card title={`Income`} value={todayIncome} type="money"/>
         </Suspense>
     </div>
 }
