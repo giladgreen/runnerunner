@@ -103,6 +103,7 @@ export type TournamentForm = {
   buy_in: number;
   re_buy: number;
   max_players: number;
+  rsvp_required: boolean;
 };
 
 
@@ -127,6 +128,7 @@ export type TournamentDB = {
   buy_in: number;
   re_buy: number;
   max_players: number;
+  rsvp_required: boolean;
 };
 
 

@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import {useFormState} from "react-dom";
 import {PencilIcon} from "@heroicons/react/24/outline";
+import {Checkbox} from "primereact/checkbox";
+import {useState} from "react";
 
 export default function EditTournamentForm({
    tournament,
@@ -17,6 +19,7 @@ export default function EditTournamentForm({
   const updateTournamentWithId = updateTournament.bind(null, tournament.id);
 
   const [state, dispatch] = useFormState(updateTournamentWithId, initialState);
+  const [rsvpRequired, setRsvpRequired] = useState(tournament.rsvp_required);
 
   return (
       <form action={dispatch}>
@@ -121,7 +124,7 @@ export default function EditTournamentForm({
                   </div>
               </div>
                 {/* max_players */}
-              <div className="mb-4">
+              <div className="mb-4 rsvp-section" >
                   <label htmlFor="max_players" className="mb-2 block text-sm font-medium">
                       Max Players
                   </label>
@@ -140,6 +143,8 @@ export default function EditTournamentForm({
                       </div>
                       <PencilIcon
                           className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
+
+
                       <div id="max_players-error" aria-live="polite" aria-atomic="true">
                           {state.errors?.max_players &&
                               state.errors.max_players.map((error: string) => (
@@ -149,6 +154,14 @@ export default function EditTournamentForm({
                               ))}
                       </div>
                   </div>
+                  <label htmlFor="rsvp_required" className="mb-2 block text-sm font-medium" style={{marginTop:10}}>
+                      RSVP Required
+                  </label>
+                  <Checkbox inputId="rsvp_required" name="rsvp_required" value="rsvp_required"
+                            checked={rsvpRequired}
+                            onChange={(e) => setRsvpRequired(!!e.checked)}
+                  />
+
               </div>
 
           </div>

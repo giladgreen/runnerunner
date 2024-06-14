@@ -18,6 +18,7 @@ const UpdateTournament =  z.object({
     buy_in: z.coerce.number(),
     re_buy: z.coerce.number(),
     max_players: z.coerce.number(),
+    rsvp_required: z.coerce.boolean(),
     name: z.string()
 });
 
@@ -48,6 +49,7 @@ export type State = {
         buy_in?: string[];
         re_buy?: string[];
         max_players?: string[];
+        rsvp_required?: string[];
     };
     message?: string | null;
 };
@@ -313,6 +315,7 @@ export async function updateTournament(
         buy_in: formData.get('buy_in'),
         re_buy: formData.get('re_buy'),
         max_players: formData.get('max_players'),
+        rsvp_required: formData.get('rsvp_required'),
     });
 
     if (!validatedFields.success) {
@@ -323,13 +326,13 @@ export async function updateTournament(
         };
     }
 
-    const { name, buy_in, re_buy, max_players } = validatedFields.data;
+    const { name, buy_in, re_buy, max_players, rsvp_required } = validatedFields.data;
     const date = new Date().toISOString();
 
     try {
         await sql`
       UPDATE tournaments
-      SET name = ${name}, buy_in = ${buy_in},re_buy = ${re_buy},max_players = ${max_players}, updated_at=${date}
+      SET name = ${name}, buy_in = ${buy_in},re_buy = ${re_buy},max_players = ${max_players},rsvp_required=${rsvp_required}, updated_at=${date}
       WHERE id = ${id}
     `;
     } catch (error) {

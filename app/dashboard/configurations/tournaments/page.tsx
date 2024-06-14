@@ -29,6 +29,9 @@ export default async function Page() {
                         Max players
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
+                        RSVP Required
+                    </th>
+                    <th scope="col" className="px-3 py-5 font-medium">
                         <span className="sr-only">Edit</span>
                     </th>
                 </tr>
@@ -53,6 +56,9 @@ export default async function Page() {
                         </td>
                         <td className="whitespace-nowrap px-3 py-3">
                             {tournament.max_players}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-3">
+                            {tournament.rsvp_required ? 'Yes' : 'No'}
                         </td>
                         <td className="whitespace-nowrap py-3 pl-6 pr-3">
 

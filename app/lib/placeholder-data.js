@@ -382,42 +382,49 @@ const tournaments = [
   name: 'טורניר קיסריה',
   buy_in: 300,
       max_players:100,
+      rsvp_required: true
   },
   {
     day: 'Monday',
     name: 'טורניר תל אביב',
     buy_in: 300,
     max_players:100,
+    rsvp_required: true
   },
   {
     day: 'Tuesday',
     name: 'טורניר רעננה',
     buy_in: 300,
     max_players:100,
+    rsvp_required: true
   },
   {
     day: 'Wednesday',
     name: 'טורניר כפר סבא',
     buy_in: 250,
     max_players:100,
+    rsvp_required: true
   },
   {
     day: 'Thursday',
     name: 'טורניר ראשל״צ',
     buy_in: 400,
     max_players:100,
+    rsvp_required: true
   },
   {
     day: 'Friday',
     name: '',
     buy_in: 0,
     max_players:100,
+    rsvp_required: false
   },
   {
     day: 'Saturday',
     name: 'טורניר ראשל״צ',
     buy_in: 250,
     max_players:100,
+    rsvp_required: false
   }]
 
 

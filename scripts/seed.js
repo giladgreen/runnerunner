@@ -23,6 +23,7 @@ async function seedTournaments(client) {
         buy_in INT NOT NULL,
         re_buy INT NOT NULL,
         max_players INT NOT NULL,
+        rsvp_required BOOLEAN NOT NULL,
         updated_at timestamp NOT NULL DEFAULT now()
       );
     `;
@@ -33,8 +34,8 @@ async function seedTournaments(client) {
     const insertedTournaments = await Promise.all(
         tournaments.map(async (tournament, index) => {
         return client.sql`
-        INSERT INTO tournaments (day, name, buy_in, re_buy, max_players, i)
-        VALUES (${tournament.day}, ${tournament.name}, ${tournament.buy_in}, ${Math.max(tournament.buy_in - 100, 0)}, ${tournament.max_players}, ${index+1});
+        INSERT INTO tournaments (day, name, buy_in, re_buy, max_players, rsvp_required,i)
+        VALUES (${tournament.day}, ${tournament.name}, ${tournament.buy_in}, ${Math.max(tournament.buy_in - 100, 0)}, ${tournament.max_players},${tournament.rsvp_required}, ${index+1});
       `;
       }),
     );
