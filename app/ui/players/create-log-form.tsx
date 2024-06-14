@@ -57,17 +57,21 @@ export function UseCreditForm({player, tournaments, hide, prevPage, username} : 
   }
   const todayHistory = historyLog.filter(log => isToday(new Date(log.updated_at)));
   const isRebuy = todayHistory.length > 0;
-  console.log('## UseCreditForm,',player.name,' isRebuy:', isRebuy);
   const entryText = isRebuy ? 'כניסה נוספת' : 'כניסה';
   const note = `${tournament!.name} - ${entryText}`;
-  const amount = isRebuy ?  tournament!.re_buy : tournament!.buy_in;
+  const initialAmount = isRebuy ?  tournament!.re_buy : tournament!.buy_in;
   // @ts-ignore
   const [state1, dispatch] = useFormState(createPlayerUsageLogWithPlayerData, initialState);
-
+  const [amount, setAmount] = useState(initialAmount);
 
   const useCredit = amount < player.balance;
   const [type, setType] = useState(useCredit ? 'credit' : 'cash');
 
+  useEffect(() => {
+    if (amount !== initialAmount) {
+      setAmount(initialAmount);
+    }
+  }, [player, tournaments]);
   return (
       <div>
         <form action={dispatch} className="form-control">
@@ -89,7 +93,7 @@ export function UseCreditForm({player, tournaments, hide, prevPage, username} : 
                       className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                       aria-describedby="change-error"
                       value={amount}
-                      disabled
+                      onChange={(e) => {  setAmount(Number(e.target.value)) }}
                   />
                   <BanknotesIcon
                       className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
@@ -119,8 +123,7 @@ export function UseCreditForm({player, tournaments, hide, prevPage, username} : 
                     className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                     aria-describedby="note-error"
                     required
-                    value={note}
-                    disabled
+                    defaultValue={note}
                 />
 
                 <PencilIcon

@@ -97,6 +97,11 @@ export async function fetchRSVPAndArrivalData() {
 
     const todayHistoryResults = await sql`SELECT phone_number, type, change FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
     const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' );
+
+    const todayTournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${dayOfTheWeek}`;
+    const todayTournament = todayTournamentResult.rows[0];
+    const todayTournamentMaxPlayers = todayTournament.rsvp_required ? todayTournament?.max_players : null;
+
     if (todayHistory.length === 0){
       return {
         rsvpForToday,
@@ -104,7 +109,8 @@ export async function fetchRSVPAndArrivalData() {
         todayCreditIncome: 0,
         todayCashIncome: 0,
         todayTransferIncome: 0,
-        reEntriesCount: 0
+        reEntriesCount: 0,
+        todayTournamentMaxPlayers
       };
     }
     const reEntriesCount = todayHistory.length - (Array.from(new Set(todayHistory.map(({ phone_number }) => phone_number)))).length;
@@ -121,7 +127,8 @@ export async function fetchRSVPAndArrivalData() {
       todayCreditIncome: todayCreditIncome < 0 ? -1 * todayCreditIncome : todayCreditIncome,
       todayCashIncome: todayCashIncome < 0 ? -1 * todayCashIncome : todayCashIncome,
       todayTransferIncome: todayTransferIncome < 0 ? -1 * todayTransferIncome : todayTransferIncome,
-      reEntriesCount
+      reEntriesCount,
+      todayTournamentMaxPlayers
     };
   } catch (error) {
     console.error('Database Error:', error);

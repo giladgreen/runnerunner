@@ -44,15 +44,17 @@ export async function GeneralPlayersCardWrapper() {
 }
 
 export async function RSVPAndArrivalCardWrapper() {
+
     const {
         rsvpForToday,
+        todayTournamentMaxPlayers,
         arrivedToday,
         todayCreditIncome,
         todayCashIncome,
         todayTransferIncome,
         reEntriesCount
     } = await fetchRSVPAndArrivalData();
-
+    const rsvpForTodayText =`${rsvpForToday}${todayTournamentMaxPlayers ?` / ${todayTournamentMaxPlayers}`:''}`
     const todayIncome = <div>
         <div style={{fontSize: 20, marginBottom:10}}>
             <b>{formatCurrency(todayCreditIncome + todayCashIncome + todayTransferIncome)}</b>
@@ -113,9 +115,10 @@ export async function RSVPAndArrivalCardWrapper() {
 
     </div>
 
+    const rsvpStyle = {padding: 50, fontSize: 40}
     return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" style={{marginBottom: 20, width: '100%'}} >
         <Suspense fallback={<CardsSkeleton count={4}/>}>
-            <Card title={'RSVP for Today'} value={<div style={{padding: 50, fontSize: 40}}>{rsvpForToday}</div>} type="rsvp"/>
+            <Card title={'RSVP for Today'} value={<div style={rsvpStyle}>{rsvpForTodayText}</div>} type="rsvp"/>
             <Card title={'Arrived Today'} value={<div  style={{padding: 50, fontSize: 40}}>{arrivedToday}</div>} type="arrived"/>
             <Card title={'Re Entries'} value={<div  style={{padding: 50, fontSize: 40}}>{reEntriesCount}</div>} type="money"/>
             <Card title={"Today's income"} value={todayIncome} type="money"/>
