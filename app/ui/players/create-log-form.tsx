@@ -58,11 +58,12 @@ export function UseCreditForm({player, tournaments, hide, prevPage, username} : 
   const todayHistory = historyLog.filter(log => isToday(new Date(log.updated_at)));
   const isRebuy = todayHistory.length > 0;
   const entryText = isRebuy ? 'כניסה נוספת' : 'כניסה';
-  const note = `${tournament!.name} - ${entryText}`;
+  const initialNote = `${tournament!.name} - ${entryText}`;
   const initialAmount = isRebuy ?  tournament!.re_buy : tournament!.buy_in;
   // @ts-ignore
   const [state1, dispatch] = useFormState(createPlayerUsageLogWithPlayerData, initialState);
   const [amount, setAmount] = useState(initialAmount);
+  const [note, setNote] = useState(initialNote);
 
   const useCredit = amount < player.balance;
   const [type, setType] = useState(useCredit ? 'credit' : 'cash');
@@ -70,6 +71,10 @@ export function UseCreditForm({player, tournaments, hide, prevPage, username} : 
   useEffect(() => {
     if (amount !== initialAmount) {
       setAmount(initialAmount);
+    }
+
+    if (note !== initialNote) {
+      setNote(initialNote);
     }
   }, [player, tournaments]);
   return (
@@ -123,7 +128,9 @@ export function UseCreditForm({player, tournaments, hide, prevPage, username} : 
                     className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                     aria-describedby="note-error"
                     required
-                    defaultValue={note}
+                    value={note}
+                    onChange={(e) => {  setNote(e.target.value) }}
+
                 />
 
                 <PencilIcon

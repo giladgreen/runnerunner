@@ -214,6 +214,24 @@ console.log('## fetchTodayPlayers. query:', query)
   try {
     const now = new Date();
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+    console.log('## dayOfTheWeek:', dayOfTheWeek)
+
+    const oneHour = new Date((new Date()).getTime() + 60*60*1000);
+    console.log('## dayOfTheWeek in 1 hour from now:', oneHour.toLocaleString('en-us', { weekday: 'long' }))
+
+
+    const twoHour = new Date((new Date()).getTime() + 2*60*60*1000);
+    console.log('## dayOfTheWeek in 2 hour from now:', twoHour.toLocaleString('en-us', { weekday: 'long' }))
+
+
+    const threeHour = new Date((new Date()).getTime() + 3*60*60*1000);
+    console.log('## dayOfTheWeek in 3 hour from now:', threeHour.toLocaleString('en-us', { weekday: 'long' }))
+
+
+    const fourHour = new Date((new Date()).getTime() + 4*60*60*1000);
+    console.log('## dayOfTheWeek in 4 hour from now:', fourHour.toLocaleString('en-us', { weekday: 'long' }))
+
+
     const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
 
     const playersResults = await sql<PlayerDB>`SELECT * FROM players`;
