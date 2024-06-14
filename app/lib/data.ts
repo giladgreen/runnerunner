@@ -110,7 +110,8 @@ export async function fetchRSVPAndArrivalData() {
         todayCashIncome: 0,
         todayTransferIncome: 0,
         reEntriesCount: 0,
-        todayTournamentMaxPlayers
+        todayTournamentMaxPlayers,
+        todayTournament
       };
     }
     const reEntriesCount = todayHistory.length - (Array.from(new Set(todayHistory.map(({ phone_number }) => phone_number)))).length;
@@ -128,7 +129,8 @@ export async function fetchRSVPAndArrivalData() {
       todayCashIncome: todayCashIncome < 0 ? -1 * todayCashIncome : todayCashIncome,
       todayTransferIncome: todayTransferIncome < 0 ? -1 * todayTransferIncome : todayTransferIncome,
       reEntriesCount,
-      todayTournamentMaxPlayers
+      todayTournamentMaxPlayers,
+      todayTournament
     };
   } catch (error) {
     console.error('Database Error:', error);
@@ -405,6 +407,24 @@ export async function fetchTournamentByDay(day: string) {
     `;
 
     return data.rows[0];
+
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetchTournamentById.');
+  }
+}
+
+export async function fetchRsvpCountForTodayTournament() {
+  noStore();
+  try {
+    const now = new Date();
+    const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+    const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
+
+    const allPlayersResult = await sql`SELECT * FROM players`;
+    const allPlayers = allPlayersResult.rows;
+
+    return allPlayers.filter(player => player[rsvpPropName]).length
 
   } catch (error) {
     console.error('Database Error:', error);

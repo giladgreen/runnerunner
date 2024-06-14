@@ -17,6 +17,15 @@ import {CardsSkeleton} from "@/app/ui/skeletons";
 import Image from "next/image";
 import Link from "next/link";
 
+const translation = {
+    Sunday: 'יום ראשון',
+    Monday: 'יום שני',
+    Tuesday: 'יום שלישי',
+    Wednesday: 'יום רביעי',
+    Thursday: 'יום חמישי',
+    Friday: 'יום שישי',
+    Saturday: 'יום שבת',
+}
 const iconMap = {
   money: BanknotesIcon,
   players: UserGroupIcon,
@@ -52,7 +61,8 @@ export async function RSVPAndArrivalCardWrapper() {
         todayCreditIncome,
         todayCashIncome,
         todayTransferIncome,
-        reEntriesCount
+        reEntriesCount,
+        todayTournament
     } = await fetchRSVPAndArrivalData();
     const rsvpForTodayText =`${rsvpForToday}${todayTournamentMaxPlayers ?` / ${todayTournamentMaxPlayers}`:''}`
     const todayIncome = <div>
@@ -118,10 +128,27 @@ export async function RSVPAndArrivalCardWrapper() {
     const rsvpStyle = {padding: 50, fontSize: 40}
     return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" style={{marginBottom: 20, width: '100%'}} >
         <Suspense fallback={<CardsSkeleton count={4}/>}>
-            <Card title={'RSVP for Today'} value={<div style={rsvpStyle}>{rsvpForTodayText}</div>} type="rsvp"/>
-            <Card title={'Arrived Today'} value={<div  style={{padding: 50, fontSize: 40}}>{arrivedToday}</div>} type="arrived"/>
+            <Card title={`${todayTournament.day} RSVP`} value={<div style={rsvpStyle}>{rsvpForTodayText}</div>} type="rsvp"/>
+            <Card title={`${todayTournament.day} Players`} value={<div  style={{padding: 50, fontSize: 40}}>{arrivedToday}</div>} type="arrived"/>
             <Card title={'Re Entries'} value={<div  style={{padding: 50, fontSize: 40}}>{reEntriesCount}</div>} type="money"/>
-            <Card title={"Today's income"} value={todayIncome} type="money"/>
+            <Card title={`${todayTournament.day}'s income`} value={todayIncome} type="money"/>
+        </Suspense>
+    </div>
+}
+
+
+export async function TodayTournamentNameCardWrapper() {
+
+    const {
+        todayTournament
+    } = await fetchRSVPAndArrivalData();
+
+    return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1" style={{marginBottom: 20, width: '100%'}} >
+        <Suspense fallback={<CardsSkeleton count={1}/>}>
+
+            <Card title={`Current Tournament`} value={`${
+                // @ts-ignore
+                translation[todayTournament.day]} -  ${todayTournament.name}`} />
         </Suspense>
     </div>
 }

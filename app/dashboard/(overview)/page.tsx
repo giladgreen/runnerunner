@@ -1,13 +1,16 @@
 import MVPPlayers from '@/app/ui/dashboard/mvp-players';
 import {
     FinalTablePlayers,
-    GeneralPlayersCardWrapper, RSVPAndArrivalCardWrapper
+    GeneralPlayersCardWrapper, RSVPAndArrivalCardWrapper, TodayTournamentNameCardWrapper
 } from '@/app/ui/dashboard/cards';
 import DebtPlayers from "@/app/ui/dashboard/debt-players";
 
 export default async function Page() {
     return (
         <div>
+            <div className="flex w-full items-center justify-between" style={{width: '100%'}}>
+                <TodayTournamentNameCardWrapper/>
+            </div>
             <RSVPAndArrivalCardWrapper/>
             <div style={{marginTop: 40}}>
                 <FinalTablePlayers title="Today's Game Players Place"/>
