@@ -1,6 +1,6 @@
 'use client';
 
-import {PlayerForm, PlayersTable, TemplateDB} from '@/app/lib/definitions';
+import {PlayerDB, TournamentDB} from '@/app/lib/definitions';
 import {UseCreditForm} from "@/app/ui/players/create-log-form";
 import React from "react";
 import Image from "next/image";
@@ -8,13 +8,13 @@ import Image from "next/image";
 export default function OpenModalButton({
   player,
   prevPage,
-  templates,
-  username
+  username,
+tournaments
 }: {
-  player: PlayersTable;
+  player: PlayerDB;
+  tournaments: TournamentDB[];
   prevPage: string;
   username?: string;
-  templates: TemplateDB[]
 }) {
 
     const [show,setShow] = React.useState(false);
@@ -37,7 +37,7 @@ export default function OpenModalButton({
                   />
           </div>
           <div className={show ? 'edit-player-modal' : 'hidden'}>
-              <UseCreditForm player={player as unknown as PlayerForm} templates={templates} hide={close} prevPage={prevPage} username={username}/>
+              <UseCreditForm player={player} tournaments={tournaments} hide={close} prevPage={prevPage} username={username}/>
           </div>
       </div>
   );

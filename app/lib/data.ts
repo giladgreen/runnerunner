@@ -5,7 +5,7 @@ import {
   BugDB, Counts,
   DebtPlayerRaw, LogDB,
   MVPPlayerRaw, PlayerDB,
-  PlayersTable, TemplateDB, User
+  TournamentDB, User
 } from './definitions';
 
 import {redirect} from "next/navigation";
@@ -151,7 +151,7 @@ export async function fetchFilteredPlayers(
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
-    const playersResultPromise = await sql<PlayersTable>`
+    const playersResultPromise = await sql<PlayerDB>`
       SELECT
         *
       FROM players
@@ -209,30 +209,18 @@ console.log('## fetchTodayPlayers. query:', query)
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
     const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
 
-    const playersResults = await sql<PlayersTable>`SELECT * FROM players`;
+    const playersResults = await sql<PlayerDB>`SELECT * FROM players`;
     const players = playersResults.rows;
-    console.log('## rsvpPropName:', rsvpPropName)
-    console.log('## fetchTodayPlayers. players:', players.length)
-    // players.forEach((player) => {
-    //   console.log('##     player:', player)
-    //
-    // })
+
     const todayHistoryResults = await sql`SELECT * FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
     const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' )
-    console.log('## todayHistory:', todayHistory)
-
 
     players.forEach((player) => {
-      const playerItems = todayHistory.filter(({ phone_number}) => phone_number === player.phone_number);
-
-
+      const playerItems = todayHistory.filter(({ phone_number}) => phone_number === player.phone_number) as LogDB[];
       player.arrived = playerItems.length > 0;
       player.entries = playerItems.length;
       player.name = player.name.trim();
-      if (playerItems.length > 0){
-        console.log('## fetchTodayPlayers. player:', player)
-      }
-
+      player.historyLog = playerItems;
     });
 
 
@@ -351,17 +339,17 @@ export async function fetchAllPlayersForExport() {
     throw new Error('Failed to fetch bugs.');
   }
 }
-export async function fetchTemplates() {
+export async function fetchTournaments() {
   noStore();
   try {
-    const templatesResult = await sql<TemplateDB>`
-      SELECT * FROM templates ORDER BY i ASC`;
+    const tournamentsResult = await sql<TournamentDB>`
+      SELECT * FROM tournaments ORDER BY i ASC`;
 
-    return templatesResult.rows;
+    return tournamentsResult.rows;
 
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch bugs.');
+    throw new Error('Failed to fetch tournaments.');
   }
 }
 export async function fetchPlayerById(id: string) {
@@ -375,14 +363,19 @@ export async function fetchPlayerById(id: string) {
     `;
 
     const player = data.rows[0];
-    const historyData = await sql<LogDB>`
+    if (player){
+      console.log('## adding logs to player:', player)
+      const historyData = await sql<LogDB>`
       SELECT *
       FROM history
-      WHERE history.phone_number = ${player.phone_number}
+      WHERE phone_number = ${player.phone_number}
       order by history.updated_at asc;
     `;
+      console.log('## found logs:', historyData.rows.length)
 
-    player.historyLog = historyData.rows;
+      player.historyLog = historyData.rows;
+    }
+
 
     return player;
 
@@ -392,21 +385,22 @@ export async function fetchPlayerById(id: string) {
   }
 }
 
-export async function fetchTemplateById(id: string) {
+export async function fetchTournamentByDay(day: string) {
   noStore();
+  const dayName = day.slice(0, 1).toUpperCase() + day.slice(1).toLowerCase()
   try {
-    const data = await sql<TemplateDB>`
+    const data = await sql<TournamentDB>`
       SELECT
         *
-      FROM templates
-      WHERE id = ${id};
+      FROM tournaments
+      WHERE day = ${dayName};
     `;
 
     return data.rows[0];
 
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetchTemplateById.');
+    throw new Error('Failed to fetchTournamentById.');
   }
 }
 

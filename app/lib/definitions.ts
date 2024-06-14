@@ -21,6 +21,7 @@ export type rsvp = {
   friday_rsvp: boolean;
   saturday_rsvp: boolean;
 }
+
 export type MVPPlayer = {
   id: string;
   name: string;
@@ -49,26 +50,6 @@ export type DebtPlayerRaw = Omit<DebtPlayer, 'balance'> & {
   arrived: boolean;
 };
 
-export type PlayersTable = {
-  id: string;
-  name: string;
-  phone_number: string;
-  image_url: string;
-  updated_at: string;
-  position: number;
-  balance: number;
-  historyCount: number;
-  notes: string;
-  sunday_rsvp: boolean;
-  monday_rsvp: boolean;
-  tuesday_rsvp: boolean;
-  wednesday_rsvp: boolean;
-  thursday_rsvp: boolean;
-  friday_rsvp: boolean;
-  saturday_rsvp: boolean;
-  arrived: boolean;
-  entries: number;
-};
 export type PlayerForm = {
   id: string;
   name: string;
@@ -94,10 +75,20 @@ export type PlayerDB = {
   updated_at: string;
   position: number;
   balance: number;
+  historyCount: number;
   note: string;
   notes: string;
   historyLog: LogDB[],
   arrived: boolean;
+  entries: number;
+  sunday_rsvp: boolean;
+  monday_rsvp: boolean;
+  tuesday_rsvp: boolean;
+  wednesday_rsvp: boolean;
+  thursday_rsvp: boolean;
+  friday_rsvp: boolean;
+  saturday_rsvp: boolean;
+
 };
 
 export type Counts = {
@@ -105,11 +96,13 @@ export type Counts = {
   count: number;
 };
 
-export type TemplateForm = {
+export type TournamentForm = {
   id: string;
-  template: string;
+  name: string;
   day: string;
-  amount: number;
+  buy_in: number;
+  re_buy: number;
+  max_players: number;
 };
 
 
@@ -125,12 +118,19 @@ export type LogDB = {
 //updated by
 };
 
-export type TemplateDB = {
+
+
+export type TournamentDB = {
   id: string;
-  template: string;
+  name: string;
   day: string;
-  amount: number;
+  buy_in: number;
+  re_buy: number;
+  max_players: number;
 };
+
+
+
 export type BugDB = {
   id: string;
   description: string;

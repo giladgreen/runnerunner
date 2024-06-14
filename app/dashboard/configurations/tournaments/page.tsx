@@ -1,15 +1,15 @@
-import { fetchTemplates} from "@/app/lib/data";
-import {formatCurrency, formatDateToLocal} from "@/app/lib/utils";
+import { fetchTournaments} from "@/app/lib/data";
+import {formatCurrency} from "@/app/lib/utils";
 import React from "react";
 import { PencilIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export default async function Page() {
-    const templates = await fetchTemplates();
+    const tournaments = await fetchTournaments();
 
     return (
         <div className="config-section">
-            <div><b><u>Templates:</u></b></div>
+            <div><b><u>Tournaments:</u></b></div>
             <table className="hidden min-w-full text-gray-900 md:table">
                 <thead className="rounded-lg text-left text-sm font-normal">
                 <tr>
@@ -17,10 +17,16 @@ export default async function Page() {
                         Day
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
-                        Template
+                        Name
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
-                        Amount
+                        Buy-in
+                    </th>
+                    <th scope="col" className="px-3 py-5 font-medium">
+                        Re-buy
+                    </th>
+                    <th scope="col" className="px-3 py-5 font-medium">
+                        Max players
                     </th>
                     <th scope="col" className="px-3 py-5 font-medium">
                         <span className="sr-only">Edit</span>
@@ -28,25 +34,31 @@ export default async function Page() {
                 </tr>
                 </thead>
                 <tbody className="bg-white">
-                {templates?.map((template) => (
+                {tournaments?.map((tournament) => (
                     <tr
-                        key={template.id}
+                        key={tournament.id}
                         className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                     >
                         <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                            {template.day}
+                            {tournament.day}
                         </td>
                         <td className="whitespace-nowrap px-3 py-3">
-                            {template.template}
+                            {tournament.name}
                         </td>
                         <td className="whitespace-nowrap px-3 py-3">
-                            {formatCurrency(template.amount)}
+                            {formatCurrency(tournament.buy_in)}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-3">
+                            {formatCurrency(tournament.re_buy)}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-3">
+                            {tournament.max_players}
                         </td>
                         <td className="whitespace-nowrap py-3 pl-6 pr-3">
 
                             <div className="flex justify-end gap-3">
                                 <Link
-                                    href={`/dashboard/configurations/templates/${template.id}/edit`}
+                                    href={`/dashboard/configurations/tournaments/${tournament.day.toLowerCase()}/edit`}
                                     className="rounded-md border p-2 hover:bg-gray-100"
                                 >
                                     <PencilIcon className="w-5"/>

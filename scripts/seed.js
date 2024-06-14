@@ -3,45 +3,47 @@ const {
   players,
   users,
   logs,
-  templates,
+  tournaments,
   DEMO_USERS_PHONES
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
 const dropTablesBefore = process.argv[2] === 'drop';
 
-async function seedTemplates(client) {
+async function seedTournaments(client) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
     // Create the "users" table if it doesn't exist
     const createTable = await client.sql`
-      CREATE TABLE IF NOT EXISTS templates (
+      CREATE TABLE IF NOT EXISTS tournaments (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         day TEXT NOT NULL UNIQUE,
-        template TEXT NOT NULL,
+        name TEXT NOT NULL,
         i INT NOT NULL,
-        amount INT NOT NULL,
+        buy_in INT NOT NULL,
+        re_buy INT NOT NULL,
+        max_players INT NOT NULL,
         updated_at timestamp NOT NULL DEFAULT now()
       );
     `;
 
-    console.log(`Created "templates" table`);
+    console.log(`Created "tournaments" table`);
 
     // Insert data into the "users" table
-    const insertedTemplates = await Promise.all(
-      templates.map(async (template, index) => {
+    const insertedTournaments = await Promise.all(
+        tournaments.map(async (tournament, index) => {
         return client.sql`
-        INSERT INTO templates (day, template, amount, i)
-        VALUES (${template.day}, ${template.template}, ${template.amount}, ${index+1});
+        INSERT INTO tournaments (day, name, buy_in, re_buy, max_players, i)
+        VALUES (${tournament.day}, ${tournament.name}, ${tournament.buy_in}, ${Math.max(tournament.buy_in - 100, 0)}, ${tournament.max_players}, ${index+1});
       `;
       }),
     );
 
-    console.log(`Seeded ${insertedTemplates.length} templates`);
+    console.log(`Seeded ${insertedTournaments.length} tournaments`);
 
     return {
       createTable,
-      insertedTemplates
+      insertedTournaments
     };
   } catch (error) {
     console.error('Error seeding users:', error);
@@ -230,13 +232,13 @@ async function main() {
 
   if (dropTablesBefore){
     console.log('## drop tables')
-      await client.sql`DROP TABLE IF EXISTS templates`;
+      await client.sql`DROP TABLE IF EXISTS tournaments`;
       await client.sql`DROP TABLE IF EXISTS users`;
       await client.sql`DROP TABLE IF EXISTS players`;
       await client.sql`DROP TABLE IF EXISTS history`;
   }
 
-  await seedTemplates(client);
+  await seedTournaments(client);
   await seedUsers(client);
   await createBugReportTable(client);
   await seedPlayers(client);

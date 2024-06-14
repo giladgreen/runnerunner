@@ -376,41 +376,48 @@ const logs = [
 
 ]
 
-const templates = [
+const tournaments = [
     {
   day: 'Sunday',
-  template: 'טורניר קיסריה - כניסה',
-  amount: 300
-},
+  name: 'טורניר קיסריה',
+  buy_in: 300,
+      max_players:100,
+  },
   {
     day: 'Monday',
-    template: 'טורניר תל אביב - כניסה',
-    amount: 300
+    name: 'טורניר תל אביב',
+    buy_in: 300,
+    max_players:100,
   },
   {
     day: 'Tuesday',
-    template: 'טורניר רעננה - כניסה',
-    amount: 300
+    name: 'טורניר רעננה',
+    buy_in: 300,
+    max_players:100,
   },
   {
     day: 'Wednesday',
-    template: 'טורניר כפר סבא - כניסה',
-    amount: 250
+    name: 'טורניר כפר סבא',
+    buy_in: 250,
+    max_players:100,
   },
   {
     day: 'Thursday',
-    template: 'טורניר ראשל״צ - כניסה',
-    amount: 400
+    name: 'טורניר ראשל״צ',
+    buy_in: 400,
+    max_players:100,
   },
   {
     day: 'Friday',
-    template: '',
-    amount: 0
+    name: '',
+    buy_in: 0,
+    max_players:100,
   },
   {
     day: 'Saturday',
-    template: 'טורניר ראשל״צ - כניסה',
-    amount: 250
+    name: 'טורניר ראשל״צ',
+    buy_in: 250,
+    max_players:100,
   }]
 
 
@@ -418,6 +425,6 @@ module.exports = {
   users,
   players,
   logs,
-  templates,
+  tournaments,
   DEMO_USERS_PHONES
 };

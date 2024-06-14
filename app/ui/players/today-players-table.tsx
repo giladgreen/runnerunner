@@ -1,13 +1,12 @@
 import Image from 'next/image';
 import Link from "next/link";
-import {formatDateToLocal, formatCurrency} from '@/app/lib/utils';
-import { fetchTodayPlayers} from '@/app/lib/data';
+import { formatCurrency} from '@/app/lib/utils';
 import RSVPButton from "@/app/ui/players/rsvp-button";
 import OpenModalButton from "@/app/ui/players/open-modal-button";
 import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
-import {PlayersTable, TemplateDB} from "@/app/lib/definitions";
-import {fetchTemplates} from "@/app/lib/actions";
+import {PlayerDB} from "@/app/lib/definitions";
 import OpenPositionModalButton from "@/app/ui/players/open-position-modal-button";
+import {fetchTournaments} from "@/app/lib/data";
 
 const formatPlayerEntries = (
     entries: number,
@@ -29,9 +28,9 @@ const formatPlayerEntries = (
   />
 };
 
-export default async function TodaysPlayersTable({ players, username, prevPage}:{players: PlayersTable[], username?:string, prevPage?: string}) {
+export default async function TodaysPlayersTable({ players, username, prevPage}:{players: PlayerDB[], username?:string, prevPage?: string}) {
 
-  const templates: TemplateDB[] = (await fetchTemplates()) as TemplateDB[];
+  const tournaments = await fetchTournaments();
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
   const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`;
@@ -39,7 +38,7 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
   // @ts-ignore
   const rsvpPlayers = players.filter((player) => !!player[rsvpPropName]);
   const rsvpPlayersCount = rsvpPlayers.length;
-  // console.log('rsvpPlayers', rsvpPlayers);
+
   return (
     <div className="mt-6 flow-root" style={{ width: '100%'}}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -192,7 +191,7 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
                     </td>
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                       <div className="flex justify-end gap-3">
-                        <OpenModalButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'} templates={templates} username={username}/>
+                        <OpenModalButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'} tournaments={tournaments} username={username}/>
                         <OpenPositionModalButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'}/>
                       </div>
 

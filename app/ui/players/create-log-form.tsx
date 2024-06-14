@@ -8,54 +8,23 @@ import {
 import { Button } from '@/app/ui/button';
 import {createPlayerNewCreditLog, createPlayerUsageLog, setPlayerPosition} from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import {PlayerForm, TemplateDB} from "@/app/lib/definitions";
-import {useState} from "react";
-const TEXTS = {
-}
+import {PlayerDB, PlayerForm, TournamentDB} from "@/app/lib/definitions";
+import {useEffect, useState} from "react";
 
-const AMOUNTS = {
-}
 
-function initialTemplates(templates: TemplateDB[]) {
-  if (!templates) {
-    return;
-  }
-  if (Object.keys(TEXTS).length !== 0) {
-    return;
-  }
-
-  templates.forEach((template) => {
-    // @ts-ignore
-    TEXTS[template.day] = template.template;
-    // @ts-ignore
-    AMOUNTS[template.day] = template.amount;
-  })
-
-}
 function getInitialText(): string {
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
-  const savedDayOfTheWeek =/* localStorage ? localStorage.getItem('day-of-the-week') :*/ dayOfTheWeek;
+  const savedDayOfTheWeek = dayOfTheWeek;
   let newDay = true;
   if (savedDayOfTheWeek){
    if (savedDayOfTheWeek === dayOfTheWeek){
      newDay = false;
    }
-  } else{
-    //localStorage && localStorage.setItem('day-of-the-week', dayOfTheWeek);
   }
 
   // @ts-ignore
-  let result: string = TEXTS[dayOfTheWeek] ? TEXTS[dayOfTheWeek] as string : '';
-
-  const storedText = result;//newDay ? result : localStorage ? localStorage.getItem('use-balance-note-text') : result;
-
-  if (!storedText){
-   // localStorage && localStorage.setItem('use-balance-note-text', result);
-  }else{
-    result = storedText;
-  }
-  return result;
+  return TEXTS[dayOfTheWeek] ? TEXTS[dayOfTheWeek] as string : '';
 }
 
 function getInitialAmount(): number {
@@ -64,39 +33,44 @@ function getInitialAmount(): number {
 
   // @ts-ignore
   let result: number = AMOUNTS[dayOfTheWeek] ? AMOUNTS[dayOfTheWeek] as number : 300;
-  const storedText = result;//localStorage ? localStorage.getItem('use-balance-amount') : result;
+  const storedText = result;
 
-  if (!storedText){
-    //localStorage && localStorage.setItem('use-balance-amount', `${result}`);
-  }else{
+  if (storedText){
     result = Number(storedText);
   }
   return result;
 }
 
 
-export function UseCreditForm({player, templates, hide, prevPage, username} : {prevPage:string, player: PlayerForm, templates:TemplateDB[], hide?: ()=>void, username?:string}) {
-  initialTemplates(templates);
+export function UseCreditForm({player, tournaments, hide, prevPage, username} : {prevPage:string, player: PlayerDB, tournaments:TournamentDB[], hide?: ()=>void, username?:string}) {
+
   const initialState = { message: null, errors: {} };
   const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null,{ player, prevPage, username })
+  const now = new Date();
+  const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' }).toLowerCase();
+  const tournament = tournaments.find(t => t.day.toLowerCase() === dayOfTheWeek);
+  // @ts-ignore
+  const historyLog = player.historyLog || [];
 
-  const initialText = getInitialText();
-  const initialAmount = getInitialAmount();
-  const [note, setNote] = useState(initialText);
-  const [amount, setAmount] = useState(initialAmount);
+  const isToday = (date: Date)=>{
+    return (new Date()).getTime() - date.getTime() < 12 * 60 * 60 * 1000;
+  }
+  const todayHistory = historyLog.filter(log => isToday(new Date(log.updated_at)));
+  const isRebuy = todayHistory.length > 0;
+  console.log('## UseCreditForm,',player.name,' isRebuy:', isRebuy);
+  const entryText = isRebuy ? 'כניסה נוספת' : 'כניסה';
+  const note = `${tournament!.name} - ${entryText}`;
+  const amount = isRebuy ?  tournament!.re_buy : tournament!.buy_in;
   // @ts-ignore
   const [state1, dispatch] = useFormState(createPlayerUsageLogWithPlayerData, initialState);
 
 
-  const useCredit = initialAmount < player.balance;
+  const useCredit = amount < player.balance;
   const [type, setType] = useState(useCredit ? 'credit' : 'cash');
 
   return (
       <div>
         <form action={dispatch} className="form-control">
-          <label className="mb-2 block text-sm font-medium">
-            Use credit
-          </label>
           <div className="rounded-md  p-4 md:p-6 form-inner-control">
             {/*  balance change */}
             <div className="mb-4">
@@ -114,11 +88,8 @@ export function UseCreditForm({player, templates, hide, prevPage, username} : {p
                       placeholder="Enter ILS amount"
                       className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                       aria-describedby="change-error"
-                      onChange={(e) => {
-                        setAmount(Number(e.target.value))
-                        //localStorage && localStorage.setItem('use-balance-amount', e.target.value);
-                      }}
                       value={amount}
+                      disabled
                   />
                   <BanknotesIcon
                       className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
@@ -147,13 +118,9 @@ export function UseCreditForm({player, templates, hide, prevPage, username} : {p
                     placeholder="Enter note"
                     className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                     aria-describedby="note-error"
-                    onChange={(e) => {
-                      setNote(e.target.value);
-                      //localStorage && localStorage.setItem('use-balance-note-text', e.target.value);
-
-                    }}
                     required
                     value={note}
+                    disabled
                 />
 
                 <PencilIcon
@@ -201,7 +168,7 @@ export function UseCreditForm({player, templates, hide, prevPage, username} : {p
           </div>
           <div className="mt-6 flex justify-end gap-4">
 
-            <Button type="submit" onClick={()=> hide?.()}>Use</Button>
+            <Button type="submit" onClick={()=> hide?.()}> {isRebuy ? 'Rebuy' : 'Buy In'}</Button>
 
           </div>
         </form>
@@ -267,7 +234,7 @@ export function SetPositionForm({player, hide, prevPage} : { player: PlayerForm,
   );
 }
 
-export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:TemplateDB[]}) {
+export function UseCreditForPrizeForm({player} : {player: PlayerForm }) {
   const initialState = { message: null, errors: {} };
   const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, { player, prevPage: '/dashboard/players' });
 
@@ -278,13 +245,12 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:
   // @ts-ignore
   const [state1, dispatch] = useFormState(createPlayerUsageLogWithPlayerData, initialState);
 
-  const useCredit = initialAmount < player.balance;
   const [type, setType] = useState('prize');
 
   return (
         <form action={dispatch} className="form-control">
           <label className="mb-2 block text-sm font-medium">
-            Use credit for a prize
+            Use credit for A Prize
           </label>
           <div className="rounded-md  p-4 md:p-6 form-inner-control">
             {/*  balance change */}
@@ -305,7 +271,6 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:
                       aria-describedby="change-error"
                       onChange={(e) => {
                         setAmount(Number(e.target.value))
-                        //localStorage && localStorage.setItem('use-balance-amount', e.target.value);
                       }}
                       value={amount}
                   />
@@ -338,8 +303,6 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:
                     aria-describedby="note-error"
                     onChange={(e) => {
                       setNote(e.target.value);
-                      //localStorage && localStorage.setItem('use-balance-note-text', e.target.value);
-
                     }}
                     required
                     value={note}
@@ -362,7 +325,7 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:
             <div className="relative mt-2 rounded-md">
               <div className="relative rsvp-section">
                 <div className="flex flex-wrap justify-content-center gap-3 radio">
-                  <div className="flex align-items-center">
+                  <div className="flex align-items-center" style={{ opacity:0.2}}>
                     <input type="radio" value="prize" name="type"
                            checked={type === 'prize'}
                            onChange={() => setType('prize')}
@@ -377,7 +340,7 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm, templates:
 
           </div>
           <div className="mt-6 flex justify-end gap-4">
-            <Button type="submit">Use</Button>
+            <Button type="submit">Use Credit</Button>
           </div>
         </form>
   );
@@ -392,14 +355,14 @@ export function AddToBalanceForm({player}: { player: PlayerForm }) {
   return (
       <form action={dispatch} className="form-control">
           <label className="mb-2 block text-sm font-medium">
-            Add to Balance
+            Add to Player Credit
           </label>
           <div className="rounded-md p-4 md:p-6 form-inner-control">
 
             {/*  balance change */}
             <div className="mb-4">
               <label htmlFor="change" className="mb-2 block text-sm font-medium">
-                Added Credit
+                Amount
               </label>
               <div className="relative mt-2 rounded-md">
                 <div className="relative">
@@ -464,12 +427,12 @@ export function AddToBalanceForm({player}: { player: PlayerForm }) {
   );
 }
 
-export default function CreateLogForm({player, templates} : {player: PlayerForm, templates:TemplateDB[]}) {
+export default function CreateLogForm({player, tournaments} : {player: PlayerDB, tournaments:TournamentDB[]}) {
   return (
       <div style={{ display: 'flex' , justifyContent: 'space-between'}} >
-        <UseCreditForm player={player} templates={templates} prevPage={'/dashboard/players'}/>
-        <UseCreditForPrizeForm player={player} templates={templates}/>
         <AddToBalanceForm player={player}/>
+        <UseCreditForPrizeForm player={player} />
+
       </div>
   );
 }

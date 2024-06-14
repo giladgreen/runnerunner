@@ -2,7 +2,6 @@ import Pagination from '@/app/ui/players/pagination';
 import Search from '@/app/ui/search';
 import PlayersTable from '@/app/ui/players/players-table';
 import { CreateNewPlayer } from '@/app/ui/players/buttons';
-import { lusitana } from '@/app/ui/fonts';
 import { PlayersTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
 import { fetchPlayersPages } from '@/app/lib/data';

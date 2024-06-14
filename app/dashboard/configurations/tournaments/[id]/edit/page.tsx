@@ -1,15 +1,15 @@
-import Form from '@/app/ui/players/edit-template-form';
+import EditTournamentForm from '@/app/ui/players/edit-tournament-form';
 import Breadcrumbs from '@/app/ui/players/breadcrumbs';
-import { fetchTemplateById} from '@/app/lib/data';
+import {fetchTournamentByDay} from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
-    const id = params.id;
-    const template = await fetchTemplateById(id);
-    if (!template) {
+    const dayOfTheWeek = params.id;
+    const tournament = await fetchTournamentByDay(dayOfTheWeek);
+    if (!tournament) {
         notFound();
     }
-    template.id = id;
+
     return (
         <main>
             <Breadcrumbs
@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     }
                 ]}
             />
-            <Form template={template} />
+            <EditTournamentForm tournament={tournament} />
         </main>
     );
 }

@@ -1,7 +1,7 @@
 'use client';
 
-import {PlayerForm, PlayersTable, TemplateDB} from '@/app/lib/definitions';
-import {SetPositionForm, UseCreditForm} from "@/app/ui/players/create-log-form";
+import {PlayerDB, PlayerForm} from '@/app/lib/definitions';
+import {SetPositionForm} from "@/app/ui/players/create-log-form";
 import React from "react";
 import Image from "next/image";
 
@@ -9,7 +9,7 @@ export default function OpenPositionModalButton({
   player,
                                                     prevPage
 }: {
-  player: PlayersTable;
+  player: PlayerDB;
     prevPage: string;
 }) {
     const [show,setShow] = React.useState(false);

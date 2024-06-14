@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { UpdatePlayer  } from '@/app/ui/players/buttons';
 import {  DeletePlayer } from '@/app/ui/players/client-buttons';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
-import { fetchFilteredPlayers, fetchTemplates } from '@/app/lib/data';
+import { fetchFilteredPlayers } from '@/app/lib/data';
 import Link from "next/link";
 import RSVPButton from "@/app/ui/players/rsvp-button";
 

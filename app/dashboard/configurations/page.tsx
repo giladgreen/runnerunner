@@ -1,5 +1,5 @@
 import Form from '@/app/ui/players/create-bug-form';
-import {fetchAllBugs, fetchAllPlayersForExport, fetchTemplates} from "@/app/lib/data";
+import {fetchAllBugs, fetchAllPlayersForExport} from "@/app/lib/data";
 import {formatDateToLocal} from "@/app/lib/utils";
 import {ImportPlayers, ExportPlayers, ResetRSVP, ResetPlayersPosition} from "@/app/ui/players/client-buttons";
 import {PlayerDB} from "@/app/lib/definitions";
@@ -59,9 +59,9 @@ export default async function Page() {
             </div>
             <div className="config-seperator"/>
             <div className="config-section">
-                <Link href="/dashboard/configurations/templates"
+                <Link href="/dashboard/configurations/tournaments"
                       className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400">
-                    Templates
+                    Tournaments
                 </Link>
 
             </div>

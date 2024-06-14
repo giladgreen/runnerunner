@@ -1,13 +1,13 @@
 'use client';
 
-import { PlayersTable} from '@/app/lib/definitions';
+import { PlayerDB} from '@/app/lib/definitions';
 import {rsvpPlayerForDay} from "@/app/lib/actions";
 
 export default function RSVPButton({
   player,
   prevPage
 }: {
-  player: PlayersTable;
+  player: PlayerDB;
     prevPage: string;
 }) {
     const now = new Date();

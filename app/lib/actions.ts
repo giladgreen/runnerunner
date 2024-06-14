@@ -5,29 +5,20 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import {PlayerDB, PlayerForm, User, TemplateDB} from "@/app/lib/definitions";
+import {PlayerDB, PlayerForm, User, TournamentDB} from "@/app/lib/definitions";
 import bcrypt from "bcrypt";
 import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/unstable-no-store";
 
-const FormSchema = z.object({
-    id: z.string(),
-    image_url: z.string(),
-    name: z.string().min(1, 'name can not be left empty'),
-    balance: z.coerce.number(),
-    phone_number: z.string().min(1, 'name can not be left empty'),
-    updated_at: z.string(),
-    note: z.string().min(1, 'balance note can not be left empty'),
-    notes: z.string(),
-});
-const CreatePlayer = FormSchema.omit({ id: true, updated_at: true });
 const CreateUsageLog =  z.object({
     change: z.coerce.number(),
     note: z.string().min(1, 'change note can not be left empty'),
 });
 
-const UpdateTemplate =  z.object({
-    amount: z.coerce.number(),
-    template: z.string()
+const UpdateTournament =  z.object({
+    buy_in: z.coerce.number(),
+    re_buy: z.coerce.number(),
+    max_players: z.coerce.number(),
+    name: z.string()
 });
 
 const UpdatePlayer = z.object({
@@ -52,9 +43,11 @@ export type State = {
         note?: string[];
         notes?: string[];
         description?: string[];
-        template?: string[];
         amount?: string[];
         position?: string[];
+        buy_in?: string[];
+        re_buy?: string[];
+        max_players?: string[];
     };
     message?: string | null;
 };
@@ -308,56 +301,59 @@ export async function updatePlayer(
     revalidatePath(prevPage);
     redirect(prevPage);
 }
-export async function updateTemplate(
+
+export async function updateTournament(
     id: string,
     prevState: State,
     formData: FormData,
 ) {
 
-    const validatedFields = UpdateTemplate.safeParse({
-        template: formData.get('template'),
-        amount: formData.get('amount'),
+    const validatedFields = UpdateTournament.safeParse({
+        name: formData.get('name'),
+        buy_in: formData.get('buy_in'),
+        re_buy: formData.get('re_buy'),
+        max_players: formData.get('max_players'),
     });
 
     if (!validatedFields.success) {
-        console.log('## updateTemplate error', validatedFields.error.flatten().fieldErrors);
+        console.log('## updateTournament error', validatedFields.error.flatten().fieldErrors);
         return {
             errors: validatedFields.error.flatten().fieldErrors,
-            message: 'Missing Fields. Failed to Update Template.',
+            message: 'Missing Fields. Failed to Update tournament.',
         };
     }
 
-    const { template, amount } = validatedFields.data;
+    const { name, buy_in, re_buy, max_players } = validatedFields.data;
     const date = new Date().toISOString();
 
     try {
         await sql`
-      UPDATE templates
-      SET template = ${template}, amount = ${amount}, updated_at=${date}
+      UPDATE tournaments
+      SET name = ${name}, buy_in = ${buy_in},re_buy = ${re_buy},max_players = ${max_players}, updated_at=${date}
       WHERE id = ${id}
     `;
     } catch (error) {
-        console.log('## updateTemplate error', error)
-        return { message: 'Database Error: Failed to Update Template.' };
+        console.log('## updateTournament error', error)
+        return { message: 'Database Error: Failed to update Tournament.' };
     }
 
-    revalidatePath('/dashboard/configurations');
-    redirect('/dashboard/configurations');
+    revalidatePath('/dashboard/configurations/tournaments');
+    redirect('/dashboard/configurations/tournaments');
 }
 
-export async function fetchTemplates(
+export async function fetchTournament(
 
 ) {
     noStore();
     try {
-        const data = await sql<TemplateDB>`
-      SELECT * FROM templates ORDER BY i ASC
+        const data = await sql<TournamentDB>`
+      SELECT * FROM tournaments ORDER BY i ASC
      `;
 
         return data.rows;
     } catch (error) {
-        console.log('## fetchTemplates error', error)
-        return { message: 'Database Error: Failed to fetch Templates .' };
+        console.log('## fetchTournament error', error)
+        return { message: 'Database Error: Failed to fetch Tournament .' };
     }
 }
 
