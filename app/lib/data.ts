@@ -219,17 +219,20 @@ console.log('## fetchTodayPlayers. query:', query)
     const oneHour = new Date((new Date()).getTime() + 60*60*1000);
     console.log('## dayOfTheWeek in 1 hour from now:', oneHour.toLocaleString('en-us', { weekday: 'long' }))
 
-
-    const twoHour = new Date((new Date()).getTime() + 2*60*60*1000);
-    console.log('## dayOfTheWeek in 2 hour from now:', twoHour.toLocaleString('en-us', { weekday: 'long' }))
-
-
     const threeHour = new Date((new Date()).getTime() + 3*60*60*1000);
     console.log('## dayOfTheWeek in 3 hour from now:', threeHour.toLocaleString('en-us', { weekday: 'long' }))
 
 
     const fourHour = new Date((new Date()).getTime() + 4*60*60*1000);
     console.log('## dayOfTheWeek in 4 hour from now:', fourHour.toLocaleString('en-us', { weekday: 'long' }))
+
+
+    const fiveHour = new Date((new Date()).getTime() + 5*60*60*1000);
+    console.log('## dayOfTheWeek in 5 hour from now:', fiveHour.toLocaleString('en-us', { weekday: 'long' }))
+
+
+    const sevenHour = new Date((new Date()).getTime() + 7*60*60*1000);
+    console.log('## dayOfTheWeek in 7 hour from now:', sevenHour.toLocaleString('en-us', { weekday: 'long' }))
 
 
     const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
