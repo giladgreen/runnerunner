@@ -12,34 +12,7 @@ import {PlayerDB, PlayerForm, TournamentDB} from "@/app/lib/definitions";
 import {useEffect, useState} from "react";
 
 
-function getInitialText(): string {
-  const now = new Date();
-  const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
-  const savedDayOfTheWeek = dayOfTheWeek;
-  let newDay = true;
-  if (savedDayOfTheWeek){
-   if (savedDayOfTheWeek === dayOfTheWeek){
-     newDay = false;
-   }
-  }
 
-  // @ts-ignore
-  return TEXTS[dayOfTheWeek] ? TEXTS[dayOfTheWeek] as string : '';
-}
-
-function getInitialAmount(): number {
-  const now = new Date();
-  const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
-
-  // @ts-ignore
-  let result: number = AMOUNTS[dayOfTheWeek] ? AMOUNTS[dayOfTheWeek] as number : 300;
-  const storedText = result;
-
-  if (storedText){
-    result = Number(storedText);
-  }
-  return result;
-}
 
 
 export function UseCreditForm({player, tournaments, hide, prevPage, username} : {prevPage:string, player: PlayerDB, tournaments:TournamentDB[], hide?: ()=>void, username?:string}) {
