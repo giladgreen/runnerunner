@@ -4,6 +4,17 @@ import {fetchPlayerByUserId, fetchRsvpCountForTodayTournament, fetchTournamentBy
 import Image from "next/image";
 import HistoryTable from "@/app/ui/players/history-table";
 import {rsvpPlayerForDay} from "@/app/lib/actions";
+
+const translation = {
+    Sunday: 'יום ראשון',
+    Monday: 'יום שני',
+    Tuesday: 'יום שלישי',
+    Wednesday: 'יום רביעי',
+    Thursday: 'יום חמישי',
+    Friday: 'יום שישי',
+    Saturday: 'יום שבת',
+}
+
 export default async function Page({ params }: { params: { id: string } }) {
     const userId = params.id;
     const player = await fetchPlayerByUserId(userId);
@@ -33,6 +44,9 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     const {rsvp_required, max_players} = todayTournament;
 
+    const noTournamentToday = rsvp_required && max_players === 0;
+    // @ts-ignore
+    const todayTournamentData = noTournamentToday ? `אין היום טורניר` : `${translation[todayTournament.day]} -  ${todayTournament.name}`;
     // @ts-ignore
     const isRegisterForTodayTournament = !!player[rsvpPropName];
     const isFull = rsvpCountForTodayTournament >= max_players;
@@ -43,7 +57,6 @@ export default async function Page({ params }: { params: { id: string } }) {
         textDecoration: 'underline',
     }
 
-
     const onRegisterSubmit = async (_formData: FormData) => {
         'use server'
         await rsvpPlayerForDay(player.phone_number, rsvpPropName, true, `/personal/${userId}`);
@@ -53,15 +66,53 @@ export default async function Page({ params }: { params: { id: string } }) {
         await rsvpPlayerForDay(player.phone_number, rsvpPropName, false, `/personal/${userId}`);
     };
 
-
-    const unregisterButton = <form action={onUnRegisterSubmit}>
-        <button >
-            press <span style={buttonStyle}><b>HERE</b></span>
-        </button>
-    </form>
-
-
     const separator = <hr style={{marginTop: 20, marginBottom: 20}}/>;
+
+    const divWithTopMargin = {marginTop: 40};
+    const noRegistrationNeeded = <div style={divWithTopMargin}>
+        אין צורך ברישום לטורניר של היום
+    </div>
+
+    const registrationNeeded = <div>
+        {!isFull && <div>
+            { isRegisterForTodayTournament ? (
+                <div>
+                    <div style={divWithTopMargin}>
+                        אתה כבר רשום לטורניר של היום
+                    </div>
+                    <div style={divWithTopMargin}>
+                        <form action={onUnRegisterSubmit}>
+                            <button>
+                                לביטול הרישום לחץ <span style={buttonStyle}><b>כאן</b></span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            ) : (
+                <div>
+                    <div style={divWithTopMargin}>
+                        אתה לא רשום לטורניר של היום
+                    </div>
+                    <div style={divWithTopMargin}>
+                        <form action={onRegisterSubmit}>
+                            <button>
+                                לרישום  לחץ <span style={buttonStyle}><b>כאן</b></span>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            )}
+        </div>}
+
+        {isFull && !isRegisterForTodayTournament && <div style={divWithTopMargin}>
+            אין יותר מקום לטורניר של היום
+        </div>}
+    </div>
+
+
+
+
     return (
         <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
             <div className="w-full flex-none md:w-64">
@@ -85,71 +136,16 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <div> {player.notes}  </div>
                     <h1 style={{zoom: 2}}><b>Current Balance: {formatCurrency(player.balance)}</b></h1>
                     {separator}
-                    <div>
-                        {rsvp_required ? (
-                            <div>
-                                <div style={{marginBottom: 20}}>
-                                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                    <u>Today's tournament requires registration.</u>
-                                </div>
-                                <div style={{marginBottom: 30}}>
-                                    {isRegisterForTodayTournament ? (
-                                        <div>
-                                            {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                            You <b>are</b> registered for today's tournament.
-                                        </div>
-                                    ) : (
-                                        <div>
-                                            {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                            You are <b>not</b> registered for today's tournament.
-                                        </div>
-                                    )}
-                                </div>
-                                <div style={{marginBottom: 40}}>
-                                    {isRegisterForTodayTournament ? (
-                                        <div>
-                                            <form action={onUnRegisterSubmit}>
-                                                <button>
-                                                    To <b>cancel</b> your registration, press <span style={buttonStyle}><b>HERE</b></span>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    ) : (
-                                        <div>
-                                            {isFull ? (
-                                                <div>
-                                                    {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                                    Today's tournament is already <b>full</b>. No more registrations are allowed.
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    <form action={onRegisterSubmit}>
-                                                        <button>
-                                                            {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                                            To <b>register</b> for today's tournament, press <span
-                                                            style={buttonStyle}><b>HERE</b></span>
-                                                        </button>
-                                                    </form>
-                                                </div>
-
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        ) : (
-                            <div>
-                            {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                Today's tournament is open for all players. No RSVP is required.
-                            </div>
-                        )}
-
-                    </div>
+                    <div> {todayTournamentData}</div>
+                    {!noTournamentToday && <div>
+                        {!rsvp_required ? noRegistrationNeeded : registrationNeeded }
+                    </div>}
                     {separator}
 
                     <HistoryTable player={player} isRestrictedData/>
                 </div>
             </div>
         </div>
-    );
+    )
+        ;
 }
