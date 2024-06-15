@@ -107,7 +107,7 @@ export async function fetchRSVPAndArrivalData() {
     const rsvpForToday = allPlayers.filter(player => player.rsvpForToday).length
 
     const todayHistoryResults = await sql`SELECT phone_number, type, change FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' && type != 'credit');
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize');
 
     const todayTournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${dayOfTheWeek}`;
     const todayTournament = todayTournamentResult.rows[0];
