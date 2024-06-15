@@ -9,7 +9,6 @@ const {
 const bcrypt = require('bcrypt');
 
 const dropTablesBefore = process.argv[2] === 'drop';
-
 async function seedTournaments(client) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -225,6 +224,29 @@ async function seedHistory(client) {
   }
 }
 
+async function seedWinners(client) {
+  try {
+    // Create the "winners" table if it doesn't exist
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS winners (
+         date VARCHAR(20) PRIMARY KEY,
+         tournament_name TEXT NOT NULL,
+         winners TEXT NOT NULL
+      );
+    `;
+
+    console.log(`Created "winners" table`);
+
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error seeding winners:', error);
+    throw error;
+  }
+}
+
 async function main() {
   console.log('## main start')
 
@@ -237,6 +259,7 @@ async function main() {
       await client.sql`DROP TABLE IF EXISTS users`;
       await client.sql`DROP TABLE IF EXISTS players`;
       await client.sql`DROP TABLE IF EXISTS history`;
+      await client.sql`DROP TABLE IF EXISTS winners`;
   }
 
   await seedTournaments(client);
@@ -245,6 +268,7 @@ async function main() {
   await seedPlayers(client);
 
   await seedHistory(client);
+  await seedWinners(client);
 
   await client.end();
 }
