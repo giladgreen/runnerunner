@@ -257,8 +257,8 @@ const tournaments = [
     day: 'Friday',
     name: '',
     buy_in: 0,
-    max_players:100,
-    rsvp_required: false
+    max_players:0,
+    rsvp_required: true
   },
   {
     day: 'Saturday',
@@ -267,7 +267,6 @@ const tournaments = [
     max_players:100,
     rsvp_required: false
   }]
-
 
 module.exports = {
   users,
