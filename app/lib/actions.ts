@@ -431,7 +431,21 @@ export async function updateIsUserAdmin(id:string) {
         console.error('Database Error:', error);
         return false;
     }
-    redirect('/dashboard/users');
+    redirect('/dashboard/configurations/users');
+}
+
+
+export async function updateIsUserWorker(id:string) {
+    noStore();
+    try {
+        const users = await sql<User>`SELECT * FROM users WHERE id = ${id}`;
+        const user = users.rows[0];
+        await sql`UPDATE users SET is_worker = ${!user.is_worker} WHERE id = ${id}`;
+    } catch (error) {
+        console.error('Database Error:', error);
+        return false;
+    }
+    redirect('/dashboard/configurations/users');
 }
 
 

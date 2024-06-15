@@ -50,7 +50,7 @@ export default async function Page() {
             <div className="config-seperator"/>
             <div className="config-section">
 
-                <Link  href="/dashboard/users"
+                <Link  href="/dashboard/configurations/users"
                        className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400">
                     Users permissions
                 </Link>

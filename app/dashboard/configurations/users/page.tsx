@@ -2,7 +2,7 @@ import { lusitana } from '@/app/ui/fonts';
 import { fetchAllUsers } from '@/app/lib/data';
 import React from "react";
 import {User} from "@/app/lib/definitions";
-import {updateIsUserAdmin} from "@/app/lib/actions";
+import {updateIsUserAdmin, updateIsUserWorker} from "@/app/lib/actions";
 
 export default async function Page() {
     const users = await fetchAllUsers();
@@ -26,6 +26,9 @@ export default async function Page() {
                         <th scope="col" className="px-3 py-5 font-medium thin-column">
                             is admin
                         </th>
+                        <th scope="col" className="px-3 py-5 font-medium thin-column">
+                            is operator
+                        </th>
                     </tr>
                     </thead>
                     <tbody className="bg-white">
@@ -41,7 +44,10 @@ export default async function Page() {
                                 {user.phone_number}
                             </td>
                             <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
-                                <UpdateUser user={user}/>
+                                <UpdateAdminUser user={user}/>
+                            </td>
+                            <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
+                                <UpdateWorkerUser user={user}/>
                             </td>
                         </tr>
                     ))}
@@ -52,7 +58,7 @@ export default async function Page() {
     );
 }
 
-function UpdateUser({user}: { user: User }) {
+function UpdateAdminUser({user}: { user: User }) {
     const updateIsUserAdminWithId = updateIsUserAdmin.bind(null, user.id);
 
     const onSubmit = async (_formData: FormData) => {
@@ -65,6 +71,24 @@ function UpdateUser({user}: { user: User }) {
         <form action={onSubmit}>
             <button className="">
                 {user.is_admin ? '✅' : '☑️'}
+            </button>
+        </form>
+    );
+}
+
+function UpdateWorkerUser({user}: { user: User }) {
+    const updateIsUserWorkerWithId = updateIsUserWorker.bind(null, user.id);
+
+    const onSubmit = async (_formData: FormData) => {
+        'use server'
+        await updateIsUserWorkerWithId();
+    };
+
+
+    return (
+        <form action={onSubmit}>
+            <button className="">
+                {user.is_worker ? '✅' : '☑️'}
             </button>
         </form>
     );

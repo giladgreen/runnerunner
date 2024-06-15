@@ -314,7 +314,7 @@ export async function fetchAllUsers() {
       }
     });
 
-    return users;
+    return users.sort((a,b)=> a.phone_number < b.phone_number ? -1 : 1);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of users.');
