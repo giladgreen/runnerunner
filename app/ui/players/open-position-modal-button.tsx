@@ -7,7 +7,7 @@ import Image from "next/image";
 
 export default function OpenPositionModalButton({
   player,
-                                                    prevPage
+  prevPage
 }: {
   player: PlayerDB;
     prevPage: string;

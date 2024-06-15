@@ -90,7 +90,11 @@ export type PlayerDB = {
   saturday_rsvp: boolean;
 
 };
-
+export type WinnerDB = {
+  date: string;
+  tournament_name: string;
+  winners: string;
+}
 export type Counts = {
   phone_number: string;
   count: number;

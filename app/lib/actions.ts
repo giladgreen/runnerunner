@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import {PlayerDB, PlayerForm, User, TournamentDB} from "@/app/lib/definitions";
+import {PlayerDB, PlayerForm, User, TournamentDB, WinnerDB} from "@/app/lib/definitions";
 import bcrypt from "bcrypt";
 import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/unstable-no-store";
 
@@ -228,13 +228,36 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
          };
    }
     try {
-        const date = new Date().toISOString();
+        const date = (new Date()).toISOString().slice(0,10);
+        const playerResult = await sql<PlayerDB>`SELECT * FROM players WHERE id = ${playerId}`;
+        const player = playerResult.rows[0];
+        if (!player){
+            return {
+                message: 'Invalid Position. Failed to find Player.',
+            };
+        }
 
-        await sql`
-      UPDATE players
-      SET position = ${newPosition}, updated_at=${date}
-      WHERE id = ${playerId}
+        const today = (new Date()).toLocaleString('en-us', {weekday: 'long'});
+
+        const todayTournamentResult = await sql<TournamentDB>`
+      SELECT
+        *
+      FROM tournaments
+      WHERE day = ${today};
     `;
+        const todayTournament = todayTournamentResult.rows[0];
+        const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
+        let winnersObject = winnersResult.rows[0];
+        if (winnersObject){
+            const newWinnersObject = {
+                ...JSON.parse(winnersObject.winners),
+                [player.phone_number]: newPositionNumber
+            }
+            await sql`UPDATE winners SET winners=${JSON.stringify(newWinnersObject)} WHERE date = ${date}`;
+
+        }else{
+            await sql`INSERT INTO winners (date, tournament_name, winners) VALUES (${date}, ${todayTournament.name}, ${JSON.stringify({ [player.phone_number]: newPositionNumber})}`;
+        }
 
     } catch (error) {
         console.log('## create log error', error)
@@ -347,17 +370,7 @@ export async function resetAllRsvp() {
     redirect('/dashboard/players');
 }
 
-export async function resetPlayersPositions() {
-    try {
-        await sql`UPDATE players SET position = 0`;
-    } catch (error) {
-        console.log('## resetPlayersPositions error', error)
 
-        return { message: 'Database Error: Failed to resetPlayersPositions.' };
-    }
-    revalidatePath('/dashboard/todayplayers');
-    redirect('/dashboard/todayplayers');
-}
 export async function deletePlayer(id: string) {
 
     try {

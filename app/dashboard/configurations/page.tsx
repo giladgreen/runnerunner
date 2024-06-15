@@ -1,5 +1,5 @@
 import {fetchAllBugs, fetchAllPlayersForExport} from "@/app/lib/data";
-import {ImportPlayers, ExportPlayers, ResetRSVP, ResetPlayersPosition} from "@/app/ui/players/client-buttons";
+import {ImportPlayers, ExportPlayers, ResetRSVP} from "@/app/ui/players/client-buttons";
 import {PlayerDB} from "@/app/lib/definitions";
 import React from "react";
 import Link from 'next/link';
@@ -10,26 +10,6 @@ import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 
 function Seperator() {
     return <div className="config-seperator"/>
-}
-
-function ResetPlayersPositionButton() {
-    return <div className="config-section">
-        <div style={{marginBottom: 20}}>
-            <Image
-                title={'podium'}
-                src={`/podium.png`}
-                alt={`podium`}
-                className="mr-4 zoom-on-hover"
-                width={35}
-                height={35}
-            />
-            <b>Reset players place</b>
-
-        </div>
-        <ResetPlayersPosition/>
-
-        *should be performed at the beginning of each day
-    </div>
 }
 
 function ResetRSVPButton() {
@@ -125,9 +105,6 @@ export default async function Page() {
             <div className="config-section">
                 <b>Configurations</b>
             </div>
-
-            <Seperator/>
-            <ResetPlayersPositionButton/>
             <Seperator/>
             <ResetRSVPButton/>
             <Seperator/>

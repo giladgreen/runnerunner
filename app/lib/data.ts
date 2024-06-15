@@ -5,7 +5,7 @@ import {
   BugDB, Counts,
   DebtPlayerRaw, LogDB,
   MVPPlayerRaw, PlayerDB,
-  TournamentDB, User
+  TournamentDB, User, WinnerDB
 } from './definitions';
 
 export async function fetchMVPPlayers() {
@@ -139,8 +139,17 @@ export async function fetchRSVPAndArrivalData() {
 export async function fetchFinalTablePlayers() {
   noStore();
   try {
-    const allPlayersResult = await sql<PlayerDB>`SELECT * FROM players WHERE position > 0 ORDER BY position ASC`;
-    return allPlayersResult.rows;
+    const date = (new Date()).toISOString().slice(0,10);
+    const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
+    const winnersObject = winnersResult.rows[0] || {};
+
+    const allPlayersResult = await sql<PlayerDB>`SELECT * FROM players`;
+    const allPlayers = allPlayersResult.rows;
+    allPlayers.forEach(player => {
+        // @ts-ignore
+      player.position = winnersObject[player.phone_number] || 0;
+    })
+    return allPlayers.filter(player => player.position > 0).sort((a,b)=> a.position < b.position ? -1 : 1);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch final table players data.');
@@ -211,6 +220,9 @@ export async function fetchTodayPlayers(query?: string) {
 console.log('## fetchTodayPlayers. query:', query)
   noStore();
   try {
+    const date = (new Date()).toISOString().slice(0,10);
+    const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
+    const winnersObject = winnersResult.rows[0] || {};
     const now = new Date();
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
 
@@ -228,6 +240,9 @@ console.log('## fetchTodayPlayers. query:', query)
       player.entries = playerItems.length;
       player.name = player.name.trim();
       player.historyLog = playerItems;
+
+      // @ts-ignore
+      player.position = winnersObject[player.phone_number] || 0;
     });
 
     console.log('## players. :', players.length)

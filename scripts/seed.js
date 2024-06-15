@@ -131,14 +131,14 @@ async function seedPlayers(client) {
     phone_number VARCHAR(20) NOT NULL,
     notes VARCHAR(500) NOT NULL default '',
     updated_at timestamp NOT NULL DEFAULT now(),
+    
     sunday_rsvp BOOLEAN DEFAULT FALSE,
     monday_rsvp BOOLEAN DEFAULT FALSE,
     tuesday_rsvp BOOLEAN DEFAULT FALSE,
     wednesday_rsvp BOOLEAN DEFAULT FALSE,
     thursday_rsvp BOOLEAN DEFAULT FALSE,
     friday_rsvp BOOLEAN DEFAULT FALSE,
-    saturday_rsvp BOOLEAN DEFAULT FALSE,
-    position INT DEFAULT 0
+    saturday_rsvp BOOLEAN DEFAULT FALSE
   );
 `;
 
