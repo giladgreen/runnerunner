@@ -33,6 +33,9 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
   const tournaments = await fetchTournaments();
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+  const todayTournament = tournaments.find((tournament) => tournament.day === dayOfTheWeek);
+  // @ts-ignore
+  const rsvp_required = todayTournament.rsvp_required;
   const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`;
   const arrivedPlayers = players.filter((player) => player.arrived).length;
   // @ts-ignore
@@ -116,9 +119,9 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
                   Notes
                 </th>
 
-                <th scope="col" className="px-3 py-5 font-medium">
+              {rsvp_required && <th scope="col" className="px-3 py-5 font-medium">
                   RSVP
-                </th>
+                </th>}
                 <th scope="col" className="px-3 py-5 font-medium">
                   Arrived
                 </th>
@@ -170,9 +173,9 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
 
                     </td>
 
-                    <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
+                    {rsvp_required && <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
                       <RSVPButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'}/>
-                    </td>
+                    </td>}
                     <td className="whitespace-nowrap px-3 py-3 rsvp-icon ">
                       {player.arrived ? '✅' : ''}
                     </td>

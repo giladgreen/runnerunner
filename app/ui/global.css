@@ -15,9 +15,11 @@
   font-weight: bold;
 }
 .form-control {
-  border: 1px solid rgb(0, 112, 243);
+  border: 2px solid rgb(0, 112, 243);
   border-radius:6px;
   padding:12px;
+  background: white;
+  box-shadow: 0 0 0 3px white;
 }
 .form-inner-control{
 background: rgb(0, 112, 243, 0.2);

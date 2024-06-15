@@ -3,7 +3,8 @@
 import {
   UserGroupIcon,
   HomeIcon,BanknotesIcon,
-  UsersIcon, WrenchScrewdriverIcon
+  UsersIcon, WrenchScrewdriverIcon,
+  Square2StackIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -14,9 +15,9 @@ import clsx from 'clsx';
 const links = [
   { name: 'homepage', href: '/dashboard', icon: HomeIcon },
   {
-    name: "today's players",
+    name: "current tournament",
     href: '/dashboard/todayplayers',
-    icon: UsersIcon
+    icon: Square2StackIcon
   },
   {
     name: 'all players',

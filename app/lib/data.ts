@@ -18,7 +18,7 @@ export async function fetchMVPPlayers() {
       LIMIT 5`;
 
     const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' );
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' && type != 'credit');
 
     const players = data.rows;
     players.forEach((player) => {
@@ -42,7 +42,7 @@ export async function fetchDebtPlayers() {
       LIMIT 5`;
 
     const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' )
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' && type != 'credit')
 
     const players = data.rows;
     players.forEach((player) => {
@@ -93,7 +93,7 @@ export async function fetchRSVPAndArrivalData() {
     const rsvpForToday = allPlayers.filter(player => player[rsvpPropName]).length
 
     const todayHistoryResults = await sql`SELECT phone_number, type, change FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' );
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' && type != 'credit');
 
     const todayTournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${dayOfTheWeek}`;
     const todayTournament = todayTournamentResult.rows[0];
@@ -220,7 +220,7 @@ console.log('## fetchTodayPlayers. query:', query)
     const players = playersResults.rows;
 
     const todayHistoryResults = await sql`SELECT * FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' )
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' && type != 'credit' )
 
     players.forEach((player) => {
       const playerItems = todayHistory.filter(({ phone_number}) => phone_number === player.phone_number) as LogDB[];
@@ -230,11 +230,16 @@ console.log('## fetchTodayPlayers. query:', query)
       player.historyLog = playerItems;
     });
 
+    console.log('## players. :', players.length)
 
     // @ts-ignore
     const results = players.filter(p => (!query && p.arrived) || (!query && !!p[rsvpPropName]) || (query && query.length > 0 && (p.name.includes(query) ||  p.phone_number.includes(query))))
     results.sort((a,b)=> a.name < b.name ? -1 : 1);
+    console.log('## results. :', results.length)
+if (results.length){
+  console.log('## results[0]. :', results[0])
 
+}
     return results;
   } catch (error) {
     console.error('Database Error:', error);

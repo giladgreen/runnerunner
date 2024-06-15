@@ -63,7 +63,8 @@ export async function RSVPAndArrivalCardWrapper() {
         reEntriesCount,
         todayTournament
     } = await fetchRSVPAndArrivalData();
-    const rsvpForTodayText =`${rsvpForToday}${todayTournamentMaxPlayers ?` / ${todayTournamentMaxPlayers}`:''}`
+    const { rsvp_required } = todayTournament;
+    const rsvpForTodayText = rsvp_required ? (`${rsvpForToday}${todayTournamentMaxPlayers ?` / ${todayTournamentMaxPlayers}`:''}`) : 'ללא'
     const todayIncome = <div>
         <div style={{fontSize: 20, marginBottom:10}}>
             <b>{formatCurrency(todayCreditIncome + todayCashIncome + todayTransferIncome)}</b>
