@@ -147,6 +147,7 @@ export async function importPlayers(players: { name: string; phone_number: strin
 
 export async function resetAllPlayersAndHistory() {
     try {
+        console.log('## resetAllPlayersAndHistory start')
         await sql`DELETE FROM history`;
         console.log('## all history deleted')
         await sql`DELETE FROM players`;

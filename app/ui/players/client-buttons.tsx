@@ -151,7 +151,6 @@ export function ResetPlayersPosition() {
 }
 
 export function ResetPlayersAndHistory() {
-
     return (
         <>
             <Button
