@@ -256,7 +256,7 @@ const tournaments = [
   {
     day: 'Friday',
     name: '',
-    buy_in: 0,
+    buy_in: 200,
     max_players:0,
     rsvp_required: true
   },
