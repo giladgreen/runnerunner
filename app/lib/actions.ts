@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import {PlayerDB, PlayerForm, User, TournamentDB, WinnerDB} from "@/app/lib/definitions";
+import {PlayerDB, PlayerForm, User, TournamentDB, WinnerDB, RSVPDB} from "@/app/lib/definitions";
 import bcrypt from "bcrypt";
 import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/unstable-no-store";
 
@@ -25,13 +25,6 @@ const UpdateTournament =  z.object({
 const UpdatePlayer = z.object({
     name: z.string().min(1, 'name can not be left empty'),
     notes: z.string(),
-    sunday_rsvp: z.boolean().optional(),
-    monday_rsvp: z.boolean().optional(),
-    tuesday_rsvp: z.boolean().optional(),
-    wednesday_rsvp: z.boolean().optional(),
-    thursday_rsvp: z.boolean().optional(),
-    friday_rsvp: z.boolean().optional(),
-    saturday_rsvp: z.boolean().optional()
 });
 
 
@@ -74,26 +67,22 @@ export async function createReport(formData: FormData) {
     redirect('/dashboard/configurations');
 }
 export async function createPlayer(prevPage: string, prevState: State, formData: FormData) {
-
-    const sunday_rsvp = !!formData.get('sunday_rsvp');
-    const monday_rsvp = !!formData.get('monday_rsvp');
-    const tuesday_rsvp = !!formData.get('tuesday_rsvp');
-    const wednesday_rsvp = !!formData.get('wednesday_rsvp');
-    const thursday_rsvp = !!formData.get('thursday_rsvp');
-    const friday_rsvp = !!formData.get('friday_rsvp');
-    const saturday_rsvp = !!formData.get('saturday_rsvp');
     const name = formData.get('name') as string;
     const balance = formData.get('balance') as string;
     const note = formData.get('note') as string;
     const phone_number = formData.get('phone_number') as string;
     const notes = formData.get('notes') as string;
-    const image_url = (formData.get('image_url') as string) ?? '/players/default.png'
+    let image_url = (formData.get('image_url') as string) ?? '/players/default.png'
     const phoneNumber = phone_number.replaceAll('-', '');
 
+    if (!image_url || image_url.trim().length < 7){
+        image_url = '/players/default.png';
+    }
+console.log('## image_url', image_url)
     try {
         await sql`
-      INSERT INTO players (name, balance, phone_number, image_url, notes, sunday_rsvp, monday_rsvp, tuesday_rsvp, wednesday_rsvp, thursday_rsvp, friday_rsvp,saturday_rsvp)
-      VALUES (${name}, ${balance}, ${phoneNumber}, ${image_url} , ${notes ?? ''}, ${sunday_rsvp}, ${monday_rsvp}, ${tuesday_rsvp}, ${wednesday_rsvp}, ${thursday_rsvp}, ${friday_rsvp}, ${saturday_rsvp})
+      INSERT INTO players (name, balance, phone_number, image_url, notes)
+      VALUES (${name}, ${balance}, ${phoneNumber}, ${image_url} , ${notes ?? ''})
     `;
 
         await sql`
@@ -291,13 +280,6 @@ export async function updatePlayer(
             message: 'Missing Fields. Failed to Update Player.',
         };
     }
-    const sunday_rsvp = !!formData.get('sunday_rsvp');
-    const monday_rsvp = !!formData.get('monday_rsvp');
-    const tuesday_rsvp = !!formData.get('tuesday_rsvp');
-    const wednesday_rsvp = !!formData.get('wednesday_rsvp');
-    const thursday_rsvp = !!formData.get('thursday_rsvp');
-    const friday_rsvp = !!formData.get('friday_rsvp');
-    const saturday_rsvp = !!formData.get('saturday_rsvp');
     const image_url = (formData.get('image_url') as string);
 
     const { name, notes } = validatedFields.data;
@@ -306,7 +288,7 @@ export async function updatePlayer(
     try {
         await sql`
       UPDATE players
-      SET name = ${name}, image_url = ${image_url}, notes = ${notes}, updated_at=${date} , sunday_rsvp = ${sunday_rsvp}, monday_rsvp = ${monday_rsvp}, tuesday_rsvp = ${tuesday_rsvp}, wednesday_rsvp = ${wednesday_rsvp}, thursday_rsvp = ${thursday_rsvp},friday_rsvp=${friday_rsvp}, saturday_rsvp = ${saturday_rsvp}
+      SET name = ${name}, image_url = ${image_url}, notes = ${notes}, updated_at=${date}
       WHERE id = ${id}
     `;
     } catch (error) {
@@ -357,20 +339,6 @@ export async function updateTournament(
     revalidatePath('/dashboard/configurations/tournaments');
     redirect('/dashboard/configurations/tournaments');
 }
-
-
-export async function resetAllRsvp() {
-    try {
-        await sql`UPDATE players SET sunday_rsvp = false, monday_rsvp = false, tuesday_rsvp = false, wednesday_rsvp = false, thursday_rsvp = false, friday_rsvp=false, saturday_rsvp = false`;
-    } catch (error) {
-        console.error('## resetAllRsvp error', error)
-
-        return { message: 'Database Error: Failed to resetAllRsvp.' };
-    }
-    revalidatePath('/dashboard/players');
-    redirect('/dashboard/players');
-}
-
 
 export async function deletePlayer(id: string) {
 
@@ -464,13 +432,27 @@ export async function updateIsUserWorker(id:string) {
 }
 
 
-export async function rsvpPlayerForDay(phone_number:string, rsvpAttribute: string, val: boolean, prevPage: string){
+export async function rsvpPlayerForDay(phone_number:string, date:string, val: boolean, prevPage: string){
     noStore();
-    const playerResult = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phone_number}`;
-    const player = playerResult.rows[0]
     try {
-        // @ts-ignore
-        await sql`UPDATE players SET sunday_rsvp = ${rsvpAttribute === 'sunday_rsvp' ? val : player['sunday_rsvp'] as boolean}, monday_rsvp = ${rsvpAttribute === 'monday_rsvp' ? val : player['monday_rsvp'] as boolean}, tuesday_rsvp = ${rsvpAttribute === 'tuesday_rsvp' ? val : player['tuesday_rsvp'] as boolean}, wednesday_rsvp = ${rsvpAttribute === 'wednesday_rsvp' ? val : player['wednesday_rsvp'] as boolean}, thursday_rsvp = ${rsvpAttribute === 'thursday_rsvp' ? val : player['thursday_rsvp'] as boolean},friday_rsvp = ${rsvpAttribute === 'friday_rsvp' ? val : player['friday_rsvp'] as boolean}, saturday_rsvp = ${rsvpAttribute === 'saturday_rsvp' ? val : player['saturday_rsvp'] as boolean} where phone_number = ${phone_number};`;
+        const rsvpResult = await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${phone_number} AND date = ${date}`;
+        const existingRsvp = rsvpResult.rows[0];
+
+        if (val && existingRsvp){
+            //already rsvp
+            return;
+        }
+        if (!val && !existingRsvp){
+            //already not rsvp
+            return;
+        }
+         if (val && !existingRsvp){
+             await sql`INSERT INTO rsvp (date, phone_number) VALUES (${date}, ${phone_number})`;
+
+        }else{
+             await sql`DELETE FROM rsvp WHERE id = ${existingRsvp.id}`;
+         }
+
     } catch (error) {
         console.error('rsvpPlayerForDay Error:', error);
         return false;

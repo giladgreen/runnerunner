@@ -12,9 +12,6 @@ import {PlayersSkeleton} from "@/app/ui/skeletons";
 
 export default async function DebtPlayers() {
     const debtPlayers = await fetchDebtPlayers();
-    const now = new Date();
-    const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
-    const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
 
   return (
       <Suspense fallback={<PlayersSkeleton />}>
@@ -67,12 +64,10 @@ export default async function DebtPlayers() {
                 </div>
                   <div>
                       {
-                          // @ts-ignore
-                          player[rsvpPropName] && !player.arrived && <TickIcon size={24}/>
+                          player.rsvpForToday && !player.arrived && <TickIcon size={24}/>
                       }
                       {
-                          // @ts-ignore
-                          player[rsvpPropName] && player.arrived && <DoubleTicksIcon size={24}/>
+                          player.rsvpForToday && player.arrived && <DoubleTicksIcon size={24}/>
                       }
                   </div>
               </div>

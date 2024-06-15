@@ -187,61 +187,6 @@ export default function Form({prevPage}:{prevPage:string}) {
           <label htmlFor="notes" className="mb-2 block text-sm font-medium">
             RSVP
           </label>
-          <div className="relative mt-2 rounded-md">
-            <div className="relative rsvp-section">
-              <div className="flex flex-wrap justify-content-center gap-3">
-                <div className="flex align-items-center">
-                  <Checkbox inputId="sunday_rsvp" name="sunday_rsvp" value="sunday_rsvp"
-                            checked={sundayChecked}
-                            onChange={(e) => setSundayChecked(!!e.checked)}
-                  />
-                  <label htmlFor="sunday_rsvp" className="ml-2">Sunday</label>
-                </div>
-                <div className="flex align-items-center">
-                  <Checkbox inputId="monday_rsvp" name="monday_rsvp" value="monday_rsvp"
-                            checked={mondayChecked}
-                            onChange={(e) => setMondayChecked(!!e.checked)}
-                  />
-                  <label htmlFor="monday_rsvp" className="ml-2">Monday</label>
-                </div>
-                <div className="flex align-items-center">
-                  <Checkbox inputId="tuesday_rsvp" name="tuesday_rsvp" value="tuesday_rsvp"
-                            checked={tuesdayChecked}
-                            onChange={(e) => setTuesdayChecked(!!e.checked)}
-                  />
-                  <label htmlFor="tuesday_rsvp" className="ml-2">Tuesday</label>
-                </div>
-                <div className="flex align-items-center">
-                  <Checkbox inputId="wednesday_rsvp" name="wednesday_rsvp" value="wednesday_rsvp"
-                            checked={wednesdayChecked}
-                            onChange={(e) => setWednesdayChecked(!!e.checked)}
-                  />
-                  <label htmlFor="wednesday_rsvp" className="ml-2">Wednesday</label>
-                </div>
-                <div className="flex align-items-center">
-                  <Checkbox inputId="thursday_rsvp" name="thursday_rsvp" value="thursday_rsvp"
-                            checked={thursdayChecked}
-                            onChange={(e) => setThursdayChecked(!!e.checked)}
-                  />
-                  <label htmlFor="thursday_rsvp" className="ml-2">Thursday</label>
-                </div>
-                <div className="flex align-items-center">
-                  <Checkbox inputId="friday_rsvp" name="friday_rsvp" value="friday_rsvp"
-                            checked={fridayChecked}
-                            onChange={(e) => setFridayChecked(!!e.checked)}
-                  />
-                  <label htmlFor="friday_rsvp" className="ml-2">Friday</label>
-                </div>
-                <div className="flex align-items-center">
-                  <Checkbox inputId="saturday_rsvp" name="saturday_rsvp" value="saturday_rsvp"
-                            checked={saturdayChecked}
-                            onChange={(e) => setSaturdayChecked(!!e.checked)}
-                  />
-                  <label htmlFor="saturday_rsvp" className="ml-2">Saturday</label>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* player image url */}

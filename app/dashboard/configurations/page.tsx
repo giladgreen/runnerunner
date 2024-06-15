@@ -1,34 +1,20 @@
 import {fetchAllBugs, fetchAllPlayersForExport} from "@/app/lib/data";
-import {ImportPlayers, ExportPlayers, ResetRSVP} from "@/app/ui/players/client-buttons";
+import {ImportPlayers, ExportPlayers} from "@/app/ui/players/client-buttons";
 import {PlayerDB} from "@/app/lib/definitions";
 import React from "react";
 import Link from 'next/link';
 import Form from "@/app/ui/players/create-bug-form";
 import {formatDateToLocal} from "@/app/lib/utils";
-import Image from "next/image";
-import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 
 function Seperator() {
     return <div className="config-seperator"/>
 }
 
-function ResetRSVPButton() {
-    return <div className="config-section">
-        <div style={{marginBottom: 20}}>
-            <DoubleTicksIcon size={20}/>
-            <b>Reset RSVPs</b>
-        </div>
-        <ResetRSVP/>
-        *should be performed at the beginning of each week
-    </div>
-}
-
-
 function TournamentsLink() {
     return <div className="config-section">
         <Link href="/dashboard/configurations/tournaments"
               className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400">
-            Tournaments
+            Tournaments Info
         </Link>
 
     </div>
@@ -105,8 +91,6 @@ export default async function Page() {
             <div className="config-section">
                 <b>Configurations</b>
             </div>
-            <Seperator/>
-            <ResetRSVPButton/>
             <Seperator/>
             <ExportPlayersButton players={players}/>
             <Seperator/>

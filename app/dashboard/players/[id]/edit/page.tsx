@@ -1,10 +1,11 @@
 import Form from '@/app/ui/players/edit-form';
 import Breadcrumbs from '@/app/ui/players/breadcrumbs';
-import { fetchPlayerById } from '@/app/lib/data';
+import {fetchPlayerById, fetchTournaments} from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
+    const tournaments = await fetchTournaments();
     const player = await fetchPlayerById(id);
     if (!player) {
         notFound();
@@ -27,7 +28,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     }
                 ]}
             />
-            <Form player={player} prevPage={'/dashboard/players'}/>
+            <Form player={player} prevPage={'/dashboard/players'} tournaments={tournaments}/>
         </main>
     );
 }

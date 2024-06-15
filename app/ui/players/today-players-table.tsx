@@ -36,10 +36,10 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
   const todayTournament = tournaments.find((tournament) => tournament.day === dayOfTheWeek);
   // @ts-ignore
   const rsvp_required = todayTournament.rsvp_required;
-  const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`;
+
   const arrivedPlayers = players.filter((player) => player.arrived).length;
   // @ts-ignore
-  const rsvpPlayers = players.filter((player) => !!player[rsvpPropName]);
+  const rsvpPlayers = players.filter((player) => player.rsvpForToday);
   const rsvpPlayersCount = rsvpPlayers.length;
 
   return (
@@ -89,12 +89,10 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
                   <div>
                     <div>
                       {
-                        // @ts-ignore
-                          player[rsvpPropName] && !player.arrived && <TickIcon size={24}/>
+                          player.rsvpForToday && !player.arrived && <TickIcon size={24}/>
                       }
                       {
-                        // @ts-ignore
-                          player[rsvpPropName] && player.arrived && <DoubleTicksIcon size={24}/>
+                          player.rsvpForToday && player.arrived && <DoubleTicksIcon size={24}/>
                       }
                     </div>
 

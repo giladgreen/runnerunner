@@ -3,34 +3,61 @@ import { updatePlayer } from '@/app/lib/actions';
 import { Checkbox } from 'primereact/checkbox';
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
 
-import { PlayerForm } from '@/app/lib/definitions';
+import {PlayerDB, PlayerForm, TournamentDB} from '@/app/lib/definitions';
 
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import {useFormState} from "react-dom";
 import {PencilIcon} from "@heroicons/react/24/outline";
 import {useState} from "react";
+import RSVPButton from "@/app/ui/players/rsvp-button";
+
+const translation = {
+    Sunday: 'יום ראשון',
+    Monday: 'יום שני',
+    Tuesday: 'יום שלישי',
+    Wednesday: 'יום רביעי',
+    Thursday: 'יום חמישי',
+    Friday: 'יום שישי',
+    Saturday: 'יום שבת',
+}
 
 export default function EditPlayerForm({
   player,
+  tournaments,
   prevPage
 }: {
   player: PlayerForm;
+  tournaments: TournamentDB[];
   prevPage: string
 }) {
-  const initialState = { message: null, errors: {} };
-  const updatePlayerWithId = updatePlayer.bind(null, {id: player.id, prevPage});
+    const initialState = { message: null, errors: {} };
+    const updatePlayerWithId = updatePlayer.bind(null, {id: player.id, prevPage});
     const [imageUrl, setImageUrl] = useState(player.image_url ?? '');
 
     const [state, dispatch] = useFormState(updatePlayerWithId, initialState);
-  const [sundayChecked, setSundayChecked] = useState(!!player.sunday_rsvp);
-    const [mondayChecked, setMondayChecked] = useState(!!player.monday_rsvp);
-    const [tuesdayChecked, setTuesdayChecked] = useState(!!player.tuesday_rsvp);
-    const [wednesdayChecked, setWednesdayChecked] = useState(!!player.wednesday_rsvp);
-    const [thursdayChecked, setThursdayChecked] = useState(!!player.thursday_rsvp);
-    const [fridayChecked, setFridayChecked] = useState(!!player.friday_rsvp);
-    const [saturdayChecked, setSaturdayChecked] = useState(!!player.saturday_rsvp);
-  return (
+
+
+    const dayOfTheWeek = (new Date()).toLocaleString('en-us', { weekday: 'long' });
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const today = days.indexOf(dayOfTheWeek);
+    const rsvps = player.rsvps;
+
+    const rsvpsForTheNextWeek = tournaments.slice(today).map((tournament, index) => {
+        const date = (new Date((new Date()).getTime() + (1000 * 60 * 60 * 24 * index)));
+        const dayOfTheWeek = date.toLocaleString('en-us', { weekday: 'long' });
+        const stringDate = date.toISOString().slice(0,10);
+        // @ts-ignore
+        const text = ` ${translation[dayOfTheWeek]} - ${tournament.name}`;
+        return <div key={tournament.id}>
+            {tournament.rsvp_required ?
+                (tournament.max_players === 0 ? '' : <RSVPButton player={player as PlayerDB} prevPage={`/dashboard/players/${player.id}/edit`} stringDate={stringDate} text={text}/>)
+                : <div>◻️ {text} </div>}
+        </div>
+
+    });
+
+    return (
       <>
           <form action={dispatch}>
               <div className="rounded-md bg-gray-50 p-4 md:p-6">
@@ -96,61 +123,6 @@ export default function EditPlayerForm({
                       <label htmlFor="notes" className="mb-2 block text-sm font-medium">
                           RSVP
                       </label>
-                      <div className="relative mt-2 rounded-md">
-                          <div className="relative rsvp-section">
-                              <div className="flex flex-wrap justify-content-center gap-3">
-                                  <div className="flex align-items-center">
-                                      <Checkbox inputId="sunday_rsvp" name="sunday_rsvp" value="sunday_rsvp"
-                                                checked={sundayChecked}
-                                                onChange={(e) => setSundayChecked(!!e.checked)}
-                                      />
-                                      <label htmlFor="sunday_rsvp" className="ml-2">Sunday</label>
-                                  </div>
-                                 <div className="flex align-items-center">
-                                    <Checkbox inputId="monday_rsvp" name="monday_rsvp" value="monday_rsvp"
-                                              checked={mondayChecked}
-                                              onChange={(e) => setMondayChecked(!!e.checked)}
-                                    />
-                                    <label htmlFor="monday_rsvp" className="ml-2">Monday</label>
-                                 </div>
-                                 <div className="flex align-items-center">
-                                    <Checkbox inputId="tuesday_rsvp" name="tuesday_rsvp" value="tuesday_rsvp"
-                                              checked={tuesdayChecked}
-                                              onChange={(e) => setTuesdayChecked(!!e.checked)}
-                                    />
-                                    <label htmlFor="tuesday_rsvp" className="ml-2">Tuesday</label>
-                                 </div>
-                                 <div className="flex align-items-center">
-                                    <Checkbox inputId="wednesday_rsvp" name="wednesday_rsvp" value="wednesday_rsvp"
-                                              checked={wednesdayChecked}
-                                              onChange={(e) => setWednesdayChecked(!!e.checked)}
-                                    />
-                                    <label htmlFor="wednesday_rsvp" className="ml-2">Wednesday</label>
-                                 </div>
-                                 <div className="flex align-items-center">
-                                        <Checkbox inputId="thursday_rsvp" name="thursday_rsvp" value="thursday_rsvp"
-                                                checked={thursdayChecked}
-                                                onChange={(e) => setThursdayChecked(!!e.checked)}
-                                        />
-                                        <label htmlFor="thursday_rsvp" className="ml-2">Thursday</label>
-                                </div>
-                                 <div className="flex align-items-center">
-                                        <Checkbox inputId="friday_rsvp" name="friday_rsvp" value="friday_rsvp"
-                                                checked={fridayChecked}
-                                                onChange={(e) => setFridayChecked(!!e.checked)}
-                                        />
-                                        <label htmlFor="friday_rsvp" className="ml-2">Friday</label>
-                                </div>
-                                <div className="flex align-items-center">
-                                    <Checkbox inputId="saturday_rsvp" name="saturday_rsvp" value="saturday_rsvp"
-                                              checked={saturdayChecked}
-                                              onChange={(e) => setSaturdayChecked(!!e.checked)}
-                                    />
-                                    <label htmlFor="saturday_rsvp" className="ml-2">Saturday</label>
-                                </div>
-                              </div>
-                          </div>
-                      </div>
                   </div>
 
               </div>
@@ -203,6 +175,12 @@ export default function EditPlayerForm({
                   }
 
               </CldUploadWidget>
+          </div>
+          <div style={{ marginTop: 45, border: '2px solid blue', borderRadius:5, padding:10}}>
+             <div><u>RSVP</u></div>
+             <div>
+                 {rsvpsForTheNextWeek}
+             </div>
           </div>
       </>
   );

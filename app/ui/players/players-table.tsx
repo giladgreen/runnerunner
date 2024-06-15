@@ -15,6 +15,7 @@ export default async function PlayersTable({
 }) {
   const players = await fetchFilteredPlayers(query, currentPage);
   const now = new Date();
+
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
 
   return (

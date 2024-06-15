@@ -12,7 +12,7 @@ import { lusitana } from '@/app/ui/fonts';
 import {fetchFinalTablePlayers, fetchGeneralPlayersCardData, fetchRSVPAndArrivalData} from '@/app/lib/data';
 import {formatCurrency} from "@/app/lib/utils";
 import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
-import {CSSProperties, Suspense} from "react";
+import {CSSProperties, Suspense, useState} from "react";
 import {CardsSkeleton} from "@/app/ui/skeletons";
 import Image from "next/image";
 
@@ -230,7 +230,6 @@ export function Card({
     spend?: boolean
     empty?: boolean
 }) {
-
     if (empty) return (<div className={`rounded-xl  p-2 shadow-sm`}></div>);
 
     const Icon = type && !empty ? iconMap[type] : undefined;

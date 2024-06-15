@@ -130,15 +130,7 @@ async function seedPlayers(client) {
     balance INT NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
     notes VARCHAR(500) NOT NULL default '',
-    updated_at timestamp NOT NULL DEFAULT now(),
-    
-    sunday_rsvp BOOLEAN DEFAULT FALSE,
-    monday_rsvp BOOLEAN DEFAULT FALSE,
-    tuesday_rsvp BOOLEAN DEFAULT FALSE,
-    wednesday_rsvp BOOLEAN DEFAULT FALSE,
-    thursday_rsvp BOOLEAN DEFAULT FALSE,
-    friday_rsvp BOOLEAN DEFAULT FALSE,
-    saturday_rsvp BOOLEAN DEFAULT FALSE
+    updated_at timestamp NOT NULL DEFAULT now()
   );
 `;
 
@@ -150,8 +142,8 @@ async function seedPlayers(client) {
         (player, index) => {
           const rsvp = index % 2 === 0 ? true : false;
           return client.sql`
-        INSERT INTO players (name, phone_number, balance, image_url, notes, sunday_rsvp, monday_rsvp, tuesday_rsvp, wednesday_rsvp, thursday_rsvp, friday_rsvp, saturday_rsvp)
-        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.image_url ?? '/players/default.png'}, ${player.notes ?? ''}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp}, ${rsvp})
+        INSERT INTO players (name, phone_number, balance, image_url, notes)
+        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.image_url ?? '/players/default.png'}, ${player.notes ?? ''})
         ON CONFLICT (id) DO NOTHING;
       `
         },
@@ -247,6 +239,29 @@ async function seedWinners(client) {
   }
 }
 
+async function seedRSVP(client) {
+  try {
+    // Create the "rsvp" table if it doesn't exist
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS rsvp (
+         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+         date VARCHAR(20) NOT NULL,
+         phone_number TEXT NOT NULL
+      );
+    `;
+
+    console.log(`Created "rsvp" table`);
+
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error seeding rsvp:', error);
+    throw error;
+  }
+}
+
 async function main() {
   console.log('## main start')
 
@@ -260,6 +275,7 @@ async function main() {
       await client.sql`DROP TABLE IF EXISTS players`;
       await client.sql`DROP TABLE IF EXISTS history`;
       await client.sql`DROP TABLE IF EXISTS winners`;
+      await client.sql`DROP TABLE IF EXISTS rsvp`;
   }
 
   await seedTournaments(client);
@@ -269,6 +285,7 @@ async function main() {
 
   await seedHistory(client);
   await seedWinners(client);
+  await seedRSVP(client);
 
   await client.end();
 }

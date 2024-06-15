@@ -39,7 +39,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     const today = (new Date()).toLocaleString('en-us', {weekday: 'long'}).toLowerCase();
     const todayTournament = await fetchTournamentByDay(today)
-    const rsvpPropName = `${today}_rsvp`;
+
     const rsvpCountForTodayTournament = await fetchRsvpCountForTodayTournament();
 
     const {rsvp_required, max_players} = todayTournament;
@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     // @ts-ignore
     const todayTournamentData = noTournamentToday ? `אין היום טורניר` : `${translation[todayTournament.day]} -  ${todayTournament.name}`;
     // @ts-ignore
-    const isRegisterForTodayTournament = !!player[rsvpPropName];
+    const isRegisterForTodayTournament = player.rsvpForToday;
     const isFull = rsvpCountForTodayTournament >= max_players;
 
     const buttonStyle = {
@@ -59,11 +59,13 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     const onRegisterSubmit = async (_formData: FormData) => {
         'use server'
-        await rsvpPlayerForDay(player.phone_number, rsvpPropName, true, `/personal/${userId}`);
+        const todayDate = (new Date()).toISOString().slice(0,10);
+        await rsvpPlayerForDay(player.phone_number, todayDate, true, `/personal/${userId}`);
     };
     const onUnRegisterSubmit = async (_formData: FormData) => {
         'use server'
-        await rsvpPlayerForDay(player.phone_number, rsvpPropName, false, `/personal/${userId}`);
+        const todayDate = (new Date()).toISOString().slice(0,10);
+        await rsvpPlayerForDay(player.phone_number, todayDate, false, `/personal/${userId}`);
     };
 
     const separator = <hr style={{marginTop: 20, marginBottom: 20}}/>;
