@@ -18,7 +18,7 @@ export async function fetchMVPPlayers() {
       LIMIT 5`;
 
     const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' && type != 'credit');
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize');
 
     const players = data.rows;
     players.forEach((player) => {
@@ -42,7 +42,7 @@ export async function fetchDebtPlayers() {
       LIMIT 5`;
 
     const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' && type != 'credit')
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize')
 
     const players = data.rows;
     players.forEach((player) => {
@@ -136,19 +136,19 @@ export async function fetchRSVPAndArrivalData() {
 }
 
 
-export async function fetchFinalTablePlayers() {
+export async function fetchFinalTablePlayers(stringDate?: string) {
   noStore();
   try {
-    const date = (new Date()).toISOString().slice(0,10);
+    const date = stringDate ?? (new Date()).toISOString().slice(0,10);
     const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
-    const winnersObject = winnersResult.rows[0] || {};
-
+    const winnersObject = JSON.parse((winnersResult.rows[0] || { winners:'{}'}).winners);
     const allPlayersResult = await sql<PlayerDB>`SELECT * FROM players`;
     const allPlayers = allPlayersResult.rows;
     allPlayers.forEach(player => {
         // @ts-ignore
       player.position = winnersObject[player.phone_number] || 0;
     })
+
     return allPlayers.filter(player => player.position > 0).sort((a,b)=> a.position < b.position ? -1 : 1);
   } catch (error) {
     console.error('Database Error:', error);
@@ -217,14 +217,16 @@ export async function fetchPlayersPages(query: string) {
   }
 }
 export async function fetchTodayPlayers(query?: string) {
-console.log('## fetchTodayPlayers. query:', query)
   noStore();
   try {
     const date = (new Date()).toISOString().slice(0,10);
     const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
-    const winnersObject = winnersResult.rows[0] || {};
+    const winnersObject = JSON.parse((winnersResult.rows[0] || { winners:'{}'}).winners);
     const now = new Date();
     const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+    const tournamentsResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${dayOfTheWeek}`;
+    const tournament = tournamentsResult.rows[0];
+    const rsvp_required = tournament.rsvp_required;
 
     const rsvpPropName = `${dayOfTheWeek.toLowerCase()}_rsvp`
 
@@ -232,12 +234,14 @@ console.log('## fetchTodayPlayers. query:', query)
     const players = playersResults.rows;
 
     const todayHistoryResults = await sql`SELECT * FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' && type != 'credit' )
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' )
 
     players.forEach((player) => {
       const playerItems = todayHistory.filter(({ phone_number}) => phone_number === player.phone_number) as LogDB[];
       player.arrived = playerItems.length > 0;
       player.entries = playerItems.length;
+
+
       player.name = player.name.trim();
       player.historyLog = playerItems;
 
@@ -245,16 +249,11 @@ console.log('## fetchTodayPlayers. query:', query)
       player.position = winnersObject[player.phone_number] || 0;
     });
 
-    console.log('## players. :', players.length)
 
     // @ts-ignore
-    const results = players.filter(p => (!query && p.arrived) || (!query && !!p[rsvpPropName]) || (query && query.length > 0 && (p.name.includes(query) ||  p.phone_number.includes(query))))
+    const results = players.filter(p => (!query && p.arrived) || (!query && !!p[rsvpPropName] && rsvp_required) || (query && query.length > 0 && (p.name.includes(query) ||  p.phone_number.includes(query))))
     results.sort((a,b)=> a.name < b.name ? -1 : 1);
-    console.log('## results. :', results.length)
-if (results.length){
-  console.log('## results[0]. :', results[0])
 
-}
     return results;
   } catch (error) {
     console.error('Database Error:', error);
@@ -391,14 +390,12 @@ export async function fetchPlayerById(id: string) {
 
     const player = data.rows[0];
     if (player){
-      console.log('## adding logs to player:', player)
       const historyData = await sql<LogDB>`
       SELECT *
       FROM history
       WHERE phone_number = ${player.phone_number}
       order by history.updated_at asc;
     `;
-      console.log('## found logs:', historyData.rows.length)
 
       player.historyLog = historyData.rows;
     }

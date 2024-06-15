@@ -20,7 +20,7 @@ export default async function Page({
                 <RSVPAndArrivalCardWrapper/>
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                <FinalTablePlayers title="Players Place"/>
+                <FinalTablePlayers title="Places"/>
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Search placeholder="search players"/>

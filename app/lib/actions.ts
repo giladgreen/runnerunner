@@ -65,7 +65,7 @@ export async function createReport(formData: FormData) {
 
 
     } catch (error) {
-        console.log('## createReport error', error)
+        console.error('## createReport error', error)
         return {
             message: 'Database Error: Failed to Create report.',
         };
@@ -102,7 +102,7 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
     `;
 
     } catch (error) {
-        console.log('## createPlayer error', error)
+        console.error('## createPlayer error', error)
         return {
             message: 'Database Error: Failed to Create Player.',
         };
@@ -117,12 +117,13 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
 export async function importPlayers(players: { name: string; phone_number: string; balance: number, notes:string }[]) {
     const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
     try {
+        const date = (new Date((new Date()).getTime() - 24 * 60 * 60 * 1000)).toISOString();
         const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
         await Promise.all(
             playersToInsert.map(
                 (player) => sql<PlayerDB>`
-        INSERT INTO players (name, phone_number, balance, notes)
-        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes});
+        INSERT INTO players (name, phone_number, balance, notes, updated_at)
+        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date});
       `,
             ),
         );
@@ -136,7 +137,7 @@ export async function importPlayers(players: { name: string; phone_number: strin
             ),
         );
     } catch (error) {
-        console.log('## importPlayers error', error)
+        console.error('## importPlayers error', error)
         return {
             message: 'Database Error: Failed to import Players.',
         };
@@ -147,13 +148,10 @@ export async function importPlayers(players: { name: string; phone_number: strin
 
 export async function resetAllPlayersAndHistory() {
     try {
-        console.log('## resetAllPlayersAndHistory start')
         await sql`DELETE FROM history`;
-        console.log('## all history deleted')
         await sql`DELETE FROM players`;
-        console.log('## all history players')
     } catch (error) {
-        console.log('## resetAllPlayersAndHistory error', error)
+        console.error('## resetAllPlayersAndHistory error', error)
         return {
             message: 'Database Error: Failed to reset Players.',
         };
@@ -186,8 +184,9 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
       INSERT INTO history (phone_number, change, note, type, updated_by)
       VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type}, ${username ?? 'super-admin'})
     `;
+
     }catch(error){
-        console.log('### create log error', error)
+        console.error('### create log error', error)
         return {
             message: 'Database Error: Failed to Create log.',
         };
@@ -204,7 +203,7 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
     `;
 
         } catch (error) {
-            console.log('## create log error', error)
+            console.error('## create log error', error)
             return {
                 message: 'Database Error: Failed to update player balance on credit change.',
             };
@@ -220,9 +219,10 @@ export async function createPlayerUsageLog(data : {player: PlayerForm, prevPage:
 }
 
 export async function setPlayerPosition({playerId, prevPage}:{playerId: string, prevPage: string}, prevState: State, formData: FormData){
-   const newPosition =  formData.get('position') as string;
-   const newPositionNumber = Number(newPosition);
-   if (isNaN(newPositionNumber) || newPositionNumber < 1){
+    const newPosition =  formData.get('position') as string;
+    const newPositionNumber = Number(newPosition);
+
+    if (isNaN(newPositionNumber) || newPositionNumber < 1){
          return {
               message: 'Invalid Position. Failed to set Player Position.',
          };
@@ -248,6 +248,7 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
         const todayTournament = todayTournamentResult.rows[0];
         const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
         let winnersObject = winnersResult.rows[0];
+
         if (winnersObject){
             const newWinnersObject = {
                 ...JSON.parse(winnersObject.winners),
@@ -256,11 +257,11 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
             await sql`UPDATE winners SET winners=${JSON.stringify(newWinnersObject)} WHERE date = ${date}`;
 
         }else{
-            await sql`INSERT INTO winners (date, tournament_name, winners) VALUES (${date}, ${todayTournament.name}, ${JSON.stringify({ [player.phone_number]: newPositionNumber})}`;
+            await sql`INSERT INTO winners (date, tournament_name, winners) VALUES (${date}, ${todayTournament.name}, ${JSON.stringify({ [player.phone_number]: newPositionNumber})})`;
         }
 
     } catch (error) {
-        console.log('## create log error', error)
+        console.error('## create log error', error)
         return {
             message: 'Database Error: Failed to setPlayerPosition.',
         };
@@ -284,7 +285,7 @@ export async function updatePlayer(
     });
 
     if (!validatedFields.success) {
-        console.log('## updatePlayer error', validatedFields.error.flatten().fieldErrors);
+        console.error('## updatePlayer error', validatedFields.error.flatten().fieldErrors);
         return {
             errors: validatedFields.error.flatten().fieldErrors,
             message: 'Missing Fields. Failed to Update Player.',
@@ -309,7 +310,7 @@ export async function updatePlayer(
       WHERE id = ${id}
     `;
     } catch (error) {
-        console.log('## updatePlayer error', error)
+        console.error('## updatePlayer error', error)
         return { message: 'Database Error: Failed to Update Player.' };
     }
 
@@ -332,7 +333,7 @@ export async function updateTournament(
     });
 
     if (!validatedFields.success) {
-        console.log('## updateTournament error', validatedFields.error.flatten().fieldErrors);
+        console.error('## updateTournament error', validatedFields.error.flatten().fieldErrors);
         return {
             errors: validatedFields.error.flatten().fieldErrors,
             message: 'Missing Fields. Failed to Update tournament.',
@@ -349,7 +350,7 @@ export async function updateTournament(
       WHERE id = ${id}
     `;
     } catch (error) {
-        console.log('## updateTournament error', error)
+        console.error('## updateTournament error', error)
         return { message: 'Database Error: Failed to update Tournament.' };
     }
 
@@ -362,7 +363,7 @@ export async function resetAllRsvp() {
     try {
         await sql`UPDATE players SET sunday_rsvp = false, monday_rsvp = false, tuesday_rsvp = false, wednesday_rsvp = false, thursday_rsvp = false, friday_rsvp=false, saturday_rsvp = false`;
     } catch (error) {
-        console.log('## resetAllRsvp error', error)
+        console.error('## resetAllRsvp error', error)
 
         return { message: 'Database Error: Failed to resetAllRsvp.' };
     }
@@ -400,7 +401,7 @@ export async function authenticate(
         formData.set('email', phoneNumber);
         await signIn('credentials', formData);
     } catch (error) {
-        console.log('## error', error)
+        console.error('## authenticate error', error)
         if (error instanceof AuthError) {
             switch (error.type) {
                 case 'CredentialsSignin':

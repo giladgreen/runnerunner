@@ -8,7 +8,6 @@ export default function TodaySearch({ placeholder }: { placeholder: string }) {
     const pathname = usePathname();
     const { replace } = useRouter();
     const handleSearch = useDebouncedCallback((term) => {
-        console.log(`searching..  ${term}   `);
         const params = new URLSearchParams(searchParams);
         if (term) {
             params.set('query', term);

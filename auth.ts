@@ -29,7 +29,7 @@ export const { auth, signIn, signOut } = NextAuth({
                 const passwordsMatch = await bcrypt.compare(password, user.password);
                 if (passwordsMatch) return { ...user, email: user.phone_number};
 
-                console.log('Error: Invalid credentials');
+                console.error('Error: Invalid credentials');
                 return null;
             },
         }),

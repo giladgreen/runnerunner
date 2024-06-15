@@ -6,6 +6,7 @@ import {
 } from '@heroicons/react/24/solid';
 import {formatCurrency, formatDateToLocal} from "@/app/lib/utils";
 import {lusitana} from "@/app/ui/fonts";
+import {getFinalTablePlayersContent} from "@/app/ui/dashboard/cards";
 
 export default async function RevenuesPage() {
     const revenues = await fetchRevenues();
@@ -27,10 +28,13 @@ export default async function RevenuesPage() {
                     <th className="px-3 py-5 font-medium">
                         <b>Buyins</b>
                     </th>
+                    <th className="px-3 py-5 font-medium">
+                        <b>Places</b>
+                    </th>
                 </tr>
                 </thead>
                 <tbody className="bg-white">
-                {Object.keys(revenues).map(key => revenues[key]).map((dateItem) => {
+                {Object.keys(revenues).map(key => revenues[key]).map(async (dateItem) => {
                     const dayIncome = (<div className={`${lusitana.className} truncate rounded-xl bg-white px-4 py-4 text-center text-2xl`}
                     > <div>
                         <div style={{fontSize: 20, marginBottom:10}}>
@@ -93,6 +97,8 @@ export default async function RevenuesPage() {
                     </div>
                     </div>)
 
+                    const date = (new Date(dateItem.date)).toISOString().slice(0,10);
+                    const finalTableData = await getFinalTablePlayersContent(date, true);
                  return <tr
                      key={dateItem.date}
                      className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
@@ -108,6 +114,9 @@ export default async function RevenuesPage() {
                      </th>
                      <th className="px-3 py-5 font-medium">
                          {dateItem.entries - dateItem.reentries} buyins {dateItem.reentries > 0 ? `(+ ${dateItem.reentries} rebuys)` : ``}
+                     </th>
+                     <th className="px-3 py-5 font-medium">
+                         { finalTableData }
                      </th>
                  </tr>
                 })}

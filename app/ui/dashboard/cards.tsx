@@ -12,7 +12,7 @@ import { lusitana } from '@/app/ui/fonts';
 import {fetchFinalTablePlayers, fetchGeneralPlayersCardData, fetchRSVPAndArrivalData} from '@/app/lib/data';
 import {formatCurrency} from "@/app/lib/utils";
 import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
-import {Suspense} from "react";
+import {CSSProperties, Suspense} from "react";
 import {CardsSkeleton} from "@/app/ui/skeletons";
 import Image from "next/image";
 
@@ -154,51 +154,62 @@ export async function TodayTournamentNameCardWrapper() {
 }
 
 
-export async function FinalTablePlayers({ title}:{title: string}) {
-    const finalTablePlayers = await fetchFinalTablePlayers();
+export async function getFinalTablePlayersContent(date:string, revenuePage:boolean) {
+    const finalTablePlayers = await fetchFinalTablePlayers(date);
 
     if (!finalTablePlayers || finalTablePlayers.length === 0) return null;
 
-    const content = <div style={{marginBottom: 30, width: '100%'}}>
+    const textStyle = revenuePage ? {
+        color: '#555555',
+        fontSize: 11,
+    } :{
+        background: '#6666CCAA',
+        color: 'white',
+        width: 30,
+        height: 30,
+        borderRadius: 50,
+        textAlign: 'center',
+        marginRight: 10
+    }
+
+    return <div style={{marginBottom: 30, width: '100%'}}>
         <div style={{ width: '100%'}}>
             {finalTablePlayers.map((finalTablePlayer: any) => {
                 return <div
                     key={finalTablePlayer.id}
                     className="w-full rounded-md bg-white" style={{width: '100%'}}
                 >
-                    <div className="flex items-center  border-b pb-4">
-                            <div className="text-lg" style={{
-                                background: '#6666CCAA',
-                                color: 'white',
-                                width: 30,
-                                height: 30,
-                                borderRadius: 50,
-                                textAlign: 'center',
-                                marginRight: 10
-                            }}>#{finalTablePlayer.position}</div>
-                        <Image
+                    <div className={`flex items-center border-b ${revenuePage ? '':'pb-4'}`}>
+                        <div  style={textStyle as CSSProperties}>#{finalTablePlayer.position}</div>
+                        {!revenuePage && <Image
                             src={finalTablePlayer.image_url}
                             className="zoom-on-hover"
                             style={{
                                 marginLeft: 10,
-                                marginRight: 10
+                                marginRight: 20
                             }}
                             width={40}
                             height={40}
                             alt={`${finalTablePlayer.name}'s profile picture`}
-                        />
-                            <div className="text-sm text-gray-500">{finalTablePlayer.phone_number}</div>
-                            <div style={{ fontSize: 20, marginLeft:15}}>
-                                {finalTablePlayer.name}
-                            </div>
-
+                        />}
+                        {revenuePage && <span style={{marginLeft:10}}></span>}
+                        <div className="text-gray-500"  style={{ fontSize: revenuePage ? 11: 20, }}>{finalTablePlayer.phone_number}</div>
+                        <div style={{ fontSize: revenuePage ? 11: 20, marginLeft: 20}}>
+                            {finalTablePlayer.name}
                         </div>
+
+                    </div>
                 </div>
 
 
             })}
         </div>
     </div>
+}
+export async function FinalTablePlayers({ title}:{title: string}) {
+    const date = (new Date()).toISOString().slice(0,10);
+    const content = await getFinalTablePlayersContent(date, false) as JSX.Element;
+    if (!content) return null;
 
     return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1" style={{marginBottom: 10, marginTop: -20, width: '100%'}} >
         <Card title={title} value={content} type="players"/>
