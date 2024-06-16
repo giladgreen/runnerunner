@@ -13,9 +13,11 @@ export default async function Page({
     searchParams?: {
         query?: string;
         page?: string;
+        sort?: string;
     };
 }) {
     const query = searchParams?.query || '';
+    const sortBy = searchParams?.sort || 'updated_at';
     const currentPage = Number(searchParams?.page) || 1;
     const totalPages = await fetchPlayersPages(query);
 
@@ -30,7 +32,7 @@ export default async function Page({
 
             </div>
             <Suspense key={query + currentPage} fallback={<PlayersTableSkeleton />}>
-                <PlayersTable query={query} currentPage={currentPage} />
+                <PlayersTable query={query} currentPage={currentPage} sortBy={sortBy} />
             </Suspense>
             <div className="mt-5 flex w-full justify-center">
                 <Pagination totalPages={totalPages} />

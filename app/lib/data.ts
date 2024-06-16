@@ -175,10 +175,11 @@ const ITEMS_PER_PAGE = 8;
 export async function fetchFilteredPlayers(
   query: string,
   currentPage: number,
+  sortBy: string = 'updated_at'
 ) {
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-
+console.log('## fetchFilteredPlayers sortBy', sortBy);
   try {
     const playersResultPromise = await sql<PlayerDB>`
       SELECT
@@ -187,7 +188,7 @@ export async function fetchFilteredPlayers(
       WHERE
         name::text ILIKE ${`%${query}%`} OR
         phone_number::text ILIKE ${`%${query}%`}
-      ORDER BY updated_at DESC
+      ORDER BY ${sortBy} DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
 

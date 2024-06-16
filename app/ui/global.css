@@ -29,6 +29,10 @@ background: rgb(0, 112, 243, 0.2);
   transition: transform 0.5s;
 
 }
+.sort-cursor{
+    cursor: ns-resize;
+
+}
 .table-text-item{
   text-align: center;
   padding: 0;

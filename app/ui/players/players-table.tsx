@@ -9,11 +9,14 @@ import RSVPButton from "@/app/ui/players/rsvp-button";
 export default async function PlayersTable({
   query,
   currentPage,
+  sortBy
 }: {
   query: string;
   currentPage: number;
+  sortBy: string;
 }) {
-  const players = await fetchFilteredPlayers(query, currentPage);
+  console.log('## sortBy', sortBy)
+  const players = await fetchFilteredPlayers(query, currentPage, sortBy);
   const now = new Date();
 
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
@@ -68,19 +71,19 @@ export default async function PlayersTable({
           <table className="hidden min-w-full text-gray-900 md:table">
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
-                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+                <th scope="col" className="px-4 py-5 font-medium sm:pl-6 sort-cursor" title="Sort by Name">
                   Player
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 py-5 font-medium  sort-cursor" title="Sort by Phone">
                   Phone
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 py-5 font-medium  sort-cursor" title="Sort by Balance">
                   Balance
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 py-5 font-medium  sort-cursor" title="Sort by Notes">
                   Notes
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                <th scope="col" className="px-3 py-5 font-medium  sort-cursor" title="Sort by Updated At">
                   Updated At
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
