@@ -30,6 +30,7 @@ const UpdatePlayer = z.object({
 
 export type State = {
     errors?: {
+        runner_id?: string[];
         name?: string[];
         balance?: string[];
         change?: string[];
@@ -69,6 +70,7 @@ export async function createReport(formData: FormData) {
 export async function createPlayer(prevPage: string, prevState: State, formData: FormData) {
     const name = formData.get('name') as string;
     const balance = formData.get('balance') as string;
+    const runner_id = formData.get('runner_id') as string;
     const note = formData.get('note') as string;
     const phone_number = formData.get('phone_number') as string;
     const notes = formData.get('notes') as string;
@@ -81,8 +83,8 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
 console.log('## image_url', image_url)
     try {
         await sql`
-      INSERT INTO players (name, balance, phone_number, image_url, notes)
-      VALUES (${name}, ${balance}, ${phoneNumber}, ${image_url} , ${notes ?? ''})
+      INSERT INTO players (name, balance, phone_number, image_url, notes, runner_id)
+      VALUES (${name}, ${balance}, ${phoneNumber}, ${image_url} , ${notes ?? ''}, ${runner_id})
     `;
 
         await sql`
@@ -103,7 +105,7 @@ console.log('## image_url', image_url)
 }
 
 
-export async function importPlayers(players: { name: string; phone_number: string; balance: number, notes:string }[]) {
+export async function importPlayers(players: {runner_id:string, name: string; phone_number: string; balance: number, notes:string }[]) {
     const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
     try {
         const date = (new Date((new Date()).getTime() - 24 * 60 * 60 * 1000)).toISOString();
@@ -111,8 +113,8 @@ export async function importPlayers(players: { name: string; phone_number: strin
         await Promise.all(
             playersToInsert.map(
                 (player) => sql<PlayerDB>`
-        INSERT INTO players (name, phone_number, balance, notes, updated_at)
-        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date});
+        INSERT INTO players (name, phone_number, balance, notes, updated_at, runner_id)
+        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date}, ${player.runner_id});
       `,
             ),
         );
