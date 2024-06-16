@@ -10,10 +10,12 @@ import {getFinalTablePlayersContent} from "@/app/ui/dashboard/cards";
 
 export default async function RevenuesPage() {
     const revenues = await fetchRevenues();
+    const revenueDates =  Object.keys(revenues);
 
     return (
         <div className="w-full revenue-table">
-            <table className="min-w-full text-gray-900 md:table">
+            {revenueDates.length === 0 && <div className="text-center">No Data yet</div>}
+            {revenueDates.length > 0 && <table className="min-w-full text-gray-900 md:table">
                 <thead className="rounded-lg text-left text-sm font-normal">
                 <tr>
                     <th className="px-4 py-5 font-medium">
@@ -34,7 +36,7 @@ export default async function RevenuesPage() {
                 </tr>
                 </thead>
                 <tbody className="bg-white">
-                {Object.keys(revenues).map(key => revenues[key]).map(async (dateItem) => {
+                {revenueDates.map(key => revenues[key]).map(async (dateItem) => {
                     const dayIncome = (<div className={`${lusitana.className} truncate rounded-xl bg-white px-4 py-4 text-center text-2xl`}
                     > <div>
                         <div style={{fontSize: 20, marginBottom:10}}>
@@ -121,7 +123,7 @@ export default async function RevenuesPage() {
                  </tr>
                 })}
                 </tbody>
-            </table>
+            </table>}
         </div>
     );
 }

@@ -291,10 +291,15 @@ export async function fetchRevenues() {
 
     const dateToPlayerMap = {};
     return history.reduce((acc, { phone_number, change, type, updated_at }) => {
+      const newAcc = {...acc};
       const dateAsString = updated_at.toISOString();
+      const dateObj = new Date(updated_at);
+      if (dateObj.getTime() < (new Date('2024-06-15T10:00:00.000Z')).getTime()){
+        return newAcc;
+      }
       const date = dateAsString.slice(0,10);
-      if (!acc[date]){
-        acc[date] = {
+      if (!newAcc[date]){
+        newAcc[date] = {
           cash: 0,
           credit: 0,
           wire: 0,
@@ -306,26 +311,26 @@ export async function fetchRevenues() {
         }
       }
       const amount = -1 * change;
-      acc[date].total += amount;
-      acc[date].entries += 1;
-      acc[date][type] += amount;
+      newAcc[date].total += amount;
+      newAcc[date].entries += 1;
+      newAcc[date][type] += amount;
 
       // @ts-ignore
       const datePlayers = dateToPlayerMap[date];
       if (datePlayers){
         if (!datePlayers.includes(phone_number)){
           datePlayers.push(phone_number);
-          acc[date].players += 1;
+          newAcc[date].players += 1;
         }else {
-            acc[date].reentries += 1;
+          newAcc[date].reentries += 1;
         }
       }else{
         // @ts-ignore
         dateToPlayerMap[date] = [phone_number];
-        acc[date].players += 1;
+        newAcc[date].players += 1;
       }
 
-      return acc;
+      return newAcc;
     }, {});
 
   } catch (error) {

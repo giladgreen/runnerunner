@@ -106,7 +106,7 @@ console.log('## image_url', image_url)
 export async function importPlayers(players: {name: string; phone_number: string; balance: number, notes:string }[]) {
     const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
     try {
-        const date = (new Date((new Date()).getTime() - 24 * 60 * 60 * 1000)).toISOString();
+        const date = (new Date((new Date()).getTime() - 48 * 60 * 60 * 1000)).toISOString();
         const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
         await Promise.all(
             playersToInsert.map(
@@ -116,12 +116,12 @@ export async function importPlayers(players: {name: string; phone_number: string
       `,
             ),
         );
-
+        const archive = 'ארכיון'
         await Promise.all(
              playersToInsert.map(
                 (player) => sql`
-        INSERT INTO history (phone_number, change, note, type)
-        VALUES (${player.phone_number}, ${player.balance}, 'imported balance', 'credit');
+        INSERT INTO history (phone_number, change, note, type, updated_at)
+        VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date});
       `
             ),
         );

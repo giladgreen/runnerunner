@@ -52,8 +52,9 @@ export function ImportPlayers() {
                             }
                             const parts = line.split(',');
                             const player = {
-                                name: parts[0].trim(),
-                                phone_number: parts[1].trim().replaceAll('-', ''),
+                                phone_number: parts[0].trim().replaceAll('-', ''),
+
+                                name: parts[1].trim(),
                                 balance: Number(parts[2]),
                                 notes: '',
                             }
