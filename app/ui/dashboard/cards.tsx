@@ -194,7 +194,7 @@ export async function getFinalTablePlayersContent(date:string, revenuePage:boole
                         />}
                         {revenuePage && <span style={{marginLeft:10}}></span>}
                         <div className="text-gray-500"  style={{ fontSize: revenuePage ? 11: 20, }}>{finalTablePlayer.phone_number}</div>
-                        <div style={{ fontSize: revenuePage ? 11: 20, marginLeft: 20}} title={finalTablePlayer.runner_id}>
+                        <div style={{ fontSize: revenuePage ? 11: 20, marginLeft: 20}} >
                             {finalTablePlayer.name}
                         </div>
 

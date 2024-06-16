@@ -52,11 +52,10 @@ export function ImportPlayers() {
                             }
                             const parts = line.split(',');
                             const player = {
-                                runner_id: parts[0].trim(),
-                                name: parts[1].trim(),
-                                phone_number: parts[2].trim().replaceAll('-', ''),
-                                balance: Number(parts[3]),
-                                notes: parts[4],
+                                name: parts[0].trim(),
+                                phone_number: parts[1].trim().replaceAll('-', ''),
+                                balance: Number(parts[2]),
+                                notes: '',
                             }
                             if (!player.phone_number.startsWith('0')){
                                 player.phone_number = '0' + player.phone_number;
@@ -67,7 +66,7 @@ export function ImportPlayers() {
                                 player.notes = player.notes.trim()
                             }
                             return player;
-                        }).filter(Boolean) as { runner_id:string; name: string; phone_number: string; balance: number, notes:string }[];
+                        }).filter(Boolean) as { name: string; phone_number: string; balance: number, notes:string }[];
 
                         await importPlayers(players);
                     };
@@ -93,7 +92,7 @@ export function ExportPlayers({ players}: { players: PlayerDB[]}) {
             <Button
             onClick={() => {
                 const data = players.map((player) => {
-                    return `${player.runner_id},${player.name},${player.phone_number},${player.balance},${player.notes}`
+                    return `${player.name},${player.phone_number},${player.balance},${player.notes}`
                 }).join('\n');
                 const filename = "players_data.csv";
 

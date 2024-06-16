@@ -66,7 +66,7 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
                           height={40}
                           alt={`${player.name}'s profile picture`}
                         />
-                        <div title={player.runner_id + ' מספר אימות '}>
+                        <div >
                             {player.name}
                         </div>
                       </div>
@@ -150,7 +150,7 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
                             height={40}
                             alt={`${player.name}'s profile picture`}
                         />
-                        <div title={player.runner_id + ' מספר אימות '}>
+                        <div >
                           {player.name}
                         </div>
                       </div>

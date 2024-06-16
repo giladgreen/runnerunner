@@ -130,7 +130,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                         height={55}
                     />
 
-                    <div className="truncate text-sm font-semibold md:text-base" title={player.runner_id + ' מספר אימות '}>
+                    <div className="truncate text-sm font-semibold md:text-base" >
                         {player.name}
                     </div>
 

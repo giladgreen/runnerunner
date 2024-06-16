@@ -13,7 +13,6 @@ export type User = {
 
 export type MVPPlayer = {
   id: string;
-  runner_id: string;
   name: string;
   phone_number: string;
   image_url: string;
@@ -23,7 +22,6 @@ export type MVPPlayer = {
 
 export type DebtPlayer = {
   id: string;
-  runner_id: string;
   name: string;
   phone_number: string;
   image_url: string;
@@ -57,7 +55,6 @@ export type PlayerForm = {
 };
 export type PlayerDB = {
   id: string;
-  runner_id: string;
   name: string;
   phone_number: string;
   image_url: string;

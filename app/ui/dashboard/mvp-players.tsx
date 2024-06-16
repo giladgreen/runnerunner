@@ -47,7 +47,7 @@ export default async function MVPPlayers() {
                     height={55}
                   />
                   <div className="min-w-0">
-                    <div className="truncate text-sm font-semibold md:text-base" title={player.runner_id + ' מספר אימות '}>
+                    <div className="truncate text-sm font-semibold md:text-base" >
                       {player.name}
                     </div>
                     <div className="hidden text-sm text-gray-500 sm:block">

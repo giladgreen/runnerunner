@@ -125,7 +125,6 @@ async function seedPlayers(client) {
     const createTable = await client.sql`
     CREATE TABLE IF NOT EXISTS players (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    runner_id TEXT NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     image_url VARCHAR(255) NOT NULL default '/players/default.png',
     balance INT NOT NULL,
@@ -143,8 +142,8 @@ async function seedPlayers(client) {
         (player, index) => {
           const rsvp = index % 2 === 0 ? true : false;
           return client.sql`
-        INSERT INTO players (name, phone_number, balance, image_url, notes, runner_id)
-        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.image_url ?? '/players/default.png'}, ${player.notes ?? ''}, ${index+1})
+        INSERT INTO players (name, phone_number, balance, image_url, notes)
+        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.image_url ?? '/players/default.png'}, ${player.notes ?? ''})
         ON CONFLICT (id) DO NOTHING;
       `
         },

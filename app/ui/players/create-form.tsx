@@ -25,35 +25,6 @@ export default function Form({prevPage}:{prevPage:string}) {
     <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
 
-        {/* player Id */}
-        <div className="mb-4">
-          <label htmlFor="runner_id" className="mb-2 block text-sm font-medium">
-            Player Runner Id
-          </label>
-          <div className="relative">
-            <input
-                id="runner_id"
-                name="runner_id"
-                type="text"
-                placeholder="Enter runner id"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                aria-describedby="runner_id-error"
-
-            />
-
-            <PencilIcon
-                className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
-          </div>
-          <div id="player-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.runner_id &&
-                state.errors.runner_id.map((error: string) => (
-                    <div className="mt-2 text-sm text-red-500" key={error}>
-                      {error}
-                    </div>
-                ))}
-          </div>
-        </div>
-
         {/* player Name */}
         <div className="mb-4">
           <label htmlFor="name" className="mb-2 block text-sm font-medium">
