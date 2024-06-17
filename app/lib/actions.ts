@@ -79,8 +79,13 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
         image_url = '/players/default.png';
     }
 
-    try{
-        await sql`INSERT INTO images (phone_number, image_url) VALUES (${phoneNumber}, ${image_url})`;
+    try {
+        if (image_url !== '/players/default.png'){
+            await sql`INSERT INTO images (phone_number, image_url) VALUES (${phoneNumber}, ${image_url})`;
+            console.log('## added image to images table', phoneNumber)
+
+        }
+
     }  catch (error) {
         console.error('## add image error', error)
     }
