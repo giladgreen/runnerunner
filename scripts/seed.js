@@ -1,4 +1,6 @@
 const { db } = require('@vercel/postgres');
+const _ = require("lodash");
+
 const {
   players,
   users,
@@ -263,8 +265,10 @@ async function seedRSVP(client) {
 }
 
 async function main() {
-  console.log('## main start')
-return;
+  console.log('## main start');
+
+
+  return;
   // const client = await db.connect();
   // console.log('## db connected')
     //
@@ -291,7 +295,7 @@ return;
   // await seedWinners(client);
   // await seedRSVP(client);
   //
-  await client.end();
+  // await client.end();
 }
 
 main().catch((err) => {

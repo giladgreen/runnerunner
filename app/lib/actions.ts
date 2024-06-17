@@ -120,7 +120,7 @@ export async function importPlayers(players: {name: string; phone_number: string
         VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date});`,
             ),
         );
-        console.log('finish inserting new players')
+        console.log('finish inserting new players:', playersToInsert.length)
 
         //update
         await Promise.all(
@@ -128,30 +128,23 @@ export async function importPlayers(players: {name: string; phone_number: string
                 (player) => sql`
         UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number});
       `) );
-        console.log('finish updating existing players')
+        console.log('finish updating existing players', playersToUpdate.length)
 
         await Promise.all(
-            players.map(
+            playersToInsert.map(
                 (player) => sql`
         DELETE FROM history WHERE phone_number= ${player.phone_number}`))
         console.log('finish delete all history')
 
-
         const archive = 'ארכיון'
-        await Promise.all(
-            players.map(
-                (player) => {
-                    console.log('inserting history for player',`
+        await Promise.all(playersToInsert.map((player) => sql`
         INSERT INTO history (phone_number, change, note, type, updated_at)
-        VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date});
-      `)
-                    return sql`
-        INSERT INTO history (phone_number, change, note, type, updated_at)
-        VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date});
-      `
-                }
-            ),
-        );
+        VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date}) `));
+        console.log('finish insert new history')
+        await Promise.all(playersToUpdate.map((player) => sql`
+        UPDATE history SET change = ${player.balance} WHERE phone_number = ${player.phone_number} AND type = 'credit' AND note = ${archive}`));
+        console.log('finish update history')
+
         console.log('****')
         console.log('finish all')
 
