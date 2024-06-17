@@ -109,6 +109,8 @@ export async function importPlayers(players: {name: string; phone_number: string
         const date = '2024-01-01T10:10:00.000Z';
         const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
         const playersToUpdate = players.filter(p => existingPlayers.find(ep => ep.phone_number === p.phone_number));
+        console.log('playersToInsert',playersToInsert.length)
+        console.log('playersToUpdate',playersToUpdate.length)
 
         //insert
         await Promise.all(
@@ -118,6 +120,7 @@ export async function importPlayers(players: {name: string; phone_number: string
         VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date});`,
             ),
         );
+        console.log('finish inserting new players')
 
         //update
         await Promise.all(
@@ -125,22 +128,32 @@ export async function importPlayers(players: {name: string; phone_number: string
                 (player) => sql`
         UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number});
       `) );
+        console.log('finish updating existing players')
 
         await Promise.all(
-            playersToUpdate.map(
+            players.map(
                 (player) => sql`
         DELETE FROM history WHERE phone_number= ${player.phone_number}`))
+        console.log('finish delete all history')
 
 
         const archive = 'ארכיון'
         await Promise.all(
             players.map(
-                (player) => sql`
+                (player) => {
+                    console.log('inserting history for player',`
+        INSERT INTO history (phone_number, change, note, type, updated_at)
+        VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date});
+      `)
+                    return sql`
         INSERT INTO history (phone_number, change, note, type, updated_at)
         VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date});
       `
+                }
             ),
         );
+        console.log('****')
+        console.log('finish all')
 
 
     } catch (error) {
