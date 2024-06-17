@@ -267,8 +267,6 @@ async function seedRSVP(client) {
 async function main() {
   console.log('## main start');
 
-
-  return;
   // const client = await db.connect();
   // console.log('## db connected')
     //

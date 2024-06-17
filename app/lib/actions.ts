@@ -79,6 +79,11 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
         image_url = '/players/default.png';
     }
 
+    try{
+        await sql`INSERT INTO images (phone_number, image_url) VALUES (${phoneNumber}, ${image_url})`;
+    }  catch (error) {
+        console.error('## add image error', error)
+    }
     try {
         await sql`
       INSERT INTO players (name, balance, phone_number, image_url, notes)
@@ -121,38 +126,41 @@ export async function importPlayers(players: {name: string; phone_number: string
         const playersToUpdate = players.filter(p => existingPlayers.find(ep => ep.phone_number === p.phone_number));
         console.log('playersToInsert',playersToInsert.length)
         console.log('playersToUpdate',playersToUpdate.length)
-
+        let i = 0;
         //insert
-        await Promise.all(
-            playersToInsert.map(
-                (player) => sql<PlayerDB>`
-        INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
-        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date}, ${player.image_url});`,
-            ),
-        );
-        console.log('finish inserting new players:', playersToInsert.length)
+        for (const player of playersToInsert) {
+            await sql`INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
+ VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date}, ${player.image_url});`;
 
-        //update
-        await Promise.all(
-            playersToUpdate.map(
-                (player) => sql`
-        UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number});
-      `) );
+            console.log('inserted player #',i++)
+        }
+        i = 0;
+       //update
+        console.log('finish inserting new players:', playersToInsert.length)
+        for (const player of playersToUpdate) {
+            await sql`UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number})`;
+            console.log('updated player #',i++)
+        }
+        i = 0;
+
         console.log('finish updating existing players', playersToUpdate.length)
 
-        await Promise.all(
-            playersToInsert.map(
-                (player) => sql`
-        DELETE FROM history WHERE phone_number= ${player.phone_number}`))
-        console.log('finish delete all history')
-
         const archive = 'ארכיון'
-        await Promise.all(playersToInsert.map((player) => sql`
-        INSERT INTO history (phone_number, change, note, type, updated_at)
-        VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date}) `));
+        for (const player of playersToInsert) {
+            await sql`DELETE FROM history WHERE phone_number= ${player.phone_number}`;
+            await sql`INSERT INTO history (phone_number, change, note, type, updated_at)
+ VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date})`;
+            console.log('insert history #',i++);
+        }
+        i = 0;
+
         console.log('finish insert new history')
-        await Promise.all(playersToUpdate.map((player) => sql`
-        UPDATE history SET change = ${player.balance} WHERE phone_number = ${player.phone_number} AND type = 'credit' AND note = ${archive}`));
+
+        for (const player of playersToUpdate) {
+            await sql`UPDATE history SET change = ${player.balance} WHERE phone_number = ${player.phone_number} AND type = 'credit' AND note = ${archive}`;
+            console.log('update history #',i++);
+        }
+
         console.log('finish update history')
 
         console.log('****')
