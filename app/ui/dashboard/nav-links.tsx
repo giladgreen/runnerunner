@@ -20,15 +20,16 @@ const links = [
     icon: Square2StackIcon
   },
   {
+    name: "previous tournaments",
+    href: '/dashboard/revenues',
+    icon: BanknotesIcon
+  },
+  {
     name: 'all players',
     href: '/dashboard/players',
     icon: UserGroupIcon,
   },
-  {
-    name: "revenues",
-    href: '/dashboard/revenues',
-    icon: BanknotesIcon
-  },
+
   {
     name: 'configurations',
     href: '/dashboard/configurations',
