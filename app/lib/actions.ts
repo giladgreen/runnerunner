@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import {PlayerDB, PlayerForm, User, TournamentDB, WinnerDB, RSVPDB} from "@/app/lib/definitions";
+import {PlayerDB, PlayerForm, User, TournamentDB, WinnerDB, RSVPDB, ImageDB} from "@/app/lib/definitions";
 import bcrypt from "bcrypt";
 import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/unstable-no-store";
 
@@ -103,11 +103,21 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
 }
 
 
-export async function importPlayers(players: {name: string; phone_number: string; balance: number, notes:string }[]) {
+export async function importPlayers(players: {name: string; phone_number: string; balance: number, notes:string, image_url:string }[]) {
+    const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
     const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
     try {
         const date = '2024-01-01T10:10:00.000Z';
         const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
+        playersToInsert.forEach(p => {
+            const existingImage = existingPlayersImages.find(ep => ep.phone_number === p.phone_number);
+            if (existingImage){
+                p.image_url = existingImage.image_url;
+            } else  {
+                p.image_url = '/players/default.png';
+            }
+        })
+
         const playersToUpdate = players.filter(p => existingPlayers.find(ep => ep.phone_number === p.phone_number));
         console.log('playersToInsert',playersToInsert.length)
         console.log('playersToUpdate',playersToUpdate.length)
@@ -116,8 +126,8 @@ export async function importPlayers(players: {name: string; phone_number: string
         await Promise.all(
             playersToInsert.map(
                 (player) => sql<PlayerDB>`
-        INSERT INTO players (name, phone_number, balance, notes, updated_at)
-        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date});`,
+        INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
+        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date}, ${player.image_url});`,
             ),
         );
         console.log('finish inserting new players:', playersToInsert.length)

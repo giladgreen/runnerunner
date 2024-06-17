@@ -53,6 +53,10 @@ export type PlayerForm = {
   notes: string;
   rsvps:string[];
 };
+export type ImageDB = {
+  phone_number: string;
+  image_url: string;
+}
 export type PlayerDB = {
   id: string;
   name: string;
