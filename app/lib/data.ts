@@ -172,6 +172,43 @@ export async function fetchFinalTablePlayers(stringDate?: string) {
 
 
 const ITEMS_PER_PAGE = 8;
+ async function fetchSortedPlayers(query: string, sortBy: string, currentPage: number){
+   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+   switch (sortBy) {
+     case 'name':
+       return sql<PlayerDB>`
+        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`}
+        ORDER BY name ASC
+        LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+      `;
+
+     case 'balance':
+       return sql<PlayerDB>`
+        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`}
+        ORDER BY balance DESC
+        LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+      `;
+     case 'phone':
+       return sql<PlayerDB>`
+        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`}
+        ORDER BY phone_number ASC
+        LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+      `;
+     case 'notes':
+       return sql<PlayerDB>`
+        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`}
+        ORDER BY notes DESC
+        LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+      `;
+     default:
+       return sql<PlayerDB>`
+        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`}
+        ORDER BY updated_at DESC
+        LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+      `;
+   }
+}
 export async function fetchFilteredPlayers(
   query: string,
   currentPage: number,
@@ -179,18 +216,9 @@ export async function fetchFilteredPlayers(
 ) {
   noStore();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-console.log('## fetchFilteredPlayers sortBy', sortBy);
+
   try {
-    const playersResultPromise = await sql<PlayerDB>`
-      SELECT
-        *
-      FROM players
-      WHERE
-        name::text ILIKE ${`%${query}%`} OR
-        phone_number::text ILIKE ${`%${query}%`}
-      ORDER BY ${sortBy} DESC
-      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
-    `;
+    const playersResultPromise = fetchSortedPlayers(query, sortBy, currentPage)
 
     const playersHistoryCountResultPromise = sql<Counts>`
       SELECT
@@ -204,6 +232,9 @@ console.log('## fetchFilteredPlayers sortBy', sortBy);
     const [playersHistoryCountResult, playersResult] = await Promise.all([playersHistoryCountResultPromise, playersResultPromise]);
     const playersHistoryCount = playersHistoryCountResult.rows;
     const players = playersResult.rows;
+    console.log('## players 1', players[0])
+    console.log('## players 2', players[1])
+    console.log('## players 3', players[2])
     const todayDate = (new Date()).toISOString().slice(0,10);
     players.forEach((player) => {
       const historyCount = playersHistoryCount.find(({ phone_number}) => phone_number === player.phone_number);

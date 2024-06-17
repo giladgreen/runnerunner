@@ -1,10 +1,12 @@
 import Image from 'next/image';
+import Sort from '@/app/ui/sort';
 import { UpdatePlayer  } from '@/app/ui/players/buttons';
 import {  DeletePlayer } from '@/app/ui/players/client-buttons';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import { fetchFilteredPlayers } from '@/app/lib/data';
 import Link from "next/link";
 import RSVPButton from "@/app/ui/players/rsvp-button";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 export default async function PlayersTable({
   query,
@@ -15,7 +17,7 @@ export default async function PlayersTable({
   currentPage: number;
   sortBy: string;
 }) {
-  console.log('## sortBy', sortBy)
+
   const players = await fetchFilteredPlayers(query, currentPage, sortBy);
   const now = new Date();
 
@@ -71,20 +73,21 @@ export default async function PlayersTable({
           <table className="hidden min-w-full text-gray-900 md:table">
             <thead className="rounded-lg text-left text-sm font-normal">
               <tr>
-                <th scope="col" className="px-4 py-5 font-medium sm:pl-6 sort-cursor" title="Sort by Name">
-                  Player
+                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+                  <Sort text="Player Name" sortTerm="name" />
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium  sort-cursor" title="Sort by Phone">
-                  Phone
+                <th scope="col" className="px-3 py-5 font-mediu ">
+                  <Sort text="Phone" sortTerm="phone" />
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium  sort-cursor" title="Sort by Balance">
-                  Balance
+                <th scope="col" className="px-3 py-5 font-medium " title="Sort by Balance">
+                  <Sort text="Balance" sortTerm="balance" />
+
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium  sort-cursor" title="Sort by Notes">
-                  Notes
+                <th scope="col" className="px-3 py-5 font-medium " title="Sort by Notes">
+                  <Sort text="Notes" sortTerm="notes" />
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium  sort-cursor" title="Sort by Updated At">
-                  Updated At
+                <th scope="col" className="px-3 py-5 font-medium " title="Sort by Updated At">
+                  <Sort text="Updated At" sortTerm="updated_at" />
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   RSVP - {dayOfTheWeek}
