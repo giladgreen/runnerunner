@@ -78,7 +78,7 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
     if (!image_url || image_url.trim().length < 7){
         image_url = '/players/default.png';
     }
-console.log('## image_url', image_url)
+
     try {
         await sql`
       INSERT INTO players (name, balance, phone_number, image_url, notes)
@@ -106,25 +106,43 @@ console.log('## image_url', image_url)
 export async function importPlayers(players: {name: string; phone_number: string; balance: number, notes:string }[]) {
     const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
     try {
-        const date = (new Date((new Date()).getTime() - 48 * 60 * 60 * 1000)).toISOString();
+        const date = '2024-01-01T10:10:00.000Z';
         const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
+        const playersToUpdate = players.filter(p => existingPlayers.find(ep => ep.phone_number === p.phone_number));
+
+        //insert
         await Promise.all(
             playersToInsert.map(
                 (player) => sql<PlayerDB>`
         INSERT INTO players (name, phone_number, balance, notes, updated_at)
-        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date});
-      `,
+        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date});`,
             ),
         );
+
+        //update
+        await Promise.all(
+            playersToUpdate.map(
+                (player) => sql`
+        UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number});
+      `) );
+
+        await Promise.all(
+            playersToUpdate.map(
+                (player) => sql`
+        DELETE FROM history WHERE phone_number= ${player.phone_number}`))
+
+
         const archive = 'ארכיון'
         await Promise.all(
-             playersToInsert.map(
+            players.map(
                 (player) => sql`
         INSERT INTO history (phone_number, change, note, type, updated_at)
         VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date});
       `
             ),
         );
+
+
     } catch (error) {
         console.error('## importPlayers error', error)
         return {

@@ -232,9 +232,7 @@ export async function fetchFilteredPlayers(
     const [playersHistoryCountResult, playersResult] = await Promise.all([playersHistoryCountResultPromise, playersResultPromise]);
     const playersHistoryCount = playersHistoryCountResult.rows;
     const players = playersResult.rows;
-    console.log('## players 1', players[0])
-    console.log('## players 2', players[1])
-    console.log('## players 3', players[2])
+
     const todayDate = (new Date()).toISOString().slice(0,10);
     players.forEach((player) => {
       const historyCount = playersHistoryCount.find(({ phone_number}) => phone_number === player.phone_number);
