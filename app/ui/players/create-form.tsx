@@ -14,6 +14,7 @@ import {useState} from "react";
 
 export default function Form({prevPage}:{prevPage:string}) {
   const initialState = { message: null, errors: {} };
+
   const createPlayerWithPrevPage = createPlayer.bind(null, prevPage);
   // @ts-ignore
   const [state, dispatch] = useFormState(createPlayerWithPrevPage, initialState);

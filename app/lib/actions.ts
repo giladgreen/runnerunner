@@ -67,7 +67,6 @@ export async function createReport(formData: FormData) {
     redirect('/dashboard/configurations');
 }
 export async function createPlayer(prevPage: string, prevState: State, formData: FormData) {
-    console.log('## create Player start')
     const name = formData.get('name') as string;
     const balance = formData.get('balance') as string;
     const note = formData.get('note') as string;
@@ -331,6 +330,19 @@ export async function updatePlayer(
     const image_url = (formData.get('image_url') as string);
 
     const { name, notes } = validatedFields.data;
+
+    try {
+        if (image_url && image_url.length > 2 && image_url !== '/players/default.png'){
+            const player = (await sql<PlayerDB>`SELECT * FROM players WHERE id = ${id}`).rows[0];
+            if (player && player.image_url !== image_url){
+                await sql`INSERT INTO images (phone_number, image_url) VALUES (${player.phone_number}, ${image_url})`;
+                console.log('## added image to images table', player.phone_number)
+            }
+        }
+
+    }  catch (error) {
+        console.error('## add image error', error)
+    }
 
     const date = new Date().toISOString();
     try {
