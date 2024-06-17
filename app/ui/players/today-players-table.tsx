@@ -78,7 +78,7 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
                     <div className="text-xl font-medium">
-                      <Link href={`/dashboard/players/${player.id}/data`}>
+                      <Link href={`/dashboard/players/${player.id}/edit`}>
                       balance: {formatCurrency(player.balance)}
                       </Link>
                     </div>
@@ -162,14 +162,14 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
 
                     </td>
                     <td className={`whitespace-nowrap px-3 py-3 `}>
-                      <Link href={`/dashboard/players/${player.id}/data`}>
+                      <Link href={`/dashboard/players/${player.id}/edit`}>
                         {formatCurrency(player.balance)}
                       </Link>
                     </td>
                     <td className="whitespace-nowrap px-3 py-3">
-
-                      {player.notes}
-
+                      <Link href={`/dashboard/players/${player.id}/edit`}>
+                        {player.notes}
+                      </Link>
                     </td>
 
                     {rsvp_required && <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">

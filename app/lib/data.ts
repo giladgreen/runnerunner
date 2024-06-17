@@ -8,6 +8,8 @@ import {
   TournamentDB, User, WinnerDB
 } from './definitions';
 
+const ITEMS_PER_PAGE = 30;
+
 export async function fetchMVPPlayers() {
   noStore();
   try {
@@ -171,7 +173,7 @@ export async function fetchFinalTablePlayers(stringDate?: string) {
 }
 
 
-const ITEMS_PER_PAGE = 8;
+
  async function fetchSortedPlayers(query: string, sortBy: string, currentPage: number){
    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 

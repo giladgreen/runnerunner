@@ -2,11 +2,15 @@ import Form from '@/app/ui/players/edit-form';
 import Breadcrumbs from '@/app/ui/players/breadcrumbs';
 import {fetchPlayerById, fetchTournaments} from '@/app/lib/data';
 import { notFound } from 'next/navigation';
+import {formatCurrency} from "@/app/lib/utils";
+import CreateLogForm from "@/app/ui/players/create-log-form";
+import HistoryTable from "@/app/ui/players/history-table";
 
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
     const tournaments = await fetchTournaments();
     const player = await fetchPlayerById(id);
+
     if (!player) {
         notFound();
     }
@@ -15,7 +19,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <main>
             <Breadcrumbs
                 breadcrumbs={[
-                    { label: 'players', href: '/dashboard/players' },
+                    {label: 'players', href: '/dashboard/players'},
                     {
                         label: 'Edit player',
                         href: `/dashboard/players/${id}/edit`,
@@ -29,6 +33,17 @@ export default async function Page({ params }: { params: { id: string } }) {
                 ]}
             />
             <Form player={player} prevPage={'/dashboard/players'} tournaments={tournaments}/>
+            <div>
+                <div>Phone number: {player.phone_number}  </div>
+                <div> {player.notes}  </div>
+                <h1 style={{zoom: 2}}><b>Current Balance: {formatCurrency(player.balance)}</b></h1>
+                <hr style={{marginTop: 10, marginBottom: 20}}/>
+                <CreateLogForm player={player} tournaments={tournaments}/>
+
+                <hr style={{marginTop: 20, marginBottom: 20}}/>
+
+                <HistoryTable player={player} isRestrictedData={false}/>
+            </div>
         </main>
     );
 }

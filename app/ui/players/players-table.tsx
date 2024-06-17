@@ -33,7 +33,7 @@ export default async function PlayersTable({
                 key={player.id}
                 className="mb-2 w-full rounded-md bg-white p-4"
               >
-                <Link href={`/dashboard/players/${player.id}/data`}>
+                <Link href={`/dashboard/players/${player.id}/edit`}>
                   <div className="flex items-center justify-between border-b pb-4">
                     <div>
                       <div className="mb-2 flex items-center">
@@ -105,7 +105,7 @@ export default async function PlayersTable({
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <Link
-                        href={`/dashboard/players/${player.id}/data`}
+                        href={`/dashboard/players/${player.id}/edit`}
                     >
                     <div className="flex items-center gap-3">
                       <Image
@@ -123,28 +123,28 @@ export default async function PlayersTable({
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     <Link
-                        href={`/dashboard/players/${player.id}/data`}
+                        href={`/dashboard/players/${player.id}/edit`}
                     >
                     {player.phone_number}
                     </Link>
                   </td>
                   <td className={`whitespace-nowrap px-3 py-3 ${player.historyCount > 1 ? 'bold':''}`}>
                     <Link
-                        href={`/dashboard/players/${player.id}/data`}
+                        href={`/dashboard/players/${player.id}/edit`}
                     >
                     {formatCurrency(player.balance)}
                     </Link>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     <Link
-                        href={`/dashboard/players/${player.id}/data`}
+                        href={`/dashboard/players/${player.id}/edit`}
                     >
                     {player.notes}
                     </Link>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     <Link
-                        href={`/dashboard/players/${player.id}/data`}
+                        href={`/dashboard/players/${player.id}/edit`}
                     >
                     {formatDateToLocal(player.updated_at)}
                     </Link>

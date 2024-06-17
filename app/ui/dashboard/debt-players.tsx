@@ -29,7 +29,7 @@ export default async function DebtPlayers() {
               return (
                 <Link
                     key={player.id}
-                    href={`/dashboard/players/${player.id}/data`}
+                    href={`/dashboard/players/${player.id}/edit`}
                 >
               <div
                 key={player.id}

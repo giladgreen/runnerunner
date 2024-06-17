@@ -258,7 +258,7 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
     const newPosition =  formData.get('position') as string;
     const newPositionNumber = Number(newPosition);
 
-    if (isNaN(newPositionNumber) || newPositionNumber < 1){
+    if (isNaN(newPositionNumber) || newPositionNumber < 0){
          return {
               message: 'Invalid Position. Failed to set Player Position.',
          };
