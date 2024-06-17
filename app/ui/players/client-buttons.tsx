@@ -53,7 +53,7 @@ export function ImportPlayers() {
                             const parts = line.split(',');
                             const player = {
                                 phone_number: parts[0].trim().replaceAll('-', ''),
-
+                                image_url: '',
                                 name: parts[1].trim(),
                                 balance: Number(parts[2]),
                                 notes: '',
@@ -67,7 +67,7 @@ export function ImportPlayers() {
                                 player.notes = player.notes.trim()
                             }
                             return player;
-                        }).filter(Boolean) as { name: string; phone_number: string; balance: number, notes:string }[];
+                        }).filter(Boolean) as { name: string; phone_number: string; balance: number, notes:string, image_url: string }[];
 
                         await importPlayers(players);
                     };
