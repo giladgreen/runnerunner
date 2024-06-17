@@ -7,6 +7,7 @@ import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 import {PlayerDB} from "@/app/lib/definitions";
 import OpenPositionModalButton from "@/app/ui/players/open-position-modal-button";
 import {fetchTournaments} from "@/app/lib/data";
+import EntriesButton from "@/app/ui/players/entries-button";
 
 const formatPlayerEntries = (
     entries: number,
@@ -179,7 +180,7 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
                       {player.arrived ? '✅' : ''}
                     </td>
                     <td className="whitespace-nowrap px-3 py-3 ">
-                      {formatPlayerEntries(player.entries)}
+                      <EntriesButton player={player}/>
                     </td>
                     <td className="whitespace-nowrap px-3 py-3 ">
                       {(player.position && Number(player.position) > 0) ?<div className="text-lg" style={{

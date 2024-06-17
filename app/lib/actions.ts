@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import {PlayerDB, PlayerForm, User, TournamentDB, WinnerDB, RSVPDB, ImageDB} from "@/app/lib/definitions";
+import {PlayerDB, PlayerForm, User, TournamentDB, WinnerDB, RSVPDB, ImageDB, LogDB} from "@/app/lib/definitions";
 import bcrypt from "bcrypt";
 import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/unstable-no-store";
 
@@ -527,4 +527,24 @@ export async function rsvpPlayerForDay(phone_number:string, date:string, val: bo
 
     revalidatePath(prevPage);
     redirect(prevPage);
+}
+
+
+export async function undoPlayerLastLog(phone_number:string){
+    noStore();
+    try {
+        const logsResult = await sql<LogDB>`SELECT * FROM history WHERE phone_number = ${phone_number} ORDER BY updated_at DESC LIMIT 1`;
+        const lastLog = logsResult.rows[0];
+
+        if (lastLog){
+             await sql`DELETE FROM history where id = ${lastLog.id}`;
+
+        }
+    } catch (error) {
+        console.error('undoPlayerLastLog Error:', error);
+        return false;
+    }
+
+    revalidatePath('/dashboard/todayplayers');
+    redirect('/dashboard/todayplayers');
 }
