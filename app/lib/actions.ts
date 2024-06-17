@@ -67,6 +67,7 @@ export async function createReport(formData: FormData) {
     redirect('/dashboard/configurations');
 }
 export async function createPlayer(prevPage: string, prevState: State, formData: FormData) {
+    console.log('## create Player start')
     const name = formData.get('name') as string;
     const balance = formData.get('balance') as string;
     const note = formData.get('note') as string;
