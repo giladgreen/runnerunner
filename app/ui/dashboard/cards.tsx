@@ -172,15 +172,15 @@ export async function getFinalTablePlayersContent(date:string, revenuePage:boole
         marginRight: 10
     }
 
-    return <div style={{marginBottom: 30, width: '100%'}}>
-        <div style={{ width: '100%'}}>
+    return <div style={{marginBottom: 30, width: '100%', display: 'flex'}}>
+        <div style={{width: '60%'}}>
             {finalTablePlayers.map((finalTablePlayer: any) => {
                 return <div
                     key={finalTablePlayer.id}
                     className="w-full rounded-md bg-white" style={{width: '100%'}}
                 >
-                    <div className={`flex items-center border-b ${revenuePage ? '':'pb-4'}`}>
-                        <div  style={textStyle as CSSProperties}>#{finalTablePlayer.position}</div>
+                    <div className={`flex items-center border-b ${revenuePage ? '' : 'pb-4'} highlight-on-hover`}>
+                        <div style={textStyle as CSSProperties}>#{finalTablePlayer.position}</div>
                         {!revenuePage && <Image
                             src={finalTablePlayer.image_url}
                             className="zoom-on-hover"
@@ -192,9 +192,10 @@ export async function getFinalTablePlayersContent(date:string, revenuePage:boole
                             height={40}
                             alt={`${finalTablePlayer.name}'s profile picture`}
                         />}
-                        {revenuePage && <span style={{marginLeft:10}}></span>}
-                        <div className="text-gray-500"  style={{ fontSize: revenuePage ? 11: 20, }}>{finalTablePlayer.phone_number}</div>
-                        <div style={{ fontSize: revenuePage ? 11: 20, marginLeft: 20}} >
+                        {revenuePage && <span style={{marginLeft: 10}}></span>}
+                        <div
+                             style={{fontSize: revenuePage ? 11 : 20,}}>{finalTablePlayer.phone_number}</div>
+                        <div style={{fontSize: revenuePage ? 11 : 20, marginLeft: 20}}>
                             {finalTablePlayer.name}
                         </div>
 
@@ -204,14 +205,34 @@ export async function getFinalTablePlayersContent(date:string, revenuePage:boole
 
             })}
         </div>
-    </div>
+        {revenuePage && <div style={{width: '40%', textAlign:'center'}}>
+            <Image
+                src={finalTablePlayers[0].image_url}
+                className="zoom-on-hover"
+                style={{
+                    marginTop: 20,
+                    marginLeft: 20,
+                    marginRight: 0,
+                    border: '3px solid black',
+                }}
+                width={100}
+                height={120}
+                alt={`${finalTablePlayers[0].name}'s profile picture`}
+            />
+            <b>{finalTablePlayers[0].name}</b>
+        </div>
+
 }
-export async function FinalTablePlayers({ title}:{title: string}) {
-    const date = (new Date()).toISOString().slice(0,10);
+</div>
+}
+
+export async function FinalTablePlayers({title}: { title: string }) {
+    const date = (new Date()).toISOString().slice(0, 10);
     const content = await getFinalTablePlayersContent(date, false) as JSX.Element;
     if (!content) return null;
 
-    return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1" style={{marginBottom: 10, marginTop: -20, width: '100%'}} >
+    return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1"
+                style={{marginBottom: 10, marginTop: -20, width: '100%'}}>
         <Card title={title} value={content} type="players"/>
     </div>
 }
