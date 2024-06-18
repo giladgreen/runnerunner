@@ -9,27 +9,7 @@ import OpenPositionModalButton from "@/app/ui/players/open-position-modal-button
 import {fetchTournaments} from "@/app/lib/data";
 import EntriesButton from "@/app/ui/players/entries-button";
 
-const formatPlayerEntries = (
-    entries: number,
-) => {
-  if (entries < 1) {
-    return '';
-  }
-  if (entries >5 ) {
-    return entries;
-  }
-
-  const map = ['','one', 'two', 'three', 'four', 'five'];
-  return <Image
-      src={`/${map[entries]}.png`}
-      alt={`platers entries: ${entries}`}
-      className="mr-4 zoom-on-hover"
-      width={35}
-      height={35}
-  />
-};
-
-export default async function TodaysPlayersTable({ players, username, prevPage}:{players: PlayerDB[], username?:string, prevPage?: string}) {
+export default async function TodaysPlayersTable({ userId, worker, players, username, prevPage}:{players: PlayerDB[], username?:string,  userId?:string, prevPage?: string, worker?:boolean}) {
 
   const tournaments = await fetchTournaments();
   const now = new Date();
@@ -42,7 +22,9 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
   // @ts-ignore
   const rsvpPlayers = players.filter((player) => player.rsvpForToday);
   const rsvpPlayersCount = rsvpPlayers.length;
-
+const getLink = (player: PlayerDB) => {
+  return worker ? `/worker/${userId}/players/${player.id}` : `/dashboard/players/${player.id}/edit`
+}
   return (
     <div className="mt-6 flow-root" style={{ width: '100%'}}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -79,7 +61,7 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
                     <div className="text-xl font-medium">
-                      <Link href={`/dashboard/players/${player.id}/edit`}>
+                      <Link href={getLink(player)}>
                       balance: {formatCurrency(player.balance)}
                       </Link>
                     </div>
@@ -163,12 +145,12 @@ export default async function TodaysPlayersTable({ players, username, prevPage}:
 
                     </td>
                     <td className={`whitespace-nowrap px-3 py-3 `}>
-                      <Link href={`/dashboard/players/${player.id}/edit`}>
+                      <Link  href={getLink(player)}>
                         {formatCurrency(player.balance)}
                       </Link>
                     </td>
                     <td className="whitespace-nowrap px-3 py-3">
-                      <Link href={`/dashboard/players/${player.id}/edit`}>
+                      <Link  href={getLink(player)}>
                         {player.notes}
                       </Link>
                     </td>
