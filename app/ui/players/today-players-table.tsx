@@ -6,6 +6,7 @@ import OpenModalButton from "@/app/ui/players/open-modal-button";
 import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 import {PlayerDB} from "@/app/lib/definitions";
 import OpenPositionModalButton from "@/app/ui/players/open-position-modal-button";
+import OpenPrizeModalButton from "@/app/ui/players/open-prize-modal-button";
 import {fetchTournaments} from "@/app/lib/data";
 import EntriesButton from "@/app/ui/players/entries-button";
 
@@ -178,6 +179,7 @@ const getLink = (player: PlayerDB) => {
                       <div className="flex justify-end gap-3">
                         <OpenModalButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'} tournaments={tournaments} username={username}/>
                         <OpenPositionModalButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'}/>
+                        <OpenPrizeModalButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'}/>
                       </div>
 
                     </td>

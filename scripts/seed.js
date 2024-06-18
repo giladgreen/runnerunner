@@ -264,10 +264,35 @@ async function seedRSVP(client) {
   }
 }
 
+async function seedPrizes(client) {
+  try {
+    // Create the "rsvp" table if it doesn't exist
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS prizes (
+         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+         tournament TEXT NOT NULL,
+         phone_number TEXT NOT NULL,
+         prize TEXT NOT NULL
+      );
+    `;
+
+    console.log(`Created "rsvp" table`);
+
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error seeding rsvp:', error);
+    throw error;
+  }
+}
+
 async function main() {
   console.log('## main start');
 
   // const client = await db.connect();
+
   // console.log('## db connected')
     //
     // await client.sql`DELETE FROM players`;
@@ -292,6 +317,7 @@ async function main() {
   // await seedHistory(client);
   // await seedWinners(client);
   // await seedRSVP(client);
+  // await seedPrizes(client);
   //
   // await client.end();
 }

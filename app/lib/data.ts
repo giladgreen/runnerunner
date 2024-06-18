@@ -4,7 +4,7 @@ import { unstable_noStore as noStore} from 'next/cache';
 import {
   BugDB, Counts,
   DebtPlayerRaw, LogDB,
-  MVPPlayerRaw, PlayerDB, RSVPDB,
+  MVPPlayerRaw, PlayerDB, PrizeDB, RSVPDB,
   TournamentDB, User, WinnerDB
 } from './definitions';
 
@@ -166,6 +166,26 @@ export async function fetchFinalTablePlayers(stringDate?: string) {
     })
 
     return allPlayers.filter(player => player.position > 0).sort((a,b)=> a.position < b.position ? -1 : 1);
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch final table players data.');
+  }
+}
+
+export async function fetchPlayersPrizes() {
+  noStore();
+  try {
+    const prizesResult = await sql<PrizeDB>`SELECT * FROM prizes ORDER BY tournament DESC`;
+    const prizes = prizesResult.rows;
+    const playersResult = await sql<PlayerDB>`SELECT * FROM players`;
+    const players = playersResult.rows;
+    prizes.forEach(prize => {
+        const player = players.find(p => p.phone_number === prize.phone_number);
+        if (player){
+            prize.player = player;
+        }
+    });
+    return prizes
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch final table players data.');

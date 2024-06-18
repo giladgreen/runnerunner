@@ -74,6 +74,13 @@ export type PlayerDB = {
   rsvpForToday: boolean;
   rsvps: string[];
 };
+export type PrizeDB = {
+  id: string,
+  tournament: string;
+  phone_number: string;
+  prize: string;
+  player?: PlayerDB;
+}
 export type WinnerDB = {
   date: string;
   tournament_name: string;

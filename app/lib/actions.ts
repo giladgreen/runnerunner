@@ -6,7 +6,17 @@ const _ = require("lodash");
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import {PlayerDB, PlayerForm, User, TournamentDB, WinnerDB, RSVPDB, ImageDB, LogDB} from "@/app/lib/definitions";
+import {
+    PlayerDB,
+    PlayerForm,
+    User,
+    TournamentDB,
+    WinnerDB,
+    RSVPDB,
+    ImageDB,
+    LogDB,
+    PrizeDB
+} from "@/app/lib/definitions";
 import bcrypt from "bcrypt";
 import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/unstable-no-store";
 
@@ -40,6 +50,7 @@ export type State = {
         description?: string[];
         amount?: string[];
         position?: string[];
+        prize?: string[];
         buy_in?: string[];
         re_buy?: string[];
         max_players?: string[];
@@ -307,6 +318,45 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
     redirect(prevPage);
 }
 
+export async function setPlayerPrize({playerId, prevPage}:{playerId: string, prevPage: string}, prevState: State, formData: FormData){
+    const newPrize =  formData.get('prize') as string;
+
+    if (!newPrize){
+         return {
+              message: 'Invalid Prize. Failed to set Player Prize.',
+         };
+   }
+    try {
+        const playerResult = await sql<PlayerDB>`SELECT * FROM players WHERE id = ${playerId}`;
+        const player = playerResult.rows[0];
+        if (!player){
+            return {
+                message: 'Set Prize. Failed to find Player.',
+            };
+        }
+        const today = (new Date()).toLocaleString('en-us', {weekday: 'long'});
+
+        const todayTournamentResult = await sql<TournamentDB>`
+      SELECT
+        *
+      FROM tournaments
+      WHERE day = ${today};
+    `;
+        const todayTournament = todayTournamentResult.rows[0];
+        const date = (new Date()).toISOString().slice(0,10);
+        const todayTournamentData = `${todayTournament.name} ${date}`;
+        await sql`INSERT INTO prizes (tournament, phone_number, prize) VALUES (${todayTournamentData}, ${player.phone_number}, ${newPrize})`;
+
+    } catch (error) {
+        console.error('## create log error', error)
+        return {
+            message: 'Database Error: Failed to setPlayerPrize.',
+        };
+    }
+    revalidatePath(prevPage);
+    redirect(prevPage);
+}
+
 export async function createPlayerNewCreditLog(data : {player: PlayerForm, prevPage:string}, _prevState: State, formData: FormData){
     return createPlayerLog(data.player, formData, data.prevPage, false, 'super-admin');
 }
@@ -414,6 +464,21 @@ export async function deletePlayer(id: string) {
         await sql`DELETE FROM players WHERE id = ${id}`;
         revalidatePath('/dashboard/players');
         return { message: 'Deleted Player.' };
+    } catch (error) {
+        return { message: 'Database Error: Failed to Delete Player.' };
+    }
+}
+
+export async function deletePrize( {id, prevPage}: {id: string, prevPage: string,},) {
+    try {
+        const prizeResult  =await sql<PrizeDB>`SELECT * FROM prizes WHERE id = ${id}`;
+        const prize = prizeResult.rows[0];
+        if (!prize) {
+            return;
+        }
+
+        await sql`DELETE FROM prizes WHERE id = ${id}`;
+        revalidatePath(prevPage);
     } catch (error) {
         return { message: 'Database Error: Failed to Delete Player.' };
     }

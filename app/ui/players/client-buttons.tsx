@@ -2,7 +2,7 @@
 
 import { TrashIcon } from '@heroicons/react/24/outline';
 import {
-    deletePlayer,
+    deletePlayer, deletePrize,
     importPlayers,
     resetAllPlayersAndHistory,
 } from '@/app/lib/actions';
@@ -154,5 +154,20 @@ export function ResetPlayersAndHistory() {
             <input type="file" id="fileInput" style={{ display:'none'}} accept=".csv"/>
 
         </>
+    );
+}
+
+export function DeletePrize({ id, prevPage }: { id: string, prevPage:string }) {
+    const deletePrizeWithId = deletePrize.bind(null, { id, prevPage});
+
+    return (
+        <div style={{cursor: 'pointer'}} onClick={()=>{
+            console.log('### DeletePrize onClick')
+            if (confirm("Are you sure?")) {
+                deletePrizeWithId();
+            }
+        }}>
+            <u>prize delivered</u>
+        </div>
     );
 }

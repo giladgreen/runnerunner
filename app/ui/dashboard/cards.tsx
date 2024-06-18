@@ -2,6 +2,7 @@ import {
   BanknotesIcon,
   UserGroupIcon,
   UserIcon,
+    GiftIcon,
 } from '@heroicons/react/24/outline';
 import {
   WalletIcon,
@@ -9,12 +10,19 @@ import {
     ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/solid';
 import { lusitana } from '@/app/ui/fonts';
-import {fetchFinalTablePlayers, fetchGeneralPlayersCardData, fetchRSVPAndArrivalData} from '@/app/lib/data';
+import {
+    fetchFinalTablePlayers,
+    fetchGeneralPlayersCardData,
+    fetchPlayersPrizes,
+    fetchRSVPAndArrivalData
+} from '@/app/lib/data';
 import {formatCurrency} from "@/app/lib/utils";
 import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 import {CSSProperties, Suspense, useState} from "react";
 import {CardsSkeleton} from "@/app/ui/skeletons";
 import Image from "next/image";
+import {PrizeDB} from "@/app/lib/definitions";
+import {DeletePrize} from "@/app/ui/players/client-buttons";
 
 const translation = {
     Sunday: 'יום ראשון',
@@ -31,7 +39,8 @@ const iconMap = {
   debt: UserIcon,
   rsvp: TickIcon,
   arrived: DoubleTicksIcon,
-  empty: DoubleTicksIcon
+  empty: DoubleTicksIcon,
+  prize: GiftIcon
 };
 
 export async function GeneralPlayersCardWrapper() {
@@ -154,7 +163,34 @@ export async function TodayTournamentNameCardWrapper() {
 }
 
 
-export async function getFinalTablePlayersContent(date:string, revenuePage:boolean) {
+export async function getPlayersPrizesContent(prevPage:string) {
+    const playersPrizes = await fetchPlayersPrizes();
+
+    if (!playersPrizes || playersPrizes.length === 0) return null;
+
+    return <div style={{marginBottom: 30, width: '100%'}}>
+
+            {playersPrizes.map((playersPrize: PrizeDB) => {
+                return <div
+                    key={playersPrize.id}
+                    className="flex border-b prize-highlight-on-hover"
+                    style={{marginBottom: 5}}
+                >
+                    <div className="w-full rounded-md flex items-center  ">
+                        <span style={{marginLeft: 25}}>{playersPrize!.tournament}</span>
+                        <span style={{marginLeft: 25}}>{playersPrize!.player!.name}</span>
+                        <span style={{marginLeft: 25}}>{playersPrize!.player!.phone_number}</span>
+                        <span style={{marginLeft: 25}}>{playersPrize!.prize}</span>
+                    </div>
+
+                     <DeletePrize id={playersPrize.id} prevPage={prevPage}/>
+
+                </div>
+            })}
+    </div>
+}
+
+export async function getFinalTablePlayersContent(date: string, revenuePage: boolean) {
     const finalTablePlayers = await fetchFinalTablePlayers(date);
 
     if (!finalTablePlayers || finalTablePlayers.length === 0) return null;
@@ -186,10 +222,11 @@ export async function getFinalTablePlayersContent(date:string, revenuePage:boole
                             className="zoom-on-hover"
                             style={{
                                 marginLeft: 10,
-                                marginRight: 20
+                                marginRight: 20,
+                                marginTop:5
                             }}
                             width={40}
-                            height={40}
+                            height={50}
                             alt={`${finalTablePlayer.name}'s profile picture`}
                         />}
                         {revenuePage && <span style={{marginLeft: 10}}></span>}
@@ -238,6 +275,17 @@ export async function FinalTablePlayers({title}: { title: string }) {
 }
 
 
+export async function PlayersPrizes({title, prevPage}: { title: string, prevPage: string }) {
+    const content = await getPlayersPrizesContent(prevPage) as JSX.Element;
+    if (!content) return null;
+
+    return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1"
+                style={{marginBottom: 10, marginTop: -20, width: '100%'}}>
+        <Card title={title} value={content} type="prize"/>
+    </div>
+}
+
+
 export function Card({
                          title,
                          value,
@@ -247,7 +295,7 @@ export function Card({
                      }: {
     title: string | JSX.Element;
     value: number | string | JSX.Element;
-    type?: 'players' | 'debt' | 'money' | 'rsvp' | 'arrived' | 'empty';
+    type?: 'players' | 'debt' | 'money' | 'rsvp' | 'arrived' | 'empty' | 'prize';
     spend?: boolean
     empty?: boolean
 }) {

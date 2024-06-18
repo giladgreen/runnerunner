@@ -2,7 +2,7 @@ import {fetchTodayPlayers, fetchUserById} from "@/app/lib/data";
 import {notFound} from "next/navigation";
 
 import SideNavUser from "@/app/ui/dashboard/sidenav-user";
-import {FinalTablePlayers, RSVPAndArrivalCardWrapper} from "@/app/ui/dashboard/cards";
+import {FinalTablePlayers, PlayersPrizes, RSVPAndArrivalCardWrapper} from "@/app/ui/dashboard/cards";
 import Search from "@/app/ui/todaysearch";
 import {CreateNewTodayPlayer} from "@/app/ui/players/buttons";
 import TodaysPlayersTable from "@/app/ui/players/today-players-table";
@@ -28,6 +28,9 @@ export default async function Page({ params, searchParams }: { params: { id: str
                     </div>
                     <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                         <FinalTablePlayers title="Players Place"/>
+                    </div>
+                    <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+                        <PlayersPrizes title="Players Prizes" prevPage={`/worker/${connectedUserId}`}/>
                     </div>
                     <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                         <Search placeholder="search players"/>
