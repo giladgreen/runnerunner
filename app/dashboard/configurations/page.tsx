@@ -1,4 +1,4 @@
-import {fetchAllBugs, fetchAllPlayersForExport} from "@/app/lib/data";
+import {fetchAllBugs, fetchAllPlayersForExport, fetchFinalTablePlayers} from "@/app/lib/data";
 import {ImportPlayers, ExportPlayers} from "@/app/ui/players/client-buttons";
 import {PlayerDB} from "@/app/lib/definitions";
 import React from "react";
@@ -32,10 +32,10 @@ function UserPermissionsLink() {
 }
 
 
-function ExportPlayersButton({players}: { players: PlayerDB[] }) {
+function ExportPlayersButton({players, playersPlaces}: { players: PlayerDB[], playersPlaces: PlayerDB[] }) {
     return <div className="config-section">
         <div style={{marginBottom: 20}}><b>Export players data to CSV file</b></div>
-        <ExportPlayers players={players as PlayerDB[]}/>
+        <ExportPlayers players={players as PlayerDB[]} playersPlaces={playersPlaces}/>
     </div>
 }
 
@@ -84,6 +84,7 @@ function ReportBugForm({bugs}: { bugs: any[] }) {
 export default async function Page() {
     const bugs = await fetchAllBugs();
     const players = await fetchAllPlayersForExport();
+    const playersPlaces = await fetchFinalTablePlayers();
 
     return (
         <div className="w-full">
@@ -92,7 +93,7 @@ export default async function Page() {
                 <b>Configurations</b>
             </div>
             <Seperator/>
-            <ExportPlayersButton players={players}/>
+            <ExportPlayersButton players={players} playersPlaces={playersPlaces}/>
             <Seperator/>
             <ImportPlayersButton/>
             <Seperator/>

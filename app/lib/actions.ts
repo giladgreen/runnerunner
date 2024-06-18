@@ -2,6 +2,7 @@
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+const _ = require("lodash");
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
@@ -113,12 +114,15 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
 }
 
 
-export async function importPlayers(players: {name: string; phone_number: string; balance: number, notes:string, image_url:string }[]) {
+export async function importPlayers(players: PlayerDB[]) {
     const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
     const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
     try {
         const date = '2024-01-01T10:10:00.000Z';
         const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
+        const playersToUpdate = players.filter(p => existingPlayers.find(ep => ep.phone_number === p.phone_number));
+
+
         playersToInsert.forEach(p => {
             const existingImage = existingPlayersImages.find(ep => ep.phone_number === p.phone_number);
             if (existingImage){
@@ -128,45 +132,42 @@ export async function importPlayers(players: {name: string; phone_number: string
             }
         })
 
-        const playersToUpdate = players.filter(p => existingPlayers.find(ep => ep.phone_number === p.phone_number));
+        const playersToInsertBatches = _.chunk(playersToInsert, 10);
+        const playersToUpdateBatches = _.chunk(playersToUpdate, 10);
         console.log('playersToInsert',playersToInsert.length)
+        console.log('playersToInsertBatches',playersToInsertBatches.length)
         console.log('playersToUpdate',playersToUpdate.length)
-        let i = 0;
-        //insert
-        for (const player of playersToInsert) {
-            await sql`INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
- VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date}, ${player.image_url});`;
+        console.log('playersToUpdateBatches',playersToUpdateBatches.length)
 
-            console.log('inserted player #',i++)
+        //insert new players
+        for (const batch of playersToInsertBatches) {
+            await Promise.all(batch.map((player: PlayerDB) => sql`INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
+            VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date}, ${player.image_url});`))
         }
-        i = 0;
-       //update
-        console.log('finish inserting new players:', playersToInsert.length)
-        for (const player of playersToUpdate) {
-            await sql`UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number})`;
-            console.log('updated player #',i++)
+        console.log('finished inserting new players',playersToInsert.length)
+        //update existing players
+        for (const batch of playersToUpdateBatches) {
+            await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number})`))
         }
-        i = 0;
-
-        console.log('finish updating existing players', playersToUpdate.length)
-
+        console.log('finished updating existing players',playersToInsert.length)
         const archive = 'ארכיון'
-        for (const player of playersToInsert) {
-            await sql`DELETE FROM history WHERE phone_number= ${player.phone_number}`;
-            await sql`INSERT INTO history (phone_number, change, note, type, updated_at)
- VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date})`;
-            console.log('insert history #',i++);
+        for (const batch of playersToInsertBatches) {
+            await Promise.all(batch.map((player: PlayerDB) => {
+                sql`DELETE FROM history WHERE phone_number= ${player.phone_number}`
+            }))
         }
-        i = 0;
+        for (const batch of playersToInsertBatches) {
+            await Promise.all(batch.map((player: PlayerDB) => {
+                sql`INSERT INTO history (phone_number, change, note, type, updated_at)
+                VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date})`
+            }))
+        }
 
         console.log('finish insert new history')
-
-        for (const player of playersToUpdate) {
-            await sql`UPDATE history SET change = ${player.balance} WHERE phone_number = ${player.phone_number} AND type = 'credit' AND note = ${archive}`;
-            console.log('update history #',i++);
+        for (const batch of playersToUpdateBatches) {
+            await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE history SET change = ${player.balance} WHERE phone_number = ${player.phone_number} AND type = 'credit' AND note = ${archive}`))
         }
-
-        console.log('finish update history')
+        console.log('finish update archive history')
 
         console.log('****')
         console.log('finish all')

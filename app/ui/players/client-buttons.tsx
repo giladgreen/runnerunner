@@ -67,7 +67,7 @@ export function ImportPlayers() {
                                 player.notes = player.notes.trim()
                             }
                             return player;
-                        }).filter(Boolean) as { name: string; phone_number: string; balance: number, notes:string, image_url: string }[];
+                        }).filter(Boolean) as PlayerDB[];
 
                         await importPlayers(players);
                     };
@@ -86,29 +86,48 @@ export function ImportPlayers() {
             );
             }
 
-export function ExportPlayers({ players}: { players: PlayerDB[]}) {
+export function ExportPlayers({ players, playersPlaces}: { players: PlayerDB[], playersPlaces:PlayerDB[]}) {
 
     return (
         <>
             <Button
             onClick={() => {
-                const data = players.map((player) => {
-                    return `${player.name},${player.phone_number},${player.balance},${player.notes}`
+                const creditData = players.map((player) => {
+                    return `${player.phone_number},${player.name},${player.balance},${player.notes}`
                 }).join('\n');
-                const filename = "players_data.csv";
+                const creditFilename = "players_credit.csv";
+                const creditBlob = new Blob([creditData], {type: "text/plain;charset=utf-8"});
 
-                const blob = new Blob([data], {type: "text/plain;charset=utf-8"});
+                const creditLink = document.createElement("a");
+                creditLink.download = creditFilename;
+                creditLink.href = window.URL.createObjectURL(creditBlob);
+                creditLink.style.display = 'none';
 
-                const link = document.createElement("a");
-                link.download = filename;
-                link.href = window.URL.createObjectURL(blob);
-                link.style.display = 'none';
+                document.body.appendChild(creditLink);
 
-                document.body.appendChild(link);
+                creditLink.click();
 
-                link.click();
+                document.body.removeChild(creditLink);
+////////////////////////////////////////////////////////////////
 
-                document.body.removeChild(link);
+                const placesData = playersPlaces.map((player) => {
+                    return `${player.position}, ${player.phone_number},${player.name}`
+                }).join('\n');
+                const placesFilename = "today_players_places.csv";
+                const todayplacesData = `position, phone number, name
+${placesData}`
+                const placesBlob = new Blob([todayplacesData], {type: "text/plain;charset=utf-8"});
+
+                const placesLink = document.createElement("a");
+                placesLink.download = placesFilename;
+                placesLink.href = window.URL.createObjectURL(placesBlob);
+                placesLink.style.display = 'none';
+
+                document.body.appendChild(placesLink);
+
+                placesLink.click();
+
+                document.body.removeChild(placesLink);
             }}
                 >
 
