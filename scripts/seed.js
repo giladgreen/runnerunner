@@ -2,15 +2,11 @@ const { db } = require('@vercel/postgres');
 const _ = require("lodash");
 
 const {
-  players,
   users,
-  logs,
   tournaments,
-  DEMO_USERS_PHONES
 } = require('../app/lib/placeholder-data.js');
 const bcrypt = require('bcrypt');
 
-const dropTablesBefore = process.argv[2] === 'drop';
 async function seedTournaments(client) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -28,7 +24,7 @@ async function seedTournaments(client) {
         updated_at timestamp NOT NULL DEFAULT now()
       );
     `;
-
+    await client.sql`DELETE FROM tournaments`;
     console.log(`Created "tournaments" table`);
 
     // Insert data into the "users" table
@@ -41,11 +37,10 @@ async function seedTournaments(client) {
       }),
     );
 
-    console.log(`Seeded ${insertedTournaments.length} tournaments`);
+     console.log(`Seeded ${insertedTournaments.length} tournaments`);
 
     return {
       createTable,
-      insertedTournaments
     };
   } catch (error) {
     console.error('Error seeding users:', error);
@@ -69,7 +64,7 @@ async function seedUsers(client) {
     `;
 
     console.log(`Created "users" table`);
-
+    await  client.sql`delete from users`;
     // Insert data into the "users" table
     const insertedUsers = await Promise.all(
       users.map(async (user) => {
@@ -138,25 +133,8 @@ async function seedPlayers(client) {
 
     console.log(`Created "players" table`);
 
-    // Insert data into the "players" table
-    const insertedPlayers = await Promise.all(
-      players.map(
-        (player, index) => {
-          const rsvp = index % 2 === 0 ? true : false;
-          return client.sql`
-        INSERT INTO players (name, phone_number, balance, image_url, notes)
-        VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.image_url ?? '/players/default.png'}, ${player.notes ?? ''})
-        ON CONFLICT (id) DO NOTHING;
-      `
-        },
-      ),
-    );
-
-    console.log(`Seeded ${insertedPlayers.length} players`);
-
     return {
       createTable,
-      players: insertedPlayers,
     };
   } catch (error) {
     console.error('Error seeding players:');
@@ -183,34 +161,8 @@ async function seedHistory(client) {
 
     console.log(`Created "history" table`);
 
-    const insertedHistoryLogs = await Promise.all(
-        players.map(
-            (player) => client.sql`
-        INSERT INTO history (phone_number, change, note, type, updated_at, updated_by)
-        VALUES (${player.phone_number}, ${player.balance}, 'legacy balance', 'credit', '2024-01-01T10:00:00.000Z','super-admin')
-        ON CONFLICT (id) DO NOTHING;
-      `,
-        ),
-    );
-
-    console.log(`Seeded ${insertedHistoryLogs.length} history`);
-
-
-    //update DEMO USERs:
-
-    await Promise.all(DEMO_USERS_PHONES.map(phoneNumber => client.sql`delete from history where phone_number = ${phoneNumber};`));
-    await Promise.all(DEMO_USERS_PHONES.map(phoneNumber => Promise.all(
-        logs.map(
-            (log) => client.sql`
-        INSERT INTO history (phone_number, change, note, type, updated_at, updated_by)
-        VALUES (${phoneNumber}, ${log.change}, ${log.note}, ${log.type ?? 'credit'},${log.updated_at}, ${log.updated_by}); `,
-        ),
-    )))
-
-
     return {
       createTable,
-      insertedHistoryLogs
     };
   } catch (error) {
     console.error('Error seeding history:', error);
@@ -288,32 +240,43 @@ async function seedPrizes(client) {
   }
 }
 
+async function seedImages(client) {
+  try {
+    // Create the "rsvp" table if it doesn't exist
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS images (
+         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+         phone_number TEXT NOT NULL,
+         image_url TEXT NOT NULL
+      );
+    `;
+
+    console.log(`Created "images" table`);
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error seeding rsvp:', error);
+    throw error;
+  }
+}
+
 async function main() {
   console.log('## main start');
 
   const client = await db.connect();
 
   console.log('## db connected')
-
-  if (dropTablesBefore){
-    console.log('## drop tables')
-      await client.sql`DROP TABLE IF EXISTS tournaments`;
-      await client.sql`DROP TABLE IF EXISTS users`;
-      await client.sql`DROP TABLE IF EXISTS players`;
-      await client.sql`DROP TABLE IF EXISTS history`;
-      await client.sql`DROP TABLE IF EXISTS winners`;
-      await client.sql`DROP TABLE IF EXISTS rsvp`;
-  }
-
-  await seedTournaments(client);
   await seedUsers(client);
+  await seedTournaments(client);
   await createBugReportTable(client);
   await seedPlayers(client);
-
   await seedHistory(client);
   await seedWinners(client);
   await seedRSVP(client);
   await seedPrizes(client);
+  await seedImages(client);
 
   await client.end();
 }

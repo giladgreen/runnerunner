@@ -8,7 +8,6 @@
     "prettier:check": "prettier --check --ignore-unknown .",
     "start": "next start",
     "seed": "node -r dotenv/config ./scripts/seed.js",
-    "seed-with-drop-tables-first": "node -r dotenv/config ./scripts/seed.js drop",
     "lint": "next lint"
   },
   "dependencies": {

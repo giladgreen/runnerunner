@@ -12,20 +12,6 @@ const users = [
     password: 'kush1984',
     is_admin: true,
     is_worker: false
-  },
-  {
-    phone_number: '0542609910',
-    name: 'israel israeli',
-    password: '123456',
-    is_admin: false,
-    is_worker: false
-  },
-  {
-    phone_number: '144',
-    name:'worky',
-    password: '123456',
-    is_admin: false,
-    is_worker: true
   }
 ];
 
