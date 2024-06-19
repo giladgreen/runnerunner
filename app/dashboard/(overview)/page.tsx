@@ -8,7 +8,7 @@ import DebtPlayers from "@/app/ui/dashboard/debt-players";
 export default async function Page() {
     return (
         <div>
-            <div className="flex w-full items-center justify-between" style={{width: '100%'}}>
+            <div className="flex w-full items-center justify-between full-width">
                 <TodayTournamentNameCardWrapper/>
             </div>
             <RSVPAndArrivalCardWrapper/>

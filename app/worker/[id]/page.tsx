@@ -26,11 +26,11 @@ export default async function Page({ params, searchParams }: { params: { id: str
             </div>
             <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
 
-                <div className="w-full" style={{width: '100%'}}>
-                    <div className="flex w-full items-center justify-between" style={{width: '100%'}}>
+                <div className="w-full full-width">
+                    <div className="flex w-full items-center justify-between full-width" >
                         <TodayTournamentNameCardWrapper/>
                     </div>
-                    <div className="flex w-full items-center justify-between" style={{width: '100%'}}>
+                    <div className="flex w-full items-center justify-between full-width" >
                         <RSVPAndArrivalCardWrapper/>
                     </div>
                     <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">

@@ -27,7 +27,7 @@ const getLink = (player: PlayerDB) => {
   return worker ? `/worker/${userId}/players/${player.id}` : `/dashboard/players/${player.id}/edit`
 }
   return (
-    <div className="mt-6 flow-root" style={{ width: '100%'}}>
+    <div className="mt-6 flow-root full-width" >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         {rsvpPlayersCount} players RSVPed, {arrivedPlayers} arrived.
       </div>
@@ -38,7 +38,7 @@ const getLink = (player: PlayerDB) => {
             {players?.map((player) => (
               <div
                 key={player.id}
-                className="w-full rounded-md bg-white" style={{marginBottom:20, width: '100%'}}
+                className="w-full rounded-md bg-white full-width" style={{marginBottom:20}}
               >
                   <div className="flex items-center justify-between border-b pb-4">
                     <div>

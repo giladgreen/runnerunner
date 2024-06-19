@@ -22,8 +22,8 @@ export default async function Page({
     const totalPages = await fetchPlayersPages(query);
 
     return (
-        <div className="w-full" style={{ width: '100%'}}>
-            <div className="flex w-full items-center justify-between" style={{ width: '100%'}}>
+        <div className="w-full full-width">
+            <div className="flex w-full items-center justify-between full-width">
                 <GeneralPlayersCardWrapper />
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">

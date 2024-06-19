@@ -50,7 +50,7 @@ export async function GeneralPlayersCardWrapper() {
         totalRunnerDebt,
         totalPlayersDebt,
     } = await fetchGeneralPlayersCardData();
-    return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" style={{width: '100%'}}>
+    return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 full-width">
         <Suspense fallback={<CardsSkeleton count={4}/>}>
             <Card title="Total players" value={totalNumberOfPlayers} type="players"/>
             <Card title="Our Obligations" value={formatCurrency(totalRunnerDebt)} type="money"/>
@@ -135,7 +135,7 @@ export async function RSVPAndArrivalCardWrapper() {
     </div>
 
     const oneLinerStyle = {padding: 50, fontSize: 40}
-    return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" style={{marginBottom: 20, width: '100%'}} >
+    return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 full-width" style={{marginBottom: 20}} >
         <Suspense fallback={<CardsSkeleton count={4}/>}>
             <Card title="RSVP" value={<div style={oneLinerStyle}>{rsvpForTodayText}</div>} type="rsvp"/>
             <Card title="Arrived" value={<div  style={oneLinerStyle}>{arrivedToday}</div>} type="arrived"/>
@@ -152,7 +152,7 @@ export async function TodayTournamentNameCardWrapper() {
         todayTournament
     } = await fetchRSVPAndArrivalData();
 
-    return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1" style={{marginBottom: 20, width: '100%'}} >
+    return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1 full-width" style={{marginBottom: 20}} >
         <Suspense fallback={<CardsSkeleton count={1}/>}>
 
             <Card title="Current Tournament" value={`${
@@ -168,7 +168,7 @@ export async function getPlayersPrizesContent(prevPage:string) {
 
     if (!playersPrizes || playersPrizes.length === 0) return null;
 
-    return <div style={{marginBottom: 30, width: '100%'}}>
+    return <div className="full-width" style={{marginBottom: 30}}>
 
             {playersPrizes.map((playersPrize: PrizeDB) => {
                 return <div
@@ -208,12 +208,12 @@ export async function getFinalTablePlayersContent(date: string, isTournamentsDat
         marginRight: 10
     }
 
-    return <div style={{marginBottom: 30, width: '100%', display: 'flex'}}>
+    return <div className="full-width" style={{marginBottom: 30,  display: 'flex'}}>
         <div style={{width: '60%'}}>
             {finalTablePlayers.map((finalTablePlayer: PlayerDB) => {
                 return <div
                     key={finalTablePlayer.id}
-                    className="w-full rounded-md bg-white" style={{width: '100%'}}
+                    className="w-full rounded-md bg-white full-width"
                 >
                     <div className={`flex items-center border-b ${isTournamentsDataPage ? '' : 'pb-4'} highlight-on-hover`}>
                         <div style={textStyle as CSSProperties}>#{finalTablePlayer.position}</div>
@@ -268,8 +268,8 @@ export async function FinalTablePlayers({title}: { title: string }) {
     const content = await getFinalTablePlayersContent(date, false) as JSX.Element;
     if (!content) return null;
 
-    return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1"
-                style={{marginBottom: 10, marginTop: -20, width: '100%'}}>
+    return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1 full-width"
+                style={{marginBottom: 10, marginTop: -20}}>
         <Card title={title} value={content} type="players"/>
     </div>
 }
@@ -279,8 +279,8 @@ export async function PlayersPrizes({title, prevPage}: { title: string, prevPage
     const content = await getPlayersPrizesContent(prevPage) as JSX.Element;
     if (!content) return null;
 
-    return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1"
-                style={{marginBottom: 10, marginTop: -20, width: '100%'}}>
+    return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1 full-width"
+                style={{marginBottom: 10, marginTop: -20}}>
         <Card title={title} value={content} type="prize"/>
     </div>
 }
