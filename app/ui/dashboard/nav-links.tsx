@@ -16,12 +16,12 @@ const links = [
   { name: 'homepage', href: '/dashboard', icon: HomeIcon },
   {
     name: "current tournament",
-    href: '/dashboard/todayplayers',
+    href: '/dashboard/currenttournament',
     icon: Square2StackIcon
   },
   {
     name: "previous tournaments",
-    href: '/dashboard/revenues',
+    href: '/dashboard/tournamentsdata',
     icon: BanknotesIcon
   },
   {

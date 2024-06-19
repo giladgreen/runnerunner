@@ -7,7 +7,7 @@ export default async function Page() {
         <main>
             <Breadcrumbs
                 breadcrumbs={[
-                    { label: `today's players`, href: '/dashboard/todayplayers' },
+                    { label: `today's players`, href: '/dashboard/currenttournament' },
                     {
                         label: 'Create player',
                         href: '/dashboard/players/create',
@@ -15,7 +15,7 @@ export default async function Page() {
                     },
                 ]}
             />
-            <Form prevPage={'/dashboard/todayplayers'}/>
+            <Form prevPage={'/dashboard/currenttournament'}/>
         </main>
     );
 }

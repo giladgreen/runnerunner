@@ -335,9 +335,11 @@ export async function fetchTodayPlayers(query?: string) {
   }
 }
 
-export async function fetchRevenues() {
+export async function fetchTournamentsData() {
   noStore();
   try {
+    const tournamentsResults = await sql<TournamentDB>`SELECT * FROM tournaments`;
+    const tournaments =  tournamentsResults.rows;
     const historyResults = await sql`SELECT * FROM history WHERE change < 0 ORDER BY updated_at DESC`;
     const history =  historyResults.rows.filter(({ type }) => type !== 'prize');
 
@@ -346,12 +348,15 @@ export async function fetchRevenues() {
       const newAcc = {...acc};
       const dateAsString = updated_at.toISOString();
       const dateObj = new Date(updated_at);
+      const tournament = tournaments.find(({ day }) => day === dateObj.toLocaleString('en-us', {weekday: 'long'}));
+
       if (dateObj.getTime() < (new Date('2024-06-15T10:00:00.000Z')).getTime()){
         return newAcc;
       }
       const date = dateAsString.slice(0,10);
       if (!newAcc[date]){
         newAcc[date] = {
+          tournamentName: tournament?.name,
           cash: 0,
           credit: 0,
           wire: 0,
@@ -387,7 +392,7 @@ export async function fetchRevenues() {
 
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch the fetch revenue.');
+    throw new Error('Failed to fetch the fetch incomes.');
   }
 }
 

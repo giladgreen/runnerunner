@@ -95,8 +95,6 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
     try {
         if (image_url !== '/players/default.png'){
             await sql`INSERT INTO images (phone_number, image_url) VALUES (${phoneNumber}, ${image_url})`;
-            console.log('## added image to images table', phoneNumber)
-
         }
 
     }  catch (error) {
@@ -146,22 +144,16 @@ export async function importPlayers(players: PlayerDB[]) {
 
         const playersToInsertBatches = _.chunk(playersToInsert, 10);
         const playersToUpdateBatches = _.chunk(playersToUpdate, 10);
-        console.log('playersToInsert',playersToInsert.length)
-        console.log('playersToInsertBatches',playersToInsertBatches.length)
-        console.log('playersToUpdate',playersToUpdate.length)
-        console.log('playersToUpdateBatches',playersToUpdateBatches.length)
 
         //insert new players
         for (const batch of playersToInsertBatches) {
             await Promise.all(batch.map((player: PlayerDB) => sql`INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
             VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date}, ${player.image_url});`))
         }
-        console.log('finished inserting new players',playersToInsert.length)
         //update existing players
         for (const batch of playersToUpdateBatches) {
             await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number})`))
         }
-        console.log('finished updating existing players',playersToInsert.length)
         const archive = 'ארכיון'
         for (const batch of playersToInsertBatches) {
             await Promise.all(batch.map((player: PlayerDB) => {
@@ -175,24 +167,18 @@ export async function importPlayers(players: PlayerDB[]) {
             }))
         }
 
-        console.log('finish insert new history')
         for (const batch of playersToUpdateBatches) {
             await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE history SET change = ${player.balance} WHERE phone_number = ${player.phone_number} AND type = 'credit' AND note = ${archive}`))
         }
-        console.log('finish update archive history')
-
-        console.log('****')
-        console.log('finish all')
-
-
+        revalidatePath('/dashboard');
+        redirect('/dashboard');
     } catch (error) {
         console.error('## importPlayers error', error)
         return {
             message: 'Database Error: Failed to import Players.',
         };
     }
-    revalidatePath('/dashboard');
-    redirect('/dashboard');
+
 }
 
 export async function resetAllPlayersAndHistory() {
@@ -388,7 +374,6 @@ export async function updatePlayer(
             const player = (await sql<PlayerDB>`SELECT * FROM players WHERE id = ${id}`).rows[0];
             if (player && player.image_url !== image_url){
                 await sql`INSERT INTO images (phone_number, image_url) VALUES (${player.phone_number}, ${image_url})`;
-                console.log('## added image to images table', player.phone_number)
             }
         }
 
@@ -612,6 +597,6 @@ export async function undoPlayerLastLog(phone_number:string){
         return false;
     }
 
-    revalidatePath('/dashboard/todayplayers');
-    redirect('/dashboard/todayplayers');
+    revalidatePath('/dashboard/currenttournament');
+    redirect('/dashboard/currenttournament');
 }

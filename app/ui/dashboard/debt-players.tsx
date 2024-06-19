@@ -12,7 +12,7 @@ import {PlayersSkeleton} from "@/app/ui/skeletons";
 
 export default async function DebtPlayers() {
     const debtPlayers = await fetchDebtPlayers();
-console.log('debtPlayers',debtPlayers.length)
+
   return (
       <Suspense fallback={<PlayersSkeleton />}>
 

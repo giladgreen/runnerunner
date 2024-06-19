@@ -157,7 +157,7 @@ const getLink = (player: PlayerDB) => {
                     </td>
 
                     {rsvp_required && <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
-                      <RSVPButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'}/>
+                      <RSVPButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'}/>
                     </td>}
                     <td className="whitespace-nowrap px-3 py-3 rsvp-icon ">
                       {player.arrived ? '✅' : ''}
@@ -177,9 +177,9 @@ const getLink = (player: PlayerDB) => {
                     </td>
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                       <div className="flex justify-end gap-3">
-                        <OpenModalButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'} tournaments={tournaments} username={username}/>
-                        <OpenPositionModalButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'}/>
-                        <OpenPrizeModalButton player={player} prevPage={prevPage ?? '/dashboard/todayplayers'}/>
+                        <OpenModalButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'} tournaments={tournaments} username={username}/>
+                        <OpenPositionModalButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'}/>
+                        <OpenPrizeModalButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'}/>
                       </div>
 
                     </td>

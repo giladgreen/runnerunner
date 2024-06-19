@@ -50,6 +50,9 @@ export function ImportPlayers() {
                             if (line.trim().length === 0){
                                 return false;
                             }
+                            if (line.includes('name') && line.includes('balance')){
+                                return false;
+                            }
                             const parts = line.split(',');
                             const player = {
                                 phone_number: parts[0].trim().replaceAll('-', ''),
@@ -94,9 +97,11 @@ export function ExportPlayers({ players, playersPlaces, worker, tournament, priz
             onClick={() => {
                 const todayDate = (new Date()).toISOString().slice(0,10);
 
-                const creditData = players.sort((a,b)=> a.balance < b.balance ? 1 : -1).map((player) => {
+                const creditData =`phone number, name, balance, notes
+${players.sort((a,b)=> a.balance < b.balance ? 1 : -1).map((player) => {
                     return `${player.phone_number},${player.name},${player.balance},${player.notes}`
-                }).join('\n');
+                }).join(`
+`)}`;
                 const creditFilename = `players_credit_${todayDate}.csv`;
                 const creditBlob = new Blob([creditData], {type: "text/plain;charset=utf-8"});
 
@@ -115,14 +120,14 @@ export function ExportPlayers({ players, playersPlaces, worker, tournament, priz
                     const placesData = playersPlaces.map((player) => {
                         return `${player.position}, ${player.phone_number},${player.name}`
                     }).join('\n');
-                    const placesFilename = `${todayDate}_players_places.csv`;
+                    const placesFilename = `players_places_${todayDate}.csv`;
                     const todayPlacesData = `${tournament.name}
 position, phone number, name
 ${placesData}
 
 
-${prizes.length ? `Prizes:
-${prizes.map(prize => `${prize!.player!.name} (${prize!.phone_number})- ${prize.prize}   (${prize.tournament})`).join(`
+${prizes.length ? `Name, phone number, prize, tournament
+${prizes.map(prize => `${prize!.player!.name}, ${prize!.phone_number}, ${prize.prize},  ${prize.tournament}`).join(`
 `)}` :''}
 `;
 
@@ -173,7 +178,7 @@ export function DeletePrize({ id, prevPage }: { id: string, prevPage:string }) {
 
     return (
         <div style={{cursor: 'pointer'}} onClick={()=>{
-            console.log('### DeletePrize onClick')
+
             if (confirm("Are you sure?")) {
                 deletePrizeWithId();
             }

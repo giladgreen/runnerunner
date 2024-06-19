@@ -28,7 +28,7 @@ export default async function Page({
                 <FinalTablePlayers title="Places"/>
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                <PlayersPrizes title="Players Prizes" prevPage={`/dashboard/todayplayers`}/>
+                <PlayersPrizes title="Players Prizes" prevPage={`/dashboard/currenttournament`}/>
 
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">

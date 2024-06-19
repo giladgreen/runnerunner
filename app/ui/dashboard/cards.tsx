@@ -190,12 +190,12 @@ export async function getPlayersPrizesContent(prevPage:string) {
     </div>
 }
 
-export async function getFinalTablePlayersContent(date: string, revenuePage: boolean) {
+export async function getFinalTablePlayersContent(date: string, isTournamentsDataPage: boolean) {
     const finalTablePlayers = await fetchFinalTablePlayers(date);
 
     if (!finalTablePlayers || finalTablePlayers.length === 0) return null;
 
-    const textStyle = revenuePage ? {
+    const textStyle = isTournamentsDataPage ? {
         color: '#555555',
         fontSize: 11,
     } :{
@@ -215,9 +215,9 @@ export async function getFinalTablePlayersContent(date: string, revenuePage: boo
                     key={finalTablePlayer.id}
                     className="w-full rounded-md bg-white" style={{width: '100%'}}
                 >
-                    <div className={`flex items-center border-b ${revenuePage ? '' : 'pb-4'} highlight-on-hover`}>
+                    <div className={`flex items-center border-b ${isTournamentsDataPage ? '' : 'pb-4'} highlight-on-hover`}>
                         <div style={textStyle as CSSProperties}>#{finalTablePlayer.position}</div>
-                        {!revenuePage && <Image
+                        {!isTournamentsDataPage && <Image
                             src={finalTablePlayer.image_url}
                             className="zoom-on-hover"
                             style={{
@@ -229,10 +229,10 @@ export async function getFinalTablePlayersContent(date: string, revenuePage: boo
                             height={50}
                             alt={`${finalTablePlayer.name}'s profile picture`}
                         />}
-                        {revenuePage && <span style={{marginLeft: 10}}></span>}
+                        {isTournamentsDataPage && <span style={{marginLeft: 10}}></span>}
                         <div
-                             style={{fontSize: revenuePage ? 11 : 20,}}>{finalTablePlayer.phone_number}</div>
-                        <div style={{fontSize: revenuePage ? 11 : 20, marginLeft: 20}}>
+                             style={{fontSize: isTournamentsDataPage ? 11 : 20,}}>{finalTablePlayer.phone_number}</div>
+                        <div style={{fontSize: isTournamentsDataPage ? 11 : 20, marginLeft: 20}}>
                             {finalTablePlayer.name}
                         </div>
 
@@ -242,7 +242,7 @@ export async function getFinalTablePlayersContent(date: string, revenuePage: boo
 
             })}
         </div>
-        {revenuePage && <div style={{width: '40%', textAlign:'center'}}>
+        {isTournamentsDataPage && <div style={{width: '40%', textAlign:'center'}}>
             <Image
                 src={finalTablePlayers[0].image_url}
                 className="zoom-on-hover"

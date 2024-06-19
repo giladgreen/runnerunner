@@ -16,7 +16,7 @@ export function CreateNewPlayer() {
 
 
 export function CreateNewTodayPlayer({connectedUserId}:{connectedUserId?: string}) {
-  const href = connectedUserId ? `/worker/${connectedUserId}/create` : '/dashboard/todayplayers/create';
+  const href = connectedUserId ? `/worker/${connectedUserId}/create` : '/dashboard/currenttournament/create';
   return (
     <Link
       href={href}
