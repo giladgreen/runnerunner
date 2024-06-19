@@ -60,7 +60,7 @@ export type State = {
 };
 
 
-export async function createReport(formData: FormData) {
+export async function createReport(worker:boolean, formData: FormData) {
     const description = formData.get('description') as string;
     try {
         await sql`
@@ -75,6 +75,7 @@ export async function createReport(formData: FormData) {
             message: 'Database Error: Failed to Create report.',
         };
     }
+    const url = worker ? '/' : '/dashboard/configurations';
     revalidatePath('/dashboard/configurations');
     redirect('/dashboard/configurations');
 }

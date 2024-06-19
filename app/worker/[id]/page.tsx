@@ -1,7 +1,6 @@
 import {fetchTodayPlayers, fetchUserById} from "@/app/lib/data";
 import {notFound} from "next/navigation";
-
-import SideNavUser from "@/app/ui/dashboard/sidenav-user";
+import SideNavWorker from "@/app/ui/dashboard/sidenav-worker";
 import {FinalTablePlayers, PlayersPrizes, RSVPAndArrivalCardWrapper} from "@/app/ui/dashboard/cards";
 import Search from "@/app/ui/todaysearch";
 import {CreateNewTodayPlayer} from "@/app/ui/players/buttons";
@@ -18,7 +17,7 @@ export default async function Page({ params, searchParams }: { params: { id: str
     return (
         <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
             <div className="w-full flex-none md:w-64">
-                <SideNavUser username={user.name}/>
+                <SideNavWorker username={user.name!} userId={user.id!}/>
             </div>
             <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
 

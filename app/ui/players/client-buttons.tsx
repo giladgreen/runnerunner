@@ -86,16 +86,18 @@ export function ImportPlayers() {
             );
             }
 
-export function ExportPlayers({ players, playersPlaces}: { players: PlayerDB[], playersPlaces:PlayerDB[]}) {
+export function ExportPlayers({ players, playersPlaces, worker}: { players: PlayerDB[], playersPlaces:PlayerDB[], worker?: boolean}) {
 
     return (
         <>
             <Button
             onClick={() => {
+                const todayDate = (new Date()).toISOString().slice(0,10);
+
                 const creditData = players.map((player) => {
                     return `${player.phone_number},${player.name},${player.balance},${player.notes}`
                 }).join('\n');
-                const creditFilename = "players_credit.csv";
+                const creditFilename = `players_credit_${todayDate}.csv`;
                 const creditBlob = new Blob([creditData], {type: "text/plain;charset=utf-8"});
 
                 const creditLink = document.createElement("a");
@@ -108,26 +110,27 @@ export function ExportPlayers({ players, playersPlaces}: { players: PlayerDB[], 
                 creditLink.click();
 
                 document.body.removeChild(creditLink);
-////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////
+                if (!worker) {
+                    const placesData = playersPlaces.map((player) => {
+                        return `${player.position}, ${player.phone_number},${player.name}`
+                    }).join('\n');
+                    const placesFilename = `${todayDate}_players_places.csv`;
+                    const todayplacesData = `position, phone number, name
+                ${placesData}`
+                    const placesBlob = new Blob([todayplacesData], {type: "text/plain;charset=utf-8"});
 
-                const placesData = playersPlaces.map((player) => {
-                    return `${player.position}, ${player.phone_number},${player.name}`
-                }).join('\n');
-                const placesFilename = "today_players_places.csv";
-                const todayplacesData = `position, phone number, name
-${placesData}`
-                const placesBlob = new Blob([todayplacesData], {type: "text/plain;charset=utf-8"});
+                    const placesLink = document.createElement("a");
+                    placesLink.download = placesFilename;
+                    placesLink.href = window.URL.createObjectURL(placesBlob);
+                    placesLink.style.display = 'none';
 
-                const placesLink = document.createElement("a");
-                placesLink.download = placesFilename;
-                placesLink.href = window.URL.createObjectURL(placesBlob);
-                placesLink.style.display = 'none';
+                    document.body.appendChild(placesLink);
 
-                document.body.appendChild(placesLink);
+                    placesLink.click();
 
-                placesLink.click();
-
-                document.body.removeChild(placesLink);
+                    document.body.removeChild(placesLink);
+                }
             }}
                 >
 

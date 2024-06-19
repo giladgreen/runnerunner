@@ -12,34 +12,24 @@ import clsx from 'clsx';
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
-const links = [
-  { name: 'homepage', href: '/dashboard', icon: HomeIcon },
-  {
-    name: "current tournament",
-    href: '/dashboard/todayplayers',
-    icon: Square2StackIcon
-  },
-  {
-    name: "previous tournaments",
-    href: '/dashboard/revenues',
-    icon: BanknotesIcon
-  },
-  {
-    name: 'all players',
-    href: '/dashboard/players',
-    icon: UserGroupIcon,
-  },
+function getLinks(userId: string){
+  return [
+    {
+      name: "current tournament",
+      href: `/worker/${userId}`,
+      icon: Square2StackIcon
+    },
+    {
+      name: 'configurations',
+      href: `/worker/${userId}/configurations`,
+      icon: WrenchScrewdriverIcon,
+    }
+  ];
+}
 
-  {
-    name: 'configurations',
-    href: '/dashboard/configurations',
-    icon: WrenchScrewdriverIcon,
-  }
-];
-
-export default function NavLinks() {
+export default function NavLinksWorker({ userId}: {userId:string}) {
   const pathname = usePathname();
-
+  const links = getLinks(userId)
   return (
     <>
       {links.map((link) => {
