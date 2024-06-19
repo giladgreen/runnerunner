@@ -6,7 +6,7 @@ import {
     fetchTournamentByDay
 } from "@/app/lib/data";
 import {ImportPlayers, ExportPlayers} from "@/app/ui/players/client-buttons";
-import {PlayerDB, PrizeDB, TournamentDB} from "@/app/lib/definitions";
+import {BugDB, PlayerDB, PrizeDB, TournamentDB} from "@/app/lib/definitions";
 import React from "react";
 import Link from 'next/link';
 import Form from "@/app/ui/players/create-bug-form";
@@ -55,7 +55,7 @@ function ImportPlayersButton() {
 }
 
 
-function ReportBugForm({bugs}: { bugs: any[] }) {
+function ReportBugForm({bugs}: { bugs: BugDB[] }) {
     return <div className="config-section" style={{marginTop: 130}}>
         <h1 className="text-2xl">Report a bug</h1>
         <Form/>

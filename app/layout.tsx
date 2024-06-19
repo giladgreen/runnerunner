@@ -1,4 +1,11 @@
-import '@/app/ui/global.css';
+import '@/app/global.css';
+import '@/app/style.css';
+import '@/app/ui/style.css';
+import '@/app/signin/style.css';
+import '@/app/signup/style.css';
+import '@/app/ui/players/style.css';
+import '@/app/ui/dashboard/style.css';
+
 import { inter } from '@/app/ui/fonts';
 import { Metadata } from 'next';
 

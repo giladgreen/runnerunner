@@ -1,0 +1,16 @@
+.highlight-on-hover {
+    color: #777777;
+}
+
+.highlight-on-hover:hover {
+    background: rgb(0, 112, 243,0.8);
+    color: white !important;
+}
+
+.prize-highlight-on-hover {
+    color: black;
+}
+.prize-highlight-on-hover:hover{
+    background: rgb(0, 112, 243,0.5);
+    color: white !important;
+}

@@ -2,39 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-.top-header {
-  color: white;
-  /*direction: ltr;*/
-  font-size: xxx-large;
-  font-family: Abraham;
-}
-.homepage-top-header{
-  padding-left: 40px;
-}
 .bold{
   font-weight: bold;
 }
-.form-control {
-  border: 2px solid rgb(0, 112, 243);
-  border-radius:6px;
-  padding:12px;
-  background: white;
-  box-shadow: 0 0 0 3px white;
-}
-.highlight-on-hover{
-  color: #777777;
-}
-.highlight-on-hover:hover{
-  background: rgb(0, 112, 243,0.8);
-  color: white !important;
-}
-.prize-highlight-on-hover{
-  color: black;
-}
-.prize-highlight-on-hover:hover{
-  background: rgb(0, 112, 243,0.5);
-  color: white !important;
-}
+
+
 .form-inner-control{
 background: rgb(0, 112, 243, 0.2);
 }
@@ -117,15 +89,41 @@ align-items: center;
   font-size: xx-large;
 }
 
+
+
+.tournaments-data-table {
+  table {
+    width: 100%;
+    th {
+      border: 1px solid #44444455;
+      width: 110px;
+      text-align: left;
+    }
+  }
+}
+
+.tournaments-data-table-income-cell{
+  table {
+    width: 100%;
+    th {
+      border: none;
+      text-align: center;
+    }
+  }
+}
+
+
+
+
+
+
 .CheckCircleIcon{
   cursor: pointer;
 }
 .pointer{
   cursor: pointer;
 }
-.signin-top-header{
-  padding-left: 20px;
-}
+
 .config-seperator{
     margin: 20px 0;
     height: 20px;
@@ -150,25 +148,4 @@ input[type='number']::-webkit-inner-spin-button {
 input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
-
-.tournaments-data-table {
-  table {
-    width: 100%;
-    th {
-      border: 1px solid #44444455;
-      width: 110px;
-      text-align: left;
-    }
-  }
-}
-
-.tournaments-data-table-income-cell{
-  table {
-    width: 100%;
-    th {
-      border: none;
-      text-align: center;
-    }
-  }
 }

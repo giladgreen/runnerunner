@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <div> {player.notes}  </div>
                 <h1 style={{ zoom: 2 }}><b>Current Balance: {formatCurrency(player.balance)}</b></h1>
                 <hr style={{marginTop: 10, marginBottom: 20}}/>
-                <CreateLogForm player={player} tournaments={tournaments}/>
+                <CreateLogForm player={player}/>
 
                 <hr style={{marginTop: 20, marginBottom: 20}}/>
 

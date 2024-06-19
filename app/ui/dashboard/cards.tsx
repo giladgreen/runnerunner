@@ -21,7 +21,7 @@ import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 import {CSSProperties, Suspense, useState} from "react";
 import {CardsSkeleton} from "@/app/ui/skeletons";
 import Image from "next/image";
-import {PrizeDB} from "@/app/lib/definitions";
+import {PlayerDB, PrizeDB} from "@/app/lib/definitions";
 import {DeletePrize} from "@/app/ui/players/client-buttons";
 
 const translation = {
@@ -210,7 +210,7 @@ export async function getFinalTablePlayersContent(date: string, isTournamentsDat
 
     return <div style={{marginBottom: 30, width: '100%', display: 'flex'}}>
         <div style={{width: '60%'}}>
-            {finalTablePlayers.map((finalTablePlayer: any) => {
+            {finalTablePlayers.map((finalTablePlayer: PlayerDB) => {
                 return <div
                     key={finalTablePlayer.id}
                     className="w-full rounded-md bg-white" style={{width: '100%'}}

@@ -46,7 +46,7 @@ export function UseCreditForm({player, tournaments, hide, prevPage, username} : 
     if (note !== initialNote) {
       setNote(initialNote);
     }
-  }, [player, tournaments]);
+  }, [player, tournaments, amount, setAmount, initialAmount, note, setNote, initialNote]);
   return (
       <div>
         <form action={dispatch} className="form-control">
@@ -183,7 +183,7 @@ export function SetPositionForm({player, hide, prevPage} : { player: PlayerForm,
                       type="number"
                       step="1"
                       min={0}
-                      aria-valuemin={0}
+                      // aria-valuemin={0}
                       placeholder="Enter position"
                       className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                       aria-describedby="position-error"
@@ -407,7 +407,7 @@ export function AddToBalanceForm({player}: { player: PlayerForm }) {
   );
 }
 
-export default function CreateLogForm({player, tournaments} : {player: PlayerDB, tournaments:TournamentDB[]}) {
+export default function CreateLogForm({player} : {player: PlayerDB}) {
   return (
       <div style={{ display: 'flex' , justifyContent: 'space-between'}} >
         <AddToBalanceForm player={player}/>
@@ -441,7 +441,7 @@ export function SetPrizeForm({player, hide, prevPage} : { player: PlayerForm, hi
                       id="prize"
                       name="prize"
                       type="text"
-                      aria-valuemin={0}
+                      // aria-valuemin={0}
                       placeholder="Enter prize"
                       className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                       aria-describedby="prize-error"
