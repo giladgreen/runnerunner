@@ -1,29 +1,32 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "@/app/style.css";
+@import "@/app/ui/style.css";
+@import "@/app/signin/style.css";
+@import "@/app/signup/style.css";
+@import "@/app/ui/players/style.css";
+@import "@/app/ui/dashboard/style.css";
+@import "@/app/dashboard/style.css";
+@import "@/app/dashboard/tournamentsdata/style.css";
 
-.bold{
+.bold {
   font-weight: bold;
 }
 
-
-.form-inner-control{
-background: rgb(0, 112, 243, 0.2);
-}
 .zoom-on-hover:hover {
   transform: scale(1.6);
   transition: transform 0.5s;
 
 }
-.sort-cursor{
-    cursor: ns-resize;
 
+.sort-cursor {
+    cursor: ns-resize;
 }
-.table-text-item{
+
+.table-text-item {
   text-align: center;
   padding: 0;
 }
-.card-table{
+
+.card-table {
   table {
     border-spacing: 1px;
     border: 0;
@@ -53,69 +56,21 @@ background: rgb(0, 112, 243, 0.2);
 }
 
 
-.edit-player-modal{
-  background: white;
-  z-index:10;
-  position: fixed;
-  top: 20px;
-  right: 50px;
-  display: flex;
+
+.table-item {
+  text-align: center;
+  align-items: center;
+  display:grid;
   justify-content: center;
 }
-.edit-player-modal-hidden{
-  visibility: hidden;
-}
 
-.table-item{
-
-  text-align: center;
-align-items: center;
- display:grid;
-    justify-content: center;
-}
-.smaller-test{
+.smaller-test {
     font-size: smaller;
-
 }
-.thin-column{
+
+.thin-column {
   max-width: 160px !important;
 }
-.rsvp-section{
-  svg {
-    visibility: hidden;
-  }
-}
-.rsvp-icon{
-  font-size: xx-large;
-}
-
-
-
-.tournaments-data-table {
-  table {
-    width: 100%;
-    th {
-      border: 1px solid #44444455;
-      width: 110px;
-      text-align: left;
-    }
-  }
-}
-
-.tournaments-data-table-income-cell{
-  table {
-    width: 100%;
-    th {
-      border: none;
-      text-align: center;
-    }
-  }
-}
-
-
-
-
-
 
 .CheckCircleIcon{
   cursor: pointer;

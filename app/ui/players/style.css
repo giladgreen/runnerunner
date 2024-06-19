@@ -5,3 +5,30 @@
     background: white;
     box-shadow: 0 0 0 3px white;
 }
+
+.form-inner-control {
+    background: rgb(0, 112, 243, 0.2);
+}
+
+.edit-player-modal {
+    background: white;
+    z-index:10;
+    position: fixed;
+    top: 20px;
+    right: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.edit-player-modal-hidden {
+    visibility: hidden;
+}
+
+.rsvp-section {
+    svg {
+        visibility: hidden;
+    }
+}
+.rsvp-icon{
+    font-size: xx-large;
+}
