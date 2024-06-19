@@ -68,8 +68,8 @@ export function ImportPlayers() {
                             }
                             return player;
                         }).filter(Boolean) as PlayerDB[];
-
-                        await importPlayers(players);
+                        const relevantPlayers = players.filter((player) => player.balance !== 0 || player.phone_number.length > 6);
+                        await importPlayers(relevantPlayers);
                     };
                     reader.readAsText(file);
                 });

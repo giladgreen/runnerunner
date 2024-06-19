@@ -291,35 +291,31 @@ async function seedPrizes(client) {
 async function main() {
   console.log('## main start');
 
-  // const client = await db.connect();
+  const client = await db.connect();
 
-  // console.log('## db connected')
-    //
-    // await client.sql`DELETE FROM players`;
-    // await client.sql`DELETE FROM history`;
+  console.log('## db connected')
 
+  if (dropTablesBefore){
+    console.log('## drop tables')
+      await client.sql`DROP TABLE IF EXISTS tournaments`;
+      await client.sql`DROP TABLE IF EXISTS users`;
+      await client.sql`DROP TABLE IF EXISTS players`;
+      await client.sql`DROP TABLE IF EXISTS history`;
+      await client.sql`DROP TABLE IF EXISTS winners`;
+      await client.sql`DROP TABLE IF EXISTS rsvp`;
+  }
 
-  // if (dropTablesBefore){
-  //   console.log('## drop tables')
-  //     await client.sql`DROP TABLE IF EXISTS tournaments`;
-  //     await client.sql`DROP TABLE IF EXISTS users`;
-  //     await client.sql`DROP TABLE IF EXISTS players`;
-  //     await client.sql`DROP TABLE IF EXISTS history`;
-  //     await client.sql`DROP TABLE IF EXISTS winners`;
-  //     await client.sql`DROP TABLE IF EXISTS rsvp`;
-  // }
-  //
-  // await seedTournaments(client);
-  // await seedUsers(client);
-  // await createBugReportTable(client);
-  // await seedPlayers(client);
-  //
-  // await seedHistory(client);
-  // await seedWinners(client);
-  // await seedRSVP(client);
-  // await seedPrizes(client);
-  //
-  // await client.end();
+  await seedTournaments(client);
+  await seedUsers(client);
+  await createBugReportTable(client);
+  await seedPlayers(client);
+
+  await seedHistory(client);
+  await seedWinners(client);
+  await seedRSVP(client);
+  await seedPrizes(client);
+
+  await client.end();
 }
 
 main().catch((err) => {
