@@ -19,7 +19,7 @@ export default function RSVPButton({
     const icon =  isRsvpForDate ? '✅' :'☑️';
     return (
       <div onClick={() => rsvpPlayerForDay(player.phone_number, date, !isRsvpForDate, prevPage)}>
-        <span style={{ cursor: 'pointer'}}>{ icon }</span>  {text}
+        <span className="pointer">{ icon }</span>  {text}
       </div>
   );
 }

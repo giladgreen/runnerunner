@@ -14,8 +14,8 @@ function getDayIncome(dateItem: { total: number,credit: number,cash: number, wir
         <div style={{fontSize: 20, marginBottom:10}}>
             <b>{formatCurrency(dateItem.total)}</b>
         </div>
-        <div  style={{width:'100%' }} className="card-table tournaments-data-table-income-cell">
-            <table  style={{fontSize: 15, width:'100%'}}  cellSpacing="0" cellPadding="0">
+        <div className="card-table tournaments-data-table-income-cell full-width">
+            <table style={{fontSize: 15}} className="full-width" cellSpacing="0" cellPadding="0">
                 <thead>
                 <tr>
                     <th scope="col" className="table-text-item" data-tooltip="Credit" title="Credit">

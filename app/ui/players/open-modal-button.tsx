@@ -26,7 +26,7 @@ tournaments
       <div>
           <div onClick={() => {
               setShow(true);
-          }} style={{ fontSize:'24', cursor: 'pointer'}}>
+          }} className="pointer" style={{ fontSize:'24'}}>
               <Image
                   title={'pay'}
                   src={`/pay.png`}

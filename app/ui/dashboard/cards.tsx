@@ -78,8 +78,8 @@ export async function RSVPAndArrivalCardWrapper() {
         <div style={{fontSize: 20, marginBottom:10}}>
             <b>{formatCurrency(todayCreditIncome + todayCashIncome + todayTransferIncome)}</b>
         </div>
-        <div  style={{width:'100%' }} className="card-table">
-            <table  style={{fontSize: 15, width:'100%'}} cellSpacing="0" cellPadding="0">
+        <div  className="card-table full-width">
+            <table  style={{fontSize: 15}} className="full-width" cellSpacing="0" cellPadding="0">
                 <thead>
                 <tr>
                       <th scope="col" className="table-text-item" data-tooltip="Credit" title="Credit">

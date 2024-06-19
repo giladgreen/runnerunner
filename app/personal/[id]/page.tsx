@@ -51,12 +51,6 @@ export default async function Page({ params }: { params: { id: string } }) {
     const isRegisterForTodayTournament = player.rsvpForToday;
     const isFull = rsvpCountForTodayTournament >= max_players;
 
-    const buttonStyle = {
-        cursor: 'pointer',
-        color: 'blue',
-        textDecoration: 'underline',
-    }
-
     const onRegisterSubmit = async (_formData: FormData) => {
         'use server'
         const todayDate = (new Date()).toISOString().slice(0,10);
@@ -85,7 +79,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <div style={divWithTopMargin}>
                         <form action={onUnRegisterSubmit}>
                             <button>
-                                לביטול הרישום לחץ <span style={buttonStyle}><b>כאן</b></span>
+                                לביטול הרישום לחץ <span className="button-style" ><b>כאן</b></span>
                             </button>
                         </form>
                     </div>
@@ -98,7 +92,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <div style={divWithTopMargin}>
                         <form action={onRegisterSubmit}>
                             <button>
-                                לרישום  לחץ <span style={buttonStyle}><b>כאן</b></span>
+                                לרישום  לחץ <span className="button-style"><b>כאן</b></span>
                             </button>
                         </form>
                     </div>

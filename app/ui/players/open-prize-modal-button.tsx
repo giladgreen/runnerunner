@@ -21,7 +21,7 @@ export default function OpenPrizeModalButton({
       <div>
           <div onClick={() => {
               setShow(true);
-          }} style={{ fontSize:'24', cursor: 'pointer'}}>
+          }} className="pointer" style={{ fontSize:'24'}}>
               <Image
                   title={'prize'}
                   src={`/prize.png`}

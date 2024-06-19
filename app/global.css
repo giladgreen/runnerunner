@@ -5,18 +5,23 @@
 @import "@/app/ui/players/style.css";
 @import "@/app/ui/dashboard/style.css";
 @import "@/app/dashboard/style.css";
+@import "@/app/personal/[id]/style.css";
 @import "@/app/dashboard/tournamentsdata/style.css";
 
 .bold {
   font-weight: bold;
 }
 
+
 .zoom-on-hover:hover {
   transform: scale(1.6);
   transition: transform 0.5s;
 
 }
-
+.justify-end{
+    justify-content: flex-end;
+    justify-self: end;
+}
 .sort-cursor {
     cursor: ns-resize;
 }
@@ -72,24 +77,26 @@
   max-width: 160px !important;
 }
 
-.CheckCircleIcon{
+.CheckCircleIcon {
   cursor: pointer;
 }
-.pointer{
+.pointer {
   cursor: pointer;
 }
 
-.config-seperator{
+.config-seperator {
     margin: 20px 0;
     height: 20px;
     background-color: #0070f377;
 }
-.config-section{
+.config-section {
     margin: 0 10px;
 }
-.homepage-welcome{
+
+.homepage-welcome {
   margin-bottom: 90px;
 }
+
 input[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;

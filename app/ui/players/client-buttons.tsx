@@ -177,7 +177,7 @@ export function DeletePrize({ id, prevPage }: { id: string, prevPage:string }) {
     const deletePrizeWithId = deletePrize.bind(null, { id, prevPage});
 
     return (
-        <div style={{cursor: 'pointer'}} onClick={()=>{
+        <div className="pointer" onClick={()=>{
 
             if (confirm("Are you sure?")) {
                 deletePrizeWithId();

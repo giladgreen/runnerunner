@@ -37,7 +37,7 @@ export default function EntriesButton({
           }
 
 
-      }}  style={{ cursor: 'pointer'}}>
+      }}  className="pointer">
           {formatPlayerEntries(player.entries)}
       </div>
   );
