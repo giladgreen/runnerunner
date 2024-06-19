@@ -1,6 +1,12 @@
-import {fetchAllBugs, fetchAllPlayersForExport, fetchFinalTablePlayers} from "@/app/lib/data";
+import {
+    fetchAllBugs,
+    fetchAllPlayersForExport,
+    fetchFinalTablePlayers,
+    fetchPlayersPrizes,
+    fetchTournamentByDay
+} from "@/app/lib/data";
 import {ImportPlayers, ExportPlayers} from "@/app/ui/players/client-buttons";
-import {PlayerDB} from "@/app/lib/definitions";
+import {PlayerDB, PrizeDB, TournamentDB} from "@/app/lib/definitions";
 import React from "react";
 import Link from 'next/link';
 import Form from "@/app/ui/players/create-bug-form";
@@ -32,10 +38,10 @@ function UserPermissionsLink() {
 }
 
 
-function ExportPlayersButton({players, playersPlaces}: { players: PlayerDB[], playersPlaces: PlayerDB[] }) {
+function ExportPlayersButton({players, playersPlaces, tournament, prizes}: { players: PlayerDB[], playersPlaces: PlayerDB[],tournament: TournamentDB, prizes: PrizeDB[]}) {
     return <div className="config-section">
         <div style={{marginBottom: 20}}><b>Export players data to CSV file</b></div>
-        <ExportPlayers players={players as PlayerDB[]} playersPlaces={playersPlaces}/>
+        <ExportPlayers players={players as PlayerDB[]} playersPlaces={playersPlaces} tournament={tournament} prizes={prizes}/>
     </div>
 }
 
@@ -85,7 +91,9 @@ export default async function Page() {
     const bugs = await fetchAllBugs();
     const players = await fetchAllPlayersForExport();
     const playersPlaces = await fetchFinalTablePlayers();
-
+    const today = (new Date()).toLocaleString('en-us', {weekday: 'long'});
+    const tournament = await fetchTournamentByDay(today);
+    const prizes = await fetchPlayersPrizes();
     return (
         <div className="w-full">
 
@@ -93,7 +101,7 @@ export default async function Page() {
                 <b>Configurations</b>
             </div>
             <Seperator/>
-            <ExportPlayersButton players={players} playersPlaces={playersPlaces}/>
+            <ExportPlayersButton players={players} playersPlaces={playersPlaces}  tournament={tournament} prizes={prizes}/>
             <Seperator/>
             <ImportPlayersButton/>
             <Seperator/>

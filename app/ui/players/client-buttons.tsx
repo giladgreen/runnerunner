@@ -8,7 +8,7 @@ import {
 } from '@/app/lib/actions';
 import {Button} from "@/app/ui/button";
 import React from "react";
-import {PlayerDB} from "@/app/lib/definitions";
+import {PlayerDB, PrizeDB, TournamentDB} from "@/app/lib/definitions";
 
 export function DeletePlayer({ id }: { id: string }) {
   const deletePlayerWithId = deletePlayer.bind(null, id);
@@ -86,7 +86,7 @@ export function ImportPlayers() {
             );
             }
 
-export function ExportPlayers({ players, playersPlaces, worker}: { players: PlayerDB[], playersPlaces:PlayerDB[], worker?: boolean}) {
+export function ExportPlayers({ players, playersPlaces, worker, tournament, prizes}: { players: PlayerDB[], playersPlaces:PlayerDB[], tournament: TournamentDB, prizes: PrizeDB[], worker?: boolean}) {
 
     return (
         <>
@@ -94,7 +94,7 @@ export function ExportPlayers({ players, playersPlaces, worker}: { players: Play
             onClick={() => {
                 const todayDate = (new Date()).toISOString().slice(0,10);
 
-                const creditData = players.map((player) => {
+                const creditData = players.sort((a,b)=> a.balance < b.balance ? 1 : -1).map((player) => {
                     return `${player.phone_number},${player.name},${player.balance},${player.notes}`
                 }).join('\n');
                 const creditFilename = `players_credit_${todayDate}.csv`;
@@ -111,14 +111,22 @@ export function ExportPlayers({ players, playersPlaces, worker}: { players: Play
 
                 document.body.removeChild(creditLink);
                 ////////////////////////////////////////////////////////////////
-                if (!worker) {
+                if (!worker && playersPlaces && playersPlaces.length) {
                     const placesData = playersPlaces.map((player) => {
                         return `${player.position}, ${player.phone_number},${player.name}`
                     }).join('\n');
                     const placesFilename = `${todayDate}_players_places.csv`;
-                    const todayplacesData = `position, phone number, name
-                ${placesData}`
-                    const placesBlob = new Blob([todayplacesData], {type: "text/plain;charset=utf-8"});
+                    const todayPlacesData = `${tournament.name}
+position, phone number, name
+${placesData}
+
+
+${prizes.length ? `Prizes:
+${prizes.map(prize => `${prize!.player!.name} (${prize!.phone_number})- ${prize.prize}   (${prize.tournament})`).join(`
+`)}` :''}
+`;
+
+                    const placesBlob = new Blob([todayPlacesData], {type: "text/plain;charset=utf-8"});
 
                     const placesLink = document.createElement("a");
                     placesLink.download = placesFilename;

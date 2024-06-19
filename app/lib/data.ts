@@ -9,7 +9,7 @@ import {
 } from './definitions';
 
 const ITEMS_PER_PAGE = 30;
-
+const TOP_COUNT = 8;
 export async function fetchMVPPlayers() {
   noStore();
   try {
@@ -17,7 +17,7 @@ export async function fetchMVPPlayers() {
       SELECT *
       FROM players
       ORDER BY balance DESC
-      LIMIT 5`;
+      LIMIT ${TOP_COUNT}`;
 
     const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
     const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize');
@@ -46,7 +46,7 @@ export async function fetchDebtPlayers() {
       FROM players
       WHERE balance < 0
       ORDER BY balance ASC
-      LIMIT 5`;
+      LIMIT ${TOP_COUNT}`;
 
     const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
     const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize')

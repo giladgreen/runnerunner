@@ -1,6 +1,12 @@
-import {fetchAllBugs, fetchAllPlayersForExport, fetchFinalTablePlayers, fetchUserById} from "@/app/lib/data";
+import {
+    fetchAllBugs,
+    fetchAllPlayersForExport,
+    fetchFinalTablePlayers, fetchPlayersPrizes, fetchTournamentByDay,
+    fetchTournaments,
+    fetchUserById
+} from "@/app/lib/data";
 import {ExportPlayers} from "@/app/ui/players/client-buttons";
-import {PlayerDB} from "@/app/lib/definitions";
+import {PlayerDB, PrizeDB, TournamentDB} from "@/app/lib/definitions";
 import React from "react";
 import Form from "@/app/ui/players/create-bug-form";
 import {formatDateToLocal} from "@/app/lib/utils";
@@ -11,10 +17,10 @@ function Seperator() {
     return <div className="config-seperator"/>
 }
 
-function ExportPlayersButton({players, playersPlaces, worker}: { players: PlayerDB[], playersPlaces: PlayerDB[], worker?: boolean }) {
+function ExportPlayersButton({players, playersPlaces, tournament, prizes, worker}: { players: PlayerDB[], playersPlaces: PlayerDB[],tournament: TournamentDB, prizes: PrizeDB[], worker?: boolean }) {
     return <div className="config-section">
         <div style={{marginBottom: 20}}><b>Export players data to CSV file { !worker ? '+ current tournament places' :''}</b></div>
-        <ExportPlayers players={players as PlayerDB[]} playersPlaces={playersPlaces} worker={worker}/>
+        <ExportPlayers players={players as PlayerDB[]} playersPlaces={playersPlaces} worker={worker}  tournament={tournament} prizes={prizes}/>
     </div>
 }
 
@@ -62,7 +68,9 @@ export default async function Page({ params, searchParams }: { params: { id: str
     const bugs = await fetchAllBugs();
     const players = await fetchAllPlayersForExport();
     const playersPlaces = await fetchFinalTablePlayers();
-
+    const today = (new Date()).toLocaleString('en-us', {weekday: 'long'});
+    const tournament = await fetchTournamentByDay(today);
+    const prizes = await fetchPlayersPrizes();
     return (
         <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
             <div className="w-full flex-none md:w-64">
@@ -74,7 +82,7 @@ export default async function Page({ params, searchParams }: { params: { id: str
                     <b>Configurations</b>
                 </div>
                 <Seperator/>
-                <ExportPlayersButton players={players} playersPlaces={playersPlaces} worker/>
+                <ExportPlayersButton players={players} playersPlaces={playersPlaces}  tournament={tournament} prizes={prizes} worker/>
                 <Seperator/>
                 <ReportBugForm bugs={bugs}/>
             </div>

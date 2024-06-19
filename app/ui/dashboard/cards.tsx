@@ -155,7 +155,7 @@ export async function TodayTournamentNameCardWrapper() {
     return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1" style={{marginBottom: 20, width: '100%'}} >
         <Suspense fallback={<CardsSkeleton count={1}/>}>
 
-            <Card title={`Current Tournament`} value={`${
+            <Card title="Current Tournament" value={`${
                 // @ts-ignore
                 translation[todayTournament.day]} -  ${todayTournament.name}`} />
         </Suspense>
