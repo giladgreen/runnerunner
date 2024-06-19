@@ -16,8 +16,7 @@ export default async function TodaysPlayersTable({ userId, worker, players, user
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
   const todayTournament = tournaments.find((tournament) => tournament.day === dayOfTheWeek);
-  // @ts-ignore
-  const rsvp_required = todayTournament.rsvp_required;
+  const rsvp_required = todayTournament!.rsvp_required;
 
   const arrivedPlayers = players.filter((player) => player.arrived).length;
   // @ts-ignore

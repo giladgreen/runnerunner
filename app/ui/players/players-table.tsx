@@ -3,7 +3,7 @@ import Sort from '@/app/ui/sort';
 import { UpdatePlayer  } from '@/app/ui/players/buttons';
 import {  DeletePlayer } from '@/app/ui/players/client-buttons';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
-import { fetchFilteredPlayers } from '@/app/lib/data';
+import {fetchFilteredPlayers, fetchTournaments} from '@/app/lib/data';
 import Link from "next/link";
 import RSVPButton from "@/app/ui/players/rsvp-button";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
@@ -20,8 +20,10 @@ export default async function PlayersTable({
 
   const players = await fetchFilteredPlayers(query, currentPage, sortBy);
   const now = new Date();
-
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+  const tournaments = await fetchTournaments();
+  const todayTournament = tournaments.find((tournament) => tournament.day === dayOfTheWeek);
+  const rsvp_required = todayTournament!.rsvp_required;
 
   return (
     <div className="mt-6 flow-root">
@@ -89,9 +91,9 @@ export default async function PlayersTable({
                 <th scope="col" className="px-3 py-5 font-medium " title="Sort by Updated At">
                   <Sort text="Updated At" sortTerm="updated_at" />
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
+                {rsvp_required && <th scope="col" className="px-3 py-5 font-medium">
                   RSVP - {dayOfTheWeek}
-                </th>
+                </th>}
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -149,9 +151,9 @@ export default async function PlayersTable({
                     {formatDateToLocal(player.updated_at)}
                     </Link>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
+                  {rsvp_required && <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
                       <RSVPButton player={player} prevPage={'/dashboard/players'} />
-                  </td>
+                  </td>}
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
                       <UpdatePlayer id={player.id} />
