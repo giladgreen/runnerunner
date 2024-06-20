@@ -15,9 +15,8 @@ export const authConfig = {
             let isWorker: boolean = false;
             let userUUID: string | undefined = undefined;
             if (isLoggedIn) {
-                const users = (await sql<User>`SELECT * FROM users`).rows;
-                // @ts-ignore
-                const userFromDB = users.find((user) => user.phone_number === loggedInUser!.email);
+                const usersResult = await sql<User>`SELECT * FROM users WHERE phone_number = ${loggedInUser!.email}`;
+                const userFromDB = usersResult.rows[0];
                 isAdmin = Boolean(userFromDB && userFromDB.is_admin);
                 isWorker = Boolean(userFromDB && userFromDB.is_worker);
                 userUUID = userFromDB?.id;

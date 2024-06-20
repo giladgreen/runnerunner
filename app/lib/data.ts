@@ -19,12 +19,15 @@ export async function fetchMVPPlayers() {
       ORDER BY balance DESC
       LIMIT ${TOP_COUNT}`;
 
-    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
+    const todayDate = (new Date()).toISOString().slice(0,10);
+    const todayHistoryResults = await sql`SELECT phone_number, type FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
     const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize');
-
+    const rsvp = await getAllRsvps();
     const players = data.rows;
     players.forEach((player) => {
       player.arrived = !!todayHistory.find(({ phone_number}) => phone_number === player.phone_number);
+      player.rsvpForToday = !!rsvp.find(({ phone_number, date }) => phone_number === player.phone_number && date === todayDate);
+      player.rsvps = rsvp.filter(({ phone_number }) => phone_number === player.phone_number).map(({ date }) => date);
     });
     return players;
   } catch (error) {
@@ -48,7 +51,7 @@ export async function fetchDebtPlayers() {
       ORDER BY balance ASC
       LIMIT ${TOP_COUNT}`;
 
-    const todayHistoryResults = await sql`SELECT phone_number FROM history WHERE change < 0 AND updated_at > now() - interval '6 hour' group by phone_number`;
+    const todayHistoryResults = await sql`SELECT phone_number, type FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
     const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize')
 
     const rsvp = await getAllRsvps();
@@ -200,32 +203,32 @@ export async function fetchPlayersPrizes() {
    switch (sortBy) {
      case 'name':
        return sql<PlayerDB>`
-        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`}
+        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}
         ORDER BY name ASC
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
       `;
 
      case 'balance':
        return sql<PlayerDB>`
-        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`}
+        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}
         ORDER BY balance DESC
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
       `;
      case 'phone':
        return sql<PlayerDB>`
-        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`}
+        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}
         ORDER BY phone_number ASC
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
       `;
      case 'notes':
        return sql<PlayerDB>`
-        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`}
+        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}
         ORDER BY notes DESC
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
       `;
      default:
        return sql<PlayerDB>`
-        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`}
+        SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}
         ORDER BY updated_at DESC
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
       `;

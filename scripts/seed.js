@@ -253,12 +253,35 @@ async function seedImages(client) {
 
     console.log(`Created "images" table`);
 
+    const players = (await client.sql`SELECT * FROM players`).rows;
+    const images = (await client.sql`SELECT * FROM images`).rows;
+    const playersToUpdate = players.map(player => {
+      const image = images.find(image => image.phone_number === player.phone_number);
+      return {
+        ...player,
+        image
+      }
+    }).filter(player => player.image && player.image_url.includes('default.png'));
+
+    console.log(`Found ${playersToUpdate.length} players to update image`);
+    await Promise.all(playersToUpdate.map(player => client.sql`UPDATE players SET image_url = ${player.image.image_url} WHERE phone_number = ${player.phone_number}`));
+    console.log(`Updated ${playersToUpdate.length} players`);
+
     return {
       createTable,
     };
   } catch (error) {
     console.error('Error seeding rsvp:', error);
     throw error;
+  }
+}
+
+async function _fillUpHistory(client) {
+  const total = 30 * 150;
+  for (let i = 0; i < total; i++) {
+    console.log(i,' / ', total)
+    await client.sql`INSERT INTO history (phone_number, change, type, note, updated_by)
+        VALUES ('144',100, 'test', 'test', 'admin');`
   }
 }
 
@@ -277,6 +300,7 @@ async function main() {
   await seedRSVP(client);
   await seedPrizes(client);
   await seedImages(client);
+
 
   await client.end();
 }

@@ -34,6 +34,7 @@ export type MVPPlayerRaw = Omit<MVPPlayer, 'balance'> & {
   balance: number;
   arrived: boolean;
   rsvpForToday: boolean;
+  rsvps: string[];
 };
 export type DebtPlayerRaw = Omit<DebtPlayer, 'balance'> & {
   balance: number;

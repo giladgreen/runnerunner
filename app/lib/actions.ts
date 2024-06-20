@@ -274,12 +274,7 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
 
         const today = (new Date()).toLocaleString('en-us', {weekday: 'long'});
 
-        const todayTournamentResult = await sql<TournamentDB>`
-      SELECT
-        *
-      FROM tournaments
-      WHERE day = ${today};
-    `;
+        const todayTournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${today};`;
         const todayTournament = todayTournamentResult.rows[0];
         const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
         let winnersObject = winnersResult.rows[0];
@@ -323,12 +318,7 @@ export async function setPlayerPrize({playerId, prevPage}:{playerId: string, pre
         }
         const today = (new Date()).toLocaleString('en-us', {weekday: 'long'});
 
-        const todayTournamentResult = await sql<TournamentDB>`
-      SELECT
-        *
-      FROM tournaments
-      WHERE day = ${today};
-    `;
+        const todayTournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${today};`;
         const todayTournament = todayTournamentResult.rows[0];
         const date = (new Date()).toISOString().slice(0,10);
         const todayTournamentData = `${todayTournament.name} ${date}`;
@@ -371,7 +361,8 @@ export async function updatePlayer(
 
     try {
         if (image_url && image_url.length > 2 && image_url !== '/players/default.png'){
-            const player = (await sql<PlayerDB>`SELECT * FROM players WHERE id = ${id}`).rows[0];
+            const playersResults = await sql<PlayerDB>`SELECT * FROM players WHERE id = ${id}`;
+            const player = playersResults.rows[0];
             if (player && player.image_url !== image_url){
                 await sql`INSERT INTO images (phone_number, image_url) VALUES (${player.phone_number}, ${image_url})`;
             }
@@ -457,7 +448,7 @@ export async function deletePlayer(id: string) {
 
 export async function deletePrize( {id, prevPage}: {id: string, prevPage: string,},) {
     try {
-        const prizeResult  =await sql<PrizeDB>`SELECT * FROM prizes WHERE id = ${id}`;
+        const prizeResult  = await sql<PrizeDB>`SELECT * FROM prizes WHERE id = ${id}`;
         const prize = prizeResult.rows[0];
         if (!prize) {
             return;
@@ -554,6 +545,7 @@ export async function updateIsUserWorker(id:string) {
 export async function rsvpPlayerForDay(phone_number:string, date:string, val: boolean, prevPage: string){
     noStore();
     try {
+        await sql`DELETE FROM rsvp WHERE date < now() - interval '30 hour'`;
         const rsvpResult = await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${phone_number} AND date = ${date}`;
         const existingRsvp = rsvpResult.rows[0];
 
