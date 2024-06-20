@@ -545,7 +545,7 @@ export async function updateIsUserWorker(id:string) {
 export async function rsvpPlayerForDay(phone_number:string, date:string, val: boolean, prevPage: string){
     noStore();
     try {
-        await sql`DELETE FROM rsvp WHERE date < now() - interval '30 hour'`;
+
         const rsvpResult = await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${phone_number} AND date = ${date}`;
         const existingRsvp = rsvpResult.rows[0];
 
