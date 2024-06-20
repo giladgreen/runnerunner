@@ -1,7 +1,7 @@
 import { CreateNewTodayPlayer } from '@/app/ui/players/buttons';
 import TodaysPlayersTable from "@/app/ui/players/today-players-table";
 import Search from "@/app/ui/todaysearch";
-import {fetchTodayPlayers} from "@/app/lib/data";
+import {fetchFeatureFlags, fetchTodayPlayers} from "@/app/lib/data";
 import {
     FinalTablePlayers,
     PlayersPrizes,
@@ -16,6 +16,8 @@ export default async function Page({
     };
 }) {
     const players = await fetchTodayPlayers(searchParams?.query);
+    const { prizesEnabled, placesEnabled} = await fetchFeatureFlags();
+
     return (
         <div className="w-full full-width" >
             <div className="flex w-full items-center justify-between full-width">
@@ -24,13 +26,12 @@ export default async function Page({
             <div className="flex w-full items-center justify-between full-width">
                 <RSVPAndArrivalCardWrapper/>
             </div>
-            <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+            { placesEnabled && <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <FinalTablePlayers title="Places"/>
-            </div>
-            <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+            </div> }
+            {prizesEnabled && <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <PlayersPrizes title="Players Prizes" prevPage={`/dashboard/currenttournament`}/>
-
-            </div>
+            </div>}
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Search placeholder="search players"/>
                 <CreateNewTodayPlayer/>

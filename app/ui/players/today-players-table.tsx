@@ -7,10 +7,12 @@ import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 import {PlayerDB} from "@/app/lib/definitions";
 import OpenPositionModalButton from "@/app/ui/players/open-position-modal-button";
 import OpenPrizeModalButton from "@/app/ui/players/open-prize-modal-button";
-import {fetchTournaments} from "@/app/lib/data";
+import {fetchFeatureFlags, fetchTournaments} from "@/app/lib/data";
 import EntriesButton from "@/app/ui/players/entries-button";
 
 export default async function TodaysPlayersTable({ userId, worker, players, username, prevPage}:{players: PlayerDB[], username?:string,  userId?:string, prevPage?: string, worker?:boolean}) {
+
+  const { prizesEnabled, placesEnabled, rsvpEnabled} = await fetchFeatureFlags();
 
   const tournaments = await fetchTournaments();
   const now = new Date();
@@ -25,10 +27,13 @@ export default async function TodaysPlayersTable({ userId, worker, players, user
 const getLink = (player: PlayerDB) => {
   return worker ? `/worker/${userId}/players/${player.id}` : `/dashboard/players/${player.id}/edit`
 }
+
+  const titleText =rsvpEnabled && rsvp_required ? `${rsvpPlayersCount} players RSVPed, ${arrivedPlayers} arrived.` : `${arrivedPlayers} players arrived.`
+
   return (
     <div className="mt-6 flow-root full-width" >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        {rsvpPlayersCount} players RSVPed, {arrivedPlayers} arrived.
+        {titleText}
       </div>
 
       <div className="inline-block min-w-full align-middle">
@@ -70,14 +75,14 @@ const getLink = (player: PlayerDB) => {
                     </div>
                   </div>
                   <div>
-                    <div>
+                    {rsvpEnabled &&<div>
                       {
                           player.rsvpForToday && !player.arrived && <TickIcon size={24}/>
                       }
                       {
                           player.rsvpForToday && player.arrived && <DoubleTicksIcon size={24}/>
                       }
-                    </div>
+                    </div>}
 
                   </div>
                 </div>
@@ -100,7 +105,7 @@ const getLink = (player: PlayerDB) => {
                   Notes
                 </th>
 
-              {rsvp_required && <th scope="col" className="px-3 py-5 font-medium">
+              {rsvpEnabled && rsvp_required && <th scope="col" className="px-3 py-5 font-medium">
                   RSVP
                 </th>}
                 <th scope="col" className="px-3 py-5 font-medium">
@@ -109,8 +114,8 @@ const getLink = (player: PlayerDB) => {
                 <th scope="col" className="px-3 py-5 font-medium">
                   Buyins
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                </th>
+              {placesEnabled &&  <th scope="col" className="px-3 py-5 font-medium">
+                </th>}
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -155,7 +160,7 @@ const getLink = (player: PlayerDB) => {
                       </Link>
                     </td>
 
-                    {rsvp_required && <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
+                    {rsvpEnabled && rsvp_required && <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
                       <RSVPButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'}/>
                     </td>}
                     <td className="whitespace-nowrap px-3 py-3 rsvp-icon ">
@@ -164,7 +169,7 @@ const getLink = (player: PlayerDB) => {
                     <td className="whitespace-nowrap px-3 py-3 ">
                       <EntriesButton player={player}/>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-3 ">
+                    {placesEnabled &&  <td className="whitespace-nowrap px-3 py-3 ">
                       {(player.position && Number(player.position) > 0) ?<div className="text-lg" style={{
                         background: '#6666CCCC',
                         color: 'white',
@@ -173,12 +178,12 @@ const getLink = (player: PlayerDB) => {
                         borderRadius: 50,
                         textAlign: 'center',
                       }}>#{player.position}</div> : ''}
-                    </td>
+                    </td>}
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                       <div className="flex justify-end gap-3">
                         <OpenModalButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'} tournaments={tournaments} username={username}/>
-                        <OpenPositionModalButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'}/>
-                        <OpenPrizeModalButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'}/>
+                        {placesEnabled && <OpenPositionModalButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'}/>}
+                        {prizesEnabled && <OpenPrizeModalButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'}/>}
                       </div>
 
                     </td>

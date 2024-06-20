@@ -1,4 +1,4 @@
-import {fetchTodayPlayers, fetchUserById} from "@/app/lib/data";
+import {fetchFeatureFlags, fetchTodayPlayers, fetchUserById} from "@/app/lib/data";
 import {notFound} from "next/navigation";
 import SideNavWorker from "@/app/ui/dashboard/sidenav-worker";
 import {
@@ -19,6 +19,9 @@ export default async function Page({ params, searchParams }: { params: { id: str
         notFound();
     }
     const players = await fetchTodayPlayers(searchParams?.query);
+    const { prizesEnabled, placesEnabled} = await fetchFeatureFlags();
+
+
     return (
         <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
             <div className="w-full flex-none md:w-64">
@@ -33,12 +36,12 @@ export default async function Page({ params, searchParams }: { params: { id: str
                     <div className="flex w-full items-center justify-between full-width" >
                         <RSVPAndArrivalCardWrapper/>
                     </div>
-                    <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+                    {placesEnabled && <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                         <FinalTablePlayers title="Players Place"/>
-                    </div>
-                    <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+                    </div>}
+                    {prizesEnabled && <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                         <PlayersPrizes title="Players Prizes" prevPage={`/worker/${connectedUserId}`}/>
-                    </div>
+                    </div>}
                     <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                         <Search placeholder="search players"/>
                         <CreateNewTodayPlayer connectedUserId={connectedUserId}/>

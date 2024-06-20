@@ -177,13 +177,6 @@ export default function Form({prevPage}:{prevPage:string}) {
           </div>
         </div>
 
-        {/* player rsvp */}
-        <div className="mb-4">
-          <label htmlFor="notes" className="mb-2 block text-sm font-medium">
-            RSVP
-          </label>
-        </div>
-
         {/* player image url */}
         <div className="mb-4">
           <label htmlFor="image_url" className="mb-2 block text-sm font-medium">

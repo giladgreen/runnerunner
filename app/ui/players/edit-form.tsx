@@ -25,9 +25,11 @@ const translation = {
 export default function EditPlayerForm({
   player,
   tournaments,
+  rsvpEnabled,
   prevPage
 }: {
   player: PlayerForm;
+    rsvpEnabled:boolean;
   tournaments: TournamentDB[];
   prevPage: string
 }) {
@@ -176,12 +178,12 @@ export default function EditPlayerForm({
 
               </CldUploadWidget>
           </div>
-          <div style={{ marginTop: 45, border: '2px solid blue', borderRadius:5, padding:10}}>
+          { rsvpEnabled && <div style={{ marginTop: 45, border: '2px solid blue', borderRadius:5, padding:10}}>
              <div><u>RSVP this week tournaments</u></div>
              <div>
                  {rsvpsForTheNextWeek}
              </div>
-          </div>
+          </div>}
       </>
   );
 }

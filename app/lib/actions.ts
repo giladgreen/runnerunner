@@ -514,6 +514,18 @@ export async function signUp(
     return;
 }
 
+export async function updateFFValue(name:string, newValue:boolean) {
+    noStore();
+    try {
+        await sql`UPDATE feature_flags SET is_open = ${newValue} WHERE flag_name = ${name}`;
+    } catch (error) {
+        console.error('Database updateFFValue Error:', error);
+        return false;
+    }
+    revalidatePath('/dashboard/configurations/flags');
+    redirect('/dashboard/configurations/flags');
+}
+
 export async function updateIsUserAdmin(id:string) {
     noStore();
     try {

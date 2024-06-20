@@ -240,6 +240,28 @@ async function seedPrizes(client) {
   }
 }
 
+async function seedFF(client) {
+  try {
+    // Create the "feature_flags" table if it doesn't exist
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS feature_flags (
+         flag_name TEXT NOT NULL PRIMARY KEY,
+         is_open BOOLEAN NOT NULL
+      );
+    `;
+
+    console.log(`Created "feature_flags" table`);
+
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error seeding feature_flags:', error);
+    throw error;
+  }
+}
+
 async function seedImages(client) {
   try {
     // Create the "rsvp" table if it doesn't exist
@@ -300,6 +322,7 @@ async function main() {
   await seedRSVP(client);
   await seedPrizes(client);
   await seedImages(client);
+  await seedFF(client);
 
 
   await client.end();

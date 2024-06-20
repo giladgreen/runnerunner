@@ -89,7 +89,7 @@ export function ImportPlayers() {
             );
             }
 
-export function ExportPlayers({ players, playersPlaces, worker, tournament, prizes}: { players: PlayerDB[], playersPlaces:PlayerDB[], tournament: TournamentDB, prizes: PrizeDB[], worker?: boolean}) {
+export function ExportPlayers({ players, playersPlaces, worker, tournament, prizes, prizesEnabled, placesEnabled}: { players: PlayerDB[], playersPlaces:PlayerDB[], tournament: TournamentDB, prizes: PrizeDB[], worker?: boolean, prizesEnabled?: boolean, placesEnabled?: boolean}) {
 
     return (
         <>
@@ -116,36 +116,46 @@ ${players.sort((a,b)=> a.balance < b.balance ? 1 : -1).map((player) => {
 
                 document.body.removeChild(creditLink);
                 ////////////////////////////////////////////////////////////////
-                if (!worker && playersPlaces && playersPlaces.length) {
-                    const placesData = playersPlaces.map((player) => {
-                        return `${player.position}, ${player.phone_number},${player.name}`
-                    }).join('\n');
-                    const placesFilename = `players_places_${todayDate}.csv`;
-                    const todayPlacesData = `${tournament.name}
-position, phone number, name
+                if (!placesEnabled && !prizesEnabled){
+                    return;
+                }
+                if (worker) {
+                    return
+                }
+                const addPlaces = placesEnabled && playersPlaces && playersPlaces.length > 0;
+                const addPrizes = prizesEnabled && prizes && prizes.length > 0;
+                const filename = `players_${addPlaces && addPrizes ? 'places_and_prizes' : (addPlaces ? 'places' : 'prizes')}.csv`;
+
+                const placesData = addPlaces ? `position, phone number, name 
+${playersPlaces.map((player) => {
+                    return `${player.position}, ${player.phone_number},${player.name}`
+                }).join('\n')}` : '';
+
+                const prizesData = addPrizes ? `Name, phone number, prize, tournament
+${prizes.map(prize => `${prize!.player!.name}, ${prize!.phone_number}, ${prize.prize},  ${prize.tournament}`).join('\n')}` : '';
+
+                const fileData = `${tournament.name}
+
 ${placesData}
 
+${prizesData}
 
-${prizes.length ? `Name, phone number, prize, tournament
-${prizes.map(prize => `${prize!.player!.name}, ${prize!.phone_number}, ${prize.prize},  ${prize.tournament}`).join(`
-`)}` :''}
+
 `;
 
-                    const placesBlob = new Blob([todayPlacesData], {type: "text/plain;charset=utf-8"});
+                    const dataBlob = new Blob([fileData], {type: "text/plain;charset=utf-8"});
 
-                    const placesLink = document.createElement("a");
-                    placesLink.download = placesFilename;
-                    placesLink.href = window.URL.createObjectURL(placesBlob);
-                    placesLink.style.display = 'none';
+                    const dataLink = document.createElement("a");
+                    dataLink.download = filename;
+                    dataLink.href = window.URL.createObjectURL(dataBlob);
+                    dataLink.style.display = 'none';
 
-                    document.body.appendChild(placesLink);
+                    document.body.appendChild(dataLink);
 
-                    placesLink.click();
+                    dataLink.click();
 
-                    document.body.removeChild(placesLink);
-                }
-            }}
-                >
+                    document.body.removeChild(dataLink);
+            }} >
 
             <span >export</span>
             </Button>
@@ -167,8 +177,6 @@ export function ResetPlayersAndHistory() {
             >
                 <span >Reset</span>
             </Button>
-            <input type="file" id="fileInput" style={{ display:'none'}} accept=".csv"/>
-
         </>
     );
 }

@@ -1,4 +1,4 @@
-import { fetchTournamentsData} from '@/app/lib/data';
+import {fetchFeatureFlags, fetchTournamentsData} from '@/app/lib/data';
 import {
     WalletIcon,
     CreditCardIcon,
@@ -73,6 +73,8 @@ function getDayIncome(dateItem: { total: number,credit: number,cash: number, wir
 }
 
 export default async function TournamentsDataPage() {
+    const {  placesEnabled} = await fetchFeatureFlags();
+
     const tournaments = await fetchTournamentsData();
     const tournamentsData =  Object.keys(tournaments);
 
@@ -94,9 +96,9 @@ export default async function TournamentsDataPage() {
                     <th className="px-3 py-5 font-medium">
                         <b>Buyins</b>
                     </th>
-                    <th className="px-3 py-5 font-medium">
+                    {placesEnabled && <th className="px-3 py-5 font-medium">
                         <b>Places</b>
-                    </th>
+                    </th>}
                 </tr>
                 </thead>
                 <tbody className="bg-white">
@@ -128,9 +130,9 @@ export default async function TournamentsDataPage() {
                      <th className="px-3 py-5 font-medium">
                          {dateItem.entries - dateItem.reentries} buyins {dateItem.reentries > 0 ? `(+ ${dateItem.reentries} rebuys)` : ``}
                      </th>
-                     <th className="px-3 py-5 font-medium">
+                    {placesEnabled && <th className="px-3 py-5 font-medium">
                          { finalTableData }
-                     </th>
+                     </th>}
                  </tr>
                 })}
                 </tbody>

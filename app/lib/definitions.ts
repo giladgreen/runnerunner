@@ -134,6 +134,13 @@ export type TournamentDB = {
 
 
 
+export type FeatureFlagDB = {
+  flag_name: string;
+  is_open: boolean;
+};
+
+
+
 export type BugDB = {
   id: string;
   description: string;

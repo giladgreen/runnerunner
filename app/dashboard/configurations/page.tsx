@@ -1,6 +1,6 @@
 import {
     fetchAllBugs,
-    fetchAllPlayersForExport,
+    fetchAllPlayersForExport, fetchFeatureFlags,
     fetchFinalTablePlayers,
     fetchPlayersPrizes,
     fetchTournamentByDay
@@ -19,8 +19,18 @@ function Seperator() {
 function TournamentsLink() {
     return <div className="config-section">
         <Link href="/dashboard/configurations/tournaments"
-              className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400">
+              className="mt-4 rounded-md bg-blue-400 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400">
             Tournaments Info
+        </Link>
+
+    </div>
+}
+
+function FeatureFlagsLink() {
+    return <div className="config-section">
+        <Link href="/dashboard/configurations/flags"
+              className="mt-4 rounded-md bg-blue-700 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400">
+            Feature Flags
         </Link>
 
     </div>
@@ -30,7 +40,7 @@ function UserPermissionsLink() {
     return <div className="config-section">
 
         <Link href="/dashboard/configurations/users"
-              className="mt-4 rounded-md bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400">
+              className="mt-4 rounded-md bg-blue-700 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400">
             Users permissions
         </Link>
 
@@ -38,10 +48,10 @@ function UserPermissionsLink() {
 }
 
 
-function ExportPlayersButton({players, playersPlaces, tournament, prizes}: { players: PlayerDB[], playersPlaces: PlayerDB[],tournament: TournamentDB, prizes: PrizeDB[]}) {
+function ExportPlayersButton({players, playersPlaces, tournament, prizes, prizesEnabled, placesEnabled}: { players: PlayerDB[], playersPlaces: PlayerDB[],tournament: TournamentDB, prizes: PrizeDB[], prizesEnabled?: boolean, placesEnabled?: boolean}) {
     return <div className="config-section">
         <div style={{marginBottom: 20}}><b>Export players data to CSV file</b></div>
-        <ExportPlayers players={players as PlayerDB[]} playersPlaces={playersPlaces} tournament={tournament} prizes={prizes}/>
+        <ExportPlayers players={players as PlayerDB[]} playersPlaces={playersPlaces} tournament={tournament} prizes={prizes} prizesEnabled={prizesEnabled} placesEnabled={placesEnabled}/>
     </div>
 }
 
@@ -88,6 +98,7 @@ function ReportBugForm({bugs}: { bugs: BugDB[] }) {
 
 
 export default async function Page() {
+    const { prizesEnabled, placesEnabled, rsvpEnabled} = await fetchFeatureFlags();
     const bugs = await fetchAllBugs();
     const players = await fetchAllPlayersForExport();
     const playersPlaces = await fetchFinalTablePlayers();
@@ -101,13 +112,15 @@ export default async function Page() {
                 <b>Configurations</b>
             </div>
             <Seperator/>
-            <ExportPlayersButton players={players} playersPlaces={playersPlaces}  tournament={tournament} prizes={prizes}/>
+            <ExportPlayersButton players={players} playersPlaces={playersPlaces}  tournament={tournament} prizes={prizes} prizesEnabled={prizesEnabled} placesEnabled={placesEnabled}/>
             <Seperator/>
             <ImportPlayersButton/>
             <Seperator/>
             <UserPermissionsLink/>
             <Seperator/>
             <TournamentsLink/>
+            <Seperator/>
+            <FeatureFlagsLink/>
             <Seperator/>
 
             <ReportBugForm bugs={bugs}/>

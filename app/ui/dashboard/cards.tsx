@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { lusitana } from '@/app/ui/fonts';
 import {
+    fetchFeatureFlags,
     fetchFinalTablePlayers,
     fetchGeneralPlayersCardData,
     fetchPlayersPrizes,
@@ -61,6 +62,7 @@ export async function GeneralPlayersCardWrapper() {
 }
 
 export async function RSVPAndArrivalCardWrapper() {
+    const { rsvpEnabled } = await fetchFeatureFlags();
 
     const {
         rsvpForToday,
@@ -137,7 +139,7 @@ export async function RSVPAndArrivalCardWrapper() {
     const oneLinerStyle = {padding: 50, fontSize: 40}
     return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 full-width" style={{marginBottom: 20}} >
         <Suspense fallback={<CardsSkeleton count={4}/>}>
-            <Card title="RSVP" value={<div style={oneLinerStyle}>{rsvpForTodayText}</div>} type="rsvp"/>
+            {rsvpEnabled && <Card title="RSVP" value={<div style={oneLinerStyle}>{rsvpForTodayText}</div>} type="rsvp"/>}
             <Card title="Arrived" value={<div  style={oneLinerStyle}>{arrivedToday}</div>} type="arrived"/>
             <Card title="Re Entries" value={<div  style={oneLinerStyle}>{reEntriesCount}</div>} type="money"/>
             <Card title="Income" value={todayIncome} type="money"/>

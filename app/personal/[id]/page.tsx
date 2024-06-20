@@ -1,6 +1,11 @@
 import SideNavUser from "@/app/ui/dashboard/sidenav-user";
 import {formatCurrency} from "@/app/lib/utils";
-import {fetchPlayerByUserId, fetchRsvpCountForTodayTournament, fetchTournamentByDay} from "@/app/lib/data";
+import {
+    fetchFeatureFlags,
+    fetchPlayerByUserId,
+    fetchRsvpCountForTodayTournament,
+    fetchTournamentByDay
+} from "@/app/lib/data";
 import Image from "next/image";
 import HistoryTable from "@/app/ui/players/history-table";
 import {rsvpPlayerForDay} from "@/app/lib/actions";
@@ -17,6 +22,9 @@ const translation = {
 
 export default async function Page({ params }: { params: { id: string } }) {
     const userId = params.id;
+    const { rsvpEnabled, playerRsvpEnabled} = await fetchFeatureFlags();
+    const showRsvp = rsvpEnabled && playerRsvpEnabled;
+
     const player = await fetchPlayerByUserId(userId);
     if (!player) {
         return (
@@ -131,9 +139,9 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <div>Phone number: {player.phone_number}  </div>
                     <div> {player.notes}  </div>
                     <h1 style={{zoom: 2}}><b>Current Balance: {formatCurrency(player.balance)}</b></h1>
-                    {separator}
-                    <div> {todayTournamentData}</div>
-                    {!noTournamentToday && <div>
+                    {showRsvp && separator}
+                    {showRsvp && <div> {todayTournamentData}</div>}
+                    {showRsvp && !noTournamentToday && <div>
                         {!rsvp_required ? noRegistrationNeeded : registrationNeeded }
                     </div>}
                     {separator}

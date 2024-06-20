@@ -3,7 +3,7 @@ import { unstable_noStore as noStore} from 'next/cache';
 
 import {
   BugDB, Counts,
-  DebtPlayerRaw, LogDB,
+  DebtPlayerRaw, FeatureFlagDB, LogDB,
   MVPPlayerRaw, PlayerDB, PrizeDB, RSVPDB,
   TournamentDB, User, WinnerDB
 } from './definitions';
@@ -463,6 +463,27 @@ export async function fetchTournaments() {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch tournaments.');
+  }
+}
+export async function fetchFeatureFlags() {
+  noStore();
+  try {
+    const flagsResult = await sql<FeatureFlagDB>`
+      SELECT * FROM feature_flags`;
+
+    const prizesEnabled = flagsResult.rows.find(flag => flag.flag_name === 'prizes')?.is_open;
+    const placesEnabled = flagsResult.rows.find(flag => flag.flag_name === 'places')?.is_open;
+    const rsvpEnabled = flagsResult.rows.find(flag => flag.flag_name === 'rsvp')?.is_open;
+    const playerRsvpEnabled = flagsResult.rows.find(flag => flag.flag_name === 'player_can_rsvp')?.is_open;
+    return {
+      prizesEnabled,
+      placesEnabled,
+      rsvpEnabled,
+      playerRsvpEnabled
+    }
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch flagsResult.');
   }
 }
 export async function fetchPlayerById(id: string) {
