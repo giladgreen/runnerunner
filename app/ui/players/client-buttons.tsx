@@ -65,7 +65,7 @@ export function ImportPlayers() {
                                 player.phone_number = '0' + player.phone_number;
                             }
                             if (!player.notes){
-                                player.notes = 'imported player'
+                                player.notes = ''
                             }else{
                                 player.notes = player.notes.trim()
                             }
