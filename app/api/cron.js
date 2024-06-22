@@ -1,4 +1,11 @@
+import {removeOldRsvp} from "../lib/actions";
+
 export default function handler(req, res) {
-    console.error('Cron job is running!')
-    res.status(200).end('Hello Cron!');
+    removeOldRsvp().then(() => {
+        res.status(200).end('removed old rsvps');
+    }).catchall((err) => {
+        console.log('error removing old rsvps', err);
+        res.status(500).end('error removing old rsvps');
+    });
+
 }

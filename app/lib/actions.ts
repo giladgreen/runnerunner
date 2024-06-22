@@ -604,3 +604,11 @@ export async function undoPlayerLastLog(phone_number:string){
     revalidatePath('/dashboard/currenttournament');
     redirect('/dashboard/currenttournament');
 }
+
+export async function removeOldRsvp(){
+    try {
+        await sql`DELETE FROM rsvp WHERE date < now() - interval '48 hour'`;
+    } catch (error) {
+        console.error('rsvpPlayerForDay Error:', error);
+    }
+}
