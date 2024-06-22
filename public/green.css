@@ -1,0 +1,20 @@
+.config-seperator {
+    background-color: #00f37077 !important
+}
+.highlight-on-hover:hover {
+    background: rgb(0, 243,112,0.8) !important
+}
+
+.prize-highlight-on-hover:hover{
+    background: rgb(0, 243, 112,0.5) !important;
+}
+.form-control {
+    border: 2px solid rgb(0, 243, 112) !important;
+}
+.form-inner-control {
+    background: rgb(0, 243, 112, 0.2) !important;
+}
+
+.button-style {
+    color: green !important;
+}
