@@ -11,6 +11,7 @@ import {useFormState} from "react-dom";
 import {PencilIcon} from "@heroicons/react/24/outline";
 import {useState} from "react";
 import RSVPButton from "@/app/ui/players/rsvp-button";
+import {usePathname, useSearchParams} from "next/navigation";
 
 const translation = {
     Sunday: 'יום ראשון',
@@ -26,13 +27,12 @@ export default function EditPlayerForm({
   player,
   tournaments,
   rsvpEnabled,
-  prevPage
 }: {
   player: PlayerForm;
     rsvpEnabled:boolean;
   tournaments: TournamentDB[];
-  prevPage: string
 }) {
+    const prevPage = `${usePathname()}?${useSearchParams().toString()}`
     const initialState = { message: null, errors: {} };
     const updatePlayerWithId = updatePlayer.bind(null, {id: player.id, prevPage});
     const [imageUrl, setImageUrl] = useState(player.image_url ?? '');
@@ -53,7 +53,7 @@ export default function EditPlayerForm({
         const text = ` ${translation[dayOfTheWeek]} - ${tournament.name}`;
         return <div key={tournament.id}>
             {tournament.rsvp_required ?
-                (tournament.max_players === 0 ? '' : <RSVPButton player={player as PlayerDB} prevPage={`/dashboard/players/${player.id}/edit`} stringDate={stringDate} text={text}/>)
+                (tournament.max_players === 0 ? '' : <RSVPButton player={player as PlayerDB} stringDate={stringDate} text={text}/>)
                 : <div>◻️ {text} </div>}
         </div>
 

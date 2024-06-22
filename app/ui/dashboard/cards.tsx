@@ -165,7 +165,7 @@ export async function TodayTournamentNameCardWrapper() {
 }
 
 
-export async function getPlayersPrizesContent(prevPage:string) {
+export async function getPlayersPrizesContent() {
     const playersPrizes = await fetchPlayersPrizes();
 
     if (!playersPrizes || playersPrizes.length === 0) return null;
@@ -185,7 +185,7 @@ export async function getPlayersPrizesContent(prevPage:string) {
                         <span style={{marginLeft: 25}}>{playersPrize!.prize}</span>
                     </div>
 
-                     <DeletePrize id={playersPrize.id} prevPage={prevPage}/>
+                     <DeletePrize id={playersPrize.id}/>
 
                 </div>
             })}
@@ -277,8 +277,8 @@ export async function FinalTablePlayers({title}: { title: string }) {
 }
 
 
-export async function PlayersPrizes({title, prevPage}: { title: string, prevPage: string }) {
-    const content = await getPlayersPrizesContent(prevPage) as JSX.Element;
+export async function PlayersPrizes({title}: { title: string }) {
+    const content = await getPlayersPrizesContent() as JSX.Element;
     if (!content) return null;
 
     return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1 full-width"

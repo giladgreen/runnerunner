@@ -10,7 +10,7 @@ import OpenPrizeModalButton from "@/app/ui/players/open-prize-modal-button";
 import {fetchFeatureFlags, fetchTournaments} from "@/app/lib/data";
 import EntriesButton from "@/app/ui/players/entries-button";
 
-export default async function TodaysPlayersTable({ userId, worker, players, username, prevPage}:{players: PlayerDB[], username?:string,  userId?:string, prevPage?: string, worker?:boolean}) {
+export default async function TodaysPlayersTable({ userId, worker, players, username}:{players: PlayerDB[], username?:string,  userId?:string, worker?:boolean}) {
 
   const { prizesEnabled, placesEnabled, rsvpEnabled} = await fetchFeatureFlags();
 
@@ -161,7 +161,7 @@ const getLink = (player: PlayerDB) => {
                     </td>
 
                     {rsvpEnabled && rsvp_required && <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
-                      <RSVPButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'}/>
+                      <RSVPButton player={player}/>
                     </td>}
                     <td className="whitespace-nowrap px-3 py-3 rsvp-icon ">
                       {player.arrived ? '✅' : ''}
@@ -181,9 +181,9 @@ const getLink = (player: PlayerDB) => {
                     </td>}
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                       <div className="flex justify-end gap-3">
-                        <OpenModalButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'} tournaments={tournaments} username={username}/>
-                        {placesEnabled && <OpenPositionModalButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'}/>}
-                        {prizesEnabled && <OpenPrizeModalButton player={player} prevPage={prevPage ?? '/dashboard/currenttournament'}/>}
+                        <OpenModalButton player={player} tournaments={tournaments} username={username}/>
+                        {placesEnabled && <OpenPositionModalButton player={player}/>}
+                        {prizesEnabled && <OpenPrizeModalButton player={player} />}
                       </div>
 
                     </td>

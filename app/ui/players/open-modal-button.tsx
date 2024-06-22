@@ -4,19 +4,18 @@ import {PlayerDB, TournamentDB} from '@/app/lib/definitions';
 import {UseCreditForm} from "@/app/ui/players/create-log-form";
 import React from "react";
 import Image from "next/image";
+import {usePathname, useSearchParams} from "next/navigation";
 
 export default function OpenModalButton({
   player,
-  prevPage,
   username,
-tournaments
+  tournaments
 }: {
   player: PlayerDB;
   tournaments: TournamentDB[];
-  prevPage: string;
   username?: string;
 }) {
-
+    const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
     const [show,setShow] = React.useState(false);
 
     const close = ()=>{

@@ -154,6 +154,7 @@ async function seedHistory(client) {
          change INT NOT NULL,
          type VARCHAR(20) NOT NULL,
          note VARCHAR(255) NOT NULL,
+         archive BOOLEAN NOT NULL DEFAULT FALSE,
          updated_by VARCHAR(20) DEFAULT 'admin',
          updated_at timestamp with time zone NOT NULL DEFAULT now()
       );

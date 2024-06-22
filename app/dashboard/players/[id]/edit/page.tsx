@@ -1,4 +1,4 @@
-import Form from '@/app/ui/players/edit-form';
+import EditPlayerForm from '@/app/ui/players/edit-form';
 import Breadcrumbs from '@/app/ui/players/breadcrumbs';
 import {fetchFeatureFlags, fetchPlayerById, fetchTournaments} from '@/app/lib/data';
 import { notFound } from 'next/navigation';
@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     }
                 ]}
             />
-            <Form player={player} prevPage={'/dashboard/players'} tournaments={tournaments} rsvpEnabled={Boolean(rsvpEnabled)}/>
+            <EditPlayerForm player={player} tournaments={tournaments} rsvpEnabled={Boolean(rsvpEnabled)}/>
             <div>
                 <div>Phone number: {player.phone_number}  </div>
                 <div> {player.notes}  </div>

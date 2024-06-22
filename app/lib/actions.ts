@@ -162,8 +162,8 @@ export async function importPlayers(players: PlayerDB[]) {
         }
         for (const batch of playersToInsertBatches) {
             await Promise.all(batch.map((player: PlayerDB) => {
-                sql`INSERT INTO history (phone_number, change, note, type, updated_at)
-                VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date})`
+                sql`INSERT INTO history (phone_number, change, note, type, updated_at, archive)
+                VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date}), true`
             }))
         }
 

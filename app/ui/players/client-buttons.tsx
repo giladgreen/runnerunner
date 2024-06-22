@@ -9,6 +9,8 @@ import {
 import {Button} from "@/app/ui/button";
 import React from "react";
 import {PlayerDB, PrizeDB, TournamentDB} from "@/app/lib/definitions";
+import {usePathname} from "next/navigation";
+import {useSearchParams} from "next/dist/client/components/navigation";
 
 export function DeletePlayer({ id }: { id: string }) {
   const deletePlayerWithId = deletePlayer.bind(null, id);
@@ -181,7 +183,9 @@ export function ResetPlayersAndHistory() {
     );
 }
 
-export function DeletePrize({ id, prevPage }: { id: string, prevPage:string }) {
+export function DeletePrize({ id }: { id: string }) {
+    const prevPage = `${usePathname()}?${useSearchParams().toString()}`
+
     const deletePrizeWithId = deletePrize.bind(null, { id, prevPage});
 
     return (

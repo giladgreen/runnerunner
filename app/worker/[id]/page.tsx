@@ -40,14 +40,14 @@ export default async function Page({ params, searchParams }: { params: { id: str
                         <FinalTablePlayers title="Players Place"/>
                     </div>}
                     {prizesEnabled && <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                        <PlayersPrizes title="Players Prizes" prevPage={`/worker/${connectedUserId}`}/>
+                        <PlayersPrizes title="Players Prizes" />
                     </div>}
                     <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                         <Search placeholder="search players"/>
                         <CreateNewTodayPlayer connectedUserId={connectedUserId}/>
                     </div>
                     <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                        <TodaysPlayersTable players={players} prevPage={`/worker/${connectedUserId}`} username={user.name} userId={user.id} worker/>
+                        <TodaysPlayersTable players={players} username={user.name} userId={user.id} worker/>
                     </div>
 
                 </div>

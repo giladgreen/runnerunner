@@ -6,7 +6,6 @@ import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import {fetchFeatureFlags, fetchFilteredPlayers, fetchTournaments} from '@/app/lib/data';
 import Link from "next/link";
 import RSVPButton from "@/app/ui/players/rsvp-button";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 export default async function PlayersTable({
   query,
@@ -152,7 +151,7 @@ export default async function PlayersTable({
                     </Link>
                   </td>
                   {rsvp_required && rsvpEnabled && <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
-                      <RSVPButton player={player} prevPage={'/dashboard/players'} />
+                      <RSVPButton player={player} />
                   </td>}
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">

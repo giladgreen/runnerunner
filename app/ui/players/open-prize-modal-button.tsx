@@ -4,14 +4,14 @@ import {PlayerDB, PlayerForm} from '@/app/lib/definitions';
 import {SetPositionForm, SetPrizeForm} from "@/app/ui/players/create-log-form";
 import React from "react";
 import Image from "next/image";
+import {usePathname, useSearchParams} from "next/navigation";
 
 export default function OpenPrizeModalButton({
   player,
-  prevPage
 }: {
   player: PlayerDB;
-  prevPage: string;
 }) {
+    const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
     const [show,setShow] = React.useState(false);
 
     const close = ()=>{

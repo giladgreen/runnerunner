@@ -2,18 +2,19 @@
 
 import { PlayerDB} from '@/app/lib/definitions';
 import {rsvpPlayerForDay} from "@/app/lib/actions";
-
+import { usePathname } from 'next/navigation';
+import { useSearchParams} from "next/dist/client/components/navigation";
 export default function RSVPButton({
   player,
-  prevPage,
   stringDate,
     text
 }: {
   player: PlayerDB;
-    prevPage: string;
     stringDate?:string;
     text?:string;
 }) {
+    const prevPage = `${usePathname()}?${useSearchParams().toString()}`
+
     const date = stringDate ?? (new Date()).toISOString().slice(0,10);
     const isRsvpForDate = player.rsvps.includes(date);
     const icon =  isRsvpForDate ? '✅' :'☑️';

@@ -19,7 +19,7 @@ export default async function Page() {
                 <FinalTablePlayers title="Today's Game Places"/>
             </div>}
             {prizesEnabled && <div style={{marginTop: 40}}>
-                <PlayersPrizes title="Players Prizes" prevPage={`/dashboard`}/>
+                <PlayersPrizes title="Players Prizes" />
             </div>}
             <hr style={{marginBottom: 30, marginTop: 10}}/>
             <GeneralPlayersCardWrapper/>

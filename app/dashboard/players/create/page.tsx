@@ -1,4 +1,4 @@
-import Form from '@/app/ui/players/create-form';
+import CreatePlayerForm from '@/app/ui/players/create-form';
 import Breadcrumbs from '@/app/ui/players/breadcrumbs';
 
 export default async function Page() {
@@ -15,7 +15,7 @@ export default async function Page() {
                     },
                 ]}
             />
-            <Form prevPage={'/dashboard/players'}/>
+            <CreatePlayerForm />
         </main>
     );
 }

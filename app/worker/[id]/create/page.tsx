@@ -1,4 +1,4 @@
-import Form from '@/app/ui/players/create-form';
+import CreatePlayerForm from '@/app/ui/players/create-form';
 import SideNavUser from "@/app/ui/dashboard/sidenav-user";
 
 export default async function Page({ params }: { params: { id: string }}) {
@@ -9,7 +9,7 @@ const prevPage = `/worker/${params.id}`;
             <SideNavUser/>
         </div>
         <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
-            <Form prevPage={prevPage}/>
+            <CreatePlayerForm />
         </div>
     </div>
 )

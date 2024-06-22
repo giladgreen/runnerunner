@@ -11,8 +11,10 @@ import { createPlayer } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import {Checkbox} from "primereact/checkbox";
 import {useState} from "react";
+import {usePathname, useSearchParams} from "next/navigation";
 
-export default function Form({prevPage}:{prevPage:string}) {
+export default function CreatePlayerForm() {
+  const prevPage = `${usePathname()}?${useSearchParams().toString()}`
   const initialState = { message: null, errors: {} };
 
   const createPlayerWithPrevPage = createPlayer.bind(null, prevPage);
