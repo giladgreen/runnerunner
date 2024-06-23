@@ -178,12 +178,14 @@ export async function importPlayers(players: PlayerDB[]) {
         }
         console.log('## import step: 10')
 
-        redirect('/');
+
     } catch (error) {
         console.error('## importPlayers error', error)
         return {
             message: 'Database Error: Failed to import Players.',
         };
+    }finally {
+        redirect('/');
     }
 
 }
