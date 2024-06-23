@@ -320,10 +320,10 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
         }
     }
 
-    await validate(player.phone_number);
-    if (otherPlayerPhoneNumber){
-        await validate(otherPlayerPhoneNumber as string);
-    }
+    //validate(player.phone_number);
+    // if (otherPlayerPhoneNumber){
+    //     validate(otherPlayerPhoneNumber as string);
+    // }
 
     revalidatePath(prevPage);
     redirect(prevPage);
@@ -334,6 +334,8 @@ export async function createPlayerUsageLog(data : {player: PlayerForm, prevPage:
 }
 
 export async function setPlayerPosition({playerId, prevPage}:{playerId: string, prevPage: string}, prevState: State, formData: FormData){
+    console.log('## setPlayerPosition 1')
+
     const newPosition =  formData.get('position') as string;
     const newPositionNumber = Number(newPosition);
 
@@ -351,23 +353,31 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
                 message: 'Invalid Position. Failed to find Player.',
             };
         }
-
+        console.log('## setPlayerPosition player', player)
         const today = (new Date()).toLocaleString('en-us', {weekday: 'long'});
 
         const todayTournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${today};`;
         const todayTournament = todayTournamentResult.rows[0];
         const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
         let winnersObject = winnersResult.rows[0];
+        console.log('## setPlayerPosition winnersObject', winnersObject)
 
         if (winnersObject){
             const newWinnersObject = {
                 ...JSON.parse(winnersObject.winners),
-                [player.phone_number]: newPositionNumber
+                [player.phone_number]: {
+                    position: newPositionNumber,
+                    hasReceived: false,
+                }
             }
             await sql`UPDATE winners SET winners=${JSON.stringify(newWinnersObject)} WHERE date = ${date}`;
 
         }else{
-            await sql`INSERT INTO winners (date, tournament_name, winners) VALUES (${date}, ${todayTournament.name}, ${JSON.stringify({ [player.phone_number]: newPositionNumber})})`;
+            console.log('## newWinnersObject else')
+
+            const newWinnersObject = { [player.phone_number]: {position: newPositionNumber, hasReceived: false}};
+            console.log('## newWinnersObject', newWinnersObject)
+            await sql`INSERT INTO winners (date, tournament_name, winners) VALUES (${date}, ${todayTournament.name}, ${JSON.stringify(newWinnersObject)})`;
         }
 
     } catch (error) {
@@ -709,10 +719,10 @@ export async function undoPlayerLastLog(phone_number:string){
     }
 
 
-    await validate(phone_number);
-    if (otherPlayerPhoneNumber) {
-        await validate(otherPlayerPhoneNumber);
-    }
+    // validate(phone_number);
+    // if (otherPlayerPhoneNumber) {
+    //     validate(otherPlayerPhoneNumber);
+    // }
     revalidatePath('/dashboard/currenttournament');
     redirect('/dashboard/currenttournament');
 }
@@ -725,24 +735,41 @@ export async function removeOldRsvp(){
     }
 }
 
-async function validate(phoneNumber: string) {
-    const [playerResult, userHistoryResult] = await Promise.all([
-        sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phoneNumber}`,
-        sql<LogDB>`SELECT * FROM history WHERE phone_number = ${phoneNumber}`]);
 
-    const player = playerResult.rows[0];
-    const playerHistoryLogs = userHistoryResult.rows;
-    if (!player) {
-        throw new Error('player not found');
-    }
-    if (!playerHistoryLogs || playerHistoryLogs.length === 0) {
-        throw new Error('player history not found');
-    }
-    const sum = playerHistoryLogs.reduce((acc, log) => {
-        return acc + log.change;
-    }  ,0);
+// async function validatePlayer(phoneNumber: string) {
+//     const [playerResult, userHistoryResult] = await Promise.all([
+//         sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phoneNumber}`,
+//         sql<LogDB>`SELECT * FROM history WHERE phone_number = ${phoneNumber}`]);
+//
+//     const player = playerResult.rows[0];
+//     const playerHistoryLogs = userHistoryResult.rows;
+//     if (!player) {
+//         return;
+//     }
+//     if (!playerHistoryLogs || playerHistoryLogs.length === 0) {
+//         return;
+//     }
+//     const sum = playerHistoryLogs.reduce((acc, log) => {
+//         return acc + log.change;
+//     }  ,0);
+//
+//     if (sum !== player.balance) {
+//
+//         console.log('######')
+//         console.log('player.balance:',player.balance)
+//         console.log('sum:',sum)
+//         console.log('sum:',sum)
+//         playerHistoryLogs.forEach(log=>{
+//             console.log(JSON.stringify(log))
+//         })
+//         console.log('######')
+//         console.error('balance mismatch');
+//     }
+// }
 
-    if (sum !== player.balance) {
-        throw new Error('balance mismatch');
-    }
-}
+// function validate(phoneNumber: string) {
+    // setTimeout(() => {
+    //     validatePlayer(phoneNumber);
+    // },10000)
+
+// }

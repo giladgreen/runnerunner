@@ -24,6 +24,7 @@ import {CardsSkeleton} from "@/app/ui/skeletons";
 import Image from "next/image";
 import {PlayerDB, PrizeDB} from "@/app/lib/definitions";
 import {DeletePrize} from "@/app/ui/players/client-buttons";
+import OpenGiveCreditModalButton from "@/app/ui/players/open-give-credit-modal-button";
 
 const translation = {
     Sunday: 'יום ראשון',
@@ -196,19 +197,7 @@ export async function getFinalTablePlayersContent(date: string, isTournamentsDat
     const finalTablePlayers = await fetchFinalTablePlayers(date);
 
     if (!finalTablePlayers || finalTablePlayers.length === 0) return null;
-
-    const textStyle = isTournamentsDataPage ? {
-        color: '#555555',
-        fontSize: 11,
-    } :{
-        background: '#6666CCAA',
-        color: 'white',
-        width: 30,
-        height: 30,
-        borderRadius: 50,
-        textAlign: 'center',
-        marginRight: 10
-    }
+    const textClass = isTournamentsDataPage ? 'text-tournaments-data-page' : 'text-on-card'
 
     return <div className="full-width" style={{marginBottom: 30,  display: 'flex'}}>
         <div style={{width: '60%'}}>
@@ -217,8 +206,11 @@ export async function getFinalTablePlayersContent(date: string, isTournamentsDat
                     key={finalTablePlayer.id}
                     className="w-full rounded-md bg-white full-width"
                 >
+
                     <div className={`flex items-center border-b ${isTournamentsDataPage ? '' : 'pb-4'} highlight-on-hover`}>
-                        <div style={textStyle as CSSProperties}>#{finalTablePlayer.position}</div>
+                        <OpenGiveCreditModalButton player={finalTablePlayer} hasReceived={true}/>
+                        <div className={textClass}>#{finalTablePlayer.position}</div>
+
                         {!isTournamentsDataPage && <Image
                             src={finalTablePlayer.image_url}
                             className="zoom-on-hover"
@@ -232,6 +224,7 @@ export async function getFinalTablePlayersContent(date: string, isTournamentsDat
                             alt={`${finalTablePlayer.name}'s profile picture`}
                         />}
                         {isTournamentsDataPage && <span style={{marginLeft: 10}}></span>}
+
                         <div
                              style={{fontSize: isTournamentsDataPage ? 11 : 20,}}>{finalTablePlayer.phone_number}</div>
                         <div style={{fontSize: isTournamentsDataPage ? 11 : 20, marginLeft: 20}}>

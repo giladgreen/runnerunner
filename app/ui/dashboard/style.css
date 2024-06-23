@@ -14,3 +14,19 @@
     background: rgb(0, 112, 243,0.5);
     color: white !important;
 }
+
+
+.text-tournaments-data-page {
+    color: #555555;
+    fontSize: 11;
+}
+
+.text-on-card {
+    background: #6666CCAA;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    text-align: center;
+    margin-right: 10px;
+}

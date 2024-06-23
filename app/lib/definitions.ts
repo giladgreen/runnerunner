@@ -73,6 +73,7 @@ export type PlayerDB = {
   arrived: boolean;
   entries: number;
   rsvpForToday: boolean;
+  hasReceived: boolean;
   rsvps: string[];
 };
 export type PrizeDB = {

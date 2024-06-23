@@ -161,14 +161,22 @@ export async function fetchFinalTablePlayers(stringDate?: string) {
     const date = stringDate ?? (new Date()).toISOString().slice(0,10);
     const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
     const winnersObject = JSON.parse((winnersResult.rows[0] || { winners:'{}'}).winners);
+    const winnersPhoneNumbers = Object.keys(winnersObject);
     const allPlayersResult = await sql<PlayerDB>`SELECT * FROM players`;
-    const allPlayers = allPlayersResult.rows;
-    allPlayers.forEach(player => {
-        // @ts-ignore
-      player.position = winnersObject[player.phone_number] || 0;
+    const allPlayers = allPlayersResult.rows.filter(player => winnersPhoneNumbers.includes(player.phone_number)).map(player => {
+
+      const obj = winnersObject[player.phone_number];
+
+      console.log('obj', obj);
+
+      player.position = obj?.position || 0;
+
+      player.hasReceived = Boolean(obj?.hasReceived);
+
+      return player;
     })
 
-    return allPlayers.filter(player => player.position > 0).sort((a,b)=> a.position < b.position ? -1 : 1);
+    return allPlayers.sort((a,b)=> a.position < b.position ? -1 : 1);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch final table players data.');
@@ -318,7 +326,7 @@ export async function fetchTodayPlayers(query?: string) {
       player.historyLog = playerItems;
 
       // @ts-ignore
-      player.position = winnersObject[player.phone_number] || 0;
+      player.position = (winnersObject[player.phone_number])?.position || 0;
 
       player.rsvpForToday = !!rsvp.find(({ phone_number, date }) => phone_number === player.phone_number && date === todayDate);
       player.rsvps = rsvp.filter(({ phone_number }) => phone_number === player.phone_number).map(({ date }) => date);
