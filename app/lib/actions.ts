@@ -210,15 +210,65 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
     }
 
     const change = validatedFields.data.change * (usage ? -1 : 1);
-    const type = usage ? (formData.get('type') as string ?? 'prize') :  'credit' ;
+    let otherPlayer;
+    let otherPlayerPhoneNumber;
+    let useOtherPlayerCredit;
+    let historyNote;
+    let otherHistoryNote;
+    let type = usage ? (formData.get('type') as string ?? 'prize') :  'credit' ;
+    if (type === 'credit_by_other'){
+        otherPlayerPhoneNumber = formData.get('otherPlayer');
+        if (!otherPlayerPhoneNumber){
+            console.error('### did npt get other person data')
+            return {
+                message: 'did npt get other person data.',
+            };
+        }
+        const otherPlayerResult = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${otherPlayerPhoneNumber as string}`;
+        otherPlayer = otherPlayerResult.rows[0]
+        if (!otherPlayer){
+            console.error('### did not find other person data')
+            return {
+                message: 'did not find other person data.',
+            };
+        }
+        if (otherPlayer.balance < change){
+            console.error('### other person does not have enough credit')
+            return {
+                message: 'other person does not have enough credit.',
+            };
+        }
+        useOtherPlayerCredit = true;
+        historyNote = `${validatedFields.data.note}
+(על חשבון ${otherPlayer.name} ${otherPlayer.phone_number} ) `;
 
+
+        otherHistoryNote = `${validatedFields.data.note}
+(לטובת ${player.name} ${player.phone_number} ) `;
+    }
     const currentBalance = player.balance;
     try
     {
-        await sql`
-      INSERT INTO history (phone_number, change, note, type, updated_by)
-      VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type}, ${username ?? 'super-admin'})
-    `;
+        if (!useOtherPlayerCredit){
+            await sql`
+              INSERT INTO history (phone_number, change, note, type, updated_by)
+              VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type}, ${username ?? 'super-admin'})
+            `;
+        } else {
+            await sql`
+              INSERT INTO history (phone_number, change, note, type, updated_by, other_player_phone_number)
+              VALUES (${player.phone_number}, ${0}, ${ historyNote}, ${'credit_by_other'}, ${username ?? 'super-admin'}, ${otherPlayerPhoneNumber as string})
+            `;
+            await sql`
+              INSERT INTO history (phone_number, change, note, type, updated_by)
+              VALUES (${otherPlayerPhoneNumber as string}, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username ?? 'super-admin'})
+            `;
+
+
+        }
+
+
+
 
     }catch(error){
         console.error('### create log error', error)
@@ -241,6 +291,22 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
             console.error('## create log error', error)
             return {
                 message: 'Database Error: Failed to update player balance on credit change.',
+            };
+        }
+    } else if (type === 'credit_by_other' && useOtherPlayerCredit){
+        const newBalance = otherPlayer!.balance + change;
+        try {
+            const date = new Date().toISOString();
+            await sql`
+      UPDATE players
+      SET balance = ${newBalance}, updated_at=${date}
+      WHERE id = ${otherPlayer!.id}
+    `;
+
+        } catch (error) {
+            console.error('## create log error', error)
+            return {
+                message: 'Database Error: Failed to update other player balance on credit change.',
             };
         }
     }
@@ -593,7 +659,33 @@ export async function undoPlayerLastLog(phone_number:string){
         const lastLog = logsResult.rows[0];
 
         if (lastLog){
-             await sql`DELETE FROM history where id = ${lastLog.id}`;
+            const amount = lastLog.change;
+            const type = lastLog.type;
+            let otherPlayerPhoneNumber;
+            if (amount===0 && type === 'credit_by_other'){
+                otherPlayerPhoneNumber =  lastLog.other_player_phone_number
+            }
+
+            if (amount < 0 && lastLog.type === 'credit') {
+                const positiveAmount = amount * -1;
+                await sql`UPDATE players SET balance = balance + ${positiveAmount} WHERE phone_number = ${phone_number}`;
+            }
+            await sql`DELETE FROM history where id = ${lastLog.id}`;
+            if (otherPlayerPhoneNumber){
+                const otherPlayerLogsResult = await sql<LogDB>`SELECT * FROM history WHERE phone_number = ${otherPlayerPhoneNumber} ORDER BY updated_at DESC LIMIT 1`;
+                const otherPlayerLastLog = otherPlayerLogsResult.rows[0];
+
+                if (otherPlayerLastLog){
+                    const otherPlayerAmount = otherPlayerLastLog.change;
+                    if (otherPlayerAmount < 0 && otherPlayerLastLog.type === 'credit_to_other') {
+                        const asPositiveAmount = otherPlayerAmount * -1;
+                        await sql`UPDATE players SET balance = balance + ${asPositiveAmount} WHERE phone_number = ${otherPlayerPhoneNumber}`;
+                    }
+
+                    await sql`DELETE FROM history where id = ${otherPlayerLastLog.id}`;
+                }
+
+            }
 
         }
     } catch (error) {

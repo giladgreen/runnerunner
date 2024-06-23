@@ -117,6 +117,7 @@ export type LogDB = {
   updated_at: string;
   updated_by: string;
   type: string;
+  other_player_phone_number: string;
 //updated by
 };
 

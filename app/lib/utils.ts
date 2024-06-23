@@ -13,17 +13,23 @@ export const formatCurrency = (balance: number) => {
 
 export const formatType = (type: string) => {
   if (type === 'credit') {
-    return 'Credit';
+    return 'קרדיט';
+  }
+  if (type === 'credit_by_other') {
+    return 'קרדיט של מישהו אחר';
+  }
+  if (type === 'credit_to_other') {
+    return 'קרדיט לטובת מישהו אחר';
   }
   if (type === 'wire') {
-    return 'Money wire';
+    return 'העברה בנקאית';
   }
   if (type === 'cash') {
-    return 'Cash';
+    return 'מזומן';
   }
 
   if (type === 'prize') {
-    return 'Prize';
+    return 'פרס';
   }
 
   return type;

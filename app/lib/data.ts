@@ -20,8 +20,8 @@ export async function fetchMVPPlayers() {
       LIMIT ${TOP_COUNT}`;
 
     const todayDate = (new Date()).toISOString().slice(0,10);
-    const todayHistoryResults = await sql`SELECT phone_number, type FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize');
+    const todayHistoryResults = await sql`SELECT phone_number, type FROM history WHERE change <= 0 AND updated_at > now() - interval '12 hour'`;
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' && type != 'credit_to_other');
     const rsvp = await getAllRsvps();
     const players = data.rows;
     players.forEach((player) => {
@@ -51,8 +51,8 @@ export async function fetchDebtPlayers() {
       ORDER BY balance ASC
       LIMIT ${TOP_COUNT}`;
 
-    const todayHistoryResults = await sql`SELECT phone_number, type FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize')
+    const todayHistoryResults = await sql`SELECT phone_number, type FROM history WHERE change <= 0 AND updated_at > now() - interval '12 hour'`;
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' && type != 'credit_to_other')
 
     const rsvp = await getAllRsvps();
     const todayDate = (new Date()).toISOString().slice(0,10);
@@ -305,8 +305,8 @@ export async function fetchTodayPlayers(query?: string) {
     const players = playersResults.rows;
     const rsvp = await getAllRsvps();
 
-    const todayHistoryResults = await sql`SELECT * FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' )
+    const todayHistoryResults = await sql`SELECT * FROM history WHERE change <= 0 AND updated_at > now() - interval '12 hour'`;
+    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize'  && type != 'credit_to_other' )
 
     players.forEach((player) => {
       const playerItems = todayHistory.filter(({ phone_number}) => phone_number === player.phone_number) as LogDB[];
@@ -399,7 +399,16 @@ export async function fetchTournamentsData() {
   }
 }
 
-
+export async function fetchPlayersWithEnoughCredit(){
+  noStore();
+  try {
+    const playersResults = await sql<PlayerDB>`SELECT * FROM players WHERE balance > 100`;
+    return playersResults.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch the fetch incomes.');
+  }
+}
 
 export async function fetchAllUsers() {
   noStore();

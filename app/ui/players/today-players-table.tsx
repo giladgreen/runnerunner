@@ -7,7 +7,7 @@ import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 import {PlayerDB} from "@/app/lib/definitions";
 import OpenPositionModalButton from "@/app/ui/players/open-position-modal-button";
 import OpenPrizeModalButton from "@/app/ui/players/open-prize-modal-button";
-import {fetchFeatureFlags, fetchTournaments} from "@/app/lib/data";
+import {fetchFeatureFlags, fetchPlayersWithEnoughCredit, fetchTournaments} from "@/app/lib/data";
 import EntriesButton from "@/app/ui/players/entries-button";
 
 export default async function TodaysPlayersTable({ userId, worker, players, username}:{players: PlayerDB[], username?:string,  userId?:string, worker?:boolean}) {
@@ -15,6 +15,7 @@ export default async function TodaysPlayersTable({ userId, worker, players, user
   const { prizesEnabled, placesEnabled, rsvpEnabled} = await fetchFeatureFlags();
 
   const tournaments = await fetchTournaments();
+  const playersWithEnoughCredit = await fetchPlayersWithEnoughCredit();
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
   const todayTournament = tournaments.find((tournament) => tournament.day === dayOfTheWeek);
@@ -181,7 +182,7 @@ const getLink = (player: PlayerDB) => {
                     </td>}
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                       <div className="flex justify-end gap-3">
-                        <OpenModalButton player={player} tournaments={tournaments} username={username}/>
+                        <OpenModalButton players={playersWithEnoughCredit} player={player} tournaments={tournaments} username={username}/>
                         {placesEnabled && <OpenPositionModalButton player={player}/>}
                         {prizesEnabled && <OpenPrizeModalButton player={player} />}
                       </div>

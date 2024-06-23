@@ -10,10 +10,10 @@ import {createPlayerNewCreditLog, createPlayerUsageLog, setPlayerPosition, setPl
 import { useFormState } from 'react-dom';
 import {PlayerDB, PlayerForm, TournamentDB} from "@/app/lib/definitions";
 import {useEffect, useState} from "react";
+import SearchablePlayersDropdown from "@/app/ui/players/searchable-players-dropdown";
 
 
-export function UseCreditForm({player, tournaments, hide, prevPage, username} : {prevPage:string, player: PlayerDB, tournaments:TournamentDB[], hide?: ()=>void, username?:string}) {
-
+export function UseCreditForm({players, player, tournaments, hide, prevPage, username} : { players: PlayerDB[], prevPage:string, player: PlayerDB, tournaments:TournamentDB[], hide?: ()=>void, username?:string}) {
   const initialState = { message: null, errors: {} };
   const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null,{ player, prevPage, username })
   const now = new Date();
@@ -34,6 +34,7 @@ export function UseCreditForm({player, tournaments, hide, prevPage, username} : 
   const [state1, dispatch] = useFormState(createPlayerUsageLogWithPlayerData, initialState);
   const [amount, setAmount] = useState(initialAmount);
   const [note, setNote] = useState(initialNote);
+  const [otherPlayer, setOtherPlayer] = useState<PlayerDB | undefined>(undefined);
 
   const useCredit = amount < player.balance;
   const [type, setType] = useState(useCredit ? 'credit' : 'cash');
@@ -119,40 +120,64 @@ export function UseCreditForm({player, tournaments, hide, prevPage, username} : 
             {/* type */}
             <div className="relative mt-2 rounded-md">
               <div className="relative rsvp-section">
-                <div className="flex flex-wrap justify-content-center gap-3 radio" >
+                <div className="flex flex-wrap justify-content-center gap-3 radio">
                   <div className="flex align-items-center">
                     <input type="radio" value="credit" name="type"
                            checked={type === 'credit'}
-                           onChange={()=>setType('credit')}
+                           onChange={() => setType('credit')}
                     />
                     <label htmlFor="credit" className="ml-2">Credit</label>
                   </div>
                   <div className="flex align-items-center">
                     <input type="radio" value="cash" name="type"
                            checked={type === 'cash'}
-                           onChange={()=>setType('cash')}
+                           onChange={() => setType('cash')}
                     />
                     <label htmlFor="cash" className="ml-2">Cash</label>
                   </div>
                   <div className="flex align-items-center">
                     <input type="radio" value="wire" name="type"
                            checked={type === 'wire'}
-                           onChange={()=>setType('wire')}
+                           onChange={() => setType('wire')}
                     />
-                    <label htmlFor="cash" className="ml-2">Money wire</label>
+                    <label htmlFor="wire" className="ml-2">Money wire</label>
+                  </div>
+                  <div className="flex align-items-center">
+                    <input type="radio" value="credit_by_other" name="type"
+                           checked={type === 'credit_by_other'}
+                           onChange={() => setType('credit_by_other')}
+                    />
+                    <label htmlFor="credit_by_other" className="ml-2">Someone else Credit</label>
                   </div>
                 </div>
               </div>
             </div>
 
+
+            {/* other player */}
+            {type === 'credit_by_other' && <div className="mb-4">
+              <label htmlFor="player" className="mb-2 block text-sm font-medium">
+                Player:
+              </label>
+              <div className="relative">
+                <SearchablePlayersDropdown
+                    playerId={player.id}
+                    players={players }
+                    selectedVal={otherPlayer}
+                    handleChange={(val: any) => setOtherPlayer(val)}
+                />
+              </div>
+           </div>}
+
+
           </div>
           <div className="mt-6 flex justify-end gap-4">
 
-            <Button type="submit" onClick={()=> hide?.()}> {isRebuy ? 'Rebuy' : 'Buy In'}</Button>
+            <Button type="submit" onClick={() => hide?.()}> {isRebuy ? 'Rebuy' : 'Buy In'}</Button>
 
           </div>
         </form>
-        {hide && <Button onClick={hide} style={{ marginTop: -52, marginLeft:20}} >Cancel</Button>}
+        {hide && <Button onClick={hide} style={{marginTop: -52, marginLeft: 20}}>Cancel</Button>}
       </div>
   );
 }

@@ -9,10 +9,12 @@ import {usePathname, useSearchParams} from "next/navigation";
 export default function OpenModalButton({
   player,
   username,
-  tournaments
+  tournaments,
+  players
 }: {
   player: PlayerDB;
   tournaments: TournamentDB[];
+  players: PlayerDB[];
   username?: string;
 }) {
     const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
@@ -36,7 +38,7 @@ export default function OpenModalButton({
                   />
           </div>
           <div className={show ? 'edit-player-modal' : 'hidden'}>
-              <UseCreditForm player={player} tournaments={tournaments} hide={close} prevPage={prevPage} username={username}/>
+              <UseCreditForm players={players} player={player} tournaments={tournaments} hide={close} prevPage={prevPage} username={username}/>
           </div>
       </div>
   );
