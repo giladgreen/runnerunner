@@ -320,6 +320,11 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
         }
     }
 
+    await validate(player.phone_number);
+    if (otherPlayerPhoneNumber){
+        await validate(otherPlayerPhoneNumber as string);
+    }
+
     revalidatePath(prevPage);
     redirect(prevPage);
 }
@@ -663,6 +668,7 @@ export async function rsvpPlayerForDay(phone_number:string, date:string, val: bo
 
 export async function undoPlayerLastLog(phone_number:string){
     noStore();
+    let otherPlayerPhoneNumber;
     try {
         const logsResult = await sql<LogDB>`SELECT * FROM history WHERE phone_number = ${phone_number} ORDER BY updated_at DESC LIMIT 1`;
         const lastLog = logsResult.rows[0];
@@ -670,7 +676,7 @@ export async function undoPlayerLastLog(phone_number:string){
         if (lastLog){
             const amount = lastLog.change;
             const type = lastLog.type;
-            let otherPlayerPhoneNumber;
+
             if (amount===0 && type === 'credit_by_other'){
                 otherPlayerPhoneNumber =  lastLog.other_player_phone_number
             }
@@ -702,6 +708,11 @@ export async function undoPlayerLastLog(phone_number:string){
         return false;
     }
 
+
+    await validate(phone_number);
+    if (otherPlayerPhoneNumber) {
+        await validate(otherPlayerPhoneNumber);
+    }
     revalidatePath('/dashboard/currenttournament');
     redirect('/dashboard/currenttournament');
 }
@@ -711,5 +722,27 @@ export async function removeOldRsvp(){
         await sql`DELETE FROM rsvp WHERE date < now() - interval '48 hour'`;
     } catch (error) {
         console.error('rsvpPlayerForDay Error:', error);
+    }
+}
+
+async function validate(phoneNumber: string) {
+    const [playerResult, userHistoryResult] = await Promise.all([
+        sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phoneNumber}`,
+        sql<LogDB>`SELECT * FROM history WHERE phone_number = ${phoneNumber}`]);
+
+    const player = playerResult.rows[0];
+    const playerHistoryLogs = userHistoryResult.rows;
+    if (!player) {
+        throw new Error('player not found');
+    }
+    if (!playerHistoryLogs || playerHistoryLogs.length === 0) {
+        throw new Error('player history not found');
+    }
+    const sum = playerHistoryLogs.reduce((acc, log) => {
+        return acc + log.change;
+    }  ,0);
+
+    if (sum !== player.balance) {
+        throw new Error('balance mismatch');
     }
 }
