@@ -191,6 +191,9 @@ async function handleCreditByOther(type: string, otherPlayerPhoneNumber: string,
     }
 }
 export async function createPlayerLog(player: PlayerForm, formData: FormData, prevPage:string ,usage: boolean, username?:string){
+    console.log('### createPlayerLog')
+    const start = (new Date()).getTime();
+
     const validatedFields = CreateUsageLog.safeParse({
         change: formData.get('change'),
         note: formData.get('note'),
@@ -276,8 +279,10 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
         }
     }
 
+    console.log('### createPlayerLog end, took:',  (new Date()).getTime() - start, 'ms');
     revalidatePath(prevPage);
     redirect(prevPage);
+    console.log('### createPlayerLog after redirect, took:',  (new Date()).getTime() - start, 'ms');
 }
 
 export async function createPlayerUsageLog(data : {player: PlayerForm, prevPage:string, username?: string}, _prevState: State, formData: FormData){
