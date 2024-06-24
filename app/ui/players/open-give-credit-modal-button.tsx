@@ -17,7 +17,7 @@ function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:s
     const [type, setType] = useState('prize');
 
     return (<div className="edit-player-modal-inner-div">
-            <form action={dispatch} className="form-control give_user_prize">
+            <form action={dispatch} className="form-control">
                 <label className="mb-2 block text-sm font-medium">
                     Give Player Prize/Credit
                 </label>
@@ -25,14 +25,14 @@ function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:s
                     <div className="relative mt-2 rounded-md">
                         <div className="relative rsvp-section">
                             <div className="flex flex-wrap justify-content-center gap-3 radio">
-                                <div className="flex align-items-center">
+                                <div className="flex align-items-center" style={{ marginLeft: 20}}>
                                     <input type="radio" value="prize" name="type"
                                            checked={type === 'prize'}
                                            onChange={() => setType('prize')}
                                     />
                                     <label htmlFor="prize" className="ml-2 "><b>prize</b></label>
                                 </div>
-                                <div className="flex align-items-center">
+                                <div className="flex align-items-center" style={{ marginLeft: 40}}>
                                     <input type="radio" value="credit" name="type"
                                            checked={type === 'credit'}
                                            onChange={() => setType('credit')}
@@ -46,7 +46,7 @@ function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:s
 
                     {/*  amount  */}
                     {type === 'credit' ? <div className="mb-4 give_user_credit_amount">
-                        <label htmlFor="credit" className="mb-2 block text-sm font-medium">
+                        <label htmlFor="credit" className="mb-2 block text-sm font-medium" style={{ textAlign: 'left', marginTop: 30 }}>
                             Amount
                         </label>
                         <div className="relative mt-2 rounded-md">
