@@ -1,5 +1,5 @@
 TODO:
 
-
--on the list of winners, add option to either set user got the prize or let add hi, credit from there
-
+- replace window.confirm with my own modal
+- add UT
+- try to work with a local DB
