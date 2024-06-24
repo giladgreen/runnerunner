@@ -49,7 +49,7 @@ export function UseCreditForm({players, player, tournaments, hide, prevPage, use
     }
   }, [player, tournaments, amount, setAmount, initialAmount, note, setNote, initialNote]);
   return (
-      <div>
+      <div className="edit-player-modal-inner-div">
         <form action={dispatch} className="form-control">
           <div className="rounded-md  p-4 md:p-6 form-inner-control">
             {/*  balance change */}
@@ -69,7 +69,9 @@ export function UseCreditForm({players, player, tournaments, hide, prevPage, use
                       className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                       aria-describedby="change-error"
                       value={amount}
-                      onChange={(e) => {  setAmount(Number(e.target.value)) }}
+                      onChange={(e) => {
+                        setAmount(Number(e.target.value))
+                      }}
                   />
                   <BanknotesIcon
                       className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
@@ -100,7 +102,9 @@ export function UseCreditForm({players, player, tournaments, hide, prevPage, use
                     aria-describedby="note-error"
                     required
                     value={note}
-                    onChange={(e) => {  setNote(e.target.value) }}
+                    onChange={(e) => {
+                      setNote(e.target.value)
+                    }}
 
                 />
 
@@ -162,12 +166,12 @@ export function UseCreditForm({players, player, tournaments, hide, prevPage, use
               <div className="relative">
                 <SearchablePlayersDropdown
                     playerId={player.id}
-                    players={players }
+                    players={players}
                     selectedVal={otherPlayer}
                     handleChange={(val: any) => setOtherPlayer(val)}
                 />
               </div>
-           </div>}
+            </div>}
 
 
           </div>
@@ -189,7 +193,7 @@ export function SetPositionForm({player, hide, prevPage} : { player: PlayerForm,
   // @ts-ignore
   const [state1, dispatch] = useFormState(setPlayerPositionWithPlayerId, initialState);
 
-  return (<div>
+  return (<div className="edit-player-modal-inner-div">
         <form action={dispatch} className="form-control">
           <label className="mb-2 block text-sm font-medium">
             Set Player Place
@@ -230,11 +234,11 @@ export function SetPositionForm({player, hide, prevPage} : { player: PlayerForm,
           </div>
           <div className="mt-6 flex justify-end gap-4">
 
-            <Button type="submit" onClick={()=> hide?.()}>Set</Button>
+            <Button type="submit" onClick={() => hide?.()}>Set</Button>
 
           </div>
         </form>
-        {hide && <Button onClick={hide} style={{ marginTop: -52, marginLeft:20}} >Cancel</Button>}
+        {hide && <Button onClick={hide} style={{marginTop: -52, marginLeft: 20}}>Cancel</Button>}
       </div>
   );
 }
@@ -348,6 +352,7 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm }) {
             <Button type="submit">Use Credit</Button>
           </div>
         </form>
+
   );
 }
 
@@ -449,7 +454,7 @@ export function SetPrizeForm({player, hide, prevPage} : { player: PlayerForm, hi
   // @ts-ignore
   const [state1, dispatch] = useFormState(setPlayerPrizeWithPlayerId, initialState);
 
-  return (<div>
+  return (<div className="edit-player-modal-inner-div">
         <form action={dispatch} className="form-control">
           <label className="mb-2 block text-sm font-medium">
             Set Player Prize
@@ -487,11 +492,11 @@ export function SetPrizeForm({player, hide, prevPage} : { player: PlayerForm, hi
           </div>
           <div className="mt-6 flex justify-end gap-4">
 
-            <Button type="submit" onClick={()=> hide?.()}>Set</Button>
+            <Button type="submit" onClick={() => hide?.()}>Set</Button>
 
           </div>
         </form>
-        {hide && <Button onClick={hide} style={{ marginTop: -52, marginLeft:20}} >Cancel</Button>}
+        {hide && <Button onClick={hide} style={{marginTop: -52, marginLeft: 20}}>Cancel</Button>}
       </div>
   );
 }

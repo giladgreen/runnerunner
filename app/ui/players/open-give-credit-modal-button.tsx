@@ -16,7 +16,7 @@ function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:s
     const [_state, dispatch] = useFormState(setPlayerPrizeWithPlayerId, initialState);
     const [type, setType] = useState('prize');
 
-    return (<div>
+    return (<div className="edit-player-modal-inner-div">
             <form action={dispatch} className="form-control give_user_prize">
                 <label className="mb-2 block text-sm font-medium">
                     Give Player Prize/Credit
@@ -45,13 +45,13 @@ function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:s
                     </div>
 
                     {/*  amount  */}
-                    {type === 'credit' ? <div className="mb-4 give_user_credit_amount" >
+                    {type === 'credit' ? <div className="mb-4 give_user_credit_amount">
                         <label htmlFor="credit" className="mb-2 block text-sm font-medium">
                             Amount
                         </label>
                         <div className="relative mt-2 rounded-md">
                             <div className="relative">
-                            <input
+                                <input
                                     id="credit"
                                     name="credit"
                                     type="number"

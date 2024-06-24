@@ -11,17 +11,26 @@
 }
 
 .edit-player-modal {
-    background: white;
+    background: rgba(0, 0, 0, 0.75);
     z-index:10;
     position: fixed;
-    top: 20px;
-    right: 50px;
-    display: flex;
-    justify-content: center;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
 }
 
 .edit-player-modal-hidden {
     visibility: hidden;
+}
+.edit-player-modal-inner-div {
+    background: white;
+    z-index:11;
+    position: fixed;
+    top: 10vh;
+    left: 35vw;
+    width: 30vw;
+
 }
 
 .rsvp-section {

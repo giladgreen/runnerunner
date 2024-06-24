@@ -32,9 +32,11 @@ export default function OpenPositionModalButton({
                   />
           </div>
           <div className={show ? 'edit-player-modal' : 'hidden'}>
-              <SetPositionForm player={player as unknown as PlayerForm} hide={close} prevPage={prevPage}/>
+
+                  <SetPositionForm player={player as unknown as PlayerForm} hide={close} prevPage={prevPage}/>
+
           </div>
       </div>
-  );
+    );
 }
 
