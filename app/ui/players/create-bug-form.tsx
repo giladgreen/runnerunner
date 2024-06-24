@@ -7,11 +7,9 @@ import {
 import { Button } from '@/app/ui/button';
 import { createReport } from '@/app/lib/actions';
 
-export default function Form({ worker} :{worker?:boolean}) {
-    const createReportWithIsWorker = createReport.bind(null, Boolean(worker));
-
+export default function CreateBugForm() {
     return (
-      <form action={createReportWithIsWorker}>
+      <form action={createReport}>
         <div className="rounded-md bg-gray-50 p-4 md:p-6">
           {/* bug description */}
           <div className="mb-4">

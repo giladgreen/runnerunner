@@ -45,7 +45,7 @@ const SearchablePlayersDropdown = ({ playerId, players, selectedVal, handleChang
                         type="text"
                         value={getDisplayValue()}
 
-                        name="otherPlayer"
+                        name="other_player"
                         onChange={(e) => {
                             setQuery(e.target.value);
                             handleChange(null);

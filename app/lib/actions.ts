@@ -38,7 +38,6 @@ const UpdatePlayer = z.object({
     notes: z.string(),
 });
 
-
 export type State = {
     errors?: {
         name?: string[];
@@ -59,32 +58,51 @@ export type State = {
     message?: string | null;
 };
 
+function insertIntoBugs(description: string){
+    return sql`INSERT INTO bugs (description) VALUES (${description})`;
+}
 
-export async function createReport(worker:boolean, formData: FormData) {
-    const description = formData.get('description') as string;
-    try {
-        await sql`
-      INSERT INTO bugs (description)
-      VALUES (${description})
+function insertIntoImages(phoneNumber: string, imageUrls:string){
+    return sql`INSERT INTO images (phone_number, image_url) VALUES (${phoneNumber}, ${imageUrls})`;
+}
+
+function insertIntoHistory(phoneNumber: string, balance:number, note = '', type = 'credit'){
+    return sql`
+      INSERT INTO history (phone_number, change, note, type)
+      VALUES (${phoneNumber}, ${balance}, ${note}, ${type})
+    `;
+}
+
+async function insertIntoPlayers(name: string, balance:number, phoneNumber:string, imageUrl: string, note:string, notes?:string){
+    await sql`
+      INSERT INTO players (name, balance, phone_number, image_url, notes)
+      VALUES (${name}, ${balance}, ${phoneNumber}, ${imageUrl} , ${notes ?? ''})
     `;
 
+    return insertIntoHistory(phoneNumber, balance, note, 'credit');
+}
 
+export async function createReport(formData: FormData) {
+    const description = formData.get('description') as string;
+    try {
+        await insertIntoBugs(description);
     } catch (error) {
         console.error('## createReport error', error)
         return {
             message: 'Database Error: Failed to Create report.',
         };
     }
-    const url = worker ? '/' : '/dashboard/configurations';
+
     revalidatePath('/dashboard/configurations');
     redirect('/dashboard/configurations');
 }
+
 export async function createPlayer(prevPage: string, prevState: State, formData: FormData) {
     const name = formData.get('name') as string;
     const balance = formData.get('balance') as string;
-    const note = formData.get('note') as string;
+    const note = formData.get('note') as string ?? '';
     const phone_number = formData.get('phone_number') as string;
-    const notes = formData.get('notes') as string;
+    const notes = formData.get('notes') as string ?? '';
     let image_url = (formData.get('image_url') as string) ?? '/players/default.png'
     const phoneNumber = phone_number.replaceAll('-', '');
 
@@ -94,23 +112,13 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
 
     try {
         if (image_url !== '/players/default.png'){
-            await sql`INSERT INTO images (phone_number, image_url) VALUES (${phoneNumber}, ${image_url})`;
+            await insertIntoImages (phoneNumber,image_url);
         }
-
     }  catch (error) {
-        console.error('## add image error', error)
+        console.error('## failed to add image', error)
     }
     try {
-        await sql`
-      INSERT INTO players (name, balance, phone_number, image_url, notes)
-      VALUES (${name}, ${balance}, ${phoneNumber}, ${image_url} , ${notes ?? ''})
-    `;
-
-        await sql`
-      INSERT INTO history (phone_number, change, note, type)
-      VALUES (${phoneNumber}, ${balance}, ${note}, 'credit')
-    `;
-
+        await insertIntoPlayers(name, Number(balance), phoneNumber, image_url,note, notes);
     } catch (error) {
         console.error('## createPlayer error', error)
         return {
@@ -119,92 +127,69 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
     }
     revalidatePath(prevPage);
     redirect(prevPage);
-
-
 }
 
-
-export async function importPlayers(players: PlayerDB[]) {
-    console.log('## import step: 1')
-    const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
-    console.log('## import step: 2')
-    const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
-    console.log('## import step: 3')
-    try {
-        const date = '2024-01-01T10:10:00.000Z';
-        const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
-        const playersToUpdate = players.filter(p => existingPlayers.find(ep => ep.phone_number === p.phone_number));
-
-        console.log('## import step: 4')
-        playersToInsert.forEach(p => {
-            const existingImage = existingPlayersImages.find(ep => ep.phone_number === p.phone_number);
-            if (existingImage){
-                p.image_url = existingImage.image_url;
-            } else  {
-                p.image_url = '/players/default.png';
-            }
-        })
-        console.log('## import step: 5')
-        const playersToInsertBatches = _.chunk(playersToInsert, 10);
-        const playersToUpdateBatches = _.chunk(playersToUpdate, 10);
-
-        //insert new players
-        for (const batch of playersToInsertBatches) {
-            await Promise.all(batch.map((player: PlayerDB) => sql`INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
-            VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date}, ${player.image_url});`))
-        }
-        console.log('## import step: 6')
-        //update existing players
-        for (const batch of playersToUpdateBatches) {
-            await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number}`))
-        }
-        console.log('## import step: 7')
-        const archive = 'ארכיון'
-        for (const batch of playersToInsertBatches) {
-            await Promise.all(batch.map((player: PlayerDB) => {
-                sql`DELETE FROM history WHERE phone_number= ${player.phone_number}`
-            }))
-        }
-        console.log('## import step: 8')
-        for (const batch of playersToInsertBatches) {
-            await Promise.all(batch.map((player: PlayerDB) => {
-                sql`INSERT INTO history (phone_number, change, note, type, updated_at, archive)
-                VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date}), true`
-            }))
-        }
-        console.log('## import step: 9')
-        for (const batch of playersToUpdateBatches) {
-            await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE history SET change = ${player.balance} WHERE phone_number = ${player.phone_number} AND type = 'credit' AND note = ${archive}`))
-        }
-        console.log('## import step: 10')
-
-
-    } catch (error) {
-        console.error('## importPlayers error', error)
-        return {
-            message: 'Database Error: Failed to import Players.',
-        };
-    }finally {
-        redirect('/');
-    }
-
+async function getPlayerByPhoneNumber(phoneNumber: string){
+    const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phoneNumber};`;
+    return playersResult.rows[0] ?? null;
 }
 
 export async function resetAllPlayersAndHistory() {
-    try {
-        await sql`DELETE FROM history`;
-        await sql`DELETE FROM players`;
-    } catch (error) {
-        console.error('## resetAllPlayersAndHistory error', error)
-        return {
-            message: 'Database Error: Failed to reset Players.',
-        };
-    }
+//     try {
+//         await sql`DELETE FROM history`;
+//         await sql`DELETE FROM players`;
+//     } catch (error) {
+//         console.error('## resetAllPlayersAndHistory error', error)
+//         return {
+//             message: 'Database Error: Failed to reset Players.',
+//         };
+//     }
     revalidatePath('/dashboard');
     redirect('/dashboard');
 }
 
 
+async function handleCreditByOther(type: string, otherPlayerPhoneNumber: string, change:number, note:string, player:PlayerForm){
+    let otherPlayer;
+    let useOtherPlayerCredit;
+    let historyNote;
+    let otherHistoryNote;
+
+    if (type === 'credit_by_other'){
+        if (!otherPlayerPhoneNumber){
+            console.error('### did npt get other person data')
+            return {
+                message: 'did npt get other person data.',
+            };
+        }
+        const otherPlayer = await getPlayerByPhoneNumber(otherPlayerPhoneNumber as string)
+        if (!otherPlayer){
+            console.error('### did not find other person data')
+            return {
+                message: 'did not find other person data.',
+            };
+        }
+        if (otherPlayer.balance < change){
+            console.error('### other person does not have enough credit')
+            return {
+                message: 'other person does not have enough credit.',
+            };
+        }
+        useOtherPlayerCredit = true;
+        historyNote = `${note}
+(על חשבון ${otherPlayer.name} ${otherPlayer.phone_number} ) `;
+
+        otherHistoryNote = `${note}
+(לטובת ${player.name} ${player.phone_number} ) `;
+    }
+
+    return {
+        otherPlayer: otherPlayer as unknown as PlayerDB,
+        useOtherPlayerCredit,
+        historyNote,
+        otherHistoryNote
+    }
+}
 export async function createPlayerLog(player: PlayerForm, formData: FormData, prevPage:string ,usage: boolean, username?:string){
     const validatedFields = CreateUsageLog.safeParse({
         change: formData.get('change'),
@@ -219,42 +204,22 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
     }
 
     const change = validatedFields.data.change * (usage ? -1 : 1);
-    let otherPlayer;
-    let otherPlayerPhoneNumber;
-    let useOtherPlayerCredit;
-    let historyNote;
-    let otherHistoryNote;
+
     let type = usage ? (formData.get('type') as string ?? 'prize') :  'credit' ;
-    if (type === 'credit_by_other'){
-        otherPlayerPhoneNumber = formData.get('otherPlayer');
-        if (!otherPlayerPhoneNumber){
-            console.error('### did npt get other person data')
-            return {
-                message: 'did npt get other person data.',
-            };
-        }
-        const otherPlayerResult = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${otherPlayerPhoneNumber as string}`;
-        otherPlayer = otherPlayerResult.rows[0]
-        if (!otherPlayer){
-            console.error('### did not find other person data')
-            return {
-                message: 'did not find other person data.',
-            };
-        }
-        if (otherPlayer.balance < change){
-            console.error('### other person does not have enough credit')
-            return {
-                message: 'other person does not have enough credit.',
-            };
-        }
-        useOtherPlayerCredit = true;
-        historyNote = `${validatedFields.data.note}
-(על חשבון ${otherPlayer.name} ${otherPlayer.phone_number} ) `;
-
-
-        otherHistoryNote = `${validatedFields.data.note}
-(לטובת ${player.name} ${player.phone_number} ) `;
+    const otherPlayerPhoneNumber = formData.get('other_player') as string;
+    const  {
+        otherPlayer,
+        useOtherPlayerCredit,
+        historyNote,
+        otherHistoryNote,
+        message
+    } = await handleCreditByOther(type, otherPlayerPhoneNumber, change, validatedFields.data.note, player);
+    if (message){
+        return {
+            message,
+        };
     }
+
     const currentBalance = player.balance;
     try
     {
@@ -272,29 +237,20 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
               INSERT INTO history (phone_number, change, note, type, updated_by)
               VALUES (${otherPlayerPhoneNumber as string}, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username ?? 'super-admin'})
             `;
-
-
         }
-
-
-
-
-    }catch(error){
+    } catch(error) {
         console.error('### create log error', error)
         return {
             message: 'Database Error: Failed to Create log.',
         };
     }
+
     if (type === 'credit' || type === 'prize') {
         const newBalance = currentBalance + change;
         try {
             const date = new Date().toISOString();
 
-            await sql`
-      UPDATE players
-      SET balance = ${newBalance}, updated_at=${date}
-      WHERE id = ${player.id}
-    `;
+            await sql`UPDATE players SET balance = ${newBalance}, updated_at=${date} WHERE id = ${player.id}`;
 
         } catch (error) {
             console.error('## create log error', error)
@@ -303,13 +259,13 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
             };
         }
     } else if (type === 'credit_by_other' && useOtherPlayerCredit){
-        const newBalance = otherPlayer!.balance + change;
+        const newBalance = otherPlayer.balance + change;
         try {
             const date = new Date().toISOString();
             await sql`
       UPDATE players
       SET balance = ${newBalance}, updated_at=${date}
-      WHERE id = ${otherPlayer!.id}
+      WHERE id = ${otherPlayer.id}
     `;
 
         } catch (error) {
@@ -319,11 +275,6 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
             };
         }
     }
-
-    //validate(player.phone_number);
-    // if (otherPlayerPhoneNumber){
-    //     validate(otherPlayerPhoneNumber as string);
-    // }
 
     revalidatePath(prevPage);
     redirect(prevPage);
@@ -834,3 +785,71 @@ async function validatePlayers() {
 }
 
 // setInterval(validatePlayers, 1000 * 60 * 60);
+
+
+
+export async function importPlayers(players: PlayerDB[]) {
+    console.log('## import step: 1')
+    const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
+    console.log('## import step: 2')
+    const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
+    console.log('## import step: 3')
+    try {
+        const date = '2024-01-01T10:10:00.000Z';
+        const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
+        const playersToUpdate = players.filter(p => existingPlayers.find(ep => ep.phone_number === p.phone_number));
+
+        console.log('## import step: 4')
+        playersToInsert.forEach(p => {
+            const existingImage = existingPlayersImages.find(ep => ep.phone_number === p.phone_number);
+            if (existingImage){
+                p.image_url = existingImage.image_url;
+            } else  {
+                p.image_url = '/players/default.png';
+            }
+        })
+        console.log('## import step: 5')
+        const playersToInsertBatches = _.chunk(playersToInsert, 10);
+        const playersToUpdateBatches = _.chunk(playersToUpdate, 10);
+
+        //insert new players
+        for (const batch of playersToInsertBatches) {
+            await Promise.all(batch.map((player: PlayerDB) => sql`INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
+            VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date}, ${player.image_url});`))
+        }
+        console.log('## import step: 6')
+        //update existing players
+        for (const batch of playersToUpdateBatches) {
+            await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number}`))
+        }
+        console.log('## import step: 7')
+        const archive = 'ארכיון'
+        for (const batch of playersToInsertBatches) {
+            await Promise.all(batch.map((player: PlayerDB) => {
+                sql`DELETE FROM history WHERE phone_number= ${player.phone_number}`
+            }))
+        }
+        console.log('## import step: 8')
+        for (const batch of playersToInsertBatches) {
+            await Promise.all(batch.map((player: PlayerDB) => {
+                sql`INSERT INTO history (phone_number, change, note, type, updated_at, archive)
+                VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date}), true`
+            }))
+        }
+        console.log('## import step: 9')
+        for (const batch of playersToUpdateBatches) {
+            await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE history SET change = ${player.balance} WHERE phone_number = ${player.phone_number} AND type = 'credit' AND note = ${archive}`))
+        }
+        console.log('## import step: 10')
+
+
+    } catch (error) {
+        console.error('## importPlayers error', error)
+        return {
+            message: 'Database Error: Failed to import Players.',
+        };
+    }finally {
+        redirect('/');
+    }
+
+}

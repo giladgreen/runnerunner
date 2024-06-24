@@ -7,7 +7,7 @@ import {
 import {ExportPlayers} from "@/app/ui/players/client-buttons";
 import {BugDB, PlayerDB, PrizeDB, TournamentDB} from "@/app/lib/definitions";
 import React from "react";
-import Form from "@/app/ui/players/create-bug-form";
+import CreateBugForm from "@/app/ui/players/create-bug-form";
 import {formatDateToLocal} from "@/app/lib/utils";
 import SideNavWorker from "@/app/ui/dashboard/sidenav-worker";
 import {notFound} from "next/navigation";
@@ -26,7 +26,7 @@ function ExportPlayersButton({players, playersPlaces, tournament, prizes, worker
 function ReportBugForm({bugs}: { bugs: BugDB[] }) {
     return <div className="config-section" style={{marginTop: 130}}>
         <h1 className="text-2xl">Report a bug</h1>
-        <Form/>
+        <CreateBugForm/>
         <hr style={{marginTop: 20, marginBottom: 10}}/>
         <div>
             <div>
