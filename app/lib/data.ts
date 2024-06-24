@@ -165,13 +165,11 @@ export async function fetchFinalTablePlayers(stringDate?: string) {
     const allPlayersResult = await sql<PlayerDB>`SELECT * FROM players`;
     const allPlayers = allPlayersResult.rows.filter(player => winnersPhoneNumbers.includes(player.phone_number)).map(player => {
 
-      const obj = winnersObject[player.phone_number];
+      const playerObj = winnersObject[player.phone_number];
 
-      console.log('obj', obj);
+      player.position = playerObj?.position || 0;
 
-      player.position = obj?.position || 0;
-
-      player.hasReceived = Boolean(obj?.hasReceived);
+      player.hasReceived = Boolean(playerObj?.hasReceived);
 
       return player;
     })

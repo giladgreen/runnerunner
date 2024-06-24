@@ -208,7 +208,7 @@ export async function getFinalTablePlayersContent(date: string, isTournamentsDat
                 >
 
                     <div className={`flex items-center border-b ${isTournamentsDataPage ? '' : 'pb-4'} highlight-on-hover`}>
-                        <OpenGiveCreditModalButton player={finalTablePlayer} hasReceived={true}/>
+                        <OpenGiveCreditModalButton player={finalTablePlayer} hasReceived={finalTablePlayer.hasReceived} stringDate={date}/>
                         <div className={textClass}>#{finalTablePlayer.position}</div>
 
                         {!isTournamentsDataPage && <Image

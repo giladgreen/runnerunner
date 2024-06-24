@@ -390,6 +390,104 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
     redirect(prevPage);
 }
 
+export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{stringDate?:string, playerId: string, prevPage: string}, _prevState: State, formData: FormData){
+    try {
+        const type = formData.get('type') as string;
+        const credit = formData.get('credit') as string;
+        console.log('## givePlayerPrizeOrCredit type', type)
+        console.log('## givePlayerPrizeOrCredit credit', credit)
+        const playerResult = await sql<PlayerDB>`SELECT * FROM players WHERE id = ${playerId}`;
+        const player = playerResult.rows[0];
+        if (!player) {
+            console.error('## givePlayerPrizeOrCredit Failed to find player')
+            return {
+                message: 'Failed to find player.',
+            };
+        }
+        const date = stringDate ?? (new Date()).toISOString().slice(0, 10);
+        console.log('## givePlayerPrizeOrCredit player', player)
+        console.log('## givePlayerPrizeOrCredit date', date)
+
+        const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
+        const winners = winnersResult.rows[0];
+        if (!winners) {
+            console.error('## givePlayerPrizeOrCredit Failed to find winners in DB')
+            return {
+                message: 'Failed to find winners in DB.',
+            };
+        }
+        console.log('## givePlayerPrizeOrCredit winnersObject', winners.winners)
+        const winnersObject = JSON.parse(winners.winners);
+        const newWinnersObject = {...winnersObject};
+        const playerObject = winnersObject[player.phone_number];
+        if (!playerObject) {
+            console.error('## givePlayerPrizeOrCredit Failed to find player in winners object')
+            return {
+                message: 'Failed to find player in winners object.',
+            };
+        }
+        const position = playerObject.position;
+        const hasReceived = playerObject.hasReceived;
+        console.log('## givePlayerPrizeOrCredit position', position)
+        console.log('## givePlayerPrizeOrCredit hasReceived', hasReceived)
+        if (hasReceived) {
+            console.error('## givePlayerPrizeOrCredit Player has already received prize')
+            return {
+                message: 'Player has already received prize.',
+            };
+        }
+        const day = (new Date(date)).toLocaleString('en-us', {weekday: 'long'});
+        const tournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${day};`;
+        const tournament = tournamentResult.rows[0];
+        const tournamentName = tournament.name;
+        console.log('## givePlayerPrizeOrCredit day', day)
+        console.log('## givePlayerPrizeOrCredit tournamentName', tournamentName)
+
+        if (type === 'credit') {
+            const amount = Number(credit);
+            if (isNaN(amount) || amount <= 0){
+                console.error('## givePlayerPrizeOrCredit Invalid credit amount:', credit)
+                return {
+                    message: 'Invalid credit amount.',
+                };
+            }
+            const playerCurrentBalance = player.balance;
+            const playerNewBalance = playerCurrentBalance + amount;
+            console.log('## givePlayerPrizeOrCredit playerCurrentBalance', playerCurrentBalance)
+            console.log('## givePlayerPrizeOrCredit playerNewBalance', playerNewBalance)
+
+            const note = `#${position} - מקום ${tournamentName}`;
+            console.log('## givePlayerPrizeOrCredit note', note)
+
+            await sql`UPDATE players SET balance = ${playerNewBalance} WHERE phone_number = ${player.phone_number}`;
+            console.log('## givePlayerPrizeOrCredit after updating player balance')
+
+            await sql`
+      INSERT INTO history (phone_number, change, note, type)
+      VALUES (${player.phone_number}, ${amount}, ${note}, 'credit')
+    `;
+
+            console.log('## givePlayerPrizeOrCredit after inserting new history log')
+
+        }
+
+        newWinnersObject[player.phone_number] = {
+            ...playerObject,
+            hasReceived: true,
+        }
+        await sql`UPDATE winners SET winners=${JSON.stringify(newWinnersObject)} WHERE date = ${winners.date}`;
+        console.log('## givePlayerPrizeOrCredit after updating winners object')
+
+    }catch(error){
+        console.error('## givePlayerPrizeOrCredit error', error)
+        return {
+            message: 'Database Error: Failed to givePlayerPrizeOrCredit.',
+        };
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
+    }
+}
 export async function setPlayerPrize({playerId, prevPage}:{playerId: string, prevPage: string}, prevState: State, formData: FormData){
     const newPrize =  formData.get('prize') as string;
 

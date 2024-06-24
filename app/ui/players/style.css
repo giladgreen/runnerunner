@@ -115,3 +115,11 @@
 }
 
 
+.give_user_prize{
+    text-align: left;
+    width: 330px;
+}
+.give_user_credit_amount{
+    margin-top: 10px;
+    height: 80px;
+}
