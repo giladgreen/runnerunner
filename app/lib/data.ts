@@ -284,7 +284,7 @@ export async function fetchFinalTablePlayers(stringDate?: string) {
       return player;
     })
 
-    return allPlayers.sort(positionComparator);
+    return allPlayers.filter(player => player.position > 0).sort(positionComparator);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch final table players data.');
