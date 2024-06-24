@@ -3,85 +3,210 @@ import { unstable_noStore as noStore} from 'next/cache';
 
 import {
   BugDB, Counts,
-  DebtPlayerRaw, FeatureFlagDB, LogDB,
+  DebtPlayerRaw, FeatureFlagDB, LogDB, MVPPlayer,
   MVPPlayerRaw, PlayerDB, PrizeDB, RSVPDB,
   TournamentDB, User, WinnerDB
 } from './definitions';
 
 const ITEMS_PER_PAGE = 30;
 const TOP_COUNT = 8;
-export async function fetchMVPPlayers() {
-  noStore();
-  try {
-    const data = await sql<MVPPlayerRaw>`
-      SELECT *
-      FROM players
-      ORDER BY balance DESC
-      LIMIT ${TOP_COUNT}`;
 
-    const todayDate = (new Date()).toISOString().slice(0,10);
-    const todayHistoryResults = await sql`SELECT phone_number, type FROM history WHERE change <= 0 AND updated_at > now() - interval '12 hour'`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' && type != 'credit_to_other');
-    const rsvp = await getAllRsvps();
-    const players = data.rows;
-    players.forEach((player) => {
-      player.arrived = !!todayHistory.find(({ phone_number}) => phone_number === player.phone_number);
-      player.rsvpForToday = !!rsvp.find(({ phone_number, date }) => phone_number === player.phone_number && date === todayDate);
-      player.rsvps = rsvp.filter(({ phone_number }) => phone_number === player.phone_number).map(({ date }) => date);
-    });
-    return players;
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to fetch the latest players.');
-  }
+function positionComparator(a: PlayerDB,b: PlayerDB) {
+  return a.position < b.position ? -1 : 1;
+};
+function phoneNumberComparator(a: User,b: User) {
+  return a.phone_number < b.phone_number ? -1 : 1;
+};
+
+function nameComparator(a: PlayerDB,b: PlayerDB) {
+  return a.name < b.name ? -1 : 1;
+};
+
+function getTodayShortDate(){
+  return (new Date()).toISOString().slice(0,10);
 }
 
+function getDayOfTheWeek(date?: Date){
+  const base = date ?? new Date();
+  return base.toLocaleString('en-us', { weekday: 'long' });
+}
+
+function sumArrayByProp(array:any[], propName:string){
+  return array.reduce((acc, player) => acc + player[propName], 0);
+}
+
+async function getAllFlags(){
+  const data = await sql<FeatureFlagDB>`SELECT * FROM feature_flags`;
+  return data.rows;
+}
+async function getAllBugs(){
+  const data = await sql<BugDB>`SELECT * FROM bugs`;
+  return data.rows;
+}
+async function getAllPrizes(){
+  const prizesResult = await sql<PrizeDB>`SELECT * FROM prizes ORDER BY tournament DESC`;
+  return prizesResult.rows;
+}
 async function getAllRsvps() {
   const rsvpResults = await sql<RSVPDB>`SELECT * FROM rsvp;`;
   return rsvpResults.rows;
 }
 
-export async function fetchDebtPlayers() {
-  noStore();
-  try {
-    const data = await sql<DebtPlayerRaw>`
+async function getUserById(userId: string){
+  const usersResult = await sql<User>`SELECT * FROM users WHERE id = ${userId};`;
+  return usersResult.rows && usersResult.rows.length ? usersResult.rows[0] : null;
+}
+
+async function getPlayerById(playerId: string){
+  const data = await sql<PlayerDB>`SELECT * FROM players WHERE id = ${playerId};`;
+  const player = data?.rows[0];
+  if (!player){
+    return null;
+  }
+
+  const rsvpResults = await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${player.phone_number}`;
+  const playerRsvp = rsvpResults.rows;
+
+  const historyData = await sql<LogDB>`
+      SELECT *
+      FROM history
+      WHERE phone_number = ${player.phone_number}
+      order by history.updated_at asc;
+    `;
+
+  player.historyLog = historyData.rows;
+  player.rsvps = playerRsvp.map(({ date }) => date);
+
+  return player;
+}
+
+async function isPlayerRsvp(playerPhoneNumber:string, date: string){
+  const rsvpResults = await sql<RSVPDB>`SELECT * FROM rsvp WHERE date = ${date} AND phone_number = ${playerPhoneNumber};`;
+  return rsvpResults.rows.length > 0;
+}
+
+async function getPlayerByPhoneNumber(phoneNumber: string){
+  const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phoneNumber};`;
+  return playersResult.rows && playersResult.rows.length ? playersResult.rows[0] : null;
+}
+
+async function getTodayTournament(day?: string){
+  const dayOfTheWeek= day ?? getDayOfTheWeek();
+  const todayTournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${dayOfTheWeek}`;
+ return todayTournamentResult.rows[0];
+}
+
+async function getAllTournaments(){
+  const tournamentsResults = await sql<TournamentDB>`SELECT * FROM tournaments ORDER BY i ASC`;
+  return tournamentsResults.rows;
+}
+
+async function getDateWinnersRecord(date: string){
+  const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
+  return winnersResult.rows[0];
+}
+
+async function getPlayerHistory(playerPhoneNumber: string){
+  const historyData = await sql<LogDB>`
+            SELECT * FROM history
+            WHERE history.phone_number = ${playerPhoneNumber}
+            order by history.updated_at asc;
+          `;
+
+  return historyData.rows;
+}
+async function getTodayHistory(){
+  const todayHistoryResults = await sql`SELECT * FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'  ORDER BY updated_at DESC`;
+  return todayHistoryResults.rows.filter(({ type }) => type != 'prize');
+}
+
+async function getAllPlayersWithCredit(min: number)  {
+  const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE balance > ${min}`;
+  return playersResult.rows;
+}
+async function getAllPlayers()  {
+  const [allPlayersResult, rsvpResults] = await Promise.all([sql<PlayerDB>`SELECT * FROM players`, sql<RSVPDB>`SELECT * FROM rsvp;`])
+  const allPlayers = allPlayersResult.rows;
+  const rsvp = rsvpResults.rows;
+  const todayDate = getTodayShortDate();
+
+  allPlayers.forEach(player => {
+    player.rsvpForToday = !!rsvp.find(({ phone_number, date }) => phone_number === player.phone_number && date === todayDate);
+    player.rsvps = rsvp.filter(({ phone_number }) => phone_number === player.phone_number).map(({ date }) => date);
+  })
+
+  return allPlayers;
+}
+
+async function getAllUsers()  {
+  const usersResult = await sql<User>`SELECT * FROM users`;
+  return usersResult.rows;
+
+}
+
+async function getTopMVPPlayers(){
+  const players = await sql<MVPPlayerRaw>`
+      SELECT *
+      FROM players
+      WHERE balance > 0
+      ORDER BY balance DESC
+      LIMIT ${TOP_COUNT}`;
+
+  return players.rows;
+}
+
+async function getTopDebtPlayers(){
+  const players = await sql<DebtPlayerRaw>`
       SELECT *
       FROM players
       WHERE balance < 0
       ORDER BY balance ASC
       LIMIT ${TOP_COUNT}`;
 
-    const todayHistoryResults = await sql`SELECT phone_number, type FROM history WHERE change <= 0 AND updated_at > now() - interval '12 hour'`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize' && type != 'credit_to_other')
+  return players.rows;
+}
 
+async function fetchTopPlayers(players: MVPPlayerRaw[] | DebtPlayerRaw[]) {
+  try {
+    const todayDate = getTodayShortDate();
+
+    const todayHistory = (await getTodayHistory()).filter(({ type }) => type != 'prize' && type != 'credit_to_other');
     const rsvp = await getAllRsvps();
-    const todayDate = (new Date()).toISOString().slice(0,10);
-    const players = data.rows;
+
     players.forEach((player) => {
       player.arrived = !!todayHistory.find(({ phone_number}) => phone_number === player.phone_number);
       player.rsvpForToday = !!rsvp.find(({ phone_number, date }) => phone_number === player.phone_number && date === todayDate);
       player.rsvps = rsvp.filter(({ phone_number }) => phone_number === player.phone_number).map(({ date }) => date);
-
     });
     return players;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch the latest players.');
+    throw new Error('Failed to fetch fetchTopPlayers.');
   }
+}
+export async function fetchMVPPlayers() {
+  noStore();
+  const players = await getTopMVPPlayers();
+  return fetchTopPlayers(players);
+}
+
+export async function fetchDebtPlayers() {
+  noStore();
+  const players = await getTopDebtPlayers();
+  return fetchTopPlayers(players);
 }
 
 export async function fetchGeneralPlayersCardData() {
   noStore();
 
   try {
-    const allPlayersResult = await sql`SELECT * FROM players`;
-    const allPlayers = allPlayersResult.rows;
+    const allPlayers = await getAllPlayers()
 
     const totalNumberOfPlayers = allPlayers.length;
     const playersWithDebt = allPlayers.filter((player) => player.balance < 0);
     const numberOfPlayersWithDebt = playersWithDebt.length;
-    const totalRunnerDebt = allPlayers.filter((player) => player.balance > 0).reduce((acc, player) => acc + player.balance, 0);
-    const totalPlayersDebt = playersWithDebt.reduce((acc, player) => acc + player.balance, 0);
+    const totalRunnerDebt = sumArrayByProp(allPlayers.filter((player) => player.balance > 0), 'balance')
+    const totalPlayersDebt = sumArrayByProp(playersWithDebt,'balance');
 
     return {
       totalNumberOfPlayers,
@@ -98,24 +223,14 @@ export async function fetchGeneralPlayersCardData() {
 export async function fetchRSVPAndArrivalData() {
   noStore();
   try {
-    const now =new Date();
-    const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
-    const rsvp = await getAllRsvps();
-    const todayDate = (new Date()).toISOString().slice(0,10);
+    const allPlayers = await getAllPlayers();
 
-    const allPlayersResult = await sql`SELECT * FROM players`;
-    const allPlayers = allPlayersResult.rows;
-    allPlayers.forEach(player => {
-      player.rsvpForToday = !!rsvp.find(({ phone_number, date }) => phone_number === player.phone_number && date === todayDate);
-      player.rsvps = rsvp.filter(({ phone_number }) => phone_number === player.phone_number).map(({ date }) => date);
-    })
     const rsvpForToday = allPlayers.filter(player => player.rsvpForToday).length
 
-    const todayHistoryResults = await sql`SELECT phone_number, type, change FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize');
+    const todayHistory = await getTodayHistory();
 
-    const todayTournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${dayOfTheWeek}`;
-    const todayTournament = todayTournamentResult.rows[0];
+    const todayTournament = await getTodayTournament();
+
     const todayTournamentMaxPlayers = todayTournament.rsvp_required ? todayTournament?.max_players : null;
 
     if (todayHistory.length === 0){
@@ -132,9 +247,9 @@ export async function fetchRSVPAndArrivalData() {
     }
     const reEntriesCount = todayHistory.length - (Array.from(new Set(todayHistory.map(({ phone_number }) => phone_number)))).length;
 
-    const todayCreditIncome = todayHistory.filter(({ type }) => type === 'cash').reduce((acc, { change }) => acc + change, 0);
-    const todayCashIncome = todayHistory.filter(({ type }) => type === 'credit').reduce((acc, { change }) => acc + change, 0);
-    const todayTransferIncome = todayHistory.filter(({ type }) => type === 'wire').reduce((acc, { change }) => acc + change, 0);
+    const todayCreditIncome = sumArrayByProp( todayHistory.filter(({ type }) => type === 'cash'),'change');
+    const todayCashIncome = sumArrayByProp( todayHistory.filter(({ type }) => type === 'credit'),'change');
+    const todayTransferIncome = sumArrayByProp( todayHistory.filter(({ type }) => type === 'wire'),'change');
     const arrivedToday =  (Array.from(new Set(todayHistory.map(({ phone_number }) => phone_number)))).length;
 
 
@@ -158,23 +273,18 @@ export async function fetchRSVPAndArrivalData() {
 export async function fetchFinalTablePlayers(stringDate?: string) {
   noStore();
   try {
-    const date = stringDate ?? (new Date()).toISOString().slice(0,10);
-    const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
-    const winnersObject = JSON.parse((winnersResult.rows[0] || { winners:'{}'}).winners);
+    const date = stringDate ?? getTodayShortDate();
+    const winnersResult = await getDateWinnersRecord(date);
+    const winnersObject =  winnersResult ? JSON.parse(winnersResult.winners) : {};
     const winnersPhoneNumbers = Object.keys(winnersObject);
-    const allPlayersResult = await sql<PlayerDB>`SELECT * FROM players`;
-    const allPlayers = allPlayersResult.rows.filter(player => winnersPhoneNumbers.includes(player.phone_number)).map(player => {
-
+    const allPlayers = (await getAllPlayers()).filter(player => winnersPhoneNumbers.includes(player.phone_number)).map(player => {
       const playerObj = winnersObject[player.phone_number];
-
       player.position = playerObj?.position || 0;
-
       player.hasReceived = Boolean(playerObj?.hasReceived);
-
       return player;
     })
 
-    return allPlayers.sort((a,b)=> a.position < b.position ? -1 : 1);
+    return allPlayers.sort(positionComparator);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch final table players data.');
@@ -184,10 +294,8 @@ export async function fetchFinalTablePlayers(stringDate?: string) {
 export async function fetchPlayersPrizes() {
   noStore();
   try {
-    const prizesResult = await sql<PrizeDB>`SELECT * FROM prizes ORDER BY tournament DESC`;
-    const prizes = prizesResult.rows;
-    const playersResult = await sql<PlayerDB>`SELECT * FROM players`;
-    const players = playersResult.rows;
+    const prizes = await getAllPrizes()
+    const players = await getAllPlayers()
     prizes.forEach(prize => {
         const player = players.find(p => p.phone_number === prize.phone_number);
         if (player){
@@ -264,7 +372,7 @@ export async function fetchFilteredPlayers(
     const playersHistoryCount = playersHistoryCountResult.rows;
     const players = playersResult.rows;
 
-    const todayDate = (new Date()).toISOString().slice(0,10);
+    const todayDate = getTodayShortDate();
     players.forEach((player) => {
       const historyCount = playersHistoryCount.find(({ phone_number}) => phone_number === player.phone_number);
       player.historyCount = historyCount?.count ?? 0;
@@ -277,14 +385,13 @@ export async function fetchFilteredPlayers(
     throw new Error('Failed to fetch FilteredPlayers.');
   }
 }
-export async function fetchPlayersPages(query: string) {
+export async function fetchPlayersPagesCount(query: string) {
   noStore();
   try {
-    const count = await sql`SELECT COUNT(*)
-    FROM players
-    WHERE
+    const count = await sql`SELECT COUNT(*) FROM players WHERE
       name ILIKE ${`%${query}%`} OR
-      phone_number ILIKE ${`%${query}%`}
+      phone_number ILIKE ${`%${query}%`} OR 
+      notes::text ILIKE ${`%${query}%`}
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
@@ -297,22 +404,17 @@ export async function fetchPlayersPages(query: string) {
 export async function fetchTodayPlayers(query?: string) {
   noStore();
   try {
-    const todayDate = (new Date()).toISOString().slice(0,10);
-    const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${todayDate}`;
-    const winnersObject = JSON.parse((winnersResult.rows[0] || { winners:'{}'}).winners);
-    const now = new Date();
-    const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
-    const tournamentsResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${dayOfTheWeek}`;
-    const tournament = tournamentsResult.rows[0];
+    const todayDate = getTodayShortDate();
+    const winnersRecord = await getDateWinnersRecord(todayDate);
+    const winnersObject = winnersRecord ? JSON.parse(winnersRecord.winners) : {};
+
+    const tournament = await getTodayTournament();
     const rsvp_required = tournament.rsvp_required;
 
-
-    const playersResults = await sql<PlayerDB>`SELECT * FROM players`;
-    const players = playersResults.rows;
+    const players = await getAllPlayers()
     const rsvp = await getAllRsvps();
 
-    const todayHistoryResults = await sql`SELECT * FROM history WHERE change <= 0 AND updated_at > now() - interval '12 hour'`;
-    const todayHistory =  todayHistoryResults.rows.filter(({ type }) => type != 'prize'  && type != 'credit_to_other' )
+    const todayHistory =  (await getTodayHistory()).filter(({ type }) => type != 'prize'  && type != 'credit_to_other' )
 
     players.forEach((player) => {
       const playerItems = todayHistory.filter(({ phone_number}) => phone_number === player.phone_number) as LogDB[];
@@ -335,7 +437,7 @@ export async function fetchTodayPlayers(query?: string) {
         (!query && p.rsvpForToday && rsvp_required) ||
         (query && query.length > 0 && (p.name.includes(query) ||  p.phone_number.includes(query))))
 
-    results.sort((a,b)=> a.name < b.name ? -1 : 1);
+    results.sort(nameComparator);
 
     return results;
   } catch (error) {
@@ -347,17 +449,15 @@ export async function fetchTodayPlayers(query?: string) {
 export async function fetchTournamentsData() {
   noStore();
   try {
-    const tournamentsResults = await sql<TournamentDB>`SELECT * FROM tournaments`;
-    const tournaments =  tournamentsResults.rows;
-    const historyResults = await sql`SELECT * FROM history WHERE change < 0 ORDER BY updated_at DESC`;
-    const history =  historyResults.rows.filter(({ type }) => type !== 'prize');
+    const tournaments =  await getAllTournaments()
+    const history =  await getTodayHistory()
 
     const dateToPlayerMap = {};
     return history.reduce((acc, { phone_number, change, type, updated_at }) => {
       const newAcc = {...acc};
       const dateAsString = updated_at.toISOString();
       const dateObj = new Date(updated_at);
-      const tournament = tournaments.find(({ day }) => day === dateObj.toLocaleString('en-us', {weekday: 'long'}));
+      const tournament = tournaments.find(({ day }) => day === getDayOfTheWeek(dateObj));
 
       if (dateObj.getTime() < (new Date('2024-06-15T10:00:00.000Z')).getTime()){
         return newAcc;
@@ -408,8 +508,7 @@ export async function fetchTournamentsData() {
 export async function fetchPlayersWithEnoughCredit(){
   noStore();
   try {
-    const playersResults = await sql<PlayerDB>`SELECT * FROM players WHERE balance > 100`;
-    return playersResults.rows;
+    return await getAllPlayersWithCredit(99);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the fetch incomes.');
@@ -419,10 +518,8 @@ export async function fetchPlayersWithEnoughCredit(){
 export async function fetchAllUsers() {
   noStore();
   try {
-    const playersResults = await sql<PlayerDB>`SELECT * FROM players`;
-    const userResults = await sql<User>`SELECT * FROM users`;
-    const users = userResults.rows;
-    const players = playersResults.rows;
+    const [users, players] = await Promise.all([getAllUsers(), getAllPlayers()]);
+
     users.forEach(user => {
       const player = players.find(p => p.phone_number === user.phone_number);
       if (player){
@@ -430,7 +527,7 @@ export async function fetchAllUsers() {
       }
     });
 
-    return users.sort((a,b)=> a.phone_number < b.phone_number ? -1 : 1);
+    return users.sort(phoneNumberComparator);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of users.');
@@ -441,9 +538,7 @@ export async function fetchAllUsers() {
 export async function fetchAllBugs() {
   noStore();
   try {
-    const data = await sql<BugDB>`  SELECT  * FROM bugs  `;
-    return data.rows;
-
+    return await getAllBugs();
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch bugs.');
@@ -452,16 +547,7 @@ export async function fetchAllBugs() {
 export async function fetchAllPlayersForExport() {
   noStore();
   try {
-    const data = await sql<PlayerDB>`
-      SELECT
-        name,
-        phone_number,
-        balance,
-        notes
-      FROM players
-    `;
-    return data.rows;
-
+    return await getAllPlayers();
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch bugs.');
@@ -470,11 +556,7 @@ export async function fetchAllPlayersForExport() {
 export async function fetchTournaments() {
   noStore();
   try {
-    const tournamentsResult = await sql<TournamentDB>`
-      SELECT * FROM tournaments ORDER BY i ASC`;
-
-    return tournamentsResult.rows;
-
+    return getAllTournaments();
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch tournaments.');
@@ -483,13 +565,12 @@ export async function fetchTournaments() {
 export async function fetchFeatureFlags() {
   noStore();
   try {
-    const flagsResult = await sql<FeatureFlagDB>`
-      SELECT * FROM feature_flags`;
+    const flagsResult = await getAllFlags();
 
-    const prizesEnabled = flagsResult.rows.find(flag => flag.flag_name === 'prizes')?.is_open;
-    const placesEnabled = flagsResult.rows.find(flag => flag.flag_name === 'places')?.is_open;
-    const rsvpEnabled = flagsResult.rows.find(flag => flag.flag_name === 'rsvp')?.is_open;
-    const playerRsvpEnabled = flagsResult.rows.find(flag => flag.flag_name === 'player_can_rsvp')?.is_open;
+    const prizesEnabled = flagsResult.find(flag => flag.flag_name === 'prizes')?.is_open;
+    const placesEnabled = flagsResult.find(flag => flag.flag_name === 'places')?.is_open;
+    const rsvpEnabled = flagsResult.find(flag => flag.flag_name === 'rsvp')?.is_open;
+    const playerRsvpEnabled = flagsResult.find(flag => flag.flag_name === 'player_can_rsvp')?.is_open;
     return {
       prizesEnabled,
       placesEnabled,
@@ -504,51 +585,19 @@ export async function fetchFeatureFlags() {
 export async function fetchPlayerById(id: string) {
   noStore();
   try {
-    const data = await sql<PlayerDB>`
-      SELECT
-        *
-      FROM players
-      WHERE id = ${id};
-    `;
-
-    const player = data.rows[0];
-    if (player){
-      const rsvpResults = await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${player.phone_number}`;
-      const playerRsvp = rsvpResults.rows;
-
-
-      const historyData = await sql<LogDB>`
-      SELECT *
-      FROM history
-      WHERE phone_number = ${player.phone_number}
-      order by history.updated_at asc;
-    `;
-
-      player.historyLog = historyData.rows;
-      player.rsvps = playerRsvp.map(({ date }) => date);
-    }
-
-
-    return player;
-
+    return await getPlayerById(id);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetchPlayerById.');
   }
 }
 
-export async function fetchTournamentByDay(day: string) {
+export async function fetchTournamentByDay(day?: string) {
   noStore();
-  const dayName = day.slice(0, 1).toUpperCase() + day.slice(1).toLowerCase()
   try {
-    const data = await sql<TournamentDB>`
-      SELECT
-        *
-      FROM tournaments
-      WHERE day = ${dayName};
-    `;
+    const dayName = day ?? (new Date()).toLocaleString('en-us', {weekday: 'long'});
 
-    return data.rows[0];
+    return await getTodayTournament(dayName)
 
   } catch (error) {
     console.error('Database Error:', error);
@@ -559,17 +608,8 @@ export async function fetchTournamentByDay(day: string) {
 export async function fetchRsvpCountForTodayTournament() {
   noStore();
   try {
-    const rsvp = await getAllRsvps();
-    const todayDate = (new Date()).toISOString().slice(0,10);
-
-    const allPlayersResult = await sql`SELECT * FROM players`;
-    const allPlayers = allPlayersResult.rows;
-    allPlayers.forEach(player => {
-      player.rsvpForToday = !!rsvp.find(({ phone_number, date }) => phone_number === player.phone_number && date === todayDate);
-      player.rsvps = rsvp.filter(({ phone_number }) => phone_number === player.phone_number).map(({ date }) => date);
-    })
-    return allPlayers.filter(player => player.rsvpForToday).length
-
+    const allPlayers = await getAllPlayers();
+    return allPlayers.filter(player => player.rsvpForToday).length;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetchTournamentById.');
@@ -579,26 +619,18 @@ export async function fetchRsvpCountForTodayTournament() {
 export async function fetchPlayerByUserId(id: string) {
   noStore();
   try {
-    const todayDate = (new Date()).toISOString().slice(0,10);
 
-      const usersResult = await sql<User>`SELECT * FROM users WHERE id = ${id};`;
-      const user = usersResult.rows && usersResult.rows.length ? usersResult.rows[0] : null;
 
-      const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${user?.phone_number};`;
-
-      const player = playersResult.rows && playersResult.rows.length ? playersResult.rows[0] : null;
+      const user = await getUserById(id);
+      if (!user){
+        return null;
+      }
+      const player = await getPlayerByPhoneNumber(user?.phone_number)
 
       if (player){
-        const rsvpResults = await sql<RSVPDB>`SELECT * FROM rsvp WHERE date = ${todayDate} AND phone_number = ${player.phone_number};`;
-        const rsvp = !!rsvpResults.rows[0];
-
-        const historyData = await sql<LogDB>`
-            SELECT * FROM history
-            WHERE history.phone_number = ${player.phone_number}
-            order by history.updated_at asc;
-          `;
-
-        player.historyLog = historyData.rows;
+        const todayDate = getTodayShortDate();
+        const rsvp = await isPlayerRsvp(player.phone_number, todayDate)
+        player.historyLog = await getPlayerHistory(player.phone_number);
         player.rsvpForToday = rsvp;
       }
 
@@ -612,10 +644,7 @@ export async function fetchPlayerByUserId(id: string) {
 export async function fetchUserById(id: string) {
   noStore();
   try {
-
-    const data = await sql<User>`SELECT * FROM users WHERE id = ${id};`;
-
-    return data && data.rows.length ? data.rows[0] : null;
+    return await getUserById(id)
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetchPlayerByPhoneNumber.');

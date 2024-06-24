@@ -52,8 +52,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         );
     }
 
-    const today = (new Date()).toLocaleString('en-us', {weekday: 'long'}).toLowerCase();
-    const todayTournament = await fetchTournamentByDay(today)
+    const todayTournament = await fetchTournamentByDay();
 
     const rsvpCountForTodayTournament = await fetchRsvpCountForTodayTournament();
 

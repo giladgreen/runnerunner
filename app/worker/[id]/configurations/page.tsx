@@ -63,8 +63,7 @@ export default async function Page({ params, searchParams }: { params: { id: str
     const bugs = await fetchAllBugs();
     const players = await fetchAllPlayersForExport();
     const playersPlaces = await fetchFinalTablePlayers();
-    const today = (new Date()).toLocaleString('en-us', {weekday: 'long'});
-    const tournament = await fetchTournamentByDay(today);
+    const tournament = await fetchTournamentByDay();
     const prizes = await fetchPlayersPrizes();
     return (
         <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">

@@ -4,7 +4,7 @@ import PlayersTable from '@/app/ui/players/players-table';
 import { CreateNewPlayer } from '@/app/ui/players/buttons';
 import { PlayersTableSkeleton } from '@/app/ui/skeletons';
 import { Suspense } from 'react';
-import { fetchPlayersPages } from '@/app/lib/data';
+import { fetchPlayersPagesCount } from '@/app/lib/data';
 import {GeneralPlayersCardWrapper} from "@/app/ui/dashboard/cards";
 
 export default async function Page({
@@ -19,7 +19,7 @@ export default async function Page({
     const query = searchParams?.query || '';
     const sortBy = searchParams?.sort || 'updated_at';
     const currentPage = Number(searchParams?.page) || 1;
-    const totalPages = await fetchPlayersPages(query);
+    const totalPages = await fetchPlayersPagesCount(query);
 
     return (
         <div className="w-full full-width">

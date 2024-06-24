@@ -334,8 +334,6 @@ export async function createPlayerUsageLog(data : {player: PlayerForm, prevPage:
 }
 
 export async function setPlayerPosition({playerId, prevPage}:{playerId: string, prevPage: string}, prevState: State, formData: FormData){
-    console.log('## setPlayerPosition 1')
-
     const newPosition =  formData.get('position') as string;
     const newPositionNumber = Number(newPosition);
 
@@ -353,14 +351,12 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
                 message: 'Invalid Position. Failed to find Player.',
             };
         }
-        console.log('## setPlayerPosition player', player)
         const today = (new Date()).toLocaleString('en-us', {weekday: 'long'});
 
         const todayTournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${today};`;
         const todayTournament = todayTournamentResult.rows[0];
         const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
         let winnersObject = winnersResult.rows[0];
-        console.log('## setPlayerPosition winnersObject', winnersObject)
 
         if (winnersObject){
             const newWinnersObject = {
@@ -373,10 +369,7 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
             await sql`UPDATE winners SET winners=${JSON.stringify(newWinnersObject)} WHERE date = ${date}`;
 
         }else{
-            console.log('## newWinnersObject else')
-
             const newWinnersObject = { [player.phone_number]: {position: newPositionNumber, hasReceived: false}};
-            console.log('## newWinnersObject', newWinnersObject)
             await sql`INSERT INTO winners (date, tournament_name, winners) VALUES (${date}, ${todayTournament.name}, ${JSON.stringify(newWinnersObject)})`;
         }
 
@@ -394,8 +387,6 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
     try {
         const type = formData.get('type') as string;
         const credit = formData.get('credit') as string;
-        console.log('## givePlayerPrizeOrCredit type', type)
-        console.log('## givePlayerPrizeOrCredit credit', credit)
         const playerResult = await sql<PlayerDB>`SELECT * FROM players WHERE id = ${playerId}`;
         const player = playerResult.rows[0];
         if (!player) {
@@ -405,8 +396,6 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
             };
         }
         const date = stringDate ?? (new Date()).toISOString().slice(0, 10);
-        console.log('## givePlayerPrizeOrCredit player', player)
-        console.log('## givePlayerPrizeOrCredit date', date)
 
         const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
         const winners = winnersResult.rows[0];
@@ -416,7 +405,6 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
                 message: 'Failed to find winners in DB.',
             };
         }
-        console.log('## givePlayerPrizeOrCredit winnersObject', winners.winners)
         const winnersObject = JSON.parse(winners.winners);
         const newWinnersObject = {...winnersObject};
         const playerObject = winnersObject[player.phone_number];
@@ -428,8 +416,6 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
         }
         const position = playerObject.position;
         const hasReceived = playerObject.hasReceived;
-        console.log('## givePlayerPrizeOrCredit position', position)
-        console.log('## givePlayerPrizeOrCredit hasReceived', hasReceived)
         if (hasReceived) {
             console.error('## givePlayerPrizeOrCredit Player has already received prize')
             return {
@@ -440,8 +426,6 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
         const tournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${day};`;
         const tournament = tournamentResult.rows[0];
         const tournamentName = tournament.name;
-        console.log('## givePlayerPrizeOrCredit day', day)
-        console.log('## givePlayerPrizeOrCredit tournamentName', tournamentName)
 
         if (type === 'credit') {
             const amount = Number(credit);
@@ -453,21 +437,15 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
             }
             const playerCurrentBalance = player.balance;
             const playerNewBalance = playerCurrentBalance + amount;
-            console.log('## givePlayerPrizeOrCredit playerCurrentBalance', playerCurrentBalance)
-            console.log('## givePlayerPrizeOrCredit playerNewBalance', playerNewBalance)
 
             const note = `#${position} - מקום ${tournamentName}`;
-            console.log('## givePlayerPrizeOrCredit note', note)
 
             await sql`UPDATE players SET balance = ${playerNewBalance} WHERE phone_number = ${player.phone_number}`;
-            console.log('## givePlayerPrizeOrCredit after updating player balance')
 
             await sql`
       INSERT INTO history (phone_number, change, note, type)
       VALUES (${player.phone_number}, ${amount}, ${note}, 'credit')
     `;
-
-            console.log('## givePlayerPrizeOrCredit after inserting new history log')
 
         }
 
@@ -476,7 +454,6 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
             hasReceived: true,
         }
         await sql`UPDATE winners SET winners=${JSON.stringify(newWinnersObject)} WHERE date = ${winners.date}`;
-        console.log('## givePlayerPrizeOrCredit after updating winners object')
 
     }catch(error){
         console.error('## givePlayerPrizeOrCredit error', error)
@@ -834,40 +811,26 @@ export async function removeOldRsvp(){
 }
 
 
-// async function validatePlayer(phoneNumber: string) {
-//     const [playerResult, userHistoryResult] = await Promise.all([
-//         sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phoneNumber}`,
-//         sql<LogDB>`SELECT * FROM history WHERE phone_number = ${phoneNumber}`]);
-//
-//     const player = playerResult.rows[0];
-//     const playerHistoryLogs = userHistoryResult.rows;
-//     if (!player) {
-//         return;
-//     }
-//     if (!playerHistoryLogs || playerHistoryLogs.length === 0) {
-//         return;
-//     }
-//     const sum = playerHistoryLogs.reduce((acc, log) => {
-//         return acc + log.change;
-//     }  ,0);
-//
-//     if (sum !== player.balance) {
-//
-//         console.log('######')
-//         console.log('player.balance:',player.balance)
-//         console.log('sum:',sum)
-//         console.log('sum:',sum)
-//         playerHistoryLogs.forEach(log=>{
-//             console.log(JSON.stringify(log))
-//         })
-//         console.log('######')
-//         console.error('balance mismatch');
-//     }
-// }
+async function validatePlayers() {
+   const allPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
+   const allLogs = (await sql<LogDB>`SELECT * FROM history`).rows;
 
-// function validate(phoneNumber: string) {
-    // setTimeout(() => {
-    //     validatePlayer(phoneNumber);
-    // },10000)
 
-// }
+    allPlayers.forEach(player=>{
+        const playerHistoryLogs = allLogs.filter(log => log.phone_number === player.phone_number);
+
+        const sum = playerHistoryLogs.reduce((acc, log) => {
+            return acc + log.change;
+        }  ,0);
+
+        if (sum !== player.balance) {
+            console.error('######')
+            console.error('player:',player.phone_number)
+            console.error('player balance:',player.balance)
+            console.error('history sum:',sum)
+            console.error('!!!! balance mismatch !!!!');
+        }
+    })
+}
+
+// setInterval(validatePlayers, 1000 * 60 * 60);

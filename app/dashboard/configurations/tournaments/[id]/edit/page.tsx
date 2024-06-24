@@ -4,7 +4,8 @@ import {fetchTournamentByDay} from '@/app/lib/data';
 import { notFound } from 'next/navigation';
 export default async function Page({ params }: { params: { id: string } }) {
     const dayOfTheWeek = params.id;
-    const tournament = await fetchTournamentByDay(dayOfTheWeek);
+
+    const tournament = await fetchTournamentByDay( dayOfTheWeek.slice(0, 1).toUpperCase() + dayOfTheWeek.slice(1).toLowerCase());
     if (!tournament) {
         notFound();
     }
