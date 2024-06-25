@@ -15,21 +15,14 @@ import {useSearchParams} from "next/dist/client/components/navigation";
 export function DeletePlayer({ id }: { id: string }) {
   const deletePlayerWithId = deletePlayer.bind(null, id);
 
-  const onSubmit = (formData: FormData) => {
-    if (confirm("Are you sure?")) {
-      deletePlayerWithId();
-    }
-  };
-
-
-  return (
-      <form action={onSubmit}>
-        <button className="rounded-md border p-2 hover:bg-gray-100">
+  return (<button className="rounded-md border p-2 hover:bg-gray-100" onClick={()=>{
+            if (confirm("Are you sure?")) {
+                deletePlayerWithId();
+            }
+        }}>
           <span className="sr-only">Delete</span>
           <TrashIcon className="w-5"/>
-        </button>
-      </form>
-  );
+        </button>);
 }
 
 export function ImportPlayers() {
