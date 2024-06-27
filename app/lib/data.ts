@@ -120,8 +120,8 @@ async function getTodayHistory(){
   return todayHistoryResults.rows.filter(({ type }) => type != 'prize');
 }
 
-async function getAllPlayersWithCredit()  {
-  const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE balance > 99 ORDER BY name`;
+async function getAllPlayersForCreditUsage()  {
+  const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE balance > -4000 ORDER BY name`;
 
   return playersResult.rows;
 }
@@ -510,7 +510,7 @@ export async function fetchTournamentsData() {
 export async function fetchPlayersWithEnoughCredit(){
   noStore();
   try {
-    return await getAllPlayersWithCredit();
+    return await getAllPlayersForCreditUsage();
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the fetch incomes.');
