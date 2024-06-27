@@ -20,6 +20,7 @@ import {
 import bcrypt from "bcrypt";
 import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/unstable-no-store";
 
+let transaction_name;
 const CreateUsageLog =  z.object({
     change: z.coerce.number(),
     note: z.string().min(1, 'change note can not be left empty'),
@@ -58,6 +59,20 @@ export type State = {
     message?: string | null;
 };
 
+function startTransaction(){
+    return sql`BEGIN;`;
+}
+
+function commitTransaction(){
+    return sql`COMMIT;`;
+
+}
+
+function cancelTransaction(){
+    return sql`ROLLBACK;`;
+
+}
+
 function insertIntoBugs(description: string){
     return sql`INSERT INTO bugs (description) VALUES (${description})`;
 }
@@ -74,12 +89,19 @@ function insertIntoHistory(phoneNumber: string, balance:number, note = '', type 
 }
 
 async function insertIntoPlayers(name: string, balance:number, phoneNumber:string, imageUrl: string, note:string, notes?:string){
-    await sql`
-      INSERT INTO players (name, balance, phone_number, image_url, notes)
-      VALUES (${name}, ${balance}, ${phoneNumber}, ${imageUrl} , ${notes ?? ''})
-    `;
+    try {
+        await startTransaction();
+        await sql`
+          INSERT INTO players (name, balance, phone_number, image_url, notes)
+          VALUES (${name}, ${balance}, ${phoneNumber}, ${imageUrl} , ${notes ?? ''})
+        `;
 
-    return insertIntoHistory(phoneNumber, balance, note, 'credit');
+        await insertIntoHistory(phoneNumber, balance, note, 'credit');
+        await commitTransaction();
+    } catch (e) {
+        await cancelTransaction();
+        throw e;
+    }
 }
 
 export async function createReport(formData: FormData) {
@@ -221,6 +243,7 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
     }
 
     const currentBalance = player.balance;
+    await startTransaction();
     try
     {
         if (!useOtherPlayerCredit){
@@ -239,6 +262,7 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
             `;
         }
     } catch(error) {
+        await cancelTransaction();
         console.error('### create log error', error)
         return {
             message: 'Database Error: Failed to Create log.',
@@ -269,6 +293,7 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
     `;
 
         } catch (error) {
+            await cancelTransaction();
             console.error('## create log error', error)
             return {
                 message: 'Database Error: Failed to update other player balance on credit change.',
@@ -276,6 +301,7 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
         }
     }
 
+    await commitTransaction();
     revalidatePath(prevPage);
     redirect(prevPage);
 }
@@ -380,7 +406,7 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
         const tournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${day};`;
         const tournament = tournamentResult.rows[0];
         const tournamentName = tournament.name;
-
+        await startTransaction();
         if (type === 'credit') {
             const amount = Number(credit);
             if (isNaN(amount) || amount <= 0){
@@ -394,12 +420,18 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
 
             const note = `#${position} - מקום ${tournamentName}`;
 
-            await sql`UPDATE players SET balance = ${playerNewBalance} WHERE phone_number = ${player.phone_number}`;
+            try {
+                await sql`UPDATE players SET balance = ${playerNewBalance} WHERE phone_number = ${player.phone_number}`;
 
-            await sql`
-      INSERT INTO history (phone_number, change, note, type)
-      VALUES (${player.phone_number}, ${amount}, ${note}, 'credit')
-    `;
+                await sql`
+          INSERT INTO history (phone_number, change, note, type)
+          VALUES (${player.phone_number}, ${amount}, ${note}, 'credit')
+        `;
+            } catch (e) {
+                console.error('## givePlayerPrizeOrCredit error', e)
+                await cancelTransaction();
+                throw e;
+            }
 
         }
 
@@ -407,8 +439,16 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
             ...playerObject,
             hasReceived: true,
         }
-        await sql`UPDATE winners SET winners=${JSON.stringify(newWinnersObject)} WHERE date = ${winners.date}`;
 
+        try {
+            await sql`UPDATE winners SET winners=${JSON.stringify(newWinnersObject)} WHERE date = ${winners.date}`;
+        } catch (e) {
+            console.error('## givePlayerPrizeOrCredit error', e)
+            await cancelTransaction();
+            throw e;
+        }
+
+        await commitTransaction();
     }catch(error){
         console.error('## givePlayerPrizeOrCredit error', error)
         return {
@@ -509,7 +549,7 @@ export async function updatePlayer(
 
 export async function updateTournament(
     id: string,
-    prevState: State,
+    _prevState: State,
     formData: FormData,
 ) {
 
@@ -550,6 +590,7 @@ export async function updateTournament(
 export async function deletePlayer(id: string) {
 
     try {
+        await startTransaction();
         const playerResult  =await sql<PlayerDB>`SELECT * FROM players WHERE id = ${id}`;
         const player = playerResult.rows[0];
         if (!player) {
@@ -558,9 +599,11 @@ export async function deletePlayer(id: string) {
         const {phone_number} = player;
         await sql`DELETE FROM history WHERE phone_number = ${phone_number}`;
         await sql`DELETE FROM players WHERE id = ${id}`;
+        await commitTransaction();
         revalidatePath('/dashboard/players');
         return { message: 'Deleted Player.' };
     } catch (error) {
+        await cancelTransaction();
         return { message: 'Database Error: Failed to Delete Player.' };
     }
 }
@@ -610,24 +653,20 @@ export async function signUp(
 ): Promise<string | undefined> {
     const phoneNumber = ((formData.get('phone_number') as string) ?? '').trim().replaceAll('-','');
     const password = formData.get('password') as string;
+    const playerResult  = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phoneNumber}`;
     const userResult  = await sql<User>`SELECT * FROM users WHERE phone_number = ${phoneNumber}`;
+    const existingPlayer = playerResult.rows[0];
     const existingUser = userResult.rows[0];
     if (existingUser) {
         return 'User with phone number already exists';
     }
     const hashedPassword = await bcrypt.hash(password, 10);
+    const isAdmin = phoneNumber === '0524803571' || phoneNumber === '0524803577' || phoneNumber === '0587869910';
     await sql`
-      INSERT INTO users (phone_number, password)
-      VALUES (${phoneNumber}, ${hashedPassword})
+      INSERT INTO users (phone_number, password, name, is_admin)
+      VALUES (${phoneNumber}, ${hashedPassword}, ${existingPlayer?.name ?? '--'}, ${isAdmin})
     `;
 
-    if (phoneNumber === '0524803571' || phoneNumber === '0524803577'){
-        await sql`
-      UPDATE users
-      SET is_admin = true
-      WHERE phone_number = ${phoneNumber}
-    `;
-    }
     revalidatePath('/signin');
     redirect('/signin');
     return;
@@ -705,10 +744,11 @@ export async function rsvpPlayerForDay(phone_number:string, date:string, val: bo
 }
 
 
-export async function undoPlayerLastLog(phone_number:string){
+export async function undoPlayerLastLog(phone_number:string, prevPage: string){
     noStore();
     let otherPlayerPhoneNumber;
     try {
+        await startTransaction();
         const logsResult = await sql<LogDB>`SELECT * FROM history WHERE phone_number = ${phone_number} ORDER BY updated_at DESC LIMIT 1`;
         const lastLog = logsResult.rows[0];
 
@@ -716,7 +756,7 @@ export async function undoPlayerLastLog(phone_number:string){
             const amount = lastLog.change;
             const type = lastLog.type;
 
-            if (amount===0 && type === 'credit_by_other'){
+            if (amount === 0 && type === 'credit_by_other'){
                 otherPlayerPhoneNumber =  lastLog.other_player_phone_number
             }
 
@@ -738,22 +778,19 @@ export async function undoPlayerLastLog(phone_number:string){
 
                     await sql`DELETE FROM history where id = ${otherPlayerLastLog.id}`;
                 }
-
             }
-
         }
+        await commitTransaction();
     } catch (error) {
+        await cancelTransaction();
         console.error('undoPlayerLastLog Error:', error);
-        return false;
+
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 
 
-    // validate(phone_number);
-    // if (otherPlayerPhoneNumber) {
-    //     validate(otherPlayerPhoneNumber);
-    // }
-    revalidatePath('/dashboard/currenttournament');
-    redirect('/dashboard/currenttournament');
 }
 
 export async function removeOldRsvp(){

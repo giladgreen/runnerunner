@@ -3,6 +3,7 @@
 import { PlayerDB} from '@/app/lib/definitions';
 import { undoPlayerLastLog} from "@/app/lib/actions";
 import Image from "next/image";
+import {usePathname, useSearchParams} from "next/navigation";
 
 const formatPlayerEntries = (
     entries: number,
@@ -30,10 +31,11 @@ export default function EntriesButton({
 }: {
   player: PlayerDB;
 }) {
+    const currentPage = `${usePathname()}?${useSearchParams().toString()}`
     return (
       <div onClick={() => {
           if (confirm("Undo last player change?")) {
-              undoPlayerLastLog(player.phone_number)
+              undoPlayerLastLog(player.phone_number, currentPage)
           }
 
 
