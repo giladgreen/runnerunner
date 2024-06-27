@@ -162,7 +162,7 @@ async function handleCreditByOther(type: string, otherPlayerPhoneNumber: string,
                 message: 'did npt get other person data.',
             };
         }
-        const otherPlayer = await getPlayerByPhoneNumber(otherPlayerPhoneNumber as string)
+        otherPlayer = await getPlayerByPhoneNumber(otherPlayerPhoneNumber as string)
         if (!otherPlayer){
             console.error('### did not find other person data')
             return {

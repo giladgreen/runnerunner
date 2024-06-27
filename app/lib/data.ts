@@ -116,12 +116,13 @@ async function getPlayerHistory(playerPhoneNumber: string){
   return historyData.rows;
 }
 async function getTodayHistory(){
-  const todayHistoryResults = await sql`SELECT * FROM history WHERE change < 0 AND updated_at > now() - interval '12 hour'  ORDER BY updated_at DESC`;
+  const todayHistoryResults = await sql`SELECT * FROM history WHERE change <= 0 AND updated_at > now() - interval '12 hour'  ORDER BY updated_at DESC`;
   return todayHistoryResults.rows.filter(({ type }) => type != 'prize');
 }
 
-async function getAllPlayersWithCredit(min: number)  {
-  const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE balance > ${min}`;
+async function getAllPlayersWithCredit()  {
+  const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE balance > 99 ORDER BY name`;
+
   return playersResult.rows;
 }
 async function getAllPlayers()  {
@@ -453,6 +454,7 @@ export async function fetchTournamentsData() {
     const history =  await getTodayHistory()
 
     const dateToPlayerMap = {};
+
     return history.reduce((acc, { phone_number, change, type, updated_at }) => {
       const newAcc = {...acc};
       const dateAsString = updated_at.toISOString();
@@ -508,7 +510,7 @@ export async function fetchTournamentsData() {
 export async function fetchPlayersWithEnoughCredit(){
   noStore();
   try {
-    return await getAllPlayersWithCredit(99);
+    return await getAllPlayersWithCredit();
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the fetch incomes.');

@@ -8,6 +8,7 @@
     "prettier:check": "prettier --check --ignore-unknown .",
     "start": "next start",
     "seed": "node -r dotenv/config ./scripts/seed.js",
+    "find": "node -r dotenv/config ./scripts/find.js",
     "lint": "next lint"
   },
   "dependencies": {
