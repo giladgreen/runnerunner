@@ -32,7 +32,7 @@ export default function Page() {
                   </Link>
               </div>
               <div  className="block md:hidden" style={{ marginTop:60}}>
-                    Don't have an account yet?
+                  {`Don't have an account yet?`}
               </div>
               <div style={{ marginTop:40}}>
                     <SignUpButton />
