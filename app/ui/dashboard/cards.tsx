@@ -160,7 +160,7 @@ export async function TodayTournamentNameCardWrapper() {
 
             <Card title="Current Tournament" value={`${
                 // @ts-ignore
-                translation[todayTournament.day]} -  ${todayTournament.name}`} />
+                translation[todayTournament.day]} -  ${todayTournament.max_players === 0 && todayTournament.rsvp_required ? 'אין טורניר היום' : todayTournament.name}`} />
         </Suspense>
     </div>
 }

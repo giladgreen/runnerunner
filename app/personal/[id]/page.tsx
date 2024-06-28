@@ -60,7 +60,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     const noTournamentToday = rsvp_required && max_players === 0;
     // @ts-ignore
-    const todayTournamentData = noTournamentToday ? NO_TOURNAMENT_TODAY : `${translation[todayTournament.day]} -  ${todayTournament.name}`;
+    const todayTournamentData = noTournamentToday ? NO_TOURNAMENT_TODAY : `${translation[todayTournament.day]} -  ${todayTournament.max_players === 0 && todayTournament.rsvp_required ? 'אין טורניר היום' : todayTournament.name}`;
     // @ts-ignore
     const isRegisterForTodayTournament = player.rsvpForToday;
     const isFull = rsvpCountForTodayTournament >= max_players;

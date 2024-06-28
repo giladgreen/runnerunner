@@ -8,8 +8,14 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { Button } from './button';
+import {useSearchParams} from "next/navigation";
+import {useState} from "react";
 
 export default function SignInForm() {
+  const searchParams = useSearchParams();
+  const phone_number = searchParams.get('phone_number') ?? '';
+
+  const [phoneNumber, setPhoneNumber] = useState(phone_number)
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
 
   return (
@@ -31,6 +37,10 @@ export default function SignInForm() {
                     id="phone_number"
                     type="tel"
                     name="email"
+                    value={phoneNumber}
+                    onChange={(e) => {
+                      setPhoneNumber(e.target.value)
+                    }}
                     placeholder="please enter your phone number"
                     required
                 />

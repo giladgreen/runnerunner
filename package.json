@@ -26,6 +26,7 @@
     "next": "^14.0.2",
     "next-auth": "^5.0.0-beta.18",
     "next-cloudinary": "^6.6.2",
+    "node-fetch": "^3.3.2",
     "postcss": "8.4.31",
     "primereact": "^10.6.6",
     "react": "18.2.0",

@@ -9,7 +9,6 @@ import {
 import { Button } from '@/app/ui/button';
 import { createPlayer } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import {Checkbox} from "primereact/checkbox";
 import {useState} from "react";
 import {usePathname, useSearchParams} from "next/navigation";
 

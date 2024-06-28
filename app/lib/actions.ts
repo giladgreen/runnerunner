@@ -2,7 +2,8 @@
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-const _ = require("lodash");
+import _ from 'lodash';
+import fetch  from 'node-fetch';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
@@ -628,9 +629,8 @@ export async function authenticate(
     formData: FormData,
 ): Promise<string | undefined> {
     try {
-
-
-        const phoneNumber = ((formData.get('email') as string) ?? '').trim().replaceAll('-','');
+        let phoneNumber = ((formData.get('email') as string) ?? '').trim().replaceAll('-','');
+        phoneNumber = `${phoneNumber.startsWith('0') ? '' :'0'}${phoneNumber}`;
         formData.set('email', phoneNumber);
         await signIn('credentials', formData);
     } catch (error) {
@@ -648,10 +648,16 @@ export async function authenticate(
 }
 
 export async function signUp(
+    user_json_url:string,
     prevState: string | undefined,
     formData: FormData,
 ): Promise<string | undefined> {
-    const phoneNumber = ((formData.get('phone_number') as string) ?? '').trim().replaceAll('-','');
+    const response = await fetch(user_json_url,  { method: "Get" })
+    // @ts-ignore
+    const user_phone_number = (await response.json()).user_phone_number as string;
+
+    const phoneNumber = `${user_phone_number.startsWith('0') ? '' :'0'}${user_phone_number}`;
+
     const password = formData.get('password') as string;
     const playerResult  = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phoneNumber}`;
     const userResult  = await sql<User>`SELECT * FROM users WHERE phone_number = ${phoneNumber}`;
@@ -668,7 +674,7 @@ export async function signUp(
     `;
 
     revalidatePath('/signin');
-    redirect('/signin');
+    redirect(`/signin?phone_number=${phoneNumber}`);
     return;
 }
 
