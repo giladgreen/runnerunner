@@ -24,23 +24,7 @@ export default function SignUpButton() {
         };
     }, []);
 
-    setTimeout(()=>{
-        try {
-            if (document) {
-                // @ts-ignore
-                document.querySelector('.pe_signin_button > button').innerHTML = "Sign Up";
-                // @ts-ignore
-                document.querySelector('.pe_signin_button > button').style.backgroundColor = "rgb(37, 137, 254)";
-                // @ts-ignore
-                document.querySelector('.pe_signin_button > button').style.borderRedius = 4;
 
-            }
-        } catch (e) {
-            console.log(e)
-        }
-
-    },2000);
-
-    return (<div className="pe_signin_button" data-client-id="17886847141747406972"></div>
+    return (<div className="pe_signin_button" style={{ borderRadius: 8, backgroundColor: "rgb(37, 137, 254)" }} data-client-id="17886847141747406972"></div>
     );
 }

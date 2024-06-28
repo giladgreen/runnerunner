@@ -22,7 +22,7 @@ export default function SideNav() {
                 action={async () => {
                     'use server';
 
-                    await signOut();
+                    await signOut({ redirect: true, redirectTo: '/'});
                 }}
             >
                 <button

@@ -31,10 +31,10 @@ export default function Page() {
                       <span>Sign In</span><ArrowRightIcon className="w-5 md:w-6"/>
                   </Link>
               </div>
-              <div  className="block md:hidden" style={{ marginTop:60}}>
+              <div  className="block md:hidden" style={{ marginTop:20}}>
                   {`Don't have an account yet?`}
               </div>
-              <div style={{ marginTop:40}}>
+              <div >
                     <SignUpButton />
               </div>
           </div>
