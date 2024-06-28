@@ -4,6 +4,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import SignUpButton from "@/app/ui/players/sign-up-button";
 
+const myDataClientId = "17886847141747406972"
+//const theirDataClientId = "15695407177920574360"
 export default function Page() {
 
   return (
@@ -35,7 +37,7 @@ export default function Page() {
                   {`Don't have an account yet?`}
               </div>
               <div >
-                    <SignUpButton />
+                    <SignUpButton dataClientId={myDataClientId}/>
               </div>
           </div>
           <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">

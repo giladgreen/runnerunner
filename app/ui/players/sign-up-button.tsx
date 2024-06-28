@@ -2,7 +2,7 @@
 
 import {useEffect} from "react";
 
-export default function SignUpButton() {
+export default function SignUpButton({ dataClientId}:{dataClientId:string}) {
     const goTo = (jsonLocation:string)=>{
         window.location.href = `/signup?user_json_url=${jsonLocation}`;
     }
@@ -25,6 +25,6 @@ export default function SignUpButton() {
     }, []);
 
 
-    return (<div className="pe_signin_button" style={{ borderRadius: 8, backgroundColor: "rgb(37, 137, 254)" }} data-client-id="17886847141747406972"></div>
+    return (<div className="pe_signin_button" style={{ borderRadius: 8, backgroundColor: "rgb(37, 137, 254)" }} data-client-id={dataClientId}></div>
     );
 }
