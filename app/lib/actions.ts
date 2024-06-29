@@ -896,23 +896,29 @@ ${badPlayers.map(bp =>{
 
 
 async function importJob(players: PlayerDB[]) {
+    let log = ''
     await sql`BEGIN;`
-    console.log('## import step: 1 of 10')
+    const addToLog = (s:string)=>{
+        console.log(s);
+        log+=`
+${s}`
+    }
+    addToLog('## import step: 1 of 10')
     const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
-    console.log('## existingPlayersImages',existingPlayersImages.length)
-    console.log('## import step: 2 of 10')
+    addToLog('## existingPlayersImages',existingPlayersImages.length)
+    addToLog('## import step: 2 of 10')
     const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
-    console.log('## existingPlayers',existingPlayers.length)
+    addToLog('## existingPlayers',existingPlayers.length)
 
-    console.log('## import step: 3 of 10')
+    addToLog('## import step: 3 of 10')
     try {
         const date = '2024-01-01T10:10:00.000Z';
         const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
         const playersToUpdate = players.filter(p => existingPlayers.find(ep => ep.phone_number === p.phone_number));
-        console.log('## playersToInsert',playersToInsert.length)
-        console.log('## playersToUpdate',playersToUpdate.length)
+        addToLog(`## playersToInsert ${playersToInsert.length}`)
+        addToLog(`## playersToUpdate ${playersToUpdate.length}`)
 
-        console.log('## import step: 4 of 10')
+        addToLog('## import step: 4 of 10')
         playersToInsert.forEach(p => {
             const existingImage = existingPlayersImages.find(ep => ep.phone_number === p.phone_number);
             if (existingImage){
@@ -921,7 +927,7 @@ async function importJob(players: PlayerDB[]) {
                 p.image_url = '/players/default.png';
             }
         })
-        console.log('## import step: 5 of 10')
+        addToLog('## import step: 5 of 10')
         const playersToInsertBatches = _.chunk(playersToInsert, 10);
         const playersToUpdateBatches = _.chunk(playersToUpdate, 10);
 
@@ -930,35 +936,41 @@ async function importJob(players: PlayerDB[]) {
             await Promise.all(batch.map((player: PlayerDB) => sql`INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
             VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date}, ${player.image_url});`))
         }
-        console.log('## import step: 6 of 10')
+        addToLog('## import step: 6 of 10')
         //update existing players
         for (const batch of playersToUpdateBatches) {
             await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number}`))
         }
-        console.log('## import step: 7 of 10')
+        addToLog('## import step: 7 of 10')
         const archive = 'ארכיון'
         for (const batch of playersToInsertBatches) {
             await Promise.all(batch.map((player: PlayerDB) => {
                 sql`DELETE FROM history WHERE phone_number= ${player.phone_number}`
             }))
         }
-        console.log('## import step: 8 of 10')
+        addToLog('## import step: 8 of 10')
         for (const batch of playersToInsertBatches) {
             await Promise.all(batch.map((player: PlayerDB) => {
                 sql`INSERT INTO history (phone_number, change, note, type, updated_at, archive)
                 VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date}), true`
             }))
         }
-        console.log('## import step: 9 of 10')
+        addToLog('## import step: 9 of 10')
         for (const batch of playersToUpdateBatches) {
             await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE history SET change = ${player.balance} WHERE phone_number = ${player.phone_number} AND type = 'credit' AND note = ${archive}`))
         }
-        console.log('## import step: 10 of 10')
+        addToLog('## import step: 10 of 10')
         await sql`COMMIT;`
-        console.log('## import Done')
+        addToLog('## import Done')
 
+        sendEmail(TARGET_MAIL, 'import success', log)
     } catch (error) {
-        console.log('## Rollback Done')
+        // @ts-ignore
+        addToLog(`## import error: ${error.message}`)
+        addToLog('## Rollback Done')
+
+        sendEmail(TARGET_MAIL, 'import failed', log)
+
         await sql`ROLLBACK;`
         console.error('## importPlayers error', error)
         return {
