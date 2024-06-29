@@ -24,6 +24,9 @@ const DAY = 24 * 60 * 60 * 1000;
 const TARGET_MAIL = 'green.gilad+runner@gmail.com'
 let clearOldRsvpLastRun = (new Date('2024-06-15T10:00:00.000Z')).getTime();
 let mismatchMailSent = false;
+
+const ADMINS =  ['0587869910','0524803571','0524803577','0508874068'];
+
 function sendEmail(to: string, subject: string, body: string){
     const auth =  {
         user: process.env.EMAIL_ADDRESS,
@@ -709,7 +712,7 @@ export async function signUp(
         return 'User with phone number already exists';
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const isAdmin = phoneNumber === '0524803571' || phoneNumber === '0524803577' || phoneNumber === '0587869910';
+    const isAdmin = ADMINS.includes(phoneNumber);
     await sql`
       INSERT INTO users (phone_number, password, name, is_admin)
       VALUES (${phoneNumber}, ${hashedPassword}, ${existingPlayer?.name ?? '--'}, ${isAdmin})
@@ -737,6 +740,10 @@ export async function updateIsUserAdmin(id:string) {
     try {
         const users = await sql<User>`SELECT * FROM users WHERE id = ${id}`;
         const user = users.rows[0];
+
+        if (ADMINS.includes(user.phone_number)) {
+            return;
+        }
         await sql`UPDATE users SET is_admin = ${!user.is_admin} WHERE id = ${id}`;
     } catch (error) {
         console.error('Database Error:', error);
@@ -752,6 +759,25 @@ export async function updateIsUserWorker(id:string) {
         const users = await sql<User>`SELECT * FROM users WHERE id = ${id}`;
         const user = users.rows[0];
         await sql`UPDATE users SET is_worker = ${!user.is_worker} WHERE id = ${id}`;
+    } catch (error) {
+        console.error('Database Error:', error);
+        return false;
+    }
+    redirect('/dashboard/configurations/users');
+}
+
+
+
+export async function deleteUser(id:string) {
+    noStore();
+    try {
+        const users = await sql<User>`SELECT * FROM users WHERE id = ${id}`;
+        const user = users.rows[0];
+
+        if (user.is_admin){
+            return;
+        }
+        await sql`DELETE FROM users WHERE id = ${id}`;
     } catch (error) {
         console.error('Database Error:', error);
         return false;

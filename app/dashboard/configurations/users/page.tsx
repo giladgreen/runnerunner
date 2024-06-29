@@ -2,7 +2,7 @@ import { lusitana } from '@/app/ui/fonts';
 import { fetchAllUsers } from '@/app/lib/data';
 import React from "react";
 import {User} from "@/app/lib/definitions";
-import {updateIsUserAdmin, updateIsUserWorker} from "@/app/lib/actions";
+import {deleteUser, updateIsUserAdmin, updateIsUserWorker} from "@/app/lib/actions";
 
 export default async function Page() {
     const users = await fetchAllUsers();
@@ -29,6 +29,9 @@ export default async function Page() {
                         <th scope="col" className="px-3 py-5 font-medium thin-column">
                             is operator
                         </th>
+                        <th scope="col" className="px-3 py-5 font-medium thin-column">
+
+                        </th>
                     </tr>
                     </thead>
                     <tbody className="bg-white">
@@ -48,6 +51,9 @@ export default async function Page() {
                             </td>
                             <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
                                 <UpdateWorkerUser user={user}/>
+                            </td>
+                            <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
+                                <DeleteUser user={user}/>
                             </td>
                         </tr>
                     ))}
@@ -89,6 +95,26 @@ function UpdateWorkerUser({user}: { user: User }) {
         <form action={onSubmit}>
             <button className="">
                 {user.is_worker ? '✅' : '☑️'}
+            </button>
+        </form>
+    );
+}
+
+function DeleteUser({user}: { user: User }) {
+    const deleteUserWithId = deleteUser.bind(null, user.id);
+
+    const onSubmit = async (_formData: FormData) => {
+        'use server'
+        await deleteUserWithId();
+    };
+
+    if (user.is_admin){
+        return null;
+    }
+    return (
+        <form action={onSubmit}>
+            <button style={{ border: '1px solid black', background: 'orange', borderRadius: 5, padding: '2px 6px' }}>
+                Delete user
             </button>
         </form>
     );
