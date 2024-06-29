@@ -927,15 +927,18 @@ ${s}`
                 p.image_url = '/players/default.png';
             }
         })
+
+        sendEmail(TARGET_MAIL, 'import finished #4', log)
         addToLog('## import step: 5 of 10')
-        const playersToInsertBatches = _.chunk(playersToInsert, 10);
-        const playersToUpdateBatches = _.chunk(playersToUpdate, 10);
+        const playersToInsertBatches = _.chunk(playersToInsert, 50);
+        const playersToUpdateBatches = _.chunk(playersToUpdate, 50);
 
         //insert new players
         for (const batch of playersToInsertBatches) {
             await Promise.all(batch.map((player: PlayerDB) => sql`INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
             VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date}, ${player.image_url});`))
         }
+        sendEmail(TARGET_MAIL, 'import finished #5', log)
         addToLog('## import step: 6 of 10')
         //update existing players
         for (const batch of playersToUpdateBatches) {
@@ -955,6 +958,7 @@ ${s}`
                 VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date}), true`
             }))
         }
+        sendEmail(TARGET_MAIL, 'import finished #8', log)
         addToLog('## import step: 9 of 10')
         for (const batch of playersToUpdateBatches) {
             await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE history SET change = ${player.balance} WHERE phone_number = ${player.phone_number} AND type = 'credit' AND note = ${archive}`))
