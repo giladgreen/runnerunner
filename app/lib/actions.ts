@@ -905,10 +905,10 @@ ${s}`
     }
     addToLog('## import step: 1 of 10')
     const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
-    addToLog('## existingPlayersImages',existingPlayersImages.length)
+    addToLog(`## existingPlayersImages ${existingPlayersImages.length}`)
     addToLog('## import step: 2 of 10')
     const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
-    addToLog('## existingPlayers',existingPlayers.length)
+    addToLog(`## existingPlayers ${existingPlayers.length}`)
 
     addToLog('## import step: 3 of 10')
     try {
