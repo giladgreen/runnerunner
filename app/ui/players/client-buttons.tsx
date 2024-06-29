@@ -4,7 +4,6 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import {
     deletePlayer, deletePrize,
     importPlayers,
-    resetAllPlayersAndHistory,
 } from '@/app/lib/actions';
 import {Button} from "@/app/ui/button";
 import React from "react";
@@ -161,22 +160,6 @@ ${prizesData}
         </>
             );
             }
-
-export function ResetPlayersAndHistory() {
-    return (
-        <>
-            <Button
-                onClick={async () => {
-                    if (confirm("Are you sure?")) {
-                        await resetAllPlayersAndHistory();
-                    }
-                }}
-            >
-                <span >Reset</span>
-            </Button>
-        </>
-    );
-}
 
 export function DeletePrize({ id }: { id: string }) {
     const prevPage = `${usePathname()}?${useSearchParams().toString()}`

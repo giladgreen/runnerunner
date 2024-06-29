@@ -3,7 +3,6 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import nodemailer from 'nodemailer';
-import _ from 'lodash';
 import fetch  from 'node-fetch';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
@@ -24,7 +23,7 @@ import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/u
 const DAY = 24 * 60 * 60 * 1000;
 const TARGET_MAIL = 'green.gilad+runner@gmail.com'
 let clearOldRsvpLastRun = (new Date('2024-06-15T10:00:00.000Z')).getTime();
-
+let mismatchMailSent = false;
 function sendEmail(to:string, subject:string, body:string){
     const auth =  {
         user: process.env.EMAIL_ADDRESS,
@@ -150,6 +149,7 @@ async function insertIntoPlayers(name: string, balance:number, phoneNumber:strin
 
         await insertIntoHistory(phoneNumber, balance, note, 'credit');
         await commitTransaction();
+        validatePlayers();
     } catch (e) {
         await cancelTransaction();
         throw e;
@@ -210,19 +210,6 @@ async function getPlayerByPhoneNumber(phoneNumber: string){
     return playersResult.rows[0] ?? null;
 }
 
-export async function resetAllPlayersAndHistory() {
-//     try {
-//         await sql`DELETE FROM history`;
-//         await sql`DELETE FROM players`;
-//     } catch (error) {
-//         console.error('## resetAllPlayersAndHistory error', error)
-//         return {
-//             message: 'Database Error: Failed to reset Players.',
-//         };
-//     }
-    revalidatePath('/dashboard');
-    redirect('/dashboard');
-}
 
 
 async function handleCreditByOther(type: string, otherPlayerPhoneNumber: string, change:number, note:string, player:PlayerForm){
@@ -356,6 +343,7 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
     }
 
     await commitTransaction();
+    validatePlayers();
     revalidatePath(prevPage);
     redirect(prevPage);
 }
@@ -509,6 +497,7 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
             message: 'Database Error: Failed to givePlayerPrizeOrCredit.',
         };
     }finally {
+        validatePlayers();
         revalidatePath(prevPage);
         redirect(prevPage);
     }
@@ -846,11 +835,10 @@ export async function undoPlayerLastLog(phone_number:string, prevPage: string){
         console.error('undoPlayerLastLog Error:', error);
 
     }finally {
+        validatePlayers();
         revalidatePath(prevPage);
         redirect(prevPage);
     }
-
-
 }
 
 async function validatePlayers() {
@@ -876,8 +864,8 @@ async function validatePlayers() {
         }
     }).filter(Boolean);
 
-   if (badPlayers.length){
-
+   if (badPlayers.length && !mismatchMailSent){
+       mismatchMailSent = true;
        sendEmail(TARGET_MAIL, '!!MISMATCH FOUND!!', `
      
 ${badPlayers.map(bp =>{
@@ -938,7 +926,7 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
 
         await sql`COMMIT;`
         console.log('## import Done')
-
+        sendEmail(TARGET_MAIL, 'Import is done', `inserted ${playersToInsert.length} players`)
     } catch (error) {
         await sql`ROLLBACK;`
         // @ts-ignore
