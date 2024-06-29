@@ -914,8 +914,9 @@ async function importJob(players: PlayerDB[]) {
         const playersToUpdate = players.filter(p => existingPlayers.find(ep => ep.phone_number === p.phone_number));
         console.log(`## playersToInsert ${playersToInsert.length}`)
         console.log(`## playersToUpdate ${playersToUpdate.length}`)
+        sendEmail(TARGET_MAIL, 'import start', `playersToInsert: ${playersToInsert.length},  playersToUpdate:${playersToUpdate.length}`)
 
-        console.log('## import step: 4 of 10')
+
         playersToInsert.forEach(p => {
             const existingImage = existingPlayersImages.find(ep => ep.phone_number === p.phone_number);
             if (existingImage){
@@ -926,9 +927,9 @@ async function importJob(players: PlayerDB[]) {
         })
 
 
-        console.log('## import step: 5 of 10')
-        const playersToInsertBatches = _.chunk(playersToInsert, 50);
-        const playersToUpdateBatches = _.chunk(playersToUpdate, 50);
+
+        const playersToInsertBatches = _.chunk(playersToInsert, 10);
+        const playersToUpdateBatches = _.chunk(playersToUpdate, 10);
 
         //insert new players
         for (const batch of playersToInsertBatches) {
@@ -945,20 +946,15 @@ async function importJob(players: PlayerDB[]) {
             }))
         }
 
-        console.log('## import step: 6 of 10')
+
         //update existing players
         for (const batch of playersToUpdateBatches) {
             await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number}`))
         }
 
-
-        console.log('## import step: 7 of 10')
-
-        console.log('## import step: 9 of 10')
         for (const batch of playersToUpdateBatches) {
             await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE history SET change = ${player.balance} WHERE phone_number = ${player.phone_number} AND type = 'credit' AND note = ${archive}`))
         }
-        console.log('## import step: 10 of 10')
         await sql`COMMIT;`
         console.log('## import Done')
 
