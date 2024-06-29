@@ -11,7 +11,7 @@ import { useFormState } from 'react-dom';
 import {PlayerDB, PlayerForm, TournamentDB} from "@/app/lib/definitions";
 import {useEffect, useState} from "react";
 import SearchablePlayersDropdown from "@/app/ui/players/searchable-players-dropdown";
-
+import Image from "next/image";
 
 export function UseCreditForm({players, player, tournaments, hide, prevPage, username} : { players: PlayerDB[], prevPage:string, player: PlayerDB, tournaments:TournamentDB[], hide?: ()=>void, username?:string}) {
   const initialState = { message: null, errors: {} };
@@ -441,6 +441,13 @@ export default function CreateLogForm({player} : {player: PlayerDB}) {
   return (
       <div style={{ display: 'flex' , justifyContent: 'space-between'}} >
         <AddToBalanceForm player={player}/>
+        <Image
+            src={player.image_url}
+            className="mr-2"
+            width={300}
+            height={500}
+            alt={`profile picture`}
+        />
         <UseCreditForPrizeForm player={player} />
 
       </div>

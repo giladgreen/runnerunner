@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import {formatCurrency} from "@/app/lib/utils";
 import HistoryTable from "@/app/ui/players/history-table";
 import SideNavUser from "@/app/ui/dashboard/sidenav-user";
+import Image from "next/image";
 
 export default async function Page({ params }: { params: { pid: string } }) {
     const playerId = params.pid;
@@ -27,13 +28,26 @@ export default async function Page({ params }: { params: { pid: string } }) {
                     }
                 ]}
             />
-            <div>
+            <div style={{display:'flex'}}>
+            <div style={{ flex: 1}}>
                 <div>Phone number: {player.phone_number}  </div>
                 <div> {player.notes}  </div>
                 <h1 style={{zoom: 2}}><b>Current Balance: {formatCurrency(player.balance)}</b></h1>
                 <hr style={{marginTop: 10, marginBottom: 20}}/>
 
                 <HistoryTable player={player} isRestrictedData={false}/>
+            </div>
+            <div style={{ flex: `0 0 200px;`, padding:20}}>
+                <Image
+                    src={player.image_url}
+                    className="mr-2"
+                    width={200}
+                    height={250}
+                    alt={`profile picture`}
+                />
+
+
+            </div>
             </div>
         </div>
     </div>

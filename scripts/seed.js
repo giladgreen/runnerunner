@@ -64,10 +64,11 @@ async function seedUsers(client) {
     `;
 
     console.log(`Created "users" table`);
-    await  client.sql`delete from users`;
+    const existingUsers = (await client.sql`select * from users`).rows;
+    const usersToInsert = users.filter(user => !existingUsers.find(u => u.phone_number === user.phone_number))
     // Insert data into the "users" table
     const insertedUsers = await Promise.all(
-      users.map(async (user) => {
+        usersToInsert.map(async (user) => {
         const hashedPassword = await bcrypt.hash(user.password, 10);
         return client.sql`
         INSERT INTO users (phone_number, password, is_admin, is_worker, name)
@@ -347,3 +348,5 @@ main().catch((err) => {
     err,
   );
 });
+
+///SELECT indexname, tablename, indexdef FROM pg_indexes
