@@ -20,8 +20,23 @@ import {
 } from "@/app/lib/definitions";
 import bcrypt from "bcrypt";
 import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/unstable-no-store";
+const DAY = 24 * 60 * 60 * 1000;
+let clearOldRsvpLastRun = (new Date('2024-06-15T10:00:00.000Z')).getTime();
 
-let transaction_name;
+export async function removeOldRsvp(){
+    const now = (new Date()).getTime();
+    if (now - clearOldRsvpLastRun < DAY){
+        return;
+    }
+    try {
+        await sql`DELETE FROM rsvp WHERE date < now() - interval '48 hour'`;
+        clearOldRsvpLastRun = (new Date()).getTime();
+    } catch (error) {
+        console.error('rsvpPlayerForDay Error:', error);
+    }
+}
+
+
 const CreateUsageLog =  z.object({
     change: z.coerce.number(),
     note: z.string().min(1, 'change note can not be left empty'),
@@ -721,6 +736,7 @@ export async function updateIsUserWorker(id:string) {
 export async function rsvpPlayerForDay(phone_number:string, date:string, val: boolean, prevPage: string){
     noStore();
     try {
+        // await removeOldRsvp();
 
         const rsvpResult = await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${phone_number} AND date = ${date}`;
         const existingRsvp = rsvpResult.rows[0];
@@ -799,13 +815,6 @@ export async function undoPlayerLastLog(phone_number:string, prevPage: string){
 
 }
 
-export async function removeOldRsvp(){
-    try {
-        await sql`DELETE FROM rsvp WHERE date < now() - interval '48 hour'`;
-    } catch (error) {
-        console.error('rsvpPlayerForDay Error:', error);
-    }
-}
 
 
 async function validatePlayers() {
@@ -829,8 +838,6 @@ async function validatePlayers() {
         }
     })
 }
-
-// setInterval(validatePlayers, 1000 * 60 * 60);
 
 
 

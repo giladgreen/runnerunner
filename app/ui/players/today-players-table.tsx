@@ -7,7 +7,11 @@ import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 import {PlayerDB} from "@/app/lib/definitions";
 import OpenPositionModalButton from "@/app/ui/players/open-position-modal-button";
 import OpenPrizeModalButton from "@/app/ui/players/open-prize-modal-button";
-import {fetchFeatureFlags, fetchPlayersWithEnoughCredit, fetchTournaments} from "@/app/lib/data";
+import {
+  fetchFeatureFlags,
+  fetchPlayersWithEnoughCredit,
+  fetchTournaments
+} from "@/app/lib/data";
 import EntriesButton from "@/app/ui/players/entries-button";
 
 export default async function TodaysPlayersTable({ userId, worker, players, username}:{players: PlayerDB[], username?:string,  userId?:string, worker?:boolean}) {
@@ -15,7 +19,9 @@ export default async function TodaysPlayersTable({ userId, worker, players, user
   const { prizesEnabled, placesEnabled, rsvpEnabled} = await fetchFeatureFlags();
 
   const tournaments = await fetchTournaments();
+
   const playersWithEnoughCredit = await fetchPlayersWithEnoughCredit();
+
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
   const todayTournament = tournaments.find((tournament) => tournament.day === dayOfTheWeek);

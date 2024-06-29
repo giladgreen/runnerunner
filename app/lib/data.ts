@@ -120,11 +120,6 @@ async function getTodayHistory(){
   return todayHistoryResults.rows.filter(({ type }) => type != 'prize');
 }
 
-async function getAllPlayersForCreditUsage()  {
-  const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE balance > -4000 ORDER BY name`;
-
-  return playersResult.rows;
-}
 async function getAllPlayers()  {
   const [allPlayersResult, rsvpResults] = await Promise.all([sql<PlayerDB>`SELECT * FROM players`, sql<RSVPDB>`SELECT * FROM rsvp;`])
   const allPlayers = allPlayersResult.rows;
@@ -355,7 +350,6 @@ export async function fetchFilteredPlayers(
   sortBy: string = 'updated_at'
 ) {
   noStore();
-  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
     const playersResultPromise = fetchSortedPlayers(query, sortBy, currentPage)
@@ -510,7 +504,9 @@ export async function fetchTournamentsData() {
 export async function fetchPlayersWithEnoughCredit(){
   noStore();
   try {
-    return await getAllPlayersForCreditUsage();
+    const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE balance > -4000 ORDER BY name`;
+
+    return playersResult.rows;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the fetch incomes.');

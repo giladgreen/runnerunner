@@ -131,6 +131,10 @@ async function seedPlayers(client) {
   );
 `;
 
+    await client.sql`CREATE INDEX IF NOT EXISTS players_idx ON players (phone_number);`
+    await client.sql`CREATE INDEX IF NOT EXISTS players_name_idx ON players (name);`
+    await client.sql`CREATE INDEX IF NOT EXISTS players_balance_idx ON players (balance);`
+
     console.log(`Created "players" table`);
 
     return {
@@ -160,6 +164,10 @@ async function seedHistory(client) {
          updated_at timestamp with time zone NOT NULL DEFAULT now()
       );
     `;
+    await client.sql`CREATE INDEX IF NOT EXISTS history_idx ON history (phone_number);`
+    await client.sql`CREATE INDEX IF NOT EXISTS history_change_idx ON history (change);`
+    await client.sql`CREATE INDEX IF NOT EXISTS history_type_idx ON history (type);`
+    await client.sql`CREATE INDEX IF NOT EXISTS history_updated_at_idx ON history (updated_at);`
 
     console.log(`Created "history" table`);
 
@@ -205,6 +213,8 @@ async function seedRSVP(client) {
          phone_number TEXT NOT NULL
       );
     `;
+    await client.sql`CREATE INDEX IF NOT EXISTS rsvp_date_idx ON rsvp (date);`
+    await client.sql`CREATE INDEX IF NOT EXISTS rsvp_phone_number_idx ON rsvp (phone_number);`
 
     console.log(`Created "rsvp" table`);
 
