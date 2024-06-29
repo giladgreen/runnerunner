@@ -843,17 +843,18 @@ async function validatePlayers() {
 
 
 export async function importPlayers(players: PlayerDB[]) {
-    console.log('## import step: 1')
+    await sql`BEGIN;`
+    console.log('## import step: 1 of 10')
     const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
-    console.log('## import step: 2')
+    console.log('## import step: 2 of 10')
     const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
-    console.log('## import step: 3')
+    console.log('## import step: 3 of 10')
     try {
         const date = '2024-01-01T10:10:00.000Z';
         const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
         const playersToUpdate = players.filter(p => existingPlayers.find(ep => ep.phone_number === p.phone_number));
 
-        console.log('## import step: 4')
+        console.log('## import step: 4 of 10')
         playersToInsert.forEach(p => {
             const existingImage = existingPlayersImages.find(ep => ep.phone_number === p.phone_number);
             if (existingImage){
@@ -862,7 +863,7 @@ export async function importPlayers(players: PlayerDB[]) {
                 p.image_url = '/players/default.png';
             }
         })
-        console.log('## import step: 5')
+        console.log('## import step: 5 of 10')
         const playersToInsertBatches = _.chunk(playersToInsert, 10);
         const playersToUpdateBatches = _.chunk(playersToUpdate, 10);
 
@@ -871,33 +872,35 @@ export async function importPlayers(players: PlayerDB[]) {
             await Promise.all(batch.map((player: PlayerDB) => sql`INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
             VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date}, ${player.image_url});`))
         }
-        console.log('## import step: 6')
+        console.log('## import step: 6 of 10')
         //update existing players
         for (const batch of playersToUpdateBatches) {
             await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number}`))
         }
-        console.log('## import step: 7')
+        console.log('## import step: 7 of 10')
         const archive = 'ארכיון'
         for (const batch of playersToInsertBatches) {
             await Promise.all(batch.map((player: PlayerDB) => {
                 sql`DELETE FROM history WHERE phone_number= ${player.phone_number}`
             }))
         }
-        console.log('## import step: 8')
+        console.log('## import step: 8 of 10')
         for (const batch of playersToInsertBatches) {
             await Promise.all(batch.map((player: PlayerDB) => {
                 sql`INSERT INTO history (phone_number, change, note, type, updated_at, archive)
                 VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date}), true`
             }))
         }
-        console.log('## import step: 9')
+        console.log('## import step: 9 of 10')
         for (const batch of playersToUpdateBatches) {
             await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE history SET change = ${player.balance} WHERE phone_number = ${player.phone_number} AND type = 'credit' AND note = ${archive}`))
         }
-        console.log('## import step: 10')
-
-
+        console.log('## import step: 10 of 10')
+        await sql`COMMIT;`
+        console.log('## import Done')
+        
     } catch (error) {
+        await sql`ROLLBACK;`
         console.error('## importPlayers error', error)
         return {
             message: 'Database Error: Failed to import Players.',
