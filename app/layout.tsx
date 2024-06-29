@@ -13,9 +13,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-    <body className={`${inter.className} antialiased`}>
-    {children}</body>
-    </html>
+      <html lang="en">
+      <head>
+        {(
+            // eslint-disable-next-line @next/next/no-sync-scripts
+            <script
+                data-project-id="bEjW3thbOGbrhv74GMfN46hNJydELbAVuIYZBwxm"
+                data-is-production-environment="false"
+                src="https://snippet.meticulous.ai/v1/meticulous.js"
+            />
+        )}
+      </head>
+      <body className={`${inter.className} antialiased`}>
+      {children}</body>
+      </html>
   );
 }
