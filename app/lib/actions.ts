@@ -24,7 +24,7 @@ const DAY = 24 * 60 * 60 * 1000;
 const TARGET_MAIL = 'green.gilad+runner@gmail.com'
 let clearOldRsvpLastRun = (new Date('2024-06-15T10:00:00.000Z')).getTime();
 let mismatchMailSent = false;
-function sendEmail(to:string, subject:string, body:string){
+function sendEmail(to: string, subject: string, body: string){
     const auth =  {
         user: process.env.EMAIL_ADDRESS,
             pass: process.env.GMAIL_APP_PASSWORD,
@@ -47,13 +47,13 @@ function sendEmail(to:string, subject:string, body:string){
 console.log('## sending email to:', to)
 console.log('## subject:', subject)
 console.log('## body:', body)
-    // transporter.sendMail(mailOptions, function(error: any, info: { response: string; }){
-    //     if (error) {
-    //         console.error('error sending mail:',error.message);
-    //     } else {
-    //         console.log('Email sent: ' + info.response);
-    //     }
-    // });
+    transporter.sendMail(mailOptions, function(error: any, info: { response: string; }){
+        if (error) {
+            console.error('error sending mail:',error.message);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
 }
 
 
