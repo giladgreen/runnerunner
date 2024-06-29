@@ -15,7 +15,7 @@ export default async function Page() {
                     },
                 ]}
             />
-            <CreatePlayerForm/>
+            <CreatePlayerForm prevPage="/dashboard/currenttournament"/>
         </main>
     );
 }

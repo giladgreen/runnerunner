@@ -53,8 +53,8 @@ export default function EditTournamentForm({
                       <PencilIcon
                           className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
                       <div id="name-error" aria-live="polite" aria-atomic="true">
-                          {state.errors?.name &&
-                              state.errors.name.map((error: string) => (
+                          {state?.errors?.name &&
+                              state?.errors.name.map((error: string) => (
                                   <div className="mt-2 text-sm text-red-500" key={error}>
                                       {error}
                                   </div>
@@ -84,8 +84,8 @@ export default function EditTournamentForm({
                       <PencilIcon
                           className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
                       <div id="buy_in-error" aria-live="polite" aria-atomic="true">
-                          {state.errors?.buy_in &&
-                              state.errors.buy_in.map((error: string) => (
+                          {state?.errors?.buy_in &&
+                              state?.errors.buy_in.map((error: string) => (
                                   <div className="mt-2 text-sm text-red-500" key={error}>
                                       {error}
                                   </div>
@@ -114,8 +114,8 @@ export default function EditTournamentForm({
                       <PencilIcon
                           className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
                       <div id="re_buy-error" aria-live="polite" aria-atomic="true">
-                          {state.errors?.re_buy &&
-                              state.errors.re_buy.map((error: string) => (
+                          {state?.errors?.re_buy &&
+                              state?.errors.re_buy.map((error: string) => (
                                   <div className="mt-2 text-sm text-red-500" key={error}>
                                       {error}
                                   </div>
@@ -146,8 +146,8 @@ export default function EditTournamentForm({
 
 
                       <div id="max_players-error" aria-live="polite" aria-atomic="true">
-                          {state.errors?.max_players &&
-                              state.errors.max_players.map((error: string) => (
+                          {state?.errors?.max_players &&
+                              state?.errors.max_players.map((error: string) => (
                                   <div className="mt-2 text-sm text-red-500" key={error}>
                                       {error}
                                   </div>

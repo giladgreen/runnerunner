@@ -12,8 +12,9 @@ import { useFormState } from 'react-dom';
 import {useState} from "react";
 import {usePathname, useSearchParams} from "next/navigation";
 
-export default function CreatePlayerForm() {
-  const prevPage = `${usePathname()}?${useSearchParams().toString()}`
+export default function CreatePlayerForm({prevPage}:{prevPage:string}) {
+  console.log('## CreatePlayerForm, prevPage',prevPage)
+
   const initialState = { message: null, errors: {} };
 
   const createPlayerWithPrevPage = createPlayer.bind(null, prevPage);
@@ -47,8 +48,8 @@ export default function CreatePlayerForm() {
                 className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
           </div>
           <div id="player-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.name &&
-                state.errors.name.map((error: string) => (
+            {state?.errors?.name &&
+                state?.errors.name.map((error: string) => (
                     <div className="mt-2 text-sm text-red-500" key={error}>
                       {error}
                     </div>
@@ -76,8 +77,8 @@ export default function CreatePlayerForm() {
                 className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
           </div>
           <div id="phone_number-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.phone_number &&
-                state.errors.phone_number.map((error: string) => (
+            {state?.errors?.phone_number &&
+                state?.errors.phone_number.map((error: string) => (
                     <div className="mt-2 text-sm text-red-500" key={error}>
                       {error}
                     </div>
@@ -108,8 +109,8 @@ export default function CreatePlayerForm() {
                   className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
             </div>
             <div id="balance-error" aria-live="polite" aria-atomic="true">
-              {state.errors?.balance &&
-                  state.errors.balance.map((error: string) => (
+              {state?.errors?.balance &&
+                  state?.errors.balance.map((error: string) => (
                       <div className="mt-2 text-sm text-red-500" key={error}>
                         {error}
                       </div>
@@ -140,8 +141,8 @@ export default function CreatePlayerForm() {
                 className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
           </div>
           <div id="note-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.note &&
-                state.errors.note.map((error: string) => (
+            {state?.errors?.note &&
+                state?.errors.note.map((error: string) => (
                     <div className="mt-2 text-sm text-red-500" key={error}>
                       {error}
                     </div>
@@ -169,8 +170,8 @@ export default function CreatePlayerForm() {
                 className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
           </div>
           <div id="notes-error" aria-live="polite" aria-atomic="true">
-            {state.errors?.notes &&
-                state.errors.notes.map((error: string) => (
+            {state?.errors?.notes &&
+                state?.errors.notes.map((error: string) => (
                     <div className="mt-2 text-sm text-red-500" key={error}>
                       {error}
                     </div>

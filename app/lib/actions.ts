@@ -2,6 +2,7 @@
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
+import nodemailer from 'nodemailer';
 import _ from 'lodash';
 import fetch  from 'node-fetch';
 import { redirect } from 'next/navigation';
@@ -21,7 +22,41 @@ import {
 import bcrypt from "bcrypt";
 import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/unstable-no-store";
 const DAY = 24 * 60 * 60 * 1000;
+const TARGET_MAIL = 'green.gilad+runner@gmail.com'
 let clearOldRsvpLastRun = (new Date('2024-06-15T10:00:00.000Z')).getTime();
+
+function sendEmail(to:string, subject:string, body:string){
+    const auth =  {
+        user: process.env.EMAIL_ADDRESS,
+            pass: process.env.GMAIL_APP_PASSWORD,
+    }
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth
+    });
+
+    const mailOptions = {
+        from: process.env.EMAIL_ADDRESS,
+        to,
+        subject,
+        text: body
+    };
+console.log('## sending email to:', to)
+console.log('## subject:', subject)
+console.log('## body:', body)
+    // transporter.sendMail(mailOptions, function(error: any, info: { response: string; }){
+    //     if (error) {
+    //         console.error('error sending mail:',error.message);
+    //     } else {
+    //         console.log('Email sent: ' + info.response);
+    //     }
+    // });
+}
+
 
 export async function removeOldRsvp(){
     const now = (new Date()).getTime();
@@ -136,7 +171,7 @@ export async function createReport(formData: FormData) {
     redirect('/dashboard/configurations');
 }
 
-export async function createPlayer(prevPage: string, prevState: State, formData: FormData) {
+export async function createPlayer(prevPage: string, _prevState: State, formData: FormData) {
     const name = formData.get('name') as string;
     const balance = formData.get('balance') as string;
     const note = formData.get('note') as string ?? '';
@@ -148,7 +183,6 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
     if (!image_url || image_url.trim().length < 7){
         image_url = '/players/default.png';
     }
-
     try {
         if (image_url !== '/players/default.png'){
             await insertIntoImages (phoneNumber,image_url);
@@ -164,6 +198,9 @@ export async function createPlayer(prevPage: string, prevState: State, formData:
             message: 'Database Error: Failed to Create Player.',
         };
     }
+
+    sendEmail(TARGET_MAIL, 'New player created', `player name: ${name}
+phone: ${phone_number}`)
     revalidatePath(prevPage);
     redirect(prevPage);
 }
@@ -816,43 +853,64 @@ export async function undoPlayerLastLog(phone_number:string, prevPage: string){
 
 }
 
-
-
 async function validatePlayers() {
+    console.log('## validatePlayers')
    const allPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
    const allLogs = (await sql<LogDB>`SELECT * FROM history`).rows;
 
-
-    allPlayers.forEach(player=>{
+   const badPlayers =  allPlayers.map(player=>{
         const playerHistoryLogs = allLogs.filter(log => log.phone_number === player.phone_number);
 
         const sum = playerHistoryLogs.reduce((acc, log) => {
             return acc + log.change;
         }  ,0);
 
-        if (sum !== player.balance) {
-            console.error('######')
-            console.error('player:',player.phone_number)
-            console.error('player balance:',player.balance)
-            console.error('history sum:',sum)
-            console.error('!!!! balance mismatch !!!!');
+        if (sum === player.balance) {
+            return null;
         }
-    })
-}
+        if (sum !== player.balance) {
+            return {
+                ...player,
+                sum
+            }
+        }
+    }).filter(Boolean);
 
+   if (badPlayers.length){
+
+       sendEmail(TARGET_MAIL, '!!MISMATCH FOUND!!', `
+     
+${badPlayers.map(bp =>{
+
+           // @ts-ignore
+    return  `player: ${bp.name}  phone: ${bp.phone_number}  balance: ${bp.balance}  history sum: ${bp.sum}   
+
+`
+       })}
+       
+         
+            
+            `)
+   }
+}
 
 
 export async function importPlayers(players: PlayerDB[]) {
     await sql`BEGIN;`
     console.log('## import step: 1 of 10')
     const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
+    console.log('## existingPlayersImages',existingPlayersImages.length)
     console.log('## import step: 2 of 10')
     const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
+    console.log('## existingPlayers',existingPlayers.length)
+
     console.log('## import step: 3 of 10')
     try {
         const date = '2024-01-01T10:10:00.000Z';
         const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
         const playersToUpdate = players.filter(p => existingPlayers.find(ep => ep.phone_number === p.phone_number));
+        console.log('## playersToInsert',playersToInsert.length)
+        console.log('## playersToUpdate',playersToUpdate.length)
 
         console.log('## import step: 4 of 10')
         playersToInsert.forEach(p => {
@@ -898,7 +956,7 @@ export async function importPlayers(players: PlayerDB[]) {
         console.log('## import step: 10 of 10')
         await sql`COMMIT;`
         console.log('## import Done')
-        
+
     } catch (error) {
         await sql`ROLLBACK;`
         console.error('## importPlayers error', error)
@@ -908,5 +966,4 @@ export async function importPlayers(players: PlayerDB[]) {
     }finally {
         redirect('/');
     }
-
 }
