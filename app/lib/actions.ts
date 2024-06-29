@@ -895,7 +895,7 @@ ${badPlayers.map(bp =>{
 }
 
 
-export async function importPlayers(players: PlayerDB[]) {
+async function importJob(players: PlayerDB[]) {
     await sql`BEGIN;`
     console.log('## import step: 1 of 10')
     const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
@@ -958,12 +958,15 @@ export async function importPlayers(players: PlayerDB[]) {
         console.log('## import Done')
 
     } catch (error) {
+        console.log('## Rollback Done')
         await sql`ROLLBACK;`
         console.error('## importPlayers error', error)
         return {
             message: 'Database Error: Failed to import Players.',
         };
-    }finally {
-        redirect('/');
     }
+}
+
+export async function importPlayers(players: PlayerDB[]) {
+    importJob(players)
 }
