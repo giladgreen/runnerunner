@@ -59,7 +59,7 @@ function ImportPlayersButton() {
     return <div className="config-section">
         <div><u><b>Import players from CSV file</b></u></div>
         <div>each line in the file should be in the form of:</div>
-        <div style={{marginBottom: 15}}><b>name, phone number, balance, notes</b></div>
+        <div style={{marginBottom: 15}}><b>phone number, name, balance, notes</b></div>
         <ImportPlayers/>
     </div>
 }

@@ -894,28 +894,21 @@ ${badPlayers.map(bp =>{
    }
 }
 
-
-async function importJob(players: PlayerDB[]) {
-    const archive = 'ארכיון'
-
-
-    await sql`BEGIN;`
-
-    console.log('## import step: 1 - get existing DB data')
-    const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
-    console.log(`## existingPlayersImages ${existingPlayersImages.length}`)
-    const existingPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
-    console.log(`## existingPlayers ${existingPlayers.length}`)
-
-    console.log('## import step: 2 - insert NEW data')
+export async function importPlayers(playersToInsert: PlayerDB[]) {
     try {
-        const date = '2024-01-01T10:10:00.000Z';
-        const playersToInsert = players.filter(p => !existingPlayers.find(ep => ep.phone_number === p.phone_number));
-        const playersToUpdate = players.filter(p => existingPlayers.find(ep => ep.phone_number === p.phone_number));
-        console.log(`## playersToInsert ${playersToInsert.length}`)
-        console.log(`## playersToUpdate ${playersToUpdate.length}`)
-        sendEmail(TARGET_MAIL, 'import start', `playersToInsert: ${playersToInsert.length},  playersToUpdate:${playersToUpdate.length}`)
+        await sql`BEGIN;`
 
+        await sql`DELETE from history;`
+        await sql`DELETE from players;`
+
+
+        console.log('## import step: 1 - get existing DB data')
+        const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
+
+        console.log('## import step: 2 - insert NEW data')
+
+        const date = '2024-01-01T10:10:00.000Z';
+        console.log(`## playersToInsert ${playersToInsert.length}`)
 
         playersToInsert.forEach(p => {
             const existingImage = existingPlayersImages.find(ep => ep.phone_number === p.phone_number);
@@ -926,54 +919,38 @@ async function importJob(players: PlayerDB[]) {
             }
         })
 
+        const arr = playersToInsert.map((player) => ({ ...player, updated_at: date }));
+
+        await sql.query(
+            `INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
+     SELECT name, phone_number, balance, notes, updated_at, image_url FROM json_populate_recordset(NULL::players, $1)`,
+            [JSON.stringify(arr)]
+        );
+
+        const arr2 = playersToInsert.map((player) => ({ ...player,change:player.balance, updated_at: date, note: 'ארכיון', type: 'credit', archive: true }));
+
+        await sql.query(
+            `INSERT INTO history (phone_number, change, note, type, updated_at, archive)
+     SELECT phone_number, change, note, type, updated_at, archive FROM json_populate_recordset(NULL::history, $1)`,
+            [JSON.stringify(arr2)]
+        );
 
 
-        const playersToInsertBatches = _.chunk(playersToInsert, 10);
-        const playersToUpdateBatches = _.chunk(playersToUpdate, 10);
-
-        //insert new players
-        for (const batch of playersToInsertBatches) {
-            await Promise.all(batch.map((player: PlayerDB) => sql`INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
-            VALUES (${player.name}, ${player.phone_number}, ${player.balance}, ${player.notes}, ${date}, ${player.image_url});`));
-
-            await Promise.all(batch.map((player: PlayerDB) => {
-                sql`DELETE FROM history WHERE phone_number= ${player.phone_number}`
-            }))
-
-            await Promise.all(batch.map((player: PlayerDB) => {
-                sql`INSERT INTO history (phone_number, change, note, type, updated_at, archive)
-                VALUES (${player.phone_number}, ${player.balance}, ${archive}, 'credit', ${date}), true`
-            }))
-        }
-
-
-        //update existing players
-        for (const batch of playersToUpdateBatches) {
-            await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE players SET balance = ${player.balance}, name=${player.name}, notes=${player.notes}, updated_at=${date} WHERE phone_number= ${player.phone_number}`))
-        }
-
-        for (const batch of playersToUpdateBatches) {
-            await Promise.all(batch.map((player: PlayerDB) => sql`UPDATE history SET change = ${player.balance} WHERE phone_number = ${player.phone_number} AND type = 'credit' AND note = ${archive}`))
-        }
         await sql`COMMIT;`
         console.log('## import Done')
 
-        sendEmail(TARGET_MAIL, 'import success', `playersToInsert: ${playersToInsert.length},  playersToUpdate:${playersToUpdate.length}`)
     } catch (error) {
+        await sql`ROLLBACK;`
         // @ts-ignore
         console.log(`## import error: ${error.message}`)
-        console.log('## Rollback Done')
-        // @ts-ignore
-        sendEmail(TARGET_MAIL, 'import failed', error.message)
 
-        await sql`ROLLBACK;`
-        console.error('## importPlayers error', error)
+        console.log('## Rollback Done')
         return {
             message: 'Database Error: Failed to import Players.',
         };
+    }finally {
+        validatePlayers();
     }
-}
 
-export async function importPlayers(players: PlayerDB[]) {
-    importJob(players)
+    redirect('/')
 }
