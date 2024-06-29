@@ -29,7 +29,8 @@ export async function removeOldRsvp(){
         return;
     }
     try {
-        await sql`DELETE FROM rsvp WHERE date < now() - interval '48 hour'`;
+        console.log('## remove Old Rsvp')
+        await sql`DELETE FROM rsvp WHERE created_at < now() - interval '48 hour'`;
         clearOldRsvpLastRun = (new Date()).getTime();
     } catch (error) {
         console.error('rsvpPlayerForDay Error:', error);
@@ -736,7 +737,7 @@ export async function updateIsUserWorker(id:string) {
 export async function rsvpPlayerForDay(phone_number:string, date:string, val: boolean, prevPage: string){
     noStore();
     try {
-        // await removeOldRsvp();
+        await removeOldRsvp();
 
         const rsvpResult = await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${phone_number} AND date = ${date}`;
         const existingRsvp = rsvpResult.rows[0];

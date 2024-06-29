@@ -210,7 +210,8 @@ async function seedRSVP(client) {
       CREATE TABLE IF NOT EXISTS rsvp (
          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
          date VARCHAR(20) NOT NULL,
-         phone_number TEXT NOT NULL
+         phone_number TEXT NOT NULL,
+        created_at timestamp with time zone NOT NULL DEFAULT now()
       );
     `;
     await client.sql`CREATE INDEX IF NOT EXISTS rsvp_date_idx ON rsvp (date);`
