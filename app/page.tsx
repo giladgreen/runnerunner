@@ -3,10 +3,10 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
 import SignUpButton from "@/app/ui/players/sign-up-button";
+import {fetchFeatureFlags} from "@/app/lib/data";
 
-const myDataClientId = "17886847141747406972"
-//const theirDataClientId = "15695407177920574360"
-export default function Page() {
+export default async function Page() {
+    const {  usePhoneValidation} = await fetchFeatureFlags();
 
   return (
     <main className="flex min-h-screen flex-col p-6">
@@ -37,7 +37,7 @@ export default function Page() {
                   {`Don't have an account yet?`}
               </div>
               <div >
-                    <SignUpButton dataClientId={myDataClientId}/>
+                  <SignUpButton usePhoneValidation={usePhoneValidation}/>
               </div>
           </div>
           <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">

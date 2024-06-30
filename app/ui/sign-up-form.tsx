@@ -11,14 +11,33 @@ import {useSearchParams} from "next/navigation";
 
 export default function SignUpForm() {
   const searchParams = useSearchParams();
-  const user_json_url = searchParams.get('user_json_url') ?? '';
-  const signUpWithJsonUrl = signUp.bind(null, user_json_url)
+  const user_json_url = searchParams.get('user_json_url');
+  const redirected = Boolean(user_json_url);
+  const signUpWithJsonUrl = signUp.bind(null, user_json_url as string);
   const [errorMessage, dispatch] = useFormState(signUpWithJsonUrl, undefined);
   return (
       <form action={dispatch} className="space-y-3">
         <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
           <div><b>Sign up:</b></div>
           <div className="w-full">
+            { !redirected && <div className="mt-4">
+              <label
+                  className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+                  htmlFor="password"
+              >
+                phone number
+              </label>
+              <div className="relative">
+                <input
+                    className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                    id="phone_number"
+                    type="text"
+                    name="phone_number"
+                    placeholder="Enter phone number"
+                    required
+                />
+              </div>
+            </div>}
             <div className="mt-4">
               <label
                   className="mb-3 mt-5 block text-xs font-medium text-gray-900"
@@ -65,7 +84,7 @@ function SignUpButton() {
   return (
       <Button className="mt-4 w-full" aria-disabled={pending}>
         Sign Up
-        <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+        <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50"/>
       </Button>
   );
 }

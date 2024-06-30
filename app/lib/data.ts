@@ -565,15 +565,17 @@ export async function fetchFeatureFlags() {
   try {
     const flagsResult = await getAllFlags();
 
-    const prizesEnabled = flagsResult.find(flag => flag.flag_name === 'prizes')?.is_open;
-    const placesEnabled = flagsResult.find(flag => flag.flag_name === 'places')?.is_open;
-    const rsvpEnabled = flagsResult.find(flag => flag.flag_name === 'rsvp')?.is_open;
-    const playerRsvpEnabled = flagsResult.find(flag => flag.flag_name === 'player_can_rsvp')?.is_open;
+    const prizesEnabled = !!flagsResult.find(flag => flag.flag_name === 'prizes')?.is_open;
+    const placesEnabled = !!flagsResult.find(flag => flag.flag_name === 'places')?.is_open;
+    const rsvpEnabled = !!flagsResult.find(flag => flag.flag_name === 'rsvp')?.is_open;
+    const playerRsvpEnabled = !!flagsResult.find(flag => flag.flag_name === 'player_can_rsvp')?.is_open;
+    const usePhoneValidation = !!flagsResult.find(flag => flag.flag_name === 'use_phone_validation')?.is_open;
     return {
       prizesEnabled,
       placesEnabled,
       rsvpEnabled,
-      playerRsvpEnabled
+      playerRsvpEnabled,
+      usePhoneValidation
     }
   } catch (error) {
     console.error('Database Error:', error);

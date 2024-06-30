@@ -694,12 +694,17 @@ export async function authenticate(
 
 export async function signUp(
     user_json_url:string,
-    prevState: string | undefined,
+    _prevState: string | undefined,
     formData: FormData,
 ): Promise<string | undefined> {
-    const response = await fetch(user_json_url,  { method: "Get" })
-    // @ts-ignore
-    const user_phone_number = (await response.json()).user_phone_number as string;
+    let user_phone_number;
+    if (user_json_url){
+        const response = await fetch(user_json_url,  { method: "Get" })
+        // @ts-ignore
+        user_phone_number = (await response.json()).user_phone_number as string;
+    } else{
+        user_phone_number = formData.get('phone_number') as string;
+    }
 
     const phoneNumber = `${user_phone_number.startsWith('0') ? '' :'0'}${user_phone_number}`;
 
