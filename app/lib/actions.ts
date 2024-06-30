@@ -59,7 +59,6 @@ console.log('## body:', body)
     });
 }
 
-
 export async function removeOldRsvp(){
     const now = (new Date()).getTime();
     if (now - clearOldRsvpLastRun < DAY){
@@ -163,6 +162,7 @@ export async function createReport(formData: FormData) {
     const description = formData.get('description') as string;
     try {
         await insertIntoBugs(description);
+        sendEmail(TARGET_MAIL, 'New bug report', description);
     } catch (error) {
         console.error('## createReport error', error)
         return {
@@ -212,8 +212,6 @@ async function getPlayerByPhoneNumber(phoneNumber: string){
     const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phoneNumber};`;
     return playersResult.rows[0] ?? null;
 }
-
-
 
 async function handleCreditByOther(type: string, otherPlayerPhoneNumber: string, change:number, note:string, player:PlayerForm){
     let otherPlayer;
@@ -624,6 +622,8 @@ export async function updateTournament(
       SET name = ${name}, buy_in = ${buy_in},re_buy = ${re_buy},max_players = ${max_players},rsvp_required=${rsvp_required}, updated_at=${date}
       WHERE id = ${id}
     `;
+
+        sendEmail(TARGET_MAIL, 'tournaments update', `name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`)
     } catch (error) {
         console.error('## updateTournament error', error)
         return { message: 'Database Error: Failed to update Tournament.' };
@@ -722,7 +722,7 @@ export async function signUp(
       INSERT INTO users (phone_number, password, name, is_admin)
       VALUES (${phoneNumber}, ${hashedPassword}, ${existingPlayer?.name ?? '--'}, ${isAdmin})
     `;
-
+    sendEmail(TARGET_MAIL, 'New user created', `phone: ${phoneNumber}  ${existingPlayer?.name ? `name: ${existingPlayer?.name}`:''}`)
     revalidatePath('/signin');
     redirect(`/signin?phone_number=${phoneNumber}`);
     return;
@@ -872,12 +872,11 @@ export async function undoPlayerLastLog(phone_number:string, prevPage: string){
     }
 }
 
-async function validatePlayers() {
-    console.log('## validatePlayers')
-   const allPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
-   const allLogs = (await sql<LogDB>`SELECT * FROM history`).rows;
+export async function getInvalidPlayers() {
+    const allPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
+    const allLogs = (await sql<LogDB>`SELECT * FROM history`).rows;
 
-   const badPlayers =  allPlayers.map(player=>{
+    const badPlayers =  allPlayers.map(player=>{
         const playerHistoryLogs = allLogs.filter(log => log.phone_number === player.phone_number);
 
         const sum = playerHistoryLogs.reduce((acc, log) => {
@@ -894,6 +893,12 @@ async function validatePlayers() {
             }
         }
     }).filter(Boolean);
+
+    return badPlayers;
+}
+async function validatePlayers() {
+    console.log('## validatePlayers')
+   const badPlayers = await getInvalidPlayers()
 
    if (badPlayers.length && !mismatchMailSent){
        mismatchMailSent = true;

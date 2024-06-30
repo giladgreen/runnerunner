@@ -650,3 +650,29 @@ export async function fetchUserById(id: string) {
     throw new Error('Failed to fetchPlayerByPhoneNumber.');
   }
 }
+
+export async function getInvalidPlayers() {
+  noStore();
+  const allPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
+  const allLogs = (await sql<LogDB>`SELECT * FROM history`).rows;
+
+  const badPlayers =  allPlayers.map(player=>{
+    const playerHistoryLogs = allLogs.filter(log => log.phone_number === player.phone_number);
+
+    const sum = playerHistoryLogs.reduce((acc, log) => {
+      return acc + log.change;
+    }  ,0);
+
+    if (sum === player.balance) {
+      return null;
+    }
+    if (sum !== player.balance) {
+      return {
+        ...player,
+        sum
+      }
+    }
+  }).filter(Boolean);
+
+  return badPlayers as PlayerDB[];
+}
