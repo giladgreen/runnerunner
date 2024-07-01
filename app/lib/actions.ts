@@ -670,7 +670,7 @@ export async function deletePrize( {id, prevPage}: {id: string, prevPage: string
 }
 
 export async function authenticate(
-    prevState: string | undefined,
+    _prevState: string | undefined,
     formData: FormData,
 ): Promise<string | undefined> {
     try {
@@ -723,9 +723,12 @@ export async function signUp(
       VALUES (${phoneNumber}, ${hashedPassword}, ${existingPlayer?.name ?? '--'}, ${isAdmin})
     `;
     sendEmail(TARGET_MAIL, 'New user created', `phone: ${phoneNumber}  ${existingPlayer?.name ? `name: ${existingPlayer?.name}`:''}`)
-    revalidatePath('/signin');
-    redirect(`/signin?phone_number=${phoneNumber}`);
-    return;
+
+    const signInFormData = new FormData();
+    signInFormData.set('email', phoneNumber);
+    signInFormData.set('password', password);
+    await signIn('credentials', signInFormData);
+    redirect(`/`);
 }
 
 export async function updateFFValue(name:string, newValue:boolean) {

@@ -15,7 +15,6 @@ export default function SignInForm() {
   const searchParams = useSearchParams();
   const phone_number = searchParams.get('phone_number') ?? '';
   const callbackUrl = searchParams.get('callbackUrl') ?? '';
-  console.log('## callbackUrl', callbackUrl)
 
   const [phoneNumber, setPhoneNumber] = useState(phone_number)
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);

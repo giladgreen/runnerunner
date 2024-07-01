@@ -1,7 +1,4 @@
-
 import SignInForm from "@/app/ui/sign-in-form";
-import {useSearchParams} from "next/navigation";
-
 export default function SignInPage() {
 
 
