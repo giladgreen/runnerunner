@@ -135,3 +135,31 @@
 .pe_signin_button > button {
     border: 2px solid red;
 }
+
+.confirmation-modal-wrapper{
+    background: rgba(0, 0, 0, 0.75);
+    z-index:20;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.confirmation-modal{
+    border: 2px solid rgb(0, 112, 243);
+    border-radius:6px;
+    padding:12px;
+    background: white;
+    box-shadow: 0 0 0 3px white;
+    text-align: center;
+    position: fixed;
+    top: 10vh;
+    width: 30vw;
+    left: 35vw;
+}
+.confirmation-modal-buttons{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}

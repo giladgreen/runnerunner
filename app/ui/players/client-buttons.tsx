@@ -6,22 +6,52 @@ import {
     importPlayers,
 } from '@/app/lib/actions';
 import {Button} from "@/app/ui/button";
-import React from "react";
+import React, {useState} from "react";
 import {PlayerDB, PrizeDB, TournamentDB} from "@/app/lib/definitions";
 import {usePathname} from "next/navigation";
 import {useSearchParams} from "next/dist/client/components/navigation";
 
-export function DeletePlayer({ id }: { id: string }) {
-  const deletePlayerWithId = deletePlayer.bind(null, id);
+export function AreYouSure({onConfirm, onCancel, text}:{text: string, onConfirm:()=>void, onCancel:()=>void}) {
 
-  return (<button className="rounded-md border p-2 hover:bg-gray-100" onClick={()=>{
-            if (confirm("Are you sure?")) {
-                deletePlayerWithId();
-            }
-        }}>
+  return (<div className="confirmation-modal-wrapper">
+      <div className="confirmation-modal">
+          <div>{text}</div>
+          <div className="confirmation-modal-buttons">
+              <button className="rounded-md border p-2 hover:bg-gray-100" onClick={onCancel}>
+                  <span >Cancel</span>
+              </button>
+              <button className="rounded-md border p-2 hover:bg-gray-100" onClick={()=>{
+                  console.log('onConfirm')
+
+                  onConfirm();
+              }}>
+                  <span >Yes</span>
+              </button>
+          </div>
+      </div>
+
+  </div>);
+}
+
+export function DeletePlayer({id}: { id: string }) {
+    const deletePlayerWithId = deletePlayer.bind(null, id);
+    const [showConfirmation, setShowConfirmation] = useState(false);
+
+    return <div>
+        <button className="rounded-md border p-2 hover:bg-gray-100" onClick={() => {
+            setShowConfirmation(true);
+          }
+        }>
           <span className="sr-only">Delete</span>
           <TrashIcon className="w-5"/>
-        </button>);
+        </button>
+        {showConfirmation && <AreYouSure onConfirm={()=>{
+            console.log('calling deletePlayerWithId')
+            deletePlayerWithId();
+        }}
+                                         onCancel={()=>setShowConfirmation(false)}
+                                         text="Delete Player?"/> }
+    </div>;
 }
 
 export function ImportPlayers() {
