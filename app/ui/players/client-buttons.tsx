@@ -44,7 +44,10 @@ export function DeletePlayer({id}: { id: string }) {
           <span className="sr-only">Delete</span>
           <TrashIcon className="w-5"/>
         </button>
-        {showConfirmation && <AreYouSure onConfirm={()=>deletePlayerWithId()}
+        {showConfirmation && <AreYouSure onConfirm={()=>{
+            setShowConfirmation(false);
+            deletePlayerWithId();
+        }}
          onCancel={()=>setShowConfirmation(false)}
          subtext="player's history would be deleted as well"
          text="Delete Player?"/> }
@@ -62,6 +65,7 @@ export function ImportPlayers() {
             </Button>
             <input type="file" id="fileInput" style={{ display:'none'}} accept=".csv"/>
             {showConfirmation && <AreYouSure onConfirm={()=>{
+                setShowConfirmation(false);
                 // @ts-ignore
                 const element = document?.getElementById('fileInput');
                 element?.addEventListener('change', function(e){
@@ -188,17 +192,24 @@ ${prizesData}
 
 export function DeletePrize({ id }: { id: string }) {
     const prevPage = `${usePathname()}?${useSearchParams().toString()}`
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     const deletePrizeWithId = deletePrize.bind(null, { id, prevPage});
 
     return (
+        <div>
         <div className="pointer" onClick={()=>{
-
-            if (confirm("Are you sure?")) {
-                deletePrizeWithId();
-            }
+            setShowConfirmation(true);
         }}>
             <u>prize delivered</u>
+        </div>
+            {showConfirmation && <AreYouSure onConfirm={()=>{
+                setShowConfirmation(false);
+                deletePrizeWithId();
+            }}
+                                             onCancel={()=>setShowConfirmation(false)}
+                                             subtext="this would delete the prize from this list"
+                                             text="Set Prize as delivered?"/> }
         </div>
     );
 }
