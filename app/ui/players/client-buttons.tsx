@@ -11,16 +11,17 @@ import {PlayerDB, PrizeDB, TournamentDB} from "@/app/lib/definitions";
 import {usePathname} from "next/navigation";
 import {useSearchParams} from "next/dist/client/components/navigation";
 
-export function AreYouSure({onConfirm, onCancel, text}:{text: string, onConfirm:()=>void, onCancel:()=>void}) {
+export function AreYouSure({onConfirm, onCancel, text, subtext}:{text: string,subtext?: string, onConfirm:()=>void, onCancel:()=>void}) {
 
   return (<div className="confirmation-modal-wrapper">
       <div className="confirmation-modal">
-          <div>{text}</div>
+          <div><b>{text}</b></div>
+          {subtext && <div style={{ fontSize: 13}}>{subtext}</div>}
           <div className="confirmation-modal-buttons">
-              <button className="rounded-md border p-2 hover:bg-gray-100" onClick={onCancel}>
+              <button className="rounded-md border p-2 hover:bg-gray-100 confirmation-modal-button" onClick={onCancel}>
                   <span >Cancel</span>
               </button>
-              <button className="rounded-md border p-2 hover:bg-gray-100" onClick={()=>{
+              <button className="rounded-md border p-2 hover:bg-gray-100 confirmation-modal-button" onClick={()=>{
                   console.log('onConfirm')
 
                   onConfirm();
@@ -50,6 +51,7 @@ export function DeletePlayer({id}: { id: string }) {
             deletePlayerWithId();
         }}
                                          onCancel={()=>setShowConfirmation(false)}
+                                         subtext="player's history would be deleted as well"
                                          text="Delete Player?"/> }
     </div>;
 }

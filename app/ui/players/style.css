@@ -149,17 +149,23 @@
 .confirmation-modal{
     border: 2px solid rgb(0, 112, 243);
     border-radius:6px;
-    padding:12px;
+    padding:15px;
     background: white;
     box-shadow: 0 0 0 3px white;
     text-align: center;
     position: fixed;
-    top: 10vh;
-    width: 30vw;
-    left: 35vw;
+    top: 30vh;
+    width: 50vw;
+    left: 25vw;
 }
 .confirmation-modal-buttons{
     display: flex;
     justify-content: space-around;
     margin-top: 20px;
+}
+
+.confirmation-modal-button{
+    padding: 5px;
+    margin: 5px;
+    min-width: 40px;
 }
