@@ -5,10 +5,11 @@ import {formatCurrency} from "@/app/lib/utils";
 import HistoryTable from "@/app/ui/players/history-table";
 import SideNavUser from "@/app/ui/dashboard/sidenav-user";
 import Image from "next/image";
+import TournamentsHistoryTable from "@/app/ui/players/tournaments-history-table";
 
 export default async function Page({ params }: { params: { pid: string } }) {
     const playerId = params.pid;
-    const player = await fetchPlayerById(playerId);
+    const player = await fetchPlayerById(playerId, true);
     if (!player) {
         notFound();
     }
@@ -36,6 +37,8 @@ export default async function Page({ params }: { params: { pid: string } }) {
                 <hr style={{marginTop: 10, marginBottom: 20}}/>
 
                 <HistoryTable player={player} isRestrictedData={false}/>
+
+                <TournamentsHistoryTable player={player}/>
             </div>
             <div style={{ flex: `0 0 200px;`, padding:20}}>
                 <Image

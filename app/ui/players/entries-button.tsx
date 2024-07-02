@@ -4,6 +4,8 @@ import { PlayerDB} from '@/app/lib/definitions';
 import { undoPlayerLastLog} from "@/app/lib/actions";
 import Image from "next/image";
 import {usePathname, useSearchParams} from "next/navigation";
+import {useState} from "react";
+import {AreYouSure} from "@/app/ui/players/client-buttons";
 
 const formatPlayerEntries = (
     entries: number,
@@ -31,16 +33,21 @@ export default function EntriesButton({
 }: {
   player: PlayerDB;
 }) {
+    const [showConfirmation, setShowConfirmation] = useState(false);
+
     const currentPage = `${usePathname()}?${useSearchParams().toString()}`
     return (
-      <div onClick={() => {
-          if (confirm("Undo last player change?")) {
-              undoPlayerLastLog(player.phone_number, currentPage)
-          }
-
-
-      }}  className="pointer">
-          {formatPlayerEntries(player.entries)}
+      <div >
+          <div onClick={() => setShowConfirmation(true)}  className="pointer">
+              {formatPlayerEntries(player.entries)}
+          </div>
+          {showConfirmation && <AreYouSure onConfirm={()=> {
+              setShowConfirmation(false);
+              undoPlayerLastLog(player.phone_number, currentPage);
+          }}
+       onCancel={()=>setShowConfirmation(false)}
+       subtext="this would revert the last entry"
+       text="Undo last player change?"/> }
       </div>
   );
 }

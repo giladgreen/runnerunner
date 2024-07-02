@@ -9,6 +9,7 @@ import {
 import Image from "next/image";
 import HistoryTable from "@/app/ui/players/history-table";
 import {rsvpPlayerForDay} from "@/app/lib/actions";
+import TournamentsHistoryTable from "@/app/ui/players/tournaments-history-table";
 
 const translation = {
     Sunday: 'יום ראשון',
@@ -156,6 +157,8 @@ export default async function Page({ params }: { params: { id: string } }) {
                     {separator}
 
                     <HistoryTable player={player} isRestrictedData/>
+
+                    <TournamentsHistoryTable player={player}/>
                 </div>
             </div>
         </div>

@@ -57,6 +57,20 @@ async function getUserById(userId: string){
   return usersResult.rows && usersResult.rows.length ? usersResult.rows[0] : null;
 }
 
+async function getPlayerTournamentsHistory(phoneNumber: string){
+  const data = await sql<WinnerDB>`SELECT * FROM winners WHERE winners like  ${`%${phoneNumber}%`};`;
+  const items = data?.rows;
+  return items.map(item => {
+    const winners = JSON.parse(item.winners);
+    const place = winners[phoneNumber]?.position;
+
+    return {
+      date: item.date,
+      tournament_name: item.tournament_name,
+      place
+    }
+  })
+}
 async function getPlayerById(playerId: string){
   const data = await sql<PlayerDB>`SELECT * FROM players WHERE id = ${playerId};`;
   const player = data?.rows[0];
@@ -582,10 +596,15 @@ export async function fetchFeatureFlags() {
     throw new Error('Failed to fetch flagsResult.');
   }
 }
-export async function fetchPlayerById(id: string) {
+export async function fetchPlayerById(id: string, addTournamentsHistoryData = false) {
   noStore();
   try {
-    return await getPlayerById(id);
+    const player = await getPlayerById(id);
+    if (player && addTournamentsHistoryData){
+      player.tournamentsData = await getPlayerTournamentsHistory(player!.phone_number);
+    }
+
+    return player;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetchPlayerById.');
@@ -632,6 +651,7 @@ export async function fetchPlayerByUserId(id: string) {
         const rsvp = await isPlayerRsvp(player.phone_number, todayDate)
         player.historyLog = await getPlayerHistory(player.phone_number);
         player.rsvpForToday = rsvp;
+        player.tournamentsData = await getPlayerTournamentsHistory(player!.phone_number);
       }
 
       return player;

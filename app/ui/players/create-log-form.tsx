@@ -356,9 +356,9 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm }) {
   );
 }
 
-export function AddToBalanceForm({player}: { player: PlayerForm }) {
+export function AddToBalanceForm({player, prevPage}: { player: PlayerForm, prevPage:string }) {
   const initialState = {message: null, errors: {}};
-  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, { player, prevPage: '/dashboard/players' });
+  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, { player, prevPage });
   // @ts-ignore
   const [state2, dispatch] = useFormState(createPlayerNewCreditLogWithPlayerData, initialState);
 
@@ -437,10 +437,10 @@ export function AddToBalanceForm({player}: { player: PlayerForm }) {
   );
 }
 
-export default function CreateLogForm({player} : {player: PlayerDB}) {
+export default function CreateLogForm({player, prevPage} : {player: PlayerDB, prevPage:string}) {
   return (
       <div style={{ display: 'flex' , justifyContent: 'space-between'}} >
-        <AddToBalanceForm player={player}/>
+        <AddToBalanceForm player={player} prevPage={prevPage}/>
         <Image
             src={player.image_url}
             className="mr-2"

@@ -58,6 +58,12 @@ export type ImageDB = {
   phone_number: string;
   image_url: string;
 }
+export type TournamentPlayerData = {
+  date: string,
+  tournament_name: string,
+  place: number,
+}
+
 export type PlayerDB = {
   id: string;
   name: string;
@@ -75,6 +81,7 @@ export type PlayerDB = {
   rsvpForToday: boolean;
   hasReceived: boolean;
   rsvps: string[];
+  tournamentsData: TournamentPlayerData[];
 };
 export type PrizeDB = {
   id: string,

@@ -38,6 +38,10 @@ const phoneToName = {
 
 
 function sendEmail(to: string, subject: string, body: string){
+    if (process.env.LOCAL==='true'){
+        console.log('## skipping sending email locally')
+        return;
+    }
     const auth =  {
         user: process.env.EMAIL_ADDRESS,
             pass: process.env.GMAIL_APP_PASSWORD,

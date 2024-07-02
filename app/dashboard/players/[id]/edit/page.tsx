@@ -5,12 +5,13 @@ import { notFound } from 'next/navigation';
 import {formatCurrency} from "@/app/lib/utils";
 import CreateLogForm from "@/app/ui/players/create-log-form";
 import HistoryTable from "@/app/ui/players/history-table";
+import TournamentsHistoryTable from "@/app/ui/players/tournaments-history-table";
 
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
     const { rsvpEnabled} = await fetchFeatureFlags();
     const tournaments = await fetchTournaments();
-    const player = await fetchPlayerById(id);
+    const player = await fetchPlayerById(id, true);
 
     if (!player) {
         notFound();
@@ -39,11 +40,13 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <div> {player.notes}  </div>
                 <h1 style={{zoom: 2}}><b>Current Balance: {formatCurrency(player.balance)}</b></h1>
                 <hr style={{marginTop: 10, marginBottom: 20}}/>
-                <CreateLogForm player={player}/>
+                <CreateLogForm player={player} prevPage={'/dashboard/players'}/>
 
                 <hr style={{marginTop: 20, marginBottom: 20}}/>
 
                 <HistoryTable player={player} isRestrictedData={false}/>
+
+                <TournamentsHistoryTable player={player}/>
             </div>
         </main>
     );
