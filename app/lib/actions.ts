@@ -154,6 +154,7 @@ function insertIntoHistory(phoneNumber: string, balance:number, note = '', type 
 async function insertIntoPlayers(name: string, balance:number, phoneNumber:string, imageUrl: string, note:string, notes?:string){
     try {
         await startTransaction();
+        console.log('## insertIntoPlayers, INSERT INTO players',name);
         await sql`
           INSERT INTO players (name, balance, phone_number, image_url, notes)
           VALUES (${name}, ${balance}, ${phoneNumber}, ${imageUrl} , ${notes ?? ''})
@@ -161,7 +162,6 @@ async function insertIntoPlayers(name: string, balance:number, phoneNumber:strin
 
         await insertIntoHistory(phoneNumber, balance, note, 'credit');
         await commitTransaction();
-        validatePlayers();
     } catch (e) {
         await cancelTransaction();
         throw e;
@@ -205,6 +205,8 @@ export async function createPlayer(prevPage: string, _prevState: State, formData
     }
     try {
         await insertIntoPlayers(name, Number(balance), phoneNumber, image_url,note, notes);
+        sendEmail(TARGET_MAIL, 'New player created', `player name: ${name}
+phone: ${phone_number}`)
     } catch (error) {
         console.error('## createPlayer error', error)
         return {
@@ -212,8 +214,6 @@ export async function createPlayer(prevPage: string, _prevState: State, formData
         };
     }
 
-    sendEmail(TARGET_MAIL, 'New player created', `player name: ${name}
-phone: ${phone_number}`)
     revalidatePath(prevPage);
     redirect(prevPage);
 }
