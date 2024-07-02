@@ -22,8 +22,6 @@ export function AreYouSure({onConfirm, onCancel, text, subtext}:{text: string,su
                   <span >Cancel</span>
               </button>
               <button className="rounded-md border p-2 hover:bg-gray-100 confirmation-modal-button" onClick={()=>{
-                  console.log('onConfirm')
-
                   onConfirm();
               }}>
                   <span >Yes</span>
@@ -46,73 +44,68 @@ export function DeletePlayer({id}: { id: string }) {
           <span className="sr-only">Delete</span>
           <TrashIcon className="w-5"/>
         </button>
-        {showConfirmation && <AreYouSure onConfirm={()=>{
-            console.log('calling deletePlayerWithId')
-            deletePlayerWithId();
-        }}
-                                         onCancel={()=>setShowConfirmation(false)}
-                                         subtext="player's history would be deleted as well"
-                                         text="Delete Player?"/> }
+        {showConfirmation && <AreYouSure onConfirm={()=>deletePlayerWithId()}
+         onCancel={()=>setShowConfirmation(false)}
+         subtext="player's history would be deleted as well"
+         text="Delete Player?"/> }
     </div>;
 }
 
 export function ImportPlayers() {
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     return (
         <>
             <Button
-            onClick={() => {
-                if (confirm("This would delete all existing player and their history, Are you sure?")) {
-                    // @ts-ignore
-                    const element = document?.getElementById('fileInput');
-                    element?.addEventListener('change', function(e){
-                        // @ts-ignore
-                        let file = e?.target?.files[0];
-
-                        let reader = new FileReader();
-                        reader.onload = async function(e){
-                            const fileContent = (e?.target?.result ?? '') as string;
-                            const players = fileContent.split('\n').map((line: string) => {
-                                if (line.trim().length === 0){
-                                    return false;
-                                }
-                                if (line.includes('name') && line.includes('balance')){
-                                    return false;
-                                }
-                                const parts = line.split(',');
-                                const player = {
-                                    phone_number: parts[0].trim().replaceAll('-', ''),
-                                    image_url: '',
-                                    name: parts[1].trim(),
-                                    balance: Number(parts[2]),
-                                    notes: '',
-                                }
-                                if (!player.phone_number.startsWith('0')){
-                                    player.phone_number = '0' + player.phone_number;
-                                }
-                                if (!player.notes){
-                                    player.notes = ''
-                                }else{
-                                    player.notes = player.notes.trim()
-                                }
-                                return player;
-                            }).filter(Boolean) as PlayerDB[];
-                            const relevantPlayers = players.filter((player) => player.balance !== 0 || player.phone_number.length > 6);
-                            await importPlayers(relevantPlayers);
-                        };
-                        reader.readAsText(file);
-                    });
-                    element?.click();
-                }
-
-
-            }}
-                >
-
+            onClick={() => setShowConfirmation(true)}>
             <span >import</span>
             </Button>
             <input type="file" id="fileInput" style={{ display:'none'}} accept=".csv"/>
+            {showConfirmation && <AreYouSure onConfirm={()=>{
+                // @ts-ignore
+                const element = document?.getElementById('fileInput');
+                element?.addEventListener('change', function(e){
+                    // @ts-ignore
+                    let file = e?.target?.files[0];
 
+                    let reader = new FileReader();
+                    reader.onload = async function(e){
+                        const fileContent = (e?.target?.result ?? '') as string;
+                        const players = fileContent.split('\n').map((line: string) => {
+                            if (line.trim().length === 0){
+                                return false;
+                            }
+                            if (line.includes('name') && line.includes('balance')){
+                                return false;
+                            }
+                            const parts = line.split(',');
+                            const player = {
+                                phone_number: parts[0].trim().replaceAll('-', ''),
+                                image_url: '',
+                                name: parts[1].trim(),
+                                balance: Number(parts[2]),
+                                notes: '',
+                            }
+                            if (!player.phone_number.startsWith('0')){
+                                player.phone_number = '0' + player.phone_number;
+                            }
+                            if (!player.notes){
+                                player.notes = ''
+                            }else{
+                                player.notes = player.notes.trim()
+                            }
+                            return player;
+                        }).filter(Boolean) as PlayerDB[];
+                        const relevantPlayers = players.filter((player) => player.balance !== 0 || player.phone_number.length > 6);
+                        await importPlayers(relevantPlayers);
+                    };
+                    reader.readAsText(file);
+                });
+                element?.click();
+            }}
+             onCancel={()=>setShowConfirmation(false)}
+             subtext="This would delete all existing players and their history"
+             text="Are you sure?"/> }
         </>
             );
             }
