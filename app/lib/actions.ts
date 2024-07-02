@@ -26,6 +26,16 @@ let clearOldRsvpLastRun = (new Date('2024-06-15T10:00:00.000Z')).getTime();
 let mismatchMailSent = false;
 
 const ADMINS =  ['0587869910','0524803571','0524803577','0508874068'];
+const WORKERS =  ['0526841902'];
+
+const phoneToName = {
+    '0587869910': 'גלעד גרין',
+    '0524803571': 'אבי אסרף',
+    '0524803577': 'עוז',
+    '0508874068': 'מירי',
+    '0526841902': 'דניאל',
+};
+
 
 function sendEmail(to: string, subject: string, body: string){
     const auth =  {
@@ -654,7 +664,7 @@ export async function deletePlayer(id: string) {
     }
 }
 
-export async function deletePrize( {id, prevPage}: {id: string, prevPage: string,},) {
+export async function deletePrize( {id, prevPage}: {id: string, prevPage: string,}) {
     try {
         const prizeResult  = await sql<PrizeDB>`SELECT * FROM prizes WHERE id = ${id}`;
         const prize = prizeResult.rows[0];
@@ -718,9 +728,12 @@ export async function signUp(
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const isAdmin = ADMINS.includes(phoneNumber);
+    const isWorker = WORKERS.includes(phoneNumber);
+    // @ts-ignore
+    const name = phoneToName[phoneNumber] ? phoneToName[phoneNumber] as string :  existingPlayer?.name ?? '--';
     await sql`
-      INSERT INTO users (phone_number, password, name, is_admin)
-      VALUES (${phoneNumber}, ${hashedPassword}, ${existingPlayer?.name ?? '--'}, ${isAdmin})
+      INSERT INTO users (phone_number, password, name, is_admin, is_worker)
+      VALUES (${phoneNumber}, ${hashedPassword}, ${name}, ${isAdmin}, ${isWorker})
     `;
     sendEmail(TARGET_MAIL, 'New user created', `phone: ${phoneNumber}  ${existingPlayer?.name ? `name: ${existingPlayer?.name}`:''}`)
 
