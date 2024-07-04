@@ -73,7 +73,7 @@ export default function SignInForm() {
               </div>
             </div>
           </div>
-          <SignInButton/>
+          <SignInButton phoneNumber={phoneNumber}/>
           <div
               className="flex h-8 items-end space-x-1"
               aria-live="polite"
@@ -91,13 +91,20 @@ export default function SignInForm() {
   );
 }
 
-function SignInButton() {
+function SignInButton({phoneNumber}:{phoneNumber:string}) {
   const { pending } = useFormStatus();
 
   return (
-      <Button className="mt-4 w-full" aria-disabled={pending}>
+      <Button className="mt-4 w-full" aria-disabled={pending} onClick={()=>{
+        try {
+          localStorage.setItem('phone_number', phoneNumber);
+        } catch (e) {
+          console.error('localStorage is not available', e);
+        }
+      }}>
         Sign In
         <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
       </Button>
   );
 }
+

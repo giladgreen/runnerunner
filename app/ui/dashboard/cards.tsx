@@ -166,8 +166,8 @@ export async function TodayTournamentNameCardWrapper() {
 }
 
 
-export async function getPlayersPrizesContent() {
-    const playersPrizes = await fetchPlayersPrizes();
+export async function getPlayersPrizesContent(playerPhone?: string, personal?:boolean) {
+    const playersPrizes = await fetchPlayersPrizes(playerPhone);
 
     if (!playersPrizes || playersPrizes.length === 0) return null;
 
@@ -181,12 +181,12 @@ export async function getPlayersPrizesContent() {
                 >
                     <div className="w-full rounded-md flex items-center  ">
                         <span style={{marginLeft: 25}}>{playersPrize!.tournament}</span>
-                        <span style={{marginLeft: 25}}>{playersPrize!.player!.name}</span>
-                        <span style={{marginLeft: 25}}>{playersPrize!.player!.phone_number}</span>
+                        {!personal && <span style={{marginLeft: 25}}>{playersPrize!.player!.name}</span>}
+                        {!personal && <span style={{marginLeft: 25}}>{playersPrize!.player!.phone_number}</span>}
                         <span style={{marginLeft: 25}}>{playersPrize!.prize}</span>
                     </div>
 
-                     <DeletePrize id={playersPrize.id}/>
+                    {!personal && <DeletePrize id={playersPrize.id}/>}
 
                 </div>
             })}
@@ -270,8 +270,8 @@ export async function FinalTablePlayers({title}: { title: string }) {
 }
 
 
-export async function PlayersPrizes({title}: { title: string }) {
-    const content = await getPlayersPrizesContent() as JSX.Element;
+export async function PlayersPrizes({title, playerPhoneNumber, personal}: { title: string, playerPhoneNumber?: string, personal?:boolean }) {
+    const content = await getPlayersPrizesContent(playerPhoneNumber, personal) as JSX.Element;
     if (!content) return null;
 
     return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1 full-width"

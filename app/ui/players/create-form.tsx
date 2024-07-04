@@ -13,8 +13,6 @@ import {useState} from "react";
 import {usePathname, useSearchParams} from "next/navigation";
 
 export default function CreatePlayerForm({prevPage}:{prevPage:string}) {
-  console.log('## CreatePlayerForm, prevPage',prevPage)
-
   const initialState = { message: null, errors: {} };
 
   const createPlayerWithPrevPage = createPlayer.bind(null, prevPage);

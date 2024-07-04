@@ -98,7 +98,7 @@ function ReportBugForm({bugs}: { bugs: BugDB[] }) {
 
 
 export default async function Page() {
-    const { prizesEnabled, placesEnabled, rsvpEnabled} = await fetchFeatureFlags();
+    const { prizesEnabled, placesEnabled, importEnabled} = await fetchFeatureFlags();
     const bugs = await fetchAllBugs();
     const invalidPlayers = await getInvalidPlayers();
     const players = await fetchAllPlayersForExport();
@@ -115,8 +115,8 @@ export default async function Page() {
             <Seperator/>
             <ExportPlayersButton players={players} playersPlaces={playersPlaces}  tournament={tournament} prizes={prizes} prizesEnabled={prizesEnabled} placesEnabled={placesEnabled}/>
             <Seperator/>
-            <ImportPlayersButton/>
-            <Seperator/>
+            {importEnabled && <ImportPlayersButton/>}
+            {importEnabled && <Seperator/>}
             <UserPermissionsLink/>
             <Seperator/>
             <TournamentsLink/>

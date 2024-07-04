@@ -59,7 +59,8 @@ async function seedUsers(client) {
         password TEXT NOT NULL,
         name TEXT NOT NULL DEFAULT 'unknown',
         is_admin BOOLEAN DEFAULT FALSE,
-        is_worker BOOLEAN DEFAULT FALSE
+        is_worker BOOLEAN DEFAULT FALSE,
+        created_at timestamp NOT NULL DEFAULT now()
       );
     `;
 
@@ -265,6 +266,21 @@ async function seedFF(client) {
     `;
 
     console.log(`Created "feature_flags" table`);
+    const flags = (await client.sql`SELECT * FROM feature_flags `).rows;
+    const flagsToInsert = [
+      {flag_name: 'places', is_open: true},
+      {flag_name: 'prizes', is_open: true},
+      {flag_name: 'rsvp', is_open: true},
+      {flag_name: 'player_can_rsvp', is_open: true},
+      {flag_name: 'use_phone_validation', is_open: true},
+      {flag_name: 'import', is_open: false},
+    ]
+
+
+    await Promise.all(flagsToInsert.filter(flag => !flags.find(f => f.flag_name === flag.flag_name)).map(flag =>{
+      return  client.sql`INSERT INTO feature_flags (flag_name, is_open)
+        VALUES (${flag.flag_name}, ${flag.is_open});`
+    }))
 
 
     return {

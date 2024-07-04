@@ -301,7 +301,7 @@ export async function fetchFinalTablePlayers(stringDate?: string) {
   }
 }
 
-export async function fetchPlayersPrizes() {
+export async function fetchPlayersPrizes(playerPhoneNumber?: string) {
   noStore();
   try {
     const prizes = await getAllPrizes()
@@ -312,7 +312,7 @@ export async function fetchPlayersPrizes() {
             prize.player = player;
         }
     });
-    return prizes
+    return !playerPhoneNumber ? prizes : prizes.filter(prize => prize.phone_number === playerPhoneNumber);
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch final table players data.');
@@ -584,12 +584,14 @@ export async function fetchFeatureFlags() {
     const rsvpEnabled = !!flagsResult.find(flag => flag.flag_name === 'rsvp')?.is_open;
     const playerRsvpEnabled = !!flagsResult.find(flag => flag.flag_name === 'player_can_rsvp')?.is_open;
     const usePhoneValidation = !!flagsResult.find(flag => flag.flag_name === 'use_phone_validation')?.is_open;
+    const importEnabled = !!flagsResult.find(flag => flag.flag_name === 'import')?.is_open;
     return {
       prizesEnabled,
       placesEnabled,
       rsvpEnabled,
       playerRsvpEnabled,
-      usePhoneValidation
+      usePhoneValidation,
+      importEnabled
     }
   } catch (error) {
     console.error('Database Error:', error);

@@ -245,7 +245,13 @@ export function SetPositionForm({player, hide, prevPage} : { player: PlayerForm,
 
 export function UseCreditForPrizeForm({player} : {player: PlayerForm }) {
   const initialState = { message: null, errors: {} };
-  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, { player, prevPage: '/dashboard/players' });
+  let phoneNumber;
+  try {
+    phoneNumber = localStorage.getItem('phone_number');
+  } catch (e) {
+    console.error('localStorage is not available', e);
+  }
+  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, { player, prevPage: '/dashboard/players', phoneNumber: (phoneNumber ?? '') });
 
   const initialText = `שחקן המיר קרדיט בפרס`;
   const initialAmount = 1000;
@@ -358,7 +364,14 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm }) {
 
 export function AddToBalanceForm({player, prevPage}: { player: PlayerForm, prevPage:string }) {
   const initialState = {message: null, errors: {}};
-  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, { player, prevPage });
+  let phoneNumber;
+  try {
+    phoneNumber = localStorage.getItem('phone_number');
+  } catch (e) {
+    console.error('localStorage is not available', e);
+  }
+
+  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, { player, prevPage, phoneNumber: phoneNumber ?? '' });
   // @ts-ignore
   const [state2, dispatch] = useFormState(createPlayerNewCreditLogWithPlayerData, initialState);
 

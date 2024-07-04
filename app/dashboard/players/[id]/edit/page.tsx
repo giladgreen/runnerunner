@@ -6,6 +6,7 @@ import {formatCurrency} from "@/app/lib/utils";
 import CreateLogForm from "@/app/ui/players/create-log-form";
 import HistoryTable from "@/app/ui/players/history-table";
 import TournamentsHistoryTable from "@/app/ui/players/tournaments-history-table";
+import {PlayersPrizes} from "@/app/ui/dashboard/cards";
 
 export default async function Page({ params }: { params: { id: string } }) {
     const id = params.id;
@@ -39,6 +40,12 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <div>Phone number: {player.phone_number}  </div>
                 <div> {player.notes}  </div>
                 <h1 style={{zoom: 2}}><b>Current Balance: {formatCurrency(player.balance)}</b></h1>
+
+                <div style={{marginTop: 20, marginBottom: 20}}>
+                    <PlayersPrizes title="Players Prizes" playerPhoneNumber={player.phone_number} />
+
+                </div>
+
                 <hr style={{marginTop: 10, marginBottom: 20}}/>
                 <CreateLogForm player={player} prevPage={'/dashboard/players'}/>
 

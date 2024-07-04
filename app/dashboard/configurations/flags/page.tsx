@@ -1,11 +1,9 @@
-import { lusitana } from '@/app/ui/fonts';
-import {fetchAllUsers, fetchFeatureFlags} from '@/app/lib/data';
+import { fetchFeatureFlags} from '@/app/lib/data';
 import React from "react";
-import {User} from "@/app/lib/definitions";
-import {updateFFValue, updateIsUserAdmin, updateIsUserWorker} from "@/app/lib/actions";
+import {updateFFValue} from "@/app/lib/actions";
 
 export default async function Page() {
-    const { prizesEnabled, placesEnabled, rsvpEnabled, playerRsvpEnabled, usePhoneValidation} = await fetchFeatureFlags();
+    const { prizesEnabled, placesEnabled, rsvpEnabled, playerRsvpEnabled, usePhoneValidation, importEnabled} = await fetchFeatureFlags();
 
     return (
         <div className="w-full">
@@ -26,6 +24,17 @@ export default async function Page() {
                     </tr>
                     </thead>
                     <tbody className="bg-white">
+                    <tr
+                        key={'importEnabled'}
+                        className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                    >
+                        <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                            <b>Import</b>
+                        </td>
+                        <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
+                            <UpdateFeatureFlag featureName={'import'} currentValue={Boolean(importEnabled)}/>
+                        </td>
+                    </tr>
                     <tr
                         key={'prizesEnabled'}
                         className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"

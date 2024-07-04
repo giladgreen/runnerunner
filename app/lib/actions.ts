@@ -158,7 +158,6 @@ function insertIntoHistory(phoneNumber: string, balance:number, note = '', type 
 async function insertIntoPlayers(name: string, balance:number, phoneNumber:string, imageUrl: string, note:string, notes?:string){
     try {
         await startTransaction();
-        console.log('## insertIntoPlayers, INSERT INTO players',name);
         await sql`
           INSERT INTO players (name, balance, phone_number, image_url, notes)
           VALUES (${name}, ${balance}, ${phoneNumber}, ${imageUrl} , ${notes ?? ''})
@@ -268,7 +267,7 @@ async function handleCreditByOther(type: string, otherPlayerPhoneNumber: string,
         otherHistoryNote
     }
 }
-export async function createPlayerLog(player: PlayerForm, formData: FormData, prevPage:string ,usage: boolean, username?:string){
+export async function createPlayerLog(player: PlayerForm, formData: FormData, prevPage:string ,usage: boolean, user: { userName?:string, phoneNumber?:string}){
     const validatedFields = CreateUsageLog.safeParse({
         change: formData.get('change'),
         note: formData.get('note'),
@@ -281,6 +280,15 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
         };
     }
 
+    let username = user.userName;
+    if (user.phoneNumber){
+        const userResult = await sql<User>`SELECT * FROM users WHERE phone_number = ${user.phoneNumber}`;
+        const userFromDB = userResult.rows[0];
+        if (userFromDB){
+            username = userFromDB.name ?? username ?? user.phoneNumber;
+        }
+    }
+    username = username ?? 'unknown';
     const change = validatedFields.data.change * (usage ? -1 : 1);
 
     let type = usage ? (formData.get('type') as string ?? 'prize') :  'credit' ;
@@ -305,16 +313,16 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
         if (!useOtherPlayerCredit){
             await sql`
               INSERT INTO history (phone_number, change, note, type, updated_by)
-              VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type}, ${username ?? 'super-admin'})
+              VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type}, ${username})
             `;
         } else {
             await sql`
               INSERT INTO history (phone_number, change, note, type, updated_by, other_player_phone_number)
-              VALUES (${player.phone_number}, ${0}, ${ historyNote}, ${'credit_by_other'}, ${username ?? 'super-admin'}, ${otherPlayerPhoneNumber as string})
+              VALUES (${player.phone_number}, ${0}, ${ historyNote}, ${'credit_by_other'}, ${username}, ${otherPlayerPhoneNumber as string})
             `;
             await sql`
               INSERT INTO history (phone_number, change, note, type, updated_by)
-              VALUES (${otherPlayerPhoneNumber as string}, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username ?? 'super-admin'})
+              VALUES (${otherPlayerPhoneNumber as string}, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username})
             `;
         }
     } catch(error) {
@@ -363,8 +371,8 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
     redirect(prevPage);
 }
 
-export async function createPlayerUsageLog(data : {player: PlayerForm, prevPage:string, username?: string}, _prevState: State, formData: FormData){
-    return createPlayerLog(data.player, formData, data.prevPage, true, data.username);
+export async function createPlayerUsageLog(data : {player: PlayerForm, prevPage:string, username?: string, phoneNumber?: string}, _prevState: State, formData: FormData){
+    return createPlayerLog(data.player, formData, data.prevPage, true, { userName: data.username, phoneNumber: data.phoneNumber});
 }
 
 export async function setPlayerPosition({playerId, prevPage}:{playerId: string, prevPage: string}, prevState: State, formData: FormData){
@@ -551,8 +559,8 @@ export async function setPlayerPrize({playerId, prevPage}:{playerId: string, pre
     redirect(prevPage);
 }
 
-export async function createPlayerNewCreditLog(data : {player: PlayerForm, prevPage:string}, _prevState: State, formData: FormData){
-    return createPlayerLog(data.player, formData, data.prevPage, false, 'super-admin');
+export async function createPlayerNewCreditLog(data : {player: PlayerForm, prevPage:string, phoneNumber: string}, _prevState: State, formData: FormData){
+    return createPlayerLog(data.player, formData, data.prevPage, false, { phoneNumber: data.phoneNumber});
 }
 export async function updatePlayer(
     {id, prevPage}: {id: string, prevPage: string,},
