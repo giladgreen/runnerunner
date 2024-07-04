@@ -1,5 +1,5 @@
 import '@/app/global.css';
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { inter } from '@/app/ui/fonts';
 import { Metadata } from 'next';
 
@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: 'Runner Runner',
   description: 'Runner Runner.'
 };
+
 export default function RootLayout({
   children,
 }: {
@@ -25,7 +26,9 @@ export default function RootLayout({
         )}
       </head>
       <body className={`${inter.className} antialiased`}>
-      {children}</body>
+      <SpeedInsights/>
+        {children}
+      </body>
       </html>
   );
 }
