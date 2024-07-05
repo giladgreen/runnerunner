@@ -559,9 +559,8 @@ methodEnd('fetchTournamentsData')
 
 export async function fetchPlayersWithEnoughCredit(){
   methodStart();
-  noStore();
   try {
-    const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE balance > -4000 ORDER BY name`;
+    const playersResult = await sql<PlayerDB>`SELECT * FROM players ORDER BY name`;
 methodEnd('fetchPlayersWithEnoughCredit')
     return playersResult.rows;
   } catch (error) {
