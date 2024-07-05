@@ -24,9 +24,13 @@ async function seedTournaments(client) {
         updated_at timestamp NOT NULL DEFAULT now()
       );
     `;
-    await client.sql`DELETE FROM tournaments`;
-    console.log(`Created "tournaments" table`);
 
+
+    console.log(`Created "tournaments" table`);
+    const t = await client.sql`SELECT * FROM tournaments`;
+    if (t.rows.length > 0){
+      return;
+    }
     // Insert data into the "users" table
     const insertedTournaments = await Promise.all(
         tournaments.map(async (tournament, index) => {

@@ -143,7 +143,7 @@ async function getPlayerHistory(playerPhoneNumber: string){
   return historyData.rows;
 }
 async function getTodayHistory(){
-  const todayHistoryResults = await sql`SELECT * FROM history WHERE change <= 0 AND updated_at > now() - interval '12 hour'  ORDER BY updated_at DESC`;
+  const todayHistoryResults = await sql<LogDB>`SELECT * FROM history WHERE change <= 0 AND updated_at > now() - interval '12 hour'  ORDER BY updated_at DESC`;
   return todayHistoryResults.rows.filter(({ type }) => type != 'prize');
 }
 
@@ -189,12 +189,9 @@ async function getTopDebtPlayers(){
   return players.rows;
 }
 
-async function fetchTopPlayers(players: MVPPlayerRaw[] | DebtPlayerRaw[]) {
+async function fetchTopPlayers(players: MVPPlayerRaw[] | DebtPlayerRaw[], rsvp: RSVPDB[] = [], todayHistory: LogDB[] = []) {
   try {
     const todayDate = getTodayShortDate();
-
-    const todayHistory = (await getTodayHistory()).filter(({ type }) => type != 'prize' && type != 'credit_to_other');
-    const rsvp = await getAllRsvps();
 
     players.forEach((player) => {
       player.arrived = !!todayHistory.find(({ phone_number}) => phone_number === player.phone_number);
@@ -211,22 +208,23 @@ async function fetchTopPlayers(players: MVPPlayerRaw[] | DebtPlayerRaw[]) {
 
 
 
-export async function fetchMVPPlayers() {
+ async function fetchXPlayers(x:string, getXPlayers: ()=> MVPPlayerRaw[] | DebtPlayerRaw[]){
   methodStart();
   noStore();
-  const players = await getTopMVPPlayers();
-  const result = fetchTopPlayers(players);
-  methodEnd('fetchMVPPlayers');
+  const [players, todayHistoryUnfiltered, rsvp] = await Promise.all([ getXPlayers(), getTodayHistory(), getAllRsvps()]);
+  const todayHistory = todayHistoryUnfiltered.filter(({ type }) => type != 'prize' && type != 'credit_to_other');
+
+  const result = await fetchTopPlayers(players, rsvp, todayHistory);
+  methodEnd(x);
   return result;
 }
 
+export async function fetchMVPPlayers() {
+  return fetchXPlayers('fetchMVPPlayers', getTopMVPPlayers as unknown as ()=> MVPPlayerRaw[] | DebtPlayerRaw[]);
+}
+
 export async function fetchDebtPlayers() {
-  methodStart();
-  noStore();
-  const players = await getTopDebtPlayers();
-  const result =  fetchTopPlayers(players);
-    methodEnd('fetchDebtPlayers');
-    return result;
+  return fetchXPlayers('fetchDebtPlayers', getTopDebtPlayers as unknown as ()=> MVPPlayerRaw[] | DebtPlayerRaw[]);
 }
 
 export async function fetchGeneralPlayersCardData() {
@@ -259,13 +257,9 @@ export async function fetchRSVPAndArrivalData() {
   methodStart();
   noStore();
   try {
-    const allPlayers = await getAllPlayers();
+    const [allPlayers, todayHistory, todayTournament] = await Promise.all([getAllPlayers(), getTodayHistory(), getTodayTournament()]) ;
 
     const rsvpForToday = allPlayers.filter(player => player.rsvpForToday).length
-
-    const todayHistory = await getTodayHistory();
-
-    const todayTournament = await getTodayTournament();
 
     const todayTournamentMaxPlayers = todayTournament.rsvp_required ? todayTournament?.max_players : null;
 
@@ -498,14 +492,13 @@ export async function fetchTournamentsData() {
   methodStart();
   noStore();
   try {
-    const tournaments =  await getAllTournaments()
-    const history =  await getTodayHistory()
+    const [tournaments, history] =  await Promise.all([getAllTournaments(), getTodayHistory()]);
 
     const dateToPlayerMap = {};
 
     const result =  history.reduce((acc, { phone_number, change, type, updated_at }) => {
       const newAcc = {...acc};
-      const dateAsString = updated_at.toISOString();
+      const dateAsString = typeof updated_at === 'string' ? new Date(updated_at).toISOString() : (updated_at as Date).toISOString();
       const dateObj = new Date(updated_at);
       const tournament = tournaments.find(({ day }) => day === getDayOfTheWeek(dateObj));
 
@@ -513,7 +506,9 @@ export async function fetchTournamentsData() {
         return newAcc;
       }
       const date = dateAsString.slice(0,10);
+      // @ts-ignore
       if (!newAcc[date]){
+        // @ts-ignore
         newAcc[date] = {
           tournamentName: tournament?.name,
           cash: 0,
@@ -527,8 +522,11 @@ export async function fetchTournamentsData() {
         }
       }
       const amount = -1 * change;
+      // @ts-ignore
       newAcc[date].total += amount;
+      // @ts-ignore
       newAcc[date].entries += 1;
+      // @ts-ignore
       newAcc[date][type] += amount;
 
       // @ts-ignore
@@ -536,13 +534,16 @@ export async function fetchTournamentsData() {
       if (datePlayers){
         if (!datePlayers.includes(phone_number)){
           datePlayers.push(phone_number);
+          // @ts-ignore
           newAcc[date].players += 1;
         }else {
+          // @ts-ignore
           newAcc[date].reentries += 1;
         }
       }else{
         // @ts-ignore
         dateToPlayerMap[date] = [phone_number];
+        // @ts-ignore
         newAcc[date].players += 1;
       }
 
