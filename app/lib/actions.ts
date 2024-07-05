@@ -38,10 +38,7 @@ const phoneToName = {
 
 
 function sendEmail(to: string, subject: string, body: string){
-    if (process.env.LOCAL==='true'){
-        console.log('## skipping sending email locally')
-        return;
-    }
+
     const auth =  {
         user: process.env.EMAIL_ADDRESS,
             pass: process.env.GMAIL_APP_PASSWORD,
@@ -64,6 +61,10 @@ function sendEmail(to: string, subject: string, body: string){
 console.log('## sending email to:', to)
 console.log('## subject:', subject)
 console.log('## body:', body)
+    if (process.env.LOCAL==='true'){
+        console.log('## skipping sending email locally')
+        return;
+    }
     transporter.sendMail(mailOptions, function(error: any, info: { response: string; }){
         if (error) {
             console.error('error sending mail:',error.message);
@@ -267,6 +268,19 @@ async function handleCreditByOther(type: string, otherPlayerPhoneNumber: string,
         otherHistoryNote
     }
 }
+
+async function getUserName(user: { userName?:string, phoneNumber?:string}){
+    let username = user.userName;
+    if (user.phoneNumber){
+        const userResult = await sql<User>`SELECT * FROM users WHERE phone_number = ${user.phoneNumber}`;
+        const userFromDB = userResult.rows[0];
+        if (userFromDB){
+            username = userFromDB.name ?? username ?? user.phoneNumber;
+        }
+    }
+    username = username ?? 'unknown';
+    return username;
+}
 export async function createPlayerLog(player: PlayerForm, formData: FormData, prevPage:string ,usage: boolean, user: { userName?:string, phoneNumber?:string}){
     const validatedFields = CreateUsageLog.safeParse({
         change: formData.get('change'),
@@ -280,15 +294,7 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
         };
     }
 
-    let username = user.userName;
-    if (user.phoneNumber){
-        const userResult = await sql<User>`SELECT * FROM users WHERE phone_number = ${user.phoneNumber}`;
-        const userFromDB = userResult.rows[0];
-        if (userFromDB){
-            username = userFromDB.name ?? username ?? user.phoneNumber;
-        }
-    }
-    username = username ?? 'unknown';
+    const username = await getUserName(user);
     const change = validatedFields.data.change * (usage ? -1 : 1);
 
     let type = usage ? (formData.get('type') as string ?? 'prize') :  'credit' ;
@@ -306,25 +312,39 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
         };
     }
 
-    const currentBalance = player.balance;
-    await startTransaction();
+
+
     try
     {
-        if (!useOtherPlayerCredit){
+        await startTransaction();
+        if (useOtherPlayerCredit){
+            await sql`
+              INSERT INTO history (phone_number, change, note, type, updated_by, other_player_phone_number)
+              VALUES 
+              (${player.phone_number}, ${0}, ${ historyNote}, ${'credit_by_other'}, ${username}, ${otherPlayerPhoneNumber as string}),
+              (${otherPlayerPhoneNumber as string}, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username}, '')
+            `;
+
+        } else {
             await sql`
               INSERT INTO history (phone_number, change, note, type, updated_by)
               VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type}, ${username})
             `;
-        } else {
-            await sql`
-              INSERT INTO history (phone_number, change, note, type, updated_by, other_player_phone_number)
-              VALUES (${player.phone_number}, ${0}, ${ historyNote}, ${'credit_by_other'}, ${username}, ${otherPlayerPhoneNumber as string})
-            `;
-            await sql`
-              INSERT INTO history (phone_number, change, note, type, updated_by)
-              VALUES (${otherPlayerPhoneNumber as string}, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username})
-            `;
         }
+
+        if (type === 'credit' || type === 'prize') {
+            const playerFromDB = await getPlayerByPhoneNumber(player.phone_number);
+            const currentBalance = playerFromDB.balance;
+            const newBalance = currentBalance + change;
+            const date = new Date().toISOString();
+            await sql`UPDATE players SET balance = ${newBalance}, updated_at=${date} WHERE id = ${player.id}`;
+        } else if (type === 'credit_by_other' && useOtherPlayerCredit){
+            const newBalance = otherPlayer.balance + change;
+            const date = new Date().toISOString();
+            await sql`UPDATE players SET balance = ${newBalance}, updated_at=${date} WHERE id = ${otherPlayer.id}`;
+        }
+
+        await commitTransaction();
     } catch(error) {
         await cancelTransaction();
         console.error('### create log error', error)
@@ -333,39 +353,6 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
         };
     }
 
-    if (type === 'credit' || type === 'prize') {
-        const newBalance = currentBalance + change;
-        try {
-            const date = new Date().toISOString();
-
-            await sql`UPDATE players SET balance = ${newBalance}, updated_at=${date} WHERE id = ${player.id}`;
-
-        } catch (error) {
-            console.error('## create log error', error)
-            return {
-                message: 'Database Error: Failed to update player balance on credit change.',
-            };
-        }
-    } else if (type === 'credit_by_other' && useOtherPlayerCredit){
-        const newBalance = otherPlayer.balance + change;
-        try {
-            const date = new Date().toISOString();
-            await sql`
-      UPDATE players
-      SET balance = ${newBalance}, updated_at=${date}
-      WHERE id = ${otherPlayer.id}
-    `;
-
-        } catch (error) {
-            await cancelTransaction();
-            console.error('## create log error', error)
-            return {
-                message: 'Database Error: Failed to update other player balance on credit change.',
-            };
-        }
-    }
-
-    await commitTransaction();
     validatePlayers();
     revalidatePath(prevPage);
     redirect(prevPage);
