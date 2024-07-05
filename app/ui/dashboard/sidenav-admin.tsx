@@ -19,8 +19,8 @@ export default async function SidenavAdmin() {
         </div>
       </Link>
         <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
-            <div style={{paddingLeft: 10, paddingBottom: 10}}>
-                connected: {user.name ?? user.phone_number}
+            <div style={{paddingLeft: 10, paddingBottom: 10, color: 'rgb(47, 111, 235)'}}>
+                <b>connected: {user.name ?? user.phone_number}</b>
             </div>
             <NavLinks/>
             <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>

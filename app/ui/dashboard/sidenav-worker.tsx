@@ -17,8 +17,8 @@ export default function SideNavWorker({ username,userId }:{username:string, user
         </div>
 
       </Link>
-        <div style={{ paddingLeft:10, paddingBottom:10}}>
-            connected: {username}
+        <div style={{paddingLeft: 10, paddingBottom: 10, color: 'rgb(47, 111, 235)'}}>
+            <b>connected: {username}</b>
         </div>
         <NavLinksWorker userId={userId}/>
         <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
