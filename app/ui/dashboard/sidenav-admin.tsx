@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import NavLinks from '@/app/ui/dashboard/nav-links';
 import RunnerLogo from '@/app/ui/runner-logo';
-import { PowerIcon } from '@heroicons/react/24/outline';
+
 import { signOut } from '@/auth';
 import {SignOutButton} from "@/app/ui/dashboard/sign-out-button";
+import {getLastConnectedUser} from "@/app/lib/data";
 
-export default function SideNav() {
+export default async function SidenavAdmin() {
+     const user = await getLastConnectedUser();
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
       <Link
@@ -17,13 +19,16 @@ export default function SideNav() {
         </div>
       </Link>
         <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
+            <div style={{paddingLeft: 10, paddingBottom: 10}}>
+                connected: {user.name ?? user.phone_number}
+            </div>
             <NavLinks/>
             <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
             <form
                 action={async () => {
                     'use server';
 
-                    await signOut({ redirect: true, redirectTo: '/'});
+                    await signOut({redirect: true, redirectTo: '/'});
                 }}
             >
                 <SignOutButton/>

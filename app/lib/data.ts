@@ -698,3 +698,9 @@ export async function getInvalidPlayers() {
 
   return badPlayers as PlayerDB[];
 }
+
+export async function getLastConnectedUser() {
+  noStore();
+  const user = (await sql`SELECT phone_number, name FROM last_connected_user`).rows[0];
+  return user;
+}

@@ -20,6 +20,9 @@ export const authConfig = {
                 isAdmin = Boolean(userFromDB && userFromDB.is_admin);
                 isWorker = Boolean(userFromDB && userFromDB.is_worker);
                 userUUID = userFromDB?.id;
+                if (userFromDB){
+                    await sql`UPDATE last_connected_user SET phone_number = ${userFromDB.phone_number}, name = ${userFromDB.name}`;
+                }
             }
             const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
             const isOnWorker = nextUrl.pathname.startsWith('/worker');

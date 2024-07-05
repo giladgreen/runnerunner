@@ -48,6 +48,22 @@ async function seedTournaments(client) {
   }
 }
 
+async function seedLastConnectedUser(client) {
+  await client.sql`
+      CREATE TABLE IF NOT EXISTS last_connected_user (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        phone_number TEXT NOT NULL UNIQUE,
+        name TEXT NOT NULL UNIQUE,
+        updated_at timestamp NOT NULL DEFAULT now()
+      );
+    `;
+
+  console.log(`Created "last_connected_user" table`);
+  const existing = Boolean((await client.sql`select * from last_connected_user`).rows.length);
+  if (!existing) {
+    await client.sql`INSERT INTO last_connected_user (phone_number, name)  VALUES ('--', '--');`;
+  }
+}
 async function seedUsers(client) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
@@ -345,6 +361,7 @@ async function main() {
 
   console.log('## db connected')
   await seedUsers(client);
+  await seedLastConnectedUser(client);
   await seedTournaments(client);
   await createBugReportTable(client);
   await seedPlayers(client);
