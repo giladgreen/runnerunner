@@ -91,15 +91,13 @@ async function getPlayerById(playerId: string){
     return null;
   }
 
-  const rsvpResults = await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${player.phone_number}`;
-  const playerRsvp = rsvpResults.rows;
-
-  const historyData = await sql<LogDB>`
+  const [rsvpResults, historyData] = await Promise.all([sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${player.phone_number}`, sql<LogDB>`
       SELECT *
       FROM history
       WHERE phone_number = ${player.phone_number}
       order by history.updated_at asc;
-    `;
+    `]) ;
+  const playerRsvp = rsvpResults.rows;
 
   player.historyLog = historyData.rows;
   player.rsvps = playerRsvp.map(({ date }) => date);
@@ -205,9 +203,6 @@ async function fetchTopPlayers(players: MVPPlayerRaw[] | DebtPlayerRaw[], rsvp: 
   }
 }
 
-
-
-
  async function fetchXPlayers(x:string, getXPlayers: ()=> MVPPlayerRaw[] | DebtPlayerRaw[]){
   methodStart();
   noStore();
@@ -218,6 +213,10 @@ async function fetchTopPlayers(players: MVPPlayerRaw[] | DebtPlayerRaw[], rsvp: 
   methodEnd(x);
   return result;
 }
+
+/////////////////////////////////////////
+/////////////////////////////////////////
+/////////////////////////////////////////
 
 export async function fetchMVPPlayers() {
   return fetchXPlayers('fetchMVPPlayers', getTopMVPPlayers as unknown as ()=> MVPPlayerRaw[] | DebtPlayerRaw[]);
@@ -406,8 +405,7 @@ export async function fetchFilteredPlayers(
          GROUP BY phone_number
     `;
 
-    const rsvp = await getAllRsvps();
-    const [playersHistoryCountResult, playersResult] = await Promise.all([playersHistoryCountResultPromise, playersResultPromise]);
+    const [playersHistoryCountResult, playersResult, rsvp] = await Promise.all([playersHistoryCountResultPromise, playersResultPromise, getAllRsvps()]);
     const playersHistoryCount = playersHistoryCountResult.rows;
     const players = playersResult.rows;
 
