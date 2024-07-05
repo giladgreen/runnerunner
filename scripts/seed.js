@@ -239,7 +239,8 @@ async function seedPrizes(client) {
          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
          tournament TEXT NOT NULL,
          phone_number TEXT NOT NULL,
-         prize TEXT NOT NULL
+         prize TEXT NOT NULL,
+         created_at timestamp NOT NULL DEFAULT now()
       );
     `;
 
