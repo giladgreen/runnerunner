@@ -11,6 +11,19 @@ import {
 const ITEMS_PER_PAGE = 30;
 const TOP_COUNT = 8;
 
+let start=0;
+function methodStart(){
+  start = (new Date()).getTime();
+}
+function methodEnd(methodName: string){
+  const now = (new Date()).getTime();
+  const diff = now - start;
+  if (diff > 500){
+    console.log('Method End', methodName,'      ',diff, 'milli');
+
+  }
+
+}
 function positionComparator(a: PlayerDB,b: PlayerDB) {
   return a.position < b.position ? -1 : 1;
 };
@@ -194,19 +207,30 @@ async function fetchTopPlayers(players: MVPPlayerRaw[] | DebtPlayerRaw[]) {
     throw new Error('Failed to fetch fetchTopPlayers.');
   }
 }
+
+
+
+
 export async function fetchMVPPlayers() {
+  methodStart();
   noStore();
   const players = await getTopMVPPlayers();
-  return fetchTopPlayers(players);
+  const result = fetchTopPlayers(players);
+  methodEnd('fetchMVPPlayers');
+  return result;
 }
 
 export async function fetchDebtPlayers() {
+  methodStart();
   noStore();
   const players = await getTopDebtPlayers();
-  return fetchTopPlayers(players);
+  const result =  fetchTopPlayers(players);
+    methodEnd('fetchDebtPlayers');
+    return result;
 }
 
 export async function fetchGeneralPlayersCardData() {
+  methodStart();
   noStore();
 
   try {
@@ -217,7 +241,7 @@ export async function fetchGeneralPlayersCardData() {
     const numberOfPlayersWithDebt = playersWithDebt.length;
     const totalRunnerDebt = sumArrayByProp(allPlayers.filter((player) => player.balance > 0), 'balance')
     const totalPlayersDebt = sumArrayByProp(playersWithDebt,'balance');
-
+    methodEnd('fetchGeneralPlayersCardData');
     return {
       totalNumberOfPlayers,
       numberOfPlayersWithDebt,
@@ -226,11 +250,13 @@ export async function fetchGeneralPlayersCardData() {
     };
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchGeneralPlayersCardData with error');
     throw new Error('Failed to fetch card data.');
   }
 }
 
 export async function fetchRSVPAndArrivalData() {
+  methodStart();
   noStore();
   try {
     const allPlayers = await getAllPlayers();
@@ -262,7 +288,7 @@ export async function fetchRSVPAndArrivalData() {
     const todayTransferIncome = sumArrayByProp( todayHistory.filter(({ type }) => type === 'wire'),'change');
     const arrivedToday =  (Array.from(new Set(todayHistory.map(({ phone_number }) => phone_number)))).length;
 
-
+    methodEnd('fetchRSVPAndArrivalData');
     return {
       rsvpForToday,
       arrivedToday,
@@ -275,12 +301,15 @@ export async function fetchRSVPAndArrivalData() {
     };
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchRSVPAndArrivalData with error')
+
     throw new Error('Failed to fetch card data.');
   }
 }
 
 
 export async function fetchFinalTablePlayers(stringDate?: string) {
+  methodStart();
   noStore();
   try {
     const date = stringDate ?? getTodayShortDate();
@@ -294,32 +323,38 @@ export async function fetchFinalTablePlayers(stringDate?: string) {
       return player;
     })
 
-    return allPlayers.filter(player => player.position > 0).sort(positionComparator);
+    const result =  allPlayers.filter(player => player.position > 0).sort(positionComparator);
+    methodEnd('fetchFinalTablePlayers');
+    return result;
+
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchFinalTablePlayers with error')
     throw new Error('Failed to fetch final table players data.');
   }
 }
 
 export async function fetchPlayersPrizes(playerPhoneNumber?: string) {
+  methodStart();
   noStore();
   try {
-    const prizes = await getAllPrizes()
-    const players = await getAllPlayers()
+    const [prizes,players] = await Promise.all([getAllPrizes(), getAllPlayers()])
+
     prizes.forEach(prize => {
         const player = players.find(p => p.phone_number === prize.phone_number);
         if (player){
             prize.player = player;
         }
     });
-    return !playerPhoneNumber ? prizes : prizes.filter(prize => prize.phone_number === playerPhoneNumber);
+    const result =  !playerPhoneNumber ? prizes : prizes.filter(prize => prize.phone_number === playerPhoneNumber);
+    methodEnd('fetchPlayersPrizes');
+    return result;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchPlayersPrizes with error')
     throw new Error('Failed to fetch final table players data.');
   }
 }
-
-
 
  async function fetchSortedPlayers(query: string, sortBy: string, currentPage: number){
    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -363,6 +398,7 @@ export async function fetchFilteredPlayers(
   currentPage: number,
   sortBy: string = 'updated_at'
 ) {
+  methodStart();
   noStore();
 
   try {
@@ -388,13 +424,16 @@ export async function fetchFilteredPlayers(
       player.rsvpForToday = !!rsvp.find(({ phone_number, date }) => phone_number === player.phone_number && date === todayDate);
       player.rsvps = rsvp.filter(({ phone_number }) => phone_number === player.phone_number).map(({ date }) => date);
     });
+    methodEnd('fetchFilteredPlayers')
     return players;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchFilteredPlayers with error')
     throw new Error('Failed to fetch FilteredPlayers.');
   }
 }
 export async function fetchPlayersPagesCount(query: string) {
+  methodStart();
   noStore();
   try {
     const count = await sql`SELECT COUNT(*) FROM players WHERE
@@ -404,26 +443,25 @@ export async function fetchPlayersPagesCount(query: string) {
   `;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    methodEnd('fetchPlayersPagesCount');
     return totalPages;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchPlayersPagesCount with error');
     throw new Error('Failed to fetch total number of players.');
   }
 }
 export async function fetchTodayPlayers(query?: string) {
+  methodStart();
   noStore();
   try {
     const todayDate = getTodayShortDate();
-    const winnersRecord = await getDateWinnersRecord(todayDate);
+
+    const [winnersRecord, tournament, players, rsvp, todayHistoryUnfiltered] = await Promise.all([getDateWinnersRecord(todayDate),getTodayTournament(), getAllPlayers(), getAllRsvps(), getTodayHistory()])
+
     const winnersObject = winnersRecord ? JSON.parse(winnersRecord.winners) : {};
-
-    const tournament = await getTodayTournament();
     const rsvp_required = tournament.rsvp_required;
-
-    const players = await getAllPlayers()
-    const rsvp = await getAllRsvps();
-
-    const todayHistory =  (await getTodayHistory()).filter(({ type }) => type != 'prize'  && type != 'credit_to_other' )
+    const todayHistory =  todayHistoryUnfiltered.filter(({ type }) => type != 'prize'  && type != 'credit_to_other' )
 
     players.forEach((player) => {
       const playerItems = todayHistory.filter(({ phone_number}) => phone_number === player.phone_number) as LogDB[];
@@ -447,15 +485,17 @@ export async function fetchTodayPlayers(query?: string) {
         (query && query.length > 0 && (p.name.includes(query) ||  p.phone_number.includes(query))))
 
     results.sort(nameComparator);
-
+    methodEnd('fetchTodayPlayers')
     return results;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchTodayPlayers with error')
     throw new Error('Failed to fetch the fetchTodayPlayers.');
   }
 }
 
 export async function fetchTournamentsData() {
+  methodStart();
   noStore();
   try {
     const tournaments =  await getAllTournaments()
@@ -463,7 +503,7 @@ export async function fetchTournamentsData() {
 
     const dateToPlayerMap = {};
 
-    return history.reduce((acc, { phone_number, change, type, updated_at }) => {
+    const result =  history.reduce((acc, { phone_number, change, type, updated_at }) => {
       const newAcc = {...acc};
       const dateAsString = updated_at.toISOString();
       const dateObj = new Date(updated_at);
@@ -508,26 +548,31 @@ export async function fetchTournamentsData() {
 
       return newAcc;
     }, {});
-
+methodEnd('fetchTournamentsData')
+    return result;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchTournamentsData with error')
     throw new Error('Failed to fetch the fetch incomes.');
   }
 }
 
 export async function fetchPlayersWithEnoughCredit(){
+  methodStart();
   noStore();
   try {
     const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE balance > -4000 ORDER BY name`;
-
+methodEnd('fetchPlayersWithEnoughCredit')
     return playersResult.rows;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchPlayersWithEnoughCredit with error')
     throw new Error('Failed to fetch the fetch incomes.');
   }
 }
 
 export async function fetchAllUsers() {
+  methodStart();
   noStore();
   try {
     const [users, players] = await Promise.all([getAllUsers(), getAllPlayers()]);
@@ -539,42 +584,58 @@ export async function fetchAllUsers() {
       }
     });
 
-    return users.sort(phoneNumberComparator);
+    const result =  users.sort(phoneNumberComparator);
+    methodEnd('fetchAllUsers')
+    return result;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchAllUsers with error')
     throw new Error('Failed to fetch total number of users.');
   }
 }
 
 
 export async function fetchAllBugs() {
+  methodStart();
   noStore();
   try {
-    return await getAllBugs();
+    const result =  await getAllBugs();
+    methodEnd('fetchAllBugs')
+    return result;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchAllBugs with error')
     throw new Error('Failed to fetch bugs.');
   }
 }
 export async function fetchAllPlayersForExport() {
+  methodStart();
   noStore();
   try {
-    return await getAllPlayers();
+    const result =  await getAllPlayers();
+    methodEnd('fetchAllPlayersForExport')
+    return result;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchAllPlayersForExport with error')
     throw new Error('Failed to fetch bugs.');
   }
 }
 export async function fetchTournaments() {
+  methodStart();
   noStore();
   try {
-    return getAllTournaments();
+    const result =  getAllTournaments();
+    methodEnd('fetchTournaments')
+    return result;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchTournaments with error')
     throw new Error('Failed to fetch tournaments.');
   }
 }
 export async function fetchFeatureFlags() {
+  methodStart();
   noStore();
   try {
     const flagsResult = await getAllFlags();
@@ -585,6 +646,7 @@ export async function fetchFeatureFlags() {
     const playerRsvpEnabled = !!flagsResult.find(flag => flag.flag_name === 'player_can_rsvp')?.is_open;
     const usePhoneValidation = !!flagsResult.find(flag => flag.flag_name === 'use_phone_validation')?.is_open;
     const importEnabled = !!flagsResult.find(flag => flag.flag_name === 'import')?.is_open;
+    methodEnd('fetchFeatureFlags')
     return {
       prizesEnabled,
       placesEnabled,
@@ -595,49 +657,60 @@ export async function fetchFeatureFlags() {
     }
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchFeatureFlags with error')
     throw new Error('Failed to fetch flagsResult.');
   }
 }
 export async function fetchPlayerById(id: string, addTournamentsHistoryData = false) {
+  methodStart();
   noStore();
   try {
     const player = await getPlayerById(id);
     if (player && addTournamentsHistoryData){
       player.tournamentsData = await getPlayerTournamentsHistory(player!.phone_number);
     }
-
+methodEnd('fetchPlayerById')
     return player;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchPlayerById with error')
     throw new Error('Failed to fetchPlayerById.');
   }
 }
 
 export async function fetchTournamentByDay(day?: string) {
+  methodStart();
   noStore();
   try {
     const dayName = day ?? (new Date()).toLocaleString('en-us', {weekday: 'long'});
 
-    return await getTodayTournament(dayName)
-
+    const result =  await getTodayTournament(dayName)
+methodEnd('fetchTournamentByDay')
+    return result;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchTournamentByDay with error')
     throw new Error('Failed to fetchTournamentById.');
   }
 }
 
 export async function fetchRsvpCountForTodayTournament() {
+  methodStart();
   noStore();
   try {
     const allPlayers = await getAllPlayers();
-    return allPlayers.filter(player => player.rsvpForToday).length;
+    const result =  allPlayers.filter(player => player.rsvpForToday).length;
+    methodEnd('fetchRsvpCountForTodayTournament')
+    return result;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchRsvpCountForTodayTournament with error')
     throw new Error('Failed to fetchTournamentById.');
   }
 }
 
 export async function fetchPlayerByUserId(id: string) {
+  methodStart();
   noStore();
   try {
 
@@ -655,25 +728,31 @@ export async function fetchPlayerByUserId(id: string) {
         player.rsvpForToday = rsvp;
         player.tournamentsData = await getPlayerTournamentsHistory(player!.phone_number);
       }
-
+methodEnd('fetchPlayerByUserId')
       return player;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchPlayerByUserId with error')
     throw new Error('Failed to fetchPlayerByUserId.');
   }
 }
 
 export async function fetchUserById(id: string) {
+  methodStart();
   noStore();
   try {
-    return await getUserById(id)
+    const result =  await getUserById(id);
+    methodEnd('fetchUserById')
+    return result;
   } catch (error) {
     console.error('Database Error:', error);
+    methodEnd('fetchUserById with error')
     throw new Error('Failed to fetchPlayerByPhoneNumber.');
   }
 }
 
 export async function getInvalidPlayers() {
+  methodStart();
   noStore();
   const allPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
   const allLogs = (await sql<LogDB>`SELECT * FROM history`).rows;
@@ -695,12 +774,14 @@ export async function getInvalidPlayers() {
       }
     }
   }).filter(Boolean);
-
+methodEnd('getInvalidPlayers')
   return badPlayers as PlayerDB[];
 }
 
 export async function getLastConnectedUser() {
+  methodStart();
   noStore();
   const user = (await sql`SELECT phone_number, name FROM last_connected_user`).rows[0];
+  methodEnd('getLastConnectedUser')
   return user;
 }

@@ -889,20 +889,22 @@ export async function undoPlayerLastLog(phone_number:string, prevPage: string){
             }
         }
         await commitTransaction();
+        validatePlayers();
     } catch (error) {
         await cancelTransaction();
         console.error('undoPlayerLastLog Error:', error);
 
     }finally {
-        validatePlayers();
+
         revalidatePath(prevPage);
         redirect(prevPage);
     }
 }
 
 export async function getInvalidPlayers() {
-    const allPlayers = (await sql<PlayerDB>`SELECT * FROM players`).rows;
-    const allLogs = (await sql<LogDB>`SELECT * FROM history`).rows;
+    const [allPlayersResult, allLogsResult] = await Promise.all([sql<PlayerDB>`SELECT * FROM players`,sql<LogDB>`SELECT * FROM history`]);
+    const allPlayers = allPlayersResult.rows;
+    const allLogs = allLogsResult.rows;
 
     const badPlayers =  allPlayers.map(player=>{
         const playerHistoryLogs = allLogs.filter(log => log.phone_number === player.phone_number);
@@ -990,7 +992,8 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
 
         await sql`COMMIT;`
         console.log('## import Done')
-        sendEmail(TARGET_MAIL, 'Import is done', `inserted ${playersToInsert.length} players`)
+        sendEmail(TARGET_MAIL, 'Import is done', `inserted ${playersToInsert.length} players`);
+        validatePlayers();
     } catch (error) {
         await sql`ROLLBACK;`
         // @ts-ignore
@@ -1000,8 +1003,6 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
         return {
             message: 'Database Error: Failed to import Players.',
         };
-    }finally {
-        validatePlayers();
     }
 
     redirect('/')
