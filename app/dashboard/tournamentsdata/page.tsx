@@ -78,6 +78,7 @@ export default async function TournamentsDataPage() {
     const tournaments = await fetchTournamentsData();
     const tournamentsData =  Object.keys(tournaments);
 
+
     return (
         <div className="w-full tournaments-data-table">
             {tournamentsData.length === 0 && <div className="text-center">No Data yet</div>}
@@ -102,7 +103,8 @@ export default async function TournamentsDataPage() {
                 </tr>
                 </thead>
                 <tbody className="bg-white">
-                {tournamentsData.map(key => tournaments[key]).map(async (dateItem) => {
+                {  // @ts-ignore
+                    tournamentsData.map(key => tournaments[key]).map(async (dateItem) => {
                     const dayIncome = getDayIncome(dateItem);
 
                     const date = (new Date(dateItem.date)).toISOString().slice(0,10);

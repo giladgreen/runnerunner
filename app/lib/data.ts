@@ -547,7 +547,7 @@ export async function fetchTournamentsData() {
 
       return newAcc;
     }, {});
-methodEnd('fetchTournamentsData')
+    methodEnd('fetchTournamentsData')
     return result;
   } catch (error) {
     console.error('Database Error:', error);
