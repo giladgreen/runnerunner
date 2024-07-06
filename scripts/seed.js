@@ -146,7 +146,6 @@ async function seedPlayers(client) {
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     image_url VARCHAR(255) NOT NULL default '/players/default.png',
-    balance INT NOT NULL,
     phone_number VARCHAR(20) NOT NULL,
     notes VARCHAR(500) NOT NULL default '',
     updated_at timestamp NOT NULL DEFAULT now()
@@ -155,7 +154,6 @@ async function seedPlayers(client) {
 
     await client.sql`CREATE INDEX IF NOT EXISTS players_idx ON players (phone_number);`
     await client.sql`CREATE INDEX IF NOT EXISTS players_name_idx ON players (name);`
-    await client.sql`CREATE INDEX IF NOT EXISTS players_balance_idx ON players (balance);`
 
     console.log(`Created "players" table`);
 

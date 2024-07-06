@@ -2,12 +2,12 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { authConfig } from './auth.config';
 import { sql } from '@vercel/postgres';
-import type { User } from '@/app/lib/definitions';
+import type { UserDB } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
 
-async function getUserByPhoneNumber(phone_number: string): Promise<User | undefined> {
+async function getUserByPhoneNumber(phone_number: string): Promise<UserDB | undefined> {
     try {
-        const usersResult = await sql<User>`SELECT * FROM users WHERE phone_number=${phone_number}`;
+        const usersResult = await sql<UserDB>`SELECT * FROM users WHERE phone_number=${phone_number}`;
         return usersResult.rows[0];
     } catch (error) {
         console.error('Failed to fetch user:', error);

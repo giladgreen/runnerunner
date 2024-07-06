@@ -43,7 +43,7 @@ export default function EditPlayerForm({
     const dayOfTheWeek = (new Date()).toLocaleString('en-us', { weekday: 'long' });
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const today = days.indexOf(dayOfTheWeek);
-    const rsvps = player.rsvps;
+
 
     const rsvpsForTheNextWeek = tournaments.slice(today).map((tournament, index) => {
         const date = (new Date((new Date()).getTime() + (1000 * 60 * 60 * 24 * index)));

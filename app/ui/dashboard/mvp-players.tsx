@@ -3,12 +3,12 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
 import { fetchMVPPlayers} from "@/app/lib/data";
-import {MVPPlayerRaw} from "@/app/lib/definitions";
 import {formatCurrency} from "@/app/lib/utils";
 import Link from "next/link";
 import {TickIcon, DoubleTicksIcon} from "@/app/ui/icons";
 import {Suspense} from "react";
 import {PlayersSkeleton} from "@/app/ui/skeletons";
+import {PlayerDB} from "@/app/lib/definitions";
 
 export default async function MVPPlayers() {
     const mvpPlayers = await fetchMVPPlayers();
@@ -21,7 +21,7 @@ export default async function MVPPlayers() {
               </h2>
               <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
                  <div className="bg-white px-6">
-                  {mvpPlayers.map((player: MVPPlayerRaw, i) => {
+                  {mvpPlayers.map((player: PlayerDB, i) => {
                     return (
                         <Link
                             key={player.id}

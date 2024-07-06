@@ -1,7 +1,7 @@
 import { lusitana } from '@/app/ui/fonts';
 import { fetchAllUsers } from '@/app/lib/data';
 import React from "react";
-import {User} from "@/app/lib/definitions";
+import {UserDB} from "@/app/lib/definitions";
 import {deleteUser, updateIsUserAdmin, updateIsUserWorker} from "@/app/lib/actions";
 
 export default async function Page() {
@@ -64,7 +64,7 @@ export default async function Page() {
     );
 }
 
-function UpdateAdminUser({user}: { user: User }) {
+function UpdateAdminUser({user}: { user: UserDB }) {
     const updateIsUserAdminWithId = updateIsUserAdmin.bind(null, user.id);
 
     const onSubmit = async (_formData: FormData) => {
@@ -82,7 +82,7 @@ function UpdateAdminUser({user}: { user: User }) {
     );
 }
 
-function UpdateWorkerUser({user}: { user: User }) {
+function UpdateWorkerUser({user}: { user: UserDB }) {
     const updateIsUserWorkerWithId = updateIsUserWorker.bind(null, user.id);
 
     const onSubmit = async (_formData: FormData) => {
@@ -100,7 +100,7 @@ function UpdateWorkerUser({user}: { user: User }) {
     );
 }
 
-function DeleteUser({user}: { user: User }) {
+function DeleteUser({user}: { user: UserDB }) {
     const deleteUserWithId = deleteUser.bind(null, user.id);
 
     const onSubmit = async (_formData: FormData) => {

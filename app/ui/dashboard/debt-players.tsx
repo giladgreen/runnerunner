@@ -3,12 +3,12 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
 import {fetchDebtPlayers} from "@/app/lib/data";
-import {DebtPlayerRaw} from "@/app/lib/definitions";
 import {formatCurrency} from "@/app/lib/utils";
 import Link from "next/link";
 import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 import {Suspense} from "react";
 import {PlayersSkeleton} from "@/app/ui/skeletons";
+import {PlayerDB} from "@/app/lib/definitions";
 
 export default async function DebtPlayers() {
     const debtPlayers = await fetchDebtPlayers();
@@ -24,7 +24,7 @@ export default async function DebtPlayers() {
       <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
 
          <div className="bg-white px-6">
-          {debtPlayers.map((player: DebtPlayerRaw, i) => {
+          {debtPlayers.map((player: PlayerDB, i) => {
 
               return (
                 <Link

@@ -3,7 +3,7 @@ import {
     fetchAllPlayersForExport, fetchFeatureFlags,
     fetchFinalTablePlayers,
     fetchPlayersPrizes,
-    fetchTournamentByDay, getInvalidPlayers
+    fetchTournamentByDay
 } from "@/app/lib/data";
 import {ImportPlayers, ExportPlayers} from "@/app/ui/players/client-buttons";
 import {BugDB, PlayerDB, PrizeDB, TournamentDB} from "@/app/lib/definitions";
@@ -100,7 +100,6 @@ function ReportBugForm({bugs}: { bugs: BugDB[] }) {
 export default async function Page() {
     const { prizesEnabled, placesEnabled, importEnabled} = await fetchFeatureFlags();
     const bugs = await fetchAllBugs();
-    const invalidPlayers = await getInvalidPlayers();
     const players = await fetchAllPlayersForExport();
     const playersPlaces = await fetchFinalTablePlayers();
     const tournament = await fetchTournamentByDay();
@@ -126,31 +125,6 @@ export default async function Page() {
 
             <ReportBugForm bugs={bugs}/>
             <Seperator/>
-            {Boolean(invalidPlayers && invalidPlayers.length) && <div style={{ marginTop:300}}>
-                <div>found {invalidPlayers.length} invalid players: </div>
-                {invalidPlayers.map((player: PlayerDB) => (
-                    <div key={player.id} style={{marginTop: 20}}>
-                        <div>
-                            <div>
-                                name:{player.name}
-                            </div>
-                            <div>
-                                phone_number:{player.phone_number}
-                            </div>
-                            <div>
-                                balance: {player.balance}
-                            </div>
-                            <div>
-                                history sum: {
-                                // @ts-ignore
-                                player.sum}
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>}
-
-
         </div>
     );
 }

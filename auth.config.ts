@@ -1,6 +1,6 @@
 import type { NextAuthConfig } from 'next-auth';
 import {sql} from "@vercel/postgres";
-import { User} from "@/app/lib/definitions";
+import { UserDB} from "@/app/lib/definitions";
 
 export const authConfig = {
     pages: {
@@ -15,7 +15,7 @@ export const authConfig = {
             let isWorker: boolean = false;
             let userUUID: string | undefined = undefined;
             if (isLoggedIn) {
-                const usersResult = await sql<User>`SELECT * FROM users WHERE phone_number = ${loggedInUser!.email}`;
+                const usersResult = await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${loggedInUser!.email}`;
                 const userFromDB = usersResult.rows[0];
                 isAdmin = Boolean(userFromDB && userFromDB.is_admin);
                 isWorker = Boolean(userFromDB && userFromDB.is_worker);

@@ -10,7 +10,7 @@ import { AuthError } from 'next-auth';
 import {
     PlayerDB,
     PlayerForm,
-    User,
+    UserDB,
     TournamentDB,
     WinnerDB,
     RSVPDB,
@@ -23,7 +23,6 @@ import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/u
 const DAY = 24 * 60 * 60 * 1000;
 const TARGET_MAIL = 'green.gilad+runner@gmail.com'
 let clearOldRsvpLastRun = (new Date('2024-06-15T10:00:00.000Z')).getTime();
-let mismatchMailSent = false;
 
 const ADMINS =  ['0587869910','0524803571','0524803577','0508874068'];
 const WORKERS =  ['0526841902'];
@@ -58,9 +57,9 @@ function sendEmail(to: string, subject: string, body: string){
         subject,
         text: body
     };
-console.log('## sending email to:', to)
-console.log('## subject:', subject)
-console.log('## body:', body)
+    console.log('## sending email to:', to)
+    console.log('## subject:', subject)
+    console.log('## body:', body)
     if (process.env.LOCAL==='true'){
         console.log('## skipping sending email locally')
         return;
@@ -141,6 +140,7 @@ function cancelTransaction(){
 
 }
 
+
 function insertIntoBugs(description: string){
     return sql`INSERT INTO bugs (description) VALUES (${description})`;
 }
@@ -155,13 +155,16 @@ function insertIntoHistory(phoneNumber: string, balance:number, note = '', type 
       VALUES (${phoneNumber}, ${balance}, ${note}, ${type})
     `;
 }
+async function touchPlayer(phoneNumber: string){
+    return sql`UPDATE players SET updated_at=${new Date().toISOString()} WHERE phone_number = ${phoneNumber}`;
+}
 
 async function insertIntoPlayers(name: string, balance:number, phoneNumber:string, imageUrl: string, note:string, notes?:string){
     try {
         await startTransaction();
         await sql`
-          INSERT INTO players (name, balance, phone_number, image_url, notes)
-          VALUES (${name}, ${balance}, ${phoneNumber}, ${imageUrl} , ${notes ?? ''})
+          INSERT INTO players (name, phone_number, image_url, notes)
+          VALUES (${name}, ${phoneNumber}, ${imageUrl} , ${notes ?? ''})
         `;
 
         await insertIntoHistory(phoneNumber, balance, note, 'credit');
@@ -184,7 +187,7 @@ export async function createReport(formData: FormData) {
         };
     }
 
-    revalidatePath('/dashboard/configurations');
+    revalidatePath('/dashboard/configurations');//TODO: if worker need to return to a different url
     redirect('/dashboard/configurations');
 }
 
@@ -223,8 +226,28 @@ phone: ${phone_number}`)
 }
 
 async function getPlayerByPhoneNumber(phoneNumber: string){
-    const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phoneNumber};`;
-    return playersResult.rows[0] ?? null;
+    const playersResult = await sql<PlayerDB>`SELECT * FROM players AS P 
+JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE phone_number = ${phoneNumber} GROUP BY phone_number) AS H
+ON P.phone_number = H.phone_number
+WHERE P.phone_number = ${phoneNumber};`;
+
+    const player =  playersResult.rows[0] ?? null;
+    if (player){
+        player.balance = Number(player.balance)
+    }
+    return player;
+}
+async function getPlayerById(playerId:string){
+    const playerResult = await sql<PlayerDB>`SELECT * FROM players AS P 
+JOIN (SELECT phone_number, sum(change) AS balance FROM history GROUP BY phone_number) AS H
+ON P.phone_number = H.phone_number
+WHERE P.id = ${playerId};`;
+
+    const player =  playerResult?.rows[0] ?? null;
+    if (player){
+        player.balance = Number(player.balance)
+    }
+    return player
 }
 
 async function handleCreditByOther(type: string, otherPlayerPhoneNumber: string, change:number, note:string, player:PlayerForm){
@@ -247,12 +270,6 @@ async function handleCreditByOther(type: string, otherPlayerPhoneNumber: string,
                 message: 'did not find other person data.',
             };
         }
-        if (otherPlayer.balance < change){
-            console.error('### other person does not have enough credit')
-            return {
-                message: 'other person does not have enough credit.',
-            };
-        }
         useOtherPlayerCredit = true;
         historyNote = `${note}
 (על חשבון ${otherPlayer.name} ${otherPlayer.phone_number} ) `;
@@ -272,15 +289,15 @@ async function handleCreditByOther(type: string, otherPlayerPhoneNumber: string,
 async function getUserName(user: { userName?:string, phoneNumber?:string}){
     let username = user.userName;
     if (user.phoneNumber){
-        const userResult = await sql<User>`SELECT * FROM users WHERE phone_number = ${user.phoneNumber}`;
+        const userResult = await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${user.phoneNumber}`;
         const userFromDB = userResult.rows[0];
         if (userFromDB){
             username = userFromDB.name ?? username ?? user.phoneNumber;
         }
     }
-    username = username ?? 'unknown';
-    return username;
+    return username ?? 'unknown';
 }
+
 export async function createPlayerLog(player: PlayerForm, formData: FormData, prevPage:string ,usage: boolean, user: { userName?:string, phoneNumber?:string}){
     const validatedFields = CreateUsageLog.safeParse({
         change: formData.get('change'),
@@ -312,8 +329,6 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
         };
     }
 
-
-
     try
     {
         await startTransaction();
@@ -331,18 +346,9 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
               VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type}, ${username})
             `;
         }
-
-        if (type === 'credit' || type === 'prize') {
-            const playerFromDB = await getPlayerByPhoneNumber(player.phone_number);
-            const currentBalance = playerFromDB.balance;
-            const newBalance = currentBalance + change;
-            const date = new Date().toISOString();
-            await sql`UPDATE players SET balance = ${newBalance}, updated_at=${date} WHERE id = ${player.id}`;
-        } else if (type === 'credit_by_other' && useOtherPlayerCredit){
-            const newBalance = otherPlayer.balance + change;
-            const date = new Date().toISOString();
-            await sql`UPDATE players SET balance = ${newBalance}, updated_at=${date} WHERE id = ${otherPlayer.id}`;
-        }
+        const date = new Date().toISOString();
+        const playerPhoneToUpdate = useOtherPlayerCredit && otherPlayer ? otherPlayer.phone_number: player.phone_number;
+        await touchPlayer(playerPhoneToUpdate);
 
         await commitTransaction();
     } catch(error) {
@@ -353,7 +359,6 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
         };
     }
 
-    validatePlayers();
     revalidatePath(prevPage);
     redirect(prevPage);
 }
@@ -362,46 +367,50 @@ export async function createPlayerUsageLog(data : {player: PlayerForm, prevPage:
     return createPlayerLog(data.player, formData, data.prevPage, true, { userName: data.username, phoneNumber: data.phoneNumber});
 }
 
-export async function setPlayerPosition({playerId, prevPage}:{playerId: string, prevPage: string}, prevState: State, formData: FormData){
-    const newPosition =  formData.get('position') as string;
-    const newPositionNumber = Number(newPosition);
+export async function createPlayerNewCreditLog(data : {player: PlayerForm, prevPage:string, phoneNumber: string}, _prevState: State, formData: FormData){
+    return createPlayerLog(data.player, formData, data.prevPage, false, { phoneNumber: data.phoneNumber});
+}
 
-    if (isNaN(newPositionNumber) || newPositionNumber < 0){
+export async function setPlayerPosition({playerId, prevPage}:{playerId: string, prevPage: string}, _prevState: State, formData: FormData){
+    const newPosition = Number(formData.get('position') as string);
+
+    if (isNaN(newPosition) || newPosition < 0){
          return {
               message: 'Invalid Position. Failed to set Player Position.',
          };
-   }
+    }
     try {
         const date = (new Date()).toISOString().slice(0,10);
-        const playerResult = await sql<PlayerDB>`SELECT * FROM players WHERE id = ${playerId}`;
-        const player = playerResult.rows[0];
+        const today = (new Date()).toLocaleString('en-us', {weekday: 'long'});
+
+        const player = await getPlayerById(playerId);
         if (!player){
             return {
                 message: 'Invalid Position. Failed to find Player.',
             };
         }
-        const today = (new Date()).toLocaleString('en-us', {weekday: 'long'});
 
-        const todayTournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${today};`;
+        const [todayTournamentResult, winnersResult] = await Promise.all([
+            sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${today};`, sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`]);
+
         const todayTournament = todayTournamentResult.rows[0];
-        const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
         let winnersObject = winnersResult.rows[0];
 
         if (winnersObject){
             const newWinnersObject = {
                 ...JSON.parse(winnersObject.winners),
                 [player.phone_number]: {
-                    position: newPositionNumber,
+                    position: newPosition,
                     hasReceived: false,
                 }
             }
-            if (newPositionNumber == 0){
+            if (newPosition == 0){
                 delete newWinnersObject[player.phone_number];
             }
             await sql`UPDATE winners SET winners=${JSON.stringify(newWinnersObject)} WHERE date = ${date}`;
 
         }else{
-            const newWinnersObject = { [player.phone_number]: {position: newPositionNumber, hasReceived: false}};
+            const newWinnersObject = { [player.phone_number]: {position: newPosition, hasReceived: false}};
             await sql`INSERT INTO winners (date, tournament_name, winners) VALUES (${date}, ${todayTournament.name}, ${JSON.stringify(newWinnersObject)})`;
         }
 
@@ -417,19 +426,28 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
 
 export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{stringDate?:string, playerId: string, prevPage: string}, _prevState: State, formData: FormData){
     try {
-        const type = formData.get('type') as string;
-        const credit = formData.get('credit') as string;
-        const playerResult = await sql<PlayerDB>`SELECT * FROM players WHERE id = ${playerId}`;
-        const player = playerResult.rows[0];
+        await startTransaction();
+        const player = await getPlayerById(playerId);
         if (!player) {
             console.error('## givePlayerPrizeOrCredit Failed to find player')
             return {
                 message: 'Failed to find player.',
             };
         }
-        const date = stringDate ?? (new Date()).toISOString().slice(0, 10);
 
-        const winnersResult = await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
+        const type = formData.get('type') as string;
+        const credit = formData.get('credit') as string;
+        const date = stringDate ?? (new Date()).toISOString().slice(0, 10);
+        const day = (new Date(date)).toLocaleString('en-us', {weekday: 'long'});
+        console.log('## givePlayerPrizeOrCredit player:', player);
+        console.log('## givePlayerPrizeOrCredit stringDate:', stringDate);
+        console.log('## givePlayerPrizeOrCredit day:', day);
+        console.log('## givePlayerPrizeOrCredit date:', date);
+        console.log('## givePlayerPrizeOrCredit credit:', credit);
+        console.log('## givePlayerPrizeOrCredit type:', type);
+        const [tournamentResult, winnersResult] = await Promise.all([
+            sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${day};`, sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`]);
+
         const winners = winnersResult.rows[0];
         if (!winners) {
             console.error('## givePlayerPrizeOrCredit Failed to find winners in DB')
@@ -454,26 +472,22 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
                 message: 'Player has already received prize.',
             };
         }
-        const day = (new Date(date)).toLocaleString('en-us', {weekday: 'long'});
-        const tournamentResult = await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${day};`;
         const tournament = tournamentResult.rows[0];
         const tournamentName = tournament.name;
-        await startTransaction();
+        console.log('## givePlayerPrizeOrCredit tournamentName:', tournamentName);
         if (type === 'credit') {
             const amount = Number(credit);
-            if (isNaN(amount) || amount <= 0){
+            if (isNaN(amount) || amount < 1){
                 console.error('## givePlayerPrizeOrCredit Invalid credit amount:', credit)
                 return {
                     message: 'Invalid credit amount.',
                 };
             }
-            const playerCurrentBalance = player.balance;
-            const playerNewBalance = playerCurrentBalance + amount;
 
             const note = `#${position} - מקום ${tournamentName}`;
 
             try {
-                await sql`UPDATE players SET balance = ${playerNewBalance} WHERE phone_number = ${player.phone_number}`;
+                await touchPlayer(player.phone_number);
 
                 await sql`
           INSERT INTO history (phone_number, change, note, type)
@@ -492,27 +506,21 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
             hasReceived: true,
         }
 
-        try {
-            await sql`UPDATE winners SET winners=${JSON.stringify(newWinnersObject)} WHERE date = ${winners.date}`;
-        } catch (e) {
-            console.error('## givePlayerPrizeOrCredit error', e)
-            await cancelTransaction();
-            throw e;
-        }
+
+        await sql`UPDATE winners SET winners=${JSON.stringify(newWinnersObject)} WHERE date = ${winners.date}`;
 
         await commitTransaction();
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }catch(error){
-        console.error('## givePlayerPrizeOrCredit error', error)
+        console.error('## givePlayerPrizeOrCredit error', error);
+        await cancelTransaction();
         return {
             message: 'Database Error: Failed to givePlayerPrizeOrCredit.',
         };
-    }finally {
-        validatePlayers();
-        revalidatePath(prevPage);
-        redirect(prevPage);
     }
 }
-export async function setPlayerPrize({playerId, prevPage}:{playerId: string, prevPage: string}, prevState: State, formData: FormData){
+export async function setPlayerPrize({playerId, prevPage}:{playerId: string, prevPage: string}, _prevState: State, formData: FormData){
     const newPrize =  formData.get('prize') as string;
 
     if (!newPrize){
@@ -521,8 +529,7 @@ export async function setPlayerPrize({playerId, prevPage}:{playerId: string, pre
          };
    }
     try {
-        const playerResult = await sql<PlayerDB>`SELECT * FROM players WHERE id = ${playerId}`;
-        const player = playerResult.rows[0];
+        const player = await getPlayerById(playerId);
         if (!player){
             return {
                 message: 'Set Prize. Failed to find Player.',
@@ -535,23 +542,21 @@ export async function setPlayerPrize({playerId, prevPage}:{playerId: string, pre
         const date = (new Date()).toISOString().slice(0,10);
         const todayTournamentData = `${todayTournament.name} ${date}`;
         await sql`INSERT INTO prizes (tournament, phone_number, prize) VALUES (${todayTournamentData}, ${player.phone_number}, ${newPrize})`;
-
+        revalidatePath(prevPage);
+        redirect(prevPage);
     } catch (error) {
         console.error('## create log error', error)
         return {
             message: 'Database Error: Failed to setPlayerPrize.',
         };
     }
-    revalidatePath(prevPage);
-    redirect(prevPage);
+
 }
 
-export async function createPlayerNewCreditLog(data : {player: PlayerForm, prevPage:string, phoneNumber: string}, _prevState: State, formData: FormData){
-    return createPlayerLog(data.player, formData, data.prevPage, false, { phoneNumber: data.phoneNumber});
-}
+
 export async function updatePlayer(
     {id, prevPage}: {id: string, prevPage: string,},
-    prevState: State,
+    _prevState: State,
     formData: FormData,
 ) {
 
@@ -573,8 +578,7 @@ export async function updatePlayer(
 
     try {
         if (image_url && image_url.length > 2 && image_url !== '/players/default.png'){
-            const playersResults = await sql<PlayerDB>`SELECT * FROM players WHERE id = ${id}`;
-            const player = playersResults.rows[0];
+            const player = await getPlayerById(id)
             if (player && player.image_url !== image_url){
                 await sql`INSERT INTO images (phone_number, image_url) VALUES (${player.phone_number}, ${image_url})`;
             }
@@ -588,16 +592,20 @@ export async function updatePlayer(
     try {
         await sql`
       UPDATE players
-      SET name = ${name}, image_url = ${image_url}, notes = ${notes}, updated_at=${date}
-      WHERE id = ${id}
-    `;
+      SET name = ${name},
+      image_url = ${image_url},
+      notes = ${notes}, 
+      updated_at=${date}
+      WHERE id = ${id} `;
+
+        revalidatePath(prevPage);
+        redirect(prevPage);
     } catch (error) {
         console.error('## updatePlayer error', error)
         return { message: 'Database Error: Failed to Update Player.' };
     }
 
-    revalidatePath(prevPage);
-    redirect(prevPage);
+
 }
 
 export async function updateTournament(
@@ -631,23 +639,24 @@ export async function updateTournament(
       SET name = ${name}, buy_in = ${buy_in},re_buy = ${re_buy},max_players = ${max_players},rsvp_required=${rsvp_required}, updated_at=${date}
       WHERE id = ${id}
     `;
-
         sendEmail(TARGET_MAIL, 'tournaments update', `name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`)
+
+        revalidatePath('/dashboard/configurations/tournaments');
+        redirect('/dashboard/configurations/tournaments');
     } catch (error) {
         console.error('## updateTournament error', error)
         return { message: 'Database Error: Failed to update Tournament.' };
     }
 
-    revalidatePath('/dashboard/configurations/tournaments');
-    redirect('/dashboard/configurations/tournaments');
+
 }
 
 export async function deletePlayer(id: string) {
 
     try {
         await startTransaction();
-        const playerResult  =await sql<PlayerDB>`SELECT * FROM players WHERE id = ${id}`;
-        const player = playerResult.rows[0];
+
+        const player = await getPlayerById(id);
         if (!player) {
             return;
         }
@@ -655,8 +664,10 @@ export async function deletePlayer(id: string) {
         await sql`DELETE FROM history WHERE phone_number = ${phone_number}`;
         await sql`DELETE FROM players WHERE id = ${id}`;
         await commitTransaction();
+        sendEmail(TARGET_MAIL, 'player deleted', `name: ${player.name}, phone: ${player}   image: ${player.image_url}  notes: ${player.notes}`)
+
         revalidatePath('/dashboard/players');
-        return { message: 'Deleted Player.' };
+
     } catch (error) {
         await cancelTransaction();
         return { message: 'Database Error: Failed to Delete Player.' };
@@ -665,12 +676,6 @@ export async function deletePlayer(id: string) {
 
 export async function deletePrize( {id, prevPage}: {id: string, prevPage: string,}) {
     try {
-        const prizeResult  = await sql<PrizeDB>`SELECT * FROM prizes WHERE id = ${id}`;
-        const prize = prizeResult.rows[0];
-        if (!prize) {
-            return;
-        }
-
         await sql`DELETE FROM prizes WHERE id = ${id}`;
         revalidatePath(prevPage);
     } catch (error) {
@@ -718,9 +723,8 @@ export async function signUp(
     const phoneNumber = `${user_phone_number.startsWith('0') ? '' :'0'}${user_phone_number}`;
 
     const password = formData.get('password') as string;
-    const playerResult  = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${phoneNumber}`;
-    const userResult  = await sql<User>`SELECT * FROM users WHERE phone_number = ${phoneNumber}`;
-    const existingPlayer = playerResult.rows[0];
+    const userResult  = await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${phoneNumber}`;
+    const existingPlayer = await getPlayerByPhoneNumber(phoneNumber);
     const existingUser = userResult.rows[0];
     if (existingUser) {
         return 'User with phone number already exists';
@@ -747,43 +751,45 @@ export async function updateFFValue(name:string, newValue:boolean) {
     noStore();
     try {
         await sql`UPDATE feature_flags SET is_open = ${newValue} WHERE flag_name = ${name}`;
+        revalidatePath('/dashboard/configurations/flags');
+        redirect('/dashboard/configurations/flags');
     } catch (error) {
         console.error('Database updateFFValue Error:', error);
         return false;
     }
-    revalidatePath('/dashboard/configurations/flags');
-    redirect('/dashboard/configurations/flags');
+
 }
 
 export async function updateIsUserAdmin(id:string) {
     noStore();
     try {
-        const users = await sql<User>`SELECT * FROM users WHERE id = ${id}`;
+        const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
         const user = users.rows[0];
 
         if (ADMINS.includes(user.phone_number)) {
             return;
         }
         await sql`UPDATE users SET is_admin = ${!user.is_admin} WHERE id = ${id}`;
+        redirect('/dashboard/configurations/users');
+
     } catch (error) {
         console.error('Database Error:', error);
         return false;
     }
-    redirect('/dashboard/configurations/users');
 }
 
 
 export async function updateIsUserWorker(id:string) {
     noStore();
     try {
-        const users = await sql<User>`SELECT * FROM users WHERE id = ${id}`;
+        const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
         const user = users.rows[0];
         await sql`UPDATE users SET is_worker = ${!user.is_worker} WHERE id = ${id}`;
+        redirect('/dashboard/configurations/users');
     } catch (error) {
         console.error('Database Error:', error);
         return false;
     }
-    redirect('/dashboard/configurations/users');
 }
 
 
@@ -791,25 +797,26 @@ export async function updateIsUserWorker(id:string) {
 export async function deleteUser(id:string) {
     noStore();
     try {
-        const users = await sql<User>`SELECT * FROM users WHERE id = ${id}`;
+        const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
         const user = users.rows[0];
 
-        if (user.is_admin){
+        if (user.is_admin || user.is_worker) {
             return;
         }
         await sql`DELETE FROM users WHERE id = ${id}`;
+        redirect('/dashboard/configurations/users');
+
     } catch (error) {
         console.error('Database Error:', error);
         return false;
     }
-    redirect('/dashboard/configurations/users');
 }
 
 
 export async function rsvpPlayerForDay(phone_number:string, date:string, val: boolean, prevPage: string){
     noStore();
     try {
-        await removeOldRsvp();
+        // await removeOldRsvp();
 
         const rsvpResult = await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${phone_number} AND date = ${date}`;
         const existingRsvp = rsvpResult.rows[0];
@@ -828,14 +835,14 @@ export async function rsvpPlayerForDay(phone_number:string, date:string, val: bo
         }else{
              await sql`DELETE FROM rsvp WHERE id = ${existingRsvp.id}`;
          }
-
+        revalidatePath(prevPage);
+        redirect(prevPage);
     } catch (error) {
         console.error('rsvpPlayerForDay Error:', error);
         return false;
     }
 
-    revalidatePath(prevPage);
-    redirect(prevPage);
+
 }
 
 
@@ -856,19 +863,17 @@ export async function undoPlayerLastLog(phone_number:string, prevPage: string){
             }
 
             if (amount < 0 && lastLog.type === 'credit') {
-                const positiveAmount = amount * -1;
-                await sql`UPDATE players SET balance = balance + ${positiveAmount} WHERE phone_number = ${phone_number}`;
+                await touchPlayer(phone_number);
             }
             await sql`DELETE FROM history where id = ${lastLog.id}`;
             if (otherPlayerPhoneNumber){
-                const otherPlayerLogsResult = await sql<LogDB>`SELECT * FROM history WHERE phone_number = ${otherPlayerPhoneNumber} ORDER BY updated_at DESC LIMIT 1`;
+                const otherPlayerLogsResult = await sql<LogDB>`SELECT * FROM history WHERE phone_number = ${otherPlayerPhoneNumber} AND type = 'credit_to_other' ORDER BY updated_at DESC LIMIT 1`;
                 const otherPlayerLastLog = otherPlayerLogsResult.rows[0];
 
                 if (otherPlayerLastLog){
                     const otherPlayerAmount = otherPlayerLastLog.change;
-                    if (otherPlayerAmount < 0 && otherPlayerLastLog.type === 'credit_to_other') {
-                        const asPositiveAmount = otherPlayerAmount * -1;
-                        await sql`UPDATE players SET balance = balance + ${asPositiveAmount} WHERE phone_number = ${otherPlayerPhoneNumber}`;
+                    if (otherPlayerAmount < 0) {
+                        await touchPlayer(otherPlayerPhoneNumber);
                     }
 
                     await sql`DELETE FROM history where id = ${otherPlayerLastLog.id}`;
@@ -876,64 +881,14 @@ export async function undoPlayerLastLog(phone_number:string, prevPage: string){
             }
         }
         await commitTransaction();
-        validatePlayers();
+        revalidatePath(prevPage);
+        redirect(prevPage);
     } catch (error) {
         await cancelTransaction();
         console.error('undoPlayerLastLog Error:', error);
-
-    }finally {
-
-        revalidatePath(prevPage);
-        redirect(prevPage);
     }
 }
 
-export async function getInvalidPlayers() {
-    const [allPlayersResult, allLogsResult] = await Promise.all([sql<PlayerDB>`SELECT * FROM players`,sql<LogDB>`SELECT * FROM history`]);
-    const allPlayers = allPlayersResult.rows;
-    const allLogs = allLogsResult.rows;
-
-    const badPlayers =  allPlayers.map(player=>{
-        const playerHistoryLogs = allLogs.filter(log => log.phone_number === player.phone_number);
-
-        const sum = playerHistoryLogs.reduce((acc, log) => {
-            return acc + log.change;
-        }  ,0);
-
-        if (sum === player.balance) {
-            return null;
-        }
-        if (sum !== player.balance) {
-            return {
-                ...player,
-                sum
-            }
-        }
-    }).filter(Boolean);
-
-    return badPlayers;
-}
-async function validatePlayers() {
-    console.log('## validatePlayers')
-   const badPlayers = await getInvalidPlayers()
-
-   if (badPlayers.length && !mismatchMailSent){
-       mismatchMailSent = true;
-       sendEmail(TARGET_MAIL, '!!MISMATCH FOUND!!', `
-     
-${badPlayers.map(bp =>{
-
-           // @ts-ignore
-    return  `player: ${bp.name}  phone: ${bp.phone_number}  balance: ${bp.balance}  history sum: ${bp.sum}   
-
-`
-       })}
-       
-         
-            
-            `)
-   }
-}
 
 export async function importPlayers(playersToInsert: PlayerDB[]) {
     try {
@@ -963,8 +918,8 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
         const arr = playersToInsert.map((player) => ({ ...player, updated_at: date }));
 
         await sql.query(
-            `INSERT INTO players (name, phone_number, balance, notes, updated_at, image_url)
-     SELECT name, phone_number, balance, notes, updated_at, image_url FROM json_populate_recordset(NULL::players, $1)`,
+            `INSERT INTO players (name, phone_number, notes, updated_at, image_url)
+     SELECT name, phone_number, notes, updated_at, image_url FROM json_populate_recordset(NULL::players, $1)`,
             [JSON.stringify(arr)]
         );
 
@@ -980,7 +935,7 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
         await sql`COMMIT;`
         console.log('## import Done')
         sendEmail(TARGET_MAIL, 'Import is done', `inserted ${playersToInsert.length} players`);
-        validatePlayers();
+        redirect('/')
     } catch (error) {
         await sql`ROLLBACK;`
         // @ts-ignore
@@ -992,5 +947,5 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
         };
     }
 
-    redirect('/')
+
 }
