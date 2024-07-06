@@ -17,7 +17,7 @@ function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:s
     } catch (e) {
         console.error('localStorage is not available', e);
     }
-    const setPlayerPrizeWithPlayerId = givePlayerPrizeOrCredit.bind(null,{ userPhoneNumber, playerId: player.id, prevPage, stringDate})
+    const setPlayerPrizeWithPlayerId = givePlayerPrizeOrCredit.bind(null,{ userPhoneNumber: userPhoneNumber as string, playerId: player.id, prevPage, stringDate})
     // @ts-ignore
     const [_state, dispatch] = useFormState(setPlayerPrizeWithPlayerId, initialState);
     const [type, setType] = useState('prize');
