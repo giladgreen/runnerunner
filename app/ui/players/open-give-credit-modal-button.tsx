@@ -11,7 +11,13 @@ import { TickIcon} from "@/app/ui/icons";
 
 function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:string, player: PlayerForm, hide?: ()=>void, prevPage:string}) {
     const initialState = { message: null, errors: {} };
-    const setPlayerPrizeWithPlayerId = givePlayerPrizeOrCredit.bind(null,{ playerId: player.id, prevPage, stringDate})
+    let userPhoneNumber;
+    try {
+        userPhoneNumber = localStorage.getItem('phone_number');
+    } catch (e) {
+        console.error('localStorage is not available', e);
+    }
+    const setPlayerPrizeWithPlayerId = givePlayerPrizeOrCredit.bind(null,{ userPhoneNumber, playerId: player.id, prevPage, stringDate})
     // @ts-ignore
     const [_state, dispatch] = useFormState(setPlayerPrizeWithPlayerId, initialState);
     const [type, setType] = useState('prize');

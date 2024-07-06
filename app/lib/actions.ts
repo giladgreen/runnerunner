@@ -424,7 +424,7 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
     redirect(prevPage);
 }
 
-export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{stringDate?:string, playerId: string, prevPage: string}, _prevState: State, formData: FormData){
+export async function givePlayerPrizeOrCredit({stringDate, playerId,userPhoneNumber, prevPage}:{stringDate?:string, userPhoneNumber?:string, playerId: string, prevPage: string}, _prevState: State, formData: FormData){
     try {
         await startTransaction();
         const player = await getPlayerById(playerId);
@@ -439,12 +439,7 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
         const credit = formData.get('credit') as string;
         const date = stringDate ?? (new Date()).toISOString().slice(0, 10);
         const day = (new Date(date)).toLocaleString('en-us', {weekday: 'long'});
-        console.log('## givePlayerPrizeOrCredit player:', player);
-        console.log('## givePlayerPrizeOrCredit stringDate:', stringDate);
-        console.log('## givePlayerPrizeOrCredit day:', day);
-        console.log('## givePlayerPrizeOrCredit date:', date);
-        console.log('## givePlayerPrizeOrCredit credit:', credit);
-        console.log('## givePlayerPrizeOrCredit type:', type);
+
         const [tournamentResult, winnersResult] = await Promise.all([
             sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${day};`, sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`]);
 
@@ -474,7 +469,7 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
         }
         const tournament = tournamentResult.rows[0];
         const tournamentName = tournament.name;
-        console.log('## givePlayerPrizeOrCredit tournamentName:', tournamentName);
+
         if (type === 'credit') {
             const amount = Number(credit);
             if (isNaN(amount) || amount < 1){
@@ -488,10 +483,10 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId, prevPage}:{
 
             try {
                 await touchPlayer(player.phone_number);
-
+                const userResult = userPhoneNumber ? (await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${userPhoneNumber}`).rows[0] : null;
                 await sql`
-          INSERT INTO history (phone_number, change, note, type)
-          VALUES (${player.phone_number}, ${amount}, ${note}, 'credit')
+          INSERT INTO history (phone_number, change, note, type, updated_by)
+          VALUES (${player.phone_number}, ${amount}, ${note}, 'credit', ${userResult?.name ?? 'unknown'})
         `;
             } catch (e) {
                 console.error('## givePlayerPrizeOrCredit error', e)
