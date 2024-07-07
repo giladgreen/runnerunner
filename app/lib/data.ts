@@ -90,7 +90,7 @@ async function getPlayerTournamentsHistory(phoneNumber: string){
 }
 async function getPlayerById(playerId: string){
   const playerResult = await sql<PlayerDB>`SELECT * FROM players AS P 
-JOIN (SELECT phone_number, sum(change) AS balance FROM history GROUP BY phone_number) AS H
+JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' GROUP BY phone_number) AS H
 ON P.phone_number = H.phone_number
 WHERE P.id = ${playerId};`;
 
@@ -116,7 +116,7 @@ async function isPlayerRsvp(playerPhoneNumber:string, date: string){
 
 async function getPlayerByPhoneNumber(phoneNumber: string){
   const playersResult = await sql<PlayerDB>`SELECT * FROM players AS P 
-JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE phone_number = ${phoneNumber} GROUP BY phone_number) AS H
+JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE phone_number = ${phoneNumber}  AND (type = 'credit_to_other' OR type ='credit') GROUP BY phone_number) AS H
 ON P.phone_number = H.phone_number
 WHERE P.phone_number = ${phoneNumber};`;
 
@@ -165,7 +165,7 @@ async function getAllHistory(){
 
 async function getAllPlayers()  {
   const playersPromise = sql<PlayerDB>`SELECT * FROM players AS P 
- JOIN (SELECT phone_number, sum(change) AS balance FROM history GROUP BY phone_number) AS H
+ JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' GROUP BY phone_number) AS H
     ON P.phone_number = H.phone_number`;
 
   const [allPlayersResult, rsvpResults] = await Promise.all([playersPromise, sql<RSVPDB>`SELECT * FROM rsvp;`])
@@ -192,7 +192,7 @@ async function getAllUsers()  {
 
 async function getTopMVPPlayers(){
   const players = await sql<PlayerDB>`SELECT * FROM players AS P 
- JOIN (SELECT phone_number, sum(change) AS balance FROM history GROUP BY phone_number) AS H
+ JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' GROUP BY phone_number) AS H
     ON P.phone_number = H.phone_number WHERE H.balance > 0 ORDER BY H.balance DESC LIMIT ${TOP_COUNT}`;
 
   return players.rows;
@@ -200,7 +200,7 @@ async function getTopMVPPlayers(){
 
 async function getTopDebtPlayers(){
   const players = await sql<PlayerDB>`SELECT * FROM players AS P 
- JOIN (SELECT phone_number, sum(change) AS balance FROM history GROUP BY phone_number) AS H
+ JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' GROUP BY phone_number) AS H
     ON P.phone_number = H.phone_number WHERE H.balance < 0 ORDER BY H.balance ASC LIMIT ${TOP_COUNT}`;
 
   return players.rows;
@@ -237,7 +237,7 @@ async function fetchTopPlayers(players: PlayerDB[], rsvp: RSVPDB[] = [], todayHi
 
 async function fetchSortedPlayers(query: string, sortBy: string, currentPage: number){
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-  const phoneAndBalance = (await sql`SELECT phone_number,sum(change) AS balance FROM history GROUP BY phone_number`).rows;
+  const phoneAndBalance = (await sql`SELECT phone_number,sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' GROUP BY phone_number`).rows;
 
   switch (sortBy) {
     case 'name':
@@ -298,8 +298,7 @@ export async function fetchGeneralPlayersCardData() {
     const playersWithDebt = allPlayers.filter((player) => player.balance < 0);
     const numberOfPlayersWithDebt = playersWithDebt.length;
     const totalRunnerDebt = sumArrayByProp(allPlayers.filter((player) => player.balance > 0), 'balance')
-    console.log('######')
-    console.log('## totalRunnerDebt:', totalRunnerDebt)
+
 
     const totalPlayersDebt = sumArrayByProp(playersWithDebt,'balance');
     methodEnd('fetchGeneralPlayersCardData');
