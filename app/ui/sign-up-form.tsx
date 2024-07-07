@@ -83,7 +83,8 @@ function SignUpButton() {
 
   return (
       <Button className="mt-4 w-full" aria-disabled={pending}>
-        Sign Up
+
+        {pending ? 'Signing Up' : 'Sign Up'}
         <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50"/>
       </Button>
   );

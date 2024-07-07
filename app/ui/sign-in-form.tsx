@@ -102,7 +102,7 @@ function SignInButton({phoneNumber}:{phoneNumber:string}) {
           console.error('localStorage is not available', e);
         }
       }}>
-        Sign In
+        {pending ? 'Signing In' : 'Sign In'}
         <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
       </Button>
   );
