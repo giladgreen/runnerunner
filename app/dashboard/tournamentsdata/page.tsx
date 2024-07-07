@@ -9,12 +9,12 @@ import {lusitana} from "@/app/ui/fonts";
 import {getFinalTablePlayersContent} from "@/app/ui/dashboard/cards";
 
 function getDayIncome(dateItem: { total: number,credit: number,cash: number, wire: number }){
-    return  (<div className={`${lusitana.className} truncate rounded-xl bg-white px-4 py-4 text-center text-2xl`}
-    > <div>
-        <div style={{fontSize: 20, marginBottom:10}}>
+    return  (<div className={`${lusitana.className} truncate  bg-white  text-center text-2xl`}>
+        <div>
+            <div style={{fontSize: 20, marginBottom:10}}>
             <b>{formatCurrency(dateItem.total)}</b>
         </div>
-        <div className="card-table tournaments-data-table-income-cell full-width">
+        <div className="wide-screen card-table tournaments-data-table-income-cell full-width">
             <table style={{fontSize: 15}} className="full-width" cellSpacing="0" cellPadding="0">
                 <thead>
                 <tr>
@@ -68,7 +68,7 @@ function getDayIncome(dateItem: { total: number,credit: number,cash: number, wir
             </table>
         </div>
 
-    </div>
+        </div>
     </div>)
 }
 
@@ -76,6 +76,7 @@ export default async function TournamentsDataPage() {
     const {  placesEnabled} = await fetchFeatureFlags();
 
     const tournaments = await fetchTournamentsData();
+
     const tournamentsData =  Object.keys(tournaments);
 
 
@@ -116,7 +117,7 @@ export default async function TournamentsDataPage() {
                      className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                  >
                      <th className="px-4 py-5 font-medium">
-                        <div>
+                        <div style={{ marginBottom:20}}>
                             {formatDateToLocal(dateItem.date)}
                         </div>
                          <div>

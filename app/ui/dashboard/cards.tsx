@@ -19,7 +19,7 @@ import {
 } from '@/app/lib/data';
 import {formatCurrency} from "@/app/lib/utils";
 import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
-import {CSSProperties, Suspense, useState} from "react";
+import { Suspense} from "react";
 import {CardsSkeleton} from "@/app/ui/skeletons";
 import Image from "next/image";
 import {PlayerDB, PrizeDB} from "@/app/lib/definitions";
@@ -54,10 +54,10 @@ export async function GeneralPlayersCardWrapper() {
     } = await fetchGeneralPlayersCardData();
     return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 full-width">
         <Suspense fallback={<CardsSkeleton count={4}/>}>
-            <Card title="Total players" value={totalNumberOfPlayers} type="players"/>
-            <Card title="Our Obligations" value={formatCurrency(totalRunnerDebt)} type="money"/>
-            <Card title="Players with debt" value={numberOfPlayersWithDebt} type="debt"/>
-            <Card title="Players debt" value={formatCurrency(totalPlayersDebt)} type="money"/>
+            <Card title="Total players" value={totalNumberOfPlayers} type="players" oneLine/>
+            <Card title="Our Obligations" value={formatCurrency(totalRunnerDebt)} type="money" oneLine/>
+            <Card title="Players with debt" value={numberOfPlayersWithDebt} type="debt" oneLine/>
+            <Card title="Players debt" value={formatCurrency(totalPlayersDebt)} type="money" oneLine/>
         </Suspense>
     </div>
 }
@@ -137,12 +137,12 @@ export async function RSVPAndArrivalCardWrapper() {
 
     </div>
 
-    const oneLinerStyle = {padding: 50, fontSize: 40}
+    // const oneLinerStyle = {padding: 50, fontSize: 40}
     return <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 full-width" style={{marginBottom: 20}} >
         <Suspense fallback={<CardsSkeleton count={4}/>}>
-            {rsvpEnabled && <Card title="RSVP" value={<div style={oneLinerStyle}>{rsvpForTodayText}</div>} type="rsvp"/>}
-            <Card title="Arrived" value={<div  style={oneLinerStyle}>{arrivedToday}</div>} type="arrived"/>
-            <Card title="Re Entries" value={<div  style={oneLinerStyle}>{reEntriesCount}</div>} type="money"/>
+            {rsvpEnabled && <Card title="RSVP" value={<div >{rsvpForTodayText}</div>} type="rsvp" oneLine/>}
+            <Card title="Arrived" value={<div >{arrivedToday}</div>} type="arrived" oneLine/>
+            <Card title="Re Entries" value={<div >{reEntriesCount}</div>} type="money" oneLine/>
             <Card title="Income" value={todayIncome} type="money"/>
         </Suspense>
     </div>
@@ -158,7 +158,7 @@ export async function TodayTournamentNameCardWrapper() {
     return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1 full-width" style={{marginBottom: 20}} >
         <Suspense fallback={<CardsSkeleton count={1}/>}>
 
-            <Card title="Current Tournament" value={`${
+            <Card oneLine title="Current Tournament" value={`${
                 // @ts-ignore
                 translation[todayTournament.day]} -  ${todayTournament.max_players === 0 && todayTournament.rsvp_required ? 'אין טורניר היום' : todayTournament.name}`} />
         </Suspense>
@@ -174,19 +174,39 @@ export async function getPlayersPrizesContent(playerPhone?: string, personal?:bo
     return <div className="full-width" style={{marginBottom: 30}}>
 
             {playersPrizes.map((playersPrize: PrizeDB) => {
-                return <div
-                    key={playersPrize.id}
-                    className="flex border-b prize-highlight-on-hover"
-                    style={{marginBottom: 5}}
-                >
-                    <div className="w-full rounded-md flex items-center  ">
-                        <span style={{marginLeft: 25}}>{playersPrize!.tournament}</span>
-                        {!personal && <span style={{marginLeft: 25}}>{playersPrize!.player!.name}</span>}
-                        {!personal && <span style={{marginLeft: 25}}>{playersPrize!.player!.phone_number}</span>}
-                        <span style={{marginLeft: 25}}>{playersPrize!.prize}</span>
-                    </div>
+                return <div key={playersPrize.id}>
 
-                    {!personal && <DeletePrize id={playersPrize.id}/>}
+                    <div className="wide-screen border-b prize-row prize-highlight-on-hover">
+                        <div className="w-full rounded-md flex items-center  ">
+                            <span style={{marginLeft: 25}}>{playersPrize!.tournament}</span>
+                            {!personal && <span style={{marginLeft: 25}}>{playersPrize!.player!.name}</span>}
+                            {!personal && <span style={{marginLeft: 25}}>{playersPrize!.player!.phone_number}</span>}
+                            <span style={{marginLeft: 25}}>{playersPrize!.prize}</span>
+                        </div>
+
+                        {!personal && <DeletePrize id={playersPrize.id}/>}
+                    </div>
+                    <div className="cellular border-b prize-row">
+                        <div >
+                            <div >
+                                <span style={{marginLeft: 1}}>{playersPrize!.tournament}</span>
+                            </div>
+                            {!personal && <div className="flex">
+                                <span>{playersPrize!.player!.phone_number}</span>
+                                <span style={{marginLeft: 5}}>{playersPrize!.player!.name}</span>
+                            </div>}
+                        </div>
+                        <div >
+                            {playersPrize!.prize}
+                        </div>
+
+                        {!personal && <div>
+                             <DeletePrize id={playersPrize.id}/>
+                        </div>}
+
+
+
+                    </div>
 
                 </div>
             })}
@@ -225,10 +245,19 @@ export async function getFinalTablePlayersContent(date: string, isTournamentsDat
                         />}
                         {isTournamentsDataPage && <span style={{marginLeft: 10}}></span>}
 
-                        <div
-                             style={{fontSize: isTournamentsDataPage ? 11 : 20,}}>{finalTablePlayer.phone_number}</div>
-                        <div style={{fontSize: isTournamentsDataPage ? 11 : 20, marginLeft: 20}}>
+                        <div className="wide-screen" style={{fontSize: isTournamentsDataPage ? 11 : 20,}}>
+                            {finalTablePlayer.phone_number}
+                        </div>
+
+                        <div className="wide-screen" style={{fontSize: isTournamentsDataPage ? 11 : 20, marginLeft: 20}}>
                             {finalTablePlayer.name}
+                        </div>
+
+                        <div className="cellular">
+                            <div style={{display: "block"}}>
+                                <div>{finalTablePlayer.name}</div>
+                                <div>{finalTablePlayer.phone_number}</div>
+                            </div>
                         </div>
 
                     </div>
@@ -237,21 +266,23 @@ export async function getFinalTablePlayersContent(date: string, isTournamentsDat
 
             })}
         </div>
-        {isTournamentsDataPage && <div style={{width: '40%', textAlign:'center'}}>
-            <Image
-                src={finalTablePlayers[0].image_url}
-                className="zoom-on-hover"
-                style={{
-                    marginTop: 20,
-                    marginLeft: 20,
-                    marginRight: 0,
-                    border: '3px solid black',
-                }}
-                width={100}
-                height={120}
-                alt={`${finalTablePlayers[0].name}'s profile picture`}
-            />
-            <b>{finalTablePlayers[0].name}</b>
+        {isTournamentsDataPage && <div className="wide-screen" style={{width: '40%', textAlign: 'center'}}>
+        <div style={{textAlign:'center'}}>
+                <Image
+                    src={finalTablePlayers[0].image_url}
+                    className="zoom-on-hover"
+                    style={{
+                        marginTop: 20,
+                        marginLeft: 20,
+                        marginRight: 0,
+                        border: '3px solid black',
+                    }}
+                    width={100}
+                    height={120}
+                    alt={`${finalTablePlayers[0].name}'s profile picture`}
+                />
+                <b>{finalTablePlayers[0].name}</b>
+            </div>
         </div>
 
 }
@@ -286,28 +317,28 @@ export function Card({
                          value,
                          type,
                          spend,
-                         empty
+                         empty,
+    oneLine
                      }: {
     title: string | JSX.Element;
     value: number | string | JSX.Element;
     type?: 'players' | 'debt' | 'money' | 'rsvp' | 'arrived' | 'empty' | 'prize';
     spend?: boolean
     empty?: boolean
+    oneLine?: boolean
 }) {
     if (empty) return (<div className={`rounded-xl  p-2 shadow-sm`}></div>);
 
     const Icon = type && !empty ? iconMap[type] : undefined;
 
     return (
-        <div className={`rounded-xl bg-blue-200 p-2 shadow-sm `}>
-            <div className="flex p-4 text-center">
+        <div className={`rounded-xl bg-blue-200 p-2 shadow-sm card`}>
+            <div className="flex p-4 text-center card-header" >
                 {Icon ? <Icon className="h-5 w-5 text-gray-700" size={18}/> : null}
                 <h3 className={`ml-2 text-sm font-medium text-center ${spend ? 'center-text' : ''}`}>{title}</h3>
             </div>
             <div
-                className={`${lusitana.className}
-          truncate rounded-xl bg-white px-4 py-4 text-center text-2xl`}
-            >
+                className={`${lusitana.className} truncate rounded-xl bg-white px-4 py-4 text-center text-2xl ${oneLine ? 'card-body-one-line':''}`}>
                 {value}
             </div>
         </div>

@@ -198,7 +198,7 @@ export function DeletePrize({ id }: { id: string }) {
 
     return (
         <div>
-        <div className="pointer" onClick={()=>{
+        <div className="pointer prize_delivered_button" onClick={()=>{
             setShowConfirmation(true);
         }}>
             <u>prize delivered</u>

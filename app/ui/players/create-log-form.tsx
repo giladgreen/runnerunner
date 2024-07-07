@@ -376,7 +376,7 @@ export function AddToBalanceForm({player, prevPage}: { player: PlayerForm, prevP
   const [state2, dispatch] = useFormState(createPlayerNewCreditLogWithPlayerData, initialState);
 
   return (
-      <form action={dispatch} className="form-control">
+      <form action={dispatch} className="form-control" style={{ margin: '5px 0'}}>
           <label className="mb-2 block text-sm font-medium">
             Add to Player Credit
           </label>
@@ -452,32 +452,48 @@ export function AddToBalanceForm({player, prevPage}: { player: PlayerForm, prevP
 
 export default function CreateLogForm({player, prevPage} : {player: PlayerDB, prevPage:string}) {
   return (
-      <div style={{ display: 'flex' , justifyContent: 'space-between'}} >
-        <AddToBalanceForm player={player} prevPage={prevPage}/>
-        <Image
-            src={player.image_url}
-            className="mr-2"
-            width={300}
-            height={500}
-            alt={`profile picture`}
-        />
-        <UseCreditForPrizeForm player={player} />
+      <div>
+        <div className="cellular" >
+          <div  style={{ display: 'block'}}>
+            <Image
+                src={player.image_url}
+                className=" mr-2"
+                width={100}
+                height={100}
+                alt={`profile picture`}
+            />
+            <AddToBalanceForm player={player} prevPage={prevPage}/>
+            <UseCreditForPrizeForm player={player}/>
+          </div>
+        </div>
+
+        <div className="wide-screen" style={{ justifyContent: 'space-between'}}>
+          <AddToBalanceForm player={player} prevPage={prevPage}/>
+          <Image
+              src={player.image_url}
+              className="mr-2"
+              width={300}
+              height={500}
+              alt={`profile picture`}
+          />
+          <UseCreditForPrizeForm player={player}/>
+        </div>
 
       </div>
   );
 }
 
 
-export function SetPrizeForm({player, hide, prevPage} : { player: PlayerForm, hide?: ()=>void, prevPage:string}) {
-  const initialState = { message: null, errors: {} };
-  const setPlayerPrizeWithPlayerId = setPlayerPrize.bind(null,{ playerId: player.id, prevPage})
+export function SetPrizeForm({player, hide, prevPage}: { player: PlayerForm, hide?: () => void, prevPage: string }) {
+  const initialState = {message: null, errors: {}};
+  const setPlayerPrizeWithPlayerId = setPlayerPrize.bind(null, {playerId: player.id, prevPage})
   // @ts-ignore
   const [state1, dispatch] = useFormState(setPlayerPrizeWithPlayerId, initialState);
 
   return (<div className="edit-player-modal-inner-div">
         <form action={dispatch} className="form-control">
           <label className="mb-2 block text-sm font-medium">
-            Set Player Prize
+          Set Player Prize
           </label>
           <div className="rounded-md  p-4 md:p-6 form-inner-control">
             {/*  prize name */}

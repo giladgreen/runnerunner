@@ -30,9 +30,14 @@
     top: 10vh;
     left: 35vw;
     width: 30vw;
-
 }
-
+@media only screen and (max-width: 600px) {
+    .edit-player-modal-inner-div {
+        top: 10vh;
+        left: 10vw;
+        width: 80vw;
+    }
+}
 .rsvp-section {
     svg {
         visibility: hidden;
@@ -169,4 +174,34 @@
     padding: 5px;
     margin: 5px;
     min-width: 40px;
+}
+
+.give-credit-modal-button{
+
+}
+.cellular{
+    display: none;
+}
+.wide-screen{
+    display: flex;
+}
+
+@media only screen and (max-width: 600px) {
+    .cellular {
+        display: flex;
+    }
+    .wide-screen{
+        display: none;
+    }
+
+    .tournament_rsvp_line{
+        margin-bottom: 10px;
+    }
+    .give-credit-modal-button {
+        img{
+            max-width: unset;
+        }
+
+
+    }
 }

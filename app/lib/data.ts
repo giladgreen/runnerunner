@@ -158,6 +158,11 @@ async function getTodayHistory(){
   return todayHistoryResults.rows;
 }
 
+async function getAllHistory(){
+  const todayHistoryResults = await sql<LogDB>`SELECT * FROM history ORDER BY updated_at DESC`;
+  return todayHistoryResults.rows;
+}
+
 async function getAllPlayers()  {
   const playersPromise = sql<PlayerDB>`SELECT * FROM players AS P 
  JOIN (SELECT phone_number, sum(change) AS balance FROM history GROUP BY phone_number) AS H
@@ -515,7 +520,7 @@ export async function fetchTournamentsData() {
   methodStart();
   noStore();
   try {
-    const [tournaments, history] =  await Promise.all([getAllTournaments(), getTodayHistory()]);
+    const [tournaments, history] =  await Promise.all([getAllTournaments(), getAllHistory()]);
 
     const dateToPlayerMap = {};
 

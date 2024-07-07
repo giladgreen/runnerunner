@@ -18,3 +18,26 @@
         }
     }
 }
+
+.cellular{
+    display: none;
+}
+.wide-screen{
+    display: flex;
+}
+@media only screen and (max-width: 600px) {
+    .cellular {
+        display: flex;
+    }
+    .wide-screen{
+        display: none;
+    }
+
+    .tournaments-data-table {
+        table {
+            th {
+                width: 70px;
+            }
+        }
+    }
+}

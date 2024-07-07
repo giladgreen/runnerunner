@@ -3,8 +3,8 @@
 import {
   UserGroupIcon,
   HomeIcon,BanknotesIcon,
-  UsersIcon, WrenchScrewdriverIcon,
-  Square2StackIcon
+  WrenchScrewdriverIcon,
+  ArrowDownOnSquareIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -17,7 +17,7 @@ const links = [
   {
     name: "current tournament",
     href: '/dashboard/currenttournament',
-    icon: Square2StackIcon
+    icon: ArrowDownOnSquareIcon
   },
   {
     name: "previous tournaments",

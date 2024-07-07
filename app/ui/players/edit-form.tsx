@@ -51,7 +51,7 @@ export default function EditPlayerForm({
         const stringDate = date.toISOString().slice(0,10);
         // @ts-ignore
         const text = ` ${translation[dayOfTheWeek]} - ${tournament.name}`;
-        return <div key={tournament.id}>
+        return <div key={tournament.id} className="tournament_rsvp_line">
             {tournament.rsvp_required ?
                 (tournament.max_players === 0 ? '' : <RSVPButton player={player as PlayerDB} stringDate={stringDate} text={text}/>)
                 : <div>◻️ {text} </div>}

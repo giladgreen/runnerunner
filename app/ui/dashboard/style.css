@@ -26,7 +26,55 @@
     color: white;
     width: 30px;
     height: 30px;
-    border-radius: 50px;
+    /*border-radius: 50px;*/
     text-align: center;
     margin-right: 10px;
+}
+.card-body-one-line {
+    padding: 50px;
+    font-size: 40px;
+}
+.prize-row{
+margin-bottom: 5px;
+}
+
+.cellular{
+    display: none;
+}
+.wide-screen{
+    display: flex;
+}
+@media only screen and (max-width: 600px) {
+    .cellular {
+        display: flex;
+    }
+    .wide-screen{
+        display: none;
+    }
+
+
+    .card {
+        border: 2px solid rgb(0, 112, 243);
+    }
+    .card-header{
+        padding: 0 0 3px 11px;
+    }
+    .card-body-one-line{
+        padding: 0;
+        max-height: 80px;
+        font-size: 27px;
+    }
+    .card-body{
+        padding: 0;
+        max-height: 80px;
+    }
+
+    .prize-row {
+        font-size: 14px;
+        margin-bottom: 1px;
+        justify-content: space-around;
+    }
+    .prize_delivered_button{
+        background: yellow;
+    }
 }

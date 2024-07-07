@@ -35,7 +35,7 @@ const getLink = (player: PlayerDB) => {
   return worker ? `/worker/${userId}/players/${player.id}` : `/dashboard/players/${player.id}/edit`
 }
 
-  const titleText =rsvpEnabled && rsvp_required ? `${rsvpPlayersCount} players RSVPed, ${arrivedPlayers} arrived.` : `${arrivedPlayers} players arrived.`
+  const titleText = rsvpEnabled && rsvp_required ? `${rsvpPlayersCount} players RSVP, ${arrivedPlayers} arrived.` : `${arrivedPlayers} players arrived.`
 
   return (
     <div className="mt-6 flow-root full-width" >
@@ -51,7 +51,7 @@ const getLink = (player: PlayerDB) => {
                 key={player.id}
                 className="w-full rounded-md bg-white full-width" style={{marginBottom:20}}
               >
-                  <div className="flex items-center justify-between border-b pb-4">
+                <div className="flex items-center justify-between border-b pb-4">
                     <div>
                       <div className="mb-2 flex items-center">
                         <Image
@@ -67,7 +67,10 @@ const getLink = (player: PlayerDB) => {
                       </div>
                       <div className="text-sm text-gray-500">{player.phone_number}</div>
                     </div>
-                  </div>
+                  {rsvpEnabled && rsvp_required && <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
+                    <RSVPButton player={player}/>
+                  </td>}
+                </div>
 
 
                 <div className="flex w-full items-center justify-between pt-4">
@@ -82,15 +85,7 @@ const getLink = (player: PlayerDB) => {
                     </div>
                   </div>
                   <div>
-                    {rsvpEnabled &&<div>
-                      {
-                          player.rsvpForToday && !player.arrived && <TickIcon size={24}/>
-                      }
-                      {
-                          player.rsvpForToday && player.arrived && <DoubleTicksIcon size={24}/>
-                      }
-                    </div>}
-
+                    {rsvpEnabled && player.rsvpForToday && player.arrived && <DoubleTicksIcon size={24}/> }
                   </div>
                 </div>
               </div>
