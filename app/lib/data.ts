@@ -706,6 +706,22 @@ export async function fetchPlayerById(id: string, addTournamentsHistoryData = fa
   }
 }
 
+export async function fetchPlayerCurrentTournamentHistory(phoneNumber: string) {
+  methodStart();
+  noStore();
+  try {
+    const dayName = (new Date()).toLocaleString('en-us', {weekday: 'long'});
+
+    const todayHistory =  await getTodayHistory();
+    const result = todayHistory.filter(({ phone_number})=> phone_number === phoneNumber);
+    methodEnd('fetchPlayerCurrentTournamentHistory')
+    return result;
+  } catch (error) {
+    console.error('Database Error:', error);
+    methodEnd('fetchTournamentByDay with error')
+    throw new Error('Failed to fetchTournamentById.');
+  }
+}
 export async function fetchTournamentByDay(day?: string) {
   methodStart();
   noStore();

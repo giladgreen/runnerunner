@@ -846,7 +846,7 @@ export async function undoPlayerLastLog(phone_number:string, prevPage: string){
     let otherPlayerPhoneNumber;
     try {
         await startTransaction();
-        const logsResult = await sql<LogDB>`SELECT * FROM history WHERE phone_number = ${phone_number} ORDER BY updated_at DESC LIMIT 1`;
+        const logsResult = await sql<LogDB>`SELECT * FROM history WHERE phone_number = ${phone_number} AND type != 'credit_to_other' ORDER BY updated_at DESC LIMIT 1`;
         const lastLog = logsResult.rows[0];
 
         if (lastLog){

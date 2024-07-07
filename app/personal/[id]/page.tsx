@@ -1,16 +1,18 @@
 import SideNavUser from "@/app/ui/dashboard/sidenav-user";
-import {formatCurrency} from "@/app/lib/utils";
+import {formatCurrency, formatType} from "@/app/lib/utils";
 import {
     fetchFeatureFlags,
     fetchPlayerByUserId,
     fetchRsvpCountForTodayTournament,
-    fetchTournamentByDay
+    fetchTournamentByDay,
+    fetchPlayerCurrentTournamentHistory
 } from "@/app/lib/data";
 import Image from "next/image";
 import HistoryTable from "@/app/ui/players/history-table";
 import {rsvpPlayerForDay} from "@/app/lib/actions";
 import TournamentsHistoryTable from "@/app/ui/players/tournaments-history-table";
 import {PlayersPrizes} from "@/app/ui/dashboard/cards";
+import {LogDB} from "@/app/lib/definitions";
 
 const translation = {
     Sunday: 'יום ראשון',
@@ -29,6 +31,7 @@ const NO_TOURNAMENT_TODAY = 'אין טורניר היום';
 const NO_MORE_SPOTS = 'אין יותר מקום לטורניר של היום';
 const CLICK_HERE_TO_UNREGISTER = 'לביטול לחץ כאן';
 const CLICK_HERE_TO_REGISTER = 'לרישום לחץ כאן';
+const YOU_ARE_ALREADY_IN_THE_GAME = 'אתה כבר במשחק';
 export default async function Page({ params }: { params: { id: string } }) {
     const userId = params.id;
     const {rsvpEnabled, playerRsvpEnabled} = await fetchFeatureFlags();
@@ -55,7 +58,8 @@ export default async function Page({ params }: { params: { id: string } }) {
     }
 
     const todayTournament = await fetchTournamentByDay();
-
+    const playerCurrentTournamentHistory = await fetchPlayerCurrentTournamentHistory(player.phone_number);
+    const showUnregisterButton = playerCurrentTournamentHistory.filter(({type}) => type !== 'credit_to_other').length === 0;
     const rsvpCountForTodayTournament = await fetchRsvpCountForTodayTournament();
 
     const {rsvp_required, max_players} = todayTournament;
@@ -86,16 +90,25 @@ export default async function Page({ params }: { params: { id: string } }) {
     </div>
 
     const userIsRegisterDiv = <div>
-        <div style={divWithTopMargin} className="rsvp_text rsvp_text-registered">
-            {YOU_ARE_ALREADY_REGISTERED} ✅
-        </div>
-        <div style={divWithTopMargin}>
+
+        {showUnregisterButton && <div style={divWithTopMargin} className="rsvp_text rsvp_text-registered">
             <form action={onUnRegisterSubmit}>
                 <button className="rsvp_button rsvp_button-registered">
                     {CLICK_HERE_TO_UNREGISTER}
                 </button>
             </form>
-        </div>
+        </div>}
+
+        {!showUnregisterButton && <div style={divWithTopMargin}>
+            <div>{YOU_ARE_ALREADY_IN_THE_GAME}</div>
+            <div>
+                {playerCurrentTournamentHistory.map((item: LogDB) => {
+
+                    return <div key={item.id}> <b>{formatCurrency(item.change)}</b> - {formatType(item.type)} </div>
+                })}
+
+            </div>
+        </div>}
     </div>;
 
     const registrationNeeded = <div>
@@ -157,11 +170,15 @@ export default async function Page({ params }: { params: { id: string } }) {
                     </div>}
                     {separator}
 
+                    <div><b><u>History</u></b></div>
                     <HistoryTable player={player} isRestrictedData/>
 
                     <TournamentsHistoryTable player={player}/>
 
-                    <PlayersPrizes title="Players Prizes" playerPhoneNumber={player.phone_number} personal/>
+                    <div style={{ width:100, height:50, margin: '30px 0'}}>
+
+                    </div>
+                    <PlayersPrizes title="Prizes" playerPhoneNumber={player.phone_number} personal/>
                 </div>
             </div>
         </div>
