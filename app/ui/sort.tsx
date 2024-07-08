@@ -8,7 +8,7 @@ export default function Sort({ text, sortTerm }: { text: string, sortTerm:string
     const handleSort =() => {
         const params = new URLSearchParams(searchParams);
         params.set('sort', sortTerm);
-        replace(`${pathname}?${params.toString()}`);
+        replace(`${pathname}?${params.toString()}`, { scroll: false });
     }
 
   return (
