@@ -212,7 +212,7 @@ async function fetchTopPlayers(players: PlayerDB[], rsvp: RSVPDB[] = [], todayHi
 
     players.forEach((player) => {
       player.balance = Number(player.balance)
-      player.arrived = Boolean(todayHistory.find(({ phone_number}) => phone_number === player.phone_number));
+      player.arrived = Boolean(todayHistory.find(({ phone_number, change, type}) => phone_number === player.phone_number && (change < 0 || type === 'credit_by_other')));
       player.rsvps = rsvp.filter(({ phone_number }) => phone_number === player.phone_number).map(({ date }) => date);
       player.rsvpForToday = Boolean(player.rsvps.find(date => date === todayDate));
 
