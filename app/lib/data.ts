@@ -339,8 +339,8 @@ export async function fetchRSVPAndArrivalData() {
     }
     const reEntriesCount = todayHistory.length - (Array.from(new Set(todayHistory.map(({ phone_number }) => phone_number)))).length;
 
-    const todayCreditIncome = sumArrayByProp( todayHistory.filter(({ type }) => type === 'cash'),'change');
-    const todayCashIncome = sumArrayByProp( todayHistory.filter(({ type }) => type === 'credit'),'change');
+    const todayCreditIncome = sumArrayByProp( todayHistory.filter(({ type }) => type === 'credit' || type === 'credit_to_other'),'change');
+    const todayCashIncome = sumArrayByProp( todayHistory.filter(({ type }) => type === 'cash'),'change');
     const todayTransferIncome = sumArrayByProp( todayHistory.filter(({ type }) => type === 'wire'),'change');
     const arrivedToday =  (Array.from(new Set(todayHistory.map(({ phone_number }) => phone_number)))).length;
 
