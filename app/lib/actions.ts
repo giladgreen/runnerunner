@@ -227,7 +227,7 @@ phone: ${phone_number}`)
 
 async function getPlayerByPhoneNumber(phoneNumber: string){
     const playersResult = await sql<PlayerDB>`SELECT * FROM players AS P 
-JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE phone_number = ${phoneNumber} AND (type = 'credit_to_other' OR type ='credit') GROUP BY phone_number) AS H
+JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE phone_number = ${phoneNumber} AND (type = 'credit_to_other' OR type ='credit' OR type ='prize') GROUP BY phone_number) AS H
 ON P.phone_number = H.phone_number
 WHERE P.phone_number = ${phoneNumber};`;
 
@@ -239,7 +239,7 @@ WHERE P.phone_number = ${phoneNumber};`;
 }
 async function getPlayerById(playerId:string){
     const playerResult = await sql<PlayerDB>`SELECT * FROM players AS P 
-JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' GROUP BY phone_number) AS H
+JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number) AS H
 ON P.phone_number = H.phone_number
 WHERE P.id = ${playerId};`;
 

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import SignUpButton from "@/app/ui/players/sign-up-button";
 import {fetchFeatureFlags} from "@/app/lib/data";
 
-export default async function Page() {
+export default async function HomePage() {
     const {  usePhoneValidation} = await fetchFeatureFlags();
 
   return (
