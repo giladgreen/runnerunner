@@ -319,8 +319,8 @@ export async function fetchRSVPAndArrivalData() {
   methodStart();
   noStore();
   try {
-    const [allPlayers, todayHistory, todayTournament] = await Promise.all([getAllPlayers(), getTodayHistory(), getTodayTournament()]) ;
-
+    const [allPlayers, todayHistoryWithZero, todayTournament] = await Promise.all([getAllPlayers(), getTodayHistory(), getTodayTournament()]) ;
+    const todayHistory = todayHistoryWithZero.filter(item => item.change < 0 || item.type === 'credit_by_other');
     const rsvpForToday = allPlayers.filter(player => player.rsvpForToday).length
 
     const todayTournamentMaxPlayers = todayTournament.rsvp_required ? todayTournament?.max_players : null;
