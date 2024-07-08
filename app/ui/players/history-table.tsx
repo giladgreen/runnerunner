@@ -14,7 +14,7 @@ export default async function HistoryTable({
         if (index === 0) {
             balances.push(log.change);
         }
-        if (log.type === 'credit' && index > 0) {
+        if ((log.type === 'credit' || log.type === 'credit_to_other' || log.type === 'prize') && index > 0) {
             balances.push(balances[balances.length - 1] + log.change);
         }
 
