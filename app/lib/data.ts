@@ -484,7 +484,8 @@ export async function fetchTodayPlayers(query?: string) {
     const todayHistory =  todayHistoryUnfiltered.filter(({ type }) => type != 'prize'  && type != 'credit_to_other' )
 
     players.forEach((player) => {
-      const playerItems = todayHistory.filter(({ phone_number}) => phone_number === player.phone_number) as LogDB[];
+      const playerItems = todayHistory.filter(({ phone_number, change, type}) => phone_number === player.phone_number && (change < 0 || type === 'credit_by_other')) as LogDB[];
+
       player.arrived = playerItems.length > 0;
       player.entries = playerItems.length;
 
