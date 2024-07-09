@@ -19,10 +19,9 @@ function SetPrizesCreditForm({players, date, hide, prevPage} : { date:string, pl
     const setPrizesCreditWorthWithDate = setPrizesCreditWorth.bind(null, { date, prevPage})
     // @ts-ignore
     const [_state, dispatch] = useFormState(setPrizesCreditWorthWithDate, initialState);
-    // const [type, setType] = useState(0);
-
+    
     const positions = players.sort((a, b) => a.position - b.position);
-
+    const [balances, setBalances] = useState([0,...positions.map((p) => p.creditWorth)]);
     return (<div className="edit-player-modal-inner-div">
             <form action={dispatch} className="form-control">
                 <label className="mb-2 block text-sm font-medium">
@@ -37,8 +36,12 @@ function SetPrizesCreditForm({players, date, hide, prevPage} : { date:string, pl
                                 name={`#${player.position}`}
                                 type="number"
                                 step="1"
-                                // value={balance}
-                                // onChange={(e) => setBalance(Number(e.target.value))}
+                                value={balances[player.position]}
+                                onChange={(e) => {
+                                     const newBalances = [...balances];
+                                    newBalances[player.position] = Number(e.target.value);
+                                    setBalances(newBalances)
+                                }}
                                 placeholder={`enter #${player.position} place credit worth`}
                                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                             />
@@ -78,7 +81,7 @@ export default function OpenSetPrizesCreditModalButton({
             {<div onClick={() => {
                 setShow(true);
             }} className="pointer" style={{fontSize: '24'}}>
-               <u> 💳 Set Prizes Credit worth 💳</u>
+               <u> 💳 Set Prizes Credit Worth 💳</u>
             </div>}
             {<div className={show ? 'edit-player-modal' : 'hidden'}>
                 <SetPrizesCreditForm date={date} players={players} hide={close} prevPage={prevPage}/>

@@ -225,7 +225,7 @@ export async function getPlayersPrizesContent(todaysPlayersPhoneNumbers:string[]
 
 export async function getFinalTablePlayersContent(date: string, isTournamentsDataPage: boolean) {
     const finalTablePlayers = await fetchFinalTablePlayers(date);
-    const showSetPrizesCreditModalButton =isTournamentsDataPage && finalTablePlayers.find(p => isNaN(Number(p.creditWorth)) || p.creditWorth < 0 )
+    const showSetPrizesCreditModalButton = finalTablePlayers.find(p => !p.hasReceived);
     if (!finalTablePlayers || finalTablePlayers.length === 0) return null;
     const textClass = isTournamentsDataPage ? 'text-tournaments-data-page' : 'text-on-card'
 
