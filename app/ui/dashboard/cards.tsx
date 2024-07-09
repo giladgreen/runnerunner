@@ -25,6 +25,7 @@ import Image from "next/image";
 import {PlayerDB, PrizeDB} from "@/app/lib/definitions";
 import {DeletePrize} from "@/app/ui/players/client-buttons";
 import OpenGiveCreditModalButton from "@/app/ui/players/open-give-credit-modal-button";
+import OpenSetPrizesCreditModalButton from "@/app/ui/players/open-set-prizes-credit-modal-button";
 
 const translation = {
     Sunday: 'יום ראשון',
@@ -215,7 +216,7 @@ export async function getPlayersPrizesContent(playerPhone?: string, personal?:bo
 
 export async function getFinalTablePlayersContent(date: string, isTournamentsDataPage: boolean) {
     const finalTablePlayers = await fetchFinalTablePlayers(date);
-
+    const showSetPrizesCreditModalButton =isTournamentsDataPage && finalTablePlayers.find(p => isNaN(Number(p.creditWorth)) || p.creditWorth < 0 )
     if (!finalTablePlayers || finalTablePlayers.length === 0) return null;
     const textClass = isTournamentsDataPage ? 'text-tournaments-data-page' : 'text-on-card'
 
@@ -265,6 +266,8 @@ export async function getFinalTablePlayersContent(date: string, isTournamentsDat
 
 
             })}
+
+            {showSetPrizesCreditModalButton &&  <OpenSetPrizesCreditModalButton date={date} players={finalTablePlayers}/>}
         </div>
         {isTournamentsDataPage && <div className="wide-screen" style={{width: '40%', textAlign: 'center'}}>
         <div style={{textAlign:'center'}}>

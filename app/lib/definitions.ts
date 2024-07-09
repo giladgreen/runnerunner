@@ -48,6 +48,7 @@ export type PlayerDB = {
   entries: number;
   rsvpForToday: boolean;
   hasReceived: boolean;
+  creditWorth: number;
   rsvps: string[];
   tournamentsData: TournamentPlayerData[];
 };

@@ -376,6 +376,7 @@ export async function fetchFinalTablePlayers(stringDate?: string) {
       const playerObj = winnersObject[player.phone_number];
       player.position = playerObj?.position || 0;
       player.hasReceived = Boolean(playerObj?.hasReceived);
+      player.creditWorth = Number(playerObj?.creditWorth);
       return player;
     })
 

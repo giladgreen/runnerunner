@@ -131,6 +131,8 @@
 
 .give_user_prize{
     text-align: left;
+    margin-top: 60px;
+    height: 50px;
 }
 .give_user_credit_amount{
     margin-top: 10px;

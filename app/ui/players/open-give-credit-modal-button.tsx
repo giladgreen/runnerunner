@@ -9,7 +9,7 @@ import {useFormState} from "react-dom";
 import {Button} from "@/app/ui/button";
 import { TickIcon} from "@/app/ui/icons";
 
-function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:string, player: PlayerForm, hide?: ()=>void, prevPage:string}) {
+function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:string, player: PlayerDB, hide?: ()=>void, prevPage:string}) {
     const initialState = { message: null, errors: {} };
     let userPhoneNumber;
     try {
@@ -21,6 +21,8 @@ function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:s
     // @ts-ignore
     const [_state, dispatch] = useFormState(setPlayerPrizeWithPlayerId, initialState);
     const [type, setType] = useState('prize');
+    const legalNumber = !isNaN(Number(player.creditWorth)) && Number(player.creditWorth)>= 0;
+    const [creditWorth, setCreditWorth] = useState(legalNumber ? player.creditWorth : 0);
 
     return (<div className="edit-player-modal-inner-div">
             <form action={dispatch} className="form-control">
@@ -43,16 +45,29 @@ function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:s
                                            checked={type === 'credit'}
                                            onChange={() => setType('credit')}
                                     />
+
                                     <label htmlFor="credit" className="ml-2"> <b>credit</b></label>
                                 </div>
 
                             </div>
                         </div>
                     </div>
-
+                    {/* prize */}
+                    {type === 'prize' ? <div className="mb-4 give_user_prize">
+                        <input
+                            style={{marginTop: 30}}
+                            id="prize"
+                            name="prize"
+                            type="text"
+                            placeholder="Enter prize"
+                            className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                            aria-describedby="prize-error"
+                        />
+                    </div> : <div className="mb-4"></div>}
                     {/*  amount  */}
                     {type === 'credit' ? <div className="mb-4 give_user_credit_amount">
-                        <label htmlFor="credit" className="mb-2 block text-sm font-medium" style={{ textAlign: 'left', marginTop: 30 }}>
+                        <label htmlFor="credit" className="mb-2 block text-sm font-medium"
+                               style={{textAlign: 'left', marginTop: 30}}>
                             Amount
                         </label>
                         <div className="relative mt-2 rounded-md">
@@ -61,14 +76,18 @@ function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:s
                                     id="credit"
                                     name="credit"
                                     type="number"
-                                    // aria-valuemin={0}
+                                    value={creditWorth}
+                                    onChange={(e) => setCreditWorth(Number(e.target.value))}
                                     placeholder="Enter credit amount"
                                     className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                                     aria-describedby="prize-error"
                                 />
                             </div>
+
                         </div>
-                    </div> : <div className="mb-4 give_user_credit_amount"></div>}
+
+                        {creditWorth < 1 && <span  className="mb-2 block text-sm font-medium" style={{ textAlign: 'left', color:'red'}}>* not legal</span>}
+                    </div> : <div className="mb-4"></div>}
 
                 </div>
                 <div className="mt-6 flex justify-end gap-4">
@@ -84,10 +103,10 @@ function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:s
 
 
 export default function OpenGiveCreditModalButton({
-                                                      player,
-                                                      hasReceived,
-                                                      stringDate
-                                                  }: {
+  player,
+  hasReceived,
+  stringDate
+}: {
     player: PlayerDB;
     hasReceived: boolean;
     stringDate?:string;
@@ -107,7 +126,7 @@ export default function OpenGiveCreditModalButton({
                 💳
             </div>}
             {!hasReceived && <div className={show ? 'edit-player-modal' : 'hidden'}>
-                <SetGivePrizeForm player={player as unknown as PlayerForm} hide={close} prevPage={prevPage} stringDate={stringDate}/>
+                <SetGivePrizeForm player={player} hide={close} prevPage={prevPage} stringDate={stringDate}/>
             </div>}
         </div>
     );
