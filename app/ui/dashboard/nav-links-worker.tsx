@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  BanknotesIcon,
   WrenchScrewdriverIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
@@ -16,6 +17,11 @@ function getLinks(userId: string){
       name: "current tournament",
       href: `/worker/${userId}`,
       icon: ArrowDownOnSquareIcon
+    },
+    {
+      name: "previous tournaments",
+      href: `/worker/${userId}/tournamentsdata`,
+      icon: BanknotesIcon
     },
     {
       name: 'configurations',

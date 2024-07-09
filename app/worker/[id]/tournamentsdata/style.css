@@ -1,0 +1,43 @@
+.tournaments-data-table {
+    table {
+        width: 100%;
+        th {
+            border: 1px solid #44444455;
+            width: 110px;
+            text-align: left;
+        }
+    }
+}
+
+.tournaments-data-table-income-cell{
+    table {
+        width: 100%;
+        th {
+            border: none;
+            text-align: center;
+        }
+    }
+}
+
+.cellular{
+    display: none;
+}
+.wide-screen{
+    display: flex;
+}
+@media only screen and (max-width: 600px) {
+    .cellular {
+        display: flex;
+    }
+    .wide-screen{
+        display: none;
+    }
+
+    .tournaments-data-table {
+        table {
+            th {
+                width: 70px;
+            }
+        }
+    }
+}
