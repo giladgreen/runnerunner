@@ -198,18 +198,22 @@ export function DeletePrize({ id }: { id: string }) {
 
     return (
         <div>
-        <div className="pointer prize_delivered_button" onClick={()=>{
+        <div className="pointer" onClick={()=>{
             setShowConfirmation(true);
         }}>
-            <u>prize delivered</u>
+            <button className="my-button">
+                prize was delivered
+            </button>
         </div>
             {showConfirmation && <AreYouSure onConfirm={()=>{
                 setShowConfirmation(false);
                 deletePrizeWithId();
             }}
-                                             onCancel={()=>setShowConfirmation(false)}
-                                             subtext="this would delete the prize from this list"
-                                             text="Set Prize as delivered?"/> }
+             onCancel={()=>setShowConfirmation(false)}
+             subtext="this would delete the prize from this list"
+             text="Set Prize as delivered?"/> }
         </div>
     );
 }
+
+

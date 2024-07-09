@@ -391,6 +391,12 @@ export async function fetchFinalTablePlayers(stringDate?: string) {
   }
 }
 
+export async function fetchTodaysPlayersPhoneNumbers() {
+     const todayArrivals = (await getTodayHistory()).map(({ phone_number }) => phone_number);
+     const todayRsvps = (await getAllPlayers()).filter(p => p.rsvpForToday).map(p => p.phone_number);
+     return Array.from(new Set([...todayArrivals, ...todayRsvps]));
+}
+
 export async function fetchPlayersPrizes(playerPhoneNumber?: string) {
   methodStart();
   noStore();

@@ -15,7 +15,8 @@ import {
     fetchFinalTablePlayers,
     fetchGeneralPlayersCardData,
     fetchPlayersPrizes,
-    fetchRSVPAndArrivalData
+    fetchRSVPAndArrivalData,
+    fetchTodaysPlayersPhoneNumbers
 } from '@/app/lib/data';
 import {formatCurrency} from "@/app/lib/utils";
 import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
@@ -23,9 +24,10 @@ import { Suspense} from "react";
 import {CardsSkeleton} from "@/app/ui/skeletons";
 import Image from "next/image";
 import {PlayerDB, PrizeDB} from "@/app/lib/definitions";
-import {DeletePrize} from "@/app/ui/players/client-buttons";
+import { DeletePrize} from "@/app/ui/players/client-buttons";
 import OpenGiveCreditModalButton from "@/app/ui/players/open-give-credit-modal-button";
 import OpenSetPrizesCreditModalButton from "@/app/ui/players/open-set-prizes-credit-modal-button";
+import OpenConvertPrizeToCreditButton from "@/app/ui/players/convert-prize-to-credit-modal-form";
 
 const translation = {
     Sunday: 'יום ראשון',
@@ -167,17 +169,18 @@ export async function TodayTournamentNameCardWrapper() {
 }
 
 
-export async function getPlayersPrizesContent(playerPhone?: string, personal?:boolean) {
-    const playersPrizes = await fetchPlayersPrizes(playerPhone);
-
+export async function getPlayersPrizesContent(todaysPlayersPhoneNumbers:string[],playerPhone?: string, personal?:boolean, workerPage?:boolean, userId?:string) {
+    const playersPrizesUnfiltered = await fetchPlayersPrizes(playerPhone);
+    const playersPrizes = playersPrizesUnfiltered.filter(p => personal || !workerPage || todaysPlayersPhoneNumbers.includes(p.phone_number));
     if (!playersPrizes || playersPrizes.length === 0) return null;
+
 
     return <div className="full-width" style={{marginBottom: 30}}>
 
             {playersPrizes.map((playersPrize: PrizeDB) => {
                 return <div key={playersPrize.id}>
 
-                    <div className="wide-screen border-b prize-row prize-highlight-on-hover">
+                    <div className="wide-screen border-b prize-row ">
                         <div className="w-full rounded-md flex items-center  ">
                             <span style={{marginLeft: 25}}>{playersPrize!.tournament}</span>
                             {!personal && <span style={{marginLeft: 25}}>{playersPrize!.player!.name}</span>}
@@ -186,6 +189,7 @@ export async function getPlayersPrizesContent(playerPhone?: string, personal?:bo
                         </div>
 
                         {!personal && <DeletePrize id={playersPrize.id}/>}
+                        {!personal && <OpenConvertPrizeToCreditButton prizeId={playersPrize.id} prizeName={playersPrize.prize} userId={userId}/>}
                     </div>
                     <div className="cellular border-b prize-row">
                         <div >
@@ -203,6 +207,11 @@ export async function getPlayersPrizesContent(playerPhone?: string, personal?:bo
 
                         {!personal && <div>
                              <DeletePrize id={playersPrize.id}/>
+                        </div>}
+
+
+                        {!personal && <div>
+                             <OpenConvertPrizeToCreditButton prizeId={playersPrize.id} prizeName={playersPrize.prize} userId={userId}/>
                         </div>}
 
 
@@ -304,8 +313,9 @@ export async function FinalTablePlayers({title}: { title: string }) {
 }
 
 
-export async function PlayersPrizes({title, playerPhoneNumber, personal}: { title: string, playerPhoneNumber?: string, personal?:boolean }) {
-    const content = await getPlayersPrizesContent(playerPhoneNumber, personal) as JSX.Element;
+export async function PlayersPrizes({title, playerPhoneNumber, personal, workerPage, userId}: { title: string, playerPhoneNumber?: string, personal?:boolean, workerPage?:boolean, userId?:string }) {
+    const todayPlayersPhoneNumbers = personal || !workerPage ? [] : await fetchTodaysPlayersPhoneNumbers();
+    const content = await getPlayersPrizesContent(todayPlayersPhoneNumbers, playerPhoneNumber, personal, workerPage, userId) as JSX.Element;
     if (!content) return null;
 
     return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1 full-width"

@@ -469,6 +469,7 @@ export async function setPrizesCreditWorth({date, prevPage}:{date: string, prevP
 
 }
 export async function givePlayerPrizeOrCredit({stringDate, playerId,userPhoneNumber, prevPage}:{stringDate?:string, userPhoneNumber?:string, playerId: string, prevPage: string}, _prevState: State, formData: FormData){
+
     try {
         await startTransaction();
         const player = await getPlayerById(playerId);
@@ -716,6 +717,29 @@ export async function deletePlayer(id: string) {
 export async function deletePrize( {id, prevPage}: {id: string, prevPage: string,}) {
     try {
         await sql`DELETE FROM prizes WHERE id = ${id}`;
+        revalidatePath(prevPage);
+    } catch (error) {
+        return { message: 'Database Error: Failed to Delete Player.' };
+    }
+}
+
+export async function convertPrizeToCredit(clientData: {userPhoneNumber?:string, userId?:string, prizeId: string, prevPage: string},  _prevState: State,  formData: FormData) {
+    try {
+        const {prizeId, prevPage, userPhoneNumber, userId} = clientData;
+        await startTransaction();
+        const amount = Number(formData.get('amount') as string);
+        const prize = (await sql<PrizeDB>`SELECT * FROM prizes WHERE id = ${prizeId}`).rows[0];
+
+        const userResult = userId ? (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`).rows[0] :  (await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${userPhoneNumber ?? '0'}`).rows[0];
+
+        const playerPhoneNumber = prize.phone_number;
+        const note = ` שחקן המיר פרס בקרדיט: ${prize.prize}`
+        await sql`
+          INSERT INTO history (phone_number, change, note, type, updated_by)
+          VALUES (${playerPhoneNumber}, ${amount}, ${note}, 'credit', ${userResult?.name ?? 'unknown'})
+        `;
+
+        await sql`DELETE FROM prizes WHERE id = ${prizeId}`;
         revalidatePath(prevPage);
     } catch (error) {
         return { message: 'Database Error: Failed to Delete Player.' };
