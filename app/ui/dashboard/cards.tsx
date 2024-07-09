@@ -223,7 +223,7 @@ export async function getPlayersPrizesContent(todaysPlayersPhoneNumbers:string[]
     </div>
 }
 
-export async function getFinalTablePlayersContent(date: string, isTournamentsDataPage: boolean) {
+export async function getFinalTablePlayersContent(date: string, isTournamentsDataPage: boolean, userId?:string) {
     const finalTablePlayers = await fetchFinalTablePlayers(date);
     const showSetPrizesCreditModalButton = finalTablePlayers.find(p => !p.hasReceived);
     if (!finalTablePlayers || finalTablePlayers.length === 0) return null;
@@ -238,7 +238,7 @@ export async function getFinalTablePlayersContent(date: string, isTournamentsDat
                 >
 
                     <div className={`flex items-center border-b ${isTournamentsDataPage ? '' : 'pb-4'} highlight-on-hover`}>
-                        <OpenGiveCreditModalButton player={finalTablePlayer} hasReceived={finalTablePlayer.hasReceived} stringDate={date}/>
+                        <OpenGiveCreditModalButton player={finalTablePlayer} hasReceived={finalTablePlayer.hasReceived} stringDate={date} userId={userId}/>
                         <div className={textClass}>#{finalTablePlayer.position}</div>
 
                         {!isTournamentsDataPage && <Image
@@ -301,9 +301,9 @@ export async function getFinalTablePlayersContent(date: string, isTournamentsDat
 </div>
 }
 
-export async function FinalTablePlayers({title}: { title: string }) {
+export async function FinalTablePlayers({title, userId}: { title: string, userId?:string }) {
     const date = (new Date()).toISOString().slice(0, 10);
-    const content = await getFinalTablePlayersContent(date, false) as JSX.Element;
+    const content = await getFinalTablePlayersContent(date, false, userId) as JSX.Element;
     if (!content) return null;
 
     return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1 full-width"

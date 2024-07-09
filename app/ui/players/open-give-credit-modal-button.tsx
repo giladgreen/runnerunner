@@ -9,7 +9,7 @@ import {useFormState} from "react-dom";
 import {Button} from "@/app/ui/button";
 import { TickIcon} from "@/app/ui/icons";
 
-function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:string, player: PlayerDB, hide?: ()=>void, prevPage:string}) {
+function SetGivePrizeForm({player, hide, prevPage, stringDate, userId} : { stringDate?:string, player: PlayerDB, hide?: ()=>void, prevPage:string, userId?:string}) {
     const initialState = { message: null, errors: {} };
     let userPhoneNumber;
     try {
@@ -17,7 +17,7 @@ function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:s
     } catch (e) {
         console.error('localStorage is not available', e);
     }
-    const setPlayerPrizeWithPlayerId = givePlayerPrizeOrCredit.bind(null,{ userPhoneNumber: userPhoneNumber as string, playerId: player.id, prevPage, stringDate})
+    const setPlayerPrizeWithPlayerId = givePlayerPrizeOrCredit.bind(null,{ userId, userPhoneNumber: userPhoneNumber as string, playerId: player.id, prevPage, stringDate})
     // @ts-ignore
     const [_state, dispatch] = useFormState(setPlayerPrizeWithPlayerId, initialState);
     const [type, setType] = useState('prize');
@@ -105,11 +105,13 @@ function SetGivePrizeForm({player, hide, prevPage, stringDate} : { stringDate?:s
 export default function OpenGiveCreditModalButton({
   player,
   hasReceived,
-  stringDate
+  stringDate,
+  userId
 }: {
     player: PlayerDB;
     hasReceived: boolean;
     stringDate?:string;
+    userId?:string;
 }) {
     const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
     const [show, setShow] = React.useState(false);
@@ -126,7 +128,7 @@ export default function OpenGiveCreditModalButton({
                 💳
             </div>}
             {!hasReceived && <div className={show ? 'edit-player-modal' : 'hidden'}>
-                <SetGivePrizeForm player={player} hide={close} prevPage={prevPage} stringDate={stringDate}/>
+                <SetGivePrizeForm player={player} hide={close} prevPage={prevPage} stringDate={stringDate} userId={userId}/>
             </div>}
         </div>
     );

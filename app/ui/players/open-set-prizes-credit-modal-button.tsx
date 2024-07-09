@@ -1,9 +1,9 @@
 'use client';
 
-import {PlayerDB, PlayerForm} from '@/app/lib/definitions';
+import {PlayerDB} from '@/app/lib/definitions';
 import React, {useState} from "react";
 
-import {givePlayerPrizeOrCredit, setPrizesCreditWorth} from "@/app/lib/actions";
+import { setPrizesCreditWorth} from "@/app/lib/actions";
 import {useFormState} from "react-dom";
 import {Button} from "@/app/ui/button";
 import {usePathname, useSearchParams} from "next/navigation";
@@ -19,7 +19,7 @@ function SetPrizesCreditForm({players, date, hide, prevPage} : { date:string, pl
     const setPrizesCreditWorthWithDate = setPrizesCreditWorth.bind(null, { date, prevPage})
     // @ts-ignore
     const [_state, dispatch] = useFormState(setPrizesCreditWorthWithDate, initialState);
-    
+
     const positions = players.sort((a, b) => a.position - b.position);
     const [balances, setBalances] = useState([0,...positions.map((p) => p.creditWorth)]);
     return (<div className="edit-player-modal-inner-div">

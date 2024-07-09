@@ -468,7 +468,7 @@ export async function setPrizesCreditWorth({date, prevPage}:{date: string, prevP
     }
 
 }
-export async function givePlayerPrizeOrCredit({stringDate, playerId,userPhoneNumber, prevPage}:{stringDate?:string, userPhoneNumber?:string, playerId: string, prevPage: string}, _prevState: State, formData: FormData){
+export async function givePlayerPrizeOrCredit({stringDate, playerId,userPhoneNumber,userId, prevPage}:{stringDate?:string, userPhoneNumber?:string,userId?:string, playerId: string, prevPage: string}, _prevState: State, formData: FormData){
 
     try {
         await startTransaction();
@@ -530,7 +530,7 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId,userPhoneNum
 
 
                 await touchPlayer(player.phone_number);
-                const userResult = userPhoneNumber ? (await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${userPhoneNumber}`).rows[0] : null;
+                const userResult = userId ? (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`).rows[0]  : (await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${userPhoneNumber ?? '0'}`).rows[0] ;
                 await sql`
           INSERT INTO history (phone_number, change, note, type, updated_by)
           VALUES (${player.phone_number}, ${amount}, ${note}, 'credit', ${userResult?.name ?? 'unknown'})

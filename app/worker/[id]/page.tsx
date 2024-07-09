@@ -37,7 +37,7 @@ export default async function Page({ params, searchParams }: { params: { id: str
                         <RSVPAndArrivalCardWrapper/>
                     </div>
                     {placesEnabled && <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                        <FinalTablePlayers title="Players Place"/>
+                        <FinalTablePlayers title="Players Place" userId={user.id}/>
                     </div>}
                     {prizesEnabled && <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                         <PlayersPrizes title="Players Prizes" workerPage userId={user.id}/>
