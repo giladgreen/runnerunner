@@ -411,7 +411,10 @@ export async function fetchPlayersPrizes(playerPhoneNumber?: string) {
     });
     const result =  !playerPhoneNumber ? prizes : prizes.filter(prize => prize.phone_number === playerPhoneNumber);
     methodEnd('fetchPlayersPrizes');
-    return result;
+    return {
+        undeliveredPrizes: result.filter(p => !p.delivered),
+        deliveredPrizes: result.filter(p => p.delivered),
+    };
   } catch (error) {
     console.error('Database Error:', error);
     methodEnd('fetchPlayersPrizes with error')

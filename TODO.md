@@ -4,10 +4,6 @@ TODO:
 
 - add a dedicated page for the players with prizes
 
-- in current tournament page , in prizes section only show for today's players (also may need to show players that reach final table and didnt claim a prize)
-- 
-- also let daniel let them convert prize to credit at that point.
-
 - add UT
 - 
 - try to work with a local DB

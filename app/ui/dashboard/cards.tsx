@@ -170,8 +170,8 @@ export async function TodayTournamentNameCardWrapper() {
 
 
 export async function getPlayersPrizesContent(todaysPlayersPhoneNumbers:string[],playerPhone?: string, personal?:boolean, workerPage?:boolean, userId?:string) {
-    const playersPrizesUnfiltered = await fetchPlayersPrizes(playerPhone);
-    const playersPrizes = playersPrizesUnfiltered.filter(p => personal || !workerPage || todaysPlayersPhoneNumbers.includes(p.phone_number));
+    const {undeliveredPrizes} = await fetchPlayersPrizes(playerPhone);
+    const playersPrizes = undeliveredPrizes.filter(p => personal || !workerPage || todaysPlayersPhoneNumbers.includes(p.phone_number));
     if (!playersPrizes || playersPrizes.length === 0) return null;
 
 

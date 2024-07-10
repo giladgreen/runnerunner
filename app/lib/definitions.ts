@@ -58,6 +58,7 @@ export type PrizeDB = {
   phone_number: string;
   prize: string;
   player?: PlayerDB;
+  delivered: boolean;
 }
 export type WinnerDB = {
   date: string;

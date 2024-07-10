@@ -103,7 +103,8 @@ export default async function Page() {
     const players = await fetchAllPlayersForExport();
     const playersPlaces = await fetchFinalTablePlayers();
     const tournament = await fetchTournamentByDay();
-    const prizes = await fetchPlayersPrizes();
+    const { undeliveredPrizes } = await fetchPlayersPrizes();
+    const prizes = undeliveredPrizes
 
     return (
         <div className="w-full">
