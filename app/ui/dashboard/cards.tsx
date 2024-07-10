@@ -377,17 +377,9 @@ export async function FinalTablePlayers({title, userId}: { title: string, userId
 
 export async function PlayersPrizes({title, showOnlyToday, playerPhoneNumber, personal, workerPage, userId}: { title: string,showOnlyToday?:boolean, playerPhoneNumber?: string, personal?:boolean, workerPage?:boolean, userId?:string }) {
     const todayPlayersPhoneNumbers = showOnlyToday ? (await fetchTodaysPlayersPhoneNumbers()) : [];
-    console.log('## title',title)
-    console.log('## playerPhoneNumber',playerPhoneNumber)
-    console.log('## personal',personal)
-    console.log('## workerPage',workerPage)
-    console.log('## userId',userId)
-    console.log('## todayPlayersPhoneNumbers',todayPlayersPhoneNumbers)
     const { undeliveredPrizes} = await fetchPlayersPrizes(playerPhoneNumber);
-    console.log('## undeliveredPrizes',undeliveredPrizes)
 
     const playersPrizes = undeliveredPrizes.filter(p => personal || !showOnlyToday || todayPlayersPhoneNumbers.includes(p.phone_number));
-    console.log('## playersPrizes ',playersPrizes)
 
     const content = await getPlayersPrizesContent(playersPrizes,  personal, userId) as JSX.Element;
     if (!content) return null;
