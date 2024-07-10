@@ -258,6 +258,7 @@ async function seedPrizes(client) {
          tournament TEXT NOT NULL,
          phone_number TEXT NOT NULL,
          prize TEXT NOT NULL,
+         delivered BOOLEAN DEFAULT FALSE,
          created_at timestamp NOT NULL DEFAULT now()
       );
     `;

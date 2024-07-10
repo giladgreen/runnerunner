@@ -2,7 +2,7 @@
 
 import { TrashIcon } from '@heroicons/react/24/outline';
 import {
-    deletePlayer, deletePrize,
+    deletePlayer, setPrizeDelivered,
     importPlayers,
 } from '@/app/lib/actions';
 import {Button} from "@/app/ui/button";
@@ -194,7 +194,7 @@ export function DeletePrize({ id }: { id: string }) {
     const prevPage = `${usePathname()}?${useSearchParams().toString()}`
     const [showConfirmation, setShowConfirmation] = useState(false);
 
-    const deletePrizeWithId = deletePrize.bind(null, { id, prevPage});
+    const setPrizeDeliveredWithId = setPrizeDelivered.bind(null, { id, prevPage});
 
     return (
         <div>
@@ -207,7 +207,7 @@ export function DeletePrize({ id }: { id: string }) {
         </div>
             {showConfirmation && <AreYouSure onConfirm={()=>{
                 setShowConfirmation(false);
-                deletePrizeWithId();
+                setPrizeDeliveredWithId();
             }}
              onCancel={()=>setShowConfirmation(false)}
              subtext="this would delete the prize from this list"

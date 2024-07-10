@@ -714,12 +714,12 @@ export async function deletePlayer(id: string) {
     }
 }
 
-export async function deletePrize( {id, prevPage}: {id: string, prevPage: string,}) {
+export async function setPrizeDelivered({id, prevPage}: {id: string, prevPage: string,}) {
     try {
-        await sql`DELETE FROM prizes WHERE id = ${id}`;
+        await sql`UPDATE prizes SET delivered = TRUE WHERE id = ${id}`;
         revalidatePath(prevPage);
     } catch (error) {
-        return { message: 'Database Error: Failed to Delete Player.' };
+        return { message: 'Database Error: Failed to setPrizeDelivered.' };
     }
 }
 
