@@ -1,3 +1,5 @@
+"use client";
+
 import {PlayerDB} from "@/app/lib/definitions";
 import {usePathname, useSearchParams} from "next/navigation";
 import React, {useState} from "react";

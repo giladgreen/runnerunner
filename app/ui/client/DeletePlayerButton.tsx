@@ -1,3 +1,5 @@
+"use client";
+
 import {deletePlayer} from "@/app/lib/actions";
 import React, {useState} from "react";
 import {TrashIcon} from "@heroicons/react/24/outline";
