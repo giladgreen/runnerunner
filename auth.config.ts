@@ -14,9 +14,12 @@ export const authConfig = {
             let isAdmin: boolean = false;
             let isWorker: boolean = false;
             let userUUID: string | undefined = undefined;
+
             if (isLoggedIn) {
                 const usersResult = await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${loggedInUser!.email}`;
                 const userFromDB = usersResult.rows[0];
+                console.log('## userFromDB', userFromDB)
+
                 isAdmin = Boolean(userFromDB && userFromDB.is_admin);
                 isWorker = Boolean(userFromDB && userFromDB.is_worker);
                 userUUID = userFromDB?.id;
@@ -24,6 +27,8 @@ export const authConfig = {
                     await sql`UPDATE last_connected_user SET phone_number = ${userFromDB.phone_number}, name = ${userFromDB.name}`;
                 }
             }
+            console.log('## loggedInUser', loggedInUser)
+            console.log('## nextUrl.pathname', nextUrl.pathname)
             const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
             const isOnWorker = nextUrl.pathname.startsWith('/worker');
             const isOnPersonal = nextUrl.pathname.startsWith('/personal');
@@ -33,6 +38,9 @@ export const authConfig = {
             }
 
             if (isOnWorker) {
+                if (isWorker && !nextUrl.pathname.includes(userUUID!)) {
+                    return Response.redirect(new URL(`/worker/${userUUID}`, nextUrl));
+                }
                 return isWorker;
             }
 
