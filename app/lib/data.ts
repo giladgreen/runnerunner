@@ -800,7 +800,7 @@ export async function fetchUserById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     methodEnd('fetchUserById with error')
-    throw new Error('Failed to fetchPlayerByPhoneNumber.');
+    throw new Error('Failed to fetchUserById.');
   }
 }
 

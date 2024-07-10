@@ -2,7 +2,7 @@ import { fetchFeatureFlags} from '@/app/lib/data';
 import React from "react";
 import {updateFFValue} from "@/app/lib/actions";
 
-export default async function Page() {
+export default async function FlagsPage({ params }: { params: { userId: string } }) {
     const { prizesEnabled, placesEnabled, rsvpEnabled, playerRsvpEnabled, usePhoneValidation, importEnabled} = await fetchFeatureFlags();
 
     return (
@@ -32,7 +32,7 @@ export default async function Page() {
                             <b>Import</b>
                         </td>
                         <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
-                            <UpdateFeatureFlag featureName={'import'} currentValue={Boolean(importEnabled)}/>
+                            <UpdateFeatureFlag featureName={'import'} currentValue={Boolean(importEnabled)} userId={params.userId}/>
                         </td>
                     </tr>
                     <tr
@@ -43,7 +43,7 @@ export default async function Page() {
                             <b>Prizes</b>
                         </td>
                         <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
-                            <UpdateFeatureFlag featureName={'prizes'} currentValue={Boolean(prizesEnabled)}/>
+                            <UpdateFeatureFlag featureName={'prizes'} currentValue={Boolean(prizesEnabled)} userId={params.userId}/>
                         </td>
                     </tr>
                     <tr
@@ -54,7 +54,7 @@ export default async function Page() {
                             <b>Phone Validation</b>
                         </td>
                         <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
-                            <UpdateFeatureFlag featureName={'use_phone_validation'} currentValue={Boolean(usePhoneValidation)}/>
+                            <UpdateFeatureFlag featureName={'use_phone_validation'} currentValue={Boolean(usePhoneValidation)} userId={params.userId}/>
                         </td>
                     </tr>
                     <tr
@@ -65,7 +65,7 @@ export default async function Page() {
                             <b>Places</b>
                         </td>
                         <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
-                            <UpdateFeatureFlag featureName={'places'} currentValue={Boolean(placesEnabled)}/>
+                            <UpdateFeatureFlag featureName={'places'} currentValue={Boolean(placesEnabled)} userId={params.userId}/>
                         </td>
                     </tr>
                     <tr
@@ -76,7 +76,7 @@ export default async function Page() {
                             <b>RSVP</b>
                         </td>
                         <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
-                            <UpdateFeatureFlag featureName={'rsvp'} currentValue={Boolean(rsvpEnabled)}/>
+                            <UpdateFeatureFlag featureName={'rsvp'} currentValue={Boolean(rsvpEnabled)} userId={params.userId}/>
                         </td>
                     </tr>
                     {rsvpEnabled && <tr
@@ -87,7 +87,7 @@ export default async function Page() {
                             <b>User RSVP</b>
                         </td>
                         <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
-                            <UpdateFeatureFlag featureName={'player_can_rsvp'} currentValue={Boolean(playerRsvpEnabled)}/>
+                            <UpdateFeatureFlag featureName={'player_can_rsvp'} currentValue={Boolean(playerRsvpEnabled)} userId={params.userId}/>
                         </td>
                     </tr>}
 
@@ -98,11 +98,11 @@ export default async function Page() {
     );
 }
 
-function UpdateFeatureFlag({featureName, currentValue}: { featureName: string, currentValue: boolean }) {
+function UpdateFeatureFlag({featureName, currentValue, userId}: { featureName: string, currentValue: boolean, userId:string }) {
 
     const onSubmit = async (_formData: FormData) => {
         'use server'
-        await updateFFValue(featureName, !currentValue, '/dashboard/configurations/flags');
+        await updateFFValue(featureName, !currentValue, `/${userId}/configurations/flags`);
     };
 
     return (

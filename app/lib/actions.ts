@@ -1,4 +1,5 @@
 'use server';
+
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
@@ -34,7 +35,6 @@ const phoneToName = {
     '0508874068': 'מירי',
     '0526841902': 'דניאל',
 };
-
 
 function sendEmail(to: string, subject: string, body: string){
 
@@ -86,7 +86,6 @@ export async function removeOldRsvp(){
         console.error('rsvpPlayerForDay Error:', error);
     }
 }
-
 
 const CreateUsageLog =  z.object({
     change: z.coerce.number(),
@@ -140,7 +139,6 @@ function cancelTransaction(){
 
 }
 
-
 function insertIntoBugs(description: string){
     return sql`INSERT INTO bugs (description) VALUES (${description})`;
 }
@@ -175,7 +173,7 @@ async function insertIntoPlayers(name: string, balance:number, phoneNumber:strin
     }
 }
 
-export async function createReport(formData: FormData) {
+export async function createReport(prevPage: string, formData: FormData) {
     const description = formData.get('description') as string;
     try {
         await insertIntoBugs(description);
@@ -187,8 +185,8 @@ export async function createReport(formData: FormData) {
         };
     }
 
-    revalidatePath('/dashboard/configurations');//TODO: if worker need to return to a different url
-    redirect('/dashboard/configurations');
+    revalidatePath(prevPage);
+    redirect(prevPage);
 }
 
 export async function createPlayer(prevPage: string, _prevState: State, formData: FormData) {
@@ -237,6 +235,7 @@ WHERE P.phone_number = ${phoneNumber};`;
     }
     return player;
 }
+
 async function getPlayerById(playerId:string){
     const playerResult = await sql<PlayerDB>`SELECT * FROM players AS P 
 JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number) AS H
@@ -431,7 +430,6 @@ async function getDateWinnersRecord(date: string){
     return winnersResult.rows[0];
 }
 
-
 export async function setPrizesCreditWorth({date, prevPage}:{date: string, prevPage:string }, _prevState: State, formData: FormData){
     try {
         await startTransaction();
@@ -593,7 +591,6 @@ export async function setPlayerPrize({playerId, prevPage}:{playerId: string, pre
 
 }
 
-
 export async function updatePlayer(
     {id, prevPage}: {id: string, prevPage: string,},
     _prevState: State,
@@ -649,7 +646,7 @@ export async function updatePlayer(
 }
 
 export async function updateTournament(
-    id: string,
+    { id, prevPage }: { id: string, prevPage: string},
     _prevState: State,
     formData: FormData,
 ) {
@@ -681,17 +678,15 @@ export async function updateTournament(
     `;
         sendEmail(TARGET_MAIL, 'tournaments update', `name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`)
 
-        revalidatePath('/dashboard/configurations/tournaments');
-        redirect('/dashboard/configurations/tournaments');
+        revalidatePath(prevPage);
+        redirect(prevPage);
     } catch (error) {
         console.error('## updateTournament error', error)
         return { message: 'Database Error: Failed to update Tournament.' };
     }
-
-
 }
 
-export async function deletePlayer(id: string) {
+export async function deletePlayer({id,prevPage}:{id: string, prevPage: string}) {
 
     try {
         await startTransaction();
@@ -706,7 +701,7 @@ export async function deletePlayer(id: string) {
         await commitTransaction();
         sendEmail(TARGET_MAIL, 'player deleted', `name: ${player.name}, phone: ${player}   image: ${player.image_url}  notes: ${player.notes}`)
 
-        revalidatePath('/dashboard/players');
+        revalidatePath(prevPage);
 
     } catch (error) {
         await cancelTransaction();
@@ -810,12 +805,12 @@ export async function signUp(
     redirect(`/`);
 }
 
-export async function updateFFValue(name:string, newValue:boolean) {
+export async function updateFFValue(name:string, newValue:boolean, prevPage:string){
     noStore();
     try {
         await sql`UPDATE feature_flags SET is_open = ${newValue} WHERE flag_name = ${name}`;
-        revalidatePath('/dashboard/configurations/flags');
-        redirect('/dashboard/configurations/flags');
+        revalidatePath(prevPage);
+        redirect(prevPage);
     } catch (error) {
         console.error('Database updateFFValue Error:', error);
         return false;
@@ -823,7 +818,7 @@ export async function updateFFValue(name:string, newValue:boolean) {
 
 }
 
-export async function updateIsUserAdmin(id:string) {
+export async function updateIsUserAdmin({id, prevPage}:{id:string, prevPage: string} ) {
     noStore();
     try {
         const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
@@ -833,7 +828,7 @@ export async function updateIsUserAdmin(id:string) {
             return;
         }
         await sql`UPDATE users SET is_admin = ${!user.is_admin} WHERE id = ${id}`;
-        redirect('/dashboard/configurations/users');
+        redirect(prevPage);
 
     } catch (error) {
         console.error('Database Error:', error);
@@ -841,23 +836,20 @@ export async function updateIsUserAdmin(id:string) {
     }
 }
 
-
-export async function updateIsUserWorker(id:string) {
+export async function updateIsUserWorker({id, prevPage}:{id:string, prevPage: string}) {
     noStore();
     try {
         const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
         const user = users.rows[0];
         await sql`UPDATE users SET is_worker = ${!user.is_worker} WHERE id = ${id}`;
-        redirect('/dashboard/configurations/users');
+        redirect(prevPage);
     } catch (error) {
         console.error('Database Error:', error);
         return false;
     }
 }
 
-
-
-export async function deleteUser(id:string) {
+export async function deleteUser({id, prevPage}:{id:string, prevPage: string}) {
     noStore();
     try {
         const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
@@ -867,14 +859,13 @@ export async function deleteUser(id:string) {
             return;
         }
         await sql`DELETE FROM users WHERE id = ${id}`;
-        redirect('/dashboard/configurations/users');
+        redirect(prevPage);
 
     } catch (error) {
         console.error('Database Error:', error);
         return false;
     }
 }
-
 
 export async function rsvpPlayerForDay(phone_number:string, date:string, val: boolean, prevPage: string){
     noStore();
@@ -907,7 +898,6 @@ export async function rsvpPlayerForDay(phone_number:string, date:string, val: bo
 
 
 }
-
 
 export async function undoPlayerLastLog(phone_number:string, prevPage: string){
     noStore();
@@ -951,7 +941,6 @@ export async function undoPlayerLastLog(phone_number:string, prevPage: string){
         console.error('undoPlayerLastLog Error:', error);
     }
 }
-
 
 export async function importPlayers(playersToInsert: PlayerDB[]) {
     try {

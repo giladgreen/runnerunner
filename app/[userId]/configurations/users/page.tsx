@@ -1,11 +1,21 @@
 import { lusitana } from '@/app/ui/fonts';
-import { fetchAllUsers } from '@/app/lib/data';
+import {fetchAllUsers, fetchUserById} from '@/app/lib/data';
 import React from "react";
 import {UserDB} from "@/app/lib/definitions";
 import {deleteUser, updateIsUserAdmin, updateIsUserWorker} from "@/app/lib/actions";
 
-export default async function Page() {
+export default async function UsersPage({ params }: { params: { userId:string }}) {
+    const user = await fetchUserById(params.userId);
+    const isAdmin = user.is_admin;
     const users = await fetchAllUsers();
+    if (!isAdmin) {
+        return (
+            <div className="w-full">
+                <div className="flex w-full items-center justify-between">
+                    <h1 className={`${lusitana.className} text-2xl`}><b><u>Non admin has no permissions to see this page</u></b></h1>
+                </div>
+            </div>);
+    }
 
     return (
         <div className="w-full">
@@ -47,13 +57,13 @@ export default async function Page() {
                                 {user.phone_number}
                             </td>
                             <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
-                                <UpdateAdminUser user={user}/>
+                                <UpdateAdminUser user={user} userId={params.userId}/>
                             </td>
                             <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
-                                <UpdateWorkerUser user={user}/>
+                                <UpdateWorkerUser user={user} userId={params.userId}/>
                             </td>
                             <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
-                                <DeleteUser user={user}/>
+                                <DeleteUser user={user} userId={params.userId}/>
                             </td>
                         </tr>
                     ))}
@@ -64,8 +74,8 @@ export default async function Page() {
     );
 }
 
-function UpdateAdminUser({user}: { user: UserDB }) {
-    const updateIsUserAdminWithId = updateIsUserAdmin.bind(null, { id: user.id, prevPage:'/dashboard/configurations/users'});
+function UpdateAdminUser({user, userId}: { user: UserDB, userId:string }) {
+    const updateIsUserAdminWithId = updateIsUserAdmin.bind(null, { id: user.id, prevPage:`/${userId}/configurations/users`});
 
     const onSubmit = async (_formData: FormData) => {
         'use server'
@@ -82,8 +92,8 @@ function UpdateAdminUser({user}: { user: UserDB }) {
     );
 }
 
-function UpdateWorkerUser({user}: { user: UserDB }) {
-    const updateIsUserWorkerWithId = updateIsUserWorker.bind(null, { id: user.id, prevPage:'/dashboard/configurations/users'});
+function UpdateWorkerUser({user, userId}: { user: UserDB, userId:string }) {
+    const updateIsUserWorkerWithId = updateIsUserWorker.bind(null, { id: user.id, prevPage:`/${userId}/configurations/users`});
 
     const onSubmit = async (_formData: FormData) => {
         'use server'
@@ -100,8 +110,8 @@ function UpdateWorkerUser({user}: { user: UserDB }) {
     );
 }
 
-function DeleteUser({user}: { user: UserDB }) {
-    const deleteUserWithId = deleteUser.bind(null, {id: user.id, prevPage:'/dashboard/configurations/users'});
+function DeleteUser({user, userId}: { user: UserDB, userId:string }) {
+    const deleteUserWithId = deleteUser.bind(null, {id: user.id, prevPage:`/${userId}/configurations/users`});
 
     const onSubmit = async (_formData: FormData) => {
         'use server'

@@ -12,6 +12,7 @@ export default function CreateBugForm() {
     const prevPage = `${usePathname()}?${useSearchParams().toString()}`
     // @ts-ignore
     const createReportWithPrevPage = createReport.bind(null, prevPage);
+
     return (
       <form action={createReportWithPrevPage}>
         <div className="rounded-md bg-gray-50 p-4 md:p-6">

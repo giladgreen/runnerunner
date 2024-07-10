@@ -12,14 +12,15 @@ import {useState} from "react";
 
 export default function EditTournamentForm({
    tournament,
+   userId,
    prevPage
 }: {
     tournament: TournamentForm;
+    userId: string;
     prevPage: string;
 }) {
   const initialState = { message: null, errors: {} };
-
-  const updateTournamentWithId = updateTournament.bind(null, { id: tournament.id, prevPage});
+  const updateTournamentWithId = updateTournament.bind(null,{ id: tournament.id, prevPage});
 
   const [state, dispatch] = useFormState(updateTournamentWithId, initialState);
   const [rsvpRequired, setRsvpRequired] = useState(tournament.rsvp_required);
@@ -171,7 +172,7 @@ export default function EditTournamentForm({
 
           <div className="mt-6 flex justify-end gap-4">
               <Link
-                  href="/dashboard/configurations/tournaments"
+                  href={`/${userId}/configurations/tournaments`}
                   className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
               >
                   Cancel

@@ -18,10 +18,14 @@ export default async function Page({ params }: { params: { id: string } }) {
                     {
                         label: 'Configurations',
                         href: `/dashboard/Configurations`,
+                    },
+                    {
+                        label: 'Tournaments',
+                        href: `/dashboard/Configurations/tournament`,
                     }
                 ]}
             />
-            <EditTournamentForm tournament={tournament} />
+            <EditTournamentForm tournament={tournament} prevPage="/dashboard/Configurations/tournament"/>
         </main>
     );
 }

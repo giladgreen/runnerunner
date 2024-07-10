@@ -33,7 +33,7 @@ export function AreYouSure({onConfirm, onCancel, text, subtext}:{text: string,su
 }
 
 export function DeletePlayer({id}: { id: string }) {
-    const deletePlayerWithId = deletePlayer.bind(null, id);
+    const deletePlayerWithId = deletePlayer.bind(null, {id, prevPage: `/dashboard/players/`});
     const [showConfirmation, setShowConfirmation] = useState(false);
 
     return <div>
