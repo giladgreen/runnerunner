@@ -9,12 +9,14 @@ import GeneralPlayersCardWrapper from "@/app/ui/client/GeneralPlayersCardWrapper
 
 export default async function Page({
                                        searchParams,
+                                       params,
                                    }: {
     searchParams?: {
         query?: string;
         page?: string;
         sort?: string;
     };
+    params: { userId: string}
 }) {
     const query = searchParams?.query || '';
     const sortBy = searchParams?.sort || 'updated_at';
@@ -28,11 +30,11 @@ export default async function Page({
             </div>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Search placeholder="search players" />
-                <CreateNewPlayerButton />
+                <CreateNewPlayerButton params={params}/>
 
             </div>
             <Suspense key={query + currentPage} fallback={<PlayersTableSkeleton />}>
-                <PlayersTable query={query} currentPage={currentPage} sortBy={sortBy} />
+                <PlayersTable query={query} currentPage={currentPage} sortBy={sortBy} userId={params.userId}/>
             </Suspense>
             <div className="mt-5 flex w-full justify-center">
                 <Pagination totalPages={totalPages} />
