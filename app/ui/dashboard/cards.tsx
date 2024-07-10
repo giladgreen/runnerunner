@@ -169,15 +169,15 @@ export async function TodayTournamentNameCardWrapper() {
 }
 
 
-export async function getPlayersPrizesContent(todaysPlayersPhoneNumbers:string[],playerPhone?: string, personal?:boolean, workerPage?:boolean, userId?:string) {
-    const {undeliveredPrizes} = await fetchPlayersPrizes(playerPhone);
-    const playersPrizes = undeliveredPrizes.filter(p => personal || !workerPage || todaysPlayersPhoneNumbers.includes(p.phone_number));
+export async function getPlayersPrizesContent(playersPrizes: PrizeDB[], personal?:boolean, userId?:string) {
     if (!playersPrizes || playersPrizes.length === 0) return null;
 
 
     return <div className="full-width" style={{marginBottom: 30}}>
 
             {playersPrizes.map((playersPrize: PrizeDB) => {
+                console.log('## playersPrize', playersPrize)
+
                 return <div key={playersPrize.id}>
 
                     <div className="wide-screen border-b prize-row ">
@@ -188,8 +188,8 @@ export async function getPlayersPrizesContent(todaysPlayersPhoneNumbers:string[]
                             <span style={{marginLeft: 25}}>{playersPrize!.prize}</span>
                         </div>
 
-                        {!personal && <DeletePrize id={playersPrize.id}/>}
-                        {!personal && <OpenConvertPrizeToCreditButton prizeId={playersPrize.id} prizeName={playersPrize.prize} userId={userId}/>}
+                        {!personal  && !playersPrize.delivered && <DeletePrize id={playersPrize.id}/>}
+                        {!personal  && !playersPrize.delivered && <OpenConvertPrizeToCreditButton prizeId={playersPrize.id} prizeName={playersPrize.prize} userId={userId}/>}
                     </div>
                     <div className="cellular border-b prize-row">
                         <div >
@@ -205,17 +205,14 @@ export async function getPlayersPrizesContent(todaysPlayersPhoneNumbers:string[]
                             {playersPrize!.prize}
                         </div>
 
-                        {!personal && <div>
+                        {!personal && !playersPrize.delivered && <div>
                              <DeletePrize id={playersPrize.id}/>
                         </div>}
 
 
-                        {!personal && <div>
+                        {!personal  && !playersPrize.delivered && <div>
                              <OpenConvertPrizeToCreditButton prizeId={playersPrize.id} prizeName={playersPrize.prize} userId={userId}/>
                         </div>}
-
-
-
                     </div>
 
                 </div>
@@ -380,7 +377,10 @@ export async function FinalTablePlayers({title, userId}: { title: string, userId
 
 export async function PlayersPrizes({title, playerPhoneNumber, personal, workerPage, userId}: { title: string, playerPhoneNumber?: string, personal?:boolean, workerPage?:boolean, userId?:string }) {
     const todayPlayersPhoneNumbers = personal || !workerPage ? [] : await fetchTodaysPlayersPhoneNumbers();
-    const content = await getPlayersPrizesContent(todayPlayersPhoneNumbers, playerPhoneNumber, personal, workerPage, userId) as JSX.Element;
+    const { undeliveredPrizes} = await fetchPlayersPrizes(playerPhoneNumber);
+    const playersPrizes = undeliveredPrizes.filter(p => personal || !workerPage || todayPlayersPhoneNumbers.includes(p.phone_number));
+
+    const content = await getPlayersPrizesContent(playersPrizes,  personal, userId) as JSX.Element;
     if (!content) return null;
 
     return <div className="grid gap-1 sm:grid-cols-1 lg:grid-cols-1 full-width"

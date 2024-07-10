@@ -4,7 +4,8 @@ import {
   UserGroupIcon,
   HomeIcon,BanknotesIcon,
   WrenchScrewdriverIcon,
-  ArrowDownOnSquareIcon
+  ArrowDownOnSquareIcon,
+  GiftIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -28,6 +29,12 @@ const links = [
     name: 'all players',
     href: '/dashboard/players',
     icon: UserGroupIcon,
+  },
+
+  {
+    name: 'prizes',
+    href: '/dashboard/prizes',
+    icon: GiftIcon,
   },
 
   {
