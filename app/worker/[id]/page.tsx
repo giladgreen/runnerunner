@@ -40,7 +40,7 @@ export default async function Page({ params, searchParams }: { params: { id: str
                         <FinalTablePlayers title="Players Place" userId={user.id}/>
                     </div>}
                     {prizesEnabled && <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                        <PlayersPrizes title="Players Prizes" workerPage userId={user.id}/>
+                        <PlayersPrizes title="Players Prizes" workerPage userId={user.id} showOnlyToday/>
                     </div>}
                     <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                         <Search placeholder="search players"/>

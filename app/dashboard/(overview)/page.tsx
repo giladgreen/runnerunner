@@ -1,13 +1,13 @@
 import MVPPlayers from '@/app/ui/dashboard/mvp-players';
 import {
     FinalTablePlayers,
-    GeneralPlayersCardWrapper, PlayersPrizes, RSVPAndArrivalCardWrapper, TodayTournamentNameCardWrapper
+    GeneralPlayersCardWrapper, RSVPAndArrivalCardWrapper, TodayTournamentNameCardWrapper
 } from '@/app/ui/dashboard/cards';
 import DebtPlayers from "@/app/ui/dashboard/debt-players";
 import {fetchFeatureFlags} from "@/app/lib/data";
 
 export default async function Page() {
-    const { prizesEnabled, placesEnabled} = await fetchFeatureFlags();
+    const { placesEnabled} = await fetchFeatureFlags();
 
     return (
         <div>
@@ -17,9 +17,6 @@ export default async function Page() {
             <RSVPAndArrivalCardWrapper/>
             {placesEnabled && <div style={{marginTop: 40}}>
                 <FinalTablePlayers title="Today's Game Places"/>
-            </div>}
-            {prizesEnabled && <div style={{marginTop: 40}}>
-                <PlayersPrizes title="Players Prizes" />
             </div>}
             <hr style={{marginBottom: 30, marginTop: 10}}/>
             <GeneralPlayersCardWrapper/>
