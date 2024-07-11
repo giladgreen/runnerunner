@@ -1,10 +1,10 @@
 'use client';
 
 import {PlayerDB, PlayerForm} from '@/app/lib/definitions';
-import {SetPositionForm, SetPrizeForm} from "@/app/ui/players/create-log-form";
 import React from "react";
 import Image from "next/image";
 import {usePathname, useSearchParams} from "next/navigation";
+import SetPrizeForm from "@/app/ui/client/SetPrizeForm";
 
 export default function OpenPrizeModalButton({
   player,

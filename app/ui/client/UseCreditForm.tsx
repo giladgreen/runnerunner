@@ -6,12 +6,11 @@ import {
   HashtagIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
-import {createPlayerNewCreditLog, createPlayerUsageLog, setPlayerPosition, setPlayerPrize} from '@/app/lib/actions';
+import { createPlayerUsageLog} from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import {PlayerDB, PlayerForm, TournamentDB} from "@/app/lib/definitions";
+import {PlayerDB, TournamentDB} from "@/app/lib/definitions";
 import {useEffect, useState} from "react";
-import SearchablePlayersDropdown from "@/app/ui/players/searchable-players-dropdown";
-import Image from "next/image";
+import SearchablePlayersDropdown from "@/app/ui/client/SearchablePlayersDropdown";
 
 export default function UseCreditForm({players, player, tournaments, hide, prevPage, userId} : { players: PlayerDB[], prevPage:string, player: PlayerDB, tournaments:TournamentDB[], hide?: ()=>void, userId:string}) {
   const initialState = { message: null, errors: {} };

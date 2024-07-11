@@ -5,7 +5,7 @@ import DeletePlayerButton from '@/app/ui/client/DeletePlayerButton';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
 import {fetchFeatureFlags, fetchFilteredPlayers, fetchTournaments, fetchUserById} from '@/app/lib/data';
 import Link from "next/link";
-import RSVPButton from "@/app/ui/players/rsvp-button";
+import RSVPButton from "@/app/ui/client/RSVPButton";
 
 export default async function PlayersTable({
   query,

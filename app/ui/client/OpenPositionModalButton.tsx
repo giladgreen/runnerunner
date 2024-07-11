@@ -1,7 +1,7 @@
 'use client';
 
 import {PlayerDB, PlayerForm} from '@/app/lib/definitions';
-import {SetPositionForm} from "@/app/ui/players/create-log-form";
+import SetPositionForm from "@/app/ui/client/SetPositionForm";
 import React from "react";
 import Image from "next/image";
 import {usePathname, useSearchParams} from "next/navigation";

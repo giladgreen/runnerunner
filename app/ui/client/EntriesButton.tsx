@@ -5,7 +5,7 @@ import { undoPlayerLastLog} from "@/app/lib/actions";
 import Image from "next/image";
 import {usePathname, useSearchParams} from "next/navigation";
 import {useState} from "react";
-import {AreYouSure} from "@/app/ui/players/client-buttons";
+import AreYouSure from "@/app/ui/client/AreYouSure";
 
 const formatPlayerEntries = (
     entries: number,

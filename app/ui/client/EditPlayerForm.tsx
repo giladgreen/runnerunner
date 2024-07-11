@@ -9,7 +9,7 @@ import { Button } from '@/app/ui/button';
 import {useFormState} from "react-dom";
 import {PencilIcon} from "@heroicons/react/24/outline";
 import {useState} from "react";
-import RSVPButton from "@/app/ui/players/rsvp-button";
+import RSVPButton from "@/app/ui/client/RSVPButton";
 import {usePathname, useSearchParams} from "next/navigation";
 import {TRANSLATIONS} from "@/app/lib/definitions";
 
