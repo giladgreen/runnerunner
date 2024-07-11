@@ -1,21 +1,21 @@
 'use client';
 
 import {PlayerDB, TournamentDB} from '@/app/lib/definitions';
-import {UseCreditForm} from "@/app/ui/players/create-log-form";
+import UseCreditForm from "@/app/ui/client/UseCreditForm";
 import React from "react";
 import Image from "next/image";
 import {usePathname, useSearchParams} from "next/navigation";
 
 export default function OpenCreditModalButton({
         player,
-        username,
+        userId,
         tournaments,
         players
     }: {
     player: PlayerDB;
     tournaments: TournamentDB[];
     players: PlayerDB[];
-    username?: string;
+    userId: string;
 }) {
     const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
     const [show,setShow] = React.useState(false);
@@ -38,7 +38,7 @@ export default function OpenCreditModalButton({
                 />
             </div>
             <div className={show ? 'edit-player-modal' : 'hidden'}>
-                <UseCreditForm players={players} player={player} tournaments={tournaments} hide={close} prevPage={prevPage} username={username}/>
+                <UseCreditForm players={players} player={player} tournaments={tournaments} hide={close} prevPage={prevPage} userId={userId}/>
             </div>
         </div>
     );

@@ -1,23 +1,34 @@
 import EditPlayerForm from '@/app/ui/client/EditPlayerForm';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 import {fetchFeatureFlags, fetchPlayerById, fetchTournaments, fetchUserById} from '@/app/lib/data';
-import { notFound } from 'next/navigation';
 import {formatCurrency} from "@/app/lib/utils";
 import CreateLogForm from "@/app/ui/client/CreateLogForm";
 import HistoryTable from "@/app/ui/client/HistoryTable";
 import TournamentsHistoryTable from "@/app/ui/client/TournamentsHistoryTable";
 import PlayersPrizesPage from "@/app/[userId]/prizes/PlayersPrizesPage";
+import NotFound from "@/app/[userId]/players/[playerId]/edit/NotFound";
+import React from "react";
 
-export default async function Page({ params }: { params: { userId:string, playerId: string } }) {
+export default async function EditPlayerPage({ params }: { params: { userId:string, playerId: string } }) {
     const user = await fetchUserById(params.userId);
     const isAdmin = user.is_admin;
+    const isWorker = user.is_worker;
+    if (!isAdmin && !isWorker) {
+        return (
+            <div className="w-full">
+                <div className="flex w-full items-center justify-between">
+                    <h1 className="text-2xl"><b><u>You do not have permissions to see this page</u></b></h1>
+                </div>
+            </div>);
+    }
+
     const playerId = params.playerId;
     const { rsvpEnabled} = await fetchFeatureFlags();
     const tournaments = await fetchTournaments();
     const player = await fetchPlayerById(playerId, true);
 
     if (!player) {
-        notFound();
+        return <NotFound params={params} />;
     }
     player.id = playerId;
     return (
@@ -45,7 +56,7 @@ export default async function Page({ params }: { params: { userId:string, player
 
 
                 <hr style={{marginTop: 10, marginBottom: 20}}/>
-                <CreateLogForm player={player} prevPage={`/${params.userId}/players`}/>
+                <CreateLogForm player={player} prevPage={`/${params.userId}/players`} userId={params.userId}/>
 
                 <hr style={{marginTop: 20, marginBottom: 20}}/>
 

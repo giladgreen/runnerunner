@@ -803,11 +803,3 @@ export async function fetchUserById(id: string) {
     throw new Error('Failed to fetchUserById.');
   }
 }
-
-export async function getLastConnectedUser() {
-  methodStart();
-  noStore();
-  const user = (await sql`SELECT phone_number, name FROM last_connected_user`).rows[0];
-  methodEnd('getLastConnectedUser')
-  return user;
-}

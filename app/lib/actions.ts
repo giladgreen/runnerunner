@@ -27,6 +27,7 @@ let clearOldRsvpLastRun = (new Date('2024-06-15T10:00:00.000Z')).getTime();
 
 const ADMINS =  ['0587869910','0524803571','0524803577','0508874068'];
 const WORKERS =  ['0526841902'];
+const MOCK_UUID =  '5d4d2a2a-fe47-4a63-a4db-13eeebd83054'
 
 const phoneToName = {
     '0587869910': 'גלעד גרין',
@@ -285,19 +286,8 @@ async function handleCreditByOther(type: string, otherPlayerPhoneNumber: string,
     }
 }
 
-async function getUserName(user: { userName?:string, phoneNumber?:string}){
-    let username = user.userName;
-    if (user.phoneNumber){
-        const userResult = await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${user.phoneNumber}`;
-        const userFromDB = userResult.rows[0];
-        if (userFromDB){
-            username = userFromDB.name ?? username ?? user.phoneNumber;
-        }
-    }
-    return username ?? 'unknown';
-}
 
-export async function createPlayerLog(player: PlayerForm, formData: FormData, prevPage:string ,usage: boolean, user: { userName?:string, phoneNumber?:string}){
+export async function createPlayerLog(player: PlayerForm, formData: FormData, prevPage:string ,usage: boolean, userId: string){
     const validatedFields = CreateUsageLog.safeParse({
         change: formData.get('change'),
         note: formData.get('note'),
@@ -310,11 +300,12 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
         };
     }
 
-    const username = await getUserName(user);
+    const user = (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId && userId.trim().length > 0 ? userId : MOCK_UUID}`).rows[0];
+    const username = user?.name ?? user?.phone_number ?? 'unknown';
     const change = validatedFields.data.change * (usage ? -1 : 1);
 
     let type = usage ? (formData.get('type') as string ?? 'prize') :  'credit' ;
-    console.log('## type:', type)
+
     const otherPlayerPhoneNumber = formData.get('other_player') as string;
     const  {
         otherPlayer,
@@ -363,12 +354,12 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
     redirect(prevPage);
 }
 
-export async function createPlayerUsageLog(data : {player: PlayerForm, prevPage:string, username?: string, phoneNumber?: string}, _prevState: State, formData: FormData){
-    return createPlayerLog(data.player, formData, data.prevPage, true, { userName: data.username, phoneNumber: data.phoneNumber});
+export async function createPlayerUsageLog(data : {player: PlayerForm, prevPage:string, userId: string}, _prevState: State, formData: FormData){
+    return createPlayerLog(data.player, formData, data.prevPage, true, data.userId);
 }
 
-export async function createPlayerNewCreditLog(data : {player: PlayerForm, prevPage:string, phoneNumber: string}, _prevState: State, formData: FormData){
-    return createPlayerLog(data.player, formData, data.prevPage, false, { phoneNumber: data.phoneNumber});
+export async function createPlayerNewCreditLog(data : {player: PlayerForm, prevPage:string, userId: string}, _prevState: State, formData: FormData){
+    return createPlayerLog(data.player, formData, data.prevPage, false, data.userId);
 }
 
 export async function setPlayerPosition({playerId, prevPage}:{playerId: string, prevPage: string}, _prevState: State, formData: FormData){
@@ -395,7 +386,10 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
 
         const todayTournament = todayTournamentResult.rows[0];
         let winnersObject = winnersResult.rows[0];
-
+console.log('## setPlayerPosition. winnersObject', winnersObject)
+console.log('## setPlayerPosition. todayTournament', todayTournament)
+console.log('## setPlayerPosition. newPosition',  newPosition)
+console.log('## setPlayerPosition. phone_number',  player.phone_number)
         if (winnersObject){
             const newWinnersObject = {
                 ...JSON.parse(winnersObject.winners),
@@ -466,7 +460,7 @@ export async function setPrizesCreditWorth({date, prevPage}:{date: string, prevP
     }
 
 }
-export async function givePlayerPrizeOrCredit({stringDate, playerId,userPhoneNumber,userId, prevPage}:{stringDate?:string, userPhoneNumber?:string,userId?:string, playerId: string, prevPage: string}, _prevState: State, formData: FormData){
+export async function givePlayerPrizeOrCredit({stringDate, playerId,userId, prevPage}:{stringDate?:string,userId:string, playerId: string, prevPage: string}, _prevState: State, formData: FormData){
 
     try {
         await startTransaction();
@@ -489,6 +483,8 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId,userPhoneNum
 
         const winners = winnersResult.rows[0];
         if (!winners) {
+
+
             console.error('## givePlayerPrizeOrCredit Failed to find winners in DB')
             return {
                 message: 'Failed to find winners in DB.',
@@ -528,7 +524,7 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId,userPhoneNum
 
 
                 await touchPlayer(player.phone_number);
-                const userResult = userId ? (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`).rows[0]  : (await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${userPhoneNumber ?? '0'}`).rows[0] ;
+                const userResult = (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`).rows[0];
                 await sql`
           INSERT INTO history (phone_number, change, note, type, updated_by)
           VALUES (${player.phone_number}, ${amount}, ${note}, 'credit', ${userResult?.name ?? 'unknown'})
@@ -678,6 +674,7 @@ export async function updateTournament(
     `;
         sendEmail(TARGET_MAIL, 'tournaments update', `name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`)
 
+
         revalidatePath(prevPage);
         redirect(prevPage);
     } catch (error) {
@@ -718,14 +715,14 @@ export async function setPrizeDelivered({id, prevPage}: {id: string, prevPage: s
     }
 }
 
-export async function convertPrizeToCredit(clientData: {userPhoneNumber?:string, userId?:string, prizeId: string, prevPage: string},  _prevState: State,  formData: FormData) {
+export async function convertPrizeToCredit(clientData: { userId:string, prizeId: string, prevPage: string},  _prevState: State,  formData: FormData) {
     try {
-        const {prizeId, prevPage, userPhoneNumber, userId} = clientData;
+        const {prizeId, prevPage, userId} = clientData;
         await startTransaction();
         const amount = Number(formData.get('amount') as string);
         const prize = (await sql<PrizeDB>`SELECT * FROM prizes WHERE id = ${prizeId}`).rows[0];
 
-        const userResult = userId ? (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`).rows[0] :  (await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${userPhoneNumber ?? '0'}`).rows[0];
+        const userResult = (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`).rows[0];
 
         const playerPhoneNumber = prize.phone_number;
         const note = ` שחקן המיר פרס בקרדיט: ${prize.prize}`

@@ -1,3 +1,15 @@
+.sign-up-top-header {
+    padding-left: 20px;
+    font-size: x-large;
+    color: white;
+}
+
+.sign-in-top-header {
+    padding-left: 20px;
+    font-size: x-large;
+    color: white;
+}
+
 .form-control {
     border: 2px solid rgb(0, 112, 243);
     border-radius:6px;

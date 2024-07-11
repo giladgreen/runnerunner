@@ -9,13 +9,8 @@ import {Button} from "@/app/ui/button";
 
 function ConvertPrizeToCreditModalForm({userId, prizeId, prizeName, hide, prevPage} : { userId?:string, prizeId:string,prizeName:string, hide?: ()=>void, prevPage:string}) {
     const initialState = { message: null, errors: {} };
-    let userPhoneNumber;
-    try {
-        userPhoneNumber = localStorage.getItem('phone_number');
-    } catch (e) {
-        console.error('localStorage is not available', e);
-    }
-    const data = { prizeId, prevPage, userPhoneNumber: userPhoneNumber as string, userId};
+
+    const data = { prizeId, prevPage, userId: userId!};
     const convertPrizeToCreditWithData = convertPrizeToCredit.bind(null, data);
     // @ts-ignore
     const [_state, dispatch] = useFormState(convertPrizeToCreditWithData, initialState);

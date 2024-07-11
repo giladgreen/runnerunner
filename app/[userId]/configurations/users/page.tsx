@@ -7,6 +7,7 @@ import {deleteUser, updateIsUserAdmin, updateIsUserWorker} from "@/app/lib/actio
 export default async function UsersPage({ params }: { params: { userId:string }}) {
     const user = await fetchUserById(params.userId);
     const isAdmin = user.is_admin;
+
     const users = await fetchAllUsers();
     if (!isAdmin) {
         return (
@@ -118,7 +119,7 @@ function DeleteUser({user, userId}: { user: UserDB, userId:string }) {
         await deleteUserWithId();
     };
 
-    if (user.is_admin){
+    if (user.is_admin || user.is_worker){
         return null;
     }
     return (

@@ -23,7 +23,7 @@ import {DoubleTicksIcon, TickIcon} from "@/app/ui/icons";
 import { Suspense} from "react";
 import {CardsSkeleton} from "@/app/ui/skeletons";
 import Image from "next/image";
-import {PlayerDB, PrizeDB} from "@/app/lib/definitions";
+import {PlayerDB, PrizeDB, TRANSLATIONS} from "@/app/lib/definitions";
 import { DeletePrize} from "@/app/ui/players/client-buttons";
 import OpenGiveCreditModalButton from "@/app/ui/players/open-give-credit-modal-button";
 import OpenSetPrizesCreditModalButton from "@/app/ui/players/open-set-prizes-credit-modal-button";
@@ -163,7 +163,7 @@ export async function TodayTournamentNameCardWrapper() {
 
             <Card oneLine title="Current Tournament" value={`${
                 // @ts-ignore
-                translation[todayTournament.day]} -  ${todayTournament.max_players === 0 && todayTournament.rsvp_required ? 'אין טורניר היום' : todayTournament.name}`} />
+                TRANSLATIONS[todayTournament.day]} -  ${todayTournament.max_players === 0 && todayTournament.rsvp_required ? 'אין טורניר היום' : todayTournament.name}`} />
         </Suspense>
     </div>
 }
@@ -176,7 +176,6 @@ export async function getPlayersPrizesContent(playersPrizes: PrizeDB[], personal
     return <div className="full-width" style={{marginBottom: 30}}>
 
             {playersPrizes.map((playersPrize: PrizeDB) => {
-                console.log('## playersPrize', playersPrize)
 
                 return <div key={playersPrize.id}>
 

@@ -2,7 +2,7 @@ import {fetchRSVPAndArrivalData} from "@/app/lib/data";
 import {Suspense} from "react";
 import {CardsSkeleton} from "@/app/ui/skeletons";
 import Card from "@/app/ui/client/Card";
-
+import {TRANSLATIONS} from "@/app/lib/definitions";
 export default async function TodayTournamentNameCardWrapper({ params }: { params: { userId: string } }) {
     const {
         todayTournament
@@ -13,7 +13,7 @@ export default async function TodayTournamentNameCardWrapper({ params }: { param
 
             <Card oneLine title="Current Tournament" value={`${
                 // @ts-ignore
-                translation[todayTournament.day]} -  ${todayTournament.max_players === 0 && todayTournament.rsvp_required ? 'אין טורניר היום' : todayTournament.name}`} />
+                TRANSLATIONS[todayTournament.day]} -  ${todayTournament.max_players === 0 && todayTournament.rsvp_required ? 'אין טורניר היום' : todayTournament.name}`} />
         </Suspense>
     </div>
 }

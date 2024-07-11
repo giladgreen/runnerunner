@@ -18,49 +18,19 @@ export const authConfig = {
             if (isLoggedIn) {
                 const usersResult = await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${loggedInUser!.email}`;
                 const userFromDB = usersResult.rows[0];
-                console.log('## userFromDB', userFromDB)
-
-                isAdmin = Boolean(userFromDB && userFromDB.is_admin);
-                isWorker = Boolean(userFromDB && userFromDB.is_worker);
+              //  console.log('## userFromDB', userFromDB)
                 userUUID = userFromDB?.id;
-                if (userFromDB){
-                    await sql`UPDATE last_connected_user SET phone_number = ${userFromDB.phone_number}, name = ${userFromDB.name}`;
-                }
             }
-            console.log('## loggedInUser', loggedInUser)
-            console.log('## nextUrl.pathname', nextUrl.pathname)
-            const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-            const isOnWorker = nextUrl.pathname.startsWith('/worker');
-            const isOnPersonal = nextUrl.pathname.startsWith('/personal');
+            // console.log('## loggedInUser', loggedInUser)
+            // console.log('## nextUrl.pathname', nextUrl.pathname)
 
-            if (isOnDashboard) {
-                return isAdmin;
+            if (isLoggedIn && !nextUrl.pathname.includes(userUUID!)) {
+                return Response.redirect(new URL(`/${userUUID}`, nextUrl));
             }
 
-            if (isOnWorker) {
-                if (isWorker && !nextUrl.pathname.includes(userUUID!)) {
-                    return Response.redirect(new URL(`/worker/${userUUID}`, nextUrl));
-                }
-                return isWorker;
-            }
-
-            if (isOnPersonal) {
-                return isLoggedIn;
-            }
-
-            if (isLoggedIn) {
-                if (isAdmin) {
-                    return Response.redirect(new URL('/dashboard', nextUrl));
-                }
-
-                if (isWorker) {
-                    return Response.redirect(new URL(`/worker/${userUUID}`, nextUrl));
-                }
-
-                // @ts-ignore
-                return Response.redirect(new URL(`/personal/${userUUID}`, nextUrl));
-            }
             return true;
+
+
         },
     },
     providers: [], // Add providers with an empty array for now

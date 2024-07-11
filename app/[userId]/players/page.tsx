@@ -3,8 +3,8 @@ import Search from '@/app/ui/client/Search';
 import PlayersTable from '@/app/ui/client/PlayersTable';
 import CreateNewPlayerButton from '@/app/ui/client/CreateNewPlayerButton';
 import { PlayersTableSkeleton } from '@/app/ui/skeletons';
-import { Suspense } from 'react';
-import { fetchPlayersPagesCount } from '@/app/lib/data';
+import React, { Suspense } from 'react';
+import {fetchPlayersPagesCount, fetchUserById} from '@/app/lib/data';
 import GeneralPlayersCardWrapper from "@/app/ui/client/GeneralPlayersCardWrapper";
 
 export default async function Page({
@@ -18,6 +18,19 @@ export default async function Page({
     };
     params: { userId: string}
 }) {
+
+    const user = await fetchUserById(params.userId);
+    const isAdmin = user.is_admin;
+    const isWorker = user.is_worker;
+    if (!isAdmin && !isWorker) {
+        return (
+            <div className="w-full">
+                <div className="flex w-full items-center justify-between">
+                    <h1 className="text-2xl"><b><u>You do not have permissions to see this page</u></b></h1>
+                </div>
+            </div>);
+    }
+
     const query = searchParams?.query || '';
     const sortBy = searchParams?.sort || 'updated_at';
     const currentPage = Number(searchParams?.page) || 1;

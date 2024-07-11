@@ -1,10 +1,12 @@
-import { fetchFeatureFlags} from '@/app/lib/data';
+import {fetchFeatureFlags, fetchUserById} from '@/app/lib/data';
 import React from "react";
 import {updateFFValue} from "@/app/lib/actions";
 
 export default async function FlagsPage({ params }: { params: { userId: string } }) {
     const { prizesEnabled, placesEnabled, rsvpEnabled, playerRsvpEnabled, usePhoneValidation, importEnabled} = await fetchFeatureFlags();
-
+    const user = await fetchUserById(params.userId);
+    const isAdmin = user.is_admin;
+    if (!isAdmin) return null;
     return (
         <div className="w-full">
             <div className="flex w-full items-center justify-between">
@@ -103,6 +105,9 @@ function UpdateFeatureFlag({featureName, currentValue, userId}: { featureName: s
     const onSubmit = async (_formData: FormData) => {
         'use server'
         await updateFFValue(featureName, !currentValue, `/${userId}/configurations/flags`);
+        if (currentValue && featureName==='rsvp' ) {
+            await updateFFValue('player_can_rsvp', false, `/${userId}/configurations/flags`);
+        }
     };
 
     return (

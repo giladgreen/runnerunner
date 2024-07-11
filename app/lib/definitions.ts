@@ -125,3 +125,13 @@ export type BugDB = {
   description: string;
   updated_at: string;
 };
+
+export const TRANSLATIONS = {
+  Sunday: 'יום ראשון',
+  Monday: 'יום שני',
+  Tuesday: 'יום שלישי',
+  Wednesday: 'יום רביעי',
+  Thursday: 'יום חמישי',
+  Friday: 'יום שישי',
+  Saturday: 'יום שבת',
+}

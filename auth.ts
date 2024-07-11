@@ -20,8 +20,6 @@ export const { auth, signIn, signOut } = NextAuth({
     providers: [
         Credentials({
             async authorize(credentials) {
-
-
                 const phone_number = credentials.email as string;
                 const password = credentials.password as string;
                 const user = await getUserByPhoneNumber(phone_number);

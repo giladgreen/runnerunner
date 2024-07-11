@@ -1,4 +1,3 @@
-import SideNavUser from "@/app/ui/dashboard/sidenav-user";
 import {formatCurrency, formatType} from "@/app/lib/utils";
 import {
     fetchFeatureFlags,
@@ -8,33 +7,34 @@ import {
     fetchPlayerCurrentTournamentHistory
 } from "@/app/lib/data";
 import Image from "next/image";
-import HistoryTable from "@/app/ui/players/history-table";
+import HistoryTable from "@/app/ui/client/HistoryTable";
 import {rsvpPlayerForDay} from "@/app/lib/actions";
-import TournamentsHistoryTable from "@/app/ui/players/tournaments-history-table";
-import {PlayersPrizes} from "@/app/ui/dashboard/cards";
-import {LogDB, TRANSLATIONS} from "@/app/lib/definitions";
+import TournamentsHistoryTable from "@/app/ui/client/TournamentsHistoryTable";
+import PlayersPrizes from "@/app/ui/client/PlayersPrizes";
+import {LogDB} from "@/app/lib/definitions";
+import { TRANSLATIONS} from "@/app/lib/definitions";
+import PlayersPrizesPage from "@/app/[userId]/prizes/PlayersPrizesPage";
 
 
 const NO_NEED_FOR_RSVP = 'אין צורך ברישום לטורניר של היום';
 const YOU_ARE_ALREADY_REGISTERED = 'אתה כבר רשום לטורניר של היום';
-const YOU_ARE_NOT_REGISTERED = 'אתה לא רשום לטורניר של היום';
+const YOU = 'אתה';
+const ARE_NOT = 'לא';
+const REGISTERED_FOR_TODAY = 'רשום לטורניר של היום';
+const YOU_ARE_NOT_REGISTERED =<span>{YOU} <u>{ARE_NOT}</u> {REGISTERED_FOR_TODAY}</span>
 const NO_TOURNAMENT_TODAY = 'אין טורניר היום';
 const NO_MORE_SPOTS = 'אין יותר מקום לטורניר של היום';
 const CLICK_HERE_TO_UNREGISTER = 'לביטול לחץ כאן';
 const CLICK_HERE_TO_REGISTER = 'לרישום לחץ כאן';
 const YOU_ARE_ALREADY_IN_THE_GAME = 'אתה כבר במשחק';
-export default async function Page({ params }: { params: { id: string } }) {
-    const userId = params.id;
+export default async function PlayerPage({ params }: { params: { userId: string } }) {
     const {rsvpEnabled, playerRsvpEnabled} = await fetchFeatureFlags();
     const showRsvp = rsvpEnabled && playerRsvpEnabled;
 
-    const player = await fetchPlayerByUserId(userId);
+    const player = await fetchPlayerByUserId(params.userId);
     if (!player) {
         return (
             <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-                <div className="w-full flex-none md:w-64">
-                    <SideNavUser/>
-                </div>
                 <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
                     <div>
                         No data for this player yet..
@@ -65,12 +65,13 @@ export default async function Page({ params }: { params: { id: string } }) {
     const onRegisterSubmit = async (_formData: FormData) => {
         'use server'
         const todayDate = (new Date()).toISOString().slice(0, 10);
-        await rsvpPlayerForDay(player.phone_number, todayDate, true, `/personal/${userId}`);
+        await rsvpPlayerForDay(player.phone_number, todayDate, true, `/${params.userId}`);
     };
+
     const onUnRegisterSubmit = async (_formData: FormData) => {
         'use server'
         const todayDate = (new Date()).toISOString().slice(0, 10);
-        await rsvpPlayerForDay(player.phone_number, todayDate, false, `/personal/${userId}`);
+        await rsvpPlayerForDay(player.phone_number, todayDate, false, `/${params.userId}`);
     };
 
     const separator = <hr style={{marginTop: 20, marginBottom: 20}}/>;
@@ -83,8 +84,11 @@ export default async function Page({ params }: { params: { id: string } }) {
     const userIsRegisterDiv = <div>
 
         {showUnregisterButton && <div style={divWithTopMargin} className="rsvp_text rsvp_text-registered">
-            <form action={onUnRegisterSubmit}>
-                <button className="rsvp_button rsvp_button-registered">
+            <div style={divWithTopMargin} className="rsvp_text rsvp_text-unregistered">
+                {YOU_ARE_ALREADY_REGISTERED}
+            </div>
+            <form action={onUnRegisterSubmit} style={{marginTop:20}}>
+                <button className="rsvp_button rsvp_button-registered" >
                     {CLICK_HERE_TO_UNREGISTER}
                 </button>
             </form>
@@ -93,11 +97,9 @@ export default async function Page({ params }: { params: { id: string } }) {
         {!showUnregisterButton && <div style={divWithTopMargin}>
             <div>{YOU_ARE_ALREADY_IN_THE_GAME}</div>
             <div>
-                {playerCurrentTournamentHistory.map((item: LogDB) => {
-
+            {playerCurrentTournamentHistory.map((item: LogDB) => {
                     return <div key={item.id}> <b>{formatCurrency(item.change)}</b> - {formatType(item.type)} </div>
                 })}
-
             </div>
         </div>}
     </div>;
@@ -132,10 +134,6 @@ export default async function Page({ params }: { params: { id: string } }) {
 
 
     return (
-        <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-            <div className="w-full flex-none md:w-64">
-                <SideNavUser/>
-            </div>
             <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
                 <div>
                     <Image
@@ -151,7 +149,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                     </div>
 
                     <div>Phone number: {player.phone_number}  </div>
-                    <div> {player.notes}  </div>
+
                     <h1 style={{zoom: 2}}><b>Current Balance: {formatCurrency(player.balance)}</b></h1>
                     {showRsvp && separator}
                     {showRsvp && <div
@@ -169,10 +167,9 @@ export default async function Page({ params }: { params: { id: string } }) {
                     <div style={{ width:100, height:50, margin: '30px 0'}}>
 
                     </div>
-                    <PlayersPrizes title="Prizes" playerPhoneNumber={player.phone_number} personal/>
+                    <PlayersPrizesPage playerPhone={player.phone_number} />
                 </div>
             </div>
-        </div>
     )
         ;
 }

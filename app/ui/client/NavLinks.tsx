@@ -5,7 +5,8 @@ import {
   HomeIcon,BanknotesIcon,
   WrenchScrewdriverIcon,
   ArrowDownOnSquareIcon,
-  GiftIcon
+  GiftIcon,
+  InformationCircleIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -59,9 +60,9 @@ const links = (userId: string) => [
     worker: true,
   },
   {
-    name: 'player',
+    name: 'player info',
     href: `/${userId}`,
-    icon: UserGroupIcon,
+    icon: InformationCircleIcon,
     player: true,
   },
 ];

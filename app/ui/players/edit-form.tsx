@@ -1,9 +1,8 @@
 'use client';
 import { updatePlayer } from '@/app/lib/actions';
-import { Checkbox } from 'primereact/checkbox';
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
 
-import {PlayerDB, PlayerForm, TournamentDB} from '@/app/lib/definitions';
+import {PlayerDB, PlayerForm, TournamentDB, TRANSLATIONS} from '@/app/lib/definitions';
 
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
@@ -13,15 +12,6 @@ import {useState} from "react";
 import RSVPButton from "@/app/ui/players/rsvp-button";
 import {usePathname, useSearchParams} from "next/navigation";
 
-const translation = {
-    Sunday: 'יום ראשון',
-    Monday: 'יום שני',
-    Tuesday: 'יום שלישי',
-    Wednesday: 'יום רביעי',
-    Thursday: 'יום חמישי',
-    Friday: 'יום שישי',
-    Saturday: 'יום שבת',
-}
 
 export default function EditPlayerForm({
   player,
@@ -50,7 +40,7 @@ export default function EditPlayerForm({
         const dayOfTheWeek = date.toLocaleString('en-us', { weekday: 'long' });
         const stringDate = date.toISOString().slice(0,10);
         // @ts-ignore
-        const text = ` ${translation[dayOfTheWeek]} - ${tournament.name}`;
+        const text = ` ${TRANSLATIONS[dayOfTheWeek]} - ${tournament.name}`;
         return <div key={tournament.id} className="tournament_rsvp_line">
             {tournament.rsvp_required ?
                 (tournament.max_players === 0 ? '' : <RSVPButton player={player as PlayerDB} stringDate={stringDate} text={text}/>)

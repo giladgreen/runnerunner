@@ -4,10 +4,9 @@ import RunnerLogo from '@/app/ui/runner-logo';
 
 import { signOut } from '@/auth';
 import {SignOutButton} from "@/app/ui/dashboard/sign-out-button";
-import {getLastConnectedUser} from "@/app/lib/data";
 
 export default async function SidenavAdmin() {
-     const user = await getLastConnectedUser();
+     const user = {name:'',phone_number:''};
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
       <Link

@@ -10,12 +10,7 @@ import {usePathname, useSearchParams} from "next/navigation";
 
 function SetPrizesCreditForm({players, date, hide, prevPage} : { date:string, players: PlayerDB[],  hide?: ()=>void, prevPage:string }) {
     const initialState = { message: null, errors: {} };
-    let userPhoneNumber;
-    try {
-        userPhoneNumber = localStorage.getItem('phone_number');
-    } catch (e) {
-        console.error('localStorage is not available', e);
-    }
+
     const setPrizesCreditWorthWithDate = setPrizesCreditWorth.bind(null, { date, prevPage})
     // @ts-ignore
     const [_state, dispatch] = useFormState(setPrizesCreditWorthWithDate, initialState);

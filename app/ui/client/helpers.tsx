@@ -94,7 +94,7 @@ export async function getPlayersPrizesContent(playersPrizes: PrizeDB[], personal
     return <div className="full-width" style={{marginBottom: 30}}>
 
         {playersPrizes.map((playersPrize: PrizeDB) => {
-            console.log('## playersPrize', playersPrize)
+
 
             return <div key={playersPrize.id}>
 

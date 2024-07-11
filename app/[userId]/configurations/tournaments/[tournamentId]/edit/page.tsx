@@ -1,14 +1,11 @@
 import EditTournamentForm from '@/app/ui/client/EditTournamentForm';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 import {fetchTournamentByDay} from '@/app/lib/data';
-import { notFound } from 'next/navigation';
 export default async function tournamentEditPage({ params }: { params: { userId:string, tournamentId: string } }) {
     const dayOfTheWeek = params.tournamentId;
 
     const tournament = await fetchTournamentByDay( dayOfTheWeek.slice(0, 1).toUpperCase() + dayOfTheWeek.slice(1).toLowerCase());
-    if (!tournament) {
-        notFound();
-    }
+
 
     return (
         <main>
@@ -25,7 +22,7 @@ export default async function tournamentEditPage({ params }: { params: { userId:
                     }
                 ]}
             />
-            <EditTournamentForm tournament={tournament} prevPage={`/${params.userId}/configurations/tournament`} userId={params.userId}/>
+            <EditTournamentForm tournament={tournament} prevPage={`/${params.userId}/configurations/tournaments`} userId={params.userId}/>
         </main>
     );
 }

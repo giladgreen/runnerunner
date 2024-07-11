@@ -19,6 +19,7 @@ export default function EditTournamentForm({
     userId: string;
     prevPage: string;
 }) {
+
   const initialState = { message: null, errors: {} };
   const updateTournamentWithId = updateTournament.bind(null,{ id: tournament.id, prevPage});
 

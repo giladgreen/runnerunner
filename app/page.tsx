@@ -2,7 +2,7 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 import Link from 'next/link';
 import Image from 'next/image';
-import SignUpButton from "@/app/ui/players/sign-up-button";
+import SignUpButton from "@/app/ui/client/SignUpButton";
 import {fetchFeatureFlags} from "@/app/lib/data";
 
 export default async function HomePage() {
@@ -39,13 +39,6 @@ export default async function HomePage() {
               <div >
                   <SignUpButton usePhoneValidation={usePhoneValidation}/>
               </div>
-              <Image
-                  src="/runner-exp.png"
-                  width={1000}
-                  height={760}
-                  className="block md:hidden"
-                  alt="runner"
-              />
           </div>
           <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
               <Image

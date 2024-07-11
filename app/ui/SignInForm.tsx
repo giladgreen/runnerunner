@@ -95,13 +95,7 @@ function SignInButton({phoneNumber}:{phoneNumber:string}) {
   const { pending } = useFormStatus();
 
   return (
-      <Button className="mt-4 w-full" aria-disabled={pending} onClick={()=>{
-        try {
-          localStorage.setItem('phone_number', phoneNumber);
-        } catch (e) {
-          console.error('localStorage is not available', e);
-        }
-      }}>
+      <Button className="mt-4 w-full" aria-disabled={pending}>
         {pending ? 'Signing In' : 'Sign In'}
         <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
       </Button>

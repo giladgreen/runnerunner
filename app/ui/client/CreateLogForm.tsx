@@ -11,15 +11,10 @@ import {PlayerDB, PlayerForm} from "@/app/lib/definitions";
 import { useState} from "react";
 import Image from "next/image";
 
-export function UseCreditForPrizeForm({player, prevPage} : {player: PlayerForm, prevPage:string}) {
+export function UseCreditForPrizeForm({player, userId, prevPage} : {player: PlayerForm, userId:string, prevPage:string}) {
   const initialState = { message: null, errors: {} };
-  let phoneNumber;
-  try {
-    phoneNumber = localStorage.getItem('phone_number');
-  } catch (e) {
-    console.error('localStorage is not available', e);
-  }
-  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, { player, prevPage, phoneNumber: (phoneNumber ?? '') });
+
+  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, { player, prevPage, userId });
 
   const initialText = `שחקן המיר קרדיט בפרס`;
   const initialAmount = 1000;
@@ -130,16 +125,11 @@ export function UseCreditForPrizeForm({player, prevPage} : {player: PlayerForm, 
   );
 }
 
-export function AddToBalanceForm({player, prevPage}: { player: PlayerForm, prevPage:string }) {
+export function AddToBalanceForm({player, userId, prevPage}: { player: PlayerForm,userId:string, prevPage:string }) {
   const initialState = {message: null, errors: {}};
-  let phoneNumber;
-  try {
-    phoneNumber = localStorage.getItem('phone_number');
-  } catch (e) {
-    console.error('localStorage is not available', e);
-  }
 
-  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, { player, prevPage, phoneNumber: phoneNumber ?? '' });
+
+  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, { player, prevPage, userId });
   // @ts-ignore
   const [state2, dispatch] = useFormState(createPlayerNewCreditLogWithPlayerData, initialState);
 
@@ -218,7 +208,7 @@ export function AddToBalanceForm({player, prevPage}: { player: PlayerForm, prevP
   );
 }
 
-export default function CreateLogForm({player, prevPage} : {player: PlayerDB, prevPage:string}) {
+export default function CreateLogForm({player, userId, prevPage} : {player: PlayerDB, prevPage:string, userId:string}) {
   return (
       <div>
         <div className="cellular" >
@@ -230,13 +220,13 @@ export default function CreateLogForm({player, prevPage} : {player: PlayerDB, pr
                 height={100}
                 alt={`profile picture`}
             />
-            <AddToBalanceForm player={player} prevPage={prevPage}/>
-            <UseCreditForPrizeForm player={player} prevPage={prevPage}/>
+            <AddToBalanceForm player={player} prevPage={prevPage} userId={userId}/>
+            <UseCreditForPrizeForm player={player} prevPage={prevPage} userId={userId}/>
           </div>
         </div>
 
         <div className="wide-screen" style={{ justifyContent: 'space-between'}}>
-          <AddToBalanceForm player={player} prevPage={prevPage}/>
+          <AddToBalanceForm player={player} prevPage={prevPage} userId={userId}/>
           <Image
               src={player.image_url}
               className="mr-2"
@@ -244,7 +234,7 @@ export default function CreateLogForm({player, prevPage} : {player: PlayerDB, pr
               height={500}
               alt={`profile picture`}
           />
-          <UseCreditForPrizeForm player={player} prevPage={prevPage}/>
+          <UseCreditForPrizeForm player={player} prevPage={prevPage} userId={userId}/>
         </div>
 
       </div>

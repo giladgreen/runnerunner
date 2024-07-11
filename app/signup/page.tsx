@@ -1,4 +1,4 @@
-import SignUpForm from "@/app/ui/sign-up-form";
+import SignUpForm from "@/app/ui/SignUpForm";
 export default function SignUpPage() {
     return (
         <main className="flex items-center justify-center md:h-screen">
@@ -8,7 +8,6 @@ export default function SignUpPage() {
                     Runner Runner
                 </div>
                 <SignUpForm/>
-
             </div>
         </main>
     );

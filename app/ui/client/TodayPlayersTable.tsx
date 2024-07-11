@@ -16,7 +16,6 @@ import EntriesButton from "@/app/ui/client/EntriesButton";
 
 export default async function TodayPlayersTable({ players, params}:{players: PlayerDB[], params: {userId: string}}) {
   const user = await fetchUserById(params.userId);
-
   const { prizesEnabled, placesEnabled, rsvpEnabled} = await fetchFeatureFlags();
 
   const tournaments = await fetchTournaments();
@@ -184,11 +183,10 @@ export default async function TodayPlayersTable({ players, params}:{players: Pla
                     </td>}
                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                       <div className="flex justify-end gap-3">
-                        <OpenCreditModalButton players={playersWithEnoughCredit} player={player} tournaments={tournaments} username={user.name}/>
+                        <OpenCreditModalButton players={playersWithEnoughCredit} player={player} tournaments={tournaments} userId={params.userId}/>
                         {placesEnabled && <OpenPositionModalButton player={player}/>}
                         {prizesEnabled && <OpenPrizeModalButton player={player} />}
                       </div>
-
                     </td>
                   </tr>
               ))}

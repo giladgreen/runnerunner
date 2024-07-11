@@ -10,13 +10,8 @@ import {Button} from "@/app/ui/button";
 
 function SetGivePrizeForm({player, hide, prevPage, stringDate, userId} : { stringDate?:string, player: PlayerDB, hide?: ()=>void, prevPage:string, userId?:string}) {
     const initialState = { message: null, errors: {} };
-    let userPhoneNumber;
-    try {
-        userPhoneNumber = localStorage.getItem('phone_number');
-    } catch (e) {
-        console.error('localStorage is not available', e);
-    }
-    const setPlayerPrizeWithPlayerId = givePlayerPrizeOrCredit.bind(null,{ userId, userPhoneNumber: userPhoneNumber as string, playerId: player.id, prevPage, stringDate})
+
+    const setPlayerPrizeWithPlayerId = givePlayerPrizeOrCredit.bind(null,{ userId:userId!, playerId: player.id, prevPage, stringDate})
     // @ts-ignore
     const [_state, dispatch] = useFormState(setPlayerPrizeWithPlayerId, initialState);
     const [type, setType] = useState('prize');

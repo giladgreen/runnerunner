@@ -1,11 +1,12 @@
 import CreateNewTodayPlayerButton from '@/app/ui/client/CreateNewTodayPlayerButton';
 import TodayPlayersTable from "@/app/ui/client/TodayPlayersTable";
 import TodaySearch from "@/app/ui/client/TodaySearch";
-import {fetchFeatureFlags, fetchTodayPlayers} from "@/app/lib/data";
+import {fetchFeatureFlags, fetchTodayPlayers, fetchUserById} from "@/app/lib/data";
 import FinalTablePlayers from "@/app/ui/client/FinalTablePlayers";
 import PlayersPrizes from "@/app/ui/client/PlayersPrizes";
 import RSVPAndArrivalCardWrapper from "@/app/ui/client/RSVPAndArrivalCardWrapper";
 import TodayTournamentNameCardWrapper from "@/app/ui/client/TodayTournamentNameCardWrapper";
+import React from "react";
 
 export default async function CurrentTournament({
    params,
@@ -16,6 +17,18 @@ export default async function CurrentTournament({
     };
     params:{ userId: string };
 }) {
+    const user = await fetchUserById(params.userId);
+    const isAdmin = user.is_admin;
+    const isWorker = user.is_worker;
+    if (!isAdmin && !isWorker) {
+        return (
+            <div className="w-full">
+                <div className="flex w-full items-center justify-between">
+                    <h1 className="text-2xl"><b><u>You do not have permissions to see this page</u></b></h1>
+                </div>
+            </div>);
+    }
+
     const players = await fetchTodayPlayers(searchParams?.query);
     const { prizesEnabled, placesEnabled} = await fetchFeatureFlags();
 

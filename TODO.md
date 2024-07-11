@@ -1,6 +1,7 @@
 TODO:
 
-- add id to admin also so we can relay on it for the current user
+- must make sure all works before commiting:
+  -     the set prize in the history tournaments dont seem to work
 
 
 - add UT

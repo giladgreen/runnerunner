@@ -15,7 +15,7 @@ import Image from "next/image";
 
 export function UseCreditForm({players, player, tournaments, hide, prevPage, username} : { players: PlayerDB[], prevPage:string, player: PlayerDB, tournaments:TournamentDB[], hide?: ()=>void, username?:string}) {
   const initialState = { message: null, errors: {} };
-  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null,{ player, prevPage, username })
+  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null,{ player, prevPage, userId:'' })
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' }).toLowerCase();
   const tournament = tournaments.find(t => t.day.toLowerCase() === dayOfTheWeek);
@@ -245,13 +245,8 @@ export function SetPositionForm({player, hide, prevPage} : { player: PlayerForm,
 
 export function UseCreditForPrizeForm({player} : {player: PlayerForm }) {
   const initialState = { message: null, errors: {} };
-  let phoneNumber;
-  try {
-    phoneNumber = localStorage.getItem('phone_number');
-  } catch (e) {
-    console.error('localStorage is not available', e);
-  }
-  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, { player, prevPage: '/dashboard/players', phoneNumber: (phoneNumber ?? '') });
+
+  const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, { player, prevPage: '/dashboard/players', userId:'' });
 
   const initialText = `שחקן המיר קרדיט בפרס`;
   const initialAmount = 1000;
@@ -364,14 +359,9 @@ export function UseCreditForPrizeForm({player} : {player: PlayerForm }) {
 
 export function AddToBalanceForm({player, prevPage}: { player: PlayerForm, prevPage:string }) {
   const initialState = {message: null, errors: {}};
-  let phoneNumber;
-  try {
-    phoneNumber = localStorage.getItem('phone_number');
-  } catch (e) {
-    console.error('localStorage is not available', e);
-  }
 
-  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, { player, prevPage, phoneNumber: phoneNumber ?? '' });
+
+  const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(null, { player, prevPage, userId:'' });
   // @ts-ignore
   const [state2, dispatch] = useFormState(createPlayerNewCreditLogWithPlayerData, initialState);
 

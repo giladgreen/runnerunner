@@ -12,6 +12,7 @@ import React from "react";
 import Link from 'next/link';
 import CreateBugForm from "@/app/ui/client/CreateBugForm";
 import {formatDateToLocal} from "@/app/lib/utils";
+import {lusitana} from "@/app/ui/fonts";
 
 function Seperator() {
     return <div className="config-seperator"/>
@@ -84,6 +85,15 @@ function ReportBugForm({bugs}: { bugs: BugDB[] }) {
 export default async function ConfigurationPage({ params }: { params: { userId: string } }) {
     const user = await fetchUserById(params.userId);
     const isAdmin = user.is_admin;
+    const isWorker = user.is_worker;
+    if (!isAdmin && !isWorker) {
+        return (
+            <div className="w-full">
+                <div className="flex w-full items-center justify-between">
+                    <h1 className="text-2xl"><b><u>You do not have permissions to see this page</u></b></h1>
+                </div>
+            </div>);
+    }
     const { prizesEnabled, placesEnabled, importEnabled} = await fetchFeatureFlags();
     const bugs = await fetchAllBugs();
     const players = await fetchAllPlayersForExport();
