@@ -7,5 +7,4 @@ export default function handler(req, res) {
         console.error('error removing old rsvps', err);
         res.status(500).end('error removing old rsvps');
     });
-
 }

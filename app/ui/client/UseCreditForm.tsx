@@ -3,9 +3,8 @@
 import {
   PencilIcon,
   BanknotesIcon,
-  HashtagIcon,
 } from '@heroicons/react/24/outline';
-import { Button } from '@/app/ui/button';
+import Button from '@/app/ui/client/Button';
 import { createPlayerUsageLog} from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import {PlayerDB, TournamentDB} from "@/app/lib/definitions";

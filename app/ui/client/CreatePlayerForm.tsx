@@ -6,11 +6,10 @@ import {
   PhoneIcon,
   BanknotesIcon,
 } from '@heroicons/react/24/outline';
-import { Button } from '@/app/ui/button';
+import Button from '@/app/ui/client/Button';
 import { createPlayer } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import {useState} from "react";
-import {usePathname, useSearchParams} from "next/navigation";
 
 export default function CreatePlayerForm({userId, prevPage}:{userId:string, prevPage:string}) {
   const initialState = { message: null, errors: {} };

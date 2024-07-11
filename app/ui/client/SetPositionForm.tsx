@@ -4,7 +4,7 @@ import {
 
     HashtagIcon,
 } from '@heroicons/react/24/outline';
-import { Button } from '@/app/ui/button';
+import Button from '@/app/ui/client/Button';
 import {setPlayerPosition} from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import { PlayerForm} from "@/app/lib/definitions";

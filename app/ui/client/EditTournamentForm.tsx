@@ -4,7 +4,7 @@ import { updateTournament} from '@/app/lib/actions';
 import {TournamentForm} from '@/app/lib/definitions';
 
 import Link from 'next/link';
-import { Button } from '@/app/ui/button';
+import Button from '@/app/ui/client/Button';
 import {useFormState} from "react-dom";
 import {PencilIcon} from "@heroicons/react/24/outline";
 import {Checkbox} from "primereact/checkbox";

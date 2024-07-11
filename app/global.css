@@ -3,11 +3,6 @@
 @import "@/app/signin/style.css";
 @import "@/app/signup/style.css";
 @import "@/app/[userId]/style.css";
-@import "@/app/ui/players/style.css";
-@import "@/app/ui/dashboard/style.css";
-@import "@/app/dashboard/style.css";
-@import "@/app/personal/[id]/style.css";
-@import "@/app/dashboard/tournamentsdata/style.css";
 
 .bold {
   font-weight: bold;
