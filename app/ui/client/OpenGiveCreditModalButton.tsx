@@ -6,7 +6,7 @@ import React, {useState} from "react";
 import {TickIcon} from "@/app/ui/icons";
 import {givePlayerPrizeOrCredit} from "@/app/lib/actions";
 import {useFormState} from "react-dom";
-import {Button} from "@/app/ui/button";
+import Button from '@/app/ui/client/Button';
 
 function SetGivePrizeForm({player, hide, prevPage, stringDate, userId} : { stringDate?:string, player: PlayerDB, hide?: ()=>void, prevPage:string, userId?:string}) {
     const initialState = { message: null, errors: {} };

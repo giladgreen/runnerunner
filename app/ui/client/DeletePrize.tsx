@@ -1,3 +1,4 @@
+'use client';
 import {usePathname} from "next/navigation";
 import {useSearchParams} from "next/dist/client/components/navigation";
 import React, {useState} from "react";

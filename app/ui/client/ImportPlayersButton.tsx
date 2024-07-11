@@ -3,7 +3,7 @@
 import {
     importPlayers,
 } from '@/app/lib/actions';
-import {Button} from "@/app/ui/button";
+import Button from '@/app/ui/client/Button';
 import React, {useState} from "react";
 import {PlayerDB} from "@/app/lib/definitions";
 import AreYouSure from "@/app/ui/client/AreYouSure";

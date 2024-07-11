@@ -1,6 +1,6 @@
 "use client";
 
-import {Button} from "@/app/ui/button";
+import Button from '@/app/ui/client/Button';
 import React from "react";
 import {PlayerDB, PrizeDB, TournamentDB} from "@/app/lib/definitions";
 

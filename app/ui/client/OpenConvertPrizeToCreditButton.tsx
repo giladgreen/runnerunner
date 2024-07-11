@@ -4,7 +4,7 @@ import React from "react";
 import {usePathname, useSearchParams} from "next/navigation";
 import {convertPrizeToCredit} from "@/app/lib/actions";
 import {useFormState} from "react-dom";
-import {Button} from "@/app/ui/button";
+import Button from '@/app/ui/client/Button';
 
 function OpenConvertPrizeToCreditForm({userId, prizeId, prizeName, hide, prevPage} : { userId?:string, prizeId:string,prizeName:string, hide?: ()=>void, prevPage:string}) {
     const initialState = { message: null, errors: {} };

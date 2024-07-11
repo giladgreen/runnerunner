@@ -5,7 +5,7 @@ import React, {useState} from "react";
 
 import { setPrizesCreditWorth} from "@/app/lib/actions";
 import {useFormState} from "react-dom";
-import {Button} from "@/app/ui/button";
+import Button from '@/app/ui/client/Button';
 import {usePathname, useSearchParams} from "next/navigation";
 
 function SetPrizesCreditForm({players, date, hide, prevPage} : { date:string, players: PlayerDB[],  hide?: ()=>void, prevPage:string }) {
