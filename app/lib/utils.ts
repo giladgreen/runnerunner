@@ -1,3 +1,5 @@
+import {PlayerDB, UserDB} from "@/app/lib/definitions";
+
 const HOUR = 60 * 60 * 1000;
 
 export const formatCurrency = (balance: number) => {
@@ -6,7 +8,7 @@ export const formatCurrency = (balance: number) => {
     currency: 'ILS',
   })
 
-  const shortenedString = res. substring(0, res. length - 3);
+  const shortenedString = res.substring(0, res. length - 3);
 
   return shortenedString;
 };
@@ -42,7 +44,6 @@ export const formatDateToLocal = (
   const date = new Date(dateStr);
   const options: Intl.DateTimeFormatOptions = {
     dateStyle: 'full',
-    // timeStyle: 'long',
     timeZone: 'Asia/Jerusalem',
   };
   const formatter = new Intl.DateTimeFormat(locale, options);
@@ -92,3 +93,27 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     totalPages,
   ];
 };
+
+export function positionComparator(a: PlayerDB,b: PlayerDB) {
+  return a.position < b.position ? -1 : 1;
+};
+export function phoneNumberComparator(a: UserDB,b: UserDB) {
+  return a.phone_number < b.phone_number ? -1 : 1;
+};
+
+export function nameComparator(a: PlayerDB,b: PlayerDB) {
+  return a.name < b.name ? -1 : 1;
+};
+
+export function getTodayShortDate(){
+  return (new Date()).toISOString().slice(0,10);
+}
+
+export function getDayOfTheWeek(date?: Date){
+  const base = date ?? new Date();
+  return base.toLocaleString('en-us', { weekday: 'long' });
+}
+
+export function sumArrayByProp(array:any[], propName:string){
+  return array.reduce((acc, player) => acc + player[propName], 0);
+}

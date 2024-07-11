@@ -13,6 +13,7 @@ import {
   UserDB,
   WinnerDB
 } from './definitions';
+import {getDayOfTheWeek, getTodayShortDate, sumArrayByProp, positionComparator, nameComparator, phoneNumberComparator} from "@/app/lib/utils";
 
 const ITEMS_PER_PAGE = 30;
 const TOP_COUNT = 8;
@@ -27,29 +28,6 @@ function methodEnd(methodName: string){
   if (diff > 600){
     console.warn('Method End', methodName,'      ',diff, 'milli');
   }
-}
-function positionComparator(a: PlayerDB,b: PlayerDB) {
-  return a.position < b.position ? -1 : 1;
-};
-function phoneNumberComparator(a: UserDB,b: UserDB) {
-  return a.phone_number < b.phone_number ? -1 : 1;
-};
-
-function nameComparator(a: PlayerDB,b: PlayerDB) {
-  return a.name < b.name ? -1 : 1;
-};
-
-function getTodayShortDate(){
-  return (new Date()).toISOString().slice(0,10);
-}
-
-function getDayOfTheWeek(date?: Date){
-  const base = date ?? new Date();
-  return base.toLocaleString('en-us', { weekday: 'long' });
-}
-
-function sumArrayByProp(array:any[], propName:string){
-  return array.reduce((acc, player) => acc + player[propName], 0);
 }
 
 async function getAllFlags(){

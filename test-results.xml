@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="1" failures="0" errors="0" time="1.249">
-  <testsuite name="test the TaskPermissionsService" errors="0" failures="0" skipped="0" timestamp="2024-07-11T14:29:42" time="0.794" tests="1">
-    <testcase classname="test the TaskPermissionsService hasEditPermission when user is not assigned to task should return false" name="test the TaskPermissionsService hasEditPermission when user is not assigned to task should return false" time="0.012">
+<testsuites name="jest tests" tests="12" failures="0" errors="0" time="1.35">
+  <testsuite name="test utils" errors="0" failures="0" skipped="0" timestamp="2024-07-11T15:52:22" time="0.93" tests="12">
+    <testcase classname="test utils formatCurrency when legal positive amount should return correct format" name="test utils formatCurrency when legal positive amount should return correct format" time="0.027">
+    </testcase>
+    <testcase classname="test utils formatCurrency when legal positive amount should return correct format" name="test utils formatCurrency when legal positive amount should return correct format" time="0">
+    </testcase>
+    <testcase classname="test utils formatCurrency when positive amount - with dot should return correct format" name="test utils formatCurrency when positive amount - with dot should return correct format" time="0.001">
+    </testcase>
+    <testcase classname="test utils formatType when type is credit should return correct translation" name="test utils formatType when type is credit should return correct translation" time="0.001">
+    </testcase>
+    <testcase classname="test utils formatType when type is credit_by_other should return correct translation" name="test utils formatType when type is credit_by_other should return correct translation" time="0.001">
+    </testcase>
+    <testcase classname="test utils formatType when type is credit_to_other should return correct translation" name="test utils formatType when type is credit_to_other should return correct translation" time="0.001">
+    </testcase>
+    <testcase classname="test utils formatType when type is wire should return correct translation" name="test utils formatType when type is wire should return correct translation" time="0.002">
+    </testcase>
+    <testcase classname="test utils formatType when type is cash should return correct translation" name="test utils formatType when type is cash should return correct translation" time="0">
+    </testcase>
+    <testcase classname="test utils formatType when type is prize should return correct translation" name="test utils formatType when type is prize should return correct translation" time="0.002">
+    </testcase>
+    <testcase classname="test utils formatType when type is unknown should return correct translation" name="test utils formatType when type is unknown should return correct translation" time="0.135">
+    </testcase>
+    <testcase classname="test utils formatDateToLocal when input us legal date should return correct value" name="test utils formatDateToLocal when input us legal date should return correct value" time="0.012">
+    </testcase>
+    <testcase classname="test utils formatDateToLocal when input us legal date should return correct value" name="test utils formatDateToLocal when input us legal date should return correct value" time="0.003">
     </testcase>
   </testsuite>
 </testsuites>
