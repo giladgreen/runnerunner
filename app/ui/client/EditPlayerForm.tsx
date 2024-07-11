@@ -5,7 +5,7 @@ import { CldImage, CldUploadWidget } from 'next-cloudinary';
 import {PlayerDB, PlayerForm, TournamentDB} from '@/app/lib/definitions';
 
 import Link from 'next/link';
-import { Button } from '@/app/ui/button';
+import Button from '@/app/ui/client/Button';
 import {useFormState} from "react-dom";
 import {PencilIcon} from "@heroicons/react/24/outline";
 import {useState} from "react";

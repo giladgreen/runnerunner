@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/app/ui/button';
+import Button from '@/app/ui/client/Button';
 import {setPlayerPrize} from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import { PlayerForm} from "@/app/lib/definitions";

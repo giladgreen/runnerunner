@@ -4,7 +4,7 @@ import {
   PencilIcon,
 
 } from '@heroicons/react/24/outline';
-import { Button } from '@/app/ui/button';
+import Button from '@/app/ui/client/Button';
 import { createReport } from '@/app/lib/actions';
 import {usePathname, useSearchParams} from "next/navigation";
 
