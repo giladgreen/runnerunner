@@ -1,8 +1,5 @@
 TODO:
 
-- must make sure all works before commiting:
-  -     the set prize in the history tournaments dont seem to work
-
 
 - add UT
 - 

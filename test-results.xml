@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="1" failures="0" errors="0" time="1.249">
+  <testsuite name="test the TaskPermissionsService" errors="0" failures="0" skipped="0" timestamp="2024-07-11T14:29:42" time="0.794" tests="1">
+    <testcase classname="test the TaskPermissionsService hasEditPermission when user is not assigned to task should return false" name="test the TaskPermissionsService hasEditPermission when user is not assigned to task should return false" time="0.012">
+    </testcase>
+  </testsuite>
+</testsuites>
