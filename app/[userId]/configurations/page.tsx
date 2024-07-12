@@ -12,7 +12,7 @@ import React from "react";
 import Link from 'next/link';
 import CreateBugForm from "@/app/ui/client/CreateBugForm";
 import {formatDateToLocal} from "@/app/lib/utils";
-import {lusitana} from "@/app/ui/fonts";
+
 
 function Seperator() {
     return <div className="config-seperator"/>
@@ -94,7 +94,8 @@ export default async function ConfigurationPage({ params }: { params: { userId: 
                 </div>
             </div>);
     }
-    const { prizesEnabled, placesEnabled, importEnabled} = await fetchFeatureFlags();
+    const { prizesEnabled, placesEnabled} = await fetchFeatureFlags();
+    const importEnabled= user.is_admin && user.phone_number === '0587869910';
     const bugs = await fetchAllBugs();
     const players = await fetchAllPlayersForExport();
     const playersPlaces = await fetchFinalTablePlayers();

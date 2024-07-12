@@ -184,10 +184,12 @@ export async function createReport(prevPage: string, formData: FormData) {
         return {
             message: 'Database Error: Failed to Create report.',
         };
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 
-    revalidatePath(prevPage);
-    redirect(prevPage);
+
 }
 
 export async function createPlayer(prevPage: string, _prevState: State, formData: FormData) {
@@ -199,6 +201,35 @@ export async function createPlayer(prevPage: string, _prevState: State, formData
     let image_url = (formData.get('image_url') as string) ?? '/players/default.png'
     const phoneNumber = phone_number.replaceAll('-', '');
 
+    const existingPlayer = await getPlayerByPhoneNumber(phoneNumber);
+    if (existingPlayer){
+        return {
+            errors: {
+                phone_number: ['player already exists'],
+            },
+        };
+    }
+    if (!name || name.trim().length < 1){
+        return {
+            errors: {
+                name: ['missing name'],
+            },
+        };
+    }
+    if (!phoneNumber || phoneNumber.trim().length < 3){
+        return {
+            errors: {
+                phone_number: ['missing phone'],
+            },
+        };
+    }
+    if (isNaN(Number(balance))){
+        return {
+            errors: {
+                balance: ['illegal credit'],
+            },
+        };
+    }
     if (!image_url || image_url.trim().length < 7){
         image_url = '/players/default.png';
     }
@@ -218,10 +249,12 @@ phone: ${phone_number}`)
         return {
             message: 'Database Error: Failed to Create Player.',
         };
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 
-    revalidatePath(prevPage);
-    redirect(prevPage);
+
 }
 
 async function getPlayerByPhoneNumber(phoneNumber: string){
@@ -348,10 +381,10 @@ export async function createPlayerLog(player: PlayerForm, formData: FormData, pr
         return {
             message: 'Database Error: Failed to Create log.',
         };
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
-
-    revalidatePath(prevPage);
-    redirect(prevPage);
 }
 
 export async function createPlayerUsageLog(data : {player: PlayerForm, prevPage:string, userId: string}, _prevState: State, formData: FormData){
@@ -414,9 +447,11 @@ console.log('## setPlayerPosition. phone_number',  player.phone_number)
         return {
             message: 'Database Error: Failed to setPlayerPosition.',
         };
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
-    revalidatePath(prevPage);
-    redirect(prevPage);
+
 }
 
 async function getDateWinnersRecord(date: string){
@@ -449,14 +484,15 @@ export async function setPrizesCreditWorth({date, prevPage}:{date: string, prevP
         await sql`UPDATE winners SET winners=${JSON.stringify(currentWinnersObject)} WHERE date = ${date}`;
 
         await commitTransaction();
-        revalidatePath(prevPage);
-        redirect(prevPage);
     } catch(error) {
         console.error('## setPrizesCreditWorth error', error);
         await cancelTransaction();
         return {
             message: 'Database Error: Failed to setPrizesCreditWorth.',
         };
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 
 }
@@ -544,14 +580,15 @@ export async function givePlayerPrizeOrCredit({stringDate, playerId,userId, prev
         await sql`UPDATE winners SET winners=${JSON.stringify(newWinnersObject)} WHERE date = ${winners.date}`;
 
         await commitTransaction();
-        revalidatePath(prevPage);
-        redirect(prevPage);
     }catch(error){
         console.error('## givePlayerPrizeOrCredit error', error);
         await cancelTransaction();
         return {
             message: 'Database Error: Failed to givePlayerPrizeOrCredit.',
         };
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 }
 export async function setPlayerPrize({playerId, prevPage}:{playerId: string, prevPage: string}, _prevState: State, formData: FormData){
@@ -576,13 +613,14 @@ export async function setPlayerPrize({playerId, prevPage}:{playerId: string, pre
         const date = (new Date()).toISOString().slice(0,10);
         const todayTournamentData = `${todayTournament.name} ${date}`;
         await sql`INSERT INTO prizes (tournament, phone_number, prize) VALUES (${todayTournamentData}, ${player.phone_number}, ${newPrize})`;
-        revalidatePath(prevPage);
-        redirect(prevPage);
     } catch (error) {
         console.error('## create log error', error)
         return {
             message: 'Database Error: Failed to setPlayerPrize.',
         };
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 
 }
@@ -630,12 +668,12 @@ export async function updatePlayer(
       notes = ${notes}, 
       updated_at=${date}
       WHERE id = ${id} `;
-
-        revalidatePath(prevPage);
-        redirect(prevPage);
     } catch (error) {
         console.error('## updatePlayer error', error)
         return { message: 'Database Error: Failed to Update Player.' };
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 
 
@@ -673,13 +711,12 @@ export async function updateTournament(
       WHERE id = ${id}
     `;
         sendEmail(TARGET_MAIL, 'tournaments update', `name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`)
-
-
-        revalidatePath(prevPage);
-        redirect(prevPage);
     } catch (error) {
         console.error('## updateTournament error', error)
         return { message: 'Database Error: Failed to update Tournament.' };
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 }
 
@@ -761,6 +798,7 @@ export async function authenticate(
     }
 }
 
+
 export async function signUp(
     user_json_url:string,
     _prevState: string | undefined,
@@ -776,14 +814,20 @@ export async function signUp(
     }
 
     const phoneNumber = `${user_phone_number.startsWith('0') ? '' :'0'}${user_phone_number}`;
-
+    console.log('## signUp. phoneNumber', phoneNumber)
     const password = formData.get('password') as string;
+    console.log('## signUp. password', password)
+    const regulations_approve = formData.get('regulations_approve') as string;
+    console.log('## signUp. regulations_approve', regulations_approve)
+    const marketing_approve = formData.get('marketing_approve') as string;
+    console.log('## signUp. marketing_approve', marketing_approve)
     const userResult  = await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${phoneNumber}`;
-    const existingPlayer = await getPlayerByPhoneNumber(phoneNumber);
     const existingUser = userResult.rows[0];
     if (existingUser) {
         return 'User with phone number already exists';
     }
+    const existingPlayer = await getPlayerByPhoneNumber(phoneNumber);
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const isAdmin = ADMINS.includes(phoneNumber);
     const isWorker = WORKERS.includes(phoneNumber);
@@ -793,7 +837,11 @@ export async function signUp(
       INSERT INTO users (phone_number, password, name, is_admin, is_worker)
       VALUES (${phoneNumber}, ${hashedPassword}, ${name}, ${isAdmin}, ${isWorker})
     `;
-    sendEmail(TARGET_MAIL, 'New user created', `phone: ${phoneNumber}  ${existingPlayer?.name ? `name: ${existingPlayer?.name}`:''}`)
+    if (existingPlayer){
+        await sql`UPDATE players SET updated_at=${new Date().toISOString()}, allowed_marketing=${marketing_approve==='on'} WHERE phone_number = ${phoneNumber}`;
+    }
+
+    sendEmail(TARGET_MAIL, 'New user created', `phone: ${phoneNumber}  ${existingPlayer?.name ? `name: ${existingPlayer?.name}`:''}  marketing_approve:${marketing_approve}`)
 
     const signInFormData = new FormData();
     signInFormData.set('email', phoneNumber);
@@ -806,11 +854,12 @@ export async function updateFFValue(name:string, newValue:boolean, prevPage:stri
     noStore();
     try {
         await sql`UPDATE feature_flags SET is_open = ${newValue} WHERE flag_name = ${name}`;
-        revalidatePath(prevPage);
-        redirect(prevPage);
     } catch (error) {
         console.error('Database updateFFValue Error:', error);
         return false;
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 
 }
@@ -825,11 +874,12 @@ export async function updateIsUserAdmin({id, prevPage}:{id:string, prevPage: str
             return;
         }
         await sql`UPDATE users SET is_admin = ${!user.is_admin} WHERE id = ${id}`;
-        redirect(prevPage);
-
     } catch (error) {
         console.error('Database Error:', error);
         return false;
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 }
 
@@ -839,10 +889,12 @@ export async function updateIsUserWorker({id, prevPage}:{id:string, prevPage: st
         const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
         const user = users.rows[0];
         await sql`UPDATE users SET is_worker = ${!user.is_worker} WHERE id = ${id}`;
-        redirect(prevPage);
     } catch (error) {
         console.error('Database Error:', error);
         return false;
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 }
 
@@ -856,11 +908,13 @@ export async function deleteUser({id, prevPage}:{id:string, prevPage: string}) {
             return;
         }
         await sql`DELETE FROM users WHERE id = ${id}`;
-        redirect(prevPage);
 
     } catch (error) {
         console.error('Database Error:', error);
         return false;
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 }
 
@@ -886,11 +940,12 @@ export async function rsvpPlayerForDay(phone_number:string, date:string, val: bo
         }else{
              await sql`DELETE FROM rsvp WHERE id = ${existingRsvp.id}`;
          }
-        revalidatePath(prevPage);
-        redirect(prevPage);
     } catch (error) {
         console.error('rsvpPlayerForDay Error:', error);
         return false;
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 
 
@@ -931,11 +986,12 @@ export async function undoPlayerLastLog(phone_number:string, prevPage: string){
             }
         }
         await commitTransaction();
-        revalidatePath(prevPage);
-        redirect(prevPage);
     } catch (error) {
         await cancelTransaction();
         console.error('undoPlayerLastLog Error:', error);
+    }finally {
+        revalidatePath(prevPage);
+        redirect(prevPage);
     }
 }
 
@@ -984,7 +1040,6 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
         await sql`COMMIT;`
         console.log('## import Done')
         sendEmail(TARGET_MAIL, 'Import is done', `inserted ${playersToInsert.length} players`);
-        redirect('/')
     } catch (error) {
         await sql`ROLLBACK;`
         // @ts-ignore
@@ -994,6 +1049,8 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
         return {
             message: 'Database Error: Failed to import Players.',
         };
+    }finally {
+        redirect('/');
     }
 
 

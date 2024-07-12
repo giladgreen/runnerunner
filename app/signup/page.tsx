@@ -1,14 +1,34 @@
 import SignUpForm from "@/app/ui/SignUpForm";
+import Image from "next/image";
+import SignInForm from "@/app/ui/SignInForm";
+import SignUpButton from "@/app/ui/client/SignUpButton";
 export default function SignUpPage() {
-    return (
-        <main className="flex items-center justify-center md:h-screen">
-            <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
-                <div
-                    className="flex h-20 w-full items-end rounded-lg bg-blue-500 p-3 md:h-36 top-header sign-up-top-header">
-                    Runner Runner
+
+    return <main className="flex min-h-screen flex-col p-6">
+        <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
+            <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
+                <Image
+                    src="/runner-big.png"
+                    width={1000}
+                    height={760}
+                    className="block md:hidden"
+                    alt="runner"
+                />
+                <div>
+                    <SignUpForm/>
                 </div>
-                <SignUpForm/>
             </div>
-        </main>
-    );
+            <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
+                <Image
+                    src="/runner-big.png"
+                    width={1000}
+                    height={760}
+                    className="hidden md:block"
+                    alt="runner"
+                />
+            </div>
+        </div>
+    </main>
+
+
 }

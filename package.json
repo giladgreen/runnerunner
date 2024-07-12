@@ -7,12 +7,10 @@
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown .",
     "start": "next start",
-    "seed": "node -r dotenv/config ./scripts/seed.js",
-    "find": "node -r dotenv/config ./scripts/find.js",
+    "seed": "node -r dotenv/config ./scripts/run-seed.js",
+    "find-duplication": "node -r dotenv/config ./scripts/find.js",
     "lint": "next lint",
-    "test:unit": "jest tests/unit",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "node ./scripts/test-pre-seed.js && jest tests/unit"
   },
   "dependencies": {
     "@babel/preset-env": "^7.24.7",

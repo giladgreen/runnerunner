@@ -1,5 +1,6 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 // https://nextjs.org/learn/dashboard-app/fetching-data
+const SUPERMAN = '0587869910';
 const DEMO_USER_PHONE = '0542609910';
 const AVI_PHONE = '0524803571';
 const OZ_PHONE = '0524803577';
@@ -7,14 +8,14 @@ const DEMO_USERS_PHONES = [DEMO_USER_PHONE,AVI_PHONE,OZ_PHONE];
 
 const users = [
   {
-    phone_number: '0587869910',
+    phone_number: SUPERMAN,
     name: 'גלעד גרין',
     password: 'kush1984',
     is_admin: true,
     is_worker: false
   },
   {
-    phone_number: '0542609910',
+    phone_number: DEMO_USER_PHONE,
     name: 'דניאל שפירא גרין',
     password: '123456',
     is_admin: false,

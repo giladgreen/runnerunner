@@ -8,9 +8,7 @@ export default async function TournamentsHistoryTable({
 
     const tournamentsData = player.tournamentsData;
     if (tournamentsData.length === 0){
-        return <div style={{ marginTop:30, marginBottom:20}}>
-            <div><u><b>No Tournaments History</b></u></div>
-        </div>
+        return null;
     }
     return (<div style={{ marginTop:30, marginBottom:20}}>
     <div><u><b>Tournaments History</b></u></div>

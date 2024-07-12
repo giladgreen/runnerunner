@@ -20,6 +20,8 @@ export default function CreatePlayerForm({userId, prevPage}:{userId:string, prev
   const [balanceNote, setBalanceNote] = useState('new player');
   const [imageUrl, setImageUrl] = useState('');
   const [balance, setBalance] = useState(0);
+  // @ts-ignore
+  const error = state?.error;
 
   return (<>
     <form action={dispatch}>

@@ -16,7 +16,7 @@ export default async function SideNav({ userId }: { userId: string }) {
               className="mb-2 flex h-20 items-end justify-start rounded-md bg-blue-600 p-4 md:h-40"
               href={homepage}
           >
-              <div className="w-32 text-white md:w-40">
+              <div className="text-white md:w-40">
                   <RunnerLogo/>
               </div>
           </Link>

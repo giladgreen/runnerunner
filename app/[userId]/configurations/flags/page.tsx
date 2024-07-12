@@ -3,7 +3,7 @@ import React from "react";
 import {updateFFValue} from "@/app/lib/actions";
 
 export default async function FlagsPage({ params }: { params: { userId: string } }) {
-    const { prizesEnabled, placesEnabled, rsvpEnabled, playerRsvpEnabled, usePhoneValidation, importEnabled} = await fetchFeatureFlags();
+    const { prizesEnabled, placesEnabled, rsvpEnabled, playerRsvpEnabled, usePhoneValidation} = await fetchFeatureFlags();
     const user = await fetchUserById(params.userId);
     const isAdmin = user.is_admin;
     if (!isAdmin) return null;
@@ -26,17 +26,6 @@ export default async function FlagsPage({ params }: { params: { userId: string }
                     </tr>
                     </thead>
                     <tbody className="bg-white">
-                    <tr
-                        key={'importEnabled'}
-                        className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
-                    >
-                        <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                            <b>Import</b>
-                        </td>
-                        <td className="whitespace-nowrap py-3 pl-6 pr-3 thin-column">
-                            <UpdateFeatureFlag featureName={'import'} currentValue={Boolean(importEnabled)} userId={params.userId}/>
-                        </td>
-                    </tr>
                     <tr
                         key={'prizesEnabled'}
                         className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"

@@ -56,7 +56,7 @@ export default async function EditPlayerPage({ params }: { params: { userId:stri
 
 
                 <hr style={{marginTop: 10, marginBottom: 20}}/>
-                <CreateLogForm player={player} prevPage={`/${params.userId}/players`} userId={params.userId}/>
+                <CreateLogForm player={player} prevPage={`/${params.userId}/players/${player.id}/edit`} userId={params.userId}/>
 
                 <hr style={{marginTop: 20, marginBottom: 20}}/>
 

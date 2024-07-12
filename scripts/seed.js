@@ -1,10 +1,10 @@
 const { db } = require('@vercel/postgres');
-const _ = require("lodash");
+///SELECT indexname, tablename, indexdef FROM pg_indexes
 
 const {
   users,
   tournaments,
-} = require('../app/lib/placeholder-data.js');
+} = require('./placeholder-data.js');
 const bcrypt = require('bcrypt');
 
 async function seedTournaments(client) {
@@ -62,7 +62,7 @@ async function seedUsers(client) {
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         phone_number TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL,
-        name TEXT NOT NULL DEFAULT 'unknown',
+        name TEXT,
         is_admin BOOLEAN DEFAULT FALSE,
         is_worker BOOLEAN DEFAULT FALSE,
         created_at timestamp NOT NULL DEFAULT now()
@@ -130,9 +130,10 @@ async function seedPlayers(client) {
     CREATE TABLE IF NOT EXISTS players (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    image_url VARCHAR(255) NOT NULL default '/players/default.png',
     phone_number VARCHAR(20) NOT NULL,
     notes VARCHAR(500) NOT NULL default '',
+    image_url VARCHAR(255) NOT NULL default '/players/default.png',
+    allowed_marketing BOOLEAN NOT NULL default FALSE,
     updated_at timestamp NOT NULL DEFAULT now()
   );
 `;
@@ -278,7 +279,6 @@ async function seedFF(client) {
       {flag_name: 'rsvp', is_open: true},
       {flag_name: 'player_can_rsvp', is_open: true},
       {flag_name: 'use_phone_validation', is_open: true},
-      {flag_name: 'import', is_open: false},
     ]
 
 
@@ -342,14 +342,15 @@ async function _fillUpHistory(client) {
   }
 }
 
-async function main() {
+async function seed() {
   console.log('## main start');
+
 
   const client = await db.connect();
 
   console.log('## db connected')
   await seedUsers(client);
- 
+
   await seedTournaments(client);
   await createBugReportTable(client);
   await seedPlayers(client);
@@ -364,11 +365,19 @@ async function main() {
   await client.end();
 }
 
-main().catch((err) => {
-  console.error(
-    'An error occurred while attempting to seed the database:',
-    err,
-  );
-});
-
-///SELECT indexname, tablename, indexdef FROM pg_indexes
+function tests() {
+  console.log('## tests seed');
+  process.env.POSTGRES_URL="postgres://default:gU9uDTSOLw8e@ep-restless-violet-a2nk8a48-pooler.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require"
+  process.env.POSTGRES_PRISMA_URL="postgres://default:gU9uDTSOLw8e@ep-restless-violet-a2nk8a48-pooler.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=15"
+  process.env.POSTGRES_URL_NO_SSL="postgres://default:gU9uDTSOLw8e@ep-restless-violet-a2nk8a48-pooler.eu-central-1.aws.neon.tech:5432/verceldb"
+  process.env.POSTGRES_URL_NON_POOLING="postgres://default:gU9uDTSOLw8e@ep-restless-violet-a2nk8a48.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require"
+  process.env.POSTGRES_USER="default"
+  process.env.POSTGRES_HOST="ep-restless-violet-a2nk8a48-pooler.eu-central-1.aws.neon.tech"
+  process.env.POSTGRES_PASSWORD="gU9uDTSOLw8e"
+  process.env.POSTGRES_DATABASE="verceldb"
+  return seed();
+}
+module.exports = {
+  tests,
+  seed
+}

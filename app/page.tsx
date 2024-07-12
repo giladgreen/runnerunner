@@ -4,15 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import SignUpButton from "@/app/ui/client/SignUpButton";
 import {fetchFeatureFlags} from "@/app/lib/data";
+import SignInForm from "@/app/ui/SignInForm";
 
 export default async function HomePage() {
     const {  usePhoneValidation} = await fetchFeatureFlags();
 
   return (
     <main className="flex min-h-screen flex-col p-6">
-      <div className="rounded-lg bg-blue-500 p-4 md:h-32 top-header homepage-top-header">
-         Runner Runner
-      </div>
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
           <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
               <Image
@@ -22,18 +20,10 @@ export default async function HomePage() {
                   className="block md:hidden"
                   alt="runner"
               />
-              <div className={`text-xl text-gray-800 md:text-3xl md:leading-normal homepage-welcome`}>
-                  <strong>Welcome </strong>
-              </div>
               <div>
-                  <Link
-                      href="/signin"
-                      className="flex items-center gap-5 self-start rounded-lg bg-blue-400 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-700 md:text-base"
-                  >
-                      <span>Sign In</span><ArrowRightIcon className="w-5 md:w-6"/>
-                  </Link>
+                  <SignInForm/>
               </div>
-              <div  className="block md:hidden" style={{ marginTop:20}}>
+              <div  style={{ marginTop:20}}>
                   {`Don't have an account yet?`}
               </div>
               <div >

@@ -37,7 +37,7 @@ export default function Card({
                 <h3 className={`ml-2 text-sm font-medium text-center ${spend ? 'center-text' : ''}`}>{title}</h3>
             </div>
             <div
-                className={`${lusitana.className} truncate rounded-xl bg-white px-4 py-4 text-center text-2xl ${oneLine ? 'card-body-one-line':''}`}>
+                className={`${lusitana.className} truncate rounded-xl bg-white px-4 py-4 text-center text-2xl ${oneLine ? 'card-body-one-line':'card-body'}`}>
                 {value}
             </div>
         </div>

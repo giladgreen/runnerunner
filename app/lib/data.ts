@@ -14,6 +14,7 @@ import {
   WinnerDB
 } from './definitions';
 import {getDayOfTheWeek, getTodayShortDate, sumArrayByProp, positionComparator, nameComparator, phoneNumberComparator} from "@/app/lib/utils";
+import {redirect} from "next/navigation";
 
 const ITEMS_PER_PAGE = 30;
 const TOP_COUNT = 8;
@@ -769,6 +770,10 @@ export async function fetchPlayerByUserId(userId: string) {
 }
 
 export async function fetchUserById(id: string) {
+  if (!id || id === 'undefined'){
+    console.log('## fetchUserById , id:',id)
+    return redirect(`/`);
+  }
   methodStart();
   noStore();
   try {
@@ -778,6 +783,6 @@ export async function fetchUserById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     methodEnd('fetchUserById with error')
-    throw new Error('Failed to fetchUserById.');
+    redirect(`/`);
   }
 }

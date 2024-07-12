@@ -51,6 +51,18 @@
     }
 }
 
+.regulations_approve {
+    svg {
+        visibility: hidden;
+    }
+}
+
+.marketing_approve {
+    svg {
+        visibility: hidden;
+    }
+}
+
 .rsvp-icon{
     font-size: xx-large;
 }
@@ -264,12 +276,12 @@
 
 .rsvp_button-registered {
     color: black;
-    background-color: coral;
+    /*background-color: coral;*/
 }
 
 .rsvp_button-unregistered {
-    color: coral;
-    background-color: black ;
+    color: black;
+    /*background-color: black ;*/
 }
 
 .no_more_place {
@@ -354,6 +366,10 @@
     display: flex;
 }
 
+.card {
+    margin-bottom: 10px;
+}
+
 @media only screen and (max-width: 600px) {
     .cellular {
         display: flex;
@@ -401,21 +417,24 @@
 
     .card {
         border: 2px solid rgb(0, 112, 243);
+        margin-bottom: 10px;
     }
 
     .card-header{
         padding: 0 0 3px 11px;
+        text-align: center;
     }
 
     .card-body-one-line{
         padding: 0;
         max-height: 80px;
-        font-size: 27px;
+        font-size: 20px;
     }
 
     .card-body{
         padding: 0;
         max-height: 80px;
+        font-size: 20px;
     }
 
     .prize-row {
