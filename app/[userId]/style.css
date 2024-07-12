@@ -371,6 +371,7 @@
 }
 
 @media only screen and (max-width: 600px) {
+
     .cellular {
         display: flex;
     }
@@ -433,7 +434,7 @@
 
     .card-body{
         padding: 0;
-        max-height: 80px;
+        max-height: 126px;
         font-size: 20px;
     }
 
