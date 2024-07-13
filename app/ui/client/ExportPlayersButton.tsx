@@ -79,7 +79,7 @@ ${images.map((player) => {
                 }).join(`
 `)}`;
                 const imagesFilename = `players_images_${todayDate}.csv`;
-                const imagesBlob = new Blob([creditData], {type: "text/plain;charset=utf-8"});
+                const imagesBlob = new Blob([imagesData], {type: "text/plain;charset=utf-8"});
 
                 const imagesLink = document.createElement("a");
                 imagesLink.download = imagesFilename;
