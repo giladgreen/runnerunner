@@ -51,6 +51,7 @@ export default function UseCreditForm({
   const initialAmount = isRebuy ? tournament!.re_buy : tournament!.buy_in;
   // @ts-ignore
   const [state1, dispatch] = useFormState(
+      // @ts-ignore
     createPlayerUsageLogWithPlayerData,
     initialState,
   );

@@ -31,6 +31,7 @@ function SetGivePrizeForm({
   });
   // @ts-ignore
   const [_state, dispatch] = useFormState(
+      // @ts-ignore
     setPlayerPrizeWithPlayerId,
     initialState,
   );

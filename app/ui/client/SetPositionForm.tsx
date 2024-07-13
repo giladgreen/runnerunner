@@ -22,6 +22,7 @@ export default function SetPositionForm({
   });
   // @ts-ignore
   const [state1, dispatch] = useFormState(
+      // @ts-ignore
     setPlayerPositionWithPlayerId,
     initialState,
   );

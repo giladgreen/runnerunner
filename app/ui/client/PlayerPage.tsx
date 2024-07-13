@@ -82,6 +82,7 @@ export default async function PlayerPage({
   // @ts-ignore
   const todayTournamentData = noTournamentToday
     ? NO_TOURNAMENT_TODAY
+      // @ts-ignore
     : `${TRANSLATIONS[todayTournament.day]} -  ${
         todayTournament.max_players === 0 && todayTournament.rsvp_required
           ? 'אין טורניר היום'
