@@ -98,7 +98,7 @@ export default async function ConfigurationPage({ params }: { params: { userId: 
     const importEnabled= user.is_admin && user.phone_number === '0587869910';
     const bugs = await fetchAllBugs();
     const players = await fetchAllPlayersForExport();
-    const images = await fetchAllImagesForExport();
+    // const images = await fetchAllImagesForExport();
     const playersPlaces = await fetchFinalTablePlayers();
     const tournament = await fetchTournamentByDay();
     const { undeliveredPrizes } = await fetchPlayersPrizes();
@@ -113,7 +113,7 @@ export default async function ConfigurationPage({ params }: { params: { userId: 
             <Seperator/>
             <div className="config-section">
                 <div style={{marginBottom: 20}}><b>Export players data to CSV file</b></div>
-                <ExportPlayersButton players={players as PlayerDB[]} playersPlaces={playersPlaces} images={images}
+                <ExportPlayersButton players={players as PlayerDB[]} playersPlaces={playersPlaces}
                                      tournament={tournament} prizes={prizes} prizesEnabled={prizesEnabled}
                                      placesEnabled={placesEnabled}/>
             </div>

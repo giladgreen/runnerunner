@@ -33,8 +33,10 @@ async function main() {
   // console.log('## player', player.rows[0])
 
 
-  const user = await client.sql`select * from users `;
-  console.log('## users', user.rows)
+  // const user = await client.sql`select * from users `;
+  // console.log('## users', user.rows)
+
+  await client.sql`delete from players`;
   await client.end();
 
 }
