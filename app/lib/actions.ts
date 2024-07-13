@@ -1,12 +1,11 @@
 'use server';
-
+import bcrypt from "bcrypt";
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import nodemailer from 'nodemailer';
 import fetch  from 'node-fetch';
 import { redirect } from 'next/navigation';
-import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import {
     PlayerDB,
@@ -18,8 +17,9 @@ import {
     ImageDB,
     LogDB,
     PrizeDB
-} from "@/app/lib/definitions";
-import bcrypt from "bcrypt";
+} from "./definitions";
+
+import { signIn } from '../../auth';
 import {unstable_noStore as noStore} from "next/dist/server/web/spec-extension/unstable-no-store";
 const DAY = 24 * 60 * 60 * 1000;
 const TARGET_MAIL = 'green.gilad+runner@gmail.com'
@@ -36,14 +36,30 @@ const phoneToName = {
     '0508874068': 'מירי',
     '0526841902': 'דניאל',
 };
-
+export type State = {
+    errors?: {
+        name?: string[];
+        balance?: string[];
+        change?: string[];
+        phone_number?: string[];
+        note?: string[];
+        notes?: string[];
+        description?: string[];
+        amount?: string[];
+        position?: string[];
+        prize?: string[];
+        buy_in?: string[];
+        re_buy?: string[];
+        max_players?: string[];
+        rsvp_required?: string[];
+    };
+    message?: string | null;
+};
 function sendEmail(to: string, subject: string, body: string){
-
     const auth =  {
         user: process.env.EMAIL_ADDRESS,
             pass: process.env.GMAIL_APP_PASSWORD,
     }
-
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         host: 'smtp.gmail.com',
@@ -51,7 +67,6 @@ function sendEmail(to: string, subject: string, body: string){
         secure: true,
         auth
     });
-
     const mailOptions = {
         from: process.env.EMAIL_ADDRESS,
         to,
@@ -88,43 +103,7 @@ export async function removeOldRsvp(){
     }
 }
 
-const CreateUsageLog =  z.object({
-    change: z.coerce.number(),
-    note: z.string().min(1, 'change note can not be left empty'),
-});
 
-const UpdateTournament =  z.object({
-    buy_in: z.coerce.number(),
-    re_buy: z.coerce.number(),
-    max_players: z.coerce.number(),
-    rsvp_required: z.coerce.boolean(),
-    name: z.string()
-});
-
-const UpdatePlayer = z.object({
-    name: z.string().min(1, 'name can not be left empty'),
-    notes: z.string(),
-});
-
-export type State = {
-    errors?: {
-        name?: string[];
-        balance?: string[];
-        change?: string[];
-        phone_number?: string[];
-        note?: string[];
-        notes?: string[];
-        description?: string[];
-        amount?: string[];
-        position?: string[];
-        prize?: string[];
-        buy_in?: string[];
-        re_buy?: string[];
-        max_players?: string[];
-        rsvp_required?: string[];
-    };
-    message?: string | null;
-};
 
 function startTransaction(){
     return sql`BEGIN;`;
@@ -321,6 +300,12 @@ async function handleCreditByOther(type: string, otherPlayerPhoneNumber: string,
 
 
 export async function createPlayerLog(player: PlayerForm, formData: FormData, prevPage:string ,usage: boolean, userId: string){
+    const CreateUsageLog =  z.object({
+        change: z.coerce.number(),
+        note: z.string().min(1, 'change note can not be left empty'),
+    });
+
+
     const validatedFields = CreateUsageLog.safeParse({
         change: formData.get('change'),
         note: formData.get('note'),
@@ -627,6 +612,11 @@ export async function updatePlayer(
     _prevState: State,
     formData: FormData,
 ) {
+    const UpdatePlayer = z.object({
+        name: z.string().min(1, 'name can not be left empty'),
+        notes: z.string(),
+    });
+
 
     const validatedFields = UpdatePlayer.safeParse({
         name: formData.get('name'),
@@ -681,6 +671,14 @@ export async function updateTournament(
     _prevState: State,
     formData: FormData,
 ) {
+
+    const UpdateTournament =  z.object({
+        buy_in: z.coerce.number(),
+        re_buy: z.coerce.number(),
+        max_players: z.coerce.number(),
+        rsvp_required: z.coerce.boolean(),
+        name: z.string()
+    });
 
     const validatedFields = UpdateTournament.safeParse({
         name: formData.get('name'),
@@ -797,7 +795,7 @@ export async function authenticate(
 
 
 export async function signUp(
-    user_json_url:string,
+    user_json_url:string | null,
     _prevState: string | undefined,
     formData: FormData,
 ): Promise<string | undefined> {
@@ -814,8 +812,6 @@ export async function signUp(
 
     const password = formData.get('password') as string;
 
-    const regulations_approve = formData.get('regulations_approve') as string;
-
     const marketing_approve = formData.get('marketing_approve') as string;
 
     const userResult  = await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${phoneNumber}`;
@@ -823,17 +819,19 @@ export async function signUp(
     if (existingUser) {
         return 'User with phone number already exists';
     }
-    const existingPlayer = await getPlayerByPhoneNumber(phoneNumber);
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const isAdmin = ADMINS.includes(phoneNumber);
     const isWorker = WORKERS.includes(phoneNumber);
+    const existingPlayer = await getPlayerByPhoneNumber(phoneNumber);
     // @ts-ignore
     const name = phoneToName[phoneNumber] ? phoneToName[phoneNumber] as string :  existingPlayer?.name ?? '--';
     await sql`
       INSERT INTO users (phone_number, password, name, is_admin, is_worker)
       VALUES (${phoneNumber}, ${hashedPassword}, ${name}, ${isAdmin}, ${isWorker})
     `;
+
+
     if (existingPlayer){
         await sql`UPDATE players SET updated_at=${new Date().toISOString()}, allowed_marketing=${marketing_approve==='on'} WHERE phone_number = ${phoneNumber}`;
     } else {

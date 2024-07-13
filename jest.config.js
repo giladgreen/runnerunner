@@ -41,4 +41,9 @@ module.exports = {
     ['jest-junit', { outputName: 'test-results.xml' }],
     'summary',
   ],
+  moduleNameMapper: {
+    'next-auth/providers/credentials': '<rootDir>/tests/helpers/mocks/credentials.ts',
+    'next-auth': '<rootDir>/tests/helpers/mocks/next-auth.ts',
+    'next/navigation': '<rootDir>/tests/helpers/mocks/navigation.ts',
+  }
 };

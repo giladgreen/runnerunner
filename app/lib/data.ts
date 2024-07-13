@@ -13,7 +13,7 @@ import {
   UserDB,
   WinnerDB
 } from './definitions';
-import {getDayOfTheWeek, getTodayShortDate, sumArrayByProp, positionComparator, nameComparator, phoneNumberComparator} from "@/app/lib/utils";
+import {getDayOfTheWeek, getTodayShortDate, sumArrayByProp, positionComparator, nameComparator, phoneNumberComparator} from "./utils";
 import {redirect} from "next/navigation";
 
 const ITEMS_PER_PAGE = 30;
@@ -122,7 +122,7 @@ async function getDateWinnersRecord(date: string){
   return winnersResult.rows[0];
 }
 
-async function getPlayerHistory(playerPhoneNumber: string){
+export async function getPlayerHistory(playerPhoneNumber: string){
   const historyData = await sql<LogDB>`
             SELECT * 
             FROM history

@@ -8,7 +8,7 @@ import {
     phoneNumberComparator,
     nameComparator, getTodayShortDate, getDayOfTheWeek, sumArrayByProp
 } from "../../app/lib/utils";
-import {PlayerDB, UserDB} from "@/app/lib/definitions";
+import {PlayerDB, UserDB} from "../../app/lib/definitions";
 
 describe('test utils', () => {
     afterEach(() => {

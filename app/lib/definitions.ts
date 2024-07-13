@@ -51,6 +51,7 @@ export type PlayerDB = {
   creditWorth: number;
   rsvps: string[];
   tournamentsData: TournamentPlayerData[];
+  allowed_marketing?: boolean;
 };
 export type PrizeDB = {
   id: string,
@@ -96,6 +97,7 @@ export type LogDB = {
   updated_by: string;
   type: string;
   other_player_phone_number: string;
+  archive?: boolean;
 //updated by
 };
 
