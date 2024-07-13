@@ -46,7 +46,9 @@ export default async function TournamentsDataPage({
             {
               // @ts-ignore
               tournamentsData
-                .map((key) => tournaments[key])
+                .map((key) =>
+                    // @ts-ignore
+                    tournaments[key])
                 .map(async (dateItem) => {
                   const dayIncome = getDayIncome(dateItem);
 
