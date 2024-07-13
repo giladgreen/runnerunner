@@ -4,7 +4,7 @@ import { unstable_noStore as noStore} from 'next/cache';
 import {
   BugDB,
   Counts,
-  FeatureFlagDB,
+  FeatureFlagDB, ImageDB,
   LogDB,
   PlayerDB,
   PrizeDB,
@@ -122,6 +122,13 @@ async function getDateWinnersRecord(date: string){
   return winnersResult.rows[0];
 }
 
+export async function getAllImages(){
+  const images = await sql<ImageDB>`
+            SELECT * 
+            FROM images`;
+
+  return images.rows;
+}
 export async function getPlayerHistory(playerPhoneNumber: string){
   const historyData = await sql<LogDB>`
             SELECT * 
