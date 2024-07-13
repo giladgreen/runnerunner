@@ -1218,20 +1218,23 @@ export async function undoPlayerLastLog(
 
 export async function importPlayers(playersToInsert: PlayerDB[]) {
   try {
+    const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
+    console.log(`## existingPlayersImages ${existingPlayersImages.length}`);
+    console.log(`## existingPlayersImages first 10: ${existingPlayersImages.slice(0, 10).map((p) => p.phone_number).join(', ')}`);
+
     await sql`BEGIN;`;
 
     await sql`DELETE from history;`;
     await sql`DELETE from players;`;
 
     console.log('## import step: 1 - get existing DB data');
-    const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
+
 
     console.log('## import step: 2 - insert NEW data');
 
     const date = '2024-01-01T10:10:00.000Z';
     console.log(`## playersToInsert ${playersToInsert.length}`);
-    console.log(`## existingPlayersImages ${existingPlayersImages.length}`);
-    console.log(`## existingPlayersImages first 10: ${existingPlayersImages.slice(0, 10).map((p) => p.phone_number).join(', ')}`);
+
     let counter = 0;
     playersToInsert.forEach((p) => {
       const existingImage = existingPlayersImages.find(

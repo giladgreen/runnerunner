@@ -30,6 +30,7 @@ export default function CreateBugForm() {
               required
               // @ts-ignore
               cols="40"
+             // @ts-ignore
               rows="5"
             />
 
