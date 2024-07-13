@@ -1,6 +1,5 @@
 TODO:
 
-
 - regulations_approve: add the actual text?
 - 
 - 
@@ -8,7 +7,7 @@ TODO:
 - ctrl +z to undo and ctrl +s to export
 - try to work with a local DB
 
--try add image from WhatsApp api	
+
 
 
 

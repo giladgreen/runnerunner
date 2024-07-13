@@ -4,7 +4,27 @@ import {
     fetchAllUsers, fetchAllPlayersForExport, getPlayerHistory, fetchAllBugs, getAllImages
 } from '../../app/lib/data';
 import {PlayerDB, UserDB, LogDB, BugDB, ImageDB} from '@/app/lib/definitions';
-import {signUp, createReport, createPlayer, State} from '../../app/lib/actions';
+import {
+    signUp,
+    createReport,
+    createPlayer,
+    setPlayerPosition,
+    createPlayerUsageLog,
+    State,
+    createPlayerNewCreditLog
+} from '../../app/lib/actions';
+
+
+function getFormData(data: any){
+    return {
+        get: (prop: string)=>{
+            for (const key of Object.keys(data)){
+                if (prop === key) return data[key];
+            }
+        }
+    } as FormData
+
+}
 
 describe('actions utils', () => {
     const PHONE = '0587869900';
@@ -33,11 +53,7 @@ describe('actions utils', () => {
         const description = 'do that and that';
         let formData: FormData;
         beforeEach(async () => {
-            formData = {
-                get: (prop: string)=>{
-                    if (prop === 'description') return description;
-                }
-            } as FormData
+            formData = getFormData({ description })
         });
         describe('when creating a new bug', () => {
             it('should return correct results', async () => {
@@ -62,16 +78,11 @@ describe('actions utils', () => {
             });
         });
     });
+
     describe('signUp', () => {
         let formData: FormData;
         beforeEach(async () => {
-            formData = {
-                get: (prop: string)=>{
-                    if (prop === 'phone_number') return PHONE;
-                    if (prop === 'password') return '123456';
-                    if (prop === 'marketing_approve') return 'on';
-                }
-            } as FormData
+            formData = getFormData({ phone_number: PHONE, password: '123456', marketing_approve: 'on' })
         });
         describe('when creating a new user', () => {
             it('should return correct results', async () => {
@@ -124,27 +135,32 @@ describe('actions utils', () => {
             });
         });
     });
+
     describe('players', () => {
+        const userId = 'b96c34a5-57dd-4ac2-9393-3890a2531f2d'
         const phoneNumber = '0587861100';
+        const otherPlayerPhone = '0587861101';
         const name = 'do a didi';
         const balance = 200;
         const note = 'some note';
         const notes = 'some note';
-        const imageUrl = 'some imageUrl';
+        const imageUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Smiley.svg/220px-Smiley.svg.png';
         let formData: FormData;
         beforeEach(async () => {
-            formData = {
-                get: (prop: string)=>{
-                    if (prop === 'phone_number') return phoneNumber;
-                    if (prop === 'name') return name;
-                    if (prop === 'balance') return balance;
-                    if (prop === 'note') return note;
-                    if (prop === 'notes') return notes;
-                    if (prop === 'image_url') return imageUrl;
-                }
-            } as FormData
+            await sql`INSERT INTO users (id, name, phone_number,password, is_admin) VALUES (${userId}, 'gilad','0587869910','password', true)`;
         });
-        describe('when creating a new player', () => {
+
+        describe('when creating a legal new player', () => {
+            beforeEach(async () => {
+                formData = getFormData({
+                    phone_number: phoneNumber,
+                    name,
+                    balance,
+                    note,
+                    notes,
+                    image_url:  imageUrl,
+                })
+            });
             it('should return correct results', async () => {
                 // arrange
                 const imagesBefore = await getAllImages();
@@ -194,6 +210,146 @@ describe('actions utils', () => {
                     },
                 });
 
+                await createPlayer( 'prevState',{} as State, getFormData({
+                    phone_number: otherPlayerPhone,
+                    name,
+                    balance: 400,
+                    note,
+                    notes,
+                    image_url:  imageUrl,
+                }));
+
+
+                await createPlayerUsageLog({ player: createdPlayer, prevPage:'prevPage', userId }, {} as State, getFormData({
+                    type: 'credit',
+                    change: 100,
+                    note,
+                }) );
+
+                await createPlayerUsageLog({ player: createdPlayer, prevPage:'prevPage', userId }, {} as State, getFormData({
+                    type: 'credit_by_other',
+                    change: 300,
+                    note,
+                    other_player:otherPlayerPhone
+                }));
+
+
+
+
+                await createPlayerNewCreditLog({ player: createdPlayer, prevPage:'prevPage', userId }, {} as State, getFormData({
+                    type: 'credit',
+                    change: 450,
+                    note,
+                }) );
+
+                const positionInput = {
+                    playerId: createdPlayer.id,
+                    prevPage: 'prevPage'
+                }
+                // @ts-ignore
+                await setPlayerPosition(positionInput, {} as State, getFormData({
+                    position: 3,
+                }));
+                // @ts-ignore
+                await setPlayerPosition(positionInput, {} as State, getFormData({
+                    position: 0,
+                }));
+
+                const badRequestResult =   await setPlayerPosition(positionInput, {} as State,  getFormData({
+                    position: 'nan',
+                }));
+
+                expect(badRequestResult).toEqual({
+                    message: 'Invalid Position. Failed to set Player Position.',
+                });
+
+            });
+        });
+        describe('when trying to create new player', () => {
+            it('when no name - should return correct error', async () => {
+                // arrange
+                const formData = getFormData({
+                        phone_number: phoneNumber,
+                        name: null,
+                        balance,
+                        note,
+                        notes,
+                        image_url: imageUrl,
+                    })
+                // act
+                const resultObject = await createPlayer( 'prevState',{} as State, formData);
+
+                // assert
+                expect(resultObject).toEqual({
+                    errors: {
+                        name: ['missing name'],
+                    },
+                });
+            });
+            it('when empty name - should return correct error', async () => {
+                // arrange
+                const formData = getFormData({
+                        phone_number: phoneNumber,
+                        name: '',
+                        balance,
+                        note,
+                        notes,
+                        image_url: imageUrl,
+                    })
+
+                // act
+                const resultObject = await createPlayer( 'prevState',{} as State, formData);
+
+                // assert
+                expect(resultObject).toEqual({
+                    errors: {
+                        name: ['missing name'],
+                    },
+                });
+            });
+            it('when too short phone number name - should return correct error', async () => {
+                // arrange
+                const formData = {
+                    get: (prop: string)=>{
+                        if (prop === 'phone_number') return '1';
+                        if (prop === 'name') return 'abcde';
+                        if (prop === 'balance') return balance;
+                        if (prop === 'note') return note;
+                        if (prop === 'notes') return notes;
+                        if (prop === 'image_url') return imageUrl;
+                    }
+                } as FormData
+                // act
+                const resultObject = await createPlayer( 'prevState',{} as State, formData);
+
+                // assert
+                expect(resultObject).toEqual({
+                    errors: {
+                        phone_number: ['missing phone'],
+                    },
+                });
+            });
+            it('when ilegal balance - should return correct error', async () => {
+                // arrange
+                const formData = {
+                    get: (prop: string)=>{
+                        if (prop === 'phone_number') return '123445';
+                        if (prop === 'name') return 'abcde';
+                        if (prop === 'balance') return 'nan';
+                        if (prop === 'note') return note;
+                        if (prop === 'notes') return notes;
+                        if (prop === 'image_url') return imageUrl;
+                    }
+                } as FormData
+                // act
+                const resultObject = await createPlayer( 'prevState',{} as State, formData);
+
+                // assert
+                expect(resultObject).toEqual({
+                    errors: {
+                        balance: ['illegal credit']
+                    },
+                });
             });
         });
     });

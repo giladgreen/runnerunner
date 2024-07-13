@@ -10,7 +10,8 @@
     "seed": "node -r dotenv/config ./scripts/run-seed.js",
     "find-duplication": "node -r dotenv/config ./scripts/find.js",
     "lint": "next lint",
-    "test": "node ./scripts/test-pre-seed.js && jest tests/unit"
+    "test": "node ./scripts/test-pre-seed.js && jest tests/unit",
+    "test:coverage": "node ./scripts/test-pre-seed.js && jest tests/unit --coverage"
   },
   "dependencies": {
     "@babel/preset-env": "^7.24.7",
