@@ -1,17 +1,22 @@
 import Image from 'next/image';
 import Sort from '@/app/ui/sort';
-import UpdatePlayerButton  from '@/app/ui/client/UpdatePlayerButton';
+import UpdatePlayerButton from '@/app/ui/client/UpdatePlayerButton';
 import DeletePlayerButton from '@/app/ui/client/DeletePlayerButton';
 import { formatDateToLocal, formatCurrency } from '@/app/lib/utils';
-import {fetchFeatureFlags, fetchFilteredPlayers, fetchTournaments, fetchUserById} from '@/app/lib/data';
-import Link from "next/link";
-import RSVPButton from "@/app/ui/client/RSVPButton";
+import {
+  fetchFeatureFlags,
+  fetchFilteredPlayers,
+  fetchTournaments,
+  fetchUserById,
+} from '@/app/lib/data';
+import Link from 'next/link';
+import RSVPButton from '@/app/ui/client/RSVPButton';
 
 export default async function PlayersTable({
   query,
   currentPage,
   sortBy,
-  userId
+  userId,
 }: {
   query: string;
   currentPage: number;
@@ -20,12 +25,14 @@ export default async function PlayersTable({
 }) {
   const user = await fetchUserById(userId);
   const isAdmin = user.is_admin;
-  const {  rsvpEnabled} = await fetchFeatureFlags();
+  const { rsvpEnabled } = await fetchFeatureFlags();
   const players = await fetchFilteredPlayers(query, currentPage, sortBy);
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
   const tournaments = await fetchTournaments();
-  const todayTournament = tournaments.find((tournament) => tournament.day === dayOfTheWeek);
+  const todayTournament = tournaments.find(
+    (tournament) => tournament.day === dayOfTheWeek,
+  );
   const rsvp_required = todayTournament!.rsvp_required;
 
   return (
@@ -44,16 +51,16 @@ export default async function PlayersTable({
                       <div className="mb-2 flex items-center">
                         <Image
                           src={player.image_url}
-                          className="mr-2 rounded-full zoom-on-hover"
+                          className="zoom-on-hover mr-2 rounded-full"
                           width={40}
                           height={40}
                           alt={`${player.name}'s profile picture`}
                         />
-                        <div>
-                            {player.name}
-                        </div>
+                        <div>{player.name}</div>
                       </div>
-                      <div className="text-sm text-gray-500">{player.phone_number}</div>
+                      <div className="text-sm text-gray-500">
+                        {player.phone_number}
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -63,13 +70,13 @@ export default async function PlayersTable({
                     <div className="text-xl font-medium">
                       balance: {formatCurrency(player.balance)}
                     </div>
-                    <div className="text-l font-medium">
-                      {player.notes}
-                    </div>
+                    <div className="text-l font-medium">{player.notes}</div>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <UpdatePlayerButton id={player.id} userId={userId}/>
-                    {isAdmin && <DeletePlayerButton id={player.id} userId={userId}/>}
+                    <UpdatePlayerButton id={player.id} userId={userId} />
+                    {isAdmin && (
+                      <DeletePlayerButton id={player.id} userId={userId} />
+                    )}
                   </div>
                 </div>
               </div>
@@ -81,22 +88,35 @@ export default async function PlayersTable({
                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                   <Sort text="Player Name" sortTerm="name" />
                 </th>
-                <th scope="col" className="px-3 py-5 font-mediu ">
+                <th scope="col" className="font-mediu px-3 py-5 ">
                   <Sort text="Phone" sortTerm="phone" />
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium " title="Sort by Balance">
+                <th
+                  scope="col"
+                  className="px-3 py-5 font-medium "
+                  title="Sort by Balance"
+                >
                   <Sort text="Balance" sortTerm="balance" />
-
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium " title="Sort by Notes">
+                <th
+                  scope="col"
+                  className="px-3 py-5 font-medium "
+                  title="Sort by Notes"
+                >
                   <Sort text="Notes" sortTerm="notes" />
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium " title="Sort by Updated At">
+                <th
+                  scope="col"
+                  className="px-3 py-5 font-medium "
+                  title="Sort by Updated At"
+                >
                   <Sort text="Updated At" sortTerm="updated_at" />
                 </th>
-                {rsvp_required && rsvpEnabled && <th scope="col" className="px-3 py-5 font-medium">
-                  RSVP - {dayOfTheWeek}
-                </th>}
+                {rsvp_required && rsvpEnabled && (
+                  <th scope="col" className="px-3 py-5 font-medium">
+                    RSVP - {dayOfTheWeek}
+                  </th>
+                )}
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -109,58 +129,54 @@ export default async function PlayersTable({
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <Link
-                        href={`/${userId}/players/${player.id}/edit`}
-                    >
-                    <div className="flex items-center gap-3">
-                      <Image
-                        src={player.image_url}
-                        className="rounded-full zoom-on-hover"
-                        width={40}
-                        height={40}
-                        alt={`${player.name}'s profile picture`}
-                      />
-                      <div >
-                        {player.name}
+                    <Link href={`/${userId}/players/${player.id}/edit`}>
+                      <div className="flex items-center gap-3">
+                        <Image
+                          src={player.image_url}
+                          className="zoom-on-hover rounded-full"
+                          width={40}
+                          height={40}
+                          alt={`${player.name}'s profile picture`}
+                        />
+                        <div>{player.name}</div>
                       </div>
-                    </div>
                     </Link>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    <Link
-                        href={`/${userId}/players/${player.id}/edit`}
-                    >
-                    {player.phone_number}
+                    <Link href={`/${userId}/players/${player.id}/edit`}>
+                      {player.phone_number}
                     </Link>
                   </td>
-                  <td className={`whitespace-nowrap px-3 py-3 ${player.historyCount > 1 ? 'bold':''}`}>
-                    <Link
-                        href={`/${userId}/players/${player.id}/edit`}
-                    >
-                    {formatCurrency(player.balance)}
-                    </Link>
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-3">
-                    <Link
-                        href={`/${userId}/players/${player.id}/edit`}
-                    >
-                    {player.notes}
+                  <td
+                    className={`whitespace-nowrap px-3 py-3 ${
+                      player.historyCount > 1 ? 'bold' : ''
+                    }`}
+                  >
+                    <Link href={`/${userId}/players/${player.id}/edit`}>
+                      {formatCurrency(player.balance)}
                     </Link>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    <Link
-                        href={`/${userId}/players/${player.id}/edit`}
-                    >
-                    {formatDateToLocal(player.updated_at)}
+                    <Link href={`/${userId}/players/${player.id}/edit`}>
+                      {player.notes}
                     </Link>
                   </td>
-                  {rsvp_required && rsvpEnabled && <td className="whitespace-nowrap px-3 py-3 rsvp-icon pointer">
+                  <td className="whitespace-nowrap px-3 py-3">
+                    <Link href={`/${userId}/players/${player.id}/edit`}>
+                      {formatDateToLocal(player.updated_at)}
+                    </Link>
+                  </td>
+                  {rsvp_required && rsvpEnabled && (
+                    <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
                       <RSVPButton player={player} />
-                  </td>}
+                    </td>
+                  )}
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
                       <UpdatePlayerButton id={player.id} userId={userId} />
-                      {isAdmin && <DeletePlayerButton id={player.id} userId={userId}/>}
+                      {isAdmin && (
+                        <DeletePlayerButton id={player.id} userId={userId} />
+                      )}
                     </div>
                   </td>
                 </tr>

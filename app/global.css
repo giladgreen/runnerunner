@@ -1,24 +1,22 @@
-@import "@/app/style.css";
-@import "@/app/ui/style.css";
-@import "@/app/signup/style.css";
-@import "@/app/[userId]/style.css";
+@import '@/app/style.css';
+@import '@/app/ui/style.css';
+@import '@/app/signup/style.css';
+@import '@/app/[userId]/style.css';
 
 .bold {
   font-weight: bold;
 }
 
-
 .zoom-on-hover:hover {
   transform: scale(1.6);
   transition: transform 0.5s;
-
 }
-.justify-end{
-    justify-content: flex-end;
-    justify-self: end;
+.justify-end {
+  justify-content: flex-end;
+  justify-self: end;
 }
 .sort-cursor {
-    cursor: ns-resize;
+  cursor: ns-resize;
 }
 
 .table-text-item {
@@ -30,16 +28,16 @@
   table {
     border-spacing: 1px;
     border: 0;
-    padding:0;
-    margin:0;
+    padding: 0;
+    margin: 0;
     border-collapse: collapse;
 
     width: 100%;
-    td{
+    td {
       border-spacing: 1px;
       border: 0;
-      padding:0;
-      margin:0;
+      padding: 0;
+      margin: 0;
       border-collapse: collapse;
       max-height: 15px;
       line-height: 15px;
@@ -47,25 +45,23 @@
     th {
       border-spacing: 1px;
       border: 0;
-      padding:0;
-      margin:0;
+      padding: 0;
+      margin: 0;
       border-collapse: collapse;
       width: 110px;
     }
   }
 }
 
-
-
 .table-item {
   text-align: center;
   align-items: center;
-  display:grid;
+  display: grid;
   justify-content: center;
 }
 
 .smaller-test {
-    font-size: smaller;
+  font-size: smaller;
 }
 
 .thin-column {
@@ -80,15 +76,13 @@
 }
 
 .config-seperator {
-    margin: 20px 0;
-    height: 20px;
-    background-color: #0070f377;
+  margin: 20px 0;
+  height: 20px;
+  background-color: #0070f377;
 }
 .config-section {
-    margin: 0 10px;
+  margin: 0 10px;
 }
-
-
 
 input[type='number'] {
   -moz-appearance: textfield;

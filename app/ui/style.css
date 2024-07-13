@@ -1,13 +1,12 @@
 .runner-runner-top-header {
-    color: white;
-    font-family: Abraham, serif;
-    font-size: xxx-large;
+  color: white;
+  font-family: Abraham, serif;
+  font-size: xxx-large;
 }
 
 @media only screen and (max-width: 600px) {
-    .runner-runner-top-header {
-        font-size: 33px;
-        width: 100%;
-
-    }
+  .runner-runner-top-header {
+    font-size: 33px;
+    width: 100%;
+  }
 }

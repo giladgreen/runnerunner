@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .homepage-top-header {
-    padding-left: 40px;
-    font-size: x-large;
-    color: white;
+  padding-left: 40px;
+  font-size: x-large;
+  color: white;
 }

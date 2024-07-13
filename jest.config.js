@@ -42,9 +42,10 @@ module.exports = {
     'summary',
   ],
   moduleNameMapper: {
-    'next-auth/providers/credentials': '<rootDir>/tests/helpers/mocks/credentials.ts',
+    'next-auth/providers/credentials':
+      '<rootDir>/tests/helpers/mocks/credentials.ts',
     'next-auth': '<rootDir>/tests/helpers/mocks/next-auth.ts',
     'next/navigation': '<rootDir>/tests/helpers/mocks/navigation.ts',
     'next/cache': '<rootDir>/tests/helpers/mocks/cache.ts',
-  }
+  },
 };

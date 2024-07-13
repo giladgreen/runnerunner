@@ -1,3 +1,1 @@
-export default function Credentials() {
-
-}
+export default function Credentials() {}

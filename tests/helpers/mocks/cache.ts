@@ -1,10 +1,3 @@
-export function revalidatePath() {
+export function revalidatePath() {}
 
-}
-
-
-export function unstable_noStore() {
-
-}
-
-
+export function unstable_noStore() {}

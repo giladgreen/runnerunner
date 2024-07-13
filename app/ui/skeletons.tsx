@@ -18,7 +18,7 @@ export function CardSkeleton() {
   );
 }
 
-export function CardsSkeleton({ count}: { count: number }) {
+export function CardsSkeleton({ count }: { count: number }) {
   return (
     <>
       {Array.from({ length: count }).map((_, i) => (
@@ -181,7 +181,7 @@ export function PlayersTableSkeleton() {
                   scope="col"
                   className="relative pb-4 pl-3 pr-6 pt-2 sm:pr-6"
                 >
-                 .
+                  .
                 </th>
               </tr>
             </thead>

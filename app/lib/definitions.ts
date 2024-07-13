@@ -20,17 +20,17 @@ export type PlayerForm = {
   balance: number;
   note: string;
   notes: string;
-  rsvps:string[];
+  rsvps: string[];
 };
 export type ImageDB = {
   phone_number: string;
   image_url: string;
-}
+};
 export type TournamentPlayerData = {
-  date: string,
-  tournament_name: string,
-  place: number,
-}
+  date: string;
+  tournament_name: string;
+  place: number;
+};
 
 export type PlayerDB = {
   id: string;
@@ -43,7 +43,7 @@ export type PlayerDB = {
   historyCount: number;
   note: string;
   notes: string;
-  historyLog: LogDB[],
+  historyLog: LogDB[];
   arrived: boolean;
   entries: number;
   rsvpForToday: boolean;
@@ -54,23 +54,23 @@ export type PlayerDB = {
   allowed_marketing?: boolean;
 };
 export type PrizeDB = {
-  id: string,
+  id: string;
   tournament: string;
   phone_number: string;
   prize: string;
   player?: PlayerDB;
   delivered: boolean;
-}
+};
 export type WinnerDB = {
   date: string;
   tournament_name: string;
   winners: string;
-}
+};
 export type RSVPDB = {
   id: string;
   date: string;
   phone_number: string;
-}
+};
 export type Counts = {
   phone_number: string;
   count: number;
@@ -86,8 +86,6 @@ export type TournamentForm = {
   rsvp_required: boolean;
 };
 
-
-
 export type LogDB = {
   id: string;
   phone_number: string;
@@ -98,10 +96,8 @@ export type LogDB = {
   type: string;
   other_player_phone_number: string;
   archive?: boolean;
-//updated by
+  //updated by
 };
-
-
 
 export type TournamentDB = {
   id: string;
@@ -113,14 +109,10 @@ export type TournamentDB = {
   rsvp_required: boolean;
 };
 
-
-
 export type FeatureFlagDB = {
   flag_name: string;
   is_open: boolean;
 };
-
-
 
 export type BugDB = {
   id: string;
@@ -136,4 +128,4 @@ export const TRANSLATIONS = {
   Thursday: 'יום חמישי',
   Friday: 'יום שישי',
   Saturday: 'יום שבת',
-}
+};

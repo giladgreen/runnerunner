@@ -1,4 +1,4 @@
-import {PlayerDB, UserDB} from "@/app/lib/definitions";
+import { PlayerDB, UserDB } from '@/app/lib/definitions';
 
 const HOUR = 60 * 60 * 1000;
 
@@ -6,9 +6,9 @@ export const formatCurrency = (balance: number) => {
   const res = (balance ?? 0).toLocaleString('en-US', {
     style: 'currency',
     currency: 'ILS',
-  })
+  });
 
-  const shortenedString = res.substring(0, res. length - 3);
+  const shortenedString = res.substring(0, res.length - 3);
 
   return shortenedString;
 };
@@ -37,10 +37,7 @@ export const formatType = (type: string) => {
   return type;
 };
 
-export const formatDateToLocal = (
-  dateStr: string,
-  locale: string = 'he',
-) => {
+export const formatDateToLocal = (dateStr: string, locale: string = 'he') => {
   const date = new Date(dateStr);
   const options: Intl.DateTimeFormatOptions = {
     dateStyle: 'full',
@@ -50,15 +47,14 @@ export const formatDateToLocal = (
   return formatter.format(date);
 };
 
-
-
-export const getTime = (
-  dateStr: string,
-) => {
+export const getTime = (dateStr: string) => {
   const date = new Date(dateStr);
   const modifiedDate = new Date(date.getTime() + 3 * HOUR);
-  return  modifiedDate.toLocaleString("en-GB").split(',')[1].trim().substring(0, 5);
-
+  return modifiedDate
+    .toLocaleString('en-GB')
+    .split(',')[1]
+    .trim()
+    .substring(0, 5);
 };
 
 export const generatePagination = (currentPage: number, totalPages: number) => {
@@ -94,26 +90,26 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
   ];
 };
 
-export function positionComparator(a: PlayerDB,b: PlayerDB) {
+export function positionComparator(a: PlayerDB, b: PlayerDB) {
   return a.position < b.position ? -1 : 1;
-};
-export function phoneNumberComparator(a: UserDB,b: UserDB) {
+}
+export function phoneNumberComparator(a: UserDB, b: UserDB) {
   return a.phone_number < b.phone_number ? -1 : 1;
-};
-
-export function nameComparator(a: PlayerDB,b: PlayerDB) {
-  return a.name < b.name ? -1 : 1;
-};
-
-export function getTodayShortDate(){
-  return (new Date()).toISOString().slice(0,10);
 }
 
-export function getDayOfTheWeek(date?: Date){
+export function nameComparator(a: PlayerDB, b: PlayerDB) {
+  return a.name < b.name ? -1 : 1;
+}
+
+export function getTodayShortDate() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+export function getDayOfTheWeek(date?: Date) {
   const base = date ?? new Date();
   return base.toLocaleString('en-us', { weekday: 'long' });
 }
 
-export function sumArrayByProp(array:any[], propName:string){
+export function sumArrayByProp(array: any[], propName: string) {
   return array.reduce((acc, player) => acc + player[propName], 0);
 }

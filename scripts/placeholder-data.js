@@ -4,7 +4,7 @@ const SUPERMAN = '0587869910';
 const DEMO_USER_PHONE = '0542609910';
 const AVI_PHONE = '0524803571';
 const OZ_PHONE = '0524803577';
-const DEMO_USERS_PHONES = [DEMO_USER_PHONE,AVI_PHONE,OZ_PHONE];
+const DEMO_USERS_PHONES = [DEMO_USER_PHONE, AVI_PHONE, OZ_PHONE];
 
 const users = [
   {
@@ -12,15 +12,15 @@ const users = [
     name: 'גלעד גרין',
     password: 'kush1984',
     is_admin: true,
-    is_worker: false
+    is_worker: false,
   },
   {
     phone_number: DEMO_USER_PHONE,
     name: 'דניאל שפירא גרין',
     password: '123456',
     is_admin: false,
-    is_worker: true
-  }
+    is_worker: true,
+  },
 ];
 
 const players = [
@@ -98,7 +98,6 @@ const players = [
     image_url: '/players/rafael-moked.png',
   },
 
-
   {
     name: 'שרדר',
     balance: -400,
@@ -128,10 +127,7 @@ const players = [
     balance: 1750,
     phone_number: '0587869119',
     image_url: '/players/april.png',
-  }
-
-
-
+  },
 ];
 
 const logs = [
@@ -139,34 +135,34 @@ const logs = [
     change: 2200,
     note: 'טורניר רעננה - מקום חמישי',
     updated_at: '2024-01-01T10:00:00.000Z',
-    updated_by: 'אבי'
+    updated_by: 'אבי',
   },
   {
     change: 6000,
     note: 'טורניר ראשון לציון - מקום ראשון',
     updated_at: '2024-01-02T10:00:00.000Z',
-    updated_by: 'חדווה'
+    updated_by: 'חדווה',
   },
   {
     change: -300,
     note: 'טורניר תל אביב - כניסה',
     updated_at: '2024-01-12T20:00:00.000Z',
     updated_by: 'תרצה',
-    type: 'credit'
+    type: 'credit',
   },
   {
     change: -200,
     note: 'טורניר תל אביב - כניסה שנייה',
     updated_at: '2024-01-12T20:50:00.000Z',
     updated_by: 'תרצה',
-    type: 'credit'
+    type: 'credit',
   },
   {
     change: -400,
     note: 'טורניר ראשון לציון - כניסה',
     updated_at: '2024-01-14T20:00:00.000Z',
     updated_by: 'חדווה',
-    type: 'credit'
+    type: 'credit',
   },
   {
     change: 1000,
@@ -179,93 +175,93 @@ const logs = [
     note: 'ניצול קרדיט לפרס - דייסוןי',
     updated_at: '2024-01-15T10:00:00.000Z',
     updated_by: 'חדווה',
-    type: 'prize'
+    type: 'prize',
   },
   {
     change: -250,
     note: 'טורניר קיסריה - כניסה',
     updated_at: '2024-01-17T20:00:00.000Z',
     updated_by: 'תרצה',
-    type: 'credit'
+    type: 'credit',
   },
   {
     change: -150,
     note: 'טורניר קיסריה - כניסה שנייה',
     updated_at: '2024-01-17T20:00:00.000Z',
     updated_by: 'תרצה',
-    type: 'cash'
+    type: 'cash',
   },
   {
     change: -150,
     note: 'טורניר קיסריה - כניסה שלישית ',
     updated_at: '2024-01-17T20:00:00.000Z',
     updated_by: 'תרצה',
-    type: 'wire'
+    type: 'wire',
   },
   {
     change: 3500,
     note: 'טורניר קיסריה - מקום ראשון',
     updated_at: '2024-01-18T10:00:00.000Z',
-    updated_by: 'תרצה'
+    updated_by: 'תרצה',
   },
-
-]
+];
 
 const tournaments = [
-    {
-  day: 'Sunday',
-  name: 'טורניר קיסריה',
-  buy_in: 300,
-      max_players:100,
-      rsvp_required: true
+  {
+    day: 'Sunday',
+    name: 'טורניר קיסריה',
+    buy_in: 300,
+    max_players: 100,
+    rsvp_required: true,
   },
   {
     day: 'Monday',
     name: 'טורניר תל אביב',
     buy_in: 300,
-    max_players:100,
-    rsvp_required: true
+    max_players: 100,
+    rsvp_required: true,
   },
   {
     day: 'Tuesday',
     name: 'טורניר רעננה',
     buy_in: 300,
-    max_players:100,
-    rsvp_required: true
+    max_players: 100,
+    rsvp_required: true,
   },
   {
     day: 'Wednesday',
     name: 'טורניר כפר סבא',
     buy_in: 250,
-    max_players:100,
-    rsvp_required: true
+    max_players: 100,
+    rsvp_required: true,
   },
   {
     day: 'Thursday',
     name: 'טורניר ראשל״צ',
     buy_in: 400,
-    max_players:100,
-    rsvp_required: true
+    max_players: 100,
+    rsvp_required: true,
   },
   {
     day: 'Friday',
     name: '',
     buy_in: 200,
-    max_players:0,
-    rsvp_required: true
+    max_players: 0,
+    rsvp_required: true,
   },
   {
     day: 'Saturday',
     name: 'טורניר ראשל״צ',
     buy_in: 250,
-    max_players:100,
-    rsvp_required: false
-  }]
+    max_players: 100,
+    rsvp_required: false,
+  },
+];
 
 module.exports = {
   users,
   players,
   logs,
   tournaments,
-  DEMO_USERS_PHONES
+  DEMO_USERS_PHONES,
 };

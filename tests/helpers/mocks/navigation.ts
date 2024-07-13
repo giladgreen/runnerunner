@@ -1,3 +1,1 @@
-export function redirect() {
-
-}
+export function redirect() {}
