@@ -2,9 +2,9 @@
 
 import Button from '@/app/ui/client/Button';
 import React from "react";
-import {PlayerDB, PrizeDB, TournamentDB} from "@/app/lib/definitions";
+import {ImageDB, PlayerDB, PrizeDB, TournamentDB} from "@/app/lib/definitions";
 
-export default function ExportPlayersButton({ players, playersPlaces, worker, tournament, prizes, prizesEnabled, placesEnabled}: { players: PlayerDB[], playersPlaces:PlayerDB[], tournament: TournamentDB, prizes: PrizeDB[], worker?: boolean, prizesEnabled?: boolean, placesEnabled?: boolean}) {
+export default function ExportPlayersButton({ players,images, playersPlaces, worker, tournament, prizes, prizesEnabled, placesEnabled}: {images:ImageDB[], players: PlayerDB[], playersPlaces:PlayerDB[], tournament: TournamentDB, prizes: PrizeDB[], worker?: boolean, prizesEnabled?: boolean, placesEnabled?: boolean}) {
 
     return (
         <>
@@ -70,6 +70,27 @@ ${prizesData}
                     dataLink.click();
 
                     document.body.removeChild(dataLink);
+
+
+                    ////////////////////////////////////////////////////////////////
+                const imagesData =`phone number, url
+${images.map((player) => {
+                    return `${player.phone_number},${player.image_url}`
+                }).join(`
+`)}`;
+                const imagesFilename = `players_images_${todayDate}.csv`;
+                const imagesBlob = new Blob([creditData], {type: "text/plain;charset=utf-8"});
+
+                const imagesLink = document.createElement("a");
+                imagesLink.download = imagesFilename;
+                imagesLink.href = window.URL.createObjectURL(imagesBlob);
+                imagesLink.style.display = 'none';
+
+                document.body.appendChild(imagesLink);
+
+                imagesLink.click();
+
+                document.body.removeChild(imagesLink);
             }} >
 
             <span >export</span>

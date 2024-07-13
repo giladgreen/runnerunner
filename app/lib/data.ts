@@ -645,6 +645,19 @@ export async function fetchAllPlayersForExport() {
     throw new Error('Failed to fetch bugs.');
   }
 }
+export async function fetchAllImagesForExport() {
+  methodStart();
+  noStore();
+  try {
+    const result =  await getAllImages();
+    methodEnd('fetchAllPlayersForExport')
+    return result;
+  } catch (error) {
+    console.error('Database Error:', error);
+    methodEnd('fetchAllPlayersForExport with error')
+    throw new Error('Failed to fetch bugs.');
+  }
+}
 export async function fetchTournaments() {
   methodStart();
   noStore();
