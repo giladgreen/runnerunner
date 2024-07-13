@@ -1,7 +1,6 @@
-import SignUpForm from "@/app/ui/SignUpForm";
+import SignUpForm from "@/app/ui/client/SignUpForm";
 import Image from "next/image";
-import SignInForm from "@/app/ui/SignInForm";
-import SignUpButton from "@/app/ui/client/SignUpButton";
+
 export default function SignUpPage() {
 
     return <main className="flex min-h-screen flex-col p-6">

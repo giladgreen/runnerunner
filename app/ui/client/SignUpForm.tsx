@@ -76,7 +76,8 @@ export default function SignUpForm() {
                   htmlFor="regulations_approve"
                   style={{marginLeft: 7}}
               >
-                Approval of customer club regulations
+מאשר תקנון מועדון לקוחות
+                {/* Approve customer club regulations */}
               </label>
 
 
@@ -90,7 +91,7 @@ export default function SignUpForm() {
                   htmlFor="regulations_approve"
                   style={{marginLeft: 7}}
               >
-                Agree to receive marketing information
+                מאשר לקבל תוכן שיווקי
               </label>
 
 
@@ -98,7 +99,7 @@ export default function SignUpForm() {
           </div>
           <Button className="mt-4 w-full" aria-disabled={pending || !regulationsApprove || password.length < 1}>
 
-            {pending ? 'Signing Up' : 'Sign Up'}
+            {pending ? 'המתן..' : 'הירשם'}
             <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50"/>
           </Button>
           <div

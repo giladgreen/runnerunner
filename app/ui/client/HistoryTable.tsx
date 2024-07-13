@@ -46,7 +46,7 @@ export default async function HistoryTable({
           <th scope="col" className="px-3 py-5 font-medium">
             Date & Time
           </th>
-          <th scope="col" className="px-3 py-5 font-medium">
+          <th scope="col" className="px-3 py-5 font-medium wide-screen">
             Updated By
           </th>
         </tr>
@@ -73,7 +73,7 @@ export default async function HistoryTable({
               <td className="whitespace-nowrap py-3 pl-6 pr-3">
                 {formatDateToLocal(log.updated_at)}, {getTime(log.updated_at)}
               </td>
-              <td className="whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3 wide-screen">
                 {log.updated_by}
               </td>
             </tr>

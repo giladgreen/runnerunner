@@ -751,8 +751,12 @@ export async function fetchPlayerByUserId(userId: string) {
       if (!user){
         return null;
       }
-    const playerPhoneNumber = user.phone_number;
-      const player = await getPlayerByPhoneNumber(playerPhoneNumber)
+
+      const playerPhoneNumber = user.phone_number;
+      // const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${playerPhoneNumber};`;
+      const player =  await getPlayerByPhoneNumber(playerPhoneNumber)
+
+
 
       if (player){
         const [historyLog, rsvpForToday, tournamentsData] = await Promise.all([getPlayerHistory(playerPhoneNumber), isPlayerRsvp(playerPhoneNumber, getTodayShortDate()),getPlayerTournamentsHistory(playerPhoneNumber) ])
@@ -771,7 +775,6 @@ export async function fetchPlayerByUserId(userId: string) {
 
 export async function fetchUserById(id: string) {
   if (!id || id === 'undefined'){
-    console.log('## fetchUserById , id:',id)
     return redirect(`/`);
   }
   methodStart();

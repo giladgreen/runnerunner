@@ -3,7 +3,7 @@ import {PlayerDB, UserDB} from "@/app/lib/definitions";
 const HOUR = 60 * 60 * 1000;
 
 export const formatCurrency = (balance: number) => {
-  const res = (balance).toLocaleString('en-US', {
+  const res = (balance ?? 0).toLocaleString('en-US', {
     style: 'currency',
     currency: 'ILS',
   })

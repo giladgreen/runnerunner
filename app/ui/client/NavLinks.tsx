@@ -60,7 +60,7 @@ const links = (userId: string) => [
     worker: true,
   },
   {
-    name: 'player info',
+    name: 'פרטי שחקן',
     href: `/${userId}`,
     icon: InformationCircleIcon,
     player: true,

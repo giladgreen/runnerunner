@@ -419,10 +419,7 @@ export async function setPlayerPosition({playerId, prevPage}:{playerId: string, 
 
         const todayTournament = todayTournamentResult.rows[0];
         let winnersObject = winnersResult.rows[0];
-console.log('## setPlayerPosition. winnersObject', winnersObject)
-console.log('## setPlayerPosition. todayTournament', todayTournament)
-console.log('## setPlayerPosition. newPosition',  newPosition)
-console.log('## setPlayerPosition. phone_number',  player.phone_number)
+
         if (winnersObject){
             const newWinnersObject = {
                 ...JSON.parse(winnersObject.winners),
@@ -814,13 +811,13 @@ export async function signUp(
     }
 
     const phoneNumber = `${user_phone_number.startsWith('0') ? '' :'0'}${user_phone_number}`;
-    console.log('## signUp. phoneNumber', phoneNumber)
+
     const password = formData.get('password') as string;
-    console.log('## signUp. password', password)
+
     const regulations_approve = formData.get('regulations_approve') as string;
-    console.log('## signUp. regulations_approve', regulations_approve)
+
     const marketing_approve = formData.get('marketing_approve') as string;
-    console.log('## signUp. marketing_approve', marketing_approve)
+
     const userResult  = await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${phoneNumber}`;
     const existingUser = userResult.rows[0];
     if (existingUser) {
@@ -839,6 +836,16 @@ export async function signUp(
     `;
     if (existingPlayer){
         await sql`UPDATE players SET updated_at=${new Date().toISOString()}, allowed_marketing=${marketing_approve==='on'} WHERE phone_number = ${phoneNumber}`;
+    } else {
+
+        await sql`
+      INSERT INTO players (name, phone_number, allowed_marketing)
+      VALUES ('UNKNOWN PLAYER',${phoneNumber}, ${marketing_approve==='on'})
+    `;
+
+        await sql`INSERT INTO history (phone_number, change, note, type, archive) VALUES (${phoneNumber},0, 'אתחול','credit', true)`;
+
+
     }
 
     sendEmail(TARGET_MAIL, 'New user created', `phone: ${phoneNumber}  ${existingPlayer?.name ? `name: ${existingPlayer?.name}`:''}  marketing_approve:${marketing_approve}`)
@@ -848,6 +855,27 @@ export async function signUp(
     signInFormData.set('password', password);
     await signIn('credentials', signInFormData);
     redirect(`/`);
+}
+
+export async function updateNewPlayerName(playerId:string, _prevState: string | undefined, formData: FormData){
+    noStore();
+    const name = formData.get('name') as string;
+    try {
+        const player = (await sql`SELECT * FROM players WHERE id = ${playerId}`).rows[0];
+        if (player){
+            await sql`UPDATE players SET name = ${name} WHERE id = ${playerId}`;
+            await sql`UPDATE users SET name = ${name} WHERE phone_number = ${player.phone_number}`;
+        } else {
+            throw new Error('player does not exist')
+        }
+
+    } catch (error) {
+        console.error('Database updateFFValue Error:', error);
+        return false;
+    }finally {
+        revalidatePath('/');
+        redirect('/');
+    }
 }
 
 export async function updateFFValue(name:string, newValue:boolean, prevPage:string){
@@ -861,7 +889,6 @@ export async function updateFFValue(name:string, newValue:boolean, prevPage:stri
         revalidatePath(prevPage);
         redirect(prevPage);
     }
-
 }
 
 export async function updateIsUserAdmin({id, prevPage}:{id:string, prevPage: string} ) {
