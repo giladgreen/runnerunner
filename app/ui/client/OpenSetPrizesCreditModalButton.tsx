@@ -27,7 +27,7 @@ function SetPrizesCreditForm({
   });
   // @ts-ignore
   const [_state, dispatch] = useFormState(
-      // @ts-ignore
+    // @ts-ignore
     setPrizesCreditWorthWithDate,
     initialState,
   );

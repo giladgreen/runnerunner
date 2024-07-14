@@ -23,7 +23,7 @@ export default function CreatePlayerForm({
   const createPlayerWithPrevPage = createPlayer.bind(null, prevPage);
   // @ts-ignore
   const [state, dispatch] = useFormState(
-      // @ts-ignore
+    // @ts-ignore
     createPlayerWithPrevPage,
     initialState,
   );

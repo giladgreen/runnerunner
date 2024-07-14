@@ -47,6 +47,17 @@ export const formatDateToLocal = (dateStr: string, locale: string = 'he') => {
   return formatter.format(date);
 };
 
+export const formatDateToLocalWithTime = (
+  dateStr: string,
+  locale: string = 'he',
+) => {
+  const date = formatDateToLocal(dateStr, locale);
+  const dateObject = new Date(new Date(dateStr).getTime() + 3 * HOUR);
+  const time = `${dateObject.getHours()}:${dateObject.getMinutes()}`;
+
+  return `${time},     ${date}`;
+};
+
 export const getTime = (dateStr: string) => {
   const date = new Date(dateStr);
   const modifiedDate = new Date(date.getTime() + 3 * HOUR);

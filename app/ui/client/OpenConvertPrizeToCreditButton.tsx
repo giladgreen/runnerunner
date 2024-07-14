@@ -25,7 +25,7 @@ function OpenConvertPrizeToCreditForm({
   const convertPrizeToCreditWithData = convertPrizeToCredit.bind(null, data);
   // @ts-ignore
   const [_state, dispatch] = useFormState(
-      // @ts-ignore
+    // @ts-ignore
     convertPrizeToCreditWithData,
     initialState,
   );

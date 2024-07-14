@@ -39,6 +39,8 @@ const phoneToName = {
 export type State = {
   errors?: {
     name?: string[];
+    extra?: string[];
+    credit?: string[];
     balance?: string[];
     change?: string[];
     phone_number?: string[];
@@ -843,6 +845,93 @@ export async function updateTournament(
   }
 }
 
+export async function createPrizeInfo(
+  { prevPage }: { prevPage: string },
+  _prevState: State,
+  formData: FormData,
+) {
+  const name = (formData.get('name') as string) ?? '';
+  const extra = (formData.get('extra') as string) ?? '';
+  const credit = (formData.get('credit') as string) ?? '';
+
+  if (!name || name.trim().length < 1) {
+    return {
+      errors: {
+        name: ['missing name'],
+      },
+    };
+  }
+
+  if (!credit || credit.trim().length < 1 || isNaN(Number(credit))) {
+    return {
+      errors: {
+        credit: ['illegal credit'],
+      },
+    };
+  }
+
+  try {
+    await sql`INSERT INTO prizes_info (name, extra,credit) VALUES (${name},${extra},${credit})`;
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete Player.' };
+  } finally {
+    revalidatePath(prevPage);
+    redirect(prevPage);
+  }
+}
+
+export async function updatePrizeInfo(
+  { prizeId, prevPage }: { prizeId: string; prevPage: string },
+  _prevState: State,
+  formData: FormData,
+) {
+  const name = (formData.get('name') as string) ?? '';
+  const extra = (formData.get('extra') as string) ?? '';
+  const credit = (formData.get('credit') as string) ?? '';
+
+  if (!name || name.trim().length < 1) {
+    return {
+      errors: {
+        name: ['missing name'],
+      },
+    };
+  }
+
+  if (!credit || credit.trim().length < 1 || isNaN(Number(credit))) {
+    return {
+      errors: {
+        credit: ['illegal credit'],
+      },
+    };
+  }
+
+  try {
+    await sql`UPDATE prizes_info SET name = ${name}, extra = ${extra}, credit = ${credit}, created_at = ${new Date().toISOString()} WHERE id = ${prizeId}`;
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete Player.' };
+  } finally {
+    revalidatePath(prevPage);
+    redirect(prevPage);
+  }
+}
+
+export async function deletePrizeInfo({
+  prizeId,
+  prevPage,
+}: {
+  prizeId: string;
+  prevPage: string;
+}) {
+  try {
+    await sql`DELETE FROM prizes_info WHERE id = ${prizeId}`;
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete Player.' };
+  } finally {
+    revalidatePath(prevPage);
+    redirect(prevPage);
+  }
+}
+
 export async function deletePlayer({
   id,
   prevPage,
@@ -866,11 +955,12 @@ export async function deletePlayer({
       'player deleted',
       `name: ${player.name}, phone: ${player}   image: ${player.image_url}  notes: ${player.notes}`,
     );
-
-    revalidatePath(prevPage);
   } catch (error) {
     await cancelTransaction();
     return { message: 'Database Error: Failed to Delete Player.' };
+  } finally {
+    revalidatePath(prevPage);
+    redirect(prevPage);
   }
 }
 
@@ -982,8 +1072,8 @@ export async function signUp(
   const existingPlayer = await getPlayerByPhoneNumber(phoneNumber);
   // @ts-ignore
   const name = phoneToName[phoneNumber]
-      // @ts-ignore
-    ? (phoneToName[phoneNumber] as string)
+    ? // @ts-ignore
+      (phoneToName[phoneNumber] as string)
     : existingPlayer?.name ?? '--';
   await sql`
       INSERT INTO users (phone_number, password, name, is_admin, is_worker)
@@ -1218,9 +1308,15 @@ export async function undoPlayerLastLog(
 
 export async function importPlayers(playersToInsert: PlayerDB[]) {
   try {
-    const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`).rows;
+    const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`)
+      .rows;
     console.log(`## existingPlayersImages ${existingPlayersImages.length}`);
-    console.log(`## existingPlayersImages first 10: ${existingPlayersImages.slice(0, 10).map((p) => p.phone_number).join(', ')}`);
+    console.log(
+      `## existingPlayersImages first 10: ${existingPlayersImages
+        .slice(0, 10)
+        .map((p) => p.phone_number)
+        .join(', ')}`,
+    );
 
     await sql`BEGIN;`;
 
@@ -1228,7 +1324,6 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
     await sql`DELETE from players;`;
 
     console.log('## import step: 1 - get existing DB data');
-
 
     console.log('## import step: 2 - insert NEW data');
 
@@ -1242,12 +1337,12 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
       );
 
       if (existingImage) {
-        console.log('## setting player image:', existingImage.image_url)
+        console.log('## setting player image:', existingImage.image_url);
         p.image_url = existingImage.image_url;
       } else {
         p.image_url = '/players/default.png';
-        if (counter < 10){
-          console.log('## did not found image:', p.phone_number)
+        if (counter < 10) {
+          console.log('## did not found image:', p.phone_number);
         }
         counter++;
       }

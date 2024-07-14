@@ -15,7 +15,7 @@ import React from 'react';
 import Link from 'next/link';
 import CreateBugForm from '@/app/ui/client/CreateBugForm';
 import { formatDateToLocal } from '@/app/lib/utils';
-import ExportPlayersWithMarketingInfoButton from "@/app/ui/client/ExportPlayersWithMarketingInfoButton";
+import ExportPlayersWithMarketingInfoButton from '@/app/ui/client/ExportPlayersWithMarketingInfoButton';
 
 function Seperator() {
   return <div className="config-seperator" />;
@@ -29,6 +29,19 @@ function TournamentsLink({ userId }: { userId: string }) {
         className="mt-4 rounded-md bg-blue-400 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400"
       >
         Tournaments Info
+      </Link>
+    </div>
+  );
+}
+
+function PrizesInfoLink({ userId }: { userId: string }) {
+  return (
+    <div className="config-section">
+      <Link
+        href={`/${userId}/configurations/prizes`}
+        className="mt-4 rounded-md bg-blue-400 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400"
+      >
+        Prizes Info
       </Link>
     </div>
   );
@@ -136,16 +149,14 @@ export default async function ConfigurationPage({
         />
       </div>
       <Seperator />
-        <div className="config-section">
+      <div className="config-section">
         <div style={{ marginBottom: 20 }}>
           <b>Export players that approved marketing info</b>
         </div>
-        <ExportPlayersWithMarketingInfoButton
-          players={players as PlayerDB[]}
-        />
+        <ExportPlayersWithMarketingInfoButton players={players as PlayerDB[]} />
       </div>
       <Seperator />
-      {importEnabled && isAdmin && (
+      {importEnabled && (
         <div className="config-section">
           <div>
             <u>
@@ -159,8 +170,10 @@ export default async function ConfigurationPage({
           <ImportPlayersButton />
         </div>
       )}
-      {importEnabled && isAdmin && <Seperator />}
+      {importEnabled && <Seperator />}
       {isAdmin && <UserPermissionsLink userId={params.userId} />}
+      <Seperator />
+      <PrizesInfoLink userId={params.userId} />
       <Seperator />
       <TournamentsLink userId={params.userId} />
       <Seperator />

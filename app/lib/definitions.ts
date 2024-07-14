@@ -53,6 +53,13 @@ export type PlayerDB = {
   tournamentsData: TournamentPlayerData[];
   allowed_marketing?: boolean;
 };
+export type PrizeInfoDB = {
+  id: string;
+  name: string;
+  extra: string;
+  credit: number;
+  created_at: string;
+};
 export type PrizeDB = {
   id: string;
   tournament: string;

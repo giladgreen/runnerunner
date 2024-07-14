@@ -21,7 +21,7 @@ export default function SetPrizeForm({
   });
   // @ts-ignore
   const [state1, dispatch] = useFormState(
-      // @ts-ignore
+    // @ts-ignore
     setPlayerPrizeWithPlayerId,
     initialState,
   );

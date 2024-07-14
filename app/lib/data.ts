@@ -9,6 +9,7 @@ import {
   LogDB,
   PlayerDB,
   PrizeDB,
+  PrizeInfoDB,
   RSVPDB,
   TournamentDB,
   UserDB,
@@ -363,6 +364,13 @@ async function fetchSortedPlayers(
 /////////////////////////////////////////
 /////////////////////////////////////////
 /////////////////////////////////////////
+
+export async function fetchPrizesInfo() {
+  const prizes =
+    await sql<PrizeInfoDB>`SELECT * FROM prizes_info ORDER BY name`;
+
+  return prizes.rows;
+}
 
 export async function fetchMVPPlayers() {
   return fetchXPlayers(

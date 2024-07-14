@@ -6,10 +6,10 @@
     "dev": "next dev",
     "find-duplication": "node -r dotenv/config ./scripts/find.js",
     "lint": "next lint",
+    "playground": "node -r dotenv/config ./scripts/playground.js",
     "pprettier": "prettier --write --ignore-unknown .",
     "pprettier:check": "prettier --check --ignore-unknown .",
     "seed": "node -r dotenv/config ./scripts/run-seed.js",
-    "playground": "node -r dotenv/config ./scripts/playground.js",
     "start": "next start",
     "test": "node ./scripts/test-pre-seed.js && jest tests/unit",
     "test:coverage": "node ./scripts/test-pre-seed.js && jest tests/unit --coverage"

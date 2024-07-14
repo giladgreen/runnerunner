@@ -248,6 +248,16 @@ async function seedPrizes(client) {
       );
     `;
 
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS prizes_info (
+         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+         name TEXT NOT NULL,
+         extra TEXT,
+         credit INT DEFAULT 0,
+         created_at timestamp NOT NULL DEFAULT now()
+      );
+    `;
+
     console.log(`Created "rsvp" table`);
 
     return {

@@ -34,7 +34,7 @@ export function UseCreditForPrizeForm({
   const [amount, setAmount] = useState(initialAmount);
   // @ts-ignore
   const [state1, dispatch] = useFormState(
-      // @ts-ignore
+    // @ts-ignore
     createPlayerUsageLogWithPlayerData,
     initialState,
   );
@@ -158,7 +158,7 @@ export function AddToBalanceForm({
   );
   // @ts-ignore
   const [state2, dispatch] = useFormState(
-      // @ts-ignore
+    // @ts-ignore
     createPlayerNewCreditLogWithPlayerData,
     initialState,
   );

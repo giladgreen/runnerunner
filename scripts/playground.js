@@ -6,14 +6,14 @@ async function processLineByLine() {
 
   const rl = readline.createInterface({
     input: fileStream,
-    crlfDelay: Infinity
+    crlfDelay: Infinity,
   });
   // Note: we use the crlfDelay option to recognize all instances of CR LF
   // ('\r\n') in input.txt as a single line break.
   const items = [];
   for await (const line of rl) {
-    const [phone,url] = line.split(',');
-    items.push({ phone, url})
+    const [phone, url] = line.split(',');
+    items.push({ phone, url });
   }
   return items;
 }
@@ -62,13 +62,20 @@ async function main() {
   // const player = await client.sql`select * from players where phone_number = '0587869910';`;
   // console.log('## player', player.rows[0])
 
-  const players = (await client.sql`select * from players limit 22`).rows;
+  // const players = (await client.sql`select * from players limit 22`).rows;
+  //
+  // for (const player of players) {
+  //   await client.sql`update players set allowed_marketing = true where id = ${player.id}`;
+  // }
 
-  for (const player of players) {
-    await client.sql`update players set allowed_marketing = true where id = ${player.id}`;
-  }
-
-  console.log('## done')
+  await client.sql`CREATE TABLE IF NOT EXISTS prizes_info (
+         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+         name TEXT NOT NULL,
+         extra TEXT,
+         credit INT DEFAULT 0,
+         created_at timestamp NOT NULL DEFAULT now()
+      )`;
+  console.log('## done');
 
   await client.end();
 }

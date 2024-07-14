@@ -14,7 +14,7 @@ export async function PlayerSetupNameModal({ player }: { player: PlayerDB }) {
   );
   // @ts-ignore
   const [state, dispatch] = useFormState(
-      // @ts-ignore
+    // @ts-ignore
     updateNewPlayerNameWithPlayerId,
     initialState,
   );
