@@ -2,15 +2,16 @@ import CreateNewTodayPlayerButton from '@/app/ui/client/CreateNewTodayPlayerButt
 import TodayPlayersTable from '@/app/ui/client/TodayPlayersTable';
 import TodaySearch from '@/app/ui/client/TodaySearch';
 import {
-  fetchFeatureFlags,
-  fetchTodayPlayers,
-  fetchUserById,
+    fetchFeatureFlags,
+    fetchTodayPlayers,
+    fetchUserById, getAllPlayers,
 } from '@/app/lib/data';
 import FinalTablePlayers from '@/app/ui/client/FinalTablePlayers';
 import PlayersPrizes from '@/app/ui/client/PlayersPrizes';
 import RSVPAndArrivalCardWrapper from '@/app/ui/client/RSVPAndArrivalCardWrapper';
 import TodayTournamentNameCardWrapper from '@/app/ui/client/TodayTournamentNameCardWrapper';
 import React from 'react';
+import RegisterSave from "@/app/ui/client/RegisterSave";
 
 export default async function CurrentTournament({
   params,
@@ -24,6 +25,10 @@ export default async function CurrentTournament({
   const user = await fetchUserById(params.userId);
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
+  const allPlayers = await getAllPlayers();
+  const players = await fetchTodayPlayers(searchParams?.query);
+
+
   if (!isAdmin && !isWorker) {
     return (
       <div className="w-full">
@@ -38,11 +43,13 @@ export default async function CurrentTournament({
     );
   }
 
-  const players = await fetchTodayPlayers(searchParams?.query);
+
+
   const { prizesEnabled, placesEnabled } = await fetchFeatureFlags();
 
   return (
     <div className="full-width w-full">
+        <RegisterSave players={allPlayers} />
       <div className="full-width flex w-full items-center justify-between">
         <TodayTournamentNameCardWrapper params={params} />
       </div>

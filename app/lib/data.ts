@@ -168,7 +168,7 @@ async function getAllHistory() {
   return todayHistoryResults.rows;
 }
 
-async function getAllPlayers() {
+export async function getAllPlayers() {
   const playersPromise = sql<PlayerDB>`SELECT * FROM players AS P 
  JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number) AS H
     ON P.phone_number = H.phone_number`;

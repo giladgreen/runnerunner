@@ -1,6 +1,8 @@
 TODO:
 
-- ctrl +z to undo and ctrl +s to export
+- 
+- ctrl +z to undo 
+-
 -
 - regulations_approve: add the actual text?
 -
