@@ -15,6 +15,7 @@ import React from 'react';
 import Link from 'next/link';
 import CreateBugForm from '@/app/ui/client/CreateBugForm';
 import { formatDateToLocal } from '@/app/lib/utils';
+import ExportPlayersWithMarketingInfoButton from "@/app/ui/client/ExportPlayersWithMarketingInfoButton";
 
 function Seperator() {
   return <div className="config-seperator" />;
@@ -132,6 +133,15 @@ export default async function ConfigurationPage({
           prizes={prizes}
           prizesEnabled={prizesEnabled}
           placesEnabled={placesEnabled}
+        />
+      </div>
+      <Seperator />
+        <div className="config-section">
+        <div style={{ marginBottom: 20 }}>
+          <b>Export players that approved marketing info</b>
+        </div>
+        <ExportPlayersWithMarketingInfoButton
+          players={players as PlayerDB[]}
         />
       </div>
       <Seperator />

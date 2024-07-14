@@ -62,8 +62,13 @@ async function main() {
   // const player = await client.sql`select * from players where phone_number = '0587869910';`;
   // console.log('## player', player.rows[0])
 
-  const images = await client.sql`select * from images `;
-  console.log('## images', images.rows.length)
+  const players = (await client.sql`select * from players limit 22`).rows;
+
+  for (const player of players) {
+    await client.sql`update players set allowed_marketing = true where id = ${player.id}`;
+  }
+
+  console.log('## done')
 
   await client.end();
 }
