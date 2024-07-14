@@ -1,5 +1,5 @@
 import { fetchFinalTablePlayers } from '@/app/lib/data';
-import { PlayerDB, PrizeDB } from '@/app/lib/definitions';
+import {PlayerDB, PrizeDB, PrizeInfoDB} from '@/app/lib/definitions';
 import OpenGiveCreditModalButton from '@/app/ui/client/OpenGiveCreditModalButton';
 import Image from 'next/image';
 import OpenSetPrizesCreditModalButton from '@/app/ui/client/OpenSetPrizesCreditModalButton';
@@ -132,6 +132,7 @@ export async function getFinalTablePlayersContent(
 
 export async function getPlayersPrizesContent(
   playersPrizes: PrizeDB[],
+  prizesInformation: PrizeInfoDB[],
   personal?: boolean,
   userId?: string,
 ) {
@@ -168,6 +169,7 @@ export async function getPlayersPrizesContent(
                   prizeId={playersPrize.id}
                   prizeName={playersPrize.prize}
                   userId={userId}
+                  prizesInformation={prizesInformation}
                 />
               )}
             </div>
@@ -201,6 +203,7 @@ export async function getPlayersPrizesContent(
                     prizeId={playersPrize.id}
                     prizeName={playersPrize.prize}
                     userId={userId}
+                    prizesInformation={prizesInformation}
                   />
                 </div>
               )}

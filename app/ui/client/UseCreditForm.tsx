@@ -64,6 +64,8 @@ export default function UseCreditForm({
   const useCredit = amount < player.balance;
   const [type, setType] = useState(useCredit ? 'credit' : 'cash');
 
+
+
   useEffect(() => {
     if (amount !== initialAmount) {
       setAmount(initialAmount);

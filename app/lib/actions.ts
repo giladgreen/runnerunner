@@ -987,7 +987,10 @@ export async function convertPrizeToCredit(
   try {
     const { prizeId, prevPage, userId } = clientData;
     await startTransaction();
+
+
     const amount = Number(formData.get('amount') as string);
+    console.log('## amount', amount);
     const prize = (
       await sql<PrizeDB>`SELECT * FROM prizes WHERE id = ${prizeId}`
     ).rows[0];

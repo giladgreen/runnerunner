@@ -1,5 +1,5 @@
 import {
-  fetchPlayersPrizes,
+  fetchPlayersPrizes, fetchPrizesInfo,
   fetchTodaysPlayersPhoneNumbers,
   fetchUserById,
 } from '@/app/lib/data';
@@ -16,6 +16,7 @@ export default async function PlayersPrizes({
   params: { userId: string };
 }) {
   const user = await fetchUserById(params.userId);
+  const prizesInformation = await fetchPrizesInfo();
   const userPhoneNumber = user.phone_number;
   const isRegularPlayer = !user.is_admin && !user.is_worker;
   const todayPlayersPhoneNumbers = showOnlyToday
@@ -34,6 +35,7 @@ export default async function PlayersPrizes({
 
   const content = (await getPlayersPrizesContent(
     playersPrizes,
+      prizesInformation,
     isRegularPlayer,
     params.userId,
   )) as JSX.Element;

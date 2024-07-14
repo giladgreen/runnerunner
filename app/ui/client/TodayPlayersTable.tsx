@@ -9,7 +9,7 @@ import OpenPositionModalButton from '@/app/ui/client/OpenPositionModalButton';
 import OpenPrizeModalButton from '@/app/ui/client/OpenPrizeModalButton';
 import {
   fetchFeatureFlags,
-  fetchPlayersWithEnoughCredit,
+  fetchPlayersWithEnoughCredit, fetchPrizesInfo,
   fetchTournaments,
   fetchUserById,
 } from '@/app/lib/data';
@@ -26,6 +26,7 @@ export default async function TodayPlayersTable({
   const { prizesEnabled, placesEnabled, rsvpEnabled } =
     await fetchFeatureFlags();
 
+  const prizesInformation = await fetchPrizesInfo();
   const tournaments = await fetchTournaments();
 
   const playersWithEnoughCredit = await fetchPlayersWithEnoughCredit();
@@ -215,7 +216,7 @@ export default async function TodayPlayersTable({
                         <OpenPositionModalButton player={player} />
                       )}
                       {prizesEnabled && (
-                        <OpenPrizeModalButton player={player} />
+                        <OpenPrizeModalButton player={player} prizesInformation={prizesInformation}/>
                       )}
                     </div>
                   </td>

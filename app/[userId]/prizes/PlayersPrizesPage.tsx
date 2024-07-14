@@ -1,4 +1,4 @@
-import { fetchPlayersPrizes } from '@/app/lib/data';
+import {fetchPlayersPrizes, fetchPrizesInfo} from '@/app/lib/data';
 import Card from '@/app/ui/client/Card';
 import { getPlayersPrizesContent } from '@/app/ui/client/helpers';
 
@@ -9,13 +9,15 @@ export default async function PlayersPrizesPage({
 }) {
   const { undeliveredPrizes, deliveredPrizes } =
     await fetchPlayersPrizes(playerPhone);
-
+  const prizesInformation = await fetchPrizesInfo();
   const undeliveredPrizesContent = (await getPlayersPrizesContent(
     undeliveredPrizes,
+      prizesInformation,
     false,
   )) as JSX.Element;
   const deliveredPrizesContent = (await getPlayersPrizesContent(
     deliveredPrizes,
+      [],
     false,
   )) as JSX.Element;
   if (!undeliveredPrizesContent && !deliveredPrizesContent) {

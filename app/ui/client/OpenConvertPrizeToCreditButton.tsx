@@ -1,10 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, {useState} from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { convertPrizeToCredit } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import Button from '@/app/ui/client/Button';
+import SearchablePrizesDropdown from "@/app/ui/client/SearchablePrizesDropdown";
+import {PlayerDB, PrizeInfoDB} from "@/app/lib/definitions";
 
 function OpenConvertPrizeToCreditForm({
   userId,
@@ -12,17 +14,23 @@ function OpenConvertPrizeToCreditForm({
   prizeName,
   hide,
   prevPage,
+  prizesInformation
 }: {
   userId?: string;
   prizeId: string;
   prizeName: string;
   hide?: () => void;
   prevPage: string;
+  prizesInformation:PrizeInfoDB[]
 }) {
   const initialState = { message: null, errors: {} };
-
+  const prizeInfo = prizesInformation.find((prize) => prize.name === prizeName);
   const data = { prizeId, prevPage, userId: userId! };
   const convertPrizeToCreditWithData = convertPrizeToCredit.bind(null, data);
+  const [selectedPrize, setSelectedPrize] = useState<PrizeInfoDB | undefined>(
+      prizeInfo,
+  );
+
   // @ts-ignore
   const [_state, dispatch] = useFormState(
     // @ts-ignore
@@ -54,16 +62,12 @@ function OpenConvertPrizeToCreditForm({
               Credit amount
             </label>
             <div className="relative mt-2 rounded-md">
-              <div className="relative">
-                <input
-                  id="amount"
-                  name="amount"
-                  type="number"
-                  placeholder="Enter credit amount"
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                  aria-describedby="prize-error"
-                />
-              </div>
+              <SearchablePrizesDropdown
+                  showPrizeName={false}
+                  prizes={prizesInformation}
+                  selectedVal={selectedPrize}
+                  handleChange={(val: any) => setSelectedPrize(val)}
+              />
             </div>
           </div>
         </div>
@@ -86,10 +90,12 @@ export default function OpenConvertPrizeToCreditButton({
   prizeId,
   prizeName,
   userId,
+  prizesInformation
 }: {
   prizeId: string;
   prizeName: string;
   userId?: string;
+  prizesInformation:PrizeInfoDB[];
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const [show, setShow] = React.useState(false);
@@ -115,6 +121,7 @@ export default function OpenConvertPrizeToCreditButton({
           prizeId={prizeId}
           prizeName={prizeName}
           userId={userId}
+          prizesInformation={prizesInformation}
         />
       </div>
     </div>
