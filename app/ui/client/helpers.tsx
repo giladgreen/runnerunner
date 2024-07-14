@@ -1,4 +1,4 @@
-import { fetchFinalTablePlayers } from '@/app/lib/data';
+import {fetchFinalTablePlayers, fetchPrizesInfo} from '@/app/lib/data';
 import {PlayerDB, PrizeDB, PrizeInfoDB} from '@/app/lib/definitions';
 import OpenGiveCreditModalButton from '@/app/ui/client/OpenGiveCreditModalButton';
 import Image from 'next/image';
@@ -19,6 +19,7 @@ export async function getFinalTablePlayersContent(
   userId?: string,
 ) {
   const finalTablePlayers = await fetchFinalTablePlayers(date);
+  const prizesInformation = await fetchPrizesInfo();
   const showSetPrizesCreditModalButton =
     isTournamentsDataPage &&
     finalTablePlayers.find((p) => !p.hasReceived) &&
@@ -47,6 +48,7 @@ export async function getFinalTablePlayersContent(
                   hasReceived={finalTablePlayer.hasReceived}
                   stringDate={date}
                   userId={userId}
+                  prizesInformation={prizesInformation}
                 />
                 <div className={textClass}>#{finalTablePlayer.position}</div>
 

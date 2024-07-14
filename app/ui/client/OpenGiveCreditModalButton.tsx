@@ -1,12 +1,13 @@
 'use client';
 
-import { PlayerDB } from '@/app/lib/definitions';
+import {PlayerDB, PrizeInfoDB} from '@/app/lib/definitions';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import { TickIcon } from '@/app/ui/icons';
 import { givePlayerPrizeOrCredit } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import Button from '@/app/ui/client/Button';
+import SearchablePrizesDropdown from "@/app/ui/client/SearchablePrizesDropdown";
 
 function SetGivePrizeForm({
   player,
@@ -14,15 +15,19 @@ function SetGivePrizeForm({
   prevPage,
   stringDate,
   userId,
+  prizesInformation,
 }: {
   stringDate?: string;
   player: PlayerDB;
   hide?: () => void;
   prevPage: string;
   userId?: string;
+  prizesInformation: PrizeInfoDB[]
 }) {
   const initialState = { message: null, errors: {} };
-
+  const [selectedPrize, setSelectedPrize] = useState<PrizeInfoDB | undefined>(
+      undefined,
+  );
   const setPlayerPrizeWithPlayerId = givePlayerPrizeOrCredit.bind(null, {
     userId: userId!,
     playerId: player.id,
@@ -90,14 +95,11 @@ function SetGivePrizeForm({
           {/* prize */}
           {type === 'prize' ? (
             <div className="give_user_prize mb-4">
-              <input
-                style={{ marginTop: 30 }}
-                id="prize"
-                name="prize"
-                type="text"
-                placeholder="Enter prize"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                aria-describedby="prize-error"
+              <SearchablePrizesDropdown
+                  showPrizeName
+                  prizes={prizesInformation}
+                  selectedVal={selectedPrize}
+                  handleChange={(val: any) => setSelectedPrize(val)}
               />
             </div>
           ) : (
@@ -161,11 +163,13 @@ export default function OpenGiveCreditModalButton({
   hasReceived,
   stringDate,
   userId,
+  prizesInformation
 }: {
   player: PlayerDB;
   hasReceived: boolean;
   stringDate?: string;
   userId?: string;
+  prizesInformation: PrizeInfoDB[]
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const [show, setShow] = React.useState(false);
@@ -195,6 +199,7 @@ export default function OpenGiveCreditModalButton({
             prevPage={prevPage}
             stringDate={stringDate}
             userId={userId}
+            prizesInformation={prizesInformation}
           />
         </div>
       )}
