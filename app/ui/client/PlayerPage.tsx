@@ -152,6 +152,8 @@ export default async function PlayerPage({
 
         {showRsvp && !noTournamentToday && (
           <Card
+            green={isRegisterForTodayTournament}
+            orange={!isRegisterForTodayTournament}
             title="מצב הרשמה"
             value={!rsvp_required ? NO_NEED_FOR_RSVP : registrationStatus}
           />

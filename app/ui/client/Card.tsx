@@ -23,6 +23,8 @@ export default function Card({
   spend,
   empty,
   oneLine,
+  green,
+  orange
 }: {
   title: string | JSX.Element;
   value: number | string | JSX.Element;
@@ -30,13 +32,15 @@ export default function Card({
   spend?: boolean;
   empty?: boolean;
   oneLine?: boolean;
+  green?: boolean;
+  orange?: boolean;
 }) {
   if (empty) return <div className={`rounded-xl  p-2 shadow-sm`}></div>;
 
   const Icon = type && !empty ? iconMap[type] : undefined;
 
   return (
-    <div className={`card rounded-xl bg-blue-200 p-2 shadow-sm`}>
+    <div className={`card rounded-xl p-2 shadow-sm ${green ? 'bg-green-200' : (orange ? 'bg-red-300' : 'bg-blue-200') }`}>
       <div className="card-header flex p-4 text-center">
         {Icon ? <Icon className="h-5 w-5 text-gray-700" size={18} /> : null}
         <h3
