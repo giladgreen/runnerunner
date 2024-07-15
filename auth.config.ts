@@ -21,6 +21,8 @@ export const authConfig = {
             loggedInUser!.email
           }`;
         const userFromDB = usersResult.rows[0];
+        isAdmin = userFromDB?.is_admin;
+        isWorker = userFromDB?.is_worker;
         //  console.log('## userFromDB', userFromDB)
         userUUID = userFromDB?.id;
       }
@@ -28,7 +30,7 @@ export const authConfig = {
       // console.log('## nextUrl.pathname', nextUrl.pathname)
 
       if (isLoggedIn && !nextUrl.pathname.includes(userUUID!)) {
-        return Response.redirect(new URL(`/${userUUID}`, nextUrl));
+        return Response.redirect(new URL(`/${userUUID}${isAdmin || isWorker ? '/current_tournament':''}`, nextUrl));
       }
 
       return true;
