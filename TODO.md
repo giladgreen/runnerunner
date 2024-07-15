@@ -1,12 +1,9 @@
 TODO:
 
-- 
-- ctrl +z to undo 
+- regulations_approve: the actual text?
 -
--
-- regulations_approve: add the actual text?
--
--
-- add UT
+- add more UT
 
+- separate the tests DB from local running DB
+- 
 - try to work with a local DB
