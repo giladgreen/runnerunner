@@ -149,7 +149,7 @@ export default async function TodayPlayersTable({
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 font-large">
                       <Image
                         src={player.image_url}
                         className="zoom-on-hover rounded-full"
@@ -157,14 +157,14 @@ export default async function TodayPlayersTable({
                         height={40}
                         alt={`${player.name}'s profile picture`}
                       />
-                      <div>{player.name}</div>
+                      <div className="font-large">{player.name}</div>
                     </div>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className="whitespace-nowrap px-3 py-3 font-large">
                     {player.phone_number}
                   </td>
                   <td className={`whitespace-nowrap px-3 py-3 `}>
-                    <Link href={getLink(player)}>
+                    <Link href={getLink(player)}  className="font-large">
                       {formatCurrency(player.balance)}
                     </Link>
                   </td>

@@ -138,30 +138,30 @@ export default async function PlayersTable({
                           height={40}
                           alt={`${player.name}'s profile picture`}
                         />
-                        <div>{player.name}</div>
+                        <div className="font-large">{player.name}</div>
                       </div>
                     </Link>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className="whitespace-nowrap px-3 py-3 font-large">
                     <Link href={`/${userId}/players/${player.id}/edit`}>
                       {player.phone_number}
                     </Link>
                   </td>
                   <td
-                    className={`whitespace-nowrap px-3 py-3 ${
+                    className={`whitespace-nowrap px-3 py-3 font-large ${
                       player.historyCount > 1 ? 'bold' : ''
                     }`}
                   >
-                    <Link href={`/${userId}/players/${player.id}/edit`}>
+                    <Link href={`/${userId}/players/${player.id}/edit`} className="font-large">
                       {formatCurrency(player.balance)}
                     </Link>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className="whitespace-nowrap px-3 py-3 font-large">
                     <Link href={`/${userId}/players/${player.id}/edit`}>
                       {player.notes}
                     </Link>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3">
+                  <td className="whitespace-nowrap px-3 py-3 font-large">
                     <Link href={`/${userId}/players/${player.id}/edit`}>
                       {formatDateToLocal(player.updated_at)}
                     </Link>
