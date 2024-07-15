@@ -979,6 +979,36 @@ export async function setPrizeDelivered({
   }
 }
 
+export async function setPrizeAsReadyToBeDelivered({
+  id,
+  prevPage,
+}: {
+  id: string;
+  prevPage: string;
+}) {
+  try {
+    await sql`UPDATE prizes SET ready_to_be_delivered = TRUE WHERE id = ${id}`;
+    revalidatePath(prevPage);
+  } catch (error) {
+    return { message: 'Database Error: Failed to setPrizeDelivered.' };
+  }
+}
+
+export async function setPrizeAsNotReadyToBeDelivered({
+  id,
+  prevPage,
+}: {
+  id: string;
+  prevPage: string;
+}) {
+  try {
+    await sql`UPDATE prizes SET ready_to_be_delivered = FALSE WHERE id = ${id}`;
+    revalidatePath(prevPage);
+  } catch (error) {
+    return { message: 'Database Error: Failed to setPrizeDelivered.' };
+  }
+}
+
 export async function convertPrizeToCredit(
   clientData: { userId: string; prizeId: string; prevPage: string },
   _prevState: State,
@@ -1000,7 +1030,8 @@ export async function convertPrizeToCredit(
     ).rows[0];
 
     const playerPhoneNumber = prize.phone_number;
-    const note = ` שחקן המיר פרס בקרדיט: ${prize.prize}`;
+    let note = ` שחקן המיר פרס בקרדיט: ${prize.prize}`;
+    note += `(${prize.tournament})`
     await sql`
           INSERT INTO history (phone_number, change, note, type, updated_by)
           VALUES (${playerPhoneNumber}, ${amount}, ${note}, 'credit', ${

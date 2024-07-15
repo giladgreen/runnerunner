@@ -67,6 +67,7 @@ export type PrizeDB = {
   prize: string;
   player?: PlayerDB;
   delivered: boolean;
+  ready_to_be_delivered: boolean;
 };
 export type WinnerDB = {
   date: string;

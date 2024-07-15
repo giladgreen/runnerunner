@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { setPrizeDelivered } from '@/app/lib/actions';
 import AreYouSure from '@/app/ui/client/AreYouSure';
 
-export default function DeletePrize({ id }: { id: string }) {
+export default function SetPrizeAsDelivered({ id }: { id: string }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -22,7 +22,7 @@ export default function DeletePrize({ id }: { id: string }) {
           setShowConfirmation(true);
         }}
       >
-        <button className="my-button">prize was delivered</button>
+        <button className="my-button">prize was delivered 👇🏻</button>
       </div>
       {showConfirmation && (
         <AreYouSure

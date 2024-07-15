@@ -22,11 +22,11 @@ export default async function PlayersPrizes({
   const todayPlayersPhoneNumbers = showOnlyToday
     ? await fetchTodaysPlayersPhoneNumbers()
     : [];
-  const { undeliveredPrizes } = await fetchPlayersPrizes(
+  const { chosenPrizes } = await fetchPlayersPrizes(
     isRegularPlayer ? userPhoneNumber : undefined,
   );
 
-  const playersPrizes = undeliveredPrizes.filter(
+  const playersPrizes = chosenPrizes.filter(
     (p) =>
       isRegularPlayer ||
       !showOnlyToday ||
@@ -38,6 +38,7 @@ export default async function PlayersPrizes({
       prizesInformation,
     isRegularPlayer,
     params.userId,
+      showOnlyToday
   )) as JSX.Element;
   if (!content) return null;
 

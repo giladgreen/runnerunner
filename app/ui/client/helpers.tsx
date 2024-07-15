@@ -3,7 +3,7 @@ import {PlayerDB, PrizeDB, PrizeInfoDB} from '@/app/lib/definitions';
 import OpenGiveCreditModalButton from '@/app/ui/client/OpenGiveCreditModalButton';
 import Image from 'next/image';
 import OpenSetPrizesCreditModalButton from '@/app/ui/client/OpenSetPrizesCreditModalButton';
-import DeletePrize from '@/app/ui/client/DeletePrize';
+import SetPrizeAsDelivered from '@/app/ui/client/SetPrizeAsDelivered';
 import OpenConvertPrizeToCreditButton from '@/app/ui/client/OpenConvertPrizeToCreditButton';
 import { lusitana } from '@/app/ui/fonts';
 import { formatCurrency } from '@/app/lib/utils';
@@ -12,6 +12,8 @@ import {
   CreditCardIcon,
   WalletIcon,
 } from '@heroicons/react/24/solid';
+import SetPrizeAsReadyToBeDelivered from "@/app/ui/client/SetPrizeAsReadyToBeDelivered";
+import SetPrizeAsNotReadyToBeDelivered from "@/app/ui/client/SetPrizeAsNotReadyToBeDelivered";
 
 export async function getFinalTablePlayersContent(
   date: string,
@@ -137,6 +139,7 @@ export async function getPlayersPrizesContent(
   prizesInformation: PrizeInfoDB[],
   personal?: boolean,
   userId?: string,
+  currentTournament?: boolean,
 ) {
   if (!playersPrizes || playersPrizes.length === 0) return null;
 
@@ -163,10 +166,16 @@ export async function getPlayersPrizesContent(
                 <span style={{ marginLeft: 25 }}>{playersPrize!.prize}</span>
               </div>
 
-              {!personal && !playersPrize.delivered && (
-                <DeletePrize id={playersPrize.id} />
+              {!personal && !playersPrize.delivered && playersPrize.ready_to_be_delivered && (
+                <SetPrizeAsDelivered id={playersPrize.id} />
               )}
-              {!personal && !playersPrize.delivered && (
+              {!personal && !playersPrize.delivered && !playersPrize.ready_to_be_delivered && !currentTournament && (
+                <SetPrizeAsReadyToBeDelivered id={playersPrize.id} />
+              )}
+              {!personal && !playersPrize.delivered && playersPrize.ready_to_be_delivered && (
+                <SetPrizeAsNotReadyToBeDelivered id={playersPrize.id} />
+              )}
+              {!personal && !playersPrize.delivered &&  !playersPrize.ready_to_be_delivered && (
                 <OpenConvertPrizeToCreditButton
                   prizeId={playersPrize.id}
                   prizeName={playersPrize.prize}
@@ -195,7 +204,7 @@ export async function getPlayersPrizesContent(
 
               {!personal && !playersPrize.delivered && (
                 <div>
-                  <DeletePrize id={playersPrize.id} />
+                  <SetPrizeAsDelivered id={playersPrize.id} />
                 </div>
               )}
 

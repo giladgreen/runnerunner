@@ -126,8 +126,8 @@ export default async function ConfigurationPage({
   // const images = await fetchAllImagesForExport();
   const playersPlaces = await fetchFinalTablePlayers();
   const tournament = await fetchTournamentByDay();
-  const { undeliveredPrizes } = await fetchPlayersPrizes();
-  const prizes = undeliveredPrizes;
+  const { chosenPrizes } = await fetchPlayersPrizes();
+  const prizes = chosenPrizes;
 
   return (
     <div className="w-full">

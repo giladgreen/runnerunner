@@ -68,13 +68,7 @@ async function main() {
   //   await client.sql`update players set allowed_marketing = true where id = ${player.id}`;
   // }
 
-  await client.sql`CREATE TABLE IF NOT EXISTS prizes_info (
-         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-         name TEXT NOT NULL,
-         extra TEXT,
-         credit INT DEFAULT 0,
-         created_at timestamp NOT NULL DEFAULT now()
-      )`;
+  await client.sql`alter table prizes add column ready_to_be_delivered BOOLEAN DEFAULT FALSE`;
   console.log('## done');
 
   await client.end();

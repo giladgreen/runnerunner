@@ -7,20 +7,13 @@ export default async function PlayersPrizesPage({
 }: {
   playerPhone?: string;
 }) {
-  const { undeliveredPrizes, deliveredPrizes } =
+  const { chosenPrizes, deliveredPrizes, readyToBeDeliveredPrizes } =
     await fetchPlayersPrizes(playerPhone);
   const prizesInformation = await fetchPrizesInfo();
-  const undeliveredPrizesContent = (await getPlayersPrizesContent(
-    undeliveredPrizes,
-      prizesInformation,
-    false,
-  )) as JSX.Element;
-  const deliveredPrizesContent = (await getPlayersPrizesContent(
-    deliveredPrizes,
-      [],
-    false,
-  )) as JSX.Element;
-  if (!undeliveredPrizesContent && !deliveredPrizesContent) {
+  const chosenPrizesContent = (await getPlayersPrizesContent(chosenPrizes, prizesInformation,false)) as JSX.Element;
+  const deliveredPrizesContent = (await getPlayersPrizesContent(  deliveredPrizes,[],   false)) as JSX.Element;
+  const readyToBeDeliveredPrizesContent = (await getPlayersPrizesContent(  readyToBeDeliveredPrizes,[],   false)) as JSX.Element;
+  if (!chosenPrizesContent && !deliveredPrizesContent && !readyToBeDeliveredPrizesContent) {
     return null;
   }
 
@@ -29,16 +22,23 @@ export default async function PlayersPrizesPage({
       className="full-width grid gap-1 sm:grid-cols-1 lg:grid-cols-1"
       style={{ marginBottom: 10, marginTop: -20 }}
     >
-      {undeliveredPrizesContent && (
+      {chosenPrizesContent && (
         <Card
-          title="Players Undelivered Prizes"
-          value={undeliveredPrizesContent}
+          title="Players Chosen Prizes"
+          value={chosenPrizesContent}
+          type="prize"
+        />
+      )}
+      {readyToBeDeliveredPrizesContent && (
+        <Card
+          title="Ready to be delivered"
+          value={readyToBeDeliveredPrizesContent}
           type="prize"
         />
       )}
       {deliveredPrizesContent && (
         <Card
-          title="Players Prizes History (Delivered)"
+          title="Prizes History (Delivered)"
           value={deliveredPrizesContent}
           type="prize"
         />
