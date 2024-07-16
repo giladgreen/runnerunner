@@ -16,16 +16,17 @@ export default function SetPrizeAsDelivered({ id }: { id: string }) {
 
   return (
     <div>
-      <div
-        className="pointer"
-        onClick={() => {
-          setShowConfirmation(true);
-        }}
-      >
-        <button className="my-button">prize was delivered 👇🏻</button>
-      </div>
-      {showConfirmation && (
-        <AreYouSure
+        <div
+            className="pointer"
+            onClick={() => {
+                setShowConfirmation(true);
+            }}
+        >
+            <span style={{margin: '0 5px'}}> 👇</span>
+
+        </div>
+        {showConfirmation && (
+            <AreYouSure
           onConfirm={() => {
             setShowConfirmation(false);
             setPrizeDeliveredWithId();

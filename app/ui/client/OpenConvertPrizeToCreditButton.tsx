@@ -112,7 +112,7 @@ export default function OpenConvertPrizeToCreditButton({
         className="pointer"
         style={{ fontSize: '24' }}
       >
-        <button className="my-button">convert to credit 💳</button>
+        <span style={{ margin: '0 5px' }}> 💳</span>
       </div>
       <div className={show ? 'edit-player-modal' : 'hidden'}>
         <OpenConvertPrizeToCreditForm

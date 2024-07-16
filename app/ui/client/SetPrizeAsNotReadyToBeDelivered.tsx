@@ -20,7 +20,7 @@ export default function SetPrizeAsNotReadyToBeDelivered({ id }: { id: string }) 
                     setPrizeAsNotReadyToBeDeliveredWithId();
                 }}
             >
-                <button className="my-button">Not Ready to be delivered 👆🏻</button>
+                <span style={{margin: '0 5px'}}> 👆</span>
             </div>
         </div>
     );

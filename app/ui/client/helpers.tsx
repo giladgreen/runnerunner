@@ -141,10 +141,12 @@ export async function getPlayersPrizesContent(
   userId?: string,
   currentTournament?: boolean,
 ) {
-  if (!playersPrizes || playersPrizes.length === 0) return null;
+  if (!playersPrizes || playersPrizes.length === 0) {
+    return <span style={{margin: '0 5px'}}> 0 prizes </span>
+  }
 
   return (
-    <div className="full-width" style={{ marginBottom: 30 }}>
+      <div className="full-width" style={{ marginBottom: 30 }}>
       {playersPrizes.map((playersPrize: PrizeDB) => {
         return (
           <div key={playersPrize.id}>
@@ -175,7 +177,7 @@ export async function getPlayersPrizesContent(
               {!personal && !playersPrize.delivered && playersPrize.ready_to_be_delivered && (
                 <SetPrizeAsNotReadyToBeDelivered id={playersPrize.id} />
               )}
-              {!personal &&  !playersPrize.ready_to_be_delivered && (
+              {!personal && (
                 <OpenConvertPrizeToCreditButton
                   prizeId={playersPrize.id}
                   prizeName={playersPrize.prize}

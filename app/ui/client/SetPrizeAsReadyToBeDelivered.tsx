@@ -14,14 +14,14 @@ export default function SetPrizeAsReadyToBeDelivered({ id }: { id: string }) {
 
   return (
     <div>
-      <div
-        className="pointer"
-        onClick={() => {
-            setPrizeAsReadyToBeDeliveredWithId();
-        }}
-      >
-        <button className="my-button">Ready to be delivered 👇🏻</button>
-      </div>
+        <div
+            className="pointer"
+            onClick={() => {
+                setPrizeAsReadyToBeDeliveredWithId();
+            }}
+        >
+            <span style={{margin: '0 5px'}}> 👇🏻</span>
+        </div>
     </div>
   );
 }
