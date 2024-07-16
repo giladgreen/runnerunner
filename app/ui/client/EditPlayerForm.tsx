@@ -1,6 +1,6 @@
 'use client';
 import { updatePlayer } from '@/app/lib/actions';
-import { CldImage, CldUploadWidget } from 'next-cloudinary';
+import { CldUploadWidget } from 'next-cloudinary';
 
 import { PlayerDB, PlayerForm, TournamentDB } from '@/app/lib/definitions';
 
@@ -12,6 +12,7 @@ import { useState } from 'react';
 import RSVPButton from '@/app/ui/client/RSVPButton';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { TRANSLATIONS } from '@/app/lib/definitions';
+import Image from "next/image";
 
 export default function EditPlayerForm({
   player,
@@ -30,7 +31,7 @@ export default function EditPlayerForm({
     id: player.id,
     prevPage,
   });
-  const [imageUrl, setImageUrl] = useState(player.image_url ?? '');
+  const [imageUrl, setImageUrl] = useState(player.image_url ?? '/players/default.png');
 
   const [state, dispatch] = useFormState(updatePlayerWithId, initialState);
 
@@ -142,7 +143,7 @@ export default function EditPlayerForm({
         {/* player image url */}
         <div className="mb-4">
           <label htmlFor="image_url" className="mb-2 block text-sm font-medium">
-            image_url
+            Image url
           </label>
           <div className="relative">
             <input
@@ -155,13 +156,13 @@ export default function EditPlayerForm({
             />
           </div>
           {imageUrl && (
-            <CldImage
-              src={imageUrl}
-              width={60}
-              height={60}
-              style={{ marginTop: 20 }}
-              alt=""
-            />
+              <Image
+                  src={imageUrl}
+                  className="zoom-on-hover mr-2"
+                  width={60}
+                  height={60}
+                  alt={`profile picture`}
+              />
           )}
         </div>
         <div className="mt-6 flex justify-end gap-4">

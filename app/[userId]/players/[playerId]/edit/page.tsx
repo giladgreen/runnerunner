@@ -80,6 +80,7 @@ export default async function EditPlayerPage({
           player={player}
           prevPage={`/${params.userId}/players/${player.id}/edit`}
           userId={params.userId}
+          isAdmin={isAdmin}
         />
 
         <hr style={{ marginTop: 20, marginBottom: 20 }} />

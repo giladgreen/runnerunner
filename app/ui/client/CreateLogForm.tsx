@@ -242,10 +242,12 @@ export default function CreateLogForm({
   player,
   userId,
   prevPage,
+  isAdmin
 }: {
   player: PlayerDB;
   prevPage: string;
   userId: string;
+  isAdmin: boolean;
 }) {
   return (
     <div>
@@ -258,11 +260,11 @@ export default function CreateLogForm({
             height={100}
             alt={`profile picture`}
           />
-          <AddToBalanceForm
+          {isAdmin && <AddToBalanceForm
             player={player}
             prevPage={prevPage}
             userId={userId}
-          />
+          />}
           <UseCreditForPrizeForm
             player={player}
             prevPage={prevPage}
@@ -272,7 +274,7 @@ export default function CreateLogForm({
       </div>
 
       <div className="wide-screen" style={{ justifyContent: 'space-between' }}>
-        <AddToBalanceForm player={player} prevPage={prevPage} userId={userId} />
+        {isAdmin && <AddToBalanceForm player={player} prevPage={prevPage} userId={userId} />}
         <Image
           src={player.image_url}
           className="mr-2"
