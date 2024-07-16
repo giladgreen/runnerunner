@@ -178,7 +178,7 @@ export default async function TodayPlayersTable({
                     </td>
                   )}
                   <td className="rsvp-icon whitespace-nowrap px-3 py-3 ">
-                    {player.arrived ? '✅' : ''}
+                    {player.arrived ? '✔️' : ''}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3 ">
                     <EntriesButton player={player} />

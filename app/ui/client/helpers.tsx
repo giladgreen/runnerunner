@@ -175,7 +175,7 @@ export async function getPlayersPrizesContent(
               {!personal && !playersPrize.delivered && playersPrize.ready_to_be_delivered && (
                 <SetPrizeAsNotReadyToBeDelivered id={playersPrize.id} />
               )}
-              {!personal && !playersPrize.delivered &&  !playersPrize.ready_to_be_delivered && (
+              {!personal &&  !playersPrize.ready_to_be_delivered && (
                 <OpenConvertPrizeToCreditButton
                   prizeId={playersPrize.id}
                   prizeName={playersPrize.prize}

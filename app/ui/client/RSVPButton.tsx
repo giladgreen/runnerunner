@@ -17,7 +17,7 @@ export default function RSVPButton({
 
   const date = stringDate ?? new Date().toISOString().slice(0, 10);
   const isRsvpForDate = player.rsvps.includes(date);
-  const icon = isRsvpForDate ? '✅' : '☑️';
+  const icon = isRsvpForDate ? '🟢' : '⚫️';
   return (
     <div
       onClick={() =>

@@ -69,6 +69,7 @@ async function seedUsers(client) {
     `;
 
     console.log(`Created "users" table`);
+
     const existingUsers = (await client.sql`select * from users`).rows;
     const usersToInsert = users.filter(
       (user) =>
