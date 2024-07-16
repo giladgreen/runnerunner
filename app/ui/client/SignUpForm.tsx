@@ -80,7 +80,9 @@ export default function SignUpForm() {
               htmlFor="regulations_approve"
               style={{ marginLeft: 7 }}
             >
-              מאשר תקנון מועדון לקוחות
+              <span style={{ margin:'0 4px'}}>  מאשר</span>
+            <u> <a href="/terms" style={{ color:'blue'}}>  תקנון</a></u>
+              <span style={{ margin:'0 4px'}}>   מועדון לקוחות</span>
               {/* Approve customer club regulations */}
             </label>
           </div>
