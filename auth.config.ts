@@ -9,7 +9,7 @@ export const authConfig = {
   callbacks: {
     authorized: async ({ auth, request: { nextUrl } }) => {
       const loggedInUser = auth?.user;
-console.log('## authorized. AWS_REGION, ', process.env.AWS_REGION)
+
       const isLoggedIn = !!loggedInUser;
       let isAdmin: boolean = false;
       let isWorker: boolean = false;
