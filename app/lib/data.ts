@@ -558,7 +558,7 @@ export async function fetchPlayersPrizes(playerPhoneNumber?: string) {
       : prizes.filter((prize) => prize.phone_number === playerPhoneNumber);
     methodEnd('fetchPlayersPrizes');
 
-    console.log('fetchPlayersPrizes result', result)
+
     const resultObject = {
       chosenPrizes: result.filter((p) => !p.delivered && !p.ready_to_be_delivered),
       readyToBeDeliveredPrizes: result.filter((p) => !p.delivered && p.ready_to_be_delivered),

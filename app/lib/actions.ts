@@ -1367,13 +1367,7 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
   try {
     const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`)
       .rows;
-    console.log(`## existingPlayersImages ${existingPlayersImages.length}`);
-    console.log(
-      `## existingPlayersImages first 10: ${existingPlayersImages
-        .slice(0, 10)
-        .map((p) => p.phone_number)
-        .join(', ')}`,
-    );
+
 
     await sql`BEGIN;`;
 
