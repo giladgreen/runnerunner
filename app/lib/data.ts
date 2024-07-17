@@ -564,7 +564,6 @@ export async function fetchPlayersPrizes(playerPhoneNumber?: string) {
       readyToBeDeliveredPrizes: result.filter((p) => !p.delivered && p.ready_to_be_delivered),
       deliveredPrizes: result.filter((p) => p.delivered),
     };
-    console.log('resultObject', resultObject)
     return resultObject;
 
   } catch (error) {

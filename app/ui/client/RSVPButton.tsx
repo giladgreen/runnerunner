@@ -19,7 +19,7 @@ export default function RSVPButton({
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const date = stringDate ?? new Date().toISOString().slice(0, 10);
   const isRsvpForDate = player.rsvps.includes(date);
-console.log('## useOptimistic', useOptimistic)
+
   const [optimisticIsRsvpForDate, addOptimisticIsRsvpForDate] = useOptimistic<boolean>(isRsvpForDate, (state: boolean) => !state);
 
   const icon = optimisticIsRsvpForDate ? '🟢' : '⚫️';

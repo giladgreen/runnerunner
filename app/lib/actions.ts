@@ -1286,8 +1286,6 @@ export async function rsvpPlayerForDay(
 ) {
   noStore();
   try {
-    // await removeOldRsvp();
-
     const rsvpResult =
       await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${phone_number} AND date = ${date}`;
     const existingRsvp = rsvpResult.rows[0];
