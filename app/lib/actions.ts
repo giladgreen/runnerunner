@@ -28,7 +28,27 @@ let clearOldRsvpLastRun = new Date('2024-06-15T10:00:00.000Z').getTime();
 const ADMINS = ['0587869910', '0524803571', '0524803577', '0508874068'];
 const WORKERS = ['0526841902'];
 const MOCK_UUID = '5d4d2a2a-fe47-4a63-a4db-13eeebd83054';
-
+const POSITIONS = {
+    1: 'ראשון',
+    2: 'שני',
+    3: 'שלישי',
+    4: 'רביעי',
+    5: 'חמישי',
+    6: 'שישי',
+    7: 'שביעי',
+    8: 'שמיני',
+    9: 'תשיעי',
+    10: 'עשירי',
+    11: 'אחד עשר',
+    12: 'שני עשר',
+    13: 'שלושה עשר',
+    14: 'ארבעה עשר',
+    15: 'חמישה עשר',
+    16: 'שישה עשר',
+    17: 'שבעה עשר',
+    18: 'שמונה עשר',
+    19: 'תשעה עשר',
+}
 const phoneToName = {
   '0587869910': 'גלעד גרין',
   '0524803571': 'אבי אסרף',
@@ -651,7 +671,10 @@ export async function givePlayerPrizeOrCredit(
         };
       }
 
-      const note = `#${position} - מקום ${tournamentName}`;
+      // const note = `#${position} ${tournamentName} -  מקום `;
+      // @ts-ignore
+      const place = POSITIONS[position];
+      const note = ` ${tournamentName}, מקום ${place}   `;
 
       await touchPlayer(player.phone_number);
       const userResult = (
