@@ -1,6 +1,4 @@
-import CreateNewTodayPlayerButton from '@/app/ui/client/CreateNewTodayPlayerButton';
 import TodayPlayersTable from '@/app/ui/client/TodayPlayersTable';
-import TodaySearch from '@/app/ui/client/TodaySearch';
 import {
     fetchFeatureFlags, fetchPrizesInfo,
     fetchTournaments,
@@ -12,8 +10,6 @@ import RSVPAndArrivalCardWrapper from '@/app/ui/client/RSVPAndArrivalCardWrapper
 import TodayTournamentNameCardWrapper from '@/app/ui/client/TodayTournamentNameCardWrapper';
 import React from 'react';
 import RegisterSave from "@/app/ui/client/RegisterSave";
-import {nameComparator, todaySearchResultsComparator} from "@/app/lib/utils";
-import {all} from "deepmerge";
 
 export default async function CurrentTournament({
   params,

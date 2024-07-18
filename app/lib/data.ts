@@ -169,27 +169,55 @@ async function getAllHistory() {
 }
 
 export async function getAllPlayers() {
+  const todayDate = getTodayShortDate();
   const playersPromise = sql<PlayerDB>`SELECT * FROM players AS P 
  JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number) AS H
     ON P.phone_number = H.phone_number`;
 
-  const [allPlayersResult, rsvpResults] = await Promise.all([
+  const [allPlayersResult, rsvpResults, todayHistoryUnfiltered, winnersRecord] = await Promise.all([
     playersPromise,
     sql<RSVPDB>`SELECT * FROM rsvp;`,
+    getTodayHistory(),
+    getDateWinnersRecord(todayDate)
   ]);
   const allPlayers = allPlayersResult.rows;
 
   const rsvp = rsvpResults.rows;
-  const todayDate = getTodayShortDate();
+
+  const todayHistory = todayHistoryUnfiltered.filter(
+      ({ type }) => type != 'prize' && type != 'credit_to_other',
+  );
+
+  const winnersObject = winnersRecord
+      ? JSON.parse(winnersRecord.winners)
+      : {};
 
   allPlayers.forEach((player) => {
     player.balance = Number(player.balance);
     player.rsvps = rsvp
       .filter(({ phone_number }) => phone_number === player.phone_number)
       .map(({ date }) => date);
+
     player.rsvpForToday = Boolean(
       player.rsvps.find((date) => date === todayDate),
     );
+
+
+    const playerItems = todayHistory.filter(
+        ({ phone_number, change, type }) =>
+            phone_number === player.phone_number &&
+            (change < 0 || type === 'credit_by_other'),
+    ) as LogDB[];
+
+    player.position = winnersObject[player.phone_number]?.position || 0;
+
+
+    player.arrived = playerItems.length > 0;
+    player.entries = playerItems.length;
+
+    player.name = player.name.trim();
+    player.historyLog = playerItems;
+
   });
 
   return allPlayers;

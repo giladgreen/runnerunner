@@ -72,7 +72,7 @@ export default function UseCreditForm({
       ...player,
       arrived: true,
       entries: (player.entries ?? 0) + 1,
-      balance: useCredit ? player.balance - amount : player.balance,
+      balance: type === 'credit' ? player.balance - amount : player.balance,
     }
     updateOptimisticPlayers(newPlayer);
     dispatch(formData)
