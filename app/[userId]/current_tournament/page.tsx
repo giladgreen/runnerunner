@@ -2,8 +2,8 @@ import CreateNewTodayPlayerButton from '@/app/ui/client/CreateNewTodayPlayerButt
 import TodayPlayersTable from '@/app/ui/client/TodayPlayersTable';
 import TodaySearch from '@/app/ui/client/TodaySearch';
 import {
-    fetchFeatureFlags,
-    fetchTodayPlayers,
+    fetchFeatureFlags, fetchPrizesInfo,
+    fetchTodayPlayers, fetchTournaments,
     fetchUserById, getAllPlayers,
 } from '@/app/lib/data';
 import FinalTablePlayers from '@/app/ui/client/FinalTablePlayers';
@@ -43,10 +43,29 @@ export default async function CurrentTournament({
     );
   }
 
-
-
+    const prizesInformation = await fetchPrizesInfo();
+    const tournaments = await fetchTournaments();
     const { prizesEnabled, placesEnabled, rsvpEnabled } =
         await fetchFeatureFlags();
+
+    const now = new Date();
+    const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+    const todayTournament = tournaments.find(
+        (tournament) => tournament.day === dayOfTheWeek,
+    );
+    const isRsvpRequired = todayTournament!.rsvp_required;
+
+    const arrivedPlayers = players.filter((player) => player.arrived).length;
+    // @ts-ignore
+    const rsvpPlayers = players.filter((player) => player.rsvpForToday);
+    const rsvpPlayersCount = rsvpPlayers.length;
+
+    const titleText =
+        rsvpEnabled && isRsvpRequired
+            ? `${rsvpPlayersCount} players RSVP, ${arrivedPlayers} arrived.`
+            : `${arrivedPlayers} players arrived.`;
+
+
   return (
     <div className="full-width w-full">
         <RegisterSave players={allPlayers} />
@@ -71,7 +90,7 @@ export default async function CurrentTournament({
         <CreateNewTodayPlayerButton params={params} />
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <TodayPlayersTable players={players} userId={params.userId} prizesEnabled={prizesEnabled} placesEnabled={placesEnabled} rsvpEnabled={rsvpEnabled}/>
+        <TodayPlayersTable prizesInformation={prizesInformation} tournaments={tournaments} rsvpPlayersCount={rsvpPlayersCount} isRsvpRequired={isRsvpRequired} titleText={titleText} allPlayers={allPlayers} players={players} userId={params.userId} prizesEnabled={prizesEnabled} placesEnabled={placesEnabled} rsvpEnabled={rsvpEnabled}/>
       </div>
     </div>
   );

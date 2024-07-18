@@ -4,52 +4,41 @@ import { formatCurrency } from '@/app/lib/utils';
 import RSVPButton from '@/app/ui/client/RSVPButton';
 import OpenCreditModalButton from '@/app/ui/client/OpenCreditModalButton';
 import { DoubleTicksIcon } from '@/app/ui/icons';
-import { PlayerDB } from '@/app/lib/definitions';
+import {PlayerDB, PrizeInfoDB, TournamentDB} from '@/app/lib/definitions';
 import OpenPositionModalButton from '@/app/ui/client/OpenPositionModalButton';
 import OpenPrizeModalButton from '@/app/ui/client/OpenPrizeModalButton';
-import {
-  fetchPlayersWithEnoughCredit, fetchPrizesInfo,
-  fetchTournaments,
-} from '@/app/lib/data';
 import EntriesButton from '@/app/ui/client/EntriesButton';
 
 export default async function TodayPlayersTable({
+  allPlayers,
   players,
   userId,
   prizesEnabled,
   placesEnabled,
-  rsvpEnabled
+  rsvpEnabled,
+  titleText, 
+  isRsvpRequired,
+  tournaments,
+  prizesInformation
 }: {
+  allPlayers: PlayerDB[];
   players: PlayerDB[];
   userId: string;
+  titleText: string;
   prizesEnabled: boolean;
   placesEnabled: boolean;
   rsvpEnabled: boolean;
+  isRsvpRequired: boolean;
+  rsvpPlayersCount:number;
+  tournaments:TournamentDB[];
+  prizesInformation:PrizeInfoDB[];
 }) {
-  const prizesInformation = await fetchPrizesInfo();
-  const tournaments = await fetchTournaments();
 
-  const playersWithEnoughCredit = await fetchPlayersWithEnoughCredit();
-
-  const now = new Date();
-  const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
-  const todayTournament = tournaments.find(
-    (tournament) => tournament.day === dayOfTheWeek,
-  );
-  const rsvp_required = todayTournament!.rsvp_required;
-
-  const arrivedPlayers = players.filter((player) => player.arrived).length;
-  // @ts-ignore
-  const rsvpPlayers = players.filter((player) => player.rsvpForToday);
-  const rsvpPlayersCount = rsvpPlayers.length;
   const getLink = (player: PlayerDB) => {
     return `/${userId}/players/${player.id}/edit`;
   };
+  const playersWithEnoughCredit = allPlayers.filter(p=> p.balance > -2000);
 
-  const titleText =
-    rsvpEnabled && rsvp_required
-      ? `${rsvpPlayersCount} players RSVP, ${arrivedPlayers} arrived.`
-      : `${arrivedPlayers} players arrived.`;
 
   return (
     <div className="full-width mt-6 flow-root">
@@ -82,7 +71,7 @@ export default async function TodayPlayersTable({
                       {player.phone_number}
                     </div>
                   </div>
-                  {rsvpEnabled && rsvp_required && (
+                  {rsvpEnabled && isRsvpRequired && (
                     <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
                       <RSVPButton player={player} />
                     </td>
@@ -123,7 +112,7 @@ export default async function TodayPlayersTable({
                   Notes
                 </th>
 
-                {rsvpEnabled && rsvp_required && (
+                {rsvpEnabled && isRsvpRequired && (
                   <th scope="col" className="px-3 py-5 font-medium">
                     RSVP
                   </th>
@@ -172,7 +161,7 @@ export default async function TodayPlayersTable({
                     <Link href={getLink(player)}>{player.notes}</Link>
                   </td>
 
-                  {rsvpEnabled && rsvp_required && (
+                  {rsvpEnabled && isRsvpRequired && (
                     <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
                       <RSVPButton player={player} />
                     </td>

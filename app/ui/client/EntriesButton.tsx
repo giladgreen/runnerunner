@@ -19,7 +19,7 @@ const formatPlayerEntries = (entries: number) => {
   return (
     <Image
       src={`/${map[entries]}.png`}
-      alt={`platers entries: ${entries}`}
+      alt={`players entries: ${entries}`}
       className="zoom-on-hover mr-4"
       width={35}
       height={35}
@@ -34,7 +34,7 @@ export default function EntriesButton({ player }: { player: PlayerDB }) {
   return (
     <div>
       <div onClick={() => setShowConfirmation(true)} className="pointer">
-        {formatPlayerEntries(player.entries)}
+        {formatPlayerEntries(player.entries ?? 0)}
       </div>
       {showConfirmation && (
         <AreYouSure
