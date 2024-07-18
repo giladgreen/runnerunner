@@ -11,12 +11,12 @@ export default function RSVPButton({
   player,
   stringDate,
   text,
-  // setQuery
+  setQuery
 }: {
   player: PlayerDB;
   stringDate?: string;
   text?: string;
-  // setQuery:(val: string)=>void
+  setQuery:(val: string)=>void
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const date = stringDate ?? new Date().toISOString().slice(0, 10);
@@ -28,12 +28,16 @@ export default function RSVPButton({
   return (
     <div
       onClick={() => {
-        // setQuery('');
+
         startTransition(() => {
           addOptimisticIsRsvpForDate(!isRsvpForDate);
         })
 
-         rsvpPlayerForDay(player.phone_number, date, !isRsvpForDate, prevPage)
+         rsvpPlayerForDay(player.phone_number, date, !isRsvpForDate, prevPage);
+
+        setTimeout(() => {
+            setQuery('');
+        },2300);
       }}
     >
       <span className="pointer">{icon}</span> {text}

@@ -3,7 +3,7 @@
 import { PencilIcon, BanknotesIcon } from '@heroicons/react/24/outline';
 import Button from '@/app/ui/client/Button';
 import { createPlayerUsageLog } from '@/app/lib/actions';
-import { useFormState } from 'react-dom';
+import {useFormState, useFormStatus} from 'react-dom';
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import { useEffect, useState } from 'react';
 import SearchablePlayersDropdown from '@/app/ui/client/SearchablePlayersDropdown';
@@ -15,6 +15,7 @@ export default function UseCreditForm({
   hide,
   prevPage,
   userId,
+  setQuery
 }: {
   players: PlayerDB[];
   prevPage: string;
@@ -22,6 +23,7 @@ export default function UseCreditForm({
   tournaments: TournamentDB[];
   hide?: () => void;
   userId: string;
+  setQuery:(val: string)=>void
 }) {
   const initialState = { message: null, errors: {} };
   const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, {
@@ -83,6 +85,40 @@ export default function UseCreditForm({
     setNote,
     initialNote,
   ]);
+
+  function SubmitButton() {
+    const { pending} = useFormStatus();
+
+    useEffect(() => {
+      if (pending){
+        setTimeout(()=>{
+          hide?.();
+          setQuery('');
+        },2000)
+      }
+    }, [pending]);
+
+    return  <Button type="submit" disabled={pending} className={pending ? ' bg-gray-500' :''}>
+      {pending ? 'wait..' : (isRebuy ? 'Rebuy' : 'Buy In')}
+    </Button>
+  }
+
+
+  function CancelButton() {
+    const { pending} = useFormStatus();
+
+    if (pending){
+      return null;
+    }
+
+    return   <Button disabled={pending} onClick={hide} style={{ marginTop: -52, marginLeft: 20 }}>
+      Cancel
+    </Button>
+  }
+
+
+
+
   return (
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
@@ -230,16 +266,11 @@ export default function UseCreditForm({
           )}
         </div>
         <div className="mt-6 flex justify-end gap-4">
-          <Button type="submit" onClick={() => hide?.()}>
-            {' '}
-            {isRebuy ? 'Rebuy' : 'Buy In'}
-          </Button>
+          <SubmitButton/>
         </div>
       </form>
       {hide && (
-        <Button onClick={hide} style={{ marginTop: -52, marginLeft: 20 }}>
-          Cancel
-        </Button>
+        <CancelButton />
       )}
     </div>
   );

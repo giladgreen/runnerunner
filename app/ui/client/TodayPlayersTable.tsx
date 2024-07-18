@@ -1,11 +1,11 @@
 'use client';
-// @ts-ignore
-// import React, {useOptimistic, useState} from "react";
-import React, {useState} from "react";
+
+import React, { useState} from "react";
+import {  useFormStatus } from 'react-dom';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import {formatCurrency, nameComparator, todaySearchResultsComparator} from '@/app/lib/utils';
+import {formatCurrency, nameComparator} from '@/app/lib/utils';
 import RSVPButton from '@/app/ui/client/RSVPButton';
 import OpenCreditModalButton from '@/app/ui/client/OpenCreditModalButton';
 import { DoubleTicksIcon } from '@/app/ui/icons';
@@ -42,17 +42,18 @@ export default function TodayPlayersTable({
   };
   const playersWithEnoughCredit = allPlayers.filter(p=> p.balance > -2000);
   const [query, setQuery] = useState('');
+
   const players = query.length > 0 ?
-      allPlayers.filter(p=> p.name.includes(query) || p.phone_number.includes(query)).sort(nameComparator) :
+      allPlayers.filter(p=> p.name.includes(query) || p.phone_number.includes(query)).sort(nameComparator).slice(0,20) :
       allPlayers.filter(p=> p.arrived || p.rsvpForToday).sort(nameComparator);
 
   const arrivedPlayers = allPlayers.filter((player) => player.arrived).length;
   const arrivedWithoutRSVPPlayers = allPlayers.filter((player) => player.arrived && !player.rsvpForToday).length;
 
-
   const header = query.length > 0 ? `showing ${players.length} search results` : rsvpEnabled && isRsvpRequired
       ? `Showing ${rsvpPlayersCount} players that RSVP, ${arrivedPlayers} that arrived. ${arrivedWithoutRSVPPlayers > 0 ? `(${arrivedWithoutRSVPPlayers} players arrived without RSVP)`:''}`
       : `Showing ${arrivedPlayers} players that arrived.`;
+
 
   return (
       <>
@@ -102,7 +103,7 @@ export default function TodayPlayersTable({
                         </div>
                         {rsvpEnabled && isRsvpRequired && (
                             <div className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                              <RSVPButton player={player} />
+                              <RSVPButton player={player} setQuery={setQuery} />
                             </div>
                         )}
                       </div>
@@ -192,8 +193,8 @@ export default function TodayPlayersTable({
 
                       {rsvpEnabled && isRsvpRequired && (
                           <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                            {/*<RSVPButton player={player} setQuery={setQuery}/>*/}
-                            <RSVPButton player={player} />
+                            <RSVPButton player={player} setQuery={setQuery}/>
+
                           </td>
                       )}
                       <td className="rsvp-icon whitespace-nowrap px-3 py-3 ">
@@ -230,7 +231,7 @@ export default function TodayPlayersTable({
                               player={player}
                               tournaments={tournaments}
                               userId={userId}
-                              // setQuery={setQuery}
+                              setQuery={setQuery}
                           />
                           {placesEnabled && (
                               <OpenPositionModalButton player={player}/>

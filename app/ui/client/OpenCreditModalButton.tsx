@@ -11,21 +11,22 @@ export default function OpenCreditModalButton({
   userId,
   tournaments,
   players,
-  // setQuery
+  setQuery
 }: {
   player: PlayerDB;
   tournaments: TournamentDB[];
   players: PlayerDB[];
   userId: string;
-  // setQuery:(val: string)=>void
+  setQuery:(val: string)=>void
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const [show, setShow] = React.useState(false);
 
   const close = () => {
     setShow(false);
-      // setQuery('')
   };
+
+
   return (
     <div>
       <div
@@ -52,6 +53,7 @@ export default function OpenCreditModalButton({
           hide={close}
           prevPage={prevPage}
           userId={userId}
+          setQuery={setQuery}
         />
       </div>
     </div>
