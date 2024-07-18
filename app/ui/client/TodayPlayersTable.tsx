@@ -93,9 +93,9 @@ export default function TodayPlayersTable({
                           </div>
                         </div>
                         {rsvpEnabled && isRsvpRequired && (
-                            <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
+                            <div className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
                               <RSVPButton player={player}/>
-                            </td>
+                            </div>
                         )}
                       </div>
 
