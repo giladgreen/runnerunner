@@ -15,7 +15,6 @@ export default function UseCreditForm({
   hide,
   prevPage,
   userId,
-  updateOptimisticPlayers
 }: {
   players: PlayerDB[];
   prevPage: string;
@@ -23,7 +22,6 @@ export default function UseCreditForm({
   tournaments: TournamentDB[];
   hide?: () => void;
   userId: string;
-  updateOptimisticPlayers: any;
 }) {
   const initialState = { message: null, errors: {} };
   const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, {
@@ -57,7 +55,6 @@ export default function UseCreditForm({
     createPlayerUsageLogWithPlayerData,
     initialState,
   );
-
   const [amount, setAmount] = useState(initialAmount);
   const [note, setNote] = useState(initialNote);
   const [otherPlayer, setOtherPlayer] = useState<PlayerDB | undefined>(
@@ -67,16 +64,7 @@ export default function UseCreditForm({
   const useCredit = amount < player.balance;
   const [type, setType] = useState(useCredit ? 'credit' : 'cash');
 
-  const localDispatch = (formData: FormData) => {
-    const newPlayer = {
-      ...player,
-      arrived: true,
-      entries: (player.entries ?? 0) + 1,
-      balance: useCredit ? player.balance - amount : player.balance,
-    }
-    updateOptimisticPlayers(newPlayer);
-    dispatch(formData)
-  }
+
 
   useEffect(() => {
     if (amount !== initialAmount) {
@@ -98,7 +86,7 @@ export default function UseCreditForm({
   ]);
   return (
     <div className="edit-player-modal-inner-div">
-      <form action={localDispatch} className="form-control">
+      <form action={dispatch} className="form-control">
         <div className="form-inner-control  rounded-md p-4 md:p-6">
           {/*  balance change */}
           <div className="mb-4">

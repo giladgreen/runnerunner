@@ -1,7 +1,4 @@
 'use client';
-// @ts-ignore
-import React, {useOptimistic, useState} from "react";
-
 import Image from 'next/image';
 import Link from 'next/link';
 import {formatCurrency, nameComparator, todaySearchResultsComparator} from '@/app/lib/utils';
@@ -12,6 +9,8 @@ import {PlayerDB, PrizeInfoDB, TournamentDB} from '@/app/lib/definitions';
 import OpenPositionModalButton from '@/app/ui/client/OpenPositionModalButton';
 import OpenPrizeModalButton from '@/app/ui/client/OpenPrizeModalButton';
 import EntriesButton from '@/app/ui/client/EntriesButton';
+import React, {useState} from "react";
+import TodaySearch from "@/app/ui/client/TodaySearch";
 import CreateNewTodayPlayerButton from "@/app/ui/client/CreateNewTodayPlayerButton";
 
 export default function TodayPlayersTable({
@@ -43,29 +42,8 @@ export default function TodayPlayersTable({
   };
   const playersWithEnoughCredit = allPlayers.filter(p=> p.balance > -2000);
   const [query, setQuery] = useState('');
-
-  const [optimisticPlayers, updateOptimisticPlayers] = useOptimistic<PlayerDB[]>(allPlayers, (state: PlayerDB[], newPlayerData: PlayerDB) => {
-    const existingPlayer = state.find(p => p.id === newPlayerData.id);
-    if (existingPlayer){
-      console.log('#### updating player',newPlayerData.name)
-      existingPlayer.balance = newPlayerData.balance;
-      existingPlayer.arrived = newPlayerData.arrived;
-      existingPlayer.entries = newPlayerData.entries;
-    }
-
-    let p = [...state].filter(p=> p.arrived || p.rsvpForToday || (query.length && (p.name.includes(query) || p.phone_number.includes(query))));
-    console.log('#### p count',p.length)
-
-    p = query.length ?  p.sort(todaySearchResultsComparator).slice(0,35) : p.sort(nameComparator);
-
-    return p;
-  });
-
-  let players = [...optimisticPlayers].filter(p=> p.arrived || p.rsvpForToday || (query.length && (p.name.includes(query) || p.phone_number.includes(query))));
-  console.log('## players count',players.length)
-
+  let players = allPlayers.filter(p=> p.arrived || p.rsvpForToday || (query.length && (p.name.includes(query) || p.phone_number.includes(query))));
   players = query.length ?  players.sort(todaySearchResultsComparator).slice(0,35) : players.sort(nameComparator);
-  console.log('## optimisticPlayers count',optimisticPlayers.length)
 
 
   return (
@@ -92,7 +70,7 @@ export default function TodayPlayersTable({
           <div className="inline-block min-w-full align-middle">
             <div className="w-full rounded-lg bg-gray-50 p-2 md:pt-0">
               <div className="md:hidden">
-                {players?.map((player: PlayerDB) => (
+                {players?.map((player) => (
                     <div
                         key={player.id}
                         className="full-width w-full rounded-md bg-white"
@@ -115,9 +93,9 @@ export default function TodayPlayersTable({
                           </div>
                         </div>
                         {rsvpEnabled && isRsvpRequired && (
-                            <div className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
+                            <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
                               <RSVPButton player={player}/>
-                            </div>
+                            </td>
                         )}
                       </div>
 
@@ -175,7 +153,7 @@ export default function TodayPlayersTable({
                 </tr>
                 </thead>
                 <tbody className="bg-white">
-                {players?.map((player: PlayerDB) => (
+                {players?.map((player) => (
                     <tr
                         key={player.id}
                         className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
@@ -243,7 +221,6 @@ export default function TodayPlayersTable({
                               player={player}
                               tournaments={tournaments}
                               userId={userId}
-                              updateOptimisticPlayers={updateOptimisticPlayers}
                           />
                           {placesEnabled && (
                               <OpenPositionModalButton player={player}/>
