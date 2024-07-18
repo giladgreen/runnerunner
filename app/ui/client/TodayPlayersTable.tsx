@@ -64,7 +64,7 @@ export default function TodayPlayersTable({
 
         <div className="full-width mt-6 flow-root">
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            {titleText} ({query})
+            {titleText}
           </div>
 
           <div className="inline-block min-w-full align-middle">
