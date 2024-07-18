@@ -1,7 +1,7 @@
 'use client';
 
 // @ts-ignore
-import { useOptimistic } from "react";
+import {startTransition, useOptimistic} from "react";
 
 import { PlayerDB } from '@/app/lib/definitions';
 import { rsvpPlayerForDay } from '@/app/lib/actions';
@@ -11,10 +11,12 @@ export default function RSVPButton({
   player,
   stringDate,
   text,
+  // setQuery
 }: {
   player: PlayerDB;
   stringDate?: string;
   text?: string;
+  // setQuery:(val: string)=>void
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const date = stringDate ?? new Date().toISOString().slice(0, 10);
@@ -26,7 +28,11 @@ export default function RSVPButton({
   return (
     <div
       onClick={() => {
-         addOptimisticIsRsvpForDate(!isRsvpForDate)
+        // setQuery('');
+        startTransition(() => {
+          addOptimisticIsRsvpForDate(!isRsvpForDate);
+        })
+
          rsvpPlayerForDay(player.phone_number, date, !isRsvpForDate, prevPage)
       }}
     >

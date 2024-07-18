@@ -21,14 +21,13 @@ export default function TodayPlayersTable({
   prizesEnabled,
   placesEnabled,
   rsvpEnabled,
-  titleText,
+  rsvpPlayersCount,
   isRsvpRequired,
   tournaments,
   prizesInformation
 }: {
   allPlayers: PlayerDB[];
   userId: string;
-  titleText: string;
   prizesEnabled: boolean;
   placesEnabled: boolean;
   rsvpEnabled: boolean;
@@ -43,11 +42,17 @@ export default function TodayPlayersTable({
   };
   const playersWithEnoughCredit = allPlayers.filter(p=> p.balance > -2000);
   const [query, setQuery] = useState('');
+  const players = query.length > 0 ?
+      allPlayers.filter(p=> p.name.includes(query) || p.phone_number.includes(query)).sort(nameComparator) :
+      allPlayers.filter(p=> p.arrived || p.rsvpForToday).sort(nameComparator);
 
-  let players = allPlayers.filter(p=> p.arrived || p.rsvpForToday || (query.length && (p.name.includes(query) || p.phone_number.includes(query))));
+  const arrivedPlayers = allPlayers.filter((player) => player.arrived).length;
+  const arrivedWithoutRSVPPlayers = allPlayers.filter((player) => player.arrived && !player.rsvpForToday).length;
 
-  players = query.length ?  players.sort(todaySearchResultsComparator).slice(0,35) : players.sort(nameComparator);
 
+  const header = query.length > 0 ? `showing ${players.length} search results` : rsvpEnabled && isRsvpRequired
+      ? `Showing ${rsvpPlayersCount} players that RSVP, ${arrivedPlayers} that arrived. ${arrivedWithoutRSVPPlayers > 0 ? `(${arrivedWithoutRSVPPlayers} players arrived without RSVP)`:''}`
+      : `Showing ${arrivedPlayers} players that arrived.`;
 
   return (
       <>
@@ -67,7 +72,7 @@ export default function TodayPlayersTable({
 
         <div className="full-width mt-6 flow-root">
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            {titleText}
+            {header}
           </div>
 
           <div className="inline-block min-w-full align-middle">
@@ -187,6 +192,7 @@ export default function TodayPlayersTable({
 
                       {rsvpEnabled && isRsvpRequired && (
                           <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
+                            {/*<RSVPButton player={player} setQuery={setQuery}/>*/}
                             <RSVPButton player={player} />
                           </td>
                       )}
@@ -224,6 +230,7 @@ export default function TodayPlayersTable({
                               player={player}
                               tournaments={tournaments}
                               userId={userId}
+                              // setQuery={setQuery}
                           />
                           {placesEnabled && (
                               <OpenPositionModalButton player={player}/>

@@ -47,15 +47,9 @@ export default async function CurrentTournament({
     );
     const isRsvpRequired = todayTournament!.rsvp_required;
 
-    const arrivedPlayers = allPlayers.filter((player) => player.arrived).length;
     // @ts-ignore
     const rsvpPlayers = allPlayers.filter((player) => player.rsvpForToday);
     const rsvpPlayersCount = rsvpPlayers.length;
-
-    const titleText =
-        rsvpEnabled && isRsvpRequired
-            ? `${rsvpPlayersCount} players RSVP, ${arrivedPlayers} arrived.`
-            : `${arrivedPlayers} players arrived.`;
 
 
   return (
@@ -78,7 +72,7 @@ export default async function CurrentTournament({
         </div>
       )}
 
-        <TodayPlayersTable prizesInformation={prizesInformation} tournaments={tournaments} rsvpPlayersCount={rsvpPlayersCount} isRsvpRequired={isRsvpRequired} titleText={titleText} allPlayers={allPlayers} userId={params.userId} prizesEnabled={prizesEnabled} placesEnabled={placesEnabled} rsvpEnabled={rsvpEnabled}/>
+        <TodayPlayersTable prizesInformation={prizesInformation} tournaments={tournaments} rsvpPlayersCount={rsvpPlayersCount} isRsvpRequired={isRsvpRequired}  allPlayers={allPlayers} userId={params.userId} prizesEnabled={prizesEnabled} placesEnabled={placesEnabled} rsvpEnabled={rsvpEnabled}/>
 
     </div>
   );
