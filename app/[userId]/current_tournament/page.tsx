@@ -3,7 +3,7 @@ import TodayPlayersTable from '@/app/ui/client/TodayPlayersTable';
 import TodaySearch from '@/app/ui/client/TodaySearch';
 import {
     fetchFeatureFlags, fetchPrizesInfo,
-    fetchTodayPlayers, fetchTournaments,
+    fetchTournaments,
     fetchUserById, getAllPlayers,
 } from '@/app/lib/data';
 import FinalTablePlayers from '@/app/ui/client/FinalTablePlayers';
@@ -12,22 +12,18 @@ import RSVPAndArrivalCardWrapper from '@/app/ui/client/RSVPAndArrivalCardWrapper
 import TodayTournamentNameCardWrapper from '@/app/ui/client/TodayTournamentNameCardWrapper';
 import React from 'react';
 import RegisterSave from "@/app/ui/client/RegisterSave";
+import {nameComparator, todaySearchResultsComparator} from "@/app/lib/utils";
+import {all} from "deepmerge";
 
 export default async function CurrentTournament({
   params,
-  searchParams,
 }: {
-  searchParams?: {
-    query?: string;
-  };
   params: { userId: string };
 }) {
   const user = await fetchUserById(params.userId);
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
   const allPlayers = await getAllPlayers();
-  const players = await fetchTodayPlayers(searchParams?.query);
-
 
   if (!isAdmin && !isWorker) {
     return (
@@ -55,9 +51,9 @@ export default async function CurrentTournament({
     );
     const isRsvpRequired = todayTournament!.rsvp_required;
 
-    const arrivedPlayers = players.filter((player) => player.arrived).length;
+    const arrivedPlayers = allPlayers.filter((player) => player.arrived).length;
     // @ts-ignore
-    const rsvpPlayers = players.filter((player) => player.rsvpForToday);
+    const rsvpPlayers = allPlayers.filter((player) => player.rsvpForToday);
     const rsvpPlayersCount = rsvpPlayers.length;
 
     const titleText =
@@ -85,13 +81,9 @@ export default async function CurrentTournament({
           <PlayersPrizes title="Players Prizes" showOnlyToday params={params} />
         </div>
       )}
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <TodaySearch placeholder="search players" />
-        <CreateNewTodayPlayerButton params={params} />
-      </div>
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <TodayPlayersTable prizesInformation={prizesInformation} tournaments={tournaments} rsvpPlayersCount={rsvpPlayersCount} isRsvpRequired={isRsvpRequired} titleText={titleText} allPlayers={allPlayers} players={players} userId={params.userId} prizesEnabled={prizesEnabled} placesEnabled={placesEnabled} rsvpEnabled={rsvpEnabled}/>
-      </div>
+
+        <TodayPlayersTable prizesInformation={prizesInformation} tournaments={tournaments} rsvpPlayersCount={rsvpPlayersCount} isRsvpRequired={isRsvpRequired} titleText={titleText} allPlayers={allPlayers} userId={params.userId} prizesEnabled={prizesEnabled} placesEnabled={placesEnabled} rsvpEnabled={rsvpEnabled}/>
+
     </div>
   );
 }

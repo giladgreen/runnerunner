@@ -112,6 +112,16 @@ export function nameComparator(a: PlayerDB, b: PlayerDB) {
   return a.name < b.name ? -1 : 1;
 }
 
+export function todaySearchResultsComparator(a: PlayerDB, b: PlayerDB) {
+  const aArrived = a.arrived || a.rsvpForToday;
+  const bArrived = b.arrived || b.rsvpForToday;
+  if ((aArrived && bArrived) || (!aArrived && !bArrived)){
+    return  nameComparator(a,b);
+  }
+
+  return (bArrived && !aArrived)? -1 :1
+}
+
 export function getTodayShortDate() {
   return new Date().toISOString().slice(0, 10);
 }
