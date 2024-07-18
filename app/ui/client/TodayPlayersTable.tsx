@@ -1,6 +1,7 @@
 'use client';
 // @ts-ignore
-import React, {useOptimistic, useState} from "react";
+// import React, {useOptimistic, useState} from "react";
+import React, {useState} from "react";
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -35,7 +36,6 @@ export default function TodayPlayersTable({
   rsvpPlayersCount:number;
   tournaments:TournamentDB[];
   prizesInformation:PrizeInfoDB[];
-
 }) {
 
   const getLink = (player: PlayerDB) => {
@@ -44,22 +44,7 @@ export default function TodayPlayersTable({
   const playersWithEnoughCredit = allPlayers.filter(p=> p.balance > -2000);
   const [query, setQuery] = useState('');
 
-  const [optimisticPlayers, updateOptimisticPlayers] = useOptimistic<PlayerDB[]>(allPlayers, (state: PlayerDB[], newPlayerData: PlayerDB) => {
-    const existingPlayer = state.find(p => p.id === newPlayerData.id);
-    if (existingPlayer){
-      existingPlayer.balance = newPlayerData.balance;
-      existingPlayer.arrived = newPlayerData.arrived;
-      existingPlayer.entries = newPlayerData.entries;
-    }
-
-    let p = [...state].filter(p=> p.arrived || p.rsvpForToday || (query.length && (p.name.includes(query) || p.phone_number.includes(query))));
-
-    p = query.length ?  p.sort(todaySearchResultsComparator).slice(0,35) : p.sort(nameComparator);
-
-    return p;
-  });
-
-  let players = [...optimisticPlayers].filter(p=> p.arrived || p.rsvpForToday || (query.length && (p.name.includes(query) || p.phone_number.includes(query))));
+  let players = allPlayers.filter(p=> p.arrived || p.rsvpForToday || (query.length && (p.name.includes(query) || p.phone_number.includes(query))));
 
   players = query.length ?  players.sort(todaySearchResultsComparator).slice(0,35) : players.sort(nameComparator);
 
@@ -112,7 +97,7 @@ export default function TodayPlayersTable({
                         </div>
                         {rsvpEnabled && isRsvpRequired && (
                             <div className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                              <RSVPButton player={player} updateOptimisticPlayers={updateOptimisticPlayers}/>
+                              <RSVPButton player={player} />
                             </div>
                         )}
                       </div>
@@ -202,7 +187,7 @@ export default function TodayPlayersTable({
 
                       {rsvpEnabled && isRsvpRequired && (
                           <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                            <RSVPButton player={player} updateOptimisticPlayers={updateOptimisticPlayers}/>
+                            <RSVPButton player={player} />
                           </td>
                       )}
                       <td className="rsvp-icon whitespace-nowrap px-3 py-3 ">
@@ -239,7 +224,6 @@ export default function TodayPlayersTable({
                               player={player}
                               tournaments={tournaments}
                               userId={userId}
-                              updateOptimisticPlayers={updateOptimisticPlayers}
                           />
                           {placesEnabled && (
                               <OpenPositionModalButton player={player}/>

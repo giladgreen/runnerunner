@@ -11,12 +11,10 @@ export default function RSVPButton({
   player,
   stringDate,
   text,
-  updateOptimisticPlayers
 }: {
   player: PlayerDB;
   stringDate?: string;
   text?: string;
-  updateOptimisticPlayers: any
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const date = stringDate ?? new Date().toISOString().slice(0, 10);
@@ -28,12 +26,7 @@ export default function RSVPButton({
   return (
     <div
       onClick={() => {
-        const newPlayer = {
-          ...player,
-          rsvpForToday: !isRsvpForDate
-        }
-          addOptimisticIsRsvpForDate(!isRsvpForDate)
-         updateOptimisticPlayers(newPlayer);
+         addOptimisticIsRsvpForDate(!isRsvpForDate)
          rsvpPlayerForDay(player.phone_number, date, !isRsvpForDate, prevPage)
       }}
     >

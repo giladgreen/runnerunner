@@ -11,13 +11,11 @@ export default function OpenCreditModalButton({
   userId,
   tournaments,
   players,
-  updateOptimisticPlayers
 }: {
   player: PlayerDB;
   tournaments: TournamentDB[];
   players: PlayerDB[];
   userId: string;
-  updateOptimisticPlayers:any
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const [show, setShow] = React.useState(false);
@@ -51,7 +49,6 @@ export default function OpenCreditModalButton({
           hide={close}
           prevPage={prevPage}
           userId={userId}
-          updateOptimisticPlayers={updateOptimisticPlayers}
         />
       </div>
     </div>
