@@ -1,3 +1,4 @@
+'use client';
 import SignUpForm from '@/app/ui/client/SignUpForm';
 import Image from 'next/image';
 

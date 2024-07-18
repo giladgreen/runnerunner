@@ -45,8 +45,8 @@ export default async function CurrentTournament({
 
 
 
-  const { prizesEnabled, placesEnabled } = await fetchFeatureFlags();
-
+    const { prizesEnabled, placesEnabled, rsvpEnabled } =
+        await fetchFeatureFlags();
   return (
     <div className="full-width w-full">
         <RegisterSave players={allPlayers} />
@@ -71,7 +71,7 @@ export default async function CurrentTournament({
         <CreateNewTodayPlayerButton params={params} />
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <TodayPlayersTable players={players} params={params} />
+        <TodayPlayersTable players={players} userId={params.userId} prizesEnabled={prizesEnabled} placesEnabled={placesEnabled} rsvpEnabled={rsvpEnabled}/>
       </div>
     </div>
   );

@@ -142,6 +142,9 @@ export async function getPlayersPrizesContent(
   currentTournament?: boolean,
 ) {
   if (!playersPrizes || playersPrizes.length === 0) {
+    if (currentTournament){
+      return null;
+    }
     return <span style={{margin: '0 5px'}}> 0 prizes </span>
   }
 

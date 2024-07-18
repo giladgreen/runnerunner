@@ -8,24 +8,24 @@ import { PlayerDB } from '@/app/lib/definitions';
 import OpenPositionModalButton from '@/app/ui/client/OpenPositionModalButton';
 import OpenPrizeModalButton from '@/app/ui/client/OpenPrizeModalButton';
 import {
-  fetchFeatureFlags,
   fetchPlayersWithEnoughCredit, fetchPrizesInfo,
   fetchTournaments,
-  fetchUserById,
 } from '@/app/lib/data';
 import EntriesButton from '@/app/ui/client/EntriesButton';
 
 export default async function TodayPlayersTable({
   players,
-  params,
+  userId,
+  prizesEnabled,
+  placesEnabled,
+  rsvpEnabled
 }: {
   players: PlayerDB[];
-  params: { userId: string };
+  userId: string;
+  prizesEnabled: boolean;
+  placesEnabled: boolean;
+  rsvpEnabled: boolean;
 }) {
-  const user = await fetchUserById(params.userId);
-  const { prizesEnabled, placesEnabled, rsvpEnabled } =
-    await fetchFeatureFlags();
-
   const prizesInformation = await fetchPrizesInfo();
   const tournaments = await fetchTournaments();
 
@@ -43,7 +43,7 @@ export default async function TodayPlayersTable({
   const rsvpPlayers = players.filter((player) => player.rsvpForToday);
   const rsvpPlayersCount = rsvpPlayers.length;
   const getLink = (player: PlayerDB) => {
-    return `/${params.userId}/players/${player.id}/edit`;
+    return `/${userId}/players/${player.id}/edit`;
   };
 
   const titleText =
@@ -210,7 +210,7 @@ export default async function TodayPlayersTable({
                         players={playersWithEnoughCredit}
                         player={player}
                         tournaments={tournaments}
-                        userId={params.userId}
+                        userId={userId}
                       />
                       {placesEnabled && (
                         <OpenPositionModalButton player={player} />

@@ -692,8 +692,8 @@ export async function fetchTodayPlayers(query?: string) {
     // @ts-ignore
     const results = players.filter(
       (p) =>
-        (!query && p.arrived) ||
-        (!query && p.rsvpForToday && rsvp_required) ||
+        p.arrived ||
+        p.rsvpForToday ||
         (query &&
           query.length > 0 &&
           (p.name.includes(query) || p.phone_number.includes(query))),

@@ -40,6 +40,7 @@ export default async function PlayersPrizes({
     params.userId,
       showOnlyToday
   )) as JSX.Element;
+
   if (!content) return null;
 
   return (
