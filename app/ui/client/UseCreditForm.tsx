@@ -7,6 +7,7 @@ import {useFormState, useFormStatus} from 'react-dom';
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import { useEffect, useState } from 'react';
 import SearchablePlayersDropdown from '@/app/ui/client/SearchablePlayersDropdown';
+import Spinner from "@/app/ui/client/Spinner";
 
 export default function UseCreditForm({
   players,
@@ -101,11 +102,13 @@ export default function UseCreditForm({
       setIsPending(pending);
     }, [pending]);
 
+    if (pending){
+      return <Spinner size={40} style={{ marginRight: 30}}/>
+    }
     return  <Button type="submit" disabled={pending} className={pending ? ' bg-gray-500 gray-on-hover' :''}>
-      {pending ? 'wait..' : (isRebuy ? 'Rebuy' : 'Buy In')}
+      {isRebuy ? 'Rebuy' : 'Buy In'}
     </Button>
   }
-
 
   function CancelButton() {
     if (isPending){

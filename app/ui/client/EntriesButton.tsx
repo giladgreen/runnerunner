@@ -6,8 +6,13 @@ import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import AreYouSure from '@/app/ui/client/AreYouSure';
+import Spinner from "@/app/ui/client/Spinner";
 
-const formatPlayerEntries = (entries: number) => {
+const formatPlayerEntries = (entries: number, isPending: boolean) => {
+  if (isPending){
+    return <Spinner size={30}/>
+  }
+
   if (entries < 1) {
     return '';
   }
@@ -30,19 +35,28 @@ const formatPlayerEntries = (entries: number) => {
 export default function EntriesButton({ player }: { player: PlayerDB }) {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
+  const [isPending, setIsPending] = useState(false);
+
   const currentPage = `${usePathname()}?${useSearchParams().toString()}`;
   return (
     <div>
-      <div onClick={() => setShowConfirmation(true)} className="pointer">
-        {formatPlayerEntries(player.entries ?? 0)}
+      <div onClick={() => {
+        setShowConfirmation(true);
+      }}
+      className="pointer">
+        {formatPlayerEntries(player.entries ?? 0, isPending)}
       </div>
       {showConfirmation && (
         <AreYouSure
           onConfirm={() => {
             setShowConfirmation(false);
             undoPlayerLastLog(player.phone_number, currentPage);
+            setIsPending(true);
+            setTimeout(() => setIsPending(false), 1000);
           }}
-          onCancel={() => setShowConfirmation(false)}
+          onCancel={() => {
+            setShowConfirmation(false);
+          }}
           subtext="this would revert the last entry"
           text="Undo last player change?"
         />
