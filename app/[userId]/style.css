@@ -374,6 +374,10 @@
 .create-new-today-player-button{
   width: 250px;
 }
+
+.gray-on-hover:hover {
+  background: #666666;
+}
 @media only screen and (max-width: 600px) {
   .create-new-today-player-button{
     width: unset;

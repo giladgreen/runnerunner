@@ -65,6 +65,7 @@ export default function UseCreditForm({
   );
 
   const useCredit = amount < player.balance;
+  const [isPending, setIsPending] = useState(false);
   const [type, setType] = useState(useCredit ? 'credit' : 'cash');
 
   useEffect(() => {
@@ -90,28 +91,28 @@ export default function UseCreditForm({
     const { pending} = useFormStatus();
 
     useEffect(() => {
+
       if (pending){
         setTimeout(()=>{
           hide?.();
           setQuery('');
-        },2000)
+        },1500)
       }
+      setIsPending(pending);
     }, [pending]);
 
-    return  <Button type="submit" disabled={pending} className={pending ? ' bg-gray-500' :''}>
+    return  <Button type="submit" disabled={pending} className={pending ? ' bg-gray-500 gray-on-hover' :''}>
       {pending ? 'wait..' : (isRebuy ? 'Rebuy' : 'Buy In')}
     </Button>
   }
 
 
   function CancelButton() {
-    const { pending} = useFormStatus();
-
-    if (pending){
+    if (isPending){
       return null;
     }
 
-    return   <Button disabled={pending} onClick={hide} style={{ marginTop: -52, marginLeft: 20 }}>
+    return   <Button onClick={hide} style={{ marginTop: -52, marginLeft: 20 }}>
       Cancel
     </Button>
   }
