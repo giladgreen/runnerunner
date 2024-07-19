@@ -1,12 +1,18 @@
 'use client';
 
-import {PlayerDB, PlayerForm, PrizeInfoDB} from '@/app/lib/definitions';
+import { PlayerDB, PlayerForm, PrizeInfoDB } from '@/app/lib/definitions';
 import React from 'react';
 import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 import SetPrizeForm from '@/app/ui/client/SetPrizeForm';
 
-export default function OpenPrizeModalButton({ player, prizesInformation }: { player: PlayerDB, prizesInformation: PrizeInfoDB[] }) {
+export default function OpenPrizeModalButton({
+  player,
+  prizesInformation,
+}: {
+  player: PlayerDB;
+  prizesInformation: PrizeInfoDB[];
+}) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const [show, setShow] = React.useState(false);
 

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import {PlayerDB, PrizeInfoDB} from '@/app/lib/definitions';
+import { PlayerDB, PrizeInfoDB } from '@/app/lib/definitions';
 import Image from 'next/image';
 import { formatCurrency } from '@/app/lib/utils';
 
@@ -7,12 +7,12 @@ const SearchablePrizesDropdown = ({
   prizes,
   selectedVal,
   handleChange,
-  showPrizeName
+  showPrizeName,
 }: {
   prizes: PrizeInfoDB[];
   selectedVal?: PrizeInfoDB;
   handleChange: any;
-  showPrizeName: boolean
+  showPrizeName: boolean;
 }) => {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +36,8 @@ const SearchablePrizesDropdown = ({
 
   const getDisplayValue = () => {
     if (query) return query;
-    if (selectedVal) return showPrizeName ? selectedVal.name : selectedVal.credit;
+    if (selectedVal)
+      return showPrizeName ? selectedVal.name : selectedVal.credit;
 
     return '';
   };
@@ -64,7 +65,6 @@ const SearchablePrizesDropdown = ({
             }}
             onClick={toggle}
           />
-
         </div>
         <div className={`arrow ${isOpen ? 'open' : ''}`}></div>
       </div>
@@ -79,12 +79,10 @@ const SearchablePrizesDropdown = ({
               } dropdown-player`}
               key={`${option.id}-${index}`}
             >
-
               <div style={{ marginLeft: 5, marginRight: 6 }}>
                 <div style={{ color: 'black' }}>
                   <b>{option.name}</b>
                 </div>
-
               </div>
               <div style={{ marginLeft: 30, paddingTop: 10 }}>
                 <b> {formatCurrency(option.credit)}</b>

@@ -115,11 +115,11 @@ export function nameComparator(a: PlayerDB, b: PlayerDB) {
 export function todaySearchResultsComparator(a: PlayerDB, b: PlayerDB) {
   const aArrived = a.arrived || a.rsvpForToday;
   const bArrived = b.arrived || b.rsvpForToday;
-  if ((aArrived && bArrived) || (!aArrived && !bArrived)){
-    return  nameComparator(a,b);
+  if ((aArrived && bArrived) || (!aArrived && !bArrived)) {
+    return nameComparator(a, b);
   }
 
-  return (bArrived && !aArrived)? -1 :1
+  return bArrived && !aArrived ? -1 : 1;
 }
 
 export function getTodayShortDate() {

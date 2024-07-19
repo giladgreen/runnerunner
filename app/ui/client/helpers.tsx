@@ -1,5 +1,5 @@
-import {fetchFinalTablePlayers, fetchPrizesInfo} from '@/app/lib/data';
-import {PlayerDB, PrizeDB, PrizeInfoDB} from '@/app/lib/definitions';
+import { fetchFinalTablePlayers, fetchPrizesInfo } from '@/app/lib/data';
+import { PlayerDB, PrizeDB, PrizeInfoDB } from '@/app/lib/definitions';
 import OpenGiveCreditModalButton from '@/app/ui/client/OpenGiveCreditModalButton';
 import Image from 'next/image';
 import OpenSetPrizesCreditModalButton from '@/app/ui/client/OpenSetPrizesCreditModalButton';
@@ -12,8 +12,8 @@ import {
   CreditCardIcon,
   WalletIcon,
 } from '@heroicons/react/24/solid';
-import SetPrizeAsReadyToBeDelivered from "@/app/ui/client/SetPrizeAsReadyToBeDelivered";
-import SetPrizeAsNotReadyToBeDelivered from "@/app/ui/client/SetPrizeAsNotReadyToBeDelivered";
+import SetPrizeAsReadyToBeDelivered from '@/app/ui/client/SetPrizeAsReadyToBeDelivered';
+import SetPrizeAsNotReadyToBeDelivered from '@/app/ui/client/SetPrizeAsNotReadyToBeDelivered';
 
 export async function getFinalTablePlayersContent(
   date: string,
@@ -142,14 +142,14 @@ export async function getPlayersPrizesContent(
   currentTournament?: boolean,
 ) {
   if (!playersPrizes || playersPrizes.length === 0) {
-    if (currentTournament){
+    if (currentTournament) {
       return null;
     }
-    return <span style={{margin: '0 5px'}}> 0 prizes </span>
+    return <span style={{ margin: '0 5px' }}> 0 prizes </span>;
   }
 
   return (
-      <div className="full-width" style={{ marginBottom: 30 }}>
+    <div className="full-width" style={{ marginBottom: 30 }}>
       {playersPrizes.map((playersPrize: PrizeDB) => {
         return (
           <div key={playersPrize.id}>
@@ -171,15 +171,22 @@ export async function getPlayersPrizesContent(
                 <span style={{ marginLeft: 25 }}>{playersPrize!.prize}</span>
               </div>
 
-              {!personal && !playersPrize.delivered && playersPrize.ready_to_be_delivered && (
-                <SetPrizeAsDelivered id={playersPrize.id} />
-              )}
-              {!personal && !playersPrize.delivered && !playersPrize.ready_to_be_delivered && !currentTournament && (
-                <SetPrizeAsReadyToBeDelivered id={playersPrize.id} />
-              )}
-              {!personal && !playersPrize.delivered && playersPrize.ready_to_be_delivered && (
-                <SetPrizeAsNotReadyToBeDelivered id={playersPrize.id} />
-              )}
+              {!personal &&
+                !playersPrize.delivered &&
+                playersPrize.ready_to_be_delivered && (
+                  <SetPrizeAsDelivered id={playersPrize.id} />
+                )}
+              {!personal &&
+                !playersPrize.delivered &&
+                !playersPrize.ready_to_be_delivered &&
+                !currentTournament && (
+                  <SetPrizeAsReadyToBeDelivered id={playersPrize.id} />
+                )}
+              {!personal &&
+                !playersPrize.delivered &&
+                playersPrize.ready_to_be_delivered && (
+                  <SetPrizeAsNotReadyToBeDelivered id={playersPrize.id} />
+                )}
               {!personal && (
                 <OpenConvertPrizeToCreditButton
                   prizeId={playersPrize.id}

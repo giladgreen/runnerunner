@@ -11,13 +11,13 @@ export default function OpenCreditModalButton({
   userId,
   tournaments,
   players,
-  setQuery
+  setQuery,
 }: {
   player: PlayerDB;
   tournaments: TournamentDB[];
   players: PlayerDB[];
   userId: string;
-  setQuery:(val: string)=>void
+  setQuery: (val: string) => void;
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const [show, setShow] = React.useState(false);
@@ -25,7 +25,6 @@ export default function OpenCreditModalButton({
   const close = () => {
     setShow(false);
   };
-
 
   return (
     <div>

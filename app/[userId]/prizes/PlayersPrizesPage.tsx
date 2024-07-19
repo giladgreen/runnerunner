@@ -1,4 +1,4 @@
-import {fetchPlayersPrizes, fetchPrizesInfo} from '@/app/lib/data';
+import { fetchPlayersPrizes, fetchPrizesInfo } from '@/app/lib/data';
 import Card from '@/app/ui/client/Card';
 import { getPlayersPrizesContent } from '@/app/ui/client/helpers';
 
@@ -10,10 +10,26 @@ export default async function PlayersPrizesPage({
   const { chosenPrizes, deliveredPrizes, readyToBeDeliveredPrizes } =
     await fetchPlayersPrizes(playerPhone);
   const prizesInformation = await fetchPrizesInfo();
-  const chosenPrizesContent = (await getPlayersPrizesContent(chosenPrizes, prizesInformation,false)) as JSX.Element;
-  const deliveredPrizesContent = (await getPlayersPrizesContent(  deliveredPrizes,[],   false)) as JSX.Element;
-  const readyToBeDeliveredPrizesContent = (await getPlayersPrizesContent(  readyToBeDeliveredPrizes,[],   false)) as JSX.Element;
-  if (!chosenPrizesContent && !deliveredPrizesContent && !readyToBeDeliveredPrizesContent) {
+  const chosenPrizesContent = (await getPlayersPrizesContent(
+    chosenPrizes,
+    prizesInformation,
+    false,
+  )) as JSX.Element;
+  const deliveredPrizesContent = (await getPlayersPrizesContent(
+    deliveredPrizes,
+    [],
+    false,
+  )) as JSX.Element;
+  const readyToBeDeliveredPrizesContent = (await getPlayersPrizesContent(
+    readyToBeDeliveredPrizes,
+    [],
+    false,
+  )) as JSX.Element;
+  if (
+    !chosenPrizesContent &&
+    !deliveredPrizesContent &&
+    !readyToBeDeliveredPrizesContent
+  ) {
     return null;
   }
 

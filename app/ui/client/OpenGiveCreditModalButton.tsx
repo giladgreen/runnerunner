@@ -1,13 +1,13 @@
 'use client';
 
-import {PlayerDB, PrizeInfoDB} from '@/app/lib/definitions';
+import { PlayerDB, PrizeInfoDB } from '@/app/lib/definitions';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import { TickIcon } from '@/app/ui/icons';
 import { givePlayerPrizeOrCredit } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import Button from '@/app/ui/client/Button';
-import SearchablePrizesDropdown from "@/app/ui/client/SearchablePrizesDropdown";
+import SearchablePrizesDropdown from '@/app/ui/client/SearchablePrizesDropdown';
 
 function SetGivePrizeForm({
   player,
@@ -22,11 +22,11 @@ function SetGivePrizeForm({
   hide?: () => void;
   prevPage: string;
   userId?: string;
-  prizesInformation: PrizeInfoDB[]
+  prizesInformation: PrizeInfoDB[];
 }) {
   const initialState = { message: null, errors: {} };
   const [selectedPrize, setSelectedPrize] = useState<PrizeInfoDB | undefined>(
-      undefined,
+    undefined,
   );
   const setPlayerPrizeWithPlayerId = givePlayerPrizeOrCredit.bind(null, {
     userId: userId!,
@@ -96,10 +96,10 @@ function SetGivePrizeForm({
           {type === 'prize' ? (
             <div className="give_user_prize mb-4">
               <SearchablePrizesDropdown
-                  showPrizeName
-                  prizes={prizesInformation}
-                  selectedVal={selectedPrize}
-                  handleChange={(val: any) => setSelectedPrize(val)}
+                showPrizeName
+                prizes={prizesInformation}
+                selectedVal={selectedPrize}
+                handleChange={(val: any) => setSelectedPrize(val)}
               />
             </div>
           ) : (
@@ -163,13 +163,13 @@ export default function OpenGiveCreditModalButton({
   hasReceived,
   stringDate,
   userId,
-  prizesInformation
+  prizesInformation,
 }: {
   player: PlayerDB;
   hasReceived: boolean;
   stringDate?: string;
   userId?: string;
-  prizesInformation: PrizeInfoDB[]
+  prizesInformation: PrizeInfoDB[];
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const [show, setShow] = React.useState(false);

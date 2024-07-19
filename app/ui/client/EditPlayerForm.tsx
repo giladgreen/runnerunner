@@ -12,7 +12,7 @@ import { useState } from 'react';
 import RSVPButton from '@/app/ui/client/RSVPButton';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { TRANSLATIONS } from '@/app/lib/definitions';
-import Image from "next/image";
+import Image from 'next/image';
 
 export default function EditPlayerForm({
   player,
@@ -31,7 +31,9 @@ export default function EditPlayerForm({
     id: player.id,
     prevPage,
   });
-  const [imageUrl, setImageUrl] = useState(player.image_url ?? '/players/default.png');
+  const [imageUrl, setImageUrl] = useState(
+    player.image_url ?? '/players/default.png',
+  );
 
   const [state, dispatch] = useFormState(updatePlayerWithId, initialState);
 
@@ -65,7 +67,7 @@ export default function EditPlayerForm({
                 player={player as PlayerDB}
                 stringDate={stringDate}
                 text={text}
-                setQuery={()=>{}}
+                setQuery={() => {}}
               />
             )
           ) : (
@@ -157,13 +159,13 @@ export default function EditPlayerForm({
             />
           </div>
           {imageUrl && (
-              <Image
-                  src={imageUrl}
-                  className="zoom-on-hover mr-2"
-                  width={60}
-                  height={60}
-                  alt={`profile picture`}
-              />
+            <Image
+              src={imageUrl}
+              className="zoom-on-hover mr-2"
+              width={60}
+              height={60}
+              alt={`profile picture`}
+            />
           )}
         </div>
         <div className="mt-6 flex justify-end gap-4">

@@ -1,5 +1,6 @@
 import {
-  fetchPlayersPrizes, fetchPrizesInfo,
+  fetchPlayersPrizes,
+  fetchPrizesInfo,
   fetchTodaysPlayersPhoneNumbers,
   fetchUserById,
 } from '@/app/lib/data';
@@ -35,10 +36,10 @@ export default async function PlayersPrizes({
 
   const content = (await getPlayersPrizesContent(
     playersPrizes,
-      prizesInformation,
+    prizesInformation,
     isRegularPlayer,
     params.userId,
-      showOnlyToday
+    showOnlyToday,
   )) as JSX.Element;
 
   if (!content) return null;

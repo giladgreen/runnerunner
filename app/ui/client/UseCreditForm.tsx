@@ -3,11 +3,11 @@
 import { PencilIcon, BanknotesIcon } from '@heroicons/react/24/outline';
 import Button from '@/app/ui/client/Button';
 import { createPlayerUsageLog } from '@/app/lib/actions';
-import {useFormState, useFormStatus} from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import { useEffect, useState } from 'react';
 import SearchablePlayersDropdown from '@/app/ui/client/SearchablePlayersDropdown';
-import Spinner from "@/app/ui/client/Spinner";
+import Spinner from '@/app/ui/client/Spinner';
 
 export default function UseCreditForm({
   players,
@@ -16,7 +16,7 @@ export default function UseCreditForm({
   hide,
   prevPage,
   userId,
-  setQuery
+  setQuery,
 }: {
   players: PlayerDB[];
   prevPage: string;
@@ -24,7 +24,7 @@ export default function UseCreditForm({
   tournaments: TournamentDB[];
   hide?: () => void;
   userId: string;
-  setQuery:(val: string)=>void
+  setQuery: (val: string) => void;
 }) {
   const initialState = { message: null, errors: {} };
   const createPlayerUsageLogWithPlayerData = createPlayerUsageLog.bind(null, {
@@ -89,39 +89,43 @@ export default function UseCreditForm({
   ]);
 
   function SubmitButton() {
-    const { pending} = useFormStatus();
+    const { pending } = useFormStatus();
 
     useEffect(() => {
-
-      if (pending){
-        setTimeout(()=>{
+      if (pending) {
+        setTimeout(() => {
           hide?.();
           setQuery('');
-        },1500)
+        }, 1500);
       }
       setIsPending(pending);
     }, [pending]);
 
-    if (pending){
-      return <Spinner size={40} style={{ marginRight: 30}}/>
+    if (pending) {
+      return <Spinner size={40} style={{ marginRight: 30 }} />;
     }
-    return  <Button type="submit" disabled={pending} className={pending ? ' bg-gray-500 gray-on-hover' :''}>
-      {isRebuy ? 'Rebuy' : 'Buy In'}
-    </Button>
+    return (
+      <Button
+        type="submit"
+        disabled={pending}
+        className={pending ? ' gray-on-hover bg-gray-500' : ''}
+      >
+        {isRebuy ? 'Rebuy' : 'Buy In'}
+      </Button>
+    );
   }
 
   function CancelButton() {
-    if (isPending){
+    if (isPending) {
       return null;
     }
 
-    return   <Button onClick={hide} style={{ marginTop: -52, marginLeft: 20 }}>
-      Cancel
-    </Button>
+    return (
+      <Button onClick={hide} style={{ marginTop: -52, marginLeft: 20 }}>
+        Cancel
+      </Button>
+    );
   }
-
-
-
 
   return (
     <div className="edit-player-modal-inner-div">
@@ -270,12 +274,10 @@ export default function UseCreditForm({
           )}
         </div>
         <div className="mt-6 flex justify-end gap-4">
-          <SubmitButton/>
+          <SubmitButton />
         </div>
       </form>
-      {hide && (
-        <CancelButton />
-      )}
+      {hide && <CancelButton />}
     </div>
   );
 }

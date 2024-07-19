@@ -3,15 +3,15 @@
 import Button from '@/app/ui/client/Button';
 import { setPlayerPrize } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import {PlayerForm, PrizeInfoDB} from '@/app/lib/definitions';
-import SearchablePrizesDropdown from "@/app/ui/client/SearchablePrizesDropdown";
-import React, {useState} from "react";
+import { PlayerForm, PrizeInfoDB } from '@/app/lib/definitions';
+import SearchablePrizesDropdown from '@/app/ui/client/SearchablePrizesDropdown';
+import React, { useState } from 'react';
 
 export default function SetPrizeForm({
   player,
   hide,
   prevPage,
-  prizesInformation
+  prizesInformation,
 }: {
   player: PlayerForm;
   hide?: () => void;
@@ -19,7 +19,7 @@ export default function SetPrizeForm({
   prizesInformation: PrizeInfoDB[];
 }) {
   const [selectedPrize, setSelectedPrize] = useState<PrizeInfoDB | undefined>(
-      undefined,
+    undefined,
   );
   const initialState = { message: null, errors: {} };
   const setPlayerPrizeWithPlayerId = setPlayerPrize.bind(null, {
@@ -48,10 +48,10 @@ export default function SetPrizeForm({
             <div className="relative mt-2 rounded-md">
               <div className="relative">
                 <SearchablePrizesDropdown
-                    showPrizeName
-                    prizes={prizesInformation}
-                    selectedVal={selectedPrize}
-                    handleChange={(val: any) => setSelectedPrize(val)}
+                  showPrizeName
+                  prizes={prizesInformation}
+                  selectedVal={selectedPrize}
+                  handleChange={(val: any) => setSelectedPrize(val)}
                 />
               </div>
               <div id="prize-error" aria-live="polite" aria-atomic="true">

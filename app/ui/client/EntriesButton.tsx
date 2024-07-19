@@ -6,11 +6,11 @@ import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import AreYouSure from '@/app/ui/client/AreYouSure';
-import Spinner from "@/app/ui/client/Spinner";
+import Spinner from '@/app/ui/client/Spinner';
 
 const formatPlayerEntries = (entries: number, isPending: boolean) => {
-  if (isPending){
-    return <Spinner size={30}/>
+  if (isPending) {
+    return <Spinner size={30} />;
   }
 
   if (entries < 1) {
@@ -40,10 +40,12 @@ export default function EntriesButton({ player }: { player: PlayerDB }) {
   const currentPage = `${usePathname()}?${useSearchParams().toString()}`;
   return (
     <div>
-      <div onClick={() => {
-        setShowConfirmation(true);
-      }}
-      className="pointer">
+      <div
+        onClick={() => {
+          setShowConfirmation(true);
+        }}
+        className="pointer"
+      >
         {formatPlayerEntries(player.entries ?? 0, isPending)}
       </div>
       {showConfirmation && (

@@ -1,15 +1,17 @@
 import TodayPlayersTable from '@/app/ui/client/TodayPlayersTable';
 import {
-    fetchFeatureFlags, fetchPrizesInfo,
-    fetchTournaments,
-    fetchUserById, getAllPlayers,
+  fetchFeatureFlags,
+  fetchPrizesInfo,
+  fetchTournaments,
+  fetchUserById,
+  getAllPlayers,
 } from '@/app/lib/data';
 import FinalTablePlayers from '@/app/ui/client/FinalTablePlayers';
 import PlayersPrizes from '@/app/ui/client/PlayersPrizes';
 import RSVPAndArrivalCardWrapper from '@/app/ui/client/RSVPAndArrivalCardWrapper';
 import TodayTournamentNameCardWrapper from '@/app/ui/client/TodayTournamentNameCardWrapper';
 import React from 'react';
-import RegisterSave from "@/app/ui/client/RegisterSave";
+import RegisterSave from '@/app/ui/client/RegisterSave';
 
 export default async function CurrentTournament({
   params,
@@ -35,26 +37,25 @@ export default async function CurrentTournament({
     );
   }
 
-    const prizesInformation = await fetchPrizesInfo();
-    const tournaments = await fetchTournaments();
-    const { prizesEnabled, placesEnabled, rsvpEnabled } =
-        await fetchFeatureFlags();
+  const prizesInformation = await fetchPrizesInfo();
+  const tournaments = await fetchTournaments();
+  const { prizesEnabled, placesEnabled, rsvpEnabled } =
+    await fetchFeatureFlags();
 
-    const now = new Date();
-    const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
-    const todayTournament = tournaments.find(
-        (tournament) => tournament.day === dayOfTheWeek,
-    );
-    const isRsvpRequired = todayTournament!.rsvp_required;
+  const now = new Date();
+  const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
+  const todayTournament = tournaments.find(
+    (tournament) => tournament.day === dayOfTheWeek,
+  );
+  const isRsvpRequired = todayTournament!.rsvp_required;
 
-    // @ts-ignore
-    const rsvpPlayers = allPlayers.filter((player) => player.rsvpForToday);
-    const rsvpPlayersCount = rsvpPlayers.length;
-
+  // @ts-ignore
+  const rsvpPlayers = allPlayers.filter((player) => player.rsvpForToday);
+  const rsvpPlayersCount = rsvpPlayers.length;
 
   return (
     <div className="full-width w-full">
-        <RegisterSave players={allPlayers} />
+      <RegisterSave players={allPlayers} />
       <div className="full-width flex w-full items-center justify-between">
         <TodayTournamentNameCardWrapper params={params} />
       </div>
@@ -72,8 +73,17 @@ export default async function CurrentTournament({
         </div>
       )}
 
-        <TodayPlayersTable prizesInformation={prizesInformation} tournaments={tournaments} rsvpPlayersCount={rsvpPlayersCount} isRsvpRequired={isRsvpRequired}  allPlayers={allPlayers} userId={params.userId} prizesEnabled={prizesEnabled} placesEnabled={placesEnabled} rsvpEnabled={rsvpEnabled}/>
-
+      <TodayPlayersTable
+        prizesInformation={prizesInformation}
+        tournaments={tournaments}
+        rsvpPlayersCount={rsvpPlayersCount}
+        isRsvpRequired={isRsvpRequired}
+        allPlayers={allPlayers}
+        userId={params.userId}
+        prizesEnabled={prizesEnabled}
+        placesEnabled={placesEnabled}
+        rsvpEnabled={rsvpEnabled}
+      />
     </div>
   );
 }

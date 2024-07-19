@@ -1,12 +1,12 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { convertPrizeToCredit } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import Button from '@/app/ui/client/Button';
-import SearchablePrizesDropdown from "@/app/ui/client/SearchablePrizesDropdown";
-import {PlayerDB, PrizeInfoDB} from "@/app/lib/definitions";
+import SearchablePrizesDropdown from '@/app/ui/client/SearchablePrizesDropdown';
+import { PlayerDB, PrizeInfoDB } from '@/app/lib/definitions';
 
 function OpenConvertPrizeToCreditForm({
   userId,
@@ -14,21 +14,21 @@ function OpenConvertPrizeToCreditForm({
   prizeName,
   hide,
   prevPage,
-  prizesInformation
+  prizesInformation,
 }: {
   userId?: string;
   prizeId: string;
   prizeName: string;
   hide?: () => void;
   prevPage: string;
-  prizesInformation:PrizeInfoDB[]
+  prizesInformation: PrizeInfoDB[];
 }) {
   const initialState = { message: null, errors: {} };
   const prizeInfo = prizesInformation.find((prize) => prize.name === prizeName);
   const data = { prizeId, prevPage, userId: userId! };
   const convertPrizeToCreditWithData = convertPrizeToCredit.bind(null, data);
   const [selectedPrize, setSelectedPrize] = useState<PrizeInfoDB | undefined>(
-      prizeInfo,
+    prizeInfo,
   );
 
   // @ts-ignore
@@ -63,10 +63,10 @@ function OpenConvertPrizeToCreditForm({
             </label>
             <div className="relative mt-2 rounded-md">
               <SearchablePrizesDropdown
-                  showPrizeName={false}
-                  prizes={prizesInformation}
-                  selectedVal={selectedPrize}
-                  handleChange={(val: any) => setSelectedPrize(val)}
+                showPrizeName={false}
+                prizes={prizesInformation}
+                selectedVal={selectedPrize}
+                handleChange={(val: any) => setSelectedPrize(val)}
               />
             </div>
           </div>
@@ -90,12 +90,12 @@ export default function OpenConvertPrizeToCreditButton({
   prizeId,
   prizeName,
   userId,
-  prizesInformation
+  prizesInformation,
 }: {
   prizeId: string;
   prizeName: string;
   userId?: string;
-  prizesInformation:PrizeInfoDB[];
+  prizesInformation: PrizeInfoDB[];
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const [show, setShow] = React.useState(false);

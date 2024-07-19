@@ -174,23 +174,22 @@ export async function getAllPlayers() {
  JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number) AS H
     ON P.phone_number = H.phone_number`;
 
-  const [allPlayersResult, rsvpResults, todayHistoryUnfiltered, winnersRecord] = await Promise.all([
-    playersPromise,
-    sql<RSVPDB>`SELECT * FROM rsvp;`,
-    getTodayHistory(),
-    getDateWinnersRecord(todayDate)
-  ]);
+  const [allPlayersResult, rsvpResults, todayHistoryUnfiltered, winnersRecord] =
+    await Promise.all([
+      playersPromise,
+      sql<RSVPDB>`SELECT * FROM rsvp;`,
+      getTodayHistory(),
+      getDateWinnersRecord(todayDate),
+    ]);
   const allPlayers = allPlayersResult.rows;
 
   const rsvp = rsvpResults.rows;
 
   const todayHistory = todayHistoryUnfiltered.filter(
-      ({ type }) => type != 'prize' && type != 'credit_to_other',
+    ({ type }) => type != 'prize' && type != 'credit_to_other',
   );
 
-  const winnersObject = winnersRecord
-      ? JSON.parse(winnersRecord.winners)
-      : {};
+  const winnersObject = winnersRecord ? JSON.parse(winnersRecord.winners) : {};
 
   allPlayers.forEach((player) => {
     player.balance = Number(player.balance);
@@ -202,22 +201,19 @@ export async function getAllPlayers() {
       player.rsvps.find((date) => date === todayDate),
     );
 
-
     const playerItems = todayHistory.filter(
-        ({ phone_number, change, type }) =>
-            phone_number === player.phone_number &&
-            (change < 0 || type === 'credit_by_other'),
+      ({ phone_number, change, type }) =>
+        phone_number === player.phone_number &&
+        (change < 0 || type === 'credit_by_other'),
     ) as LogDB[];
 
     player.position = winnersObject[player.phone_number]?.position || 0;
-
 
     player.arrived = playerItems.length > 0;
     player.entries = playerItems.length;
 
     player.name = player.name.trim();
     player.historyLog = playerItems;
-
   });
 
   return allPlayers;
@@ -586,14 +582,16 @@ export async function fetchPlayersPrizes(playerPhoneNumber?: string) {
       : prizes.filter((prize) => prize.phone_number === playerPhoneNumber);
     methodEnd('fetchPlayersPrizes');
 
-
     const resultObject = {
-      chosenPrizes: result.filter((p) => !p.delivered && !p.ready_to_be_delivered),
-      readyToBeDeliveredPrizes: result.filter((p) => !p.delivered && p.ready_to_be_delivered),
+      chosenPrizes: result.filter(
+        (p) => !p.delivered && !p.ready_to_be_delivered,
+      ),
+      readyToBeDeliveredPrizes: result.filter(
+        (p) => !p.delivered && p.ready_to_be_delivered,
+      ),
       deliveredPrizes: result.filter((p) => p.delivered),
     };
     return resultObject;
-
   } catch (error) {
     console.error('Database Error:', error);
     methodEnd('fetchPlayersPrizes with error');

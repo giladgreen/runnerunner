@@ -142,33 +142,36 @@ export default async function PlayersTable({
                       </div>
                     </Link>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3 font-large">
+                  <td className="font-large whitespace-nowrap px-3 py-3">
                     <Link href={`/${userId}/players/${player.id}/edit`}>
                       {player.phone_number}
                     </Link>
                   </td>
                   <td
-                    className={`whitespace-nowrap px-3 py-3 font-large ${
+                    className={`font-large whitespace-nowrap px-3 py-3 ${
                       player.historyCount > 1 ? 'bold' : ''
                     }`}
                   >
-                    <Link href={`/${userId}/players/${player.id}/edit`} className="font-large">
+                    <Link
+                      href={`/${userId}/players/${player.id}/edit`}
+                      className="font-large"
+                    >
                       {formatCurrency(player.balance)}
                     </Link>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3 font-large">
+                  <td className="font-large whitespace-nowrap px-3 py-3">
                     <Link href={`/${userId}/players/${player.id}/edit`}>
                       {player.notes}
                     </Link>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-3 font-large">
+                  <td className="font-large whitespace-nowrap px-3 py-3">
                     <Link href={`/${userId}/players/${player.id}/edit`}>
                       {formatDateToLocal(player.updated_at)}
                     </Link>
                   </td>
                   {rsvp_required && rsvpEnabled && (
                     <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                      <RSVPButton player={player} setQuery={()=>{}}/>
+                      <RSVPButton player={player} setQuery={() => {}} />
                     </td>
                   )}
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">

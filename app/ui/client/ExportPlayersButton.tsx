@@ -2,54 +2,56 @@
 
 import Button from '@/app/ui/client/Button';
 import React from 'react';
-import {
-  PlayerDB,
-  PrizeDB,
-  TournamentDB,
-} from '@/app/lib/definitions';
+import { PlayerDB, PrizeDB, TournamentDB } from '@/app/lib/definitions';
 
-let lastSave=0;
-function saveOtherDataToFile(placesEnabled: boolean,playersPlaces: PlayerDB[], prizesEnabled: boolean, prizes: PrizeDB[], tournament: TournamentDB, worker?: boolean,  ){
-    if (!placesEnabled && !prizesEnabled) {
-        return;
-    }
-    if (worker) {
-        return;
-    }
+let lastSave = 0;
+function saveOtherDataToFile(
+  placesEnabled: boolean,
+  playersPlaces: PlayerDB[],
+  prizesEnabled: boolean,
+  prizes: PrizeDB[],
+  tournament: TournamentDB,
+  worker?: boolean,
+) {
+  if (!placesEnabled && !prizesEnabled) {
+    return;
+  }
+  if (worker) {
+    return;
+  }
 
-    const addPlaces =
-        placesEnabled && playersPlaces && playersPlaces.length > 0;
-    const addPrizes = prizesEnabled && prizes && prizes.length > 0;
-    const filename = `players_${
-        addPlaces && addPrizes
-            ? 'places_and_prizes'
-            : addPlaces
-                ? 'places'
-                : 'prizes'
-    }.csv`;
+  const addPlaces = placesEnabled && playersPlaces && playersPlaces.length > 0;
+  const addPrizes = prizesEnabled && prizes && prizes.length > 0;
+  const filename = `players_${
+    addPlaces && addPrizes
+      ? 'places_and_prizes'
+      : addPlaces
+      ? 'places'
+      : 'prizes'
+  }.csv`;
 
-    const placesData = addPlaces
-        ? `position, phone number, name 
+  const placesData = addPlaces
+    ? `position, phone number, name 
 ${playersPlaces
-            .map((player) => {
-                return `${player.position}, ${player.phone_number},${player.name}`;
-            })
-            .join('\n')}`
-        : '';
+  .map((player) => {
+    return `${player.position}, ${player.phone_number},${player.name}`;
+  })
+  .join('\n')}`
+    : '';
 
-    const prizesData = addPrizes
-        ? `Name, phone number, prize, tournament
+  const prizesData = addPrizes
+    ? `Name, phone number, prize, tournament
 ${prizes
-            .map(
-                (prize) =>
-                    `${prize!.player!.name}, ${prize!.phone_number}, ${prize.prize},  ${
-                        prize.tournament
-                    }`,
-            )
-            .join('\n')}`
-        : '';
+  .map(
+    (prize) =>
+      `${prize!.player!.name}, ${prize!.phone_number}, ${prize.prize},  ${
+        prize.tournament
+      }`,
+  )
+  .join('\n')}`
+    : '';
 
-    const fileData = `${tournament.name}
+  const fileData = `${tournament.name}
 
 ${placesData}
 
@@ -58,51 +60,51 @@ ${prizesData}
 
 `;
 
-    const dataBlob = new Blob([fileData], {
-        type: 'text/plain;charset=utf-8',
-    });
+  const dataBlob = new Blob([fileData], {
+    type: 'text/plain;charset=utf-8',
+  });
 
-    const dataLink = document.createElement('a');
-    dataLink.download = filename;
-    dataLink.href = window.URL.createObjectURL(dataBlob);
-    dataLink.style.display = 'none';
+  const dataLink = document.createElement('a');
+  dataLink.download = filename;
+  dataLink.href = window.URL.createObjectURL(dataBlob);
+  dataLink.style.display = 'none';
 
-    document.body.appendChild(dataLink);
+  document.body.appendChild(dataLink);
 
-    dataLink.click();
+  dataLink.click();
 
-    document.body.removeChild(dataLink);
+  document.body.removeChild(dataLink);
 }
-export function savePlayersDataToFile(players: PlayerDB[]){
-    const now = new Date();
-    if (now.getTime() - lastSave < 5000) {
-        return;
-    }
-    lastSave  = now.getTime();
-    const todayDate = now.toISOString().slice(0, 10);
+export function savePlayersDataToFile(players: PlayerDB[]) {
+  const now = new Date();
+  if (now.getTime() - lastSave < 5000) {
+    return;
+  }
+  lastSave = now.getTime();
+  const todayDate = now.toISOString().slice(0, 10);
 
-    const creditData = `phone number, name, balance, notes
+  const creditData = `phone number, name, balance, notes
 ${players
-        .sort((a, b) => (a.balance < b.balance ? 1 : -1))
-        .map((player) => {
-            return `${player.phone_number},${player.name},${player.balance},${player.notes}`;
-        }).join(`
+  .sort((a, b) => (a.balance < b.balance ? 1 : -1))
+  .map((player) => {
+    return `${player.phone_number},${player.name},${player.balance},${player.notes}`;
+  }).join(`
 `)}`;
-    const creditFilename = `players_credit_${todayDate}.csv`;
-    const creditBlob = new Blob([creditData], {
-        type: 'text/plain;charset=utf-8',
-    });
+  const creditFilename = `players_credit_${todayDate}.csv`;
+  const creditBlob = new Blob([creditData], {
+    type: 'text/plain;charset=utf-8',
+  });
 
-    const creditLink = document.createElement('a');
-    creditLink.download = creditFilename;
-    creditLink.href = window.URL.createObjectURL(creditBlob);
-    creditLink.style.display = 'none';
+  const creditLink = document.createElement('a');
+  creditLink.download = creditFilename;
+  creditLink.href = window.URL.createObjectURL(creditBlob);
+  creditLink.style.display = 'none';
 
-    document.body.appendChild(creditLink);
+  document.body.appendChild(creditLink);
 
-    creditLink.click();
+  creditLink.click();
 
-    document.body.removeChild(creditLink);
+  document.body.removeChild(creditLink);
 }
 
 export default function ExportPlayersButton({
@@ -126,8 +128,15 @@ export default function ExportPlayersButton({
     <>
       <Button
         onClick={() => {
-            savePlayersDataToFile(players);
-            saveOtherDataToFile(!!placesEnabled, playersPlaces, !!prizesEnabled, prizes, tournament, worker)
+          savePlayersDataToFile(players);
+          saveOtherDataToFile(
+            !!placesEnabled,
+            playersPlaces,
+            !!prizesEnabled,
+            prizes,
+            tournament,
+            worker,
+          );
         }}
       >
         <span>export</span>

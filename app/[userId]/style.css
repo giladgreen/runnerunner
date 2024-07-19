@@ -366,12 +366,11 @@
   margin-bottom: 10px;
 }
 
-.font-large{
-    font-size: 20px;
-
+.font-large {
+  font-size: 20px;
 }
 
-.create-new-today-player-button{
+.create-new-today-player-button {
   width: 250px;
 }
 
@@ -379,12 +378,11 @@
   background: #666666;
 }
 @media only screen and (max-width: 600px) {
-  .create-new-today-player-button{
+  .create-new-today-player-button {
     width: unset;
   }
-  .font-large{
+  .font-large {
     font-size: unset;
-
   }
 
   .cellular {
