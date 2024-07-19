@@ -54,7 +54,7 @@ export default function EntriesButton({ player }: { player: PlayerDB }) {
             setShowConfirmation(false);
             undoPlayerLastLog(player.phone_number, currentPage);
             setIsPending(true);
-            setTimeout(() => setIsPending(false), 1000);
+            setTimeout(() => setIsPending(false), 1600);
           }}
           onCancel={() => {
             setShowConfirmation(false);

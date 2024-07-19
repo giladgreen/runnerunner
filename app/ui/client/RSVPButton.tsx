@@ -37,7 +37,7 @@ export default function RSVPButton({
 
         setTimeout(() => {
           setQuery('');
-        }, 2300);
+        }, 2500);
       }}
     >
       <span className="pointer">{icon}</span> {text}
