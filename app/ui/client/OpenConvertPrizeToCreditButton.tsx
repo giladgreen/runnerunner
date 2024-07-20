@@ -7,6 +7,7 @@ import { useFormState } from 'react-dom';
 import Button from '@/app/ui/client/Button';
 import SearchablePrizesDropdown from '@/app/ui/client/SearchablePrizesDropdown';
 import { PlayerDB, PrizeInfoDB } from '@/app/lib/definitions';
+import SpinnerButton from '@/app/ui/client/SpinnerButton';
 
 function OpenConvertPrizeToCreditForm({
   userId,
@@ -72,9 +73,7 @@ function OpenConvertPrizeToCreditForm({
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-4">
-          <Button type="submit" onClick={() => hide?.()}>
-            Update
-          </Button>
+          <SpinnerButton text="Update" onClick={() => hide?.()} />
         </div>
       </form>
       {hide && (

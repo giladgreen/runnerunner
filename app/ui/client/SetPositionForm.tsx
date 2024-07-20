@@ -5,6 +5,7 @@ import Button from '@/app/ui/client/Button';
 import { setPlayerPosition } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import { PlayerForm } from '@/app/lib/definitions';
+import SpinnerButton from '@/app/ui/client/SpinnerButton';
 
 export default function SetPositionForm({
   player,
@@ -69,9 +70,7 @@ export default function SetPositionForm({
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-4">
-          <Button type="submit" onClick={() => hide?.()}>
-            Set
-          </Button>
+          <SpinnerButton text="Set" onClick={() => hide?.()} />
         </div>
       </form>
       {hide && (

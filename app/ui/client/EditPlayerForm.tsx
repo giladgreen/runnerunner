@@ -6,13 +6,15 @@ import { PlayerDB, PlayerForm, TournamentDB } from '@/app/lib/definitions';
 
 import Link from 'next/link';
 import Button from '@/app/ui/client/Button';
-import { useFormState } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import { PencilIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import RSVPButton from '@/app/ui/client/RSVPButton';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { TRANSLATIONS } from '@/app/lib/definitions';
 import Image from 'next/image';
+import Spinner from '@/app/ui/client/Spinner';
+import SpinnerButton from '@/app/ui/client/SpinnerButton';
 
 export default function EditPlayerForm({
   player,
@@ -175,7 +177,7 @@ export default function EditPlayerForm({
           >
             Cancel
           </Link>
-          <Button type="submit">Update player</Button>
+          <SpinnerButton text="Update Player" />
         </div>
       </form>
       <div

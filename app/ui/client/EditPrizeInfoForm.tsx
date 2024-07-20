@@ -4,8 +4,9 @@ import { updatePrizeInfo } from '@/app/lib/actions';
 import { PrizeInfoDB } from '@/app/lib/definitions';
 import Link from 'next/link';
 import Button from '@/app/ui/client/Button';
-import { useFormState } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import { PencilIcon } from '@heroicons/react/24/outline';
+import Spinner from '@/app/ui/client/Spinner';
 
 export default function EditPrizeInfoForm({
   prize,
@@ -124,9 +125,18 @@ export default function EditPrizeInfoForm({
           >
             Cancel
           </Link>
-          <Button type="submit">Update prize</Button>
+          <UpdatePrizeButton />
         </div>
       </form>
     </>
   );
+}
+
+function UpdatePrizeButton() {
+  const { pending } = useFormStatus();
+
+  if (pending) {
+    return <Spinner size={33} />;
+  }
+  return <Button type="submit">Update prize</Button>;
 }

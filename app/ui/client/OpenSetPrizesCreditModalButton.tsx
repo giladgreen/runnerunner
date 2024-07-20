@@ -7,6 +7,7 @@ import { setPrizesCreditWorth } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import Button from '@/app/ui/client/Button';
 import { usePathname, useSearchParams } from 'next/navigation';
+import SpinnerButton from '@/app/ui/client/SpinnerButton';
 
 function SetPrizesCreditForm({
   players,
@@ -68,9 +69,7 @@ function SetPrizesCreditForm({
         </div>
 
         <div className="mt-6 flex justify-end gap-4">
-          <Button type="submit" onClick={() => hide?.()}>
-            Update
-          </Button>
+          <SpinnerButton text="Update" onClick={() => hide?.()} />
         </div>
       </form>
       {hide && (

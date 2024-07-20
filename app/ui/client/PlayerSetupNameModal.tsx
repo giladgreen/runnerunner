@@ -4,6 +4,8 @@ import Button from '@/app/ui/client/Button';
 import { PlayerDB } from '@/app/lib/definitions';
 import { updateNewPlayerName } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
+import SpinnerButton from '@/app/ui/client/SpinnerButton';
+import React from 'react';
 
 export async function PlayerSetupNameModal({ player }: { player: PlayerDB }) {
   const initialState = { message: null, errors: {} };
@@ -53,8 +55,7 @@ export async function PlayerSetupNameModal({ player }: { player: PlayerDB }) {
             </div>
           </div>
         </div>
-
-        <Button type="submit">עדכן</Button>
+        <SpinnerButton text="עדכן" />
       </form>
     </div>
   );

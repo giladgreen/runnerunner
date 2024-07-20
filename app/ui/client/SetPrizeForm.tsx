@@ -6,6 +6,7 @@ import { useFormState } from 'react-dom';
 import { PlayerForm, PrizeInfoDB } from '@/app/lib/definitions';
 import SearchablePrizesDropdown from '@/app/ui/client/SearchablePrizesDropdown';
 import React, { useState } from 'react';
+import SpinnerButton from '@/app/ui/client/SpinnerButton';
 
 export default function SetPrizeForm({
   player,
@@ -66,9 +67,7 @@ export default function SetPrizeForm({
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-4">
-          <Button type="submit" onClick={() => hide?.()}>
-            Set
-          </Button>
+          <SpinnerButton text="Set" onClick={() => hide?.()} />
         </div>
       </form>
       {hide && (

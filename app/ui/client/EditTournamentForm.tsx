@@ -5,10 +5,12 @@ import { TournamentForm } from '@/app/lib/definitions';
 
 import Link from 'next/link';
 import Button from '@/app/ui/client/Button';
-import { useFormState } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import { Checkbox } from 'primereact/checkbox';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import Spinner from '@/app/ui/client/Spinner';
+import SpinnerButton from '@/app/ui/client/SpinnerButton';
 
 export default function EditTournamentForm({
   tournament,
@@ -182,7 +184,7 @@ export default function EditTournamentForm({
         >
           Cancel
         </Link>
-        <Button type="submit">Update tournament</Button>
+        <SpinnerButton text="Update tournament" />
       </div>
     </form>
   );

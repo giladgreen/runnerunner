@@ -10,6 +10,7 @@ import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import Button from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import Spinner from '@/app/ui/client/Spinner';
 
 export default function SignInForm() {
   const searchParams = useSearchParams();
@@ -69,7 +70,7 @@ export default function SignInForm() {
             </div>
           </div>
         </div>
-        <SignInButton phoneNumber={phoneNumber} />
+        <SignInButton />
         <div
           className="flex h-8 items-end space-x-1"
           aria-live="polite"
@@ -87,12 +88,15 @@ export default function SignInForm() {
   );
 }
 
-function SignInButton({ phoneNumber }: { phoneNumber: string }) {
+function SignInButton() {
   const { pending } = useFormStatus();
 
+  if (pending) {
+    return <Spinner size={24} />;
+  }
   return (
-    <Button className="mt-4 w-full" aria-disabled={pending}>
-      {pending ? 'Signing In' : 'Sign In'}
+    <Button className="mt-4 w-full">
+      Sign In
       <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
     </Button>
   );

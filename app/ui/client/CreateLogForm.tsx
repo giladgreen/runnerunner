@@ -6,10 +6,12 @@ import {
   createPlayerNewCreditLog,
   createPlayerUsageLog,
 } from '@/app/lib/actions';
-import { useFormState } from 'react-dom';
+import { useFormState, useFormStatus } from 'react-dom';
 import { PlayerDB, PlayerForm } from '@/app/lib/definitions';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
+import Spinner from '@/app/ui/client/Spinner';
+import SpinnerButton from '@/app/ui/client/SpinnerButton';
 
 export function UseCreditForPrizeForm({
   player,
@@ -135,10 +137,18 @@ export function UseCreditForPrizeForm({
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">
-        <Button type="submit">Use Credit</Button>
+        <UseCreditButton />
       </div>
     </form>
   );
+}
+function UseCreditButton() {
+  const { pending } = useFormStatus();
+
+  if (pending) {
+    return <Spinner size={33} />;
+  }
+  return <Button type="submit">Use Credit</Button>;
 }
 
 export function AddToBalanceForm({
@@ -232,7 +242,7 @@ export function AddToBalanceForm({
         </div>
       </div>
       <div className="mt-6 flex justify-end gap-4">
-        <Button type="submit">Add</Button>
+        <SpinnerButton text="Add" />
       </div>
     </form>
   );
