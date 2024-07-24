@@ -171,7 +171,7 @@ export default async function PlayersTable({
                   </td>
                   {rsvp_required && rsvpEnabled && (
                     <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                      <RSVPButton player={player} setQuery={() => {}} />
+                      <RSVPButton player={player} />
                     </td>
                   )}
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">

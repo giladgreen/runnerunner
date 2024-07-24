@@ -69,7 +69,6 @@ export default function EditPlayerForm({
                 player={player as PlayerDB}
                 stringDate={stringDate}
                 text={text}
-                setQuery={() => {}}
               />
             )
           ) : (
