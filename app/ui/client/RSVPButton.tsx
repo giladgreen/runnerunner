@@ -23,7 +23,6 @@ export default function RSVPButton({
   const [optimisticIsRsvpForDate, addOptimisticIsRsvpForDate] =
     useOptimistic<boolean>(isRsvpForDate, (state: boolean) => !state);
 
-  const icon = optimisticIsRsvpForDate ? '🟢' : '⚫️';
   return (
     <div
       onClick={() => {
@@ -35,7 +34,7 @@ export default function RSVPButton({
 
       }}
     >
-      <span className="pointer">{icon}</span> {text}
+      <span className="pointer"> <div style={{ width: 30, height: 30, border: '1px solid black', borderRadius: 15, background:optimisticIsRsvpForDate?'green':'white' }}/>  </span> {text}
     </div>
   );
 }
