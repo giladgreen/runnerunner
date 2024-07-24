@@ -1,6 +1,4 @@
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
-import Link from 'next/link';
 import Image from 'next/image';
 import SignUpButton from '@/app/ui/client/SignUpButton';
 import { fetchFeatureFlags } from '@/app/lib/data';
