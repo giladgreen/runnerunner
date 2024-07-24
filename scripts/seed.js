@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 
 async function seedTournaments(client) {
   try {
-    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
     // Create the "users" table if it doesn't exist
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS tournaments (
@@ -54,7 +53,6 @@ async function seedTournaments(client) {
 
 async function seedUsers(client) {
   try {
-    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
     // Create the "users" table if it doesn't exist
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS users (
@@ -65,6 +63,19 @@ async function seedUsers(client) {
         is_admin BOOLEAN DEFAULT FALSE,
         is_worker BOOLEAN DEFAULT FALSE,
         created_at timestamp NOT NULL DEFAULT now()
+      );
+    `;
+
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS deleted_users (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        phone_number TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL,
+        name TEXT,
+        is_admin BOOLEAN DEFAULT FALSE,
+        is_worker BOOLEAN DEFAULT FALSE,
+        created_at timestamp NOT NULL DEFAULT now(),
+        deleted_at timestamp NOT NULL DEFAULT now()
       );
     `;
 
@@ -100,14 +111,21 @@ async function seedUsers(client) {
 
 async function createBugReportTable(client) {
   try {
-    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
-
     // Create the "players" table if it doesn't exist
     const createTable = await client.sql`
     CREATE TABLE IF NOT EXISTS bugs (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     description VARCHAR(500) NOT NULL,
     updated_at timestamp NOT NULL DEFAULT now()
+  );
+`;
+
+    await client.sql`
+    CREATE TABLE IF NOT EXISTS deleted_bugs (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    description VARCHAR(500) NOT NULL,
+    updated_at timestamp NOT NULL DEFAULT now(),
+    deleted_at timestamp NOT NULL DEFAULT now()
   );
 `;
 
@@ -124,7 +142,6 @@ async function seedPlayers(client) {
   try {
     console.log(`seedPlayers start`);
 
-    await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
     console.log(`seedPlayers , created EXTENSION`);
 
     // Create the "players" table if it doesn't exist
@@ -137,6 +154,19 @@ async function seedPlayers(client) {
     image_url VARCHAR(255) NOT NULL default '/players/default.png',
     allowed_marketing BOOLEAN NOT NULL default FALSE,
     updated_at timestamp NOT NULL DEFAULT now()
+  );
+`;
+
+    await client.sql`
+    CREATE TABLE IF NOT EXISTS deleted_players (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    notes VARCHAR(500) NOT NULL default '',
+    image_url VARCHAR(255) NOT NULL default '/players/default.png',
+    allowed_marketing BOOLEAN NOT NULL default FALSE,
+    updated_at timestamp NOT NULL DEFAULT now(),
+    deleted_at timestamp NOT NULL DEFAULT now()
   );
 `;
 
@@ -176,6 +206,21 @@ async function seedHistory(client) {
     await client.sql`CREATE INDEX IF NOT EXISTS history_change_idx ON history (change);`;
     await client.sql`CREATE INDEX IF NOT EXISTS history_type_idx ON history (type);`;
     await client.sql`CREATE INDEX IF NOT EXISTS history_updated_at_idx ON history (updated_at);`;
+
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS deleted_history (
+         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+         phone_number VARCHAR(20) NOT NULL,
+         change INT NOT NULL,
+         type VARCHAR(20) NOT NULL,
+         note VARCHAR(255) NOT NULL,
+         archive BOOLEAN NOT NULL DEFAULT FALSE,
+         other_player_phone_number VARCHAR(20),
+         updated_by VARCHAR(20) DEFAULT 'admin',
+         updated_at timestamp with time zone NOT NULL DEFAULT now(),
+         deleted_at timestamp NOT NULL DEFAULT now()
+      );
+    `;
 
     console.log(`Created "history" table`);
 
@@ -224,6 +269,16 @@ async function seedRSVP(client) {
     await client.sql`CREATE INDEX IF NOT EXISTS rsvp_date_idx ON rsvp (date);`;
     await client.sql`CREATE INDEX IF NOT EXISTS rsvp_phone_number_idx ON rsvp (phone_number);`;
 
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS deleted_rsvp (
+         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+         date VARCHAR(20) NOT NULL,
+         phone_number TEXT NOT NULL,
+        created_at timestamp with time zone NOT NULL DEFAULT now(),
+        deleted_at timestamp NOT NULL DEFAULT now()
+      );
+    `;
+
     console.log(`Created "rsvp" table`);
 
     return {
@@ -257,6 +312,30 @@ async function seedPrizes(client) {
          extra TEXT,
          credit INT DEFAULT 0,
          created_at timestamp NOT NULL DEFAULT now()
+      );
+    `;
+
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS deleted_prizes (
+         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+         tournament TEXT NOT NULL,
+         phone_number TEXT NOT NULL,
+         prize TEXT NOT NULL,
+         ready_to_be_delivered BOOLEAN DEFAULT FALSE,
+         delivered BOOLEAN DEFAULT FALSE,
+         created_at timestamp NOT NULL DEFAULT now(),
+         deleted_at timestamp NOT NULL DEFAULT now()
+      );
+    `;
+
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS deleted_prizes_info (
+         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+         name TEXT NOT NULL,
+         extra TEXT,
+         credit INT DEFAULT 0,
+         created_at timestamp NOT NULL DEFAULT now(),
+         deleted_at timestamp NOT NULL DEFAULT now()
       );
     `;
 
@@ -369,7 +448,7 @@ async function seed() {
   console.log('## main start');
 
   const client = await db.connect();
-
+  await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
   console.log('## db connected');
   await seedUsers(client);
 

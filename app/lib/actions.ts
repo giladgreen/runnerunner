@@ -17,6 +17,7 @@ import {
   ImageDB,
   LogDB,
   PrizeDB,
+  PrizeInfoDB,
 } from './definitions';
 
 import { signIn } from '../../auth';
@@ -114,20 +115,6 @@ function sendEmail(to: string, subject: string, body: string) {
   );
 }
 
-export async function removeOldRsvp() {
-  const now = new Date().getTime();
-  if (now - clearOldRsvpLastRun < DAY) {
-    return;
-  }
-  try {
-    console.log('## remove Old Rsvp');
-    await sql`DELETE FROM rsvp WHERE created_at < now() - interval '48 hour'`;
-    clearOldRsvpLastRun = new Date().getTime();
-  } catch (error) {
-    console.error('rsvpPlayerForDay Error:', error);
-  }
-}
-
 function startTransaction() {
   return sql`BEGIN;`;
 }
@@ -138,6 +125,27 @@ function commitTransaction() {
 
 function cancelTransaction() {
   return sql`ROLLBACK;`;
+}
+
+export async function removeOldRsvp() {
+  try {
+    await startTransaction();
+    console.log('## remove Old Rsvp');
+    const rsvpItemsResult =
+      await sql<RSVPDB>`SELECT * FROM rsvp WHERE created_at < now() - interval '48 hour'`;
+    const rsvpItems = rsvpItemsResult.rows;
+    await Promise.all(
+      rsvpItems.map((item) => {
+        return sql`INSERT INTO deleted_rsvp (id, date, phone_number, created_at) VALUES (${item.id},${item.date},${item.phone_number},${item.created_at})`;
+      }),
+    );
+    await sql`DELETE FROM rsvp WHERE created_at < now() - interval '48 hour'`;
+    await commitTransaction();
+    clearOldRsvpLastRun = new Date().getTime();
+  } catch (error) {
+    await cancelTransaction();
+    console.error('rsvpPlayerForDay Error:', error);
+  }
 }
 
 function insertIntoBugs(description: string) {
@@ -946,8 +954,16 @@ export async function deletePrizeInfo({
   prevPage: string;
 }) {
   try {
+    await startTransaction();
+    const prizeInfo = (
+      await sql<PrizeInfoDB>`select * FROM prizes_info WHERE id = ${prizeId}`
+    ).rows[0];
+    await sql`INSERT INTO deleted_prizes_info (id, name, extra,credit,created_at) VALUES (${prizeInfo.id},${prizeInfo.name},${prizeInfo.extra},${prizeInfo.credit},${prizeInfo.created_at})`;
     await sql`DELETE FROM prizes_info WHERE id = ${prizeId}`;
+
+    await commitTransaction();
   } catch (error) {
+    await cancelTransaction();
     return { message: 'Database Error: Failed to Delete Player.' };
   } finally {
     revalidatePath(prevPage);
@@ -970,6 +986,19 @@ export async function deletePlayer({
       return;
     }
     const { phone_number } = player;
+    const playerHistory = (
+      await sql<LogDB>`SELECT * FROM history WHERE phone_number = ${phone_number}`
+    ).rows;
+
+    sql`INSERT INTO deleted_players (id, name, phone_number, notes, image_url, allowed_marketing, updated_at) 
+VALUES (${player.id}, ${player.name}, ${player.phone_number}, ${player.notes}, ${player.image_url}, ${player.allowed_marketing}, ${player.updated_at})`;
+
+    await Promise.all(
+      playerHistory.map((historyLog) => {
+        return sql`INSERT INTO deleted_history (id, phone_number, change , type, note , archive , other_player_phone_number, updated_by, updated_at ) 
+      VALUES (${historyLog.id}, ${historyLog.phone_number}, ${historyLog.change}, ${historyLog.type}, ${historyLog.note}, ${historyLog.archive}, ${historyLog.other_player_phone_number}, ${historyLog.updated_by}, ${historyLog.updated_at})`;
+      }),
+    );
     await sql`DELETE FROM history WHERE phone_number = ${phone_number}`;
     await sql`DELETE FROM players WHERE id = ${id}`;
     await commitTransaction();
@@ -1038,8 +1067,9 @@ export async function convertPrizeToCredit(
   formData: FormData,
 ) {
   try {
-    const { prizeId, prevPage, userId } = clientData;
     await startTransaction();
+
+    const { prizeId, prevPage, userId } = clientData;
 
     const amount = Number(formData.get('amount') as string);
     console.log('## amount', amount);
@@ -1061,9 +1091,14 @@ export async function convertPrizeToCredit(
           })
         `;
 
+    await sql`INSERT INTO deleted_prizes (id, tournament, phone_number, prize, ready_to_be_delivered, delivered, created_at)
+ VALUES (${prize.id},${prize.tournament},${prize.phone_number},${prize.prize},${prize.ready_to_be_delivered},${prize.delivered},${prize.created_at})`;
     await sql`DELETE FROM prizes WHERE id = ${prizeId}`;
+
+    commitTransaction();
     revalidatePath(prevPage);
   } catch (error) {
+    cancelTransaction();
     return { message: 'Database Error: Failed to Delete Player.' };
   }
 }
@@ -1261,14 +1296,22 @@ export async function deleteUser({
 }) {
   noStore();
   try {
+    await startTransaction();
     const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
     const user = users.rows[0];
 
     if (user.is_admin || user.is_worker) {
       return;
     }
+
+    await sql`INSERT INTO deleted_users (id, phone_number, password, name, is_admin, is_worker, created_at) 
+VALUES (${user.id}, ${user.phone_number},  ${user.password}, ${user.name}, ${user.is_admin}, ${user.is_worker}, ${user.created_at})`;
+
     await sql`DELETE FROM users WHERE id = ${id}`;
+
+    await commitTransaction();
   } catch (error) {
+    await cancelTransaction();
     console.error('Database Error:', error);
     return false;
   } finally {
@@ -1299,8 +1342,16 @@ export async function rsvpPlayerForDay(
     }
     if (val && !existingRsvp) {
       await sql`INSERT INTO rsvp (date, phone_number) VALUES (${date}, ${phone_number})`;
-    } else {
-      await sql`DELETE FROM rsvp WHERE id = ${existingRsvp.id}`;
+    } else if (existingRsvp) {
+      try {
+        await startTransaction();
+        await sql`INSERT INTO deleted_rsvp (id,date,phone_number, created_at ) VALUES (${existingRsvp.id}, ${existingRsvp.date}, ${existingRsvp.phone_number}, ${existingRsvp.created_at})`;
+        await sql`DELETE FROM rsvp WHERE id = ${existingRsvp.id}`;
+        await commitTransaction();
+      } catch (error) {
+        await cancelTransaction();
+        throw error;
+      }
     }
   } catch (error) {
     console.error('rsvpPlayerForDay Error:', error);
@@ -1365,7 +1416,7 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
     const existingPlayersImages = (await sql<ImageDB>`SELECT * FROM images`)
       .rows;
 
-    await sql`BEGIN;`;
+    await startTransaction();
 
     await sql`DELETE from history;`;
     await sql`DELETE from players;`;
@@ -1420,8 +1471,8 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
      SELECT phone_number, change, note, type, updated_at, archive FROM json_populate_recordset(NULL::history, $1)`,
       [JSON.stringify(arr2)],
     );
+    await commitTransaction();
 
-    await sql`COMMIT;`;
     console.log('## import Done');
     sendEmail(
       TARGET_MAIL,
@@ -1429,7 +1480,7 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
       `inserted ${playersToInsert.length} players`,
     );
   } catch (error) {
-    await sql`ROLLBACK;`;
+    await cancelTransaction();
     // @ts-ignore
     console.log(`## import error: ${error.message}`);
 

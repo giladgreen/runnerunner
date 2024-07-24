@@ -9,6 +9,7 @@ export type UserDB = {
   name?: string;
   is_admin: boolean;
   is_worker: boolean;
+  created_at: string;
 };
 
 export type PlayerForm = {
@@ -68,6 +69,7 @@ export type PrizeDB = {
   player?: PlayerDB;
   delivered: boolean;
   ready_to_be_delivered: boolean;
+  created_at: string;
 };
 export type WinnerDB = {
   date: string;
@@ -78,6 +80,7 @@ export type RSVPDB = {
   id: string;
   date: string;
   phone_number: string;
+  created_at: string;
 };
 export type Counts = {
   phone_number: string;
