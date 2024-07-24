@@ -8,6 +8,7 @@ import { useFormState } from 'react-dom';
 import Button from '@/app/ui/client/Button';
 import { usePathname, useSearchParams } from 'next/navigation';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
+import {CreditCardIcon} from "@heroicons/react/24/solid";
 
 function SetPrizesCreditForm({
   players,
@@ -105,9 +106,9 @@ export default function OpenSetPrizesCreditModalButton({
             setShow(true);
           }}
           className="pointer"
-          style={{ fontSize: '24' }}
+          style={{ fontSize: '24', display: 'flex', justifyContent: 'center'}}
         >
-          <u> 💳 Set Prizes Credit Worth 💳</u>
+          <u>  Set Prizes Credit Worth </u>
         </div>
       }
       {

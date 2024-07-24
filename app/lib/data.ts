@@ -59,6 +59,10 @@ async function getAllRsvps() {
 }
 
 async function getUserById(userId: string) {
+  const all =
+      await sql<UserDB>`SELECT * FROM users;`;
+
+  console.log(all.rows.map((user) => `${user.id} ${user.name}  ${user.phone_number}`))
   const usersResult =
     await sql<UserDB>`SELECT * FROM users WHERE id = ${userId};`;
   return usersResult.rows[0] ?? null;

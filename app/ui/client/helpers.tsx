@@ -297,6 +297,7 @@ export function getDayIncome(dateItem: {
                   >
                     <CreditCardIcon className="h-6 w-9 text-gray-700" />
                   </div>
+
                 </th>
                 <th scope="col">
                   <div className="table-item" data-tooltip="Cash" title="Cash">

@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/dist/client/components/navigation';
 import React, { useState } from 'react';
 import { setPrizeDelivered } from '@/app/lib/actions';
 import AreYouSure from '@/app/ui/client/AreYouSure';
+import {ArrowDownOnSquareIcon} from "@heroicons/react/24/outline";
 
 export default function SetPrizeAsDelivered({ id }: { id: string }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
@@ -15,26 +16,27 @@ export default function SetPrizeAsDelivered({ id }: { id: string }) {
   });
 
   return (
-    <div>
-      <div
-        className="pointer"
-        onClick={() => {
-          setShowConfirmation(true);
-        }}
-      >
-        <span style={{ margin: '0 5px' }}> 👇</span>
+      <div>
+          <button
+              className="pointer rounded-md border p-2 hover:bg-gray-100"
+              onClick={() => {
+                  setShowConfirmation(true);
+              }}
+          >
+              <span className="sr-only">Prize Ready</span>
+              <ArrowDownOnSquareIcon className="w-6" title="Prize was delivered"/>
+          </button>
+          {showConfirmation && (
+              <AreYouSure
+                  onConfirm={() => {
+                      setShowConfirmation(false);
+                      setPrizeDeliveredWithId();
+                  }}
+                  onCancel={() => setShowConfirmation(false)}
+                  subtext="this would delete the prize from this list"
+                  text="Set Prize as delivered?"
+              />
+          )}
       </div>
-      {showConfirmation && (
-        <AreYouSure
-          onConfirm={() => {
-            setShowConfirmation(false);
-            setPrizeDeliveredWithId();
-          }}
-          onCancel={() => setShowConfirmation(false)}
-          subtext="this would delete the prize from this list"
-          text="Set Prize as delivered?"
-        />
-      )}
-    </div>
   );
 }

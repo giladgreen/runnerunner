@@ -1,11 +1,9 @@
 import Link from 'next/link';
 import NavLinks from '@/app/ui/client/NavLinks';
-import RunnerLogo from '@/app/ui/runner-logo';
 
 import { signOut } from '@/auth';
 import SignOutButton from '@/app/ui/client/SignOutButton';
 import { fetchUserById } from '@/app/lib/data';
-import Image from "next/image";
 
 export default async function SideNav({ userId }: { userId: string }) {
   const user = await fetchUserById(userId);

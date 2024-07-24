@@ -3,8 +3,8 @@
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import UseCreditForm from '@/app/ui/client/UseCreditForm';
 import React from 'react';
-import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { PlusCircleIcon} from "@heroicons/react/24/solid";
 
 export default function OpenCreditModalButton({
   player,
@@ -27,34 +27,27 @@ export default function OpenCreditModalButton({
   };
 
   return (
-    <div>
-      <div
-        onClick={() => {
-          setShow(true);
-        }}
-        className="pointer"
-        style={{ fontSize: '24' }}
-      >
-        <Image
-          title={'pay'}
-          src={`/pay.png`}
-          alt={`pay`}
-          className="zoom-on-hover mr-4"
-          width={35}
-          height={35}
-        />
+      <div>
+          <button
+              className="pointer rounded-md border p-2 hover:bg-gray-100"
+              onClick={() => {
+                  setShow(true);
+              }}
+          >
+              <span className="sr-only">Pay</span>
+              <PlusCircleIcon className="w-6" title="Pay"/>
+          </button>
+          <div className={show ? 'edit-player-modal' : 'hidden'}>
+              <UseCreditForm
+                  players={players}
+                  player={player}
+                  tournaments={tournaments}
+                  hide={close}
+                  prevPage={prevPage}
+                  userId={userId}
+                  setQuery={setQuery}
+              />
+          </div>
       </div>
-      <div className={show ? 'edit-player-modal' : 'hidden'}>
-        <UseCreditForm
-          players={players}
-          player={player}
-          tournaments={tournaments}
-          hide={close}
-          prevPage={prevPage}
-          userId={userId}
-          setQuery={setQuery}
-        />
-      </div>
-    </div>
   );
 }

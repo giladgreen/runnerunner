@@ -14,6 +14,7 @@ import OpenPositionModalButton from '@/app/ui/client/OpenPositionModalButton';
 import OpenPrizeModalButton from '@/app/ui/client/OpenPrizeModalButton';
 import EntriesButton from '@/app/ui/client/EntriesButton';
 import CreateNewTodayPlayerButton from '@/app/ui/client/CreateNewTodayPlayerButton';
+import {TrashIcon} from "@heroicons/react/24/outline";
 
 export default function TodayPlayersTable({
   allPlayers,
@@ -74,18 +75,27 @@ export default function TodayPlayersTable({
     <>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <input
-          className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-          placeholder="Search Players"
-          onChange={(e) => {
-            setQuery(e.target.value);
-          }}
-          value={query}
+            className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+            placeholder="Search Players"
+            onChange={(e) => {
+              setQuery(e.target.value);
+            }}
+            value={query}
         />
-        <CreateNewTodayPlayerButton params={{ userId }} />
+        <button
+            className="pointer rounded-md border p-2 hover:bg-gray-100"
+            onClick={() => {
+              setQuery('')
+            }}
+        >
+          <span className="sr-only">Clear</span>
+          <TrashIcon className="w-6" title="clear"/>
+        </button>
+        <CreateNewTodayPlayerButton params={{userId}}/>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <div className="full-width mt-6 flow-root">
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{display: 'flex', justifyContent: 'space-between'}}>
             {header}
           </div>
 
@@ -116,7 +126,7 @@ export default function TodayPlayersTable({
                       </div>
                       {rsvpEnabled && isRsvpRequired && (
                         <div className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                          <RSVPButton player={player} setQuery={setQuery} />
+                          <RSVPButton player={player} />
                         </div>
                       )}
                     </div>
@@ -206,7 +216,7 @@ export default function TodayPlayersTable({
 
                       {rsvpEnabled && isRsvpRequired && (
                         <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                          <RSVPButton player={player} setQuery={setQuery} />
+                          <RSVPButton player={player} />
                         </td>
                       )}
                       <td className="rsvp-icon whitespace-nowrap px-3 py-3 ">

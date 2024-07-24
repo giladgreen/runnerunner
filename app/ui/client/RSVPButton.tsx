@@ -11,12 +11,10 @@ export default function RSVPButton({
   player,
   stringDate,
   text,
-  setQuery,
 }: {
   player: PlayerDB;
   stringDate?: string;
   text?: string;
-  setQuery?: (val: string) => void;
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const date = stringDate ?? new Date().toISOString().slice(0, 10);
@@ -35,9 +33,6 @@ export default function RSVPButton({
 
         rsvpPlayerForDay(player.phone_number, date, !isRsvpForDate, prevPage);
 
-        setTimeout(() => {
-          setQuery?.('');
-        }, 2500);
       }}
     >
       <span className="pointer">{icon}</span> {text}

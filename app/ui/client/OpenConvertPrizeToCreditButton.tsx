@@ -6,8 +6,9 @@ import { convertPrizeToCredit } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import Button from '@/app/ui/client/Button';
 import SearchablePrizesDropdown from '@/app/ui/client/SearchablePrizesDropdown';
-import { PlayerDB, PrizeInfoDB } from '@/app/lib/definitions';
+import {  PrizeInfoDB } from '@/app/lib/definitions';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
+import {CreditCardIcon} from "@heroicons/react/24/outline";
 
 function OpenConvertPrizeToCreditForm({
   userId,
@@ -103,26 +104,28 @@ export default function OpenConvertPrizeToCreditButton({
     setShow(false);
   };
   return (
-    <div className="give-credit-modal-button" style={{ marginRight: 10 }}>
-      <div
-        onClick={() => {
-          setShow(true);
-        }}
-        className="pointer"
-        style={{ fontSize: '24' }}
-      >
-        <span style={{ margin: '0 5px' }}> 💳</span>
+      <div className="give-credit-modal-button" style={{marginRight: 10}}>
+        <button
+            className="pointer rounded-md border p-2 hover:bg-gray-100"
+            onClick={() => {
+              setShow(true);
+            }}
+        >
+          <span className="sr-only">Convert to Credit</span>
+          <CreditCardIcon className="w-6" title="Convert to Credit"/>
+        </button>
+
+
+        <div className={show ? 'edit-player-modal' : 'hidden'}>
+          <OpenConvertPrizeToCreditForm
+              hide={close}
+              prevPage={prevPage}
+              prizeId={prizeId}
+              prizeName={prizeName}
+              userId={userId}
+              prizesInformation={prizesInformation}
+          />
+        </div>
       </div>
-      <div className={show ? 'edit-player-modal' : 'hidden'}>
-        <OpenConvertPrizeToCreditForm
-          hide={close}
-          prevPage={prevPage}
-          prizeId={prizeId}
-          prizeName={prizeName}
-          userId={userId}
-          prizesInformation={prizesInformation}
-        />
-      </div>
-    </div>
   );
 }

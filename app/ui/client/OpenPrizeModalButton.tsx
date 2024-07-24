@@ -2,9 +2,10 @@
 
 import { PlayerDB, PlayerForm, PrizeInfoDB } from '@/app/lib/definitions';
 import React from 'react';
-import Image from 'next/image';
+
 import { usePathname, useSearchParams } from 'next/navigation';
 import SetPrizeForm from '@/app/ui/client/SetPrizeForm';
+import {GiftIcon, HashtagIcon} from "@heroicons/react/24/solid";
 
 export default function OpenPrizeModalButton({
   player,
@@ -20,31 +21,25 @@ export default function OpenPrizeModalButton({
     setShow(false);
   };
   return (
-    <div>
-      <div
-        onClick={() => {
-          setShow(true);
-        }}
-        className="pointer"
-        style={{ fontSize: '24' }}
-      >
-        <Image
-          title={'prize'}
-          src={`/prize.png`}
-          alt={`prize`}
-          className="zoom-on-hover mr-4"
-          width={35}
-          height={35}
-        />
+      <div>
+          <button
+              className="pointer rounded-md border p-2 hover:bg-gray-100"
+              onClick={() => {
+                  setShow(true);
+              }}
+          >
+              <span className="sr-only">Prize</span>
+              <GiftIcon className="w-6" title="Prize"/>
+          </button>
+
+          <div className={show ? 'edit-player-modal' : 'hidden'}>
+              <SetPrizeForm
+                  player={player as unknown as PlayerForm}
+                  hide={close}
+                  prevPage={prevPage}
+                  prizesInformation={prizesInformation}
+              />
+          </div>
       </div>
-      <div className={show ? 'edit-player-modal' : 'hidden'}>
-        <SetPrizeForm
-          player={player as unknown as PlayerForm}
-          hide={close}
-          prevPage={prevPage}
-          prizesInformation={prizesInformation}
-        />
-      </div>
-    </div>
   );
 }

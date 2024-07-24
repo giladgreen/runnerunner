@@ -3,8 +3,8 @@
 import { PlayerDB, PlayerForm } from '@/app/lib/definitions';
 import SetPositionForm from '@/app/ui/client/SetPositionForm';
 import React from 'react';
-import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
+import {HashtagIcon} from "@heroicons/react/24/solid";
 
 export default function OpenPositionModalButton({
   player,
@@ -18,30 +18,23 @@ export default function OpenPositionModalButton({
     setShow(false);
   };
   return (
-    <div>
-      <div
-        onClick={() => {
-          setShow(true);
-        }}
-        className="pointer"
-        style={{ fontSize: '24' }}
-      >
-        <Image
-          title={'podium'}
-          src={`/podium.png`}
-          alt={`podium`}
-          className="zoom-on-hover mr-4"
-          width={35}
-          height={35}
-        />
+      <div>
+          <button
+              className="pointer rounded-md border p-2 hover:bg-gray-100"
+              onClick={() => {
+                  setShow(true);
+              }}
+          >
+              <span className="sr-only">Position</span>
+              <HashtagIcon className="w-6" title="Set Position"/>
+          </button>
+          <div className={show ? 'edit-player-modal' : 'hidden'}>
+              <SetPositionForm
+                  player={player as unknown as PlayerForm}
+                  hide={close}
+                  prevPage={prevPage}
+              />
+          </div>
       </div>
-      <div className={show ? 'edit-player-modal' : 'hidden'}>
-        <SetPositionForm
-          player={player as unknown as PlayerForm}
-          hide={close}
-          prevPage={prevPage}
-        />
-      </div>
-    </div>
   );
 }

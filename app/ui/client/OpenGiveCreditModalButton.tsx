@@ -9,6 +9,7 @@ import { useFormState } from 'react-dom';
 import Button from '@/app/ui/client/Button';
 import SearchablePrizesDropdown from '@/app/ui/client/SearchablePrizesDropdown';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
+import {CreditCardIcon} from "@heroicons/react/24/outline";
 
 function SetGivePrizeForm({
   player,
@@ -177,22 +178,25 @@ export default function OpenGiveCreditModalButton({
     setShow(false);
   };
   return (
-    <div className="give-credit-modal-button" style={{ marginRight: 10 }}>
-      {hasReceived && <TickIcon size={20} />}
-      {!hasReceived && (
-        <div
-          onClick={() => {
-            setShow(true);
-          }}
-          className="pointer"
-          style={{ fontSize: '24' }}
-        >
-          💳
-        </div>
-      )}
-      {!hasReceived && (
-        <div className={show ? 'edit-player-modal' : 'hidden'}>
-          <SetGivePrizeForm
+      <div className="give-credit-modal-button" style={{marginRight: 10}}>
+        {hasReceived && <TickIcon size={20}/>}
+        {!hasReceived && (
+            <button
+                className="pointer rounded-md border p-2 hover:bg-gray-100"
+                onClick={() => {
+                  setShow(true);
+                }}
+            >
+              <span className="sr-only">Convert to Credit</span>
+              <CreditCardIcon className="w-6" title="Convert to Credit"/>
+            </button>
+
+  )
+}
+{
+  !hasReceived && (
+      <div className={show ? 'edit-player-modal' : 'hidden'}>
+        <SetGivePrizeForm
             player={player}
             hide={close}
             prevPage={prevPage}
