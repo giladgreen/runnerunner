@@ -3,6 +3,7 @@ import { formatCurrency } from '@/app/lib/utils';
 import React from 'react';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import {TRANSLATIONS} from "@/app/lib/definitions";
 
 export default async function TournamentsSetupPage({
   params,
@@ -27,36 +28,37 @@ export default async function TournamentsSetupPage({
   }
   const tournaments = await fetchTournaments();
 
+
   return (
-    <div className="config-section">
+    <div className="config-section rtl" style={{ textAlign: 'right'}}>
       <div>
         <b>
-          <u>Tournaments:</u>
+          <u>טורנירים:</u>
         </b>
       </div>
-      <table className="hidden min-w-full text-gray-900 md:table">
-        <thead className="rounded-lg text-left text-sm font-normal">
+      <table className="hidden min-w-full text-gray-900 md:table rtl" style={{ textAlign: 'right'}}>
+        <thead className="rounded-lg text-left text-sm font-normal" style={{ textAlign: 'right'}}>
           <tr>
-            <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
-              Day
+            <th scope="col" className="px-4 py-5 font-medium sm:pl-6" style={{ textAlign: 'right'}}>
+              יום
             </th>
-            <th scope="col" className="px-3 py-5 font-medium">
-              Name
+            <th scope="col" className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+              שם
             </th>
-            <th scope="col" className="px-3 py-5 font-medium">
-              Buy-in
+            <th scope="col" className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+              עלות כניסה
             </th>
-            <th scope="col" className="px-3 py-5 font-medium">
-              Re-buy
+            <th scope="col" className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+              עלות כניסה נוספת
             </th>
-            <th scope="col" className="px-3 py-5 font-medium">
-              Max players
+            <th scope="col" className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+              מספר שחקנים מירבי
             </th>
-            <th scope="col" className="px-3 py-5 font-medium">
-              RSVP Required
+            <th scope="col" className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+              האם נדרש אישור הגעה
             </th>
-            <th scope="col" className="px-3 py-5 font-medium">
-              <span className="sr-only">Edit</span>
+            <th scope="col" className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+              <span className="sr-only">ערוך</span>
             </th>
           </tr>
         </thead>
@@ -67,7 +69,10 @@ export default async function TournamentsSetupPage({
               className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
             >
               <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                {tournament.day}
+                {
+                  // @ts-ignore
+                  TRANSLATIONS[tournament.day]
+                }
               </td>
               <td className="whitespace-nowrap px-3 py-3">{tournament.name}</td>
               <td className="whitespace-nowrap px-3 py-3">

@@ -16,6 +16,7 @@ const iconMap = {
   empty: DoubleTicksIcon,
   prize: GiftIcon,
   today: ArrowDownOnSquareIcon,
+  export: ArrowDownOnSquareIcon,
 };
 
 export default function Card({
@@ -30,7 +31,7 @@ export default function Card({
 }: {
   title: string | JSX.Element;
   value: number | string | JSX.Element;
-  type?: 'players' | 'debt' | 'money' | 'rsvp' | 'arrived' | 'empty' | 'prize' | 'today';
+  type?: 'players' | 'debt' | 'money' | 'rsvp' | 'arrived' | 'empty' | 'prize' | 'today' | 'export';
   spend?: boolean;
   empty?: boolean;
   oneLine?: boolean;

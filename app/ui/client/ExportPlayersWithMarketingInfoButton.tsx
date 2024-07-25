@@ -14,7 +14,7 @@ export default function ExportPlayersWithMarketingInfoButton({
   );
   return (
     <>
-      <Button
+      <Button style={{textAlign: 'center', width: '100%'}}
         onClick={() => {
           const todayDate = new Date().toISOString().slice(0, 10);
           const data = `name, phone number,
@@ -39,11 +39,11 @@ ${allowed_marketing_players.map((player) => {
           document.body.removeChild(link);
         }}
       >
-        <span>ייצוא</span>
+          <div style={{textAlign: 'center', width: '100%'}}>לחץ כאן</div>
       </Button>
-      <input
-        type="file"
-        id="fileInput"
+        <input
+            type="file"
+            id="fileInput"
         style={{ display: 'none' }}
         accept=".csv"
       />

@@ -126,7 +126,7 @@ export default function ExportPlayersButton({
 }) {
   return (
     <>
-      <Button
+      <Button style={{ width: '100%', textAlign:'center' }}
         onClick={() => {
           savePlayersDataToFile(players);
           saveOtherDataToFile(
@@ -139,7 +139,7 @@ export default function ExportPlayersButton({
           );
         }}
       >
-        <span>ייצוא</span>
+        <div style={{ textAlign: 'center', width: '100%' }}>לחץ כאן</div>
       </Button>
       <input
         type="file"

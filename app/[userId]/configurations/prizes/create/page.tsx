@@ -29,18 +29,18 @@ export default function CreateNewPrizesInfoPage({
 
   return (
     <form action={dispatch}>
-      <div className="rounded-md bg-gray-50 p-4 md:p-6">
+      <div className="rounded-md bg-gray-50 p-4 md:p-6 rtl" style={{ textAlign: 'right' }}>
         {/* prize name */}
         <div className="mb-4">
-          <label htmlFor="name" className="mb-2 block text-sm font-medium">
-            Name
+          <label htmlFor="name" className="mb-2 block text-sm font-medium" >
+            שם
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
                 id="name"
                 name="name"
-                placeholder="הכנס פרס"
+                placeholder="הכנס שם פרס"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="name-error"
               />
@@ -60,14 +60,14 @@ export default function CreateNewPrizesInfoPage({
         {/* prize extra */}
         <div className="mb-4">
           <label htmlFor="extra" className="mb-2 block text-sm font-medium">
-            Extra
+            מידע נוסף
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
               <input
                 id="extra"
                 name="extra"
-                placeholder="מידע נוסף"
+                placeholder="מידע נוסף אם יש"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="extra-error"
               />
@@ -87,7 +87,7 @@ export default function CreateNewPrizesInfoPage({
         {/* prize credit */}
         <div className="mb-4">
           <label htmlFor="credit" className="mb-2 block text-sm font-medium">
-            Credit worth
+            שווי בקרדיט
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -95,7 +95,7 @@ export default function CreateNewPrizesInfoPage({
                 id="credit"
                 name="credit"
                 type="number"
-                placeholder="שווי קרדיט"
+                placeholder="הכנס שווי בקרדיט"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="extra-error"
               />

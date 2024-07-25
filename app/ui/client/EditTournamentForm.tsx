@@ -1,7 +1,7 @@
 'use client';
 import { updateTournament } from '@/app/lib/actions';
 
-import { TournamentForm } from '@/app/lib/definitions';
+import {TournamentForm, TRANSLATIONS} from '@/app/lib/definitions';
 
 import Link from 'next/link';
 import Button from '@/app/ui/client/Button';
@@ -33,19 +33,22 @@ export default function EditTournamentForm({
 
   return (
     <form action={dispatch}>
-      <div className="rounded-md bg-gray-50 p-4 md:p-6">
+      <div className="rounded-md bg-gray-50 p-4 md:p-6 rtl" style={{ textAlign: 'right'}}>
         {/* Day */}
         <div className="mb-4">
-          <label htmlFor="day" className="mb-2 block text-sm font-medium">
-            Day
+          <label htmlFor="day" className="mb-2 block text-sm font-medium" style={{ textAlign: 'right'}}>
           </label>
-          <div className="relative mt-2 rounded-md">{tournament.day}</div>
+          <div className="relative mt-2 rounded-md" style={{ textAlign: 'right', zoom:2}}>{
+            // @ts-ignore
+            TRANSLATIONS[tournament.day]
+
+          }</div>
         </div>
 
         {/* tournament name */}
         <div className="mb-4">
-          <label htmlFor="name" className="mb-2 block text-sm font-medium">
-            Name
+          <label htmlFor="name" className="mb-2 block text-sm font-medium" style={{ textAlign: 'right'}}>
+            שם
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -72,8 +75,8 @@ export default function EditTournamentForm({
 
         {/* buy_in */}
         <div className="mb-4">
-          <label htmlFor="buy_in" className="mb-2 block text-sm font-medium">
-            Buy In
+          <label htmlFor="buy_in" className="mb-2 block text-sm font-medium" style={{ textAlign: 'right'}}>
+            עלות כניסה
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -101,8 +104,8 @@ export default function EditTournamentForm({
         </div>
         {/* re_buy */}
         <div className="mb-4">
-          <label htmlFor="re_buy" className="mb-2 block text-sm font-medium">
-            Re-Buy
+          <label htmlFor="re_buy" className="mb-2 block text-sm font-medium" style={{ textAlign: 'right'}}>
+            עלות כניסה נוספת
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -132,9 +135,9 @@ export default function EditTournamentForm({
         <div className="rsvp-section mb-4">
           <label
             htmlFor="max_players"
-            className="mb-2 block text-sm font-medium"
+            className="mb-2 block text-sm font-medium" style={{ textAlign: 'right'}}
           >
-            Max Players
+            מספר שחקנים מירבי
           </label>
           <div className="relative mt-2 rounded-md">
             <div className="relative">
@@ -163,9 +166,10 @@ export default function EditTournamentForm({
           <label
             htmlFor="rsvp_required"
             className="mb-2 block text-sm font-medium"
-            style={{ marginTop: 10 }}
+            style={{ marginTop: 10, textAlign: 'right' }}
+
           >
-            RSVP Required
+           האם נדרש אישור הגעה
           </label>
           <Checkbox
             inputId="rsvp_required"

@@ -14,7 +14,7 @@ export default async function tournamentEditPage({
   );
 
   return (
-    <main>
+    <main className="rtl">
       <Breadcrumbs
         breadcrumbs={[
           { label: '.', href: `/${params.userId}` },
