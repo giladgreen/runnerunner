@@ -39,9 +39,10 @@ export default async function SideNav({ userId }: { userId: string }) {
           paddingLeft: 10,
           paddingBottom: 10,
           color: 'rgb(47, 111, 235)',
+            textAlign: 'right'
         }}
       >
-        <b>connected: {user.name ?? user.phone_number}</b>
+        <b>מחובר כ: {user.name ?? user.phone_number}</b>
       </div>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks user={user} />
