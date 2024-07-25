@@ -59,8 +59,8 @@ export default function EntriesButton({ player }: { player: PlayerDB }) {
           onCancel={() => {
             setShowConfirmation(false);
           }}
-          subtext="this would revert the last entry"
-          text="Undo last player change?"
+          subtext="ביטול הכניסה האחרונה של השחקן"
+          text="ביטול כניסה אחרונה?"
         />
       )}
     </div>

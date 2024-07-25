@@ -1,5 +1,6 @@
 import { lusitana } from '@/app/ui/fonts';
 import {
+  ArrowDownOnSquareIcon,
   BanknotesIcon,
   GiftIcon,
   UserGroupIcon,
@@ -14,6 +15,7 @@ const iconMap = {
   arrived: DoubleTicksIcon,
   empty: DoubleTicksIcon,
   prize: GiftIcon,
+  today: ArrowDownOnSquareIcon,
 };
 
 export default function Card({
@@ -28,7 +30,7 @@ export default function Card({
 }: {
   title: string | JSX.Element;
   value: number | string | JSX.Element;
-  type?: 'players' | 'debt' | 'money' | 'rsvp' | 'arrived' | 'empty' | 'prize';
+  type?: 'players' | 'debt' | 'money' | 'rsvp' | 'arrived' | 'empty' | 'prize' | 'today';
   spend?: boolean;
   empty?: boolean;
   oneLine?: boolean;
@@ -45,8 +47,8 @@ export default function Card({
         green ? 'bg-green-200' : orange ? 'bg-red-300' : 'bg-blue-200'
       }`}
     >
-      <div className="card-header flex p-4 text-center">
-        {Icon ? <Icon className="h-5 w-5 text-gray-700" size={18} /> : null}
+      <div className="rtl card-header flex p-4 text-center">
+        {Icon ? <Icon className="h-5 w-5 text-gray-700" size={18} style={{ marginLeft: 4}}/> : null}
         <h3
           className={`ml-2 text-center text-sm font-medium ${
             spend ? 'center-text' : ''

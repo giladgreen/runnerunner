@@ -26,7 +26,7 @@ export default function OpenPositionModalButton({
               }}
           >
               <span className="sr-only">Position</span>
-              <HashtagIcon className="w-6" title="Set Position"/>
+              <HashtagIcon className="w-6" title="קסע דירוג"/>
           </button>
           <div className={show ? 'edit-player-modal' : 'hidden'}>
               <SetPositionForm

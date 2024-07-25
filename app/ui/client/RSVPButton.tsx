@@ -24,7 +24,7 @@ export default function RSVPButton({
     useOptimistic<boolean>(isRsvpForDate, (state: boolean) => !state);
 
   return (
-    <div
+    <div  style={{ display: 'flex', margin: '5px 0'}}
       onClick={() => {
         startTransition(() => {
           addOptimisticIsRsvpForDate(!isRsvpForDate);
@@ -34,7 +34,7 @@ export default function RSVPButton({
 
       }}
     >
-      <span className="pointer"> <div style={{ width: 30, height: 30, border: '1px solid black', borderRadius: 15, background:optimisticIsRsvpForDate?'green':'white' }}/>  </span> {text}
+      <span className="pointer" style={{ display: 'flex'}}> <div style={{ margin:'0 5px', width: 30, height: 30, border: '1px solid black', borderRadius: 15, background:optimisticIsRsvpForDate?'green':'white' }}/>  </span> {text}
     </div>
   );
 }

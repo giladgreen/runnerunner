@@ -22,7 +22,7 @@ export default async function PrizesInfoPage({
         <div className="flex w-full items-center justify-between">
           <h1 className={`${lusitana.className} text-2xl`}>
             <b>
-              <u>you do not have permissions to see this page</u>
+              <u>אין לך הרשאות לראות עמוד זה</u>
             </b>
           </h1>
         </div>

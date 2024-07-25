@@ -110,7 +110,7 @@ export default function UseCreditForm({
         disabled={pending}
         className={pending ? ' gray-on-hover bg-gray-500' : ''}
       >
-        {isRebuy ? 'Rebuy' : 'Buy In'}
+        {isRebuy ? 'כניסה נוספת' : 'כניסה'}
       </Button>
     );
   }
@@ -122,7 +122,7 @@ export default function UseCreditForm({
 
     return (
       <Button onClick={hide} style={{ marginTop: -52, marginLeft: 20 }}>
-        Cancel
+        ביטול
       </Button>
     );
   }
@@ -134,7 +134,7 @@ export default function UseCreditForm({
           {/*  balance change */}
           <div className="mb-4">
             <label htmlFor="change" className="mb-2 block text-sm font-medium">
-              Amount
+              סכום
             </label>
             <div className="relative mt-2 rounded-md">
               <div className="relative">
@@ -144,7 +144,7 @@ export default function UseCreditForm({
                   type="number"
                   step="10"
                   min={0}
-                  placeholder="Enter ILS amount"
+                  placeholder="סכום"
                   className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                   aria-describedby="change-error"
                   value={amount}
@@ -168,14 +168,14 @@ export default function UseCreditForm({
           {/* note */}
           <div className="mb-4">
             <label htmlFor="note" className="mb-2 block text-sm font-medium">
-              Note
+              סיבה
             </label>
             <div className="relative">
               <input
                 id="note"
                 name="note"
                 type="text"
-                placeholder="Enter note"
+                placeholder="הערה"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="note-error"
                 required
@@ -198,7 +198,7 @@ export default function UseCreditForm({
           </div>
 
           {/* type */}
-          <div className="relative mt-2 rounded-md">
+          <div className="relative mt-2 rounded-md rtl">
             <div className="rsvp-section relative">
               <div className="justify-content-center radio flex flex-wrap gap-3">
                 <div className="align-items-center flex">
@@ -210,7 +210,7 @@ export default function UseCreditForm({
                     onChange={() => setType('credit')}
                   />
                   <label htmlFor="credit" className="ml-2">
-                    Credit
+                    קרדיט
                   </label>
                 </div>
                 <div className="align-items-center flex">
@@ -222,7 +222,7 @@ export default function UseCreditForm({
                     onChange={() => setType('cash')}
                   />
                   <label htmlFor="cash" className="ml-2">
-                    Cash
+                    מזומן
                   </label>
                 </div>
                 <div className="align-items-center flex">
@@ -234,7 +234,7 @@ export default function UseCreditForm({
                     onChange={() => setType('wire')}
                   />
                   <label htmlFor="wire" className="ml-2">
-                    Money wire
+                    העברה
                   </label>
                 </div>
                 <div className="align-items-center flex">
@@ -246,7 +246,7 @@ export default function UseCreditForm({
                     onChange={() => setType('credit_by_other')}
                   />
                   <label htmlFor="credit_by_other" className="ml-2">
-                    Someone else Credit
+                    קרדיט על חשבון שחקן אחר
                   </label>
                 </div>
               </div>
@@ -259,8 +259,9 @@ export default function UseCreditForm({
               <label
                 htmlFor="player"
                 className="mb-2 block text-sm font-medium"
+                style={{margin: '7px 0 0 0'}}
               >
-                Player:
+                שחקן:
               </label>
               <div className="relative">
                 <SearchablePlayersDropdown

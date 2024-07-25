@@ -30,7 +30,7 @@ export default function CreatePlayerForm({
     createPlayerWithPrevPage,
     initialState,
   );
-  const [balanceNote, setBalanceNote] = useState('new player');
+  const [balanceNote, setBalanceNote] = useState('שחקן חדש');
   const [imageUrl, setImageUrl] = useState('');
   const [balance, setBalance] = useState(0);
   // @ts-ignore
@@ -39,18 +39,18 @@ export default function CreatePlayerForm({
   return (
     <>
       <form action={dispatch}>
-        <div className="rounded-md bg-gray-50 p-4 md:p-6">
+        <div className="rounded-md bg-gray-50 p-4 md:p-6 rtl">
           {/* player Name */}
           <div className="mb-4">
             <label htmlFor="name" className="mb-2 block text-sm font-medium">
-              Choose Name
+              שם
             </label>
             <div className="relative">
               <input
                 id="name"
                 name="name"
                 type="text"
-                placeholder="Enter Name"
+                placeholder="הכנס שם"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="name-error"
               />
@@ -73,14 +73,14 @@ export default function CreatePlayerForm({
               htmlFor="phone_number"
               className="mb-2 block text-sm font-medium"
             >
-              Choose Phone number
+              מספר טלפון
             </label>
             <div className="relative">
               <input
                 id="phone_number"
                 name="phone_number"
                 type="text"
-                placeholder="Enter phone_number"
+                placeholder="הכנס מספר טלפון"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="phone_number-error"
               />
@@ -100,7 +100,7 @@ export default function CreatePlayerForm({
           {/* player initial balance */}
           <div className="mb-4">
             <label htmlFor="balance" className="mb-2 block text-sm font-medium">
-              Initial Balance
+              קרדיט קיים
             </label>
             <div className="relative mt-2 rounded-md">
               <div className="relative">
@@ -111,7 +111,7 @@ export default function CreatePlayerForm({
                   step="1"
                   value={balance}
                   onChange={(e) => setBalance(Number(e.target.value))}
-                  placeholder="Enter ILS balance"
+                  placeholder="הכנס קרדיט אם יש"
                   className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                   aria-describedby="balance-error"
                 />
@@ -131,7 +131,7 @@ export default function CreatePlayerForm({
           {/* note */}
           <div className="mb-4">
             <label htmlFor="note" className="mb-2 block text-sm font-medium">
-              Balance Note
+              הערה על הקרדיט הקיים
             </label>
             <div className="relative">
               <input
@@ -140,7 +140,7 @@ export default function CreatePlayerForm({
                 type="text"
                 value={balanceNote}
                 onChange={(e) => setBalanceNote(e.target.value)}
-                placeholder="Enter note"
+                placeholder="הערה"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="note-error"
               />
@@ -160,14 +160,14 @@ export default function CreatePlayerForm({
           {/* general notes */}
           <div className="mb-4">
             <label htmlFor="notes" className="mb-2 block text-sm font-medium">
-              Notes
+             הערות על השחקן
             </label>
             <div className="relative">
               <input
                 id="notes"
                 name="notes"
                 type="text"
-                placeholder="Enter notes"
+                placeholder="הערות"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="note-error"
               />
@@ -190,7 +190,7 @@ export default function CreatePlayerForm({
               htmlFor="image_url"
               className="mb-2 block text-sm font-medium"
             >
-              image_url
+              כתובת תמונה
             </label>
             <div className="relative">
               <input
@@ -219,9 +219,9 @@ export default function CreatePlayerForm({
             href={`/${userId}/players`}
             className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
           >
-            Cancel
+            ביטול
           </Link>
-          <SpinnerButton text="Create Player" />
+          <SpinnerButton text="צור שחקן" />
         </div>
       </form>
       <div
@@ -244,7 +244,7 @@ export default function CreatePlayerForm({
                   open();
                 }}
               >
-                Upload image
+                העלה תמונה
               </button>
             );
           }}

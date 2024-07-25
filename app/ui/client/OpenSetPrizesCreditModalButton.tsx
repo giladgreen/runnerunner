@@ -61,7 +61,7 @@ function SetPrizesCreditForm({
                     newBalances[player.position] = Number(e.target.value);
                     setBalances(newBalances);
                   }}
-                  placeholder={`enter #${player.position} place credit worth`}
+                  placeholder={` #${player.position} שווי קרדיט של מקום `}
                   className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 />
               </div>
@@ -70,12 +70,12 @@ function SetPrizesCreditForm({
         </div>
 
         <div className="mt-6 flex justify-end gap-4">
-          <SpinnerButton text="Update" onClick={() => hide?.()} />
+          <SpinnerButton text="עדכון" onClick={() => hide?.()} />
         </div>
       </form>
       {hide && (
         <Button onClick={hide} style={{ marginTop: -52, marginLeft: 20 }}>
-          Cancel
+          ביטול
         </Button>
       )}
     </div>
@@ -106,9 +106,9 @@ export default function OpenSetPrizesCreditModalButton({
             setShow(true);
           }}
           className="pointer"
-          style={{ fontSize: '24', display: 'flex', justifyContent: 'center'}}
+          style={{ fontSize: '24', display: 'flex', justifyContent: 'center', color: "blue"}}
         >
-          <u>  Set Prizes Credit Worth </u>
+          <u>  הגדר שווי קרדיט </u>
         </div>
       }
       {

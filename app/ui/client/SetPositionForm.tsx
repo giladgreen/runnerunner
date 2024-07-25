@@ -32,7 +32,7 @@ export default function SetPositionForm({
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
         <label className="mb-2 block text-sm font-medium">
-          Set Player Place
+          הגדר מיקום שחקן
         </label>
         <div className="form-inner-control  rounded-md p-4 md:p-6">
           {/*  balance change */}
@@ -52,7 +52,7 @@ export default function SetPositionForm({
                   step="1"
                   min={0}
                   // aria-valuemin={0}
-                  placeholder="Enter position"
+                  placeholder="מקום"
                   className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                   aria-describedby="position-error"
                 />
@@ -70,12 +70,12 @@ export default function SetPositionForm({
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-4">
-          <SpinnerButton text="Set" onClick={() => hide?.()} />
+          <SpinnerButton text="עדכן" onClick={() => hide?.()} />
         </div>
       </form>
       {hide && (
         <Button onClick={hide} style={{ marginTop: -52, marginLeft: 20 }}>
-          Cancel
+          ביטול
         </Button>
       )}
     </div>

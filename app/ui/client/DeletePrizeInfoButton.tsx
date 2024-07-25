@@ -37,7 +37,7 @@ export default function DeletePrizeInfoButton({
           }}
           onCancel={() => setShowConfirmation(false)}
           subtext=""
-          text="Delete Prize information?"
+          text="האם למחוק פרס?"
         />
       )}
     </div>

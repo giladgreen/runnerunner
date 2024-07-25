@@ -16,9 +16,9 @@ export default async function CreatePlayerPage({
       <div className="w-full">
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl">
-            <b>
-              <u>You do not have permissions to see this page</u>
-            </b>
+              <b>
+                  <u>אין לך הרשאות לראות עמוד זה</u>
+              </b>
           </h1>
         </div>
       </div>
@@ -28,9 +28,9 @@ export default async function CreatePlayerPage({
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'players', href: `/${params.userId}/players` },
+          { label: 'שחקנים', href: `/${params.userId}/players` },
           {
-            label: 'Create player',
+            label: 'יצירת שחקן',
             href: `/${params.userId}/players/create`,
             active: true,
           },

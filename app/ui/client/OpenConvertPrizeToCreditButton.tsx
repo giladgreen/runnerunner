@@ -44,24 +44,24 @@ function OpenConvertPrizeToCreditForm({
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
         <label className="mb-2 block text-sm font-medium">
-          Convert Prize into credit
+          המרת פרס לקרדיט
         </label>
         <div className="form-inner-control  rounded-md p-4 md:p-6">
           <div className="mb-4">
             <label
               className="mb-2 block text-sm font-medium"
-              style={{ textAlign: 'left', marginTop: 30 }}
+              style={{ textAlign: 'right', marginTop: 30 }}
             >
-              Prize: {prizeName}
+              פרס: {prizeName}
             </label>
           </div>
           <div className="give_user_credit_amount mb-4">
             <label
               htmlFor="amount"
               className="mb-2 block text-sm font-medium"
-              style={{ textAlign: 'left', marginTop: 30 }}
+              style={{ textAlign: 'right', marginTop: 30 }}
             >
-              Credit amount
+              שווי קרדיט
             </label>
             <div className="relative mt-2 rounded-md">
               <SearchablePrizesDropdown
@@ -74,12 +74,12 @@ function OpenConvertPrizeToCreditForm({
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-4">
-          <SpinnerButton text="Update" onClick={() => hide?.()} />
+          <SpinnerButton text="עדכון" onClick={() => hide?.()} />
         </div>
       </form>
       {hide && (
         <Button onClick={hide} style={{ marginTop: -52, marginLeft: 20 }}>
-          Cancel
+          ביטול
         </Button>
       )}
     </div>
@@ -112,7 +112,7 @@ export default function OpenConvertPrizeToCreditButton({
             }}
         >
           <span className="sr-only">Convert to Credit</span>
-          <CreditCardIcon className="w-6" title="Convert to Credit"/>
+          <CreditCardIcon className="w-6" title="המר לקרדיט"/>
         </button>
 
 

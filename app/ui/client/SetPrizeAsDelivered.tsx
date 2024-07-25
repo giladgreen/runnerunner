@@ -24,7 +24,7 @@ export default function SetPrizeAsDelivered({ id }: { id: string }) {
               }}
           >
               <span className="sr-only">Prize Ready</span>
-              <ArrowDownOnSquareIcon className="w-6" title="Prize was delivered"/>
+              <ArrowDownOnSquareIcon className="w-6" title="פרס סופק"/>
           </button>
           {showConfirmation && (
               <AreYouSure
@@ -33,8 +33,8 @@ export default function SetPrizeAsDelivered({ id }: { id: string }) {
                       setPrizeDeliveredWithId();
                   }}
                   onCancel={() => setShowConfirmation(false)}
-                  subtext="this would delete the prize from this list"
-                  text="Set Prize as delivered?"
+                  subtext=""
+                  text="האם הפרס נמסר?"
               />
           )}
       </div>

@@ -3,17 +3,14 @@ import { updatePlayer } from '@/app/lib/actions';
 import { CldUploadWidget } from 'next-cloudinary';
 
 import { PlayerDB, PlayerForm, TournamentDB } from '@/app/lib/definitions';
-
 import Link from 'next/link';
-import Button from '@/app/ui/client/Button';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormState } from 'react-dom';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import RSVPButton from '@/app/ui/client/RSVPButton';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { TRANSLATIONS } from '@/app/lib/definitions';
 import Image from 'next/image';
-import Spinner from '@/app/ui/client/Spinner';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
 
 export default function EditPlayerForm({
@@ -60,7 +57,7 @@ export default function EditPlayerForm({
       // @ts-ignore
       const text = ` ${TRANSLATIONS[dayOfTheWeek]} - ${tournament.name}`;
       return (
-        <div key={tournament.id} className="tournament_rsvp_line">
+        <div key={tournament.id} className="tournament_rsvp_line" >
           {tournament.rsvp_required ? (
             tournament.max_players === 0 ? (
               ''
@@ -72,7 +69,7 @@ export default function EditPlayerForm({
               />
             )
           ) : (
-            <div>◻️ {text} </div>
+            <div style={{ display:'flex'}}> <div style={{ border:'1px solid black', background:'#AAAAAA', width: 26, height: 26, margin: '0 8px', cursor: 'no-drop' }}/> {text}</div>
           )}
         </div>
       );
@@ -81,11 +78,11 @@ export default function EditPlayerForm({
   return (
     <>
       <form action={dispatch}>
-        <div className="rounded-md bg-gray-50 p-4 md:p-6">
+        <div className="rounded-md bg-gray-50 p-4 md:p-6 rtl">
           {/* player name */}
           <div className="mb-4">
             <label htmlFor="name" className="mb-2 block text-sm font-medium">
-              Name
+              שם השחקן
             </label>
             <div className="relative mt-2 rounded-md">
               <div className="relative">
@@ -93,7 +90,7 @@ export default function EditPlayerForm({
                   id="name"
                   name="name"
                   defaultValue={player.name}
-                  placeholder="Enter Name"
+                  placeholder="הכנס שם"
                   className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                   aria-describedby="name-error"
                 />
@@ -113,7 +110,7 @@ export default function EditPlayerForm({
           {/* player notes */}
           <div className="mb-4">
             <label htmlFor="notes" className="mb-2 block text-sm font-medium">
-              Notes
+             הערות
             </label>
             <div className="relative mt-2 rounded-md">
               <div className="relative">
@@ -121,7 +118,7 @@ export default function EditPlayerForm({
                   id="notes"
                   name="notes"
                   defaultValue={player.notes}
-                  placeholder="Enter Notes"
+                  placeholder="הערות"
                   className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                   aria-describedby="notes-error"
                 />
@@ -137,17 +134,12 @@ export default function EditPlayerForm({
               </div>
             </div>
           </div>
-          {/* player rsvp */}
-          <div className="mb-4">
-            <label htmlFor="notes" className="mb-2 block text-sm font-medium">
-              RSVP
-            </label>
-          </div>
+
         </div>
         {/* player image url */}
-        <div className="mb-4">
+        <div className="mb-4 rtl">
           <label htmlFor="image_url" className="mb-2 block text-sm font-medium">
-            Image url
+           כתובת תמונה
           </label>
           <div className="relative">
             <input
@@ -174,9 +166,9 @@ export default function EditPlayerForm({
             href={`/${userId}/players`}
             className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
           >
-            Cancel
+            ביטול
           </Link>
-          <SpinnerButton text="Update Player" />
+          <SpinnerButton text="עדכן שחקן" />
         </div>
       </form>
       <div
@@ -199,7 +191,7 @@ export default function EditPlayerForm({
                   open();
                 }}
               >
-                Upload image
+                העלה תמונה
               </button>
             );
           }}
@@ -207,6 +199,7 @@ export default function EditPlayerForm({
       </div>
       {rsvpEnabled && (
         <div
+            className="rtl"
           style={{
             marginTop: 45,
             border: '2px solid blue',
@@ -214,8 +207,8 @@ export default function EditPlayerForm({
             padding: 10,
           }}
         >
-          <div>
-            <u>RSVP this week tournaments</u>
+          <div  className="rtl" style={{ textAlign: 'right'}}>
+            <u>אישורי הגעה לשבוע הקרוב</u>
           </div>
           <div>{rsvpsForTheNextWeek}</div>
         </div>

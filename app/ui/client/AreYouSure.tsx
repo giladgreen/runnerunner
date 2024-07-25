@@ -23,7 +23,7 @@ export default function AreYouSure({
             className="confirmation-modal-button rounded-md border p-2 hover:bg-gray-100"
             onClick={onCancel}
           >
-            <span>Cancel</span>
+            <span>ביטול</span>
           </button>
           <button
             className="confirmation-modal-button rounded-md border p-2 hover:bg-gray-100"
@@ -31,7 +31,7 @@ export default function AreYouSure({
               onConfirm();
             }}
           >
-            <span>Yes</span>
+            <span>כן</span>
           </button>
         </div>
       </div>

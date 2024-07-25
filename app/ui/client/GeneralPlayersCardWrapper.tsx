@@ -15,29 +15,32 @@ export default async function GeneralPlayersCardWrapper() {
     <div className="full-width grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
       <Suspense fallback={<CardsSkeleton count={4} />}>
         <Card
-          title="Total players"
-          value={totalNumberOfPlayers}
-          type="players"
-          oneLine
+            title=" סה״כ חוב שחקנים"
+            value={formatCurrency(totalPlayersDebt)}
+            type="money"
+            oneLine
         />
         <Card
-          title="Our Obligations"
+            title="שחקנים עם חוב"
+            value={numberOfPlayersWithDebt}
+            type="debt"
+            oneLine
+        />
+
+
+        <Card
+          title="חוב ראננר לשחקנים"
           value={formatCurrency(totalRunnerDebt)}
           type="money"
           oneLine
         />
         <Card
-          title="Players with debt"
-          value={numberOfPlayersWithDebt}
-          type="debt"
-          oneLine
+            title="סה״כ שחקנים"
+            value={totalNumberOfPlayers}
+            type="players"
+            oneLine
         />
-        <Card
-          title="Players debt"
-          value={formatCurrency(totalPlayersDebt)}
-          type="money"
-          oneLine
-        />
+
       </Suspense>
     </div>
   );

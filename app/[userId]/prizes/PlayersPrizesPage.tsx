@@ -40,21 +40,21 @@ export default async function PlayersPrizesPage({
     >
       {chosenPrizesContent && (
         <Card
-          title="Players Chosen Prizes"
+          title="פרסים שנבחרו"
           value={chosenPrizesContent}
           type="prize"
         />
       )}
       {readyToBeDeliveredPrizesContent && (
         <Card
-          title="Ready to be delivered"
+          title="פרסים שמוכנים למסירה"
           value={readyToBeDeliveredPrizesContent}
           type="prize"
         />
       )}
       {deliveredPrizesContent && (
         <Card
-          title="Prizes History (Delivered)"
+          title="הסטוריית פרסים (נמסרו)"
           value={deliveredPrizesContent}
           type="prize"
         />

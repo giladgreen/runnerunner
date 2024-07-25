@@ -13,6 +13,10 @@ export const formatCurrency = (balance: number) => {
   return shortenedString;
 };
 
+export const formatCurrencyColor = (balance: number) => {
+  return balance > 0 ? 'green' : (balance === 0 ? 'gray' : 'red')
+};
+
 export const formatType = (type: string) => {
   if (type === 'credit') {
     return 'קרדיט';

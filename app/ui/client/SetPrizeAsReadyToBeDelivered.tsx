@@ -25,7 +25,7 @@ export default function SetPrizeAsReadyToBeDelivered({ id }: { id: string }) {
               }}
           >
               <span className="sr-only">Prize Ready</span>
-              <ArrowDownOnSquareIcon className="w-6" title="Prize Ready To Be Delivered"/>
+              <ArrowDownOnSquareIcon className="w-6" title="פרס מוכן למסירה"/>
           </button>
       </div>
   );

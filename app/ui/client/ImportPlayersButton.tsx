@@ -72,8 +72,8 @@ export default function ImportPlayersButton() {
             element?.click();
           }}
           onCancel={() => setShowConfirmation(false)}
-          subtext="This would delete all existing players and their history"
-          text="Are you sure?"
+          subtext="פעולה זאת תמחוק את כל השחקנים הקיימים ואת ההסטוריה שלה ואינה הפיכה"
+          text="האם אתה בטוח?"
         />
       )}
     </>

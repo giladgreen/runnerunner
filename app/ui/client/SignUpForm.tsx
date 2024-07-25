@@ -39,7 +39,7 @@ export default function SignUpForm() {
                   id="phone_number"
                   type="text"
                   name="phone_number"
-                  placeholder="Enter phone number"
+                  placeholder="מספר טלפון"
                   required
                 />
               </div>
@@ -58,7 +58,7 @@ export default function SignUpForm() {
                 id="password"
                 type="password"
                 name="password"
-                placeholder="choose password"
+                placeholder="סיסמא"
                 value={password}
                 onChange={(e) => setPasword(e.target.value)}
                 required

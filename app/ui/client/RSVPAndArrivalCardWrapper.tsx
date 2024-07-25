@@ -53,24 +53,24 @@ export default async function RSVPAndArrivalCardWrapper({
               <th
                 scope="col"
                 className="table-text-item"
-                data-tooltip="Credit"
-                title="Credit"
+                data-tooltip="קרדיט"
+                title="קרדיט"
               >
                 <b>{formatCurrency(todayCreditIncome)}</b>
               </th>
               <th
                 scope="col"
                 className="table-text-item"
-                data-tooltip="Cash"
-                title="Cash"
+                data-tooltip="מזומן"
+                title="מזומן"
               >
                 <b>{formatCurrency(todayCashIncome)}</b>
               </th>
               <th
                 scope="col"
                 className="table-text-item"
-                data-tooltip="Wire transfer"
-                title="Wire transfer"
+                data-tooltip="העברה"
+                title="העברה"
               >
                 <b>{formatCurrency(todayTransferIncome)}</b>
               </th>
@@ -81,22 +81,22 @@ export default async function RSVPAndArrivalCardWrapper({
               <th scope="col">
                 <div
                   className="table-item"
-                  data-tooltip="Credit"
-                  title="Credit"
+                  data-tooltip="קרדיט"
+                  title="קרדיט"
                 >
                   <CreditCardIcon className="h-6 w-9 text-gray-700" />
                 </div>
               </th>
               <th scope="col">
-                <div className="table-item" data-tooltip="Cash" title="Cash">
+                <div className="table-item" data-tooltip="מזומן" title="מזומן">
                   <WalletIcon className="h-6 w-9 text-gray-700" />
                 </div>
               </th>
               <th scope="col">
                 <div
                   className="table-item"
-                  data-tooltip="Wire transfer"
-                  title="Wire transfer"
+                  data-tooltip="העברה"
+                  title="העברה"
                 >
                   <ArrowLeftOnRectangleIcon className="h-6 w-9 text-gray-700" />
                 </div>
@@ -106,28 +106,28 @@ export default async function RSVPAndArrivalCardWrapper({
               <th scope="col" style={{ marginTop: -5 }}>
                 <div
                   className="table-item smaller-test"
-                  data-tooltip="Credit"
-                  title="Credit"
+                  data-tooltip="קרדיט"
+                  title="קרדיט"
                 >
-                  credit
+                  קרדיט
                 </div>
               </th>
               <th scope="col">
                 <div
                   className="table-item smaller-test"
-                  data-tooltip="Cash"
-                  title="Cash"
+                  data-tooltip="מזומן"
+                  title="מזומן"
                 >
-                  cash
+                  מזומן
                 </div>
               </th>
               <th scope="col">
                 <div
                   className="table-item smaller-test"
-                  data-tooltip="Wire transfer"
-                  title="Wire transfer"
+                  data-tooltip="העברה"
+                  title="העברה"
                 >
-                  money wire
+                  העברה
                 </div>
               </th>
             </tr>
@@ -144,27 +144,29 @@ export default async function RSVPAndArrivalCardWrapper({
       style={{ marginBottom: 20 }}
     >
       <Suspense fallback={<CardsSkeleton count={4} />}>
-        {rsvpEnabled && (
-          <Card
-            title="RSVP"
-            value={<div>{rsvpForTodayText}</div>}
-            type="rsvp"
-            oneLine
-          />
-        )}
+        <Card title="הכנסות" value={todayIncome} type="money" />
         <Card
-          title="Arrived"
+            title="כניסות מחדש"
+            value={<div>{reEntriesCount}</div>}
+            type="money"
+            oneLine
+        />
+
+        <Card
+          title="הגעה"
           value={<div>{arrivedToday}</div>}
           type="arrived"
           oneLine
         />
-        <Card
-          title="Re Entries"
-          value={<div>{reEntriesCount}</div>}
-          type="money"
-          oneLine
-        />
-        <Card title="Income" value={todayIncome} type="money" />
+        {rsvpEnabled && (
+            <Card
+                title="אישורי הרשמה"
+                value={<div>{rsvpForTodayText}</div>}
+                type="rsvp"
+                oneLine
+            />
+        )}
+
       </Suspense>
     </div>
   );

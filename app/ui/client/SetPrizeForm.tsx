@@ -38,13 +38,13 @@ export default function SetPrizeForm({
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
         <label className="mb-2 block text-sm font-medium">
-          Set Player Prize
+          פרס לשחקן
         </label>
         <div className="form-inner-control  rounded-md p-4 md:p-6">
           {/*  prize name */}
           <div className="mb-4">
             <label htmlFor="prize" className="mb-2 block text-sm font-medium">
-              Prize
+              פרס
             </label>
             <div className="relative mt-2 rounded-md">
               <div className="relative">
@@ -67,12 +67,12 @@ export default function SetPrizeForm({
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-4">
-          <SpinnerButton text="Set" onClick={() => hide?.()} />
+          <SpinnerButton text="עדכן" onClick={() => hide?.()} />
         </div>
       </form>
       {hide && (
         <Button onClick={hide} style={{ marginTop: -52, marginLeft: 20 }}>
-          Cancel
+          ביטול
         </Button>
       )}
     </div>

@@ -53,7 +53,7 @@ const SearchablePrizesDropdown = ({
   return (
     <div className="dropdown" key="prizeId">
       <div className="control">
-        <div className="selected-value">
+        <div className="selected-value rtl" style={{ textAlign: 'right'}}>
           <input
             ref={inputRef}
             type="text"
@@ -74,17 +74,17 @@ const SearchablePrizesDropdown = ({
           return (
             <div
               onClick={() => selectOption(option)}
-              className={`option ${
+              className={`rtl option ${
                 option.id === selectedVal?.id ? 'selected' : ''
               } dropdown-player`}
               key={`${option.id}-${index}`}
             >
-              <div style={{ marginLeft: 5, marginRight: 6 }}>
-                <div style={{ color: 'black' }}>
+              <div style={{ marginLeft: 10, marginRight: 6 }}>
+                <div >
                   <b>{option.name}</b>
                 </div>
               </div>
-              <div style={{ marginLeft: 30, paddingTop: 10 }}>
+              <div style={{ marginLeft: 30, color: 'black' }}>
                 <b> {formatCurrency(option.credit)}</b>
               </div>
             </div>

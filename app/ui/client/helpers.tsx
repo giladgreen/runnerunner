@@ -32,65 +32,68 @@ export async function getFinalTablePlayersContent(
     : 'text-on-card';
 
   return (
-    <div className="full-width" style={{ marginBottom: 30, display: 'flex' }}>
+    <div className="rtl full-width" style={{ marginBottom: 30, display: 'flex' }}>
       <div style={{ width: '60%' }}>
         {finalTablePlayers.map((finalTablePlayer: PlayerDB) => {
           return (
             <div
               key={finalTablePlayer.id}
-              className="full-width w-full rounded-md bg-white"
+              className="rtl full-width w-full rounded-md bg-white"
+
             >
               <div
-                className={`flex items-center border-b ${
-                  isTournamentsDataPage ? '' : 'pb-4'
-                } highlight-on-hover`}
+                  className={`rtl flex items-center border-b ${
+                      isTournamentsDataPage ? '' : 'pb-4'
+                  } highlight-on-hover`}
+                  style={{ padding:4 }}
               >
                 <OpenGiveCreditModalButton
-                  player={finalTablePlayer}
-                  hasReceived={finalTablePlayer.hasReceived}
-                  stringDate={date}
-                  userId={userId}
-                  prizesInformation={prizesInformation}
+                    player={finalTablePlayer}
+                    hasReceived={finalTablePlayer.hasReceived}
+                    stringDate={date}
+                    userId={userId}
+                    prizesInformation={prizesInformation}
                 />
-                <div className={textClass}>#{finalTablePlayer.position}</div>
+                <div className={textClass} style={{ marginRight:10}}>#{finalTablePlayer.position}</div>
 
                 {!isTournamentsDataPage && (
-                  <Image
-                    src={finalTablePlayer.image_url}
-                    className="zoom-on-hover"
-                    style={{
-                      marginLeft: 10,
-                      marginRight: 20,
-                      marginTop: 5,
-                    }}
-                    width={40}
-                    height={50}
-                    alt={`${finalTablePlayer.name}'s profile picture`}
-                  />
+                    <Image
+                        src={finalTablePlayer.image_url}
+                        className="zoom-on-hover"
+                        style={{
+                          marginLeft: 10,
+                          marginRight: 20,
+                          marginTop: 5,
+                        }}
+                        width={40}
+                        height={50}
+                        alt={`${finalTablePlayer.name}'s profile picture`}
+                    />
                 )}
                 {isTournamentsDataPage && (
-                  <span style={{ marginLeft: 10 }}></span>
+                    <span style={{marginLeft: 10}}></span>
                 )}
 
                 <div
-                  className="wide-screen"
-                  style={{ fontSize: isTournamentsDataPage ? 11 : 20 }}
-                >
-                  {finalTablePlayer.phone_number}
-                </div>
-
-                <div
-                  className="wide-screen"
-                  style={{
-                    fontSize: isTournamentsDataPage ? 11 : 20,
-                    marginLeft: 20,
-                  }}
+                    className="wide-screen"
+                    style={{
+                      fontSize: isTournamentsDataPage ? 11 : 20,
+                      marginLeft: 20,
+                    }}
                 >
                   {finalTablePlayer.name}
                 </div>
 
+                <div
+                    className="wide-screen"
+                    style={{fontSize: isTournamentsDataPage ? 11 : 20, marginRight: 20}}
+                >
+                  {finalTablePlayer.phone_number}
+                </div>
+
+
                 <div className="cellular">
-                  <div style={{ display: 'block' }}>
+                  <div style={{display: 'block'}}>
                     <div>{finalTablePlayer.name}</div>
                     <div>{finalTablePlayer.phone_number}</div>
                   </div>
@@ -101,18 +104,18 @@ export async function getFinalTablePlayersContent(
         })}
 
         {showSetPrizesCreditModalButton && (
-          <OpenSetPrizesCreditModalButton
-            date={date}
-            players={finalTablePlayers}
-          />
+            <OpenSetPrizesCreditModalButton
+                date={date}
+                players={finalTablePlayers}
+            />
         )}
       </div>
       {isTournamentsDataPage && (
-        <div
+          <div
           className="wide-screen"
-          style={{ width: '40%', textAlign: 'center' }}
+          style={{ width: '40%', textAlign: 'center', margin: '0 10px' }}
         >
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'right' }}>
             <Image
               src={finalTablePlayers[0].image_url}
               className="zoom-on-hover"
@@ -126,7 +129,7 @@ export async function getFinalTablePlayersContent(
               height={120}
               alt={`${finalTablePlayers[0].name}'s profile picture`}
             />
-            <b>{finalTablePlayers[0].name}</b>
+            <b style={{ textAlign: 'right'}}>{finalTablePlayers[0].name}</b>
           </div>
         </div>
       )}
@@ -145,7 +148,7 @@ export async function getPlayersPrizesContent(
     if (currentTournament) {
       return null;
     }
-    return <span style={{ margin: '0 5px' }}> 0 prizes </span>;
+    return <span style={{ margin: '0 5px' }}> אין פרסים </span>;
   }
 
   return (
@@ -153,22 +156,22 @@ export async function getPlayersPrizesContent(
       {playersPrizes.map((playersPrize: PrizeDB) => {
         return (
           <div key={playersPrize.id}>
-            <div className="wide-screen prize-row border-b ">
-              <div className="flex w-full items-center rounded-md  ">
-                <span style={{ marginLeft: 25 }}>
+            <div className="wide-screen prize-row border-b " style={{ padding: 5}}>
+              <div className="flex w-full items-center rounded-md rtl ">
+                <span style={{ marginLeft: 25, textAlign:'right' }}>
                   {playersPrize!.tournament}
                 </span>
                 {!personal && (
-                  <span style={{ marginLeft: 25 }}>
+                  <span style={{ marginLeft: 25, textAlign:'right' }}>
                     {playersPrize!.player!.name}
                   </span>
                 )}
                 {!personal && (
-                  <span style={{ marginLeft: 25 }}>
+                  <span style={{ marginLeft: 25, textAlign:'right' }}>
                     {playersPrize!.player!.phone_number}
                   </span>
                 )}
-                <span style={{ marginLeft: 25 }}>{playersPrize!.prize}</span>
+                <span style={{ marginLeft: 25, textAlign:'right' }}>{playersPrize!.prize}</span>
               </div>
 
               {!personal &&
@@ -188,12 +191,12 @@ export async function getPlayersPrizesContent(
                   <SetPrizeAsNotReadyToBeDelivered id={playersPrize.id} />
                 )}
               {!personal && (
-                <OpenConvertPrizeToCreditButton
+                <div style={{ margin: '0 5px'}}><OpenConvertPrizeToCreditButton
                   prizeId={playersPrize.id}
                   prizeName={playersPrize.prize}
                   userId={userId}
                   prizesInformation={prizesInformation}
-                />
+                /></div>
               )}
             </div>
             <div className="cellular prize-row border-b">
@@ -264,24 +267,24 @@ export function getDayIncome(dateItem: {
                 <th
                   scope="col"
                   className="table-text-item"
-                  data-tooltip="Credit"
-                  title="Credit"
+                  data-tooltip="קרדיט"
+                  title="קרדיט"
                 >
                   <b>{formatCurrency(dateItem.credit)}</b>
                 </th>
                 <th
                   scope="col"
                   className="table-text-item"
-                  data-tooltip="Cash"
-                  title="Cash"
+                  data-tooltip="מזומן"
+                  title="מזומן"
                 >
                   <b>{formatCurrency(dateItem.cash)}</b>
                 </th>
                 <th
                   scope="col"
                   className="table-text-item"
-                  data-tooltip="Wire transfer"
-                  title="Wire transfer"
+                  data-tooltip="העברה"
+                  title="העברה"
                 >
                   <b>{formatCurrency(dateItem.wire)}</b>
                 </th>
@@ -292,23 +295,23 @@ export function getDayIncome(dateItem: {
                 <th scope="col">
                   <div
                     className="table-item"
-                    data-tooltip="Credit"
-                    title="Credit"
+                    data-tooltip="קרדיט"
+                    title="קרדיט"
                   >
                     <CreditCardIcon className="h-6 w-9 text-gray-700" />
                   </div>
 
                 </th>
                 <th scope="col">
-                  <div className="table-item" data-tooltip="Cash" title="Cash">
+                  <div className="table-item" data-tooltip="מזומן" title="מזומן">
                     <WalletIcon className="h-6 w-9 text-gray-700" />
                   </div>
                 </th>
                 <th scope="col">
                   <div
                     className="table-item"
-                    data-tooltip="Wire transfer"
-                    title="Wire transfer"
+                    data-tooltip="העברה"
+                    title="העברה"
                   >
                     <ArrowLeftOnRectangleIcon className="h-6 w-9 text-gray-700" />
                   </div>
@@ -318,28 +321,28 @@ export function getDayIncome(dateItem: {
                 <th scope="col" style={{ marginTop: -5 }}>
                   <div
                     className="table-item smaller-test"
-                    data-tooltip="Credit"
-                    title="Credit"
+                    data-tooltip="קרדיט"
+                    title="קרדיט"
                   >
-                    credit
+                    קרדיט
                   </div>
                 </th>
                 <th scope="col">
                   <div
                     className="table-item smaller-test"
-                    data-tooltip="Cash"
-                    title="Cash"
+                    data-tooltip="מזומן"
+                    title="מזומן"
                   >
-                    cash
+                    מזומן
                   </div>
                 </th>
                 <th scope="col">
                   <div
                     className="table-item smaller-test"
-                    data-tooltip="Wire transfer"
-                    title="Wire transfer"
+                    data-tooltip="העברה"
+                    title="העברה"
                   >
-                    money wire
+                    העברה
                   </div>
                 </th>
               </tr>

@@ -53,7 +53,8 @@ function SetGivePrizeForm({
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
         <label className="mb-2 block text-sm font-medium">
-          Give Player Prize/Credit
+          תן פרס/קרדיט לשחקן
+
         </label>
         <div className="form-inner-control  rounded-md p-4 md:p-6">
           <div className="relative mt-2 rounded-md">
@@ -71,7 +72,7 @@ function SetGivePrizeForm({
                     onChange={() => setType('prize')}
                   />
                   <label htmlFor="prize" className="ml-2 ">
-                    <b>prize</b>
+                    <b>פרס</b>
                   </label>
                 </div>
                 <div
@@ -87,8 +88,7 @@ function SetGivePrizeForm({
                   />
 
                   <label htmlFor="credit" className="ml-2">
-                    {' '}
-                    <b>credit</b>
+                    <b>קרדיט</b>
                   </label>
                 </div>
               </div>
@@ -125,7 +125,7 @@ function SetGivePrizeForm({
                     type="number"
                     value={creditWorth}
                     onChange={(e) => setCreditWorth(Number(e.target.value))}
-                    placeholder="Enter credit amount"
+                    placeholder="סכום "
                     className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                     aria-describedby="prize-error"
                   />
@@ -146,12 +146,12 @@ function SetGivePrizeForm({
           )}
         </div>
         <div className="mt-6 flex justify-end gap-4">
-          <SpinnerButton text="Update" onClick={() => hide?.()} />
+          <SpinnerButton text="עדכון" onClick={() => hide?.()} />
         </div>
       </form>
       {hide && (
         <Button onClick={hide} style={{ marginTop: -52, marginLeft: 20 }}>
-          Cancel
+          ביטול
         </Button>
       )}
     </div>
@@ -188,7 +188,7 @@ export default function OpenGiveCreditModalButton({
                 }}
             >
               <span className="sr-only">Convert to Credit</span>
-              <CreditCardIcon className="w-6" title="Convert to Credit"/>
+              <CreditCardIcon className="w-6" title="המר לקרדיט"/>
             </button>
 
   )

@@ -26,7 +26,7 @@ export default async function HomePage({
         <RSVPAndArrivalCardWrapper params={params} />
         {placesEnabled && (
           <div style={{ marginTop: 40 }}>
-            <FinalTablePlayers title="Today's Game Places" params={params} />
+            <FinalTablePlayers title="דירוג טורניר נוכחי" params={params} />
           </div>
         )}
         <hr style={{ marginBottom: 30, marginTop: 10 }} />

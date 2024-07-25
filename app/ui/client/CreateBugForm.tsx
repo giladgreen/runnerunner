@@ -45,7 +45,7 @@ export default function CreateBugForm() {
       </div>
 
       <div className="mt-6 flex justify-end gap-4">
-        <SpinnerButton text="Send" />
+        <SpinnerButton text="שלח" />
       </div>
     </form>
   );

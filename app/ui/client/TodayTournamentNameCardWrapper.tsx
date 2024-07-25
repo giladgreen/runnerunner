@@ -18,7 +18,8 @@ export default async function TodayTournamentNameCardWrapper({
       <Suspense fallback={<CardsSkeleton count={1} />}>
         <Card
           oneLine
-          title="Current Tournament"
+          type="today"
+          title="טורניר נוכחי"
           value={`${
             // @ts-ignore
             TRANSLATIONS[todayTournament.day]

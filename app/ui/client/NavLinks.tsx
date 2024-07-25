@@ -18,27 +18,27 @@ import { UserDB } from '@/app/lib/definitions';
 // Depending on the size of the application, this would be stored in a database.
 const links = (userId: string) => [
   {
-    name: 'homepage',
+    name: 'עמוד הבית',
     href: `/${userId}`,
     icon: HomeIcon,
     admin: true,
   },
   {
-    name: 'current tournament',
+    name: 'טורניר נוכחי',
     href: `/${userId}/current_tournament`,
     icon: ArrowDownOnSquareIcon,
     admin: true,
     worker: true,
   },
   {
-    name: 'previous tournaments',
+    name: 'טורנירים קודמים',
     href: `/${userId}/tournaments`,
     icon: BanknotesIcon,
     admin: true,
     worker: true,
   },
   {
-    name: 'all players',
+    name: 'כל השחקנים',
     href: `/${userId}/players`,
     icon: UserGroupIcon,
     admin: true,
@@ -46,7 +46,7 @@ const links = (userId: string) => [
   },
 
   {
-    name: 'prizes',
+    name: 'פרסים',
     href: `/${userId}/prizes`,
     icon: GiftIcon,
     admin: true,
@@ -54,7 +54,7 @@ const links = (userId: string) => [
   },
 
   {
-    name: 'configurations',
+    name: 'הגדרות',
     href: `/${userId}/configurations`,
     icon: WrenchScrewdriverIcon,
     admin: true,
@@ -89,7 +89,7 @@ export default function NavLinks({ user }: { user: UserDB }) {
               key={link.name}
               href={link.href}
               className={clsx(
-                'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
+                'rtl flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
                 {
                   'bg-sky-100 text-blue-600': pathname === link.href,
                 },
@@ -97,6 +97,7 @@ export default function NavLinks({ user }: { user: UserDB }) {
             >
               <LinkIcon className="w-6" />
               <div className="hidden md:block">{link.name}</div>
+
             </Link>
           );
         })

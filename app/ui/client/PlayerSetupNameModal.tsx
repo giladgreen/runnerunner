@@ -35,7 +35,7 @@ export async function PlayerSetupNameModal({ player }: { player: PlayerDB }) {
                 id="name"
                 name="name"
                 type="text"
-                placeholder="Enter Name"
+                placeholder="שם"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="name-error"
               />

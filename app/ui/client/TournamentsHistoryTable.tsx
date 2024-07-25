@@ -10,27 +10,27 @@ export default async function TournamentsHistoryTable({
     return null;
   }
   return (
-    <div style={{ marginTop: 30, marginBottom: 20 }}>
-      <div>
+    <div className="rtl" style={{ marginTop: 30, marginBottom: 20 }}>
+      <div  className="rtl">
         <u>
-          <b>Tournaments History</b>
+          <b>הסטורית זכיות</b>
         </u>
       </div>
-      <table className=" min-w-full text-gray-900 md:table">
+      <table className="rtl min-w-full text-gray-900 md:table">
         <thead className="rounded-lg text-left text-sm font-normal">
           <tr>
-            <th scope="col" className="px-1 py-3 font-medium">
-              Date
+            <th scope="col" className="px-1 py-3 font-medium" style={{ textAlign: 'right'}}>
+              תאריך
             </th>
-            <th scope="col" className="px-1 py-3 font-medium">
-              Tournament
+            <th scope="col" className="px-1 py-3 font-medium" style={{ textAlign: 'right'}}>
+              טורניר
             </th>
-            <th scope="col" className="px-1 py-3 font-medium">
-              Place
+            <th scope="col" className="px-1 py-3 font-medium" style={{ textAlign: 'right'}}>
+              מקום
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white">
+        <tbody className="bg-white rtl">
           {tournamentsData?.map((tournamentData) => (
             <tr
               key={tournamentData.date}

@@ -19,11 +19,11 @@ export default async function tournamentEditPage({
         breadcrumbs={[
           { label: '.', href: `/${params.userId}` },
           {
-            label: 'Configurations',
+            label: 'הגדרות',
             href: `/${params.userId}/configurations`,
           },
           {
-            label: 'Tournament',
+            label: 'טורנירים',
             href: `/${params.userId}/configurations/tournament`,
           },
         ]}

@@ -27,7 +27,7 @@ export default function SetPrizeAsNotReadyToBeDelivered({
               }}
           >
               <span className="sr-only">Prize Chosen</span>
-              <ArrowUpOnSquareIcon className="w-6" title="Prize Not Ready To Be Delivered"/>
+              <ArrowUpOnSquareIcon className="w-6" title="הפרס עוד לא מוכן למסירה"/>
           </button>
 
       </div>

@@ -15,8 +15,8 @@ export default async function MVPPlayers({ userId }: { userId: string }) {
   return (
     <Suspense fallback={<PlayersSkeleton />}>
       <div className="flex w-full flex-col md:col-span-4">
-        <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-          MVP Players
+        <h2 className={`${lusitana.className} rtl mb-4 text-xl md:text-2xl`}>
+          שחקנים מובילים
         </h2>
         <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
           <div className="bg-white px-6">

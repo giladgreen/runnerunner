@@ -53,7 +53,7 @@ export default function EditTournamentForm({
                 id="name"
                 name="name"
                 defaultValue={tournament.name}
-                placeholder="Enter name"
+                placeholder="שם"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="name-error"
               />
@@ -83,7 +83,7 @@ export default function EditTournamentForm({
                 type="number"
                 min={0}
                 defaultValue={tournament.buy_in}
-                placeholder="Enter Buy In"
+                placeholder="כניסה"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="buy_in-error"
               />
@@ -112,7 +112,7 @@ export default function EditTournamentForm({
                 type="number"
                 min={0}
                 defaultValue={tournament.re_buy}
-                placeholder="Enter Re-Buy"
+                placeholder="כניסה מחדש"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="re_buy-error"
               />
@@ -144,7 +144,7 @@ export default function EditTournamentForm({
                 type="number"
                 min={0}
                 defaultValue={tournament.max_players}
-                placeholder="Enter Max Players"
+                placeholder="כמות מקסימלית של שחקנים"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="max_players-error"
               />
@@ -182,9 +182,9 @@ export default function EditTournamentForm({
           href={`/${userId}/configurations/tournaments`}
           className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
         >
-          Cancel
+          ביטול
         </Link>
-        <SpinnerButton text="Update tournament" />
+        <SpinnerButton text="עדכן טורניר" />
       </div>
     </form>
   );

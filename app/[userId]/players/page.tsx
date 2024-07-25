@@ -26,9 +26,9 @@ export default async function Page({
       <div className="w-full">
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl">
-            <b>
-              <u>You do not have permissions to see this page</u>
-            </b>
+              <b>
+                  <u>אין לך הרשאות לראות עמוד זה</u>
+              </b>
           </h1>
         </div>
       </div>
@@ -45,8 +45,9 @@ export default async function Page({
       <div className="full-width flex w-full items-center justify-between">
         <GeneralPlayersCardWrapper />
       </div>
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder="search players" />
+      <div className="rtl mt-4 flex items-center justify-between gap-2 md:mt-8">
+        <Search placeholder="חיפוש שחקן" />
+
         <CreateNewPlayerButton params={params} />
       </div>
       <Suspense key={query + currentPage} fallback={<PlayersTableSkeleton />}>

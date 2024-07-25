@@ -205,7 +205,9 @@
 .wide-screen {
   display: flex;
 }
+.only-wide-screen{
 
+}
 .my-button {
   padding: 4px;
   border: #7f7f7f 1px solid;
@@ -254,14 +256,6 @@
 
 .prize-row {
   margin-bottom: 5px;
-}
-
-.cellular {
-  display: none;
-}
-
-.wide-screen {
-  display: flex;
 }
 
 .rsvp_button {
@@ -354,14 +348,6 @@
   }
 }
 
-.cellular {
-  display: none;
-}
-
-.wide-screen {
-  display: flex;
-}
-
 .card {
   margin-bottom: 10px;
 }
@@ -376,6 +362,15 @@
 
 .gray-on-hover:hover {
   background: #666666;
+}
+
+.rtl{
+  direction: rtl;
+
+}
+.ltr{
+  direction: ltr;
+
 }
 @media only screen and (max-width: 600px) {
   .create-new-today-player-button {
@@ -392,7 +387,11 @@
   .wide-screen {
     display: none;
   }
-
+.only-wide-screen{
+  display: none;
+  visibility: collapse;
+  max-width:1px;
+}
   .tournaments-data-table {
     table {
       th {
@@ -401,16 +400,9 @@
     }
   }
 
-  .cellular {
-    display: flex;
-  }
-
-  .wide-screen {
-    display: none;
-  }
-
   .tournament_rsvp_line {
     margin-bottom: 10px;
+    display: flex;
   }
 
   .give-credit-modal-button {
@@ -419,13 +411,7 @@
     }
   }
 
-  .cellular {
-    display: flex;
-  }
 
-  .wide-screen {
-    display: none;
-  }
 
   .card {
     border: 2px solid rgb(0, 112, 243);

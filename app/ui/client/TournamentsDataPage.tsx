@@ -17,27 +17,27 @@ export default async function TournamentsDataPage({
   return (
     <div className="tournaments-data-table w-full">
       {tournamentsData.length === 0 && (
-        <div className="text-center">No Data yet</div>
+        <div className="text-center">עוד אין מידע להציג</div>
       )}
       {tournamentsData.length > 0 && (
-        <table className="min-w-full text-gray-900 md:table">
-          <thead className="rounded-lg text-left text-sm font-normal">
-            <tr>
-              <th className="px-4 py-5 font-medium">
-                <b>Date</b>
+        <table className="min-w-full text-gray-900 md:table rtl">
+          <thead className=" rounded-lg text-left text-sm font-normal rtl">
+            <tr className="rtl">
+              <th className="rtl px-4 py-5 font-medium" style={{ textAlign: 'right'}}>
+                <b>תאריך טורניר</b>
               </th>
-              <th className="px-3 py-5 font-medium">
-                <b>Income</b>
+              <th className="rtl px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+                <b>הכנסות</b>
               </th>
-              <th className="px-3 py-5 font-medium">
-                <b>Players Count</b>
+              <th className="rtl px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+                <b>כמות שחקנים</b>
               </th>
-              <th className="px-3 py-5 font-medium">
-                <b>Buyins</b>
+              <th className="rtl px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+                <b>כניסות מחדש</b>
               </th>
               {placesEnabled && (
-                <th className="px-3 py-5 font-medium">
-                  <b>Places</b>
+                <th className="rtl px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+                  <b>דירוג מנצחים</b>
                 </th>
               )}
             </tr>
@@ -70,19 +70,19 @@ export default async function TournamentsDataPage({
                       className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                     >
                       <th className="px-4 py-5 font-medium">
-                        <div style={{ marginBottom: 20 }}>
+                        <div style={{ marginBottom: 20, textAlign: 'right' }} >
                           {formatDateToLocal(dateItem.date)}
                         </div>
-                        <div>{dateItem.tournamentName}</div>
+                        <div style={{ textAlign: 'right'}}>{dateItem.tournamentName}</div>
                       </th>
                       <th className="px-3 py-5 font-medium">{dayIncome}</th>
-                      <th className="px-3 py-5 font-medium">
-                        {dateItem.players} players
+                      <th className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+                        {dateItem.players} שחקנים
                       </th>
-                      <th className="px-3 py-5 font-medium">
-                        {dateItem.entries - dateItem.reentries} buyins{' '}
+                      <th className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+                        {dateItem.entries - dateItem.reentries} כניסות{' '}
                         {dateItem.reentries > 0
-                          ? `(+ ${dateItem.reentries} rebuys)`
+                          ? `(+ ${dateItem.reentries} כניסות מחדש)`
                           : ``}
                       </th>
                       {placesEnabled && (

@@ -15,7 +15,7 @@ export default function CreateNewTodayPlayerButton({
           className="pointer rounded-md border p-2 hover:bg-gray-100"
       >
           <span className="sr-only">create new player</span>
-          <UserPlusIcon className="h-5 md:ml-4" title="create new player"/>
+          <UserPlusIcon className="h-5 md:ml-4" title="יצירת שחקן חדש"/>
       </Link>
   );
 }
