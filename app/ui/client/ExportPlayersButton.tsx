@@ -139,7 +139,7 @@ export default function ExportPlayersButton({
           );
         }}
       >
-        <span>export</span>
+        <span>ייצוא</span>
       </Button>
       <input
         type="file"

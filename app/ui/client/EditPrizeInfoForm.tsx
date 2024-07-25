@@ -31,11 +31,11 @@ export default function EditPrizeInfoForm({
   return (
     <>
       <form action={dispatch}>
-        <div className="rounded-md bg-gray-50 p-4 md:p-6">
+        <div className="rounded-md bg-gray-50 p-4 md:p-6 rtl">
           {/* prize name */}
           <div className="mb-4">
             <label htmlFor="name" className="mb-2 block text-sm font-medium">
-              Name
+              שם
             </label>
             <div className="relative mt-2 rounded-md">
               <div className="relative">
@@ -63,7 +63,7 @@ export default function EditPrizeInfoForm({
           {/* prize extra */}
           <div className="mb-4">
             <label htmlFor="extra" className="mb-2 block text-sm font-medium">
-              Extra
+              עוד מידע
             </label>
             <div className="relative mt-2 rounded-md">
               <div className="relative">
@@ -89,9 +89,9 @@ export default function EditPrizeInfoForm({
           </div>
 
           {/* prize credit */}
-          <div className="mb-4">
+          <div className="mb-4 rtl">
             <label htmlFor="credit" className="mb-2 block text-sm font-medium">
-              Credit worth
+              שווי בקרדיט
             </label>
             <div className="relative mt-2 rounded-md">
               <div className="relative">
@@ -138,5 +138,5 @@ function UpdatePrizeButton() {
   if (pending) {
     return <Spinner size={33} />;
   }
-  return <Button type="submit">Update prize</Button>;
+  return <Button type="submit">עדכון</Button>;
 }

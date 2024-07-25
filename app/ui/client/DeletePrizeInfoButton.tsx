@@ -26,7 +26,7 @@ export default function DeletePrizeInfoButton({
         }}
       >
         <button className="my-button" style={{ background: 'orange' }}>
-          Delete
+          מחיקה
         </button>
       </div>
       {showConfirmation && (

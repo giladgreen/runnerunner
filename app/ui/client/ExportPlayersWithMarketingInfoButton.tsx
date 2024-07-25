@@ -39,7 +39,7 @@ ${allowed_marketing_players.map((player) => {
           document.body.removeChild(link);
         }}
       >
-        <span>export</span>
+        <span>ייצוא</span>
       </Button>
       <input
         type="file"

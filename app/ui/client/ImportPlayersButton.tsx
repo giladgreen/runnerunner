@@ -12,7 +12,7 @@ export default function ImportPlayersButton() {
   return (
     <>
       <Button onClick={() => setShowConfirmation(true)}>
-        <span>import</span>
+        <span>ייבוא</span>
       </Button>
       <input
         type="file"

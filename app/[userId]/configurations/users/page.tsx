@@ -7,6 +7,7 @@ import {
   updateIsUserAdmin,
   updateIsUserWorker,
 } from '@/app/lib/actions';
+import Breadcrumbs from "@/app/ui/client/Breadcrumbs";
 
 export default async function UsersPage({
   params,
@@ -33,33 +34,49 @@ export default async function UsersPage({
 
   return (
     <div className="w-full">
-      <div className="flex w-full items-center justify-between">
+      <Breadcrumbs
+          breadcrumbs={[
+            { label: '.', href: `/${params.userId}` },
+            {
+              label: 'הגדרות',
+              href: `/${params.userId}/configurations`,
+            },
+            {
+              label: 'משתמשים',
+              href: `/${params.userId}/configurations/users`,
+            },
+          ]}
+      />
+
+      <div className="flex w-full items-center justify-between rtl">
         <h1 className={`${lusitana.className} text-2xl`}>
           <b>
-            <u>{users.length} Users</u>
+            <u>{users.length} משתמשים</u>
           </b>
         </h1>
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8 rtl">
         <table className="hidden  text-gray-900 md:table">
           <thead className="rounded-lg text-left text-sm font-normal">
             <tr>
               <th
                 scope="col"
                 className="thin-column px-4 py-5 font-medium sm:pl-6"
-              ></th>
+                style={{ textAlign: 'right' }}
+              >שם</th>
               <th
                 scope="col"
                 className="thin-column px-4 py-5 font-medium sm:pl-6"
+                style={{ textAlign: 'right' }}
               >
-                phone number
+                מספר טלפון
               </th>
-              <th scope="col" className="thin-column px-3 py-5 font-medium">
-                is admin
+              <th scope="col" className=" px-3 py-5 font-medium" style={{ textAlign: 'right' }}>
+                אדמין
               </th>
-              <th scope="col" className="thin-column px-3 py-5 font-medium">
-                is operator
+              <th scope="col" className=" px-3 py-5 font-medium" style={{ textAlign: 'right' }}>
+                עובד ראננר
               </th>
               <th
                 scope="col"
@@ -67,25 +84,26 @@ export default async function UsersPage({
               ></th>
             </tr>
           </thead>
-          <tbody className="bg-white">
+          <tbody className="bg-white rtl">
             {users?.map((user) => (
               <tr
                 key={user.id}
+                style={{ textAlign: 'right' }}
                 className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
               >
-                <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3">
+                <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>
                   {user.name}
                 </td>
-                <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3">
+                <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>
                   {user.phone_number}
                 </td>
-                <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3">
+                <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>
                   <UpdateAdminUser user={user} userId={params.userId} />
                 </td>
-                <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3">
+                <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>
                   <UpdateWorkerUser user={user} userId={params.userId} />
                 </td>
-                <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3">
+                <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>
                   <DeleteUser user={user} userId={params.userId} />
                 </td>
               </tr>

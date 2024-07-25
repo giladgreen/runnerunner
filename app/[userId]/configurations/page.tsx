@@ -1,6 +1,5 @@
 import {
   fetchAllBugs,
-  fetchAllImagesForExport,
   fetchAllPlayersForExport,
   fetchFeatureFlags,
   fetchFinalTablePlayers,
@@ -23,12 +22,12 @@ function Seperator() {
 
 function TournamentsLink({ userId }: { userId: string }) {
   return (
-    <div className="config-section">
+    <div className="config-section" style={{ marginBottom: 20 }}>
       <Link
         href={`/${userId}/configurations/tournaments`}
         className="mt-4 rounded-md bg-blue-400 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400"
       >
-        Tournaments Info
+        ניהול טורנירים
       </Link>
     </div>
   );
@@ -36,12 +35,12 @@ function TournamentsLink({ userId }: { userId: string }) {
 
 function PrizesInfoLink({ userId }: { userId: string }) {
   return (
-    <div className="config-section">
+    <div className="config-section" style={{ marginBottom: 20 }}>
       <Link
         href={`/${userId}/configurations/prizes`}
         className="mt-4 rounded-md bg-blue-400 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400"
       >
-        Prizes Info
+        הגדרות פרסים
       </Link>
     </div>
   );
@@ -62,12 +61,12 @@ function FeatureFlagsLink({ userId }: { userId: string }) {
 
 function UserPermissionsLink({ userId }: { userId: string }) {
   return (
-    <div className="config-section">
+    <div className="config-section" style={{ marginBottom: 20 }}>
       <Link
         href={`/${userId}/configurations/users`}
         className="mt-4 rounded-md bg-blue-700 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-400"
       >
-        Users permissions
+        ניהול משתמשים
       </Link>
     </div>
   );
@@ -130,14 +129,14 @@ export default async function ConfigurationPage({
   const prizes = chosenPrizes;
 
   return (
-    <div className="w-full">
-      <div className="config-section">
-        <b>Configurations</b>
+    <div className="w-full rtl">
+      <div className="config-section" style={{ textAlign: 'right', zoom: 1.5, marginBottom:20 }}>
+        <u> <b>הגדרות ואדמיניסטרציה</b></u>
       </div>
-      <Seperator />
-      <div className="config-section">
+
+      <div className="config-section" style={{ marginBottom: 20 }}>
         <div style={{ marginBottom: 20 }}>
-          <b>Export players data to CSV file</b>
+          <b>ייצוא דאטה לקובץ CSV</b>
         </div>
         <ExportPlayersButton
           players={players as PlayerDB[]}
@@ -148,40 +147,39 @@ export default async function ConfigurationPage({
           placesEnabled={placesEnabled}
         />
       </div>
-      <Seperator />
-      <div className="config-section">
+
+      <div className="config-section" style={{ marginBottom: 20 }}>
         <div style={{ marginBottom: 20 }}>
-          <b>Export players that approved marketing info</b>
+          <b>ייצוא רשימת שחקנים שאישרו תוכן שיווקי</b>
         </div>
         <ExportPlayersWithMarketingInfoButton players={players as PlayerDB[]} />
       </div>
-      <Seperator />
+
       {importEnabled && (
-        <div className="config-section">
+        <div className="config-section" style={{ marginBottom: 20 }}>
           <div>
             <u>
-              <b>Import players from CSV file</b>
+              <b>ייבוא שחקנים מקובץ CSV</b>
             </u>
           </div>
-          <div>each line in the file should be in the form of:</div>
+          <div>כל שורה בקובץ צריכה להיות מהצורה:</div>
           <div style={{ marginBottom: 15 }}>
-            <b>phone number, name, balance, notes</b>
+            <b>מספר טלפון, שם מלא, קרדיט, הערות</b>
           </div>
           <ImportPlayersButton />
         </div>
       )}
-      {importEnabled && <Seperator />}
+
       {isAdmin && <UserPermissionsLink userId={params.userId} />}
-      <Seperator />
+
       <PrizesInfoLink userId={params.userId} />
-      <Seperator />
+
       <TournamentsLink userId={params.userId} />
-      <Seperator />
+
       {isAdmin && <FeatureFlagsLink userId={params.userId} />}
-      <Seperator />
 
       <ReportBugForm bugs={bugs} />
-      <Seperator />
+
     </div>
   );
 }
