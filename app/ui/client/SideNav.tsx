@@ -10,7 +10,7 @@ export default async function SideNav({ userId }: { userId: string }) {
 
   const homepage = `/${userId}`;
   return (
-    <div className="flex h-full flex-col px-3 py-4 md:px-2">
+    <div className="flex h-full flex-col px-3 py-4 md:px-2 fixed-side-nav">
       <Link
         className="rounded-md bg-blue-600"
         href={homepage}

@@ -10,3 +10,23 @@ body{
   font-size: x-large;
   color: white;
 }
+
+.fixed-side-nav{
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 250px;
+}
+
+@media only screen and (max-width: 600px) {
+
+    .fixed-side-nav{
+        position: unset;
+        top: unset;
+        right: unset;
+        height: unset;
+        width: unset;
+    }
+
+}
