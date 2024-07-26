@@ -20,7 +20,9 @@ body{
 }
 
 @media only screen and (max-width: 600px) {
-
+    body{
+        overflow: unset;
+    }
     .fixed-side-nav{
         position: unset;
         top: unset;
