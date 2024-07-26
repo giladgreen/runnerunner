@@ -484,7 +484,6 @@ export async function createPlayerNewCreditLog(
 
 export async function setPlayerPosition(
   { playerId, prevPage }: { playerId: string; prevPage: string },
-  _prevState: State,
   formData: FormData,
 ) {
   const newPosition = Number(formData.get('position') as string);

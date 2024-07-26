@@ -15,6 +15,9 @@ import OpenPrizeModalButton from '@/app/ui/client/OpenPrizeModalButton';
 import EntriesButton from '@/app/ui/client/EntriesButton';
 import CreateNewTodayPlayerButton from '@/app/ui/client/CreateNewTodayPlayerButton';
 import {TrashIcon} from "@heroicons/react/24/outline";
+import {setPlayerPosition} from "@/app/lib/actions";
+import {usePathname, useSearchParams} from "next/navigation";
+import DeletePositionButton from "@/app/ui/client/DeletePositionButton";
 
 export default function TodayPlayersTable({
   allPlayers,
@@ -34,6 +37,10 @@ export default function TodayPlayersTable({
   tournaments: TournamentDB[];
   prizesInformation: PrizeInfoDB[];
 }) {
+
+  const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
+
+
   const getLink = (player: PlayerDB) => {
     return `/${userId}/players/${player.id}/edit`;
   };
@@ -236,23 +243,7 @@ export default function TodayPlayersTable({
                       </td>
 
                       <td className="whitespace-nowrap px-3 py-3 ">
-                          {player.position && Number(player.position) > 0 ? (
-                            <div
-                              className="text-lg"
-                              style={{
-                                background: '#6666CCCC',
-                                color: 'white',
-                                width: 30,
-                                height: 30,
-                                borderRadius: 50,
-                                textAlign: 'center',
-                              }}
-                            >
-                              #{player.position}
-                            </div>
-                          ) : (
-                            ''
-                          )}
+                          <DeletePositionButton player={player} prevPage={prevPage}/>
                         </td>
 
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">

@@ -19,22 +19,15 @@ export default function SetPositionForm({
   prevPage: string;
   initPosition: number;
 }) {
-  const initialState = { message: null, errors: {} };
   const setPlayerPositionWithPlayerId = setPlayerPosition.bind(null, {
     playerId: player.id,
     prevPage,
   });
-  // @ts-ignore
-  const [state1, dispatch] = useFormState(
-    // @ts-ignore
-    setPlayerPositionWithPlayerId,
-    initialState,
-  );
 
   const [position, setPosition] = useState(initPosition);
   return (
     <div className="edit-player-modal-inner-div">
-      <form action={dispatch} className="form-control">
+      <form action={setPlayerPositionWithPlayerId} className="form-control">
         <label className="mb-2 block text-sm font-medium">
           הגדר מיקום שחקן
         </label>
@@ -63,14 +56,6 @@ export default function SetPositionForm({
                   aria-describedby="position-error"
                 />
                 <HashtagIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
-              </div>
-              <div id="change-error" aria-live="polite" aria-atomic="true">
-                {state1?.errors?.position &&
-                  state1?.errors.position.map((error: string) => (
-                    <div className="mt-2 text-sm text-red-500" key={error}>
-                      {error}
-                    </div>
-                  ))}
               </div>
             </div>
           </div>
