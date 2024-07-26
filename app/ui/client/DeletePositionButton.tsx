@@ -3,7 +3,6 @@
 import { setPlayerPosition } from '@/app/lib/actions';
 import {PlayerDB } from '@/app/lib/definitions';
 import React from "react";
-import {useFormStatus} from "react-dom";
 import Spinner from "@/app/ui/client/Spinner";
 
 export default function DeletePositionButton({
@@ -13,10 +12,10 @@ export default function DeletePositionButton({
   player: PlayerDB;
   prevPage: string;
 }) {
-    const { pending } = useFormStatus();
+    const [pending, setPending] = React.useState(false);
 
     if (pending) {
-        return <Spinner size={33} />;
+        return <Spinner size={36} />;
     }
     // @ts-ignore
   const setPlayerPositionWithPlayerId = setPlayerPosition.bind(null, {
@@ -44,6 +43,12 @@ export default function DeletePositionButton({
         />
         <button
             type="submit"
+            onClick={() => {
+                setPending(true);
+                setTimeout(() => {
+                    setPending(false);
+                },1200)
+            }}
             style={{
               background: '#6666CCCC',
               color: 'white',

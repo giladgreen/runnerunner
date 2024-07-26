@@ -53,6 +53,7 @@ export default async function CurrentTournament({
   const rsvpPlayers = allPlayers.filter((player) => player.rsvpForToday);
   const rsvpPlayersCount = rsvpPlayers.length;
 
+
   return (
     <div className="full-width w-full">
       <RegisterSave players={allPlayers} />

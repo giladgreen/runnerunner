@@ -19,10 +19,48 @@ import {setPlayerPosition} from "@/app/lib/actions";
 import {usePathname, useSearchParams} from "next/navigation";
 import DeletePositionButton from "@/app/ui/client/DeletePositionButton";
 
+function getMinPosition(players: PlayerDB[]) {
+  const positions = players.filter(p => !isNaN(p.position) && p.position > 0).map((p) => p.position);
+
+  if (positions.length > 0){
+    return Math.min(...positions)-1;
+  }
+
+  if (players.length > 200) {
+    return 14;
+  }
+
+  if (players.length > 170) {
+    return 13;
+  }
+
+  if (players.length > 150) {
+    return 12;
+  }
+
+  if (players.length > 130) {
+    return 12;
+  }
+
+  if (players.length > 110) {
+    return 11;
+  }
+
+  if (players.length > 90) {
+    return 10;
+  }
+
+
+  if (players.length > 10) {
+    return 9;
+  }
+
+  return players.length;
+}
+
 export default function TodayPlayersTable({
   allPlayers,
   userId,
-
   rsvpEnabled,
   rsvpPlayersCount,
   isRsvpRequired,
@@ -74,8 +112,10 @@ export default function TodayPlayersTable({
 
       : `מציג ${arrivedPlayers} שחקנים שהגיעו.`;
 
-  const positions = players.filter(p => !isNaN(p.position) && p.position > 0).map((p) => p.position);
-  const minPosition = positions.length > 0 ? Math.min(...positions)-1 : 10;
+
+
+  const minPosition = getMinPosition(players)
+
   return (
     <>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">

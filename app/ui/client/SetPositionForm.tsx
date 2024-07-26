@@ -6,7 +6,7 @@ import { setPlayerPosition } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import { PlayerForm } from '@/app/lib/definitions';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export default function SetPositionForm({
   player,
@@ -25,6 +25,9 @@ export default function SetPositionForm({
   });
 
   const [position, setPosition] = useState(initPosition);
+  useEffect(() => {
+    setPosition(initPosition);
+  }, [initPosition]);
   return (
     <div className="edit-player-modal-inner-div">
       <form action={setPlayerPositionWithPlayerId} className="form-control">
