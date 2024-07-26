@@ -17,7 +17,7 @@ import {
   ImageDB,
   LogDB,
   PrizeDB,
-  PrizeInfoDB,
+  PrizeInfoDB, BugDB,
 } from './definitions';
 
 import { signIn } from '../../auth';
@@ -1007,6 +1007,35 @@ VALUES (${player.id}, ${player.name}, ${player.phone_number}, ${player.notes}, $
       'player deleted',
       `name: ${player.name}, phone: ${player}   image: ${player.image_url}  notes: ${player.notes}`,
     );
+  } catch (error) {
+    await cancelTransaction();
+    return { message: 'Database Error: Failed to Delete Player.' };
+  } finally {
+    revalidatePath(prevPage);
+    redirect(prevPage);
+  }
+}
+
+export async function deleteBug({
+  id,
+  prevPage,
+}: {
+  id: string;
+  prevPage: string;
+}) {
+  try {
+    await startTransaction();
+
+    const bug = (await sql<BugDB>`SELECT * FROM bugs WHERE id = ${id}`).rows[0];
+    if (!bug) {
+      return;
+    }
+
+    await sql`INSERT INTO deleted_bugs (id, description, updated_at) VALUES (${bug.id}, ${bug.description}, ${bug.updated_at})`;
+
+    await sql`DELETE FROM bugs WHERE id = ${id}`;
+    await commitTransaction();
+
   } catch (error) {
     await cancelTransaction();
     return { message: 'Database Error: Failed to Delete Player.' };

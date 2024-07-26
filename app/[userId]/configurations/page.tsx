@@ -17,6 +17,7 @@ import { formatDateToLocal } from '@/app/lib/utils';
 import ExportPlayersWithMarketingInfoButton from '@/app/ui/client/ExportPlayersWithMarketingInfoButton';
 import {CardsSkeleton} from "@/app/ui/skeletons";
 import Card from "@/app/ui/client/Card";
+import DeleteBugButton from "@/app/ui/client/DeleteBugButton";
 
 function TournamentsLink({ userId }: { userId: string }) {
   return (
@@ -79,7 +80,7 @@ function UserPermissionsLink({userId}: { userId: string }) {
     ;
 }
 
-function ReportBugForm({bugs}: { bugs: BugDB[] }) {
+function ReportBugForm({bugs, userId}: { bugs: BugDB[], userId: string }) {
     return (
         <div className="config-section rtl" style={{marginTop: 130 , textAlign:'right'}}>
             <h1 className="text-2xl">דיווח על תקלה</h1>
@@ -91,8 +92,9 @@ function ReportBugForm({bugs}: { bugs: BugDB[] }) {
         </div>
         <div>
           {bugs.map((bug) => (
-            <div key={bug.id} style={{ marginTop: 20 }}>
+            <div key={bug.id} style={{ marginTop: 20, border: '1px solid #CCCCCC', padding: 5, borderRadius: 8 }}>
               <div>
+                  <DeleteBugButton id={bug.id} userId={userId}/>
                 <div> {formatDateToLocal(bug.updated_at)}</div>
                 <div>{bug.description}</div>
               </div>
@@ -211,6 +213,6 @@ export default async function ConfigurationPage({
             />}
 
         </div>
-        <ReportBugForm bugs={bugs}/>
+        <ReportBugForm bugs={bugs} userId={params.userId}/>
     </div>
 }

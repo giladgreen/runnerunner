@@ -36,13 +36,13 @@ export default async function SideNav({ userId }: { userId: string }) {
 
       <div
         style={{
-          paddingLeft: 10,
-          paddingBottom: 10,
+          padding: 5,
           color: 'rgb(47, 111, 235)',
-            textAlign: 'right'
+          textAlign: 'right'
         }}
       >
-        <b>מחובר כ: {user.name ?? user.phone_number}</b>
+        <span  style={{ color: 'black'}}>מחובר כ: </span>
+        <b> {user.name ?? user.phone_number}</b>
       </div>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks user={user} />

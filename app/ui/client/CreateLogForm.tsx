@@ -148,7 +148,7 @@ function UseCreditButton() {
   if (pending) {
     return <Spinner size={33} />;
   }
-  return <Button type="submit">Use Credit</Button>;
+  return <Button type="submit">השתמש בקרדיט</Button>;
 }
 
 export function AddToBalanceForm({

@@ -1,20 +1,20 @@
 'use client';
 
-import { deletePlayer } from '@/app/lib/actions';
+import { deleteBug } from '@/app/lib/actions';
 import React, { useState } from 'react';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import AreYouSure from '@/app/ui/client/AreYouSure';
 
-export default function DeletePlayerButton({
+export default function DeleteBugButton({
   id,
   userId,
 }: {
   userId: string;
   id: string;
 }) {
-  const deletePlayerWithId = deletePlayer.bind(null, {
+  const deleteBugWithId = deleteBug.bind(null, {
     id,
-    prevPage: `/${userId}/players/`,
+    prevPage: `/${userId}/configurations/`,
   });
   const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -33,11 +33,11 @@ export default function DeletePlayerButton({
         <AreYouSure
           onConfirm={() => {
             setShowConfirmation(false);
-            deletePlayerWithId();
+              deleteBugWithId();
           }}
           onCancel={() => setShowConfirmation(false)}
-          subtext="הסטוריית השחקן תימחק גם"
-          text="האם למחוק שחקן?"
+          subtext=""
+          text="האם למחוק את באג?"
         />
       )}
     </div>

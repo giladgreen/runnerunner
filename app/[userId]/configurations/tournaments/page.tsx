@@ -85,7 +85,7 @@ export default async function TournamentsSetupPage({
                 {tournament.max_players}
               </td>
               <td className="whitespace-nowrap px-3 py-3">
-                {tournament.rsvp_required ? 'Yes' : 'No'}
+                {tournament.rsvp_required ? 'כן' : 'לא '}
               </td>
               <td className="whitespace-nowrap py-3 pl-6 pr-3">
                 <div className="flex justify-end gap-3">

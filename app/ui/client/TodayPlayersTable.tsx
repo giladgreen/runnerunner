@@ -107,7 +107,7 @@ export default function TodayPlayersTable({
                   <div
                     key={player.id}
                     className="full-width w-full rounded-md bg-white"
-                    style={{ marginBottom: 20 }}
+                    style={{ marginBottom: 20, padding: 4 }}
                   >
                     <div className="flex items-center justify-between border-b pb-4">
                       <div>
@@ -119,7 +119,7 @@ export default function TodayPlayersTable({
                             height={40}
                             alt={`${player.name}'s profile picture`}
                           />
-                          <div>{player.name}</div>
+                          <div style={{margin: '0 6px', zoom:1.5}}>{player.name}</div>
                         </div>
                         <div className="text-sm text-gray-500">
                           {player.phone_number}
@@ -132,21 +132,24 @@ export default function TodayPlayersTable({
                       )}
                     </div>
 
-                    <div className="flex w-full items-center justify-between pt-4">
+                    <div className="flex w-full items-center justify-between pt-4"  >
                       <div>
-                        <div className="text-xl font-medium"  style={{
-                          color: formatCurrencyColor(player.balance)
-                        }}>
                           <Link href={getLink(player)}>
-                            balance: {formatCurrency(player.balance)}
+                            <span className="text-xl font-medium" style={{
+                              color: formatCurrencyColor(player.balance)
+                            }}>
+
+                              <span>קרדיט:</span>
+                              <b style={{ marginRight:5}}>{player.balance< 0 ? 'חוב של' : ''}</b>
+                              <b >  {formatCurrency(Math.abs(player.balance))}</b>
+                            </span>
                           </Link>
-                        </div>
                         <div className="text-l font-medium">{player.notes}</div>
                       </div>
                       <div>
                         {rsvpEnabled &&
-                          player.rsvpForToday &&
-                          player.arrived && <DoubleTicksIcon size={24} />}
+                            player.rsvpForToday &&
+                            player.arrived && <DoubleTicksIcon size={24}/>}
                       </div>
                     </div>
                   </div>

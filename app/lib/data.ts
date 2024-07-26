@@ -784,7 +784,8 @@ export async function fetchTournamentsData() {
             date,
           };
         }
-        const amount = -1 * change;
+
+        const amount = change > 0 ?  change : -1 * change;
         // @ts-ignore
         newAcc[date].total += amount;
         // @ts-ignore
@@ -815,6 +816,9 @@ export async function fetchTournamentsData() {
       {},
     );
     methodEnd('fetchTournamentsData');
+    console.log('#######')
+    console.log('result', result)
+
     return result;
   } catch (error) {
     console.error('Database Error:', error);

@@ -72,11 +72,11 @@ export default async function UsersPage({
               >
                 מספר טלפון
               </th>
-              <th scope="col" className=" px-3 py-5 font-medium" style={{ textAlign: 'right' }}>
+              <th scope="col" className="px-4 py-5 font-medium" style={{ textAlign: 'right' }}>
                 אדמין
               </th>
-              <th scope="col" className=" px-3 py-5 font-medium" style={{ textAlign: 'right' }}>
-                עובד ראננר
+              <th scope="col" className="px-4 py-5 font-medium" style={{ textAlign: 'right' }}>
+                מתפעל
               </th>
               <th
                 scope="col"
@@ -97,10 +97,10 @@ export default async function UsersPage({
                 <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>
                   {user.phone_number}
                 </td>
-                <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>
+                <td className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>
                   <UpdateAdminUser user={user} userId={params.userId} />
                 </td>
-                <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>
+                <td className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>
                   <UpdateWorkerUser user={user} userId={params.userId} />
                 </td>
                 <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>

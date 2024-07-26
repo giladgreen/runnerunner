@@ -372,7 +372,23 @@
   direction: ltr;
 
 }
+
+.smaller-on-mobile{
+    font-size: 18px;
+
+}
+.smaller-on-mobile-smaller{
+    font-size: 18px;
+
+}
 @media only screen and (max-width: 600px) {
+  .smaller-on-mobile{
+    font-size: 10px;
+    font-weight: bold;
+  }
+  .smaller-on-mobile-smaller{
+    font-size: 6px;
+  }
   .create-new-today-player-button {
     width: unset;
   }
