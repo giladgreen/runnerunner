@@ -150,7 +150,7 @@ function SetGivePrizeForm({
         </div>
       </form>
       {hide && (
-        <Button onClick={hide} style={{ marginTop: -52, marginLeft: 20 }}>
+        <Button onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
           ביטול
         </Button>
       )}
