@@ -381,7 +381,14 @@
     font-size: 18px;
 
 }
+
+.players-final-table-cell{
+
+}
 @media only screen and (max-width: 600px) {
+  .players-final-table-cell{
+    padding: 0;
+  }
   .smaller-on-mobile{
     font-size: 10px;
     font-weight: bold;

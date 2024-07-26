@@ -85,7 +85,7 @@ export default async function TournamentsDataPage({
                               : ``}
                         </th>
 
-                          <th className="px-3 py-5 font-medium smaller-on-mobile">
+                          <th className="px-3 py-5 font-medium smaller-on-mobile players-final-table-cell">
                             {finalTableData}
                           </th>
 

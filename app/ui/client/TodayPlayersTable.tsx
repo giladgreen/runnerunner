@@ -67,6 +67,8 @@ export default function TodayPlayersTable({
 
       : `מציג ${arrivedPlayers} שחקנים שהגיעו.`;
 
+  const positions = players.filter(p => !isNaN(p.position) && p.position > 0).map((p) => p.position);
+  const minPosition = positions.length > 0 ? Math.min(...positions)-1 : 10;
   return (
     <>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
@@ -263,7 +265,7 @@ export default function TodayPlayersTable({
                             setQuery={setQuery}
                           />
 
-                          <OpenPositionModalButton player={player} />
+                          <OpenPositionModalButton player={player} initPosition={minPosition} />
 
 
                           <OpenPrizeModalButton

@@ -33,20 +33,19 @@ export async function getFinalTablePlayersContent(
     : 'text-on-card';
 
   return (
-    <div className="rtl full-width" style={{ marginBottom: 30, display: 'flex' }}>
-      <div style={{ width: '60%' }}>
+    <div className="rtl full-width" style={{ marginBottom: 30, display: 'flex', marginRight: 0, }}>
+      <div >
         {finalTablePlayers.map((finalTablePlayer: PlayerDB) => {
           return (
             <div
               key={finalTablePlayer.id}
               className="rtl full-width w-full rounded-md bg-white"
-
             >
               <div
                   className={`rtl flex items-center border-b ${
                       isTournamentsDataPage ? '' : 'pb-4'
                   } highlight-on-hover`}
-                  style={{ padding:4 }}
+                  style={{ padding:3 }}
               >
                 <OpenGiveCreditModalButton
                     player={finalTablePlayer}
@@ -55,12 +54,12 @@ export async function getFinalTablePlayersContent(
                     userId={userId}
                     prizesInformation={prizesInformation}
                 />
-                <div className={textClass} style={{ marginRight:10}}>#{finalTablePlayer.position}</div>
+                <div className={textClass} style={{ marginRight:3}}>#{finalTablePlayer.position}</div>
 
                 {!isTournamentsDataPage && (
                     <Image
                         src={finalTablePlayer.image_url}
-                        className="zoom-on-hover"
+                        className="zoom-on-hover wide-screen"
                         style={{
                           marginLeft: 10,
                           marginRight: 20,
@@ -72,7 +71,7 @@ export async function getFinalTablePlayersContent(
                     />
                 )}
                 {isTournamentsDataPage && (
-                    <span style={{marginLeft: 10}}></span>
+                    <span  className="wide-screen" style={{marginLeft: 10}}></span>
                 )}
 
                 <div

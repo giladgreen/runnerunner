@@ -8,8 +8,10 @@ import {HashtagIcon} from "@heroicons/react/24/solid";
 
 export default function OpenPositionModalButton({
   player,
+  initPosition
 }: {
   player: PlayerDB;
+  initPosition: number;
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const [show, setShow] = React.useState(false);
@@ -33,6 +35,7 @@ export default function OpenPositionModalButton({
                   player={player as unknown as PlayerForm}
                   hide={close}
                   prevPage={prevPage}
+                  initPosition={initPosition}
               />
           </div>
       </div>

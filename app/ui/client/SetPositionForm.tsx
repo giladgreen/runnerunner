@@ -6,15 +6,18 @@ import { setPlayerPosition } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import { PlayerForm } from '@/app/lib/definitions';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
+import {useState} from "react";
 
 export default function SetPositionForm({
   player,
   hide,
   prevPage,
+  initPosition
 }: {
   player: PlayerForm;
   hide?: () => void;
   prevPage: string;
+  initPosition: number;
 }) {
   const initialState = { message: null, errors: {} };
   const setPlayerPositionWithPlayerId = setPlayerPosition.bind(null, {
@@ -28,6 +31,7 @@ export default function SetPositionForm({
     initialState,
   );
 
+  const [position, setPosition] = useState(initPosition);
   return (
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
@@ -53,6 +57,8 @@ export default function SetPositionForm({
                   min={0}
                   // aria-valuemin={0}
                   placeholder="קבע מיקום"
+                  value={position}
+                  onChange={(e) => setPosition(+e.target.value)}
                   className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                   aria-describedby="position-error"
                 />
