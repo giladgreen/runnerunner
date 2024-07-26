@@ -93,9 +93,9 @@ export async function getFinalTablePlayersContent(
 
 
                 <div className="cellular">
-                  <div style={{display: 'block'}}>
-                    <div>{finalTablePlayer.name}</div>
-                    <div>{finalTablePlayer.phone_number}</div>
+                  <div style={{display: 'flex'}}>
+                    <div style={{margin: '0 5px'}}>{finalTablePlayer.name}</div>
+                    <div style={{margin: '0 15px'}}>{finalTablePlayer.phone_number}</div>
                   </div>
                 </div>
               </div>
@@ -174,7 +174,7 @@ export async function getPlayersPrizesContent(
                 <span style={{ marginLeft: 25, textAlign:'right' }}>{playersPrize!.prize}</span>
               </div>
 
-              {!personal &&
+              {!personal && !currentTournament &&
                 !playersPrize.delivered &&
                 playersPrize.ready_to_be_delivered && (
                   <SetPrizeAsDelivered id={playersPrize.id} />
@@ -185,7 +185,7 @@ export async function getPlayersPrizesContent(
                 !currentTournament && (
                   <SetPrizeAsReadyToBeDelivered id={playersPrize.id} />
                 )}
-              {!personal &&
+              {!personal && !currentTournament &&
                 !playersPrize.delivered &&
                 playersPrize.ready_to_be_delivered && (
                   <SetPrizeAsNotReadyToBeDelivered id={playersPrize.id} />
@@ -217,7 +217,7 @@ export async function getPlayersPrizesContent(
               </div>
               <div>{playersPrize!.prize}</div>
 
-              {!personal && !playersPrize.delivered && (
+              {!personal && !currentTournament && !playersPrize.delivered && (
                 <div>
                   <SetPrizeAsDelivered id={playersPrize.id} />
                 </div>

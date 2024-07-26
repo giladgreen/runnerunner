@@ -36,28 +36,28 @@ export default async function TournamentsSetupPage({
           <u>טורנירים:</u>
         </b>
       </div>
-      <table className="hidden min-w-full text-gray-900 md:table rtl" style={{ textAlign: 'right'}}>
+      <table className="min-w-full text-gray-900 md:table rtl" style={{ textAlign: 'right'}}>
         <thead className="rounded-lg text-left text-sm font-normal" style={{ textAlign: 'right'}}>
           <tr>
-            <th scope="col" className="px-4 py-5 font-medium sm:pl-6" style={{ textAlign: 'right'}}>
+            <th scope="col" className="px-4 py-5 font-medium sm:pl-6 smaller-on-mobile" style={{ textAlign: 'right'}}>
               יום
             </th>
-            <th scope="col" className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+            <th scope="col" className="px-2 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
               שם
             </th>
-            <th scope="col" className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+            <th scope="col" className="px-3 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
               עלות כניסה
             </th>
-            <th scope="col" className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+            <th scope="col" className="px-3 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
               עלות כניסה נוספת
             </th>
-            <th scope="col" className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+            <th scope="col" className="px-3 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
               מספר שחקנים מירבי
             </th>
-            <th scope="col" className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
-              האם נדרש אישור הגעה
+            <th scope="col" className="px-3 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
+               נדרש אישור הגעה
             </th>
-            <th scope="col" className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
+            <th scope="col" className="px-3 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
               <span className="sr-only">ערוך</span>
             </th>
           </tr>
@@ -68,32 +68,32 @@ export default async function TournamentsSetupPage({
               key={tournament.id}
               className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
             >
-              <td className="whitespace-nowrap py-3 pl-6 pr-3">
+              <td className="whitespace-nowrap py-3 pl-6 pr-3 smaller-on-mobile">
                 {
                   // @ts-ignore
-                  TRANSLATIONS[tournament.day]
+                  TRANSLATIONS[tournament.day].replace('יום','')
                 }
               </td>
-              <td className="whitespace-nowrap px-3 py-3">{tournament.name}</td>
-              <td className="whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3 smaller-on-mobile">{tournament.name}</td>
+              <td className="whitespace-nowrap px-3 py-3 smaller-on-mobile">
                 {formatCurrency(tournament.buy_in)}
               </td>
-              <td className="whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3 smaller-on-mobile">
                 {formatCurrency(tournament.re_buy)}
               </td>
-              <td className="whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3 smaller-on-mobile">
                 {tournament.max_players}
               </td>
-              <td className="whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3 smaller-on-mobile">
                 {tournament.rsvp_required ? 'כן' : 'לא '}
               </td>
-              <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                <div className="flex justify-end gap-3">
+              <td className="whitespace-nowrap py-3 pl-6 pr-3 smaller-on-mobile">
+                <div className="flex justify-end gap-3 smaller-on-mobile edit-tournament-link">
                   <Link
                     href={`/${
                       params.userId
                     }/configurations/tournaments/${tournament.day.toLowerCase()}/edit`}
-                    className="rounded-md border p-2 hover:bg-gray-100"
+                    className="rounded-md border p-2 hover:bg-gray-100 smaller-on-mobile"
                   >
                     <PencilIcon className="w-5" />
                   </Link>

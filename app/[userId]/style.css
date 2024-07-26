@@ -385,7 +385,27 @@
 .players-final-table-cell{
 
 }
+.edit-tournament-link{
+  margin-right: -60px;
+}
+.delete-prize-button{
+
+}
+.edit-prize-link{
+
+}
 @media only screen and (max-width: 600px) {
+  .edit-prize-link{
+    margin-right: -27px;
+  }
+
+  .delete-prize-button{
+    margin-right: -29px;
+  }
+  .edit-tournament-link{
+    margin-right: -27px;
+  }
+
   .players-final-table-cell{
     padding: 0;
   }

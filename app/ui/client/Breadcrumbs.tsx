@@ -31,7 +31,7 @@ export default function Breadcrumbs({
             )}
             {breadcrumb.img && (
               <div style={{ display: 'flex' }}>
-                {' '}
+
                 <Image
                   src={breadcrumb.img}
                   className="zoom-on-hover mr-2 rounded-full"
@@ -39,7 +39,7 @@ export default function Breadcrumbs({
                   height={35}
                   alt={`profile picture`}
                 />
-                {breadcrumb.label}
+                <span style={{ marginRight: 10 }}>{breadcrumb.label}</span>
               </div>
             )}
             {index < breadcrumbs.length - 1 ? (

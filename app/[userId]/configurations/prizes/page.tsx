@@ -69,22 +69,22 @@ export default async function PrizesInfoPage({
       </div>
       {prizesCount > 0 && (
         <div className="mt-4 flex items-center justify-between gap-2 md:mt-8 rtl">
-          <table className="hidden  text-gray-900 md:table rtl">
+          <table className="text-gray-900 md:table rtl">
             <thead className="rounded-lg text-left text-sm font-normal rtl">
               <tr>
-                <th scope="col" className=" px-4 py-5 font-medium sm:pl-6" style={{ textAlign: 'right' }}>
+                <th scope="col" className=" px-4 py-5 font-medium sm:pl-6 smaller-on-mobile" style={{ textAlign: 'right' }}>
                   שם
                 </th>
 
-                <th scope="col" className=" px-3 py-5 font-medium" style={{ textAlign: 'right' }}>
+                <th scope="col" className=" px-3 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right' }}>
                   שווי בקרדיט
                 </th>
-                <th scope="col" className=" px-3 py-5 font-medium" style={{ textAlign: 'right' }}>
+                <th scope="col" className=" px-3 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right' }}>
                   תאריך עדכון
                 </th>
-                <th scope="col" className=" px-3 py-5 font-medium"></th>
-                <th scope="col" className=" px-3 py-5 font-medium"></th>
-                <th scope="col" className=" px-3 py-5 font-medium">
+                <th scope="col" className=" px-3 py-5 font-medium smaller-on-mobile"></th>
+                <th scope="col" className=" px-3 py-5 font-medium smaller-on-mobile"></th>
+                <th scope="col" className=" px-3 py-5 font-medium smaller-on-mobile">
                   עוד מידע
                 </th>
               </tr>
@@ -96,30 +96,31 @@ export default async function PrizesInfoPage({
                   style={{ textAlign: 'right' }}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
-                  <td className=" whitespace-nowrap py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>
+                  <td className=" whitespace-nowrap py-3 pl-6 pr-3 smaller-on-mobile" style={{ textAlign: 'right' }}>
                     {prize.name}
                   </td>
 
-                  <td className=" whitespace-nowrap py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>
+                  <td className=" whitespace-nowrap py-3 pl-6 pr-3 smaller-on-mobile" style={{ textAlign: 'right' }}>
                     {formatCurrency(prize.credit)}
                   </td>
-                  <td className=" whitespace-nowrap py-3 pl-6 pr-3" style={{ textAlign: 'right' }}>
+                  <td className=" whitespace-nowrap py-3 pl-6 pr-3 smaller-on-mobile" style={{ textAlign: 'right' }}>
                     {formatDateToLocalWithTime(prize.created_at)}
                   </td>
-                  <td className=" whitespace-nowrap py-3 pl-6 pr-3">
+                  <td className=" whitespace-nowrap py-3 pl-6 pr-3 smaller-on-mobile">
                     <Link
+                        className="edit-prize-link"
                       href={`/${params.userId}/configurations/prizes/${prize.id}/edit`}
                     >
                       <Button className="my-button">עריכה</Button>
                     </Link>
                   </td>
-                  <td className=" whitespace-nowrap py-3 pl-6 pr-3">
+                  <td className="whitespace-nowrap py-3 pl-6 pr-3 smaller-on-mobile">
                     <DeletePrizeInfoButton
                       prize={prize}
                       userId={params.userId}
                     />
                   </td>
-                  <td className=" whitespace-nowrap py-3 pl-6 pr-3">
+                  <td className=" whitespace-nowrap py-3 pl-6 pr-3 smaller-on-mobile">
                     {prize.extra}
                   </td>
                 </tr>
