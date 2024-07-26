@@ -6,22 +6,18 @@ import { PlayerDB, PrizeDB, TournamentDB } from '@/app/lib/definitions';
 
 let lastSave = 0;
 function saveOtherDataToFile(
-  placesEnabled: boolean,
   playersPlaces: PlayerDB[],
-  prizesEnabled: boolean,
   prizes: PrizeDB[],
   tournament: TournamentDB,
   worker?: boolean,
 ) {
-  if (!placesEnabled && !prizesEnabled) {
-    return;
-  }
+
   if (worker) {
     return;
   }
 
-  const addPlaces = placesEnabled && playersPlaces && playersPlaces.length > 0;
-  const addPrizes = prizesEnabled && prizes && prizes.length > 0;
+  const addPlaces = playersPlaces && playersPlaces.length > 0;
+  const addPrizes =  prizes && prizes.length > 0;
   const filename = `players_${
     addPlaces && addPrizes
       ? 'places_and_prizes'
@@ -113,16 +109,12 @@ export default function ExportPlayersButton({
   worker,
   tournament,
   prizes,
-  prizesEnabled,
-  placesEnabled,
 }: {
   players: PlayerDB[];
   playersPlaces: PlayerDB[];
   tournament: TournamentDB;
   prizes: PrizeDB[];
   worker?: boolean;
-  prizesEnabled?: boolean;
-  placesEnabled?: boolean;
 }) {
   return (
     <>
@@ -130,9 +122,7 @@ export default function ExportPlayersButton({
         onClick={() => {
           savePlayersDataToFile(players);
           saveOtherDataToFile(
-            !!placesEnabled,
             playersPlaces,
-            !!prizesEnabled,
             prizes,
             tournament,
             worker,

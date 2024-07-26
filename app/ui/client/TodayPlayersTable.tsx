@@ -19,8 +19,7 @@ import {TrashIcon} from "@heroicons/react/24/outline";
 export default function TodayPlayersTable({
   allPlayers,
   userId,
-  prizesEnabled,
-  placesEnabled,
+
   rsvpEnabled,
   rsvpPlayersCount,
   isRsvpRequired,
@@ -29,8 +28,6 @@ export default function TodayPlayersTable({
 }: {
   allPlayers: PlayerDB[];
   userId: string;
-  prizesEnabled: boolean;
-  placesEnabled: boolean;
   rsvpEnabled: boolean;
   isRsvpRequired: boolean;
   rsvpPlayersCount: number;
@@ -182,9 +179,9 @@ export default function TodayPlayersTable({
                     <th scope="col" className="px-3 py-5 font-medium"  style={{textAlign: 'right'}}>
                       כניסות
                     </th>
-                    {placesEnabled && (
-                      <th scope="col" className="px-3 py-5 font-medium"></th>
-                    )}
+
+                    <th scope="col" className="px-3 py-5 font-medium"></th>
+
                     <th scope="col" className="relative py-3 pl-6 pr-3"  style={{textAlign: 'right'}}>
                       <span className="sr-only">עריכה</span>
                     </th>
@@ -235,8 +232,8 @@ export default function TodayPlayersTable({
                       <td className="whitespace-nowrap px-3 py-3 ">
                         <EntriesButton player={player} />
                       </td>
-                      {placesEnabled && (
-                        <td className="whitespace-nowrap px-3 py-3 ">
+
+                      <td className="whitespace-nowrap px-3 py-3 ">
                           {player.position && Number(player.position) > 0 ? (
                             <div
                               className="text-lg"
@@ -255,7 +252,7 @@ export default function TodayPlayersTable({
                             ''
                           )}
                         </td>
-                      )}
+
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
                           <OpenCreditModalButton
@@ -265,15 +262,15 @@ export default function TodayPlayersTable({
                             userId={userId}
                             setQuery={setQuery}
                           />
-                          {placesEnabled && (
-                            <OpenPositionModalButton player={player} />
-                          )}
-                          {prizesEnabled && (
-                            <OpenPrizeModalButton
-                              player={player}
-                              prizesInformation={prizesInformation}
-                            />
-                          )}
+
+                          <OpenPositionModalButton player={player} />
+
+
+                          <OpenPrizeModalButton
+                            player={player}
+                            prizesInformation={prizesInformation}
+                          />
+
                         </div>
                       </td>
                     </tr>

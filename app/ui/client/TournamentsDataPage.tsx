@@ -8,8 +8,6 @@ export default async function TournamentsDataPage({
 }: {
   userId?: string;
 }) {
-  const { placesEnabled } = await fetchFeatureFlags();
-
   const tournaments = await fetchTournamentsData();
 
   const tournamentsData = Object.keys(tournaments);
@@ -35,11 +33,11 @@ export default async function TournamentsDataPage({
               <th className="rtl px-1 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
                 <b>כניסות מחדש</b>
               </th>
-              {placesEnabled && (
+
                 <th className="rtl px-2 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
                   <b>דירוג מנצחים</b>
                 </th>
-              )}
+
             </tr>
           </thead>
           <tbody className="bg-white">
@@ -86,11 +84,11 @@ export default async function TournamentsDataPage({
                               ? `(+ ${dateItem.reentries} כניסות מחדש)`
                               : ``}
                         </th>
-                        {placesEnabled && (
-                            <th className="px-3 py-5 font-medium smaller-on-mobile">
-                              {finalTableData}
-                            </th>
-                        )}
+
+                          <th className="px-3 py-5 font-medium smaller-on-mobile">
+                            {finalTableData}
+                          </th>
+
                       </tr>
                   );
                 })

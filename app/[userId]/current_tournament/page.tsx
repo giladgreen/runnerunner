@@ -39,7 +39,7 @@ export default async function CurrentTournament({
 
   const prizesInformation = await fetchPrizesInfo();
   const tournaments = await fetchTournaments();
-  const { prizesEnabled, placesEnabled, rsvpEnabled } =
+  const {  rsvpEnabled } =
     await fetchFeatureFlags();
 
   const now = new Date();
@@ -62,16 +62,14 @@ export default async function CurrentTournament({
       <div className="full-width flex w-full items-center justify-between">
         <RSVPAndArrivalCardWrapper params={params} />
       </div>
-      {placesEnabled && (
         <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
           <FinalTablePlayers title="דירוג מנצחים" params={params} />
         </div>
-      )}
-      {prizesEnabled && (
+
         <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
           <PlayersPrizes title="פרסים" showOnlyToday params={params} />
         </div>
-      )}
+
 
       <TodayPlayersTable
         prizesInformation={prizesInformation}
@@ -80,8 +78,6 @@ export default async function CurrentTournament({
         isRsvpRequired={isRsvpRequired}
         allPlayers={allPlayers}
         userId={params.userId}
-        prizesEnabled={prizesEnabled}
-        placesEnabled={placesEnabled}
         rsvpEnabled={rsvpEnabled}
       />
     </div>

@@ -59,10 +59,10 @@ async function getAllRsvps() {
 }
 
 async function getUserById(userId: string) {
-  const all =
-      await sql<UserDB>`SELECT * FROM users;`;
-
-  console.log(all.rows.map((user) => `${user.id} ${user.name}  ${user.phone_number}`))
+  // const all =
+  //     await sql<UserDB>`SELECT * FROM users;`;
+  //
+  // console.log(all.rows.map((user) => `${user.id} ${user.name}  ${user.phone_number}`))
 
   const usersResult =
     await sql<UserDB>`SELECT * FROM users WHERE id = ${userId};`;
@@ -816,8 +816,7 @@ export async function fetchTournamentsData() {
       {},
     );
     methodEnd('fetchTournamentsData');
-    console.log('#######')
-    console.log('result', result)
+
 
     return result;
   } catch (error) {
@@ -926,12 +925,6 @@ export async function fetchFeatureFlags() {
   try {
     const flagsResult = await getAllFlags();
 
-    const prizesEnabled = Boolean(
-      flagsResult.find((flag) => flag.flag_name === 'prizes')?.is_open,
-    );
-    const placesEnabled = Boolean(
-      flagsResult.find((flag) => flag.flag_name === 'places')?.is_open,
-    );
     const rsvpEnabled = Boolean(
       flagsResult.find((flag) => flag.flag_name === 'rsvp')?.is_open,
     );
@@ -947,8 +940,6 @@ export async function fetchFeatureFlags() {
     );
     methodEnd('fetchFeatureFlags');
     return {
-      prizesEnabled,
-      placesEnabled,
       rsvpEnabled,
       playerRsvpEnabled,
       usePhoneValidation,

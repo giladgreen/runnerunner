@@ -15,7 +15,6 @@ export default async function HomePage({
   const user = await fetchUserById(params.userId);
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
-  const { placesEnabled } = await fetchFeatureFlags();
 
   if (isAdmin || isWorker) {
     return (
@@ -24,11 +23,9 @@ export default async function HomePage({
           <TodayTournamentNameCardWrapper params={params} />
         </div>
         <RSVPAndArrivalCardWrapper params={params} />
-        {placesEnabled && (
-          <div style={{ marginTop: 40 }}>
-            <FinalTablePlayers title="דירוג טורניר נוכחי" params={params} />
-          </div>
-        )}
+        <div style={{ marginTop: 40 }}>
+           <FinalTablePlayers title="דירוג טורניר נוכחי" params={params} />
+        </div>
         <hr style={{ marginBottom: 30, marginTop: 10 }} />
         <GeneralPlayersCardWrapper />
         <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">

@@ -127,7 +127,6 @@ export default async function ConfigurationPage({
             </div>
         );
     }
-    const {prizesEnabled, placesEnabled} = await fetchFeatureFlags();
     const importEnabled = user.is_admin && user.phone_number === '0587869910';
     const bugs = await fetchAllBugs();
     const players = await fetchAllPlayersForExport();
@@ -155,8 +154,6 @@ export default async function ConfigurationPage({
                 playersPlaces={playersPlaces}
                 tournament={tournament}
                 prizes={prizes}
-                prizesEnabled={prizesEnabled}
-                placesEnabled={placesEnabled}
             />}
             type="export"
             oneLine
@@ -190,7 +187,7 @@ export default async function ConfigurationPage({
                 oneLine
             />}
 
-            {isAdmin && <Card
+            {importEnabled && <Card
                 title="feature flags"
                 value={ <FeatureFlagsLink userId={params.userId}/>}
                 type="export"

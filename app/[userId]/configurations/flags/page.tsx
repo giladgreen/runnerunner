@@ -8,8 +8,6 @@ export default async function FlagsPage({
   params: { userId: string };
 }) {
   const {
-    prizesEnabled,
-    placesEnabled,
     rsvpEnabled,
     playerRsvpEnabled,
     usePhoneValidation,
@@ -44,22 +42,7 @@ export default async function FlagsPage({
           </thead>
           <tbody className="bg-white">
             <tr
-              key={'prizesEnabled'}
-              className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
-            >
-              <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                <b>Prizes</b>
-              </td>
-              <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3">
-                <UpdateFeatureFlag
-                  featureName={'prizes'}
-                  currentValue={Boolean(prizesEnabled)}
-                  userId={params.userId}
-                />
-              </td>
-            </tr>
-            <tr
-              key={'prizesEnabled'}
+              key={'PhoneEnabled'}
               className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
             >
               <td className="whitespace-nowrap py-3 pl-6 pr-3">
@@ -74,22 +57,7 @@ export default async function FlagsPage({
               </td>
             </tr>
             <tr
-              key={'prizesEnabled'}
-              className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
-            >
-              <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                <b>Places</b>
-              </td>
-              <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3">
-                <UpdateFeatureFlag
-                  featureName={'places'}
-                  currentValue={Boolean(placesEnabled)}
-                  userId={params.userId}
-                />
-              </td>
-            </tr>
-            <tr
-              key={'prizesEnabled'}
+              key={'RSVPEnabled'}
               className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
             >
               <td className="whitespace-nowrap py-3 pl-6 pr-3">
@@ -105,7 +73,7 @@ export default async function FlagsPage({
             </tr>
             {rsvpEnabled && (
               <tr
-                key={'prizesEnabled'}
+                key={'userRSVPEnabled'}
                 className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
               >
                 <td className="whitespace-nowrap py-3 pl-6 pr-3">
