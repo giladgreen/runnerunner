@@ -55,42 +55,43 @@ export default async function TournamentsDataPage({
                   const dayIncome = getDayIncome(dateItem);
 
                   const date = new Date(dateItem.date)
-                    .toISOString()
-                    .slice(0, 10);
+                      .toISOString()
+                      .slice(0, 10);
 
                   const finalTableData = await getFinalTablePlayersContent(
-                    date,
-                    true,
-                    userId,
+                      date,
+                      `${formatDateToLocal(dateItem.date)} ${dateItem.tournamentName}`,
+                      true,
+                      userId,
                   );
 
                   return (
-                    <tr
-                      key={dateItem.date}
-                      className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
-                    >
-                      <th className="px-4 py-5 font-medium">
-                        <div style={{ marginBottom: 20, textAlign: 'right' }} >
-                          {formatDateToLocal(dateItem.date)}
-                        </div>
-                        <div style={{ textAlign: 'right'}}>{dateItem.tournamentName}</div>
-                      </th>
-                      <th className="px-3 py-5 font-medium">{dayIncome}</th>
-                      <th className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
-                        {dateItem.players} שחקנים
-                      </th>
-                      <th className="px-3 py-5 font-medium" style={{ textAlign: 'right'}}>
-                        {dateItem.entries - dateItem.reentries} כניסות{' '}
-                        {dateItem.reentries > 0
-                          ? `(+ ${dateItem.reentries} כניסות מחדש)`
-                          : ``}
-                      </th>
-                      {placesEnabled && (
-                        <th className="px-3 py-5 font-medium">
-                          {finalTableData}
+                      <tr
+                          key={dateItem.date}
+                          className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                      >
+                        <th className="px-4 py-5 font-medium">
+                          <div style={{marginBottom: 20, textAlign: 'right'}}>
+                            {formatDateToLocal(dateItem.date)}
+                          </div>
+                          <div style={{textAlign: 'right'}}>{dateItem.tournamentName}</div>
                         </th>
-                      )}
-                    </tr>
+                        <th className="px-3 py-5 font-medium">{dayIncome}</th>
+                        <th className="px-3 py-5 font-medium" style={{textAlign: 'right'}}>
+                          {dateItem.players} שחקנים
+                        </th>
+                        <th className="px-3 py-5 font-medium" style={{textAlign: 'right'}}>
+                          {dateItem.entries - dateItem.reentries} כניסות{' '}
+                          {dateItem.reentries > 0
+                              ? `(+ ${dateItem.reentries} כניסות מחדש)`
+                              : ``}
+                        </th>
+                        {placesEnabled && (
+                            <th className="px-3 py-5 font-medium">
+                              {finalTableData}
+                            </th>
+                        )}
+                      </tr>
                   );
                 })
             }

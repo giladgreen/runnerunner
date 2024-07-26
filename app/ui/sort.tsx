@@ -14,6 +14,7 @@ export default function Sort({
   const handleSort = () => {
     const params = new URLSearchParams(searchParams);
     params.set('sort', sortTerm);
+    params.delete('page');
     replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 

@@ -202,11 +202,15 @@ export default function TodayPlayersTable({
                             height={40}
                             alt={`${player.name}'s profile picture`}
                           />
-                          <div className="font-large">{player.name}</div>
+
+                          <Link href={getLink(player)}>
+                            <div className="font-large">{player.name}</div>
+                          </Link>
                         </div>
                       </td>
                       <td className="font-large whitespace-nowrap px-3 py-3">
-                        {player.phone_number}
+
+                        <Link href={getLink(player)}> {player.phone_number}</Link>
                       </td>
                       <td className={`whitespace-nowrap px-3 py-3 ltr`} style={{textAlign: 'right',  color: formatCurrencyColor(player.balance)}} >
                         <Link href={getLink(player)} className="font-large">

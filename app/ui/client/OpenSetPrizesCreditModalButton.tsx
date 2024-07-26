@@ -43,7 +43,7 @@ function SetPrizesCreditForm({
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
         <label className="mb-2 block text-sm font-medium">
-          Set prizes credit worth - {date}
+          הגדר שווי פרסים בקרדיט  -  {date}
         </label>
         <div>
           {positions.map((player) => {
@@ -61,7 +61,7 @@ function SetPrizesCreditForm({
                     newBalances[player.position] = Number(e.target.value);
                     setBalances(newBalances);
                   }}
-                  placeholder={` #${player.position} שווי קרדיט של מקום `}
+                  placeholder={`  שווי קרדיט של מקום #${player.position}  `}
                   className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 />
               </div>

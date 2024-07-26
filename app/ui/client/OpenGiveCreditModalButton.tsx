@@ -52,7 +52,7 @@ function SetGivePrizeForm({
   return (
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
-        <label className="mb-2 block text-sm font-medium">
+        <label className="mb-2 block text-sm font-medium" style={{textAlign: 'right'}}>
           תן פרס/קרדיט לשחקן
 
         </label>
@@ -113,9 +113,9 @@ function SetGivePrizeForm({
               <label
                 htmlFor="credit"
                 className="mb-2 block text-sm font-medium"
-                style={{ textAlign: 'left', marginTop: 30 }}
+                style={{ textAlign: 'right', marginTop: 30 }}
               >
-                Amount
+                סכום
               </label>
               <div className="relative mt-2 rounded-md">
                 <div className="relative">
@@ -135,9 +135,9 @@ function SetGivePrizeForm({
               {creditWorth < 1 && (
                 <span
                   className="mb-2 block text-sm font-medium"
-                  style={{ textAlign: 'left', color: 'red' }}
+                  style={{ textAlign: 'right', color: 'red' }}
                 >
-                  * not legal
+                  * ערך חיובי בלבד
                 </span>
               )}
             </div>

@@ -17,6 +17,7 @@ import SetPrizeAsNotReadyToBeDelivered from '@/app/ui/client/SetPrizeAsNotReadyT
 
 export async function getFinalTablePlayersContent(
   date: string,
+  tournamentName:string,
   isTournamentsDataPage: boolean,
   userId?: string,
 ) {
@@ -105,7 +106,7 @@ export async function getFinalTablePlayersContent(
 
         {showSetPrizesCreditModalButton && (
             <OpenSetPrizesCreditModalButton
-                date={date}
+                date={tournamentName}
                 players={finalTablePlayers}
             />
         )}

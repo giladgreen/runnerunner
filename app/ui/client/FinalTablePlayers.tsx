@@ -10,6 +10,7 @@ export default async function FinalTablePlayers({
   const date = new Date().toISOString().slice(0, 10);
   const content = (await getFinalTablePlayersContent(
     date,
+    date,
     false,
     params.userId,
   )) as JSX.Element;

@@ -41,7 +41,7 @@ export default function SetPositionForm({
               htmlFor="position"
               className="mb-2 block text-sm font-medium"
             >
-              Place
+              מיקום
             </label>
             <div className="relative mt-2 rounded-md">
               <div className="relative">
@@ -52,7 +52,7 @@ export default function SetPositionForm({
                   step="1"
                   min={0}
                   // aria-valuemin={0}
-                  placeholder="מקום"
+                  placeholder="קבע מיקום"
                   className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                   aria-describedby="position-error"
                 />
