@@ -12,6 +12,7 @@ import {
 import Link from 'next/link';
 import RSVPButton from '@/app/ui/client/RSVPButton';
 import {TRANSLATIONS} from "@/app/lib/definitions";
+import React from "react";
 
 export default async function PlayersTable({
   query,
@@ -60,7 +61,7 @@ export default async function PlayersTable({
                           height={40}
                           alt={`${player.name}'s profile picture`}
                         />
-                        <div>{player.name}</div>
+                        <div style={{ margin:'0 10px', zoom: 1.5}}>{player.name}</div>
                       </div>
                       <div className="text-sm text-gray-500">
                         {player.phone_number}
@@ -71,10 +72,12 @@ export default async function PlayersTable({
 
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
-                    <div className="text-xl font-medium"  style={{
+                    <div className="text-xl font-medium" style={{
                       color: formatCurrencyColor(player.balance)
                     }}>
-                      balance: {formatCurrency(player.balance)}
+                      <span>קרדיט:</span>
+                      <b style={{marginRight: 5}}>{player.balance < 0 ? 'חוב של' : ''}</b>
+                      <b>  {formatCurrency(Math.abs(player.balance))}</b>
                     </div>
                     <div className="text-l font-medium">{player.notes}</div>
                   </div>
