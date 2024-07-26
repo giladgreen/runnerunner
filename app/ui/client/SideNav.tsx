@@ -7,10 +7,12 @@ import { fetchUserById } from '@/app/lib/data';
 
 export default async function SideNav({ userId }: { userId: string }) {
   const user = await fetchUserById(userId);
-
+  const isAdmin = user.is_admin;
+  const isWorker = user.is_worker;
+  const isRegularUser = !isAdmin && !isWorker;
   const homepage = `/${userId}`;
   return (
-    <div className="flex h-full flex-col px-3 py-4 md:px-2 fixed-side-nav">
+    <div className="flex h-full flex-col px-3 py-4 md:px-2 fixed-side-nav rtl">
       <Link
         className="rounded-md bg-blue-600"
         href={homepage}
@@ -47,6 +49,7 @@ export default async function SideNav({ userId }: { userId: string }) {
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks user={user} />
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
+        <div className="cellular" style={{ width: isRegularUser ? '65vw' : '5vw'}}></div>
         <form
           action={async () => {
             'use server';

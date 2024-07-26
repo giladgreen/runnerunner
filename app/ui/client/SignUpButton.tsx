@@ -48,11 +48,11 @@ export default function SignUpButton({
         borderRadius: 8,
         backgroundColor: 'rgb(37, 137, 254)',
         width: '100%',
-        padding: '12px 0 12px 25px',
+        padding: '12px 25px 12px 25px',
       }}
     >
       <a href="/signup">
-        <b>Sign-Up</b>
+        <b>צור חשבון</b>
       </a>
     </div>
   );

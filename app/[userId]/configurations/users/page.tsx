@@ -57,7 +57,7 @@ export default async function UsersPage({
       </div>
 
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8 rtl">
-        <table className="hidden  text-gray-900 md:table">
+        <table className=" text-gray-900 md:table">
           <thead className="rounded-lg text-left text-sm font-normal">
             <tr>
               <th

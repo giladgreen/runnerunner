@@ -1147,9 +1147,9 @@ export async function authenticate(
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
-          return 'name or password is incorrect';
+          return 'טלפון או סיסמא שגויים';
         default:
-          return 'An error occurred.';
+          return 'איראה שגיאה';
       }
     }
     throw error;

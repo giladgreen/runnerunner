@@ -2,7 +2,7 @@
 import { useFormState, useFormStatus } from 'react-dom';
 import { signUp } from '@/app/lib/actions';
 import { KeyIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 import Button from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
 import { Checkbox } from 'primereact/checkbox';
@@ -19,10 +19,10 @@ export default function SignUpForm() {
   const [marketingApprove, setMarketingApprove] = useState(false);
   const { pending } = useFormStatus();
   return (
-    <form action={dispatch} className="space-y-3">
+    <form action={dispatch} className="space-y-3 rtl" style={{ textAlign: 'right'} }>
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <div>
-          <b>Sign up:</b>
+          <b>צור חשבון</b>
         </div>
         <div className="w-full">
           {!redirected && (
@@ -31,7 +31,7 @@ export default function SignUpForm() {
                 className="mb-3 mt-5 block text-xs font-medium text-gray-900"
                 htmlFor="phone_number"
               >
-                phone number
+                מספר טלפון
               </label>
               <div className="relative">
                 <input
@@ -50,7 +50,7 @@ export default function SignUpForm() {
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="password"
             >
-              password
+              סיסמא
             </label>
             <div className="relative">
               <input
@@ -58,7 +58,7 @@ export default function SignUpForm() {
                 id="password"
                 type="password"
                 name="password"
-                placeholder="סיסמא"
+                placeholder="בחר סיסמא"
                 value={password}
                 onChange={(e) => setPasword(e.target.value)}
                 required
@@ -78,17 +78,15 @@ export default function SignUpForm() {
             <label
               className="mb-3 mt-1 block text-xs font-medium text-gray-900"
               htmlFor="regulations_approve"
-              style={{ marginLeft: 7 }}
+              style={{ marginRight: 7 }}
             >
-              <span style={{ margin: '0 4px' }}> מאשר</span>
+              <span> מאשר</span>
               <u>
-                {' '}
-                <a href="/terms" style={{ color: 'blue' }}>
-                  {' '}
+                <a href="/terms" style={{ color: 'blue', margin: '0 4px' }}>
                   תקנון
                 </a>
               </u>
-              <span style={{ margin: '0 4px' }}> מועדון לקוחות</span>
+              <span > מועדון לקוחות</span>
               {/* Approve customer club regulations */}
             </label>
           </div>
@@ -103,7 +101,7 @@ export default function SignUpForm() {
             <label
               className="mb-3 mt-1 block text-xs font-medium text-gray-900"
               htmlFor="regulations_approve"
-              style={{ marginLeft: 7 }}
+              style={{ marginRight: 7 }}
             >
               מאשר לקבל תוכן שיווקי
             </label>
@@ -114,7 +112,7 @@ export default function SignUpForm() {
           aria-disabled={pending || !regulationsApprove || password.length < 1}
         >
           {pending ? 'המתן..' : 'הירשם'}
-          <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+          <ArrowLeftIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
         <div
           className="flex h-8 items-end space-x-1"

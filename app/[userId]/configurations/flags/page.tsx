@@ -26,7 +26,7 @@ export default async function FlagsPage({
       </div>
 
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <table className="hidden  text-gray-900 md:table">
+        <table className=" text-gray-900 md:table">
           <thead className="rounded-lg text-left text-sm font-normal">
             <tr>
               <th scope="col" className="px-4 py-5 font-medium sm:pl-6">

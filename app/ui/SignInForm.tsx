@@ -4,9 +4,8 @@ import { authenticate } from '@/app/lib/actions';
 import {
   PhoneIcon,
   KeyIcon,
-  ExclamationCircleIcon,
+  ExclamationCircleIcon, ArrowLeftIcon,
 } from '@heroicons/react/24/outline';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import Button from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
@@ -23,7 +22,7 @@ export default function SignInForm() {
     window.location.href = '/';
   }
   return (
-    <form action={dispatch} className="space-y-3">
+    <form action={dispatch} className="space-y-3 rtl" style={{ textAlign: 'right'}}>
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <div className="w-full">
           <div>
@@ -31,11 +30,11 @@ export default function SignInForm() {
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="phone_number"
             >
-              phone number
+              מספר טלפון
             </label>
             <div className="relative">
               <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 rtl"
                 id="phone_number"
                 type="tel"
                 name="email"
@@ -54,7 +53,7 @@ export default function SignInForm() {
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="password"
             >
-              password
+              סיסמא
             </label>
             <div className="relative">
               <input
@@ -96,8 +95,8 @@ function SignInButton() {
   }
   return (
     <Button className="mt-4 w-full">
-      Sign In
-      <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+      התחבר
+      <ArrowLeftIcon className="ml-auto h-5 w-5 text-gray-50" style={{ margin: '0 10px'}}/>
     </Button>
   );
 }
