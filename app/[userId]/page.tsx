@@ -1,6 +1,6 @@
 import MVPPlayers from '@/app/ui/client/MVPPlayers';
 import DebtPlayers from '@/app/ui/client/DebtPlayers';
-import { fetchFeatureFlags, fetchUserById } from '@/app/lib/data';
+import {fetchFeatureFlags, fetchRSVPAndArrivalData, fetchUserById} from '@/app/lib/data';
 import TodayTournamentNameCardWrapper from '@/app/ui/client/TodayTournamentNameCardWrapper';
 import RSVPAndArrivalCardWrapper from '@/app/ui/client/RSVPAndArrivalCardWrapper';
 import FinalTablePlayers from '@/app/ui/client/FinalTablePlayers';
@@ -17,15 +17,18 @@ export default async function HomePage({
   const isWorker = user.is_worker;
 
   if (isAdmin || isWorker) {
-    return (
+      const { todayTournament } = await fetchRSVPAndArrivalData();
+      const todayHasTournament = todayTournament.max_players > 0 || !todayTournament.rsvp_required;
+
+      return (
       <div>
         <div className="full-width flex w-full items-center justify-between">
           <TodayTournamentNameCardWrapper params={params} />
         </div>
-        <RSVPAndArrivalCardWrapper params={params} />
-        <div style={{ marginTop: 40 }}>
+        {todayHasTournament && <RSVPAndArrivalCardWrapper params={params} />}
+        {todayHasTournament && <div style={{ marginTop: 40 }}>
            <FinalTablePlayers title="דירוג טורניר נוכחי" params={params} />
-        </div>
+        </div>}
         <hr style={{ marginBottom: 30, marginTop: 10 }} />
         <GeneralPlayersCardWrapper />
         <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">

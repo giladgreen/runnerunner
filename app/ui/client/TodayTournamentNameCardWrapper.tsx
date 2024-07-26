@@ -9,7 +9,6 @@ export default async function TodayTournamentNameCardWrapper({
   params: { userId: string };
 }) {
   const { todayTournament } = await fetchRSVPAndArrivalData();
-
   return (
     <div
       className="full-width grid gap-1 sm:grid-cols-1 lg:grid-cols-1"

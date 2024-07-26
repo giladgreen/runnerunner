@@ -42,6 +42,7 @@ export default async function CurrentTournament({
   const {  rsvpEnabled } =
     await fetchFeatureFlags();
 
+
   const now = new Date();
   const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
   const todayTournament = tournaments.find(
@@ -53,22 +54,38 @@ export default async function CurrentTournament({
   const rsvpPlayers = allPlayers.filter((player) => player.rsvpForToday);
   const rsvpPlayersCount = rsvpPlayers.length;
 
+const noTournamentToday =  todayTournament?.max_players === 0 && isRsvpRequired
+if (noTournamentToday){
+   return <div className="full-width w-full">
+       <RegisterSave players={allPlayers}/>
+       <div className="full-width flex w-full items-center justify-between">
+           <TodayTournamentNameCardWrapper params={params}/>
+       </div>
+       <a
+           href={`/${params.userId}/configurations/tournaments/${todayTournament?.day}/edit`}
+           className="flex h-10 items-center rounded-lg bg-blue-400 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:bg-blue-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
 
-  return (
-    <div className="full-width w-full">
-      <RegisterSave players={allPlayers} />
-      <div className="full-width flex w-full items-center justify-between">
-        <TodayTournamentNameCardWrapper params={params} />
-      </div>
-      <div className="full-width flex w-full items-center justify-between">
-        <RSVPAndArrivalCardWrapper params={params} />
-      </div>
-        <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-          <FinalTablePlayers title="דירוג מנצחים" params={params} />
+       >
+           <div style={{textAlign: 'center', width: '100%'}}><b> לשינוי הגדרות טורניר</b></div>
+       </a>
+   </div>
+}
+
+    return (
+        <div className="full-width w-full">
+            <RegisterSave players={allPlayers}/>
+            <div className="full-width flex w-full items-center justify-between">
+                <TodayTournamentNameCardWrapper params={params}/>
+            </div>
+            <div className="full-width flex w-full items-center justify-between">
+                <RSVPAndArrivalCardWrapper params={params}/>
+            </div>
+            <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+                <FinalTablePlayers title="דירוג מנצחים" params={params} />
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-          <PlayersPrizes title="פרסים" showOnlyToday params={params} />
+           <PlayersPrizes title="פרסים" showOnlyToday params={params} />
         </div>
 
 
