@@ -51,6 +51,11 @@
   }
 }
 
+.update_player_credit {
+  svg {
+    visibility: hidden;
+  }
+}
 .regulations_approve {
   svg {
     visibility: hidden;
@@ -113,7 +118,7 @@
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
   box-sizing: border-box;
   margin-top: -1px;
-  max-height: 200px;
+  max-height: 230px;
   overflow-y: auto;
   position: absolute;
   top: 100%;
@@ -147,7 +152,7 @@
 .give_user_prize {
   text-align: left;
   margin-top: 60px;
-  height: 50px;
+  height: 165px;
 }
 
 .give_user_credit_amount {

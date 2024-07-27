@@ -8,8 +8,8 @@ export default async function FinalTablePlayers({
   params: { userId: string };
 }) {
   const date = new Date().toISOString().slice(0, 10);
+
   const content = (await getFinalTablePlayersContent(
-    date,
     date,
     false,
     params.userId,

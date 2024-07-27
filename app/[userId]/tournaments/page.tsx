@@ -23,5 +23,5 @@ export default async function TournamentsPage({
       </div>
     );
   }
-  return <TournamentsDataPage />;
+  return <TournamentsDataPage userId={params.userId} />;
 }

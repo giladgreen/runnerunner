@@ -16,7 +16,7 @@ const SearchablePrizesDropdown = ({
 }) => {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-
+  prizes.sort((a, b) => a.credit - b.credit);
   const inputRef = useRef(null);
 
   useEffect(() => {

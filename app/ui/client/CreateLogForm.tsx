@@ -261,8 +261,7 @@ export default function CreateLogForm({
 }) {
   return (
     <div>
-      <div className="cellular">
-        <div style={{ display: 'block' }}>
+      <div className="cellular-block">
           <Image
             src={player.image_url}
             className=" mr-2"
@@ -282,7 +281,7 @@ export default function CreateLogForm({
             prevPage={prevPage}
             userId={userId}
           />
-        </div>
+
       </div>
 
       <div className="wide-screen" style={{ justifyContent: 'space-between' }}>

@@ -272,7 +272,6 @@ describe('actions utils', () => {
         // @ts-ignore
         await setPlayerPosition(
           positionInput,
-          {} as State,
           getFormData({
             position: 3,
           }),
@@ -280,7 +279,6 @@ describe('actions utils', () => {
         // @ts-ignore
         await setPlayerPosition(
           positionInput,
-          {} as State,
           getFormData({
             position: 0,
           }),
@@ -288,7 +286,6 @@ describe('actions utils', () => {
 
         const badRequestResult = await setPlayerPosition(
           positionInput,
-          {} as State,
           getFormData({
             position: 'nan',
           }),

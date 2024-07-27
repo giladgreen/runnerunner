@@ -40,7 +40,7 @@ function SetPrizesCreditForm({
     ...positions.map((p) => p.creditWorth),
   ]);
   return (
-    <div className="edit-player-modal-inner-div">
+    <div className="edit-player-modal-inner-div rtl" style={{ textAlign: 'right'}}>
       <form action={dispatch} className="form-control">
         <label className="mb-2 block text-sm font-medium">
           הגדר שווי פרסים בקרדיט  -  {date}
@@ -48,17 +48,21 @@ function SetPrizesCreditForm({
         <div>
           {positions.map((player) => {
             return (
-              <div key={player.id}>
-                #{player.position}
+              <div key={player.id} style={{ marginTop: 6, marginBottom:2}}>
+                מקום   #{player.position}
                 <input
                   id={`#${player.position}`}
                   name={`#${player.position}`}
                   type="number"
                   step="1"
-                  value={balances[player.position]}
+                  value={balances[player.position] >= 0 ? balances[player.position] : 0}
                   onChange={(e) => {
+                    const newValue = Number(e.target.value);
+                    if (newValue < 0) {
+                      return;
+                    }
                     const newBalances = [...balances];
-                    newBalances[player.position] = Number(e.target.value);
+                    newBalances[player.position] = newValue;
                     setBalances(newBalances);
                   }}
                   placeholder={`  שווי קרדיט של מקום #${player.position}  `}

@@ -72,7 +72,6 @@ export default async function TournamentsDataPage({
 
                       const finalTableData = await getFinalTablePlayersContent(
                           date,
-                          `${formatDateToLocal(dateItem.date)} ${dateItem.tournamentName}`,
                           true,
                           userId,
                       );

@@ -573,16 +573,18 @@ export async function setPrizesCreditWorth(
   formData: FormData,
 ) {
   noStore();
+
   try {
     await startTransaction();
     const winnersObject = await getDateWinnersRecord(date);
     if (!winnersObject || !winnersObject.winners) {
       console.error('## setPrizesCreditWorth Failed to find winnersObject');
       return {
-        message: 'Failed to find winnersObject.',
+        message: 'Failed to find winners object for date.',
       };
     }
     const currentWinnersObject = JSON.parse(winnersObject!.winners);
+
     let credits = [] as number[];
     for (let index = 1; index < 20; index++) {
       const credit = Number(formData.get(`#${index}`) as string);
@@ -639,6 +641,10 @@ export async function givePlayerPrizeOrCredit(
     const type = formData.get('type') as string;
     const credit = formData.get('credit') as string;
     const prize = formData.get('prize') as string;
+    const prizeWorth = Number(formData.get('prize_worth') as string) as number;
+    const creditWorth = Number(formData.get('credit_worth') as string) as number;
+    const updatePlayerCredit = (formData.get('update_player_credit') as string) === 'on';
+
     const date = stringDate ?? new Date().toISOString().slice(0, 10);
     const day = new Date(date).toLocaleString('en-us', { weekday: 'long' });
 
@@ -678,6 +684,9 @@ export async function givePlayerPrizeOrCredit(
     }
     const tournament = tournamentResult.rows[0];
     const tournamentName = tournament.name;
+    // @ts-ignore
+    const place = POSITIONS[position];
+    let note = ` ${tournamentName}, מקום ${place}`;
 
     if (type === 'credit') {
       const amount = Number(credit);
@@ -690,11 +699,6 @@ export async function givePlayerPrizeOrCredit(
           message: 'Invalid credit amount.',
         };
       }
-
-      // const note = `#${position} ${tournamentName} -  מקום `;
-      // @ts-ignore
-      const place = POSITIONS[position];
-      const note = ` ${tournamentName}, מקום ${place}   `;
 
       await touchPlayer(player.phone_number);
       const userResult = (
@@ -709,6 +713,28 @@ export async function givePlayerPrizeOrCredit(
     } else if (type === 'prize') {
       const todayTournamentData = `${tournamentName} ${date}`;
       await sql`INSERT INTO prizes (tournament, phone_number, prize) VALUES (${todayTournamentData}, ${player.phone_number}, ${prize})`;
+
+      if (prizeWorth !== creditWorth && updatePlayerCredit) {
+        await touchPlayer(player.phone_number);
+          //player
+          // add history
+        const userResult = (
+            await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`
+        ).rows[0];
+
+        console.log('## userId',userId)
+        console.log('## userResult',userResult)
+
+        const amount = creditWorth - prizeWorth;
+        note += ` - `;
+        note += ` לקח פרס בשווי `;
+        note += `${prizeWorth}`
+
+        await sql`INSERT INTO history (phone_number, change, note, type, updated_by)
+        VALUES (${player.phone_number}, ${amount}, ${note}, 'credit', ${userResult?.name ?? 'unknown'})`;
+
+      }
+
     }
 
     newWinnersObject[player.phone_number] = {
