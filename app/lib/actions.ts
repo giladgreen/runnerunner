@@ -196,6 +196,7 @@ async function insertIntoPlayers(
 }
 
 export async function createReport(prevPage: string, formData: FormData) {
+  noStore();
   const description = formData.get('description') as string;
   try {
     await insertIntoBugs(description);
@@ -216,6 +217,7 @@ export async function createPlayer(
   _prevState: State,
   formData: FormData,
 ) {
+  noStore();
   const name = formData.get('name') as string;
   const balance = formData.get('balance') as string;
   const note = (formData.get('note') as string) ?? '';
@@ -304,6 +306,7 @@ WHERE P.phone_number = ${phoneNumber};`;
 }
 
 async function getPlayerById(playerId: string) {
+
   const playerResult = await sql<PlayerDB>`SELECT * FROM players AS P 
 JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number) AS H
 ON P.phone_number = H.phone_number
@@ -319,10 +322,10 @@ WHERE P.id = ${playerId};`;
 async function handleCreditByOther(
   type: string,
   otherPlayerPhoneNumber: string,
-  change: number,
   note: string,
   player: PlayerForm,
 ) {
+  noStore();
   let otherPlayer;
   let useOtherPlayerCredit;
   let historyNote;
@@ -330,7 +333,7 @@ async function handleCreditByOther(
 
   if (type === 'credit_by_other') {
     if (!otherPlayerPhoneNumber) {
-      console.error('### did npt get other person data');
+      console.error('### did not get other person data');
       return {
         message: 'did npt get other person data.',
       };
@@ -367,6 +370,7 @@ export async function createPlayerLog(
   usage: boolean,
   userId: string,
 ) {
+  noStore();
   const CreateUsageLog = z.object({
     change: z.coerce.number(),
     note: z.string().min(1, 'change note can not be left empty'),
@@ -404,7 +408,6 @@ export async function createPlayerLog(
   } = await handleCreditByOther(
     type,
     otherPlayerPhoneNumber,
-    change,
     validatedFields.data.note,
     player,
   );
@@ -460,6 +463,7 @@ export async function createPlayerUsageLog(
   _prevState: State,
   formData: FormData,
 ) {
+  noStore();
   return createPlayerLog(
     data.player,
     formData,
@@ -474,6 +478,7 @@ export async function createPlayerNewCreditLog(
   _prevState: State,
   formData: FormData,
 ) {
+  noStore();
   return createPlayerLog(
     data.player,
     formData,
@@ -567,6 +572,7 @@ export async function setPrizesCreditWorth(
   _prevState: State,
   formData: FormData,
 ) {
+  noStore();
   try {
     await startTransaction();
     const winnersObject = await getDateWinnersRecord(date);
@@ -619,6 +625,7 @@ export async function givePlayerPrizeOrCredit(
   _prevState: State,
   formData: FormData,
 ) {
+  noStore();
   try {
     await startTransaction();
     const player = await getPlayerById(playerId);
@@ -730,6 +737,7 @@ export async function setPlayerPrize(
   _prevState: State,
   formData: FormData,
 ) {
+  noStore();
   const newPrize = formData.get('prize') as string;
 
   if (!newPrize) {
@@ -768,6 +776,7 @@ export async function updatePlayer(
   _prevState: State,
   formData: FormData,
 ) {
+  noStore();
   const UpdatePlayer = z.object({
     name: z.string().min(1, 'name can not be left empty'),
     notes: z.string(),
@@ -830,6 +839,7 @@ export async function updateTournament(
   _prevState: State,
   formData: FormData,
 ) {
+  noStore();
   const UpdateTournament = z.object({
     buy_in: z.coerce.number(),
     re_buy: z.coerce.number(),
@@ -886,6 +896,7 @@ export async function createPrizeInfo(
   _prevState: State,
   formData: FormData,
 ) {
+  noStore();
   const name = (formData.get('name') as string) ?? '';
   const extra = (formData.get('extra') as string) ?? '';
   const credit = (formData.get('credit') as string) ?? '';
@@ -921,6 +932,7 @@ export async function updatePrizeInfo(
   _prevState: State,
   formData: FormData,
 ) {
+  noStore();
   const name = (formData.get('name') as string) ?? '';
   const extra = (formData.get('extra') as string) ?? '';
   const credit = (formData.get('credit') as string) ?? '';
@@ -958,6 +970,7 @@ export async function deletePrizeInfo({
   prizeId: string;
   prevPage: string;
 }) {
+  noStore();
   try {
     await startTransaction();
     const prizeInfo = (
@@ -983,6 +996,7 @@ export async function deletePlayer({
   id: string;
   prevPage: string;
 }) {
+  noStore();
   try {
     await startTransaction();
 
@@ -1028,6 +1042,7 @@ export async function deleteBug({
   id: string;
   prevPage: string;
 }) {
+  noStore();
   try {
     await startTransaction();
 
@@ -1057,6 +1072,7 @@ export async function setPrizeDelivered({
   id: string;
   prevPage: string;
 }) {
+  noStore();
   try {
     await sql`UPDATE prizes SET delivered = TRUE WHERE id = ${id}`;
     revalidatePath(prevPage);
@@ -1072,6 +1088,7 @@ export async function setPrizeAsReadyToBeDelivered({
   id: string;
   prevPage: string;
 }) {
+  noStore();
   try {
     await sql`UPDATE prizes SET ready_to_be_delivered = TRUE WHERE id = ${id}`;
     revalidatePath(prevPage);
@@ -1087,6 +1104,7 @@ export async function setPrizeAsNotReadyToBeDelivered({
   id: string;
   prevPage: string;
 }) {
+  noStore();
   try {
     await sql`UPDATE prizes SET ready_to_be_delivered = FALSE WHERE id = ${id}`;
     revalidatePath(prevPage);
@@ -1100,6 +1118,7 @@ export async function convertPrizeToCredit(
   _prevState: State,
   formData: FormData,
 ) {
+  noStore();
   try {
     await startTransaction();
 
@@ -1141,6 +1160,7 @@ export async function authenticate(
   _prevState: string | undefined,
   formData: FormData,
 ): Promise<string | undefined> {
+  noStore();
   try {
     let phoneNumber = ((formData.get('email') as string) ?? '')
       .trim()
@@ -1167,6 +1187,7 @@ export async function signUp(
   _prevState: string | undefined,
   formData: FormData,
 ): Promise<string | undefined> {
+  noStore();
   let user_phone_number;
   if (user_json_url) {
     const response = await fetch(user_json_url, { method: 'Get' });
