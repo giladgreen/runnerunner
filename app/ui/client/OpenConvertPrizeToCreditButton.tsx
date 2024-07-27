@@ -104,9 +104,9 @@ export default function OpenConvertPrizeToCreditButton({
     setShow(false);
   };
   return (
-    <div className="give-credit-modal-button" style={{ marginRight: 10 }}>
+    <div className="give-credit-modal-button" style={{ marginRight: 5, marginLeft: 10 }}>
       <button
-        className="pointer rounded-md border p-2 hover:bg-gray-100"
+        className="pointer rounded-md border p-2 hover:bg-gray-100 move-up-down-button"
         onClick={() => {
           setShow(true);
         }}

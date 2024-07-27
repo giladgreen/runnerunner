@@ -17,12 +17,12 @@ export default async function PlayersPrizesPage({
   )) as JSX.Element;
   const deliveredPrizesContent = (await getPlayersPrizesContent(
     deliveredPrizes,
-    [],
+      prizesInformation,
     false,
   )) as JSX.Element;
   const readyToBeDeliveredPrizesContent = (await getPlayersPrizesContent(
     readyToBeDeliveredPrizes,
-    [],
+      prizesInformation,
     false,
   )) as JSX.Element;
   if (

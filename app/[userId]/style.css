@@ -118,7 +118,7 @@
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
   box-sizing: border-box;
   margin-top: -1px;
-  max-height: 230px;
+  max-height: 300px;
   overflow-y: auto;
   position: absolute;
   top: 100%;
@@ -405,7 +405,17 @@
 .give-credit-modal-button-b {
   padding: 8px;
 }
+
+.move-up-down-button {
+  padding: 8px;
+}
+
 @media only screen and (max-width: 600px) {
+  .move-up-down-button {
+    padding: 0;
+    margin: 0;
+  }
+
   .give-credit-modal-button-b {
     padding: 0;
     margin-left: 3px;
@@ -475,6 +485,7 @@
   }
 
   .give-credit-modal-button {
+
     font-size: 12px;
     img {
       max-width: unset;
@@ -499,13 +510,13 @@
 
   .card-body {
     padding: 0;
-    max-height: 126px;
+    max-height: 1126px;
     font-size: 20px;
   }
 
   .prize-row {
-    font-size: 14px;
-    margin-bottom: 1px;
+    font-size: 12px;
+    margin-bottom: 5px;
     justify-content: space-around;
   }
 

@@ -157,7 +157,7 @@ export async function getPlayersPrizesContent(
         return (
           <div key={playersPrize.id}>
             <div
-              className="wide-screen prize-row border-b "
+              className="wide-screen prize-row border-b"
               style={{ padding: 5 }}
             >
               <div className="rtl flex w-full items-center rounded-md ">
@@ -186,9 +186,10 @@ export async function getPlayersPrizesContent(
                   <SetPrizeAsDelivered id={playersPrize.id} />
                 )}
               {!personal &&
+                !currentTournament &&
                 !playersPrize.delivered &&
                 !playersPrize.ready_to_be_delivered &&
-                !currentTournament && (
+                 (
                   <SetPrizeAsReadyToBeDelivered id={playersPrize.id} />
                 )}
               {!personal &&
@@ -198,7 +199,7 @@ export async function getPlayersPrizesContent(
                   <SetPrizeAsNotReadyToBeDelivered id={playersPrize.id} />
                 )}
               {!personal && (
-                <div style={{ margin: '0 5px' }}>
+                <div style={{ margin: 0 }}>
                   <OpenConvertPrizeToCreditButton
                     prizeId={playersPrize.id}
                     prizeName={playersPrize.prize}
@@ -226,21 +227,34 @@ export async function getPlayersPrizesContent(
               </div>
               <div>{playersPrize!.prize}</div>
 
-              {!personal && !currentTournament && !playersPrize.delivered && (
-                <div>
-                  <SetPrizeAsDelivered id={playersPrize.id} />
-                </div>
-              )}
-
-              {!personal && !playersPrize.delivered && (
-                <div>
-                  <OpenConvertPrizeToCreditButton
-                    prizeId={playersPrize.id}
-                    prizeName={playersPrize.prize}
-                    userId={userId}
-                    prizesInformation={prizesInformation}
-                  />
-                </div>
+              {!personal &&
+                  !currentTournament &&
+                  !playersPrize.delivered &&
+                  playersPrize.ready_to_be_delivered && (
+                      <SetPrizeAsDelivered id={playersPrize.id} />
+                  )}
+              {!personal &&
+                  !currentTournament &&
+                  !playersPrize.delivered &&
+                  !playersPrize.ready_to_be_delivered &&
+                  (
+                      <SetPrizeAsReadyToBeDelivered id={playersPrize.id} />
+                  )}
+              {!personal &&
+                  !currentTournament &&
+                  !playersPrize.delivered &&
+                  playersPrize.ready_to_be_delivered && (
+                      <SetPrizeAsNotReadyToBeDelivered id={playersPrize.id} />
+                  )}
+              {!personal && (
+                  <div style={{ margin: 0 }}>
+                    <OpenConvertPrizeToCreditButton
+                        prizeId={playersPrize.id}
+                        prizeName={playersPrize.prize}
+                        userId={userId}
+                        prizesInformation={prizesInformation}
+                    />
+                  </div>
               )}
             </div>
           </div>
