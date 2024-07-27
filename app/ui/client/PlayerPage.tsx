@@ -69,7 +69,7 @@ export default async function PlayerPage({
     await fetchPlayerCurrentTournamentHistory(player.phone_number);
   const playerArrived =
     playerCurrentTournamentHistory.filter(
-      ({ type }) => type !== 'credit_to_other',
+      ({ type, change }) => type !== 'credit_to_other' && change !== 0
     ).length > 0;
   const showUnregisterButton =
     playerCurrentTournamentHistory.filter(

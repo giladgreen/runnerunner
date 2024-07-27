@@ -15,7 +15,7 @@ import {
   setPlayerPosition,
   createPlayerUsageLog,
   State,
-  createPlayerNewCreditLog,
+  createPlayerNewCreditLog, deleteBug,
 } from '../../app/lib/actions';
 
 function getFormData(data: any) {
@@ -28,7 +28,7 @@ function getFormData(data: any) {
   } as FormData;
 }
 
-describe('actions utils', () => {
+describe('actions', () => {
   const PHONE = '0587869900';
   beforeEach(async () => {
     await sql`DELETE FROM bugs`;
@@ -76,6 +76,14 @@ describe('actions utils', () => {
 
         const bugsAfter2: BugDB[] = await fetchAllBugs();
         expect(bugsAfter2.length).toEqual(2);
+        const secondBug = bugsAfter2.find(b => b.id !== bug.id);
+
+        await deleteBug({ prevPage: 'prevPage', id: bug.id });
+
+        const bugsAfterDelete: BugDB[] = await fetchAllBugs();
+        expect(bugsAfterDelete.length).toEqual(1);
+        const bugAfterDelete = bugsAfterDelete[0];
+        expect(bugAfterDelete).toEqual(secondBug);
       });
     });
   });
@@ -136,7 +144,7 @@ describe('actions utils', () => {
 
         const secondTryResult = await signUp(null, 'prevState', formData);
         expect(secondTryResult).toEqual(
-          'User with phone number already exists',
+            'משתמש בעל אותו מספר טלפון כבר קיים במערכת',
         );
       });
     });
@@ -292,7 +300,7 @@ describe('actions utils', () => {
         );
 
         expect(badRequestResult).toEqual({
-          message: 'Invalid Position. Failed to set Player Position.',
+          message: 'איראה שגיאה',
         });
       });
     });

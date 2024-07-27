@@ -205,7 +205,7 @@ export async function createReport(prevPage: string, formData: FormData) {
   } catch (error) {
     console.error('## createReport error', error);
     return {
-      message: 'Database Error: Failed to Create report.',
+      message: 'איראה שגיאה ביצירת הבאג',
     };
   } finally {
     revalidatePath(prevPage);
@@ -285,7 +285,7 @@ phone: ${phone_number}`,
   } catch (error) {
     console.error('## createPlayer error', error);
     return {
-      message: 'Database Error: Failed to Create Player.',
+      message: 'איראה שגיאה ביצירת שחקן חדש',
     };
   } finally {
     revalidatePath(prevPage);
@@ -335,7 +335,7 @@ async function handleCreditByOther(
     if (!otherPlayerPhoneNumber) {
       console.error('### did not get other person data');
       return {
-        message: 'did npt get other person data.',
+        message: 'לא נמצא מידע על שחקן',
       };
     }
     otherPlayer = await getPlayerByPhoneNumber(
@@ -344,7 +344,7 @@ async function handleCreditByOther(
     if (!otherPlayer) {
       console.error('### did not find other person data');
       return {
-        message: 'did not find other person data.',
+        message: 'לא נמצא מידע על שחקן',
       };
     }
     useOtherPlayerCredit = true;
@@ -384,7 +384,7 @@ export async function createPlayerLog(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Player.',
+      message: 'שדה חסר, אין אפשרות לסיים את הפעולה',
     };
   }
 
@@ -450,7 +450,7 @@ export async function createPlayerLog(
     await cancelTransaction();
     console.error('### create log error', error);
     return {
-      message: 'Database Error: Failed to Create log.',
+      message: 'איראה שגיאה',
     };
   } finally {
     revalidatePath(prevPage);
@@ -497,7 +497,7 @@ export async function setPlayerPosition(
   console.log('# setPlayerPosition.  newPosition', newPosition);
   if (isNaN(newPosition) || newPosition < 0) {
     return {
-      message: 'Invalid Position. Failed to set Player Position.',
+      message: 'איראה שגיאה',
     };
   }
   try {
@@ -508,7 +508,7 @@ export async function setPlayerPosition(
     if (!player) {
       console.error('# setPlayerPosition.  cant find player', playerId);
       return {
-        message: 'Invalid Position. Failed to find Player.',
+        message: 'איראה שגיאה',
       };
     }
 
@@ -553,7 +553,7 @@ export async function setPlayerPosition(
   } catch (error) {
     console.error('## create log error', error);
     return {
-      message: 'Database Error: Failed to setPlayerPosition.',
+      message: 'איראה שגיאה',
     };
   } finally {
     revalidatePath(prevPage);
@@ -580,7 +580,7 @@ export async function setPrizesCreditWorth(
     if (!winnersObject || !winnersObject.winners) {
       console.error('## setPrizesCreditWorth Failed to find winnersObject');
       return {
-        message: 'Failed to find winners object for date.',
+        message: 'איראה שגיאה',
       };
     }
     const currentWinnersObject = JSON.parse(winnersObject!.winners);
@@ -605,7 +605,7 @@ export async function setPrizesCreditWorth(
     console.error('## setPrizesCreditWorth error', error);
     await cancelTransaction();
     return {
-      message: 'Database Error: Failed to setPrizesCreditWorth.',
+      message: 'איראה שגיאה',
     };
   } finally {
     revalidatePath(prevPage);
@@ -634,7 +634,7 @@ export async function givePlayerPrizeOrCredit(
     if (!player) {
       console.error('## givePlayerPrizeOrCredit Failed to find player');
       return {
-        message: 'Failed to find player.',
+        message: 'איראה שגיאה',
       };
     }
 
@@ -660,7 +660,7 @@ export async function givePlayerPrizeOrCredit(
     if (!winners) {
       console.error('## givePlayerPrizeOrCredit Failed to find winners in DB');
       return {
-        message: 'Failed to find winners in DB.',
+        message: 'איראה שגיאה',
       };
     }
     const winnersObject = JSON.parse(winners.winners);
@@ -671,7 +671,7 @@ export async function givePlayerPrizeOrCredit(
         '## givePlayerPrizeOrCredit Failed to find player in winners object',
       );
       return {
-        message: 'Failed to find player in winners object.',
+        message: 'איראה שגיאה',
       };
     }
     const position = playerObject.position;
@@ -682,7 +682,7 @@ export async function givePlayerPrizeOrCredit(
         '## givePlayerPrizeOrCredit Player has already received prize',
       );
       return {
-        message: 'Player has already received prize.',
+        message:'איראה שגיאה',
       };
     }
     const tournament = tournamentResult.rows[0];
@@ -699,7 +699,7 @@ export async function givePlayerPrizeOrCredit(
           credit,
         );
         return {
-          message: 'Invalid credit amount.',
+          message: 'איראה שגיאה',
         };
       }
 
@@ -754,7 +754,7 @@ export async function givePlayerPrizeOrCredit(
     console.error('## givePlayerPrizeOrCredit error', error);
     await cancelTransaction();
     return {
-      message: 'Database Error: Failed to givePlayerPrizeOrCredit.',
+      message: 'איראה שגיאה',
     };
   } finally {
     revalidatePath(prevPage);
@@ -771,14 +771,14 @@ export async function setPlayerPrize(
 
   if (!newPrize) {
     return {
-      message: 'Invalid Prize. Failed to set Player Prize.',
+      message: 'איראה שגיאה',
     };
   }
   try {
     const player = await getPlayerById(playerId);
     if (!player) {
       return {
-        message: 'Set Prize. Failed to find Player.',
+        message: 'איראה שגיאה',
       };
     }
     const today = new Date().toLocaleString('en-us', { weekday: 'long' });
@@ -792,7 +792,7 @@ export async function setPlayerPrize(
   } catch (error) {
     console.error('## create log error', error);
     return {
-      message: 'Database Error: Failed to setPlayerPrize.',
+      message: 'איראה שגיאה',
     };
   } finally {
     revalidatePath(prevPage);
@@ -823,7 +823,7 @@ export async function updatePlayer(
     );
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Update Player.',
+      message: 'איראה שגיאה',
     };
   }
   const image_url = formData.get('image_url') as string;
@@ -856,7 +856,7 @@ export async function updatePlayer(
       WHERE id = ${id} `;
   } catch (error) {
     console.error('## updatePlayer error', error);
-    return { message: 'Database Error: Failed to Update Player.' };
+    return { message: 'איראה שגיאה' };
   } finally {
     revalidatePath(prevPage);
     redirect(prevPage);
@@ -892,7 +892,7 @@ export async function updateTournament(
     );
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Update tournament.',
+      message: 'איראה שגיאה',
     };
   }
 
@@ -913,7 +913,7 @@ export async function updateTournament(
     );
   } catch (error) {
     console.error('## updateTournament error', error);
-    return { message: 'Database Error: Failed to update Tournament.' };
+    return { message: 'איראה שגיאה' };
   } finally {
     revalidatePath(prevPage);
     redirect(prevPage);
@@ -949,7 +949,7 @@ export async function createPrizeInfo(
   try {
     await sql`INSERT INTO prizes_info (name, extra,credit) VALUES (${name},${extra},${credit})`;
   } catch (error) {
-    return { message: 'Database Error: Failed to Delete Player.' };
+    return { message: 'איראה שגיאה' };
   } finally {
     revalidatePath(prevPage);
     redirect(prevPage);
@@ -985,7 +985,7 @@ export async function updatePrizeInfo(
   try {
     await sql`UPDATE prizes_info SET name = ${name}, extra = ${extra}, credit = ${credit}, created_at = ${new Date().toISOString()} WHERE id = ${prizeId}`;
   } catch (error) {
-    return { message: 'Database Error: Failed to Delete Player.' };
+    return { message: 'איראה שגיאה' };
   } finally {
     revalidatePath(prevPage);
     redirect(prevPage);
@@ -1011,7 +1011,7 @@ export async function deletePrizeInfo({
     await commitTransaction();
   } catch (error) {
     await cancelTransaction();
-    return { message: 'Database Error: Failed to Delete Player.' };
+    return { message: 'איראה שגיאה' };
   } finally {
     revalidatePath(prevPage);
     redirect(prevPage);
@@ -1057,7 +1057,7 @@ VALUES (${player.id}, ${player.name}, ${player.phone_number}, ${player.notes}, $
     );
   } catch (error) {
     await cancelTransaction();
-    return { message: 'Database Error: Failed to Delete Player.' };
+    return { message: 'איראה שגיאה' };
   } finally {
     revalidatePath(prevPage);
     redirect(prevPage);
@@ -1086,7 +1086,7 @@ export async function deleteBug({
     await commitTransaction();
   } catch (error) {
     await cancelTransaction();
-    return { message: 'Database Error: Failed to Delete Player.' };
+    return { message: 'איראה שגיאה' };
   } finally {
     revalidatePath(prevPage);
     redirect(prevPage);
@@ -1105,7 +1105,7 @@ export async function setPrizeDelivered({
     await sql`UPDATE prizes SET delivered = TRUE WHERE id = ${id}`;
     revalidatePath(prevPage);
   } catch (error) {
-    return { message: 'Database Error: Failed to setPrizeDelivered.' };
+    return { message: 'איראה שגיאה' };
   }
 }
 
@@ -1121,7 +1121,7 @@ export async function setPrizeAsReadyToBeDelivered({
     await sql`UPDATE prizes SET ready_to_be_delivered = TRUE WHERE id = ${id}`;
     revalidatePath(prevPage);
   } catch (error) {
-    return { message: 'Database Error: Failed to setPrizeDelivered.' };
+    return { message: 'איראה שגיאה' };
   }
 }
 
@@ -1137,7 +1137,7 @@ export async function setPrizeAsNotReadyToBeDelivered({
     await sql`UPDATE prizes SET ready_to_be_delivered = FALSE WHERE id = ${id}`;
     revalidatePath(prevPage);
   } catch (error) {
-    return { message: 'Database Error: Failed to setPrizeDelivered.' };
+    return { message: 'איראה שגיאה' };
   }
 }
 
@@ -1180,7 +1180,7 @@ export async function convertPrizeToCredit(
     revalidatePath(prevPage);
   } catch (error) {
     cancelTransaction();
-    return { message: 'Database Error: Failed to Delete Player.' };
+    return { message: 'איראה שגיאה' };
   }
 }
 
@@ -1237,7 +1237,7 @@ export async function signUp(
     await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${phoneNumber}`;
   const existingUser = userResult.rows[0];
   if (existingUser) {
-    return 'User with phone number already exists';
+    return 'משתמש בעל אותו מספר טלפון כבר קיים במערכת';
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -1569,7 +1569,7 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
 
     console.log('## Rollback Done');
     return {
-      message: 'Database Error: Failed to import Players.',
+      message: 'איראה שגיאה',
     };
   } finally {
     redirect('/');
