@@ -248,7 +248,7 @@ export function getDayIncome(dateItem: {
         <div className="tournaments-total-income-font" style={{marginBottom: 10}}>
           <b>{formatCurrency(dateItem.total)}</b>
         </div>
-        <div className="cellular tournaments-data-table-income-cell" style={{ display: 'block'}}>
+        <div className="cellular-block tournaments-data-table-income-cell">
           <div>
             מזומן:
             {formatCurrency(dateItem.cash)}
