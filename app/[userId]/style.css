@@ -394,7 +394,22 @@
 .edit-prize-link{
 
 }
+
+.tournaments-total-income-font{
+    font-size: 20px;
+    font-weight: bold;
+}
 @media only screen and (max-width: 600px) {
+  .tournaments-total-income-font{
+    font-size: 13px;
+    font-weight: bold;
+  }
+  .tournaments-data-table-income-cell {
+    font-size: 10px;
+    display: block;
+  }
+
+
   .edit-prize-link{
     margin-right: -27px;
   }

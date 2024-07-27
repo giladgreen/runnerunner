@@ -1,4 +1,5 @@
 'use server';
+
 import bcrypt from 'bcrypt';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
@@ -486,8 +487,9 @@ export async function setPlayerPosition(
   { playerId, prevPage }: { playerId: string; prevPage: string },
   formData: FormData,
 ) {
+  noStore();
   const newPosition = Number(formData.get('position') as string);
-
+console.log('# setPlayerPosition.  newPosition',newPosition)
   if (isNaN(newPosition) || newPosition < 0) {
     return {
       message: 'Invalid Position. Failed to set Player Position.',
@@ -499,6 +501,7 @@ export async function setPlayerPosition(
 
     const player = await getPlayerById(playerId);
     if (!player) {
+      console.error('# setPlayerPosition.  cant find player', playerId)
       return {
         message: 'Invalid Position. Failed to find Player.',
       };
@@ -510,8 +513,11 @@ export async function setPlayerPosition(
     ]);
 
     const todayTournament = todayTournamentResult.rows[0];
-    let winnersObject = winnersResult.rows[0];
-
+    let winnersObject: WinnerDB | undefined = winnersResult.rows[0];
+    if (!winnersObject){
+      const allWinners = await sql<WinnerDB>`SELECT * FROM winners`;
+      winnersObject = allWinners.rows.find((item) => item.date === date);
+    }
     if (winnersObject) {
       const newWinnersObject = {
         ...JSON.parse(winnersObject.winners),

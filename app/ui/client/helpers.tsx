@@ -252,100 +252,115 @@ export function getDayIncome(dateItem: {
       className={`${lusitana.className} truncate  bg-white  text-center text-2xl`}
     >
       <div>
-        <div style={{ fontSize: 20, marginBottom: 10 }}>
+        <div className="tournaments-total-income-font" style={{marginBottom: 10}}>
           <b>{formatCurrency(dateItem.total)}</b>
         </div>
+        <div className="cellular tournaments-data-table-income-cell" style={{ display: 'block'}}>
+          <div>
+            מזומן:
+            {formatCurrency(dateItem.cash)}
+          </div>
+          <div>
+            העברה:
+            {formatCurrency(dateItem.wire)}
+          </div>
+          <div>
+            קרדיט:
+            {formatCurrency(dateItem.credit)}
+          </div>
+        </div>
+
         <div className="wide-screen card-table tournaments-data-table-income-cell full-width">
           <table
-            style={{ fontSize: 15 }}
-            className="full-width"
-            cellSpacing="0"
-            cellPadding="0"
+              style={{fontSize: 15}}
+              className="full-width"
+              cellSpacing="0"
+              cellPadding="0"
           >
             <thead>
-              <tr>
-                <th
+            <tr>
+              <th
                   scope="col"
                   className="table-text-item"
                   data-tooltip="קרדיט"
                   title="קרדיט"
-                >
-                  <b>{formatCurrency(dateItem.credit)}</b>
-                </th>
-                <th
+              >
+                <b>{formatCurrency(dateItem.credit)}</b>
+              </th>
+              <th
                   scope="col"
                   className="table-text-item"
                   data-tooltip="מזומן"
                   title="מזומן"
-                >
-                  <b>{formatCurrency(dateItem.cash)}</b>
-                </th>
-                <th
+              >
+                <b>{formatCurrency(dateItem.cash)}</b>
+              </th>
+              <th
                   scope="col"
                   className="table-text-item"
                   data-tooltip="העברה"
                   title="העברה"
-                >
-                  <b>{formatCurrency(dateItem.wire)}</b>
-                </th>
-              </tr>
+              >
+                <b>{formatCurrency(dateItem.wire)}</b>
+              </th>
+            </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="col">
-                  <div
+            <tr>
+              <th scope="col">
+                <div
                     className="table-item"
                     data-tooltip="קרדיט"
                     title="קרדיט"
-                  >
-                    <CreditCardIcon className="h-6 w-9 text-gray-700" />
-                  </div>
+                >
+                  <CreditCardIcon className="h-6 w-9 text-gray-700"/>
+                </div>
 
-                </th>
-                <th scope="col">
-                  <div className="table-item" data-tooltip="מזומן" title="מזומן">
-                    <WalletIcon className="h-6 w-9 text-gray-700" />
-                  </div>
-                </th>
-                <th scope="col">
-                  <div
+              </th>
+              <th scope="col">
+                <div className="table-item" data-tooltip="מזומן" title="מזומן">
+                  <WalletIcon className="h-6 w-9 text-gray-700"/>
+                </div>
+              </th>
+              <th scope="col">
+                <div
                     className="table-item"
                     data-tooltip="העברה"
                     title="העברה"
-                  >
-                    <ArrowLeftOnRectangleIcon className="h-6 w-9 text-gray-700" />
-                  </div>
-                </th>
-              </tr>
-              <tr>
-                <th scope="col" style={{ marginTop: -5 }}>
-                  <div
+                >
+                  <ArrowLeftOnRectangleIcon className="h-6 w-9 text-gray-700"/>
+                </div>
+              </th>
+            </tr>
+            <tr>
+              <th scope="col" style={{marginTop: -5}}>
+                <div
                     className="table-item smaller-test"
                     data-tooltip="קרדיט"
                     title="קרדיט"
-                  >
-                    קרדיט
-                  </div>
-                </th>
-                <th scope="col">
-                  <div
+                >
+                  קרדיט
+                </div>
+              </th>
+              <th scope="col">
+                <div
                     className="table-item smaller-test"
                     data-tooltip="מזומן"
                     title="מזומן"
-                  >
-                    מזומן
-                  </div>
-                </th>
-                <th scope="col">
-                  <div
+                >
+                  מזומן
+                </div>
+              </th>
+              <th scope="col">
+                <div
                     className="table-item smaller-test"
                     data-tooltip="העברה"
                     title="העברה"
-                  >
-                    העברה
-                  </div>
-                </th>
-              </tr>
+                >
+                  העברה
+                </div>
+              </th>
+            </tr>
             </tbody>
           </table>
         </div>
