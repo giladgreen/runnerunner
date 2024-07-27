@@ -178,11 +178,11 @@ export default function OpenGiveCreditModalButton({
     setShow(false);
   };
   return (
-      <div className="give-credit-modal-button" style={{marginRight: 10}}>
+      <div className="give-credit-modal-button" style={{marginRight: 2}}>
         {hasReceived && <TickIcon size={20}/>}
         {!hasReceived && (
             <button
-                className="pointer rounded-md border p-2 hover:bg-gray-100"
+                className="pointer rounded-md border p-2 hover:bg-gray-100 give-credit-modal-button-b"
                 onClick={() => {
                   setShow(true);
                 }}

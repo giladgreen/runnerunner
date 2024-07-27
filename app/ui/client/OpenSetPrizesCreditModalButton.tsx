@@ -100,27 +100,24 @@ export default function OpenSetPrizesCreditModalButton({
       className="give-credit-modal-button"
       style={{ marginRight: 10, marginTop: 30 }}
     >
-      {
-        <div
-          onClick={() => {
-            setShow(true);
-          }}
-          className="pointer"
-          style={{ fontSize: '24', display: 'flex', justifyContent: 'center', color: "blue"}}
-        >
-          <u>  הגדר שווי קרדיט </u>
-        </div>
-      }
-      {
-        <div className={show ? 'edit-player-modal' : 'hidden'}>
-          <SetPrizesCreditForm
-            date={date}
-            players={players}
-            hide={close}
-            prevPage={prevPage}
-          />
-        </div>
-      }
+      <div
+        onClick={() => {
+          setShow(true);
+        }}
+        className="pointer"
+        style={{  justifyContent: 'center', color: "blue", marginLeft: 30}}
+      >
+        <u>  הגדר שווי קרדיט </u>
+      </div>
+
+      <div className={show ? 'edit-player-modal' : 'hidden'}>
+        <SetPrizesCreditForm
+          date={date}
+          players={players}
+          hide={close}
+          prevPage={prevPage}
+        />
+      </div>
     </div>
   );
 }

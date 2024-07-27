@@ -196,9 +196,14 @@
 }
 
 .give-credit-modal-button {
+  font-size: 17px;
 }
 
 .cellular {
+  display: none;
+}
+
+.cellular-block {
   display: none;
 }
 
@@ -399,7 +404,15 @@
     font-size: 20px;
     font-weight: bold;
 }
+
+.give-credit-modal-button-b{
+  padding: 8px;
+}
 @media only screen and (max-width: 600px) {
+  .give-credit-modal-button-b{
+    padding: 0;
+    margin-left: 3px;
+  }
   .tournaments-total-income-font{
     font-size: 13px;
     font-weight: bold;
@@ -441,7 +454,9 @@
   .cellular {
     display: flex;
   }
-
+.cellular-block{
+  display: block;
+}
   .wide-screen {
     display: none;
   }
@@ -464,6 +479,7 @@
   }
 
   .give-credit-modal-button {
+    font-size: 12px;
     img {
       max-width: unset;
     }

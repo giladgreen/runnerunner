@@ -34,19 +34,14 @@ export async function getFinalTablePlayersContent(
 
   return (
     <div className="rtl full-width" style={{ marginBottom: 30, display: 'flex', marginRight: 0, }}>
-      <div >
+      <div>
         {finalTablePlayers.map((finalTablePlayer: PlayerDB) => {
           return (
             <div
               key={finalTablePlayer.id}
-              className="rtl full-width w-full rounded-md bg-white"
+              className="rounded-md bg-white flex items-center border-b highlight-on-hover"
+              style={{ padding: '4px 0' }}
             >
-              <div
-                  className={`rtl flex items-center border-b ${
-                      isTournamentsDataPage ? '' : 'pb-4'
-                  } highlight-on-hover`}
-                  style={{ padding:3 }}
-              >
                 <OpenGiveCreditModalButton
                     player={finalTablePlayer}
                     hasReceived={finalTablePlayer.hasReceived}
@@ -54,7 +49,7 @@ export async function getFinalTablePlayersContent(
                     userId={userId}
                     prizesInformation={prizesInformation}
                 />
-                <div className={textClass} style={{ marginRight:3}}>#{finalTablePlayer.position}</div>
+                <div className={textClass} style={{ margin:'0 2px 0 4px'}}>#{finalTablePlayer.position}</div>
 
                 {!isTournamentsDataPage && (
                     <Image
@@ -71,7 +66,7 @@ export async function getFinalTablePlayersContent(
                     />
                 )}
                 {isTournamentsDataPage && (
-                    <span  className="wide-screen" style={{marginLeft: 10}}></span>
+                    <span  className="wide-screen" style={{marginLeft: 6}}></span>
                 )}
 
                 <div
@@ -92,13 +87,11 @@ export async function getFinalTablePlayersContent(
                 </div>
 
 
-                <div className="cellular">
-                  <div style={{display: 'flex'}}>
-                    <div style={{margin: '0 5px'}}>{finalTablePlayer.name}</div>
-                    <div style={{margin: '0 15px'}}>{finalTablePlayer.phone_number}</div>
-                  </div>
+                <div className="cellular-block rtl" style={{textAlign:'right', marginRight: 4, marginLeft: 7}}>
+                    <div >{finalTablePlayer.name}</div>
+                    <div >{finalTablePlayer.phone_number}</div>
                 </div>
-              </div>
+
             </div>
           );
         })}
@@ -113,7 +106,7 @@ export async function getFinalTablePlayersContent(
       {isTournamentsDataPage && (
           <div
           className="wide-screen"
-          style={{ width: '40%', textAlign: 'center', margin: '0 10px' }}
+          style={{ width: '40%', textAlign: 'center', margin: '0 20px' }}
         >
           <div style={{ textAlign: 'right' }}>
             <Image
