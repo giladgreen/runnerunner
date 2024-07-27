@@ -29,7 +29,7 @@ export default async function TournamentsSetupPage({
   const tournaments = await fetchTournaments();
 
   return (
-    <div className="config-section rtl" style={{ textAlign: 'right', marginRight: -43 }}>
+    <div className="config-section rtl" style={{ textAlign: 'right', marginRight: -40 }}>
       <div style={{ textAlign: 'right', marginRight: 50 }}>
         <b>
           <u>טורנירים:</u>
