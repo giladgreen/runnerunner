@@ -2,9 +2,9 @@ import { lusitana } from '@/app/ui/fonts';
 import {
   ArrowDownOnSquareIcon,
   BanknotesIcon,
-  GiftIcon,
-  UserGroupIcon,
-  UserIcon,
+  GiftIcon,FlagIcon,
+  UserGroupIcon,PuzzlePieceIcon,
+  UserIcon,ArchiveBoxArrowDownIcon, ArrowDownOnSquareStackIcon
 } from '@heroicons/react/24/outline';
 import { DoubleTicksIcon, TickIcon } from '@/app/ui/icons';
 const iconMap = {
@@ -16,7 +16,10 @@ const iconMap = {
   empty: DoubleTicksIcon,
   prize: GiftIcon,
   today: ArrowDownOnSquareIcon,
-  export: ArrowDownOnSquareIcon,
+  export: ArchiveBoxArrowDownIcon,
+  import: ArrowDownOnSquareStackIcon,
+  tournament: PuzzlePieceIcon,
+  flags: FlagIcon,
 };
 
 export default function Card({
@@ -38,8 +41,11 @@ export default function Card({
     | 'rsvp'
     | 'arrived'
     | 'empty'
+    | 'flags'
     | 'prize'
     | 'today'
+    | 'import'
+    | 'tournament'
     | 'export';
   spend?: boolean;
   empty?: boolean;

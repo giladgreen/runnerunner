@@ -157,7 +157,6 @@ export default async function ConfigurationPage({
         style={{ textAlign: 'right', zoom: 1.5, marginBottom: 20 }}
       >
         <u>
-          {' '}
           <b>הגדרות ואדמיניסטרציה</b>
         </u>
       </div>
@@ -200,7 +199,7 @@ export default async function ConfigurationPage({
         <Card
           title=" ניהול טורנירים"
           value={<TournamentsLink userId={params.userId} />}
-          type="prize"
+          type="tournament"
           oneLine
         />
 
@@ -208,7 +207,7 @@ export default async function ConfigurationPage({
           <Card
             title="הרשאות משתמשים"
             value={<UserPermissionsLink userId={params.userId} />}
-            type="export"
+            type="players"
             oneLine
           />
         )}
@@ -217,7 +216,7 @@ export default async function ConfigurationPage({
           <Card
             title="feature flags"
             value={<FeatureFlagsLink userId={params.userId} />}
-            type="export"
+            type="flags"
             oneLine
           />
         )}
@@ -237,7 +236,7 @@ export default async function ConfigurationPage({
                 <ImportPlayersButton />
               </div>
             }
-            type="export"
+            type="import"
             oneLine
           />
         )}
