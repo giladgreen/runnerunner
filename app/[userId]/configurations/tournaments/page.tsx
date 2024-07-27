@@ -101,11 +101,30 @@ export default async function TournamentsSetupPage({
               key={tournament.id}
               className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
             >
-              <td className="smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
-                {
-                  // @ts-ignore
-                  TRANSLATIONS[tournament.day].replace('יום', '')
-                }
+              <td className="cellular smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
+                <a
+                    href={`/${
+                        params.userId
+                    }/configurations/tournaments/${tournament.day.toLowerCase()}/edit`}
+                    className="smaller-on-mobile rounded-md border p-2 hover:bg-gray-100"
+                    style={{zoom:1.5, color: 'blue', border: '0 solid transparent'}}
+                >
+                  <b><u  >
+                    {
+                    // @ts-ignore
+                    TRANSLATIONS[tournament.day].replace('יום', '')
+
+                  }
+                  </u></b>
+                </a>
+              </td>
+              <td className="wide-screen smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
+                <b className="wide-screen">
+                  {
+                    // @ts-ignore
+                    TRANSLATIONS[tournament.day].replace('יום', '')
+                  }
+                </b>
               </td>
               <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
                 {tournament.name}
@@ -122,7 +141,7 @@ export default async function TournamentsSetupPage({
               <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required ? 'כן' : 'לא '}
               </td>
-              <td className="smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
+              <td className="wide-screen smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
                 <div className="smaller-on-mobile edit-tournament-link flex justify-end gap-3">
                   <Link
                     href={`/${
