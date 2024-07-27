@@ -5,7 +5,11 @@ import { useFormStatus } from 'react-dom';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import {formatCurrency, formatCurrencyColor, nameComparator} from '@/app/lib/utils';
+import {
+  formatCurrency,
+  formatCurrencyColor,
+  nameComparator,
+} from '@/app/lib/utils';
 import RSVPButton from '@/app/ui/client/RSVPButton';
 import OpenCreditModalButton from '@/app/ui/client/OpenCreditModalButton';
 import { DoubleTicksIcon } from '@/app/ui/icons';
@@ -14,16 +18,18 @@ import OpenPositionModalButton from '@/app/ui/client/OpenPositionModalButton';
 import OpenPrizeModalButton from '@/app/ui/client/OpenPrizeModalButton';
 import EntriesButton from '@/app/ui/client/EntriesButton';
 import CreateNewTodayPlayerButton from '@/app/ui/client/CreateNewTodayPlayerButton';
-import {TrashIcon} from "@heroicons/react/24/outline";
-import {setPlayerPosition} from "@/app/lib/actions";
-import {usePathname, useSearchParams} from "next/navigation";
-import DeletePositionButton from "@/app/ui/client/DeletePositionButton";
+import { TrashIcon } from '@heroicons/react/24/outline';
+import { setPlayerPosition } from '@/app/lib/actions';
+import { usePathname, useSearchParams } from 'next/navigation';
+import DeletePositionButton from '@/app/ui/client/DeletePositionButton';
 
 function getMinPosition(players: PlayerDB[]) {
-  const positions = players.filter(p => !isNaN(p.position) && p.position > 0).map((p) => p.position);
+  const positions = players
+    .filter((p) => !isNaN(p.position) && p.position > 0)
+    .map((p) => p.position);
 
-  if (positions.length > 0){
-    return Math.min(...positions)-1;
+  if (positions.length > 0) {
+    return Math.min(...positions) - 1;
   }
 
   if (players.length > 200) {
@@ -50,7 +56,6 @@ function getMinPosition(players: PlayerDB[]) {
     return 10;
   }
 
-
   if (players.length > 10) {
     return 9;
   }
@@ -75,9 +80,7 @@ export default function TodayPlayersTable({
   tournaments: TournamentDB[];
   prizesInformation: PrizeInfoDB[];
 }) {
-
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
-
 
   const getLink = (player: PlayerDB) => {
     return `/${userId}/players/${player.id}/edit`;
@@ -107,42 +110,47 @@ export default function TodayPlayersTable({
       ? `מציג ${players.length} תוצאות `
       : rsvpEnabled && isRsvpRequired
       ? `מציג  ${rsvpPlayersCount} שחקנים שאישרו הגעה, ${arrivedPlayers} שהגיעו. ${
-                (arrivedWithoutRSVPPlayers > 0 ? (arrivedWithoutRSVPPlayers > 1 ? `(${arrivedWithoutRSVPPlayers} שחקנים הגיעו מבלי לאשר הגעה)` :  `(שחקן אחד הגיע מבלי לאשר הגעה)`) : '')
-      }`
-
+          arrivedWithoutRSVPPlayers > 0
+            ? arrivedWithoutRSVPPlayers > 1
+              ? `(${arrivedWithoutRSVPPlayers} שחקנים הגיעו מבלי לאשר הגעה)`
+              : `(שחקן אחד הגיע מבלי לאשר הגעה)`
+            : ''
+        }`
       : `מציג ${arrivedPlayers} שחקנים שהגיעו.`;
 
-
-
-  const minPosition = getMinPosition(players)
+  const minPosition = getMinPosition(players);
 
   return (
     <>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-
-        <CreateNewTodayPlayerButton params={{userId}}/>
+        <CreateNewTodayPlayerButton params={{ userId }} />
         <button
-            className="pointer rounded-md border p-2 hover:bg-gray-100"
-            onClick={() => {
-              setQuery('')
-            }}
+          className="pointer rounded-md border p-2 hover:bg-gray-100"
+          onClick={() => {
+            setQuery('');
+          }}
         >
           <span className="sr-only">Clear</span>
-          <TrashIcon className="w-6" title="נקה"/>
+          <TrashIcon className="w-6" title="נקה" />
         </button>
         <input
-            className="rtl peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-            placeholder="חיפוש שחקן"
-            onChange={(e) => {
-              setQuery(e.target.value);
-            }}
-            value={query}
+          className="rtl peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+          placeholder="חיפוש שחקן"
+          onChange={(e) => {
+            setQuery(e.target.value);
+          }}
+          value={query}
         />
-
       </div>
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8 rtl">
-        <div className="full-width mt-6 flow-root rtl">
-          <div style={{display: 'flex', justifyContent: 'space-between', textAlign: 'right'}}>
+      <div className="rtl mt-4 flex items-center justify-between gap-2 md:mt-8">
+        <div className="full-width rtl mt-6 flow-root">
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              textAlign: 'right',
+            }}
+          >
             {header}
           </div>
 
@@ -165,7 +173,9 @@ export default function TodayPlayersTable({
                             height={40}
                             alt={`${player.name}'s profile picture`}
                           />
-                          <div style={{margin: '0 6px', zoom:1.5}}>{player.name}</div>
+                          <div style={{ margin: '0 6px', zoom: 1.5 }}>
+                            {player.name}
+                          </div>
                         </div>
                         <div className="text-sm text-gray-500">
                           {player.phone_number}
@@ -178,65 +188,101 @@ export default function TodayPlayersTable({
                       )}
                     </div>
 
-                    <div className="flex w-full items-center justify-between pt-4"  >
+                    <div className="flex w-full items-center justify-between pt-4">
                       <div>
-                          <Link href={getLink(player)}>
-                            <span className="text-xl font-medium" style={{
-                              color: formatCurrencyColor(player.balance)
-                            }}>
-
-                              <span>קרדיט:</span>
-                              <b style={{ marginRight:5}}>{player.balance< 0 ? 'חוב של' : ''}</b>
-                              <b >  {formatCurrency(Math.abs(player.balance))}</b>
-                            </span>
-                          </Link>
+                        <Link href={getLink(player)}>
+                          <span
+                            className="text-xl font-medium"
+                            style={{
+                              color: formatCurrencyColor(player.balance),
+                            }}
+                          >
+                            <span>קרדיט:</span>
+                            <b style={{ marginRight: 5 }}>
+                              {player.balance < 0 ? 'חוב של' : ''}
+                            </b>
+                            <b> {formatCurrency(Math.abs(player.balance))}</b>
+                          </span>
+                        </Link>
                         <div className="text-l font-medium">{player.notes}</div>
                       </div>
                       <div>
                         {rsvpEnabled &&
-                            player.rsvpForToday &&
-                            player.arrived && <DoubleTicksIcon size={24}/>}
+                          player.rsvpForToday &&
+                          player.arrived && <DoubleTicksIcon size={24} />}
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <table className="hidden min-w-full text-gray-900 md:table rtl">
-                <thead className="rounded-lg text-left text-sm font-normal rtl ">
+              <table className="rtl hidden min-w-full text-gray-900 md:table">
+                <thead className="rtl rounded-lg text-left text-sm font-normal ">
                   <tr>
-                    <th scope="col" className="px-4 py-5 font-medium sm:pl-6"  style={{textAlign: 'right'}}>
+                    <th
+                      scope="col"
+                      className="px-4 py-5 font-medium sm:pl-6"
+                      style={{ textAlign: 'right' }}
+                    >
                       שם
                     </th>
-                    <th scope="col" className="px-3 py-5 font-medium"  style={{textAlign: 'right'}}>
+                    <th
+                      scope="col"
+                      className="px-3 py-5 font-medium"
+                      style={{ textAlign: 'right' }}
+                    >
                       טלפון
                     </th>
-                    <th scope="col" className="px-3 py-5 font-medium"  style={{textAlign: 'right'}}>
+                    <th
+                      scope="col"
+                      className="px-3 py-5 font-medium"
+                      style={{ textAlign: 'right' }}
+                    >
                       קרדיט
                     </th>
-                    <th scope="col" className="px-3 py-5 font-medium"  style={{textAlign: 'right'}}>
+                    <th
+                      scope="col"
+                      className="px-3 py-5 font-medium"
+                      style={{ textAlign: 'right' }}
+                    >
                       הערות
                     </th>
 
                     {rsvpEnabled && isRsvpRequired && (
-                      <th scope="col" className="px-3 py-5 font-medium"  style={{textAlign: 'right'}}>
+                      <th
+                        scope="col"
+                        className="px-3 py-5 font-medium"
+                        style={{ textAlign: 'right' }}
+                      >
                         אישור הגעה
                       </th>
                     )}
-                    <th scope="col" className="px-3 py-5 font-medium"  style={{textAlign: 'right'}}>
+                    <th
+                      scope="col"
+                      className="px-3 py-5 font-medium"
+                      style={{ textAlign: 'right' }}
+                    >
                       הגיע
                     </th>
-                    <th scope="col" className="px-3 py-5 font-medium"  style={{textAlign: 'right'}}>
+                    <th
+                      scope="col"
+                      className="px-3 py-5 font-medium"
+                      style={{ textAlign: 'right' }}
+                    >
                       כניסות
                     </th>
 
                     <th scope="col" className="px-3 py-5 font-medium"></th>
 
-                    <th scope="col" className="relative py-3 pl-6 pr-3"  style={{textAlign: 'right'}}>
+                    <th
+                      scope="col"
+                      className="relative py-3 pl-6 pr-3"
+                      style={{ textAlign: 'right' }}
+                    >
                       <span className="sr-only">עריכה</span>
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white rtl">
+                <tbody className="rtl bg-white">
                   {players?.map((player: PlayerDB) => (
                     <tr
                       key={player.id}
@@ -258,10 +304,18 @@ export default function TodayPlayersTable({
                         </div>
                       </td>
                       <td className="font-large whitespace-nowrap px-3 py-3">
-
-                        <Link href={getLink(player)}> {player.phone_number}</Link>
+                        <Link href={getLink(player)}>
+                          {' '}
+                          {player.phone_number}
+                        </Link>
                       </td>
-                      <td className={`whitespace-nowrap px-3 py-3 ltr`} style={{textAlign: 'right',  color: formatCurrencyColor(player.balance)}} >
+                      <td
+                        className={`ltr whitespace-nowrap px-3 py-3`}
+                        style={{
+                          textAlign: 'right',
+                          color: formatCurrencyColor(player.balance),
+                        }}
+                      >
                         <Link href={getLink(player)} className="font-large">
                           {formatCurrency(player.balance)}
                         </Link>
@@ -283,8 +337,11 @@ export default function TodayPlayersTable({
                       </td>
 
                       <td className="whitespace-nowrap px-3 py-3 ">
-                          <DeletePositionButton player={player} prevPage={prevPage}/>
-                        </td>
+                        <DeletePositionButton
+                          player={player}
+                          prevPage={prevPage}
+                        />
+                      </td>
 
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
@@ -296,14 +353,15 @@ export default function TodayPlayersTable({
                             setQuery={setQuery}
                           />
 
-                          <OpenPositionModalButton player={player} initPosition={minPosition} />
-
+                          <OpenPositionModalButton
+                            player={player}
+                            initPosition={minPosition}
+                          />
 
                           <OpenPrizeModalButton
                             player={player}
                             prizesInformation={prizesInformation}
                           />
-
                         </div>
                       </td>
                     </tr>

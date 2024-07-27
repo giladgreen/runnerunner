@@ -31,7 +31,16 @@ export default function Card({
 }: {
   title: string | JSX.Element;
   value: number | string | JSX.Element;
-  type?: 'players' | 'debt' | 'money' | 'rsvp' | 'arrived' | 'empty' | 'prize' | 'today' | 'export';
+  type?:
+    | 'players'
+    | 'debt'
+    | 'money'
+    | 'rsvp'
+    | 'arrived'
+    | 'empty'
+    | 'prize'
+    | 'today'
+    | 'export';
   spend?: boolean;
   empty?: boolean;
   oneLine?: boolean;
@@ -49,7 +58,13 @@ export default function Card({
       }`}
     >
       <div className="rtl card-header flex p-4 text-center">
-        {Icon ? <Icon className="h-5 w-5 text-gray-700" size={18} style={{ marginLeft: 4}}/> : null}
+        {Icon ? (
+          <Icon
+            className="h-5 w-5 text-gray-700"
+            size={18}
+            style={{ marginLeft: 4 }}
+          />
+        ) : null}
         <h3
           className={`ml-2 text-center text-sm font-medium ${
             spend ? 'center-text' : ''

@@ -37,9 +37,7 @@ export default function SetPrizeForm({
   return (
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
-        <label className="mb-2 block text-sm font-medium">
-          פרס לשחקן
-        </label>
+        <label className="mb-2 block text-sm font-medium">פרס לשחקן</label>
         <div className="form-inner-control  rounded-md p-4 md:p-6">
           {/*  prize name */}
           <div className="mb-4">

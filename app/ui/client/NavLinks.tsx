@@ -97,7 +97,6 @@ export default function NavLinks({ user }: { user: UserDB }) {
             >
               <LinkIcon className="w-6" />
               <div className="hidden md:block">{link.name}</div>
-
             </Link>
           );
         })

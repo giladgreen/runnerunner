@@ -12,44 +12,43 @@ export default async function SideNav({ userId }: { userId: string }) {
   const isRegularUser = !isAdmin && !isWorker;
   const homepage = `/${userId}`;
   return (
-    <div className="flex h-full flex-col px-3 py-4 md:px-2 fixed-side-nav rtl">
-      <Link
-        className="rounded-md bg-blue-600"
-        href={homepage}
-      >
-          <div className="cellular" style={{ padding: 10 }}>
-              <img
-                  src="/runner-white-logo.png"
-                  width={50}
-                  height={50}
-                  alt="runner"
-              />
-          </div>
-          <div className="wide-screen">
-              <img
-                  src="/runner-white-logo.png"
-                  width={166}
-                  height={166}
-                alt="runner"
-            />
+    <div className="fixed-side-nav rtl flex h-full flex-col px-3 py-4 md:px-2">
+      <Link className="rounded-md bg-blue-600" href={homepage}>
+        <div className="cellular" style={{ padding: 10 }}>
+          <img
+            src="/runner-white-logo.png"
+            width={50}
+            height={50}
+            alt="runner"
+          />
         </div>
-
+        <div className="wide-screen">
+          <img
+            src="/runner-white-logo.png"
+            width={166}
+            height={166}
+            alt="runner"
+          />
+        </div>
       </Link>
 
       <div
         style={{
           padding: 5,
           color: 'rgb(47, 111, 235)',
-          textAlign: 'right'
+          textAlign: 'right',
         }}
       >
-        <span  style={{ color: 'black'}}>מחובר כ: </span>
+        <span style={{ color: 'black' }}>מחובר כ: </span>
         <b> {user.name ?? user.phone_number}</b>
       </div>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks user={user} />
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
-        <div className="cellular" style={{ width: isRegularUser ? '65vw' : '5vw'}}></div>
+        <div
+          className="cellular"
+          style={{ width: isRegularUser ? '65vw' : '5vw' }}
+        ></div>
         <form
           action={async () => {
             'use server';

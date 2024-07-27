@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
 import { fetchDebtPlayers } from '@/app/lib/data';
-import {formatCurrency, formatCurrencyColor} from '@/app/lib/utils';
+import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 import Link from 'next/link';
 import { DoubleTicksIcon, TickIcon } from '@/app/ui/icons';
 import { Suspense } from 'react';
@@ -55,7 +55,7 @@ export default async function DebtPlayers({ userId }: { userId: string }) {
                     <div
                       className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
                       style={{
-                        color: formatCurrencyColor(player.balance)
+                        color: formatCurrencyColor(player.balance),
                       }}
                     >
                       {formatCurrency(player.balance)}

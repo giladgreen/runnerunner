@@ -16,9 +16,9 @@ export default async function CreatePlayerPage({
       <div className="w-full">
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl">
-              <b>
-                  <u>אין לך הרשאות לראות עמוד זה</u>
-              </b>
+            <b>
+              <u>אין לך הרשאות לראות עמוד זה</u>
+            </b>
           </h1>
         </div>
       </div>

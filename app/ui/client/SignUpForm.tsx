@@ -19,7 +19,11 @@ export default function SignUpForm() {
   const [marketingApprove, setMarketingApprove] = useState(false);
   const { pending } = useFormStatus();
   return (
-    <form action={dispatch} className="space-y-3 rtl" style={{ textAlign: 'right'} }>
+    <form
+      action={dispatch}
+      className="rtl space-y-3"
+      style={{ textAlign: 'right' }}
+    >
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <div>
           <b>צור חשבון</b>
@@ -86,7 +90,7 @@ export default function SignUpForm() {
                   תקנון
                 </a>
               </u>
-              <span > מועדון לקוחות</span>
+              <span> מועדון לקוחות</span>
               {/* Approve customer club regulations */}
             </label>
           </div>

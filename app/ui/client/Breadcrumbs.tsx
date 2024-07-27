@@ -16,7 +16,7 @@ export default function Breadcrumbs({
   breadcrumbs: Breadcrumb[];
 }) {
   return (
-    <nav aria-label="Breadcrumb" className="mb-6 block rtl">
+    <nav aria-label="Breadcrumb" className="rtl mb-6 block">
       <ol className={clsx(lusitana.className, 'flex text-xl md:text-2xl')}>
         {breadcrumbs.map((breadcrumb, index) => (
           <li
@@ -31,7 +31,6 @@ export default function Breadcrumbs({
             )}
             {breadcrumb.img && (
               <div style={{ display: 'flex' }}>
-
                 <Image
                   src={breadcrumb.img}
                   className="zoom-on-hover mr-2 rounded-full"

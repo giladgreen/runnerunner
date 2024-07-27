@@ -18,7 +18,8 @@ import {
   ImageDB,
   LogDB,
   PrizeDB,
-  PrizeInfoDB, BugDB,
+  PrizeInfoDB,
+  BugDB,
 } from './definitions';
 
 import { signIn } from '../../auth';
@@ -306,7 +307,6 @@ WHERE P.phone_number = ${phoneNumber};`;
 }
 
 async function getPlayerById(playerId: string) {
-
   const playerResult = await sql<PlayerDB>`SELECT * FROM players AS P 
 JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number) AS H
 ON P.phone_number = H.phone_number
@@ -494,7 +494,7 @@ export async function setPlayerPosition(
 ) {
   noStore();
   const newPosition = Number(formData.get('position') as string);
-console.log('# setPlayerPosition.  newPosition',newPosition)
+  console.log('# setPlayerPosition.  newPosition', newPosition);
   if (isNaN(newPosition) || newPosition < 0) {
     return {
       message: 'Invalid Position. Failed to set Player Position.',
@@ -506,7 +506,7 @@ console.log('# setPlayerPosition.  newPosition',newPosition)
 
     const player = await getPlayerById(playerId);
     if (!player) {
-      console.error('# setPlayerPosition.  cant find player', playerId)
+      console.error('# setPlayerPosition.  cant find player', playerId);
       return {
         message: 'Invalid Position. Failed to find Player.',
       };
@@ -519,7 +519,7 @@ console.log('# setPlayerPosition.  newPosition',newPosition)
 
     const todayTournament = todayTournamentResult.rows[0];
     let winnersObject: WinnerDB | undefined = winnersResult.rows[0];
-    if (!winnersObject){
+    if (!winnersObject) {
       const allWinners = await sql<WinnerDB>`SELECT * FROM winners`;
       winnersObject = allWinners.rows.find((item) => item.date === date);
     }
@@ -642,8 +642,11 @@ export async function givePlayerPrizeOrCredit(
     const credit = formData.get('credit') as string;
     const prize = formData.get('prize') as string;
     const prizeWorth = Number(formData.get('prize_worth') as string) as number;
-    const creditWorth = Number(formData.get('credit_worth') as string) as number;
-    const updatePlayerCredit = (formData.get('update_player_credit') as string) === 'on';
+    const creditWorth = Number(
+      formData.get('credit_worth') as string,
+    ) as number;
+    const updatePlayerCredit =
+      (formData.get('update_player_credit') as string) === 'on';
 
     const date = stringDate ?? new Date().toISOString().slice(0, 10);
     const day = new Date(date).toLocaleString('en-us', { weekday: 'long' });
@@ -716,25 +719,25 @@ export async function givePlayerPrizeOrCredit(
 
       if (prizeWorth !== creditWorth && updatePlayerCredit) {
         await touchPlayer(player.phone_number);
-          //player
-          // add history
+        //player
+        // add history
         const userResult = (
-            await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`
+          await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`
         ).rows[0];
 
-        console.log('## userId',userId)
-        console.log('## userResult',userResult)
+        console.log('## userId', userId);
+        console.log('## userResult', userResult);
 
         const amount = creditWorth - prizeWorth;
         note += ` - `;
         note += ` לקח פרס בשווי `;
-        note += `${prizeWorth}`
+        note += `${prizeWorth}`;
 
         await sql`INSERT INTO history (phone_number, change, note, type, updated_by)
-        VALUES (${player.phone_number}, ${amount}, ${note}, 'credit', ${userResult?.name ?? 'unknown'})`;
-
+        VALUES (${player.phone_number}, ${amount}, ${note}, 'credit', ${
+          userResult?.name ?? 'unknown'
+        })`;
       }
-
     }
 
     newWinnersObject[player.phone_number] = {
@@ -1081,7 +1084,6 @@ export async function deleteBug({
 
     await sql`DELETE FROM bugs WHERE id = ${id}`;
     await commitTransaction();
-
   } catch (error) {
     await cancelTransaction();
     return { message: 'Database Error: Failed to Delete Player.' };

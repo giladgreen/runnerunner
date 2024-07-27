@@ -785,7 +785,7 @@ export async function fetchTournamentsData() {
           };
         }
 
-        const amount = change > 0 ?  change : -1 * change;
+        const amount = change > 0 ? change : -1 * change;
         // @ts-ignore
         newAcc[date].total += amount;
         // @ts-ignore
@@ -816,7 +816,6 @@ export async function fetchTournamentsData() {
       {},
     );
     methodEnd('fetchTournamentsData');
-
 
     return result;
   } catch (error) {

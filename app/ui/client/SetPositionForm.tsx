@@ -6,13 +6,13 @@ import { setPlayerPosition } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
 import { PlayerForm } from '@/app/lib/definitions';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
-import {useEffect, useState} from "react";
+import { useEffect, useState } from 'react';
 
 export default function SetPositionForm({
   player,
   hide,
   prevPage,
-  initPosition
+  initPosition,
 }: {
   player: PlayerForm;
   hide?: () => void;

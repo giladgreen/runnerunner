@@ -1,4 +1,4 @@
-import {formatCurrency, formatCurrencyColor} from '@/app/lib/utils';
+import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 import {
   fetchFeatureFlags,
   fetchPlayerByUserId,
@@ -14,7 +14,7 @@ import { TRANSLATIONS } from '@/app/lib/definitions';
 import PlayersPrizesPage from '@/app/[userId]/prizes/PlayersPrizesPage';
 import Card from '@/app/ui/client/Card';
 import { PlayerSetupNameModal } from '@/app/ui/client/PlayerSetupNameModal';
-import React from "react";
+import React from 'react';
 
 const NO_NEED_FOR_RSVP = 'אין צורך ברישום לטורניר של היום';
 const YOU_ARE_ALREADY_REGISTERED = 'אתה רשום לטורניר של היום';
@@ -117,7 +117,7 @@ export default async function PlayerPage({
   };
 
   return (
-    <div className="flex-grow p-6 md:overflow-y-auto md:p-12 rtl">
+    <div className="rtl flex-grow p-6 md:overflow-y-auto md:p-12">
       <div>
         <Image
           src={player.image_url}
@@ -127,34 +127,44 @@ export default async function PlayerPage({
           height={70}
         />
 
-        <div className="truncate text-sm font-semibold md:text-base" style={{ margin: '10px', zoom: 2}}>
+        <div
+          className="truncate text-sm font-semibold md:text-base"
+          style={{ margin: '10px', zoom: 2 }}
+        >
           {player.name}
         </div>
 
-        <div style={{ margin: '10px', zoom: 1.4, color: 'blue'}}>{player.phone_number} </div>
+        <div style={{ margin: '10px', zoom: 1.4, color: 'blue' }}>
+          {player.phone_number}{' '}
+        </div>
 
-        <h1 style={{zoom: 1.5}}>
-         <span className="text-xl font-medium" style={{
-           color: formatCurrencyColor(player.balance)
-         }}>
+        <h1 style={{ zoom: 1.5 }}>
+          <span
+            className="text-xl font-medium"
+            style={{
+              color: formatCurrencyColor(player.balance),
+            }}
+          >
             <span>קרדיט:</span>
-            <b style={{marginRight: 5}}>{player.balance < 0 ? 'חוב של' : ''}</b>
-            <b>  {formatCurrency(Math.abs(player.balance))}</b>
+            <b style={{ marginRight: 5 }}>
+              {player.balance < 0 ? 'חוב של' : ''}
+            </b>
+            <b> {formatCurrency(Math.abs(player.balance))}</b>
           </span>
         </h1>
         {showRsvp && separator}
         {showRsvp && (
-            <Card
-                title="טורניר היום"
-                value={`${
-                    // @ts-ignore
-                    TRANSLATIONS[todayTournament.day]
-                } -  ${
-                    todayTournament.max_players === 0 && todayTournament.rsvp_required
-                        ? 'אין טורניר היום'
-                        : todayTournament.name
-                }`}
-            />
+          <Card
+            title="טורניר היום"
+            value={`${
+              // @ts-ignore
+              TRANSLATIONS[todayTournament.day]
+            } -  ${
+              todayTournament.max_players === 0 && todayTournament.rsvp_required
+                ? 'אין טורניר היום'
+                : todayTournament.name
+            }`}
+          />
         )}
 
         {showRsvp && !noTournamentToday && (

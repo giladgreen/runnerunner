@@ -53,7 +53,7 @@ const SearchablePrizesDropdown = ({
   return (
     <div className="dropdown" key="prizeId">
       <div className="control">
-        <div className="selected-value rtl" style={{ textAlign: 'right'}}>
+        <div className="selected-value rtl" style={{ textAlign: 'right' }}>
           <input
             ref={inputRef}
             type="text"
@@ -80,7 +80,7 @@ const SearchablePrizesDropdown = ({
               key={`${option.id}-${index}`}
             >
               <div style={{ marginLeft: 10, marginRight: 6 }}>
-                <div >
+                <div>
                   <b>{option.name}</b>
                 </div>
               </div>

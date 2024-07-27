@@ -79,11 +79,7 @@ export default async function RSVPAndArrivalCardWrapper({
           <tbody>
             <tr>
               <th scope="col">
-                <div
-                  className="table-item"
-                  data-tooltip="קרדיט"
-                  title="קרדיט"
-                >
+                <div className="table-item" data-tooltip="קרדיט" title="קרדיט">
                   <CreditCardIcon className="h-6 w-9 text-gray-700" />
                 </div>
               </th>
@@ -93,11 +89,7 @@ export default async function RSVPAndArrivalCardWrapper({
                 </div>
               </th>
               <th scope="col">
-                <div
-                  className="table-item"
-                  data-tooltip="העברה"
-                  title="העברה"
-                >
+                <div className="table-item" data-tooltip="העברה" title="העברה">
                   <ArrowLeftOnRectangleIcon className="h-6 w-9 text-gray-700" />
                 </div>
               </th>
@@ -146,10 +138,10 @@ export default async function RSVPAndArrivalCardWrapper({
       <Suspense fallback={<CardsSkeleton count={4} />}>
         <Card title="הכנסות" value={todayIncome} type="money" />
         <Card
-            title="כניסות מחדש"
-            value={<div>{reEntriesCount}</div>}
-            type="money"
-            oneLine
+          title="כניסות מחדש"
+          value={<div>{reEntriesCount}</div>}
+          type="money"
+          oneLine
         />
 
         <Card
@@ -159,14 +151,13 @@ export default async function RSVPAndArrivalCardWrapper({
           oneLine
         />
         {rsvpEnabled && (
-            <Card
-                title="אישורי הרשמה"
-                value={<div>{rsvpForTodayText}</div>}
-                type="rsvp"
-                oneLine
-            />
+          <Card
+            title="אישורי הרשמה"
+            value={<div>{rsvpForTodayText}</div>}
+            type="rsvp"
+            oneLine
+          />
         )}
-
       </Suspense>
     </div>
   );

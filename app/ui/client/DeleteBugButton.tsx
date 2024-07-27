@@ -33,7 +33,7 @@ export default function DeleteBugButton({
         <AreYouSure
           onConfirm={() => {
             setShowConfirmation(false);
-              deleteBugWithId();
+            deleteBugWithId();
           }}
           onCancel={() => setShowConfirmation(false)}
           subtext=""

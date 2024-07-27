@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { PlayerDB } from '@/app/lib/definitions';
 import Image from 'next/image';
-import {formatCurrency, formatCurrencyColor} from '@/app/lib/utils';
+import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 
 const SearchablePlayersDropdown = ({
   playerId,
@@ -97,7 +97,13 @@ const SearchablePlayersDropdown = ({
                 </div>
                 <div>{option.phone_number}</div>
               </div>
-              <div style={{ marginLeft: 30, paddingTop: 10, color: formatCurrencyColor(option.balance) }} >
+              <div
+                style={{
+                  marginLeft: 30,
+                  paddingTop: 10,
+                  color: formatCurrencyColor(option.balance),
+                }}
+              >
                 <b> {formatCurrency(option.balance)}</b>
               </div>
             </div>

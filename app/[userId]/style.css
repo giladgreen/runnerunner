@@ -215,8 +215,7 @@
 .wide-screen {
   display: flex;
 }
-.only-wide-screen{
-
+.only-wide-screen {
 }
 .my-button {
   padding: 4px;
@@ -374,51 +373,44 @@
   background: #666666;
 }
 
-.rtl{
+.rtl {
   direction: rtl;
-
 }
-.ltr{
+.ltr {
   direction: ltr;
-
 }
 
-.smaller-on-mobile{
-    font-size: 18px;
-
+.smaller-on-mobile {
+  font-size: 18px;
 }
-.smaller-on-mobile-smaller{
-    font-size: 18px;
-
+.smaller-on-mobile-smaller {
+  font-size: 18px;
 }
 
-.players-final-table-cell{
-
+.players-final-table-cell {
 }
-.edit-tournament-link{
+.edit-tournament-link {
   margin-right: -60px;
 }
-.delete-prize-button{
-
+.delete-prize-button {
 }
-.edit-prize-link{
-
+.edit-prize-link {
 }
 
-.tournaments-total-income-font{
-    font-size: 20px;
-    font-weight: bold;
+.tournaments-total-income-font {
+  font-size: 20px;
+  font-weight: bold;
 }
 
-.give-credit-modal-button-b{
+.give-credit-modal-button-b {
   padding: 8px;
 }
 @media only screen and (max-width: 600px) {
-  .give-credit-modal-button-b{
+  .give-credit-modal-button-b {
     padding: 0;
     margin-left: 3px;
   }
-  .tournaments-total-income-font{
+  .tournaments-total-income-font {
     font-size: 13px;
     font-weight: bold;
   }
@@ -427,26 +419,25 @@
     display: block;
   }
 
-
-  .edit-prize-link{
+  .edit-prize-link {
     margin-right: -27px;
   }
 
-  .delete-prize-button{
+  .delete-prize-button {
     margin-right: -29px;
   }
-  .edit-tournament-link{
+  .edit-tournament-link {
     margin-right: -27px;
   }
 
-  .players-final-table-cell{
+  .players-final-table-cell {
     padding: 0;
   }
-  .smaller-on-mobile{
+  .smaller-on-mobile {
     font-size: 10px;
     font-weight: bold;
   }
-  .smaller-on-mobile-smaller{
+  .smaller-on-mobile-smaller {
     font-size: 6px;
   }
   .create-new-today-player-button {
@@ -459,17 +450,17 @@
   .cellular {
     display: flex;
   }
-.cellular-block{
-  display: block;
-}
+  .cellular-block {
+    display: block;
+  }
   .wide-screen {
     display: none;
   }
-.only-wide-screen{
-  display: none;
-  visibility: collapse;
-  max-width:1px;
-}
+  .only-wide-screen {
+    display: none;
+    visibility: collapse;
+    max-width: 1px;
+  }
   .tournaments-data-table {
     table {
       th {
@@ -489,8 +480,6 @@
       max-width: unset;
     }
   }
-
-
 
   .card {
     border: 2px solid rgb(0, 112, 243);

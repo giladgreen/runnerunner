@@ -39,11 +39,7 @@ export default async function PlayersPrizesPage({
       style={{ marginBottom: 10, marginTop: -20 }}
     >
       {chosenPrizesContent && (
-        <Card
-          title="פרסים שנבחרו"
-          value={chosenPrizesContent}
-          type="prize"
-        />
+        <Card title="פרסים שנבחרו" value={chosenPrizesContent} type="prize" />
       )}
       {readyToBeDeliveredPrizesContent && (
         <Card

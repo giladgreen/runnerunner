@@ -1,4 +1,3 @@
-
 import Image from 'next/image';
 import SignUpButton from '@/app/ui/client/SignUpButton';
 import { fetchFeatureFlags } from '@/app/lib/data';
@@ -10,7 +9,10 @@ export default async function HomePage() {
   return (
     <main className="flex min-h-screen flex-col p-6">
       <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
-        <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20 rtl" style={{ textAlign: 'right'}}>
+        <div
+          className="rtl flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20"
+          style={{ textAlign: 'right' }}
+        >
           <Image
             src="/runner-big.png"
             width={1000}

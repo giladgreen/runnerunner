@@ -9,9 +9,9 @@ import { useFormState } from 'react-dom';
 import Button from '@/app/ui/client/Button';
 import SearchablePrizesDropdown from '@/app/ui/client/SearchablePrizesDropdown';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
-import {CreditCardIcon} from "@heroicons/react/24/outline";
-import {formatCurrency} from "@/app/lib/utils";
-import {Checkbox} from "primereact/checkbox";
+import { CreditCardIcon } from '@heroicons/react/24/outline';
+import { formatCurrency } from '@/app/lib/utils';
+import { Checkbox } from 'primereact/checkbox';
 
 function SetGivePrizeForm({
   player,
@@ -30,18 +30,20 @@ function SetGivePrizeForm({
 }) {
   const initialState = { message: null, errors: {} };
   const legalNumber =
-      !isNaN(Number(player.creditWorth)) && Number(player.creditWorth) >= 0;
+    !isNaN(Number(player.creditWorth)) && Number(player.creditWorth) >= 0;
   const [creditWorth, setCreditWorth] = useState(
-      legalNumber ? player.creditWorth : 0,
+    legalNumber ? player.creditWorth : 0,
   );
 
   let initialPrize = undefined;
-  if (prizesInformation.length === 1){
+  if (prizesInformation.length === 1) {
     initialPrize = prizesInformation[0];
   }
-  if (prizesInformation.length > 1){
+  if (prizesInformation.length > 1) {
     prizesInformation.sort((a, b) => b.credit - a.credit);
-    initialPrize = prizesInformation.find((prize) => prize.credit <= creditWorth);
+    initialPrize = prizesInformation.find(
+      (prize) => prize.credit <= creditWorth,
+    );
   }
 
   const [selectedPrize, setSelectedPrize] = useState<PrizeInfoDB | undefined>(
@@ -49,14 +51,24 @@ function SetGivePrizeForm({
   );
 
   const [type, setType] = useState('credit');
-const diff = selectedPrize ? Math.abs( selectedPrize?.credit - creditWorth) : 0;
+  const diff = selectedPrize
+    ? Math.abs(selectedPrize?.credit - creditWorth)
+    : 0;
 
-  const prizeWorthMoreWarning = (selectedPrize && selectedPrize?.credit > creditWorth) ?
-      <div style={{color: 'red', marginLeft: 6, marginTop: 7}}>  * שווי הפרס גבוה משווי הקרדיט ב  {formatCurrency(diff)} </div>
-      : null;
-  const creditWorthMoreWarning = (selectedPrize && selectedPrize?.credit < creditWorth) ?
-      <div style={{color: 'red', marginLeft: 6, marginTop: 7}}>  * שווי הקרדיט גבוהה משווי הפרס ב  {formatCurrency(diff)} </div>
-      : null;
+  const prizeWorthMoreWarning =
+    selectedPrize && selectedPrize?.credit > creditWorth ? (
+      <div style={{ color: 'red', marginLeft: 6, marginTop: 7 }}>
+        {' '}
+        * שווי הפרס גבוה משווי הקרדיט ב {formatCurrency(diff)}{' '}
+      </div>
+    ) : null;
+  const creditWorthMoreWarning =
+    selectedPrize && selectedPrize?.credit < creditWorth ? (
+      <div style={{ color: 'red', marginLeft: 6, marginTop: 7 }}>
+        {' '}
+        * שווי הקרדיט גבוהה משווי הפרס ב {formatCurrency(diff)}{' '}
+      </div>
+    ) : null;
 
   const [updatePlayerCredit, setUpdatePlayerCredit] = useState(false);
   const setPlayerPrizeWithPlayerId = givePlayerPrizeOrCredit.bind(null, {
@@ -65,121 +77,140 @@ const diff = selectedPrize ? Math.abs( selectedPrize?.credit - creditWorth) : 0;
     prevPage,
     stringDate,
   });
-  console.log('## userId', userId)
+  console.log('## userId', userId);
   // @ts-ignore
   const [_state, dispatch] = useFormState(
-      // @ts-ignore
-      setPlayerPrizeWithPlayerId,
-      initialState,
+    // @ts-ignore
+    setPlayerPrizeWithPlayerId,
+    initialState,
   );
 
   return (
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
-        <label className="mb-2 block text-sm font-medium" style={{textAlign: 'right'}}>
+        <label
+          className="mb-2 block text-sm font-medium"
+          style={{ textAlign: 'right' }}
+        >
           תן פרס/קרדיט לשחקן
         </label>
-
 
         <div className="form-inner-control rounded-md p-4 md:p-6">
           <div className="relative mt-2 rounded-md">
             <div className="rsvp-section relative">
               <div className="justify-content-center radio flex flex-wrap gap-3">
                 <div
-                    className="align-items-center flex"
-                    style={{marginLeft: 40}}
+                  className="align-items-center flex"
+                  style={{ marginLeft: 40 }}
                 >
                   <input
-                      type="radio"
-                      value="credit"
-                      name="type"
-                      checked={type === 'credit'}
-                      onChange={() => setType('credit')}
+                    type="radio"
+                    value="credit"
+                    name="type"
+                    checked={type === 'credit'}
+                    onChange={() => setType('credit')}
                   />
 
-                  <label htmlFor="credit" className="ml-2"  style={{margin: '0 5px'}}>
+                  <label
+                    htmlFor="credit"
+                    className="ml-2"
+                    style={{ margin: '0 5px' }}
+                  >
                     <b>קרדיט</b>
                   </label>
                 </div>
                 <div
-                    className="align-items-center flex"
-                    style={{marginLeft: 40}}
+                  className="align-items-center flex"
+                  style={{ marginLeft: 40 }}
                 >
                   <input
-                      type="radio"
-                      value="prize"
-                      name="type"
-                      checked={type === 'prize'}
-                      onChange={() => setType('prize')}
+                    type="radio"
+                    value="prize"
+                    name="type"
+                    checked={type === 'prize'}
+                    onChange={() => setType('prize')}
                   />
-                  <label htmlFor="prize" className="ml-2 " style={{margin: '0 5px'}}>
+                  <label
+                    htmlFor="prize"
+                    className="ml-2 "
+                    style={{ margin: '0 5px' }}
+                  >
                     <b>פרס</b>
                   </label>
                 </div>
-
               </div>
             </div>
           </div>
           {/* prize */}
           {type === 'prize' && (
-              <div className="give_user_prize mb-4 rtl" style={{textAlign: 'right', marginTop: 11 }}>
-                {selectedPrize && <div className="flex" >
-                  <div style={{marginLeft: 6}}> פרס שנבחר:</div>
-                  <div  style={{fontWeight:'bold', zoom:1.2 }}><b>{selectedPrize?.name}   </b></div>
-                </div>}
-                {selectedPrize && <div className="flex" style={{marginTop: 7 }} >
-                  <div style={{marginLeft: 6}}> שווי הפרס:</div>
-                  <div><b> {formatCurrency(selectedPrize?.credit)}  </b> </div>
-
-                </div>}
-                {prizeWorthMoreWarning}
-                {creditWorthMoreWarning}
-                {(prizeWorthMoreWarning || creditWorthMoreWarning) &&
-                    <div className="flex update_player_credit" style={{marginTop: 7 }} >
-                      <Checkbox
-                          inputId="update_player_credit"
-                          name="update_player_credit"
-                          value="update_player_credit"
-                          checked={updatePlayerCredit}
-                          onChange={(e) => setUpdatePlayerCredit(!!e.checked)}
-                      />
-                      <label
-                          className="mb-3 mt-1 block text-xs font-medium text-gray-900"
-                          htmlFor="update_player_credit"
-                          style={{marginRight: 7}}
-                      >
-                        עדכן קרדיט שחקן בהתאם
-                      </label>
-                    </div>}
-
-                <div className="flex" style={{marginTop: 20}}>
-                  <div style={{marginLeft: 6}}> החלף פרס</div>
-                  <SearchablePrizesDropdown
-                      showPrizeName
-                      prizes={prizesInformation}
-                      selectedVal={selectedPrize}
-                      handleChange={(val: any) => setSelectedPrize(val)}
-                  />
-                  <input
-                        id="prize_worth"
-                        name="prize_worth"
-                        type="hidden"
-                        value={selectedPrize?.credit} />
-                  <input
-                        id="credit_worth"
-                        name="credit_worth"
-                        type="hidden"
-                        value={creditWorth} />
-
-
+            <div
+              className="give_user_prize rtl mb-4"
+              style={{ textAlign: 'right', marginTop: 11 }}
+            >
+              {selectedPrize && (
+                <div className="flex">
+                  <div style={{ marginLeft: 6 }}> פרס שנבחר:</div>
+                  <div style={{ fontWeight: 'bold', zoom: 1.2 }}>
+                    <b>{selectedPrize?.name} </b>
                   </div>
+                </div>
+              )}
+              {selectedPrize && (
+                <div className="flex" style={{ marginTop: 7 }}>
+                  <div style={{ marginLeft: 6 }}> שווי הפרס:</div>
+                  <div>
+                    <b> {formatCurrency(selectedPrize?.credit)} </b>{' '}
+                  </div>
+                </div>
+              )}
+              {prizeWorthMoreWarning}
+              {creditWorthMoreWarning}
+              {(prizeWorthMoreWarning || creditWorthMoreWarning) && (
+                <div
+                  className="update_player_credit flex"
+                  style={{ marginTop: 7 }}
+                >
+                  <Checkbox
+                    inputId="update_player_credit"
+                    name="update_player_credit"
+                    value="update_player_credit"
+                    checked={updatePlayerCredit}
+                    onChange={(e) => setUpdatePlayerCredit(!!e.checked)}
+                  />
+                  <label
+                    className="mb-3 mt-1 block text-xs font-medium text-gray-900"
+                    htmlFor="update_player_credit"
+                    style={{ marginRight: 7 }}
+                  >
+                    עדכן קרדיט שחקן בהתאם
+                  </label>
+                </div>
+              )}
 
-
-
-
-                    </div>
-                    )}
-                  {/*  amount  */}
+              <div className="flex" style={{ marginTop: 20 }}>
+                <div style={{ marginLeft: 6 }}> החלף פרס</div>
+                <SearchablePrizesDropdown
+                  showPrizeName
+                  prizes={prizesInformation}
+                  selectedVal={selectedPrize}
+                  handleChange={(val: any) => setSelectedPrize(val)}
+                />
+                <input
+                  id="prize_worth"
+                  name="prize_worth"
+                  type="hidden"
+                  value={selectedPrize?.credit}
+                />
+                <input
+                  id="credit_worth"
+                  name="credit_worth"
+                  type="hidden"
+                  value={creditWorth}
+                />
+              </div>
+            </div>
+          )}
+          {/*  amount  */}
           {type === 'credit' ? (
             <div className="give_user_credit_amount mb-4">
               <label
@@ -218,7 +249,6 @@ const diff = selectedPrize ? Math.abs( selectedPrize?.credit - creditWorth) : 0;
           )}
         </div>
 
-
         <div className="mt-6 flex justify-end gap-4">
           <SpinnerButton text="עדכון" onClick={() => hide?.()} />
         </div>
@@ -252,25 +282,22 @@ export default function OpenGiveCreditModalButton({
     setShow(false);
   };
   return (
-      <div className="give-credit-modal-button" style={{marginRight: 2}}>
-        {hasReceived && <TickIcon size={20}/>}
-        {!hasReceived && (
-            <button
-                className="pointer rounded-md border p-2 hover:bg-gray-100 give-credit-modal-button-b"
-                onClick={() => {
-                  setShow(true);
-                }}
-            >
-              <span className="sr-only">Convert to Credit</span>
-              <CreditCardIcon className="w-6" title="המר לקרדיט"/>
-            </button>
-
-  )
-}
-{
-  !hasReceived && (
-      <div className={show ? 'edit-player-modal' : 'hidden'}>
-        <SetGivePrizeForm
+    <div className="give-credit-modal-button" style={{ marginRight: 2 }}>
+      {hasReceived && <TickIcon size={20} />}
+      {!hasReceived && (
+        <button
+          className="pointer give-credit-modal-button-b rounded-md border p-2 hover:bg-gray-100"
+          onClick={() => {
+            setShow(true);
+          }}
+        >
+          <span className="sr-only">Convert to Credit</span>
+          <CreditCardIcon className="w-6" title="המר לקרדיט" />
+        </button>
+      )}
+      {!hasReceived && (
+        <div className={show ? 'edit-player-modal' : 'hidden'}>
+          <SetGivePrizeForm
             player={player}
             hide={close}
             prevPage={prevPage}

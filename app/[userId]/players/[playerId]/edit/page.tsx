@@ -6,7 +6,7 @@ import {
   fetchTournaments,
   fetchUserById,
 } from '@/app/lib/data';
-import {formatCurrency, formatCurrencyColor} from '@/app/lib/utils';
+import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 import CreateLogForm from '@/app/ui/client/CreateLogForm';
 import HistoryTable from '@/app/ui/client/HistoryTable';
 import TournamentsHistoryTable from '@/app/ui/client/TournamentsHistoryTable';
@@ -27,9 +27,9 @@ export default async function EditPlayerPage({
       <div className="w-full">
         <div className="flex w-full items-center justify-between">
           <h1 className="text-2xl">
-              <b>
-                  <u>אין לך הרשאות לראות עמוד זה</u>
-              </b>
+            <b>
+              <u>אין לך הרשאות לראות עמוד זה</u>
+            </b>
           </h1>
         </div>
       </div>
@@ -69,26 +69,32 @@ export default async function EditPlayerPage({
         userId={params.userId}
       />
       <div className="ltr">
-        <div style={{ textAlign: 'right', zoom: 1.6}}>טלפון: {player.phone_number} </div>
-        <div style={{ textAlign: 'right', zoom: 1.1}}> {player.notes} </div>
-        <div style={{zoom: 2, textAlign: 'right'}}>
+        <div style={{ textAlign: 'right', zoom: 1.6 }}>
+          טלפון: {player.phone_number}{' '}
+        </div>
+        <div style={{ textAlign: 'right', zoom: 1.1 }}> {player.notes} </div>
+        <div style={{ zoom: 2, textAlign: 'right' }}>
           <h1>
-              <b  style={{
-                  textAlign: 'right',
-                  color: formatCurrencyColor(player.balance)}}
-              >קרדיט נוכחי: {formatCurrency(player.balance)}</b>
+            <b
+              style={{
+                textAlign: 'right',
+                color: formatCurrencyColor(player.balance),
+              }}
+            >
+              קרדיט נוכחי: {formatCurrency(player.balance)}
+            </b>
           </h1>
         </div>
 
-          <hr style={{marginTop: 10, marginBottom: 20}}/>
-          <CreateLogForm
-              player={player}
-              prevPage={`/${params.userId}/players/${player.id}/edit`}
-              userId={params.userId}
-              isAdmin={isAdmin}
-          />
+        <hr style={{ marginTop: 10, marginBottom: 20 }} />
+        <CreateLogForm
+          player={player}
+          prevPage={`/${params.userId}/players/${player.id}/edit`}
+          userId={params.userId}
+          isAdmin={isAdmin}
+        />
 
-          <hr style={{ marginTop: 20, marginBottom: 20 }} />
+        <hr style={{ marginTop: 20, marginBottom: 20 }} />
 
         <HistoryTable player={player} isRestrictedData={false} />
 

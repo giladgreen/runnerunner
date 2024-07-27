@@ -45,17 +45,24 @@ export function UseCreditForPrizeForm({
 
   return (
     <form action={dispatch} className="form-control">
-      <label className="mb-2 block text-sm font-medium" style={{ textAlign: 'right'}}>
+      <label
+        className="mb-2 block text-sm font-medium"
+        style={{ textAlign: 'right' }}
+      >
         שימוש בקרדיט לטובת פרס
       </label>
       <div className="form-inner-control  rounded-md p-4 md:p-6">
         {/*  balance change */}
         <div className="mb-4">
-          <label htmlFor="change" className="mb-2 block text-sm font-medium" style={{ textAlign: 'right'}}>
+          <label
+            htmlFor="change"
+            className="mb-2 block text-sm font-medium"
+            style={{ textAlign: 'right' }}
+          >
             סכום
           </label>
           <div className="relative mt-2 rounded-md">
-            <div className="relative rtl">
+            <div className="rtl relative">
               <input
                 id="change"
                 name="change"
@@ -85,10 +92,14 @@ export function UseCreditForPrizeForm({
 
         {/* note */}
         <div className="mb-4">
-          <label htmlFor="note" className="mb-2 block text-sm font-medium" style={{ textAlign: 'right'}}>
+          <label
+            htmlFor="note"
+            className="mb-2 block text-sm font-medium"
+            style={{ textAlign: 'right' }}
+          >
             הערה
           </label>
-          <div className="relative rtl">
+          <div className="rtl relative">
             <input
               id="note"
               name="note"
@@ -179,17 +190,24 @@ export function AddToBalanceForm({
       className="form-control"
       style={{ margin: '5px 0' }}
     >
-      <label className="mb-2 block text-sm font-medium" style={{ textAlign: 'right'}}>
+      <label
+        className="mb-2 block text-sm font-medium"
+        style={{ textAlign: 'right' }}
+      >
         הוספת קרדיט לשחקן
       </label>
       <div className="form-inner-control rounded-md p-4 md:p-6">
         {/*  balance change */}
         <div className="mb-4">
-          <label htmlFor="change" className="mb-2 block text-sm font-medium" style={{ textAlign: 'right'}}>
+          <label
+            htmlFor="change"
+            className="mb-2 block text-sm font-medium"
+            style={{ textAlign: 'right' }}
+          >
             סכום
           </label>
           <div className="relative mt-2 rounded-md">
-            <div className="relative rtl">
+            <div className="rtl relative">
               <input
                 id="change"
                 name="change"
@@ -216,10 +234,14 @@ export function AddToBalanceForm({
 
         {/* note */}
         <div className="mb-4">
-          <label htmlFor="note" className="mb-2 block text-sm font-medium" style={{ textAlign: 'right'}}>
+          <label
+            htmlFor="note"
+            className="mb-2 block text-sm font-medium"
+            style={{ textAlign: 'right' }}
+          >
             הערה
           </label>
-          <div className="relative rtl">
+          <div className="rtl relative">
             <input
               id="note"
               name="note"
@@ -262,26 +284,25 @@ export default function CreateLogForm({
   return (
     <div>
       <div className="cellular-block">
-          <Image
-            src={player.image_url}
-            className=" mr-2"
-            width={100}
-            height={100}
-            alt={`profile picture`}
-          />
-          {isAdmin && (
-            <AddToBalanceForm
-              player={player}
-              prevPage={prevPage}
-              userId={userId}
-            />
-          )}
-          <UseCreditForPrizeForm
+        <Image
+          src={player.image_url}
+          className=" mr-2"
+          width={100}
+          height={100}
+          alt={`profile picture`}
+        />
+        {isAdmin && (
+          <AddToBalanceForm
             player={player}
             prevPage={prevPage}
             userId={userId}
           />
-
+        )}
+        <UseCreditForPrizeForm
+          player={player}
+          prevPage={prevPage}
+          userId={userId}
+        />
       </div>
 
       <div className="wide-screen" style={{ justifyContent: 'space-between' }}>

@@ -15,18 +15,17 @@ export default async function GeneralPlayersCardWrapper() {
     <div className="full-width grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
       <Suspense fallback={<CardsSkeleton count={4} />}>
         <Card
-            title=" סה״כ חוב שחקנים"
-            value={formatCurrency(totalPlayersDebt)}
-            type="money"
-            oneLine
+          title=" סה״כ חוב שחקנים"
+          value={formatCurrency(totalPlayersDebt)}
+          type="money"
+          oneLine
         />
         <Card
-            title="שחקנים עם חוב"
-            value={numberOfPlayersWithDebt}
-            type="debt"
-            oneLine
+          title="שחקנים עם חוב"
+          value={numberOfPlayersWithDebt}
+          type="debt"
+          oneLine
         />
-
 
         <Card
           title="חוב ראננר לשחקנים"
@@ -35,12 +34,11 @@ export default async function GeneralPlayersCardWrapper() {
           oneLine
         />
         <Card
-            title="סה״כ שחקנים"
-            value={totalNumberOfPlayers}
-            type="players"
-            oneLine
+          title="סה״כ שחקנים"
+          value={totalNumberOfPlayers}
+          type="players"
+          oneLine
         />
-
       </Suspense>
     </div>
   );

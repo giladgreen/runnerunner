@@ -4,7 +4,8 @@ import { authenticate } from '@/app/lib/actions';
 import {
   PhoneIcon,
   KeyIcon,
-  ExclamationCircleIcon, ArrowLeftIcon,
+  ExclamationCircleIcon,
+  ArrowLeftIcon,
 } from '@heroicons/react/24/outline';
 import Button from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
@@ -22,7 +23,11 @@ export default function SignInForm() {
     window.location.href = '/';
   }
   return (
-    <form action={dispatch} className="space-y-3 rtl" style={{ textAlign: 'right'}}>
+    <form
+      action={dispatch}
+      className="rtl space-y-3"
+      style={{ textAlign: 'right' }}
+    >
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <div className="w-full">
           <div>
@@ -34,7 +39,7 @@ export default function SignInForm() {
             </label>
             <div className="relative">
               <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 rtl"
+                className="rtl peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                 id="phone_number"
                 type="tel"
                 name="email"
@@ -96,7 +101,10 @@ function SignInButton() {
   return (
     <Button className="mt-4 w-full">
       התחבר
-      <ArrowLeftIcon className="ml-auto h-5 w-5 text-gray-50" style={{ margin: '0 10px'}}/>
+      <ArrowLeftIcon
+        className="ml-auto h-5 w-5 text-gray-50"
+        style={{ margin: '0 10px' }}
+      />
     </Button>
   );
 }

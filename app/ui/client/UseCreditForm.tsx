@@ -198,7 +198,7 @@ export default function UseCreditForm({
           </div>
 
           {/* type */}
-          <div className="relative mt-2 rounded-md rtl">
+          <div className="rtl relative mt-2 rounded-md">
             <div className="rsvp-section relative">
               <div className="justify-content-center radio flex flex-wrap gap-3">
                 <div className="align-items-center flex">
@@ -259,7 +259,7 @@ export default function UseCreditForm({
               <label
                 htmlFor="player"
                 className="mb-2 block text-sm font-medium"
-                style={{margin: '7px 0 0 0'}}
+                style={{ margin: '7px 0 0 0' }}
               >
                 שחקן:
               </label>

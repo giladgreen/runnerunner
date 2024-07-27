@@ -31,7 +31,7 @@ export default function EditPrizeInfoForm({
   return (
     <>
       <form action={dispatch}>
-        <div className="rounded-md bg-gray-50 p-4 md:p-6 rtl">
+        <div className="rtl rounded-md bg-gray-50 p-4 md:p-6">
           {/* prize name */}
           <div className="mb-4">
             <label htmlFor="name" className="mb-2 block text-sm font-medium">
@@ -89,7 +89,7 @@ export default function EditPrizeInfoForm({
           </div>
 
           {/* prize credit */}
-          <div className="mb-4 rtl">
+          <div className="rtl mb-4">
             <label htmlFor="credit" className="mb-2 block text-sm font-medium">
               שווי בקרדיט
             </label>

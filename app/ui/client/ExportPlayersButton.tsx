@@ -11,13 +11,12 @@ function saveOtherDataToFile(
   tournament: TournamentDB,
   worker?: boolean,
 ) {
-
   if (worker) {
     return;
   }
 
   const addPlaces = playersPlaces && playersPlaces.length > 0;
-  const addPrizes =  prizes && prizes.length > 0;
+  const addPrizes = prizes && prizes.length > 0;
   const filename = `players_${
     addPlaces && addPrizes
       ? 'places_and_prizes'
@@ -118,15 +117,11 @@ export default function ExportPlayersButton({
 }) {
   return (
     <>
-      <Button style={{ width: '100%', textAlign:'center' }}
+      <Button
+        style={{ width: '100%', textAlign: 'center' }}
         onClick={() => {
           savePlayersDataToFile(players);
-          saveOtherDataToFile(
-            playersPlaces,
-            prizes,
-            tournament,
-            worker,
-          );
+          saveOtherDataToFile(playersPlaces, prizes, tournament, worker);
         }}
       >
         <div style={{ textAlign: 'center', width: '100%' }}>לחץ כאן</div>

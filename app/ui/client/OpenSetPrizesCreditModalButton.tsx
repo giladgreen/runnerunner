@@ -8,7 +8,7 @@ import { useFormState } from 'react-dom';
 import Button from '@/app/ui/client/Button';
 import { usePathname, useSearchParams } from 'next/navigation';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
-import {CreditCardIcon} from "@heroicons/react/24/solid";
+import { CreditCardIcon } from '@heroicons/react/24/solid';
 
 function SetPrizesCreditForm({
   players,
@@ -40,22 +40,29 @@ function SetPrizesCreditForm({
     ...positions.map((p) => p.creditWorth),
   ]);
   return (
-    <div className="edit-player-modal-inner-div rtl" style={{ textAlign: 'right'}}>
+    <div
+      className="edit-player-modal-inner-div rtl"
+      style={{ textAlign: 'right' }}
+    >
       <form action={dispatch} className="form-control">
         <label className="mb-2 block text-sm font-medium">
-          הגדר שווי פרסים בקרדיט  -  {date}
+          הגדר שווי פרסים בקרדיט - {date}
         </label>
         <div>
           {positions.map((player) => {
             return (
-              <div key={player.id} style={{ marginTop: 6, marginBottom:2}}>
-                מקום   #{player.position}
+              <div key={player.id} style={{ marginTop: 6, marginBottom: 2 }}>
+                מקום #{player.position}
                 <input
                   id={`#${player.position}`}
                   name={`#${player.position}`}
                   type="number"
                   step="1"
-                  value={balances[player.position] >= 0 ? balances[player.position] : 0}
+                  value={
+                    balances[player.position] >= 0
+                      ? balances[player.position]
+                      : 0
+                  }
                   onChange={(e) => {
                     const newValue = Number(e.target.value);
                     if (newValue < 0) {
@@ -109,9 +116,9 @@ export default function OpenSetPrizesCreditModalButton({
           setShow(true);
         }}
         className="pointer"
-        style={{  justifyContent: 'center', color: "blue", marginLeft: 30}}
+        style={{ justifyContent: 'center', color: 'blue', marginLeft: 30 }}
       >
-        <u>  הגדר שווי קרדיט </u>
+        <u> הגדר שווי קרדיט </u>
       </div>
 
       <div className={show ? 'edit-player-modal' : 'hidden'}>

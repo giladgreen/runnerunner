@@ -57,7 +57,7 @@ export default function EditPlayerForm({
       // @ts-ignore
       const text = ` ${TRANSLATIONS[dayOfTheWeek]} - ${tournament.name}`;
       return (
-        <div key={tournament.id} className="tournament_rsvp_line" >
+        <div key={tournament.id} className="tournament_rsvp_line">
           {tournament.rsvp_required ? (
             tournament.max_players === 0 ? (
               ''
@@ -69,7 +69,20 @@ export default function EditPlayerForm({
               />
             )
           ) : (
-            <div style={{ display:'flex'}}> <div style={{ border:'1px solid black', background:'#AAAAAA', width: 26, height: 26, margin: '0 8px', cursor: 'no-drop' }}/> {text}</div>
+            <div style={{ display: 'flex' }}>
+              {' '}
+              <div
+                style={{
+                  border: '1px solid black',
+                  background: '#AAAAAA',
+                  width: 26,
+                  height: 26,
+                  margin: '0 8px',
+                  cursor: 'no-drop',
+                }}
+              />{' '}
+              {text}
+            </div>
           )}
         </div>
       );
@@ -78,7 +91,7 @@ export default function EditPlayerForm({
   return (
     <>
       <form action={dispatch}>
-        <div className="rounded-md bg-gray-50 p-4 md:p-6 rtl">
+        <div className="rtl rounded-md bg-gray-50 p-4 md:p-6">
           {/* player name */}
           <div className="mb-4">
             <label htmlFor="name" className="mb-2 block text-sm font-medium">
@@ -110,7 +123,7 @@ export default function EditPlayerForm({
           {/* player notes */}
           <div className="mb-4">
             <label htmlFor="notes" className="mb-2 block text-sm font-medium">
-             הערות
+              הערות
             </label>
             <div className="relative mt-2 rounded-md">
               <div className="relative">
@@ -134,12 +147,11 @@ export default function EditPlayerForm({
               </div>
             </div>
           </div>
-
         </div>
         {/* player image url */}
-        <div className="mb-4 rtl">
+        <div className="rtl mb-4">
           <label htmlFor="image_url" className="mb-2 block text-sm font-medium">
-           כתובת תמונה
+            כתובת תמונה
           </label>
           <div className="relative">
             <input
@@ -199,7 +211,7 @@ export default function EditPlayerForm({
       </div>
       {rsvpEnabled && (
         <div
-            className="rtl"
+          className="rtl"
           style={{
             marginTop: 45,
             border: '2px solid blue',
@@ -207,7 +219,7 @@ export default function EditPlayerForm({
             padding: 10,
           }}
         >
-          <div  className="rtl" style={{ textAlign: 'right'}}>
+          <div className="rtl" style={{ textAlign: 'right' }}>
             <u>אישורי הגעה לשבוע הקרוב</u>
           </div>
           <div>{rsvpsForTheNextWeek}</div>

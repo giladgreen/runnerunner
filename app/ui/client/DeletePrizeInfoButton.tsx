@@ -25,7 +25,10 @@ export default function DeletePrizeInfoButton({
           setShowConfirmation(true);
         }}
       >
-        <button className="my-button delete-prize-button" style={{ background: 'orange' }}>
+        <button
+          className="my-button delete-prize-button"
+          style={{ background: 'orange' }}
+        >
           מחיקה
         </button>
       </div>

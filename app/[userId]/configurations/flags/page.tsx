@@ -7,11 +7,8 @@ export default async function FlagsPage({
 }: {
   params: { userId: string };
 }) {
-  const {
-    rsvpEnabled,
-    playerRsvpEnabled,
-    usePhoneValidation,
-  } = await fetchFeatureFlags();
+  const { rsvpEnabled, playerRsvpEnabled, usePhoneValidation } =
+    await fetchFeatureFlags();
   const user = await fetchUserById(params.userId);
   const isAdmin = user.is_admin;
   if (!isAdmin) return null;

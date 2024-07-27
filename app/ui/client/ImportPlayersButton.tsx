@@ -11,13 +11,13 @@ export default function ImportPlayersButton() {
 
   return (
     <>
-        <Button onClick={() => setShowConfirmation(true)}>
-            <div style={{textAlign: 'center', width: '100%'}}>לחץ כאן</div>
-        </Button>
-        <input
-            type="file"
-            id="fileInput"
-            style={{ display: 'none' }}
+      <Button onClick={() => setShowConfirmation(true)}>
+        <div style={{ textAlign: 'center', width: '100%' }}>לחץ כאן</div>
+      </Button>
+      <input
+        type="file"
+        id="fileInput"
+        style={{ display: 'none' }}
         accept=".csv"
       />
       {showConfirmation && (

@@ -3,7 +3,7 @@ import { formatCurrency } from '@/app/lib/utils';
 import React from 'react';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import {TRANSLATIONS} from "@/app/lib/definitions";
+import { TRANSLATIONS } from '@/app/lib/definitions';
 
 export default async function TournamentsSetupPage({
   params,
@@ -28,36 +28,69 @@ export default async function TournamentsSetupPage({
   }
   const tournaments = await fetchTournaments();
 
-
   return (
-    <div className="config-section rtl" style={{ textAlign: 'right'}}>
+    <div className="config-section rtl" style={{ textAlign: 'right' }}>
       <div>
         <b>
           <u>טורנירים:</u>
         </b>
       </div>
-      <table className="min-w-full text-gray-900 md:table rtl" style={{ textAlign: 'right'}}>
-        <thead className="rounded-lg text-left text-sm font-normal" style={{ textAlign: 'right'}}>
+      <table
+        className="rtl min-w-full text-gray-900 md:table"
+        style={{ textAlign: 'right' }}
+      >
+        <thead
+          className="rounded-lg text-left text-sm font-normal"
+          style={{ textAlign: 'right' }}
+        >
           <tr>
-            <th scope="col" className="px-4 py-5 font-medium sm:pl-6 smaller-on-mobile" style={{ textAlign: 'right'}}>
+            <th
+              scope="col"
+              className="smaller-on-mobile px-4 py-5 font-medium sm:pl-6"
+              style={{ textAlign: 'right' }}
+            >
               יום
             </th>
-            <th scope="col" className="px-2 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
+            <th
+              scope="col"
+              className="smaller-on-mobile px-2 py-5 font-medium"
+              style={{ textAlign: 'right' }}
+            >
               שם
             </th>
-            <th scope="col" className="px-3 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
+            <th
+              scope="col"
+              className="smaller-on-mobile px-3 py-5 font-medium"
+              style={{ textAlign: 'right' }}
+            >
               עלות כניסה
             </th>
-            <th scope="col" className="px-3 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
+            <th
+              scope="col"
+              className="smaller-on-mobile px-3 py-5 font-medium"
+              style={{ textAlign: 'right' }}
+            >
               עלות כניסה נוספת
             </th>
-            <th scope="col" className="px-3 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
+            <th
+              scope="col"
+              className="smaller-on-mobile px-3 py-5 font-medium"
+              style={{ textAlign: 'right' }}
+            >
               מספר שחקנים מירבי
             </th>
-            <th scope="col" className="px-3 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
-               נדרש אישור הגעה
+            <th
+              scope="col"
+              className="smaller-on-mobile px-3 py-5 font-medium"
+              style={{ textAlign: 'right' }}
+            >
+              נדרש אישור הגעה
             </th>
-            <th scope="col" className="px-3 py-5 font-medium smaller-on-mobile" style={{ textAlign: 'right'}}>
+            <th
+              scope="col"
+              className="smaller-on-mobile px-3 py-5 font-medium"
+              style={{ textAlign: 'right' }}
+            >
               <span className="sr-only">ערוך</span>
             </th>
           </tr>
@@ -68,32 +101,34 @@ export default async function TournamentsSetupPage({
               key={tournament.id}
               className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
             >
-              <td className="whitespace-nowrap py-3 pl-6 pr-3 smaller-on-mobile">
+              <td className="smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
                 {
                   // @ts-ignore
-                  TRANSLATIONS[tournament.day].replace('יום','')
+                  TRANSLATIONS[tournament.day].replace('יום', '')
                 }
               </td>
-              <td className="whitespace-nowrap px-3 py-3 smaller-on-mobile">{tournament.name}</td>
-              <td className="whitespace-nowrap px-3 py-3 smaller-on-mobile">
+              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
+                {tournament.name}
+              </td>
+              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
                 {formatCurrency(tournament.buy_in)}
               </td>
-              <td className="whitespace-nowrap px-3 py-3 smaller-on-mobile">
+              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
                 {formatCurrency(tournament.re_buy)}
               </td>
-              <td className="whitespace-nowrap px-3 py-3 smaller-on-mobile">
+              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
                 {tournament.max_players}
               </td>
-              <td className="whitespace-nowrap px-3 py-3 smaller-on-mobile">
+              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required ? 'כן' : 'לא '}
               </td>
-              <td className="whitespace-nowrap py-3 pl-6 pr-3 smaller-on-mobile">
-                <div className="flex justify-end gap-3 smaller-on-mobile edit-tournament-link">
+              <td className="smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
+                <div className="smaller-on-mobile edit-tournament-link flex justify-end gap-3">
                   <Link
                     href={`/${
                       params.userId
                     }/configurations/tournaments/${tournament.day.toLowerCase()}/edit`}
-                    className="rounded-md border p-2 hover:bg-gray-100 smaller-on-mobile"
+                    className="smaller-on-mobile rounded-md border p-2 hover:bg-gray-100"
                   >
                     <PencilIcon className="w-5" />
                   </Link>
