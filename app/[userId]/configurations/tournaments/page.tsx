@@ -29,8 +29,8 @@ export default async function TournamentsSetupPage({
   const tournaments = await fetchTournaments();
 
   return (
-    <div className="config-section rtl" style={{ textAlign: 'right', marginRight: -35 }}>
-      <div style={{ textAlign: 'right', marginRight: 40 }}>
+    <div className="config-section rtl" style={{ textAlign: 'right', marginRight: -43 }}>
+      <div style={{ textAlign: 'right', marginRight: 50 }}>
         <b>
           <u>טורנירים:</u>
         </b>
@@ -46,49 +46,49 @@ export default async function TournamentsSetupPage({
           <tr>
             <th
               scope="col"
-              className="smaller-on-mobile px-4 py-5 font-medium sm:pl-6"
+              className="px-4 py-5 font-medium sm:pl-6 smaller-on-mobile "
               style={{ textAlign: 'right' }}
             >
               יום
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-2 py-5 font-medium"
+              className=" px-2 py-5 font-medium smaller-on-mobile"
               style={{ textAlign: 'right' }}
             >
               שם
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-3 py-5 font-medium"
+              className=" px-3 py-5 font-medium smaller-on-mobile"
               style={{ textAlign: 'right' }}
             >
               עלות כניסה
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-3 py-5 font-medium"
+              className=" px-3 py-5 font-medium smaller-on-mobile"
               style={{ textAlign: 'right' }}
             >
               עלות כניסה נוספת
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-3 py-5 font-medium"
+              className="px-3 py-5 font-medium smaller-on-mobile"
               style={{ textAlign: 'right' }}
             >
               מספר שחקנים מירבי
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-3 py-5 font-medium"
+              className="px-3 py-5 font-medium smaller-on-mobile"
               style={{ textAlign: 'right' }}
             >
               נדרש אישור הגעה
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-3 py-5 font-medium"
+              className="px-3 py-5 font-medium smaller-on-mobile"
               style={{ textAlign: 'right' }}
             >
               <span className="sr-only">ערוך</span>
@@ -107,7 +107,7 @@ export default async function TournamentsSetupPage({
                         params.userId
                     }/configurations/tournaments/${tournament.day.toLowerCase()}/edit`}
                     className="smaller-on-mobile rounded-md border p-2 hover:bg-gray-100"
-                    style={{zoom:1.5, color: 'blue', border: '0 solid transparent'}}
+                    style={{zoom:1.2, color: 'blue', border: '0 solid transparent'}}
                 >
                   <b><u  >
                     {
