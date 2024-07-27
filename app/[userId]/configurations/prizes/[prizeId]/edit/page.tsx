@@ -13,5 +13,5 @@ export default async function PrizesInfoEditPage({
   const prizes = await fetchPrizesInfo();
   const prize = prizes.find((prize) => prize.id === prizeId) as PrizeInfoDB;
 
-  return <EditPrizeInfoForm prize={prize} prevPage={prevPage} />;
+  return <EditPrizeInfoForm prize={prize} prevPage={prevPage} userId={userId}/>;
 }

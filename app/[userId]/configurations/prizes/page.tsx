@@ -120,7 +120,13 @@ export default async function PrizesInfoPage({
                     className=" smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3"
                     style={{ textAlign: 'right' }}
                   >
-                    {prize.name}
+                      <Link
+
+                          href={`/${params.userId}/configurations/prizes/${prize.id}/edit`}
+                      >
+                          <b><u className="cellular"   style={{ color: 'blue' }}>{prize.name}</u></b>
+                          <b className="wide-screen">{prize.name}</b>
+                      </Link>
                   </td>
 
                   <td
@@ -135,15 +141,15 @@ export default async function PrizesInfoPage({
                   >
                     {formatDateToLocalWithTime(prize.created_at)}
                   </td>
-                  <td className=" smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
+                  <td className="smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
                     <Link
-                      className="edit-prize-link"
+                      className="wide-screen edit-prize-link"
                       href={`/${params.userId}/configurations/prizes/${prize.id}/edit`}
                     >
                       <Button className="my-button">עריכה</Button>
                     </Link>
                   </td>
-                  <td className="smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
+                  <td className="wide-screen smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
                     <DeletePrizeInfoButton
                       prize={prize}
                       userId={params.userId}

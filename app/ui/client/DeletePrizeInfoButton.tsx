@@ -7,9 +7,11 @@ import AreYouSure from '@/app/ui/client/AreYouSure';
 export default function DeletePrizeInfoButton({
   prize,
   userId,
+  text = 'מחיקה',
 }: {
   prize: PrizeInfoDB;
   userId: string;
+  text?: string;
 }) {
   const deletePrizeInfoWithId = deletePrizeInfo.bind(null, {
     prizeId: prize.id,
@@ -29,7 +31,7 @@ export default function DeletePrizeInfoButton({
           className="my-button delete-prize-button"
           style={{ background: 'orange' }}
         >
-          מחיקה
+            {text}
         </button>
       </div>
       {showConfirmation && (

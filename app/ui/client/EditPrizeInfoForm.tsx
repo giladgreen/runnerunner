@@ -7,13 +7,16 @@ import Button from '@/app/ui/client/Button';
 import { useFormState, useFormStatus } from 'react-dom';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import Spinner from '@/app/ui/client/Spinner';
+import DeletePrizeInfoButton from "@/app/ui/client/DeletePrizeInfoButton";
 
 export default function EditPrizeInfoForm({
+    userId,
   prize,
   prevPage,
 }: {
   prize: PrizeInfoDB;
   prevPage: string;
+  userId: string;
 }) {
   const initialState = { message: null, errors: {} };
   const updatePrizeInfoWithId = updatePrizeInfo.bind(null, {
@@ -29,7 +32,7 @@ export default function EditPrizeInfoForm({
   );
 
   return (
-    <>
+    <div className="rtl">
       <form action={dispatch}>
         <div className="rtl rounded-md bg-gray-50 p-4 md:p-6">
           {/* prize name */}
@@ -128,7 +131,14 @@ export default function EditPrizeInfoForm({
           <UpdatePrizeButton />
         </div>
       </form>
-    </>
+     <div className="cellular" style={{ marginTop:50, marginRight: 30}} >
+       <DeletePrizeInfoButton
+           prize={prize}
+           userId={userId}
+           text={"מחיקת הגדרות פרס"}
+       />
+     </div>
+    </div>
   );
 }
 
