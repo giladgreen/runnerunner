@@ -164,15 +164,19 @@ export default async function PlayerPage({
           <Card
             title="הרשמה"
             value={
-              <form action={onSubmit}>
-                <button>
-                  <u>
-                    {isRegisterForTodayTournament
-                      ? CLICK_HERE_TO_UNREGISTER
-                      : CLICK_HERE_TO_REGISTER}
-                  </u>
-                </button>
-              </form>
+              <div>
+                { !isRegisterForTodayTournament && <div>
+                  נותרו עוד {max_players - rsvpCountForTodayTournament} מקומות
+                </div>}
+                <form action={onSubmit}>
+                  <button style={{ border: '1px solid black', padding: 5, margin: 5, borderRadius:4, background: isRegisterForTodayTournament ? 'rgb(252 165 165)': 'rgb(187 247 208)'}}>
+                      {isRegisterForTodayTournament
+                          ? CLICK_HERE_TO_UNREGISTER
+                          : CLICK_HERE_TO_REGISTER}
+                  </button>
+                </form>
+              </div>
+
             }
           />
         )}
@@ -182,9 +186,9 @@ export default async function PlayerPage({
             <u>הסטוריה</u>
           </b>
         </div>
-        <HistoryTable player={player} isRestrictedData />
+        <HistoryTable player={player} isRestrictedData/>
 
-        <TournamentsHistoryTable player={player} />
+        <TournamentsHistoryTable player={player}/>
 
         <div style={{ width: 100, height: 50, margin: '30px 0' }}></div>
         <PlayersPrizesPage playerPhone={player.phone_number} />
