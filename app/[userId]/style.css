@@ -410,6 +410,18 @@
   padding: 8px;
 }
 
+.player-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100VW;
+  height: 60px;
+  color: white;
+  background: rgb(0, 112, 243);
+  padding: 5px 15px 5px 5px;
+  display: flex;
+  justify-content: space-between;
+}
 @media only screen and (max-width: 600px) {
   .move-up-down-button {
     padding: 0;
