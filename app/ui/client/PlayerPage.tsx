@@ -38,9 +38,6 @@ export default async function PlayerPage({
 }: {
   params: { userId: string };
 }) {
-  const { rsvpEnabled, playerRsvpEnabled } = await fetchFeatureFlags();
-  const showRsvp = rsvpEnabled && playerRsvpEnabled;
-
   const player = await fetchPlayerByUserId(params.userId);
   if (!player) {
     return (
@@ -49,14 +46,15 @@ export default async function PlayerPage({
           <div>No data for this player yet..</div>
           <div>
             {/* eslint-disable-next-line react/no-unescaped-entities */}
-            To reserve a spot for today's tournament, please contact us by
+            לרישום לטורניר אנא פנה אלינו ל
             whatsapp: 050-8874068
           </div>
         </div>
       </div>
     );
   }
-
+  const { rsvpEnabled, playerRsvpEnabled } = await fetchFeatureFlags();
+  const showRsvp = rsvpEnabled && playerRsvpEnabled;
   const todayTournament = await fetchTournamentByDay();
   const playerCurrentTournamentHistory =
     await fetchPlayerCurrentTournamentHistory(player.phone_number);
@@ -64,24 +62,25 @@ export default async function PlayerPage({
     playerCurrentTournamentHistory.filter(
       ({ type, change }) => type !== 'credit_to_other' && change !== 0
     ).length > 0;
-  const showUnregisterButton =
-    playerCurrentTournamentHistory.filter(
-      ({ type }) => type !== 'credit_to_other',
-    ).length === 0;
+
   const rsvpCountForTodayTournament = await fetchRsvpCountForTodayTournament();
 
   const { rsvp_required, max_players } = todayTournament;
 
-  const noTournamentToday = rsvp_required && max_players === 0;
+  const todayHasATournament = todayTournament && (!rsvp_required || max_players > 0)
   // @ts-ignore
-  const todayTournamentData = noTournamentToday
-    ? NO_TOURNAMENT_TODAY
-    : // @ts-ignore
-      `${TRANSLATIONS[todayTournament.day]} -  ${
-        todayTournament.max_players === 0 && todayTournament.rsvp_required
-          ? 'אין טורניר היום'
+  const todayTournamentData = `${
+      // @ts-ignore
+      TRANSLATIONS[todayTournament.day]
+  } -  ${
+      !todayHasATournament
+          ? NO_TOURNAMENT_TODAY
           : todayTournament.name
-      }`;
+  }`
+
+
+
+
   // @ts-ignore
   const isRegisterForTodayTournament = player.rsvpForToday;
   const isFull = rsvpCountForTodayTournament >= max_players;
@@ -149,18 +148,11 @@ export default async function PlayerPage({
         {showRsvp && (
           <Card
             title="טורניר היום"
-            value={`${
-              // @ts-ignore
-              TRANSLATIONS[todayTournament.day]
-            } -  ${
-              todayTournament.max_players === 0 && todayTournament.rsvp_required
-                ? 'אין טורניר היום'
-                : todayTournament.name
-            }`}
+            value={todayTournamentData}
           />
         )}
 
-        {showRsvp && !noTournamentToday && (
+        {showRsvp && todayHasATournament && (
           <Card
             green={isRegisterForTodayTournament}
             orange={!isRegisterForTodayTournament}
@@ -168,7 +160,7 @@ export default async function PlayerPage({
             value={!rsvp_required ? NO_NEED_FOR_RSVP : registrationStatus}
           />
         )}
-        {showRsvp && !noTournamentToday && rsvp_required && !playerArrived && (
+        {showRsvp && todayHasATournament && rsvp_required && !playerArrived && (
           <Card
             title="הרשמה"
             value={
