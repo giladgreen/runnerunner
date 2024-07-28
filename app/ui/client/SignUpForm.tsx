@@ -1,12 +1,12 @@
 'use client';
 import { useFormState, useFormStatus } from 'react-dom';
 import { signUp } from '@/app/lib/actions';
-import { KeyIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import {KeyIcon, ExclamationCircleIcon, PencilIcon} from '@heroicons/react/24/outline';
 import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 import Button from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
 import { Checkbox } from 'primereact/checkbox';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export default function SignUpForm() {
   const searchParams = useSearchParams();
@@ -50,21 +50,38 @@ export default function SignUpForm() {
             </div>
           )}
           <div className="mt-4">
+            <label htmlFor="name" className="mb-2 block text-sm font-medium">
+              שם מלא
+            </label>
+            <div className="relative">
+              <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  minLength={5}
+                  placeholder="הכנס שם מלא"
+                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              />
+              <PencilIcon
+                  className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500"/>
+            </div>
+          </div>
+          <div className="mt-4">
             <label
-              className="mb-3 mt-5 block text-xs font-medium text-gray-900"
-              htmlFor="password"
+                className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+                htmlFor="password"
             >
               סיסמא
             </label>
             <div className="relative">
               <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                id="password"
-                type="password"
-                name="password"
-                placeholder="בחר סיסמא"
-                value={password}
-                onChange={(e) => setPasword(e.target.value)}
+                  className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="בחר סיסמא"
+                  value={password}
+                  onChange={(e) => setPasword(e.target.value)}
                 required
                 minLength={6}
               />

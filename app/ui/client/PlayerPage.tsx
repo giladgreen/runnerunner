@@ -56,13 +56,6 @@ export default async function PlayerPage({
       </div>
     );
   }
-  if (player.name === 'UNKNOWN PLAYER') {
-    return (
-      <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
-        <PlayerSetupNameModal player={player} />
-      </div>
-    );
-  }
 
   const todayTournament = await fetchTournamentByDay();
   const playerCurrentTournamentHistory =

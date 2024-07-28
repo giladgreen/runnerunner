@@ -94,6 +94,7 @@ describe('actions', () => {
       formData = getFormData({
         phone_number: PHONE,
         password: '123456',
+        name: 'israel israeli',
         marketing_approve: 'on',
       });
     });
@@ -117,7 +118,7 @@ describe('actions', () => {
         expect(newUser?.phone_number).toEqual(PHONE);
         expect(newUser?.is_admin).toEqual(false);
         expect(newUser?.is_worker).toEqual(false);
-        expect(newUser?.name).toEqual('UNKNOWN PLAYER');
+        expect(newUser?.name).toEqual('israel israeli');
 
         const playersAfter: PlayerDB[] = await fetchAllPlayersForExport();
         expect(playersAfter.length).toEqual(1);
@@ -126,7 +127,7 @@ describe('actions', () => {
         expect(createdPlayer?.allowed_marketing).toEqual(true);
         expect(createdPlayer?.balance).toEqual(0);
         expect(createdPlayer?.image_url).toEqual('/players/default.png');
-        expect(createdPlayer?.name).toEqual('UNKNOWN PLAYER');
+        expect(createdPlayer?.name).toEqual('israel israeli');
         expect(createdPlayer?.rsvpForToday).toEqual(false);
         expect(createdPlayer?.rsvps).toEqual([]);
 

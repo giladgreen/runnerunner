@@ -1230,6 +1230,7 @@ export async function signUp(
   }${user_phone_number}`;
 
   const password = formData.get('password') as string;
+  const username = formData.get('name') as string;
 
   const marketing_approve = formData.get('marketing_approve') as string;
 
@@ -1248,7 +1249,7 @@ export async function signUp(
   const name = phoneToName[phoneNumber]
     ? // @ts-ignore
       (phoneToName[phoneNumber] as string)
-    : existingPlayer?.name ?? '--';
+    : existingPlayer?.name ?? username;
   await sql`
       INSERT INTO users (phone_number, password, name, is_admin, is_worker)
       VALUES (${phoneNumber}, ${hashedPassword}, ${name}, ${isAdmin}, ${isWorker})
@@ -1261,7 +1262,7 @@ export async function signUp(
   } else {
     await sql`
       INSERT INTO players (name, phone_number, allowed_marketing)
-      VALUES ('UNKNOWN PLAYER',${phoneNumber}, ${marketing_approve === 'on'})
+      VALUES (${name},${phoneNumber}, ${marketing_approve === 'on'})
     `;
 
     await sql`INSERT INTO history (phone_number, change, note, type, archive) VALUES (${phoneNumber},0, 'אתחול','credit', true)`;
