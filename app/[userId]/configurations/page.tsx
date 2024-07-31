@@ -142,6 +142,7 @@ export default async function ConfigurationPage({
     );
   }
   const importEnabled = user.is_admin && user.phone_number === '0587869910';
+  const ffEnabled = importEnabled;
   const bugs = await fetchAllBugs();
   const players = await fetchAllPlayersForExport();
   // const images = await fetchAllImagesForExport();
@@ -212,7 +213,7 @@ export default async function ConfigurationPage({
           />
         )}
 
-        {importEnabled && (
+        {ffEnabled && (
           <Card
             title="feature flags"
             value={<FeatureFlagsLink userId={params.userId} />}

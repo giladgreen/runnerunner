@@ -11,6 +11,7 @@ export default async function FlagsPage({
     await fetchFeatureFlags();
   const user = await fetchUserById(params.userId);
   const isAdmin = user.is_admin;
+
   if (!isAdmin) return null;
   return (
     <div className="w-full">
