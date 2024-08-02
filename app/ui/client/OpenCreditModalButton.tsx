@@ -35,7 +35,8 @@ export default function OpenCreditModalButton({
         }}
       >
         <span className="sr-only">Pay</span>
-        <PlusCircleIcon className="w-6" title="הכנס" />
+          <div title="הכנס" style={{ border: '1px solid black', color: 'white', textAlign:'center', borderRadius:12, width: 20, height: 20, background: 'black'}}><b><div style={{marginTop:-2}}>₪</div> </b></div>
+        {/*<PlusCircleIcon className="w-6" title="הכנס" />*/}
       </button>
       <div className={show ? 'edit-player-modal' : 'hidden'}>
         <UseCreditForm
