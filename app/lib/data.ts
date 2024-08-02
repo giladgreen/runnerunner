@@ -293,31 +293,9 @@ async function fetchXPlayers(x: string, getXPlayers: () => PlayerDB[]) {
   return result;
 }
 
-// function getPlayerStats(allHistory: LogDB[], phone_number: string) {
-//   const playerHistory = allHistory.filter(log => log.phone_number === phone_number);
-//   const playerHistoryByDate = playerHistory.reduce((acc, log) => {
-//     const date = (new Date(log.updated_at)).toISOString().slice(0, 10);
-//     const obj = acc.get(date) ?? { balance: 0};
-//     const newObj = {...obj};
-//     newObj.balance += log.change;
-//     // if (!acc.get(date)) {
-//     //   acc.set(date, {})
-//     // }
-//     // acc[date] += log.change;
-//
-//
-//     acc.set(date, newObj)
-//
-//
-//     return acc;
-//   },{} as Map<string, any>)
-//   return 1;
-// }
-
-function getPlayerWithExtraData(player: PlayerDB, phoneAndBalance: { phone_number: string; balance: string }[], allHistory: LogDB[]) {
+function getPlayerWithExtraData(player: PlayerDB, phoneAndBalance: { phone_number: string; balance: string }[]) {
     return {
         ...player,
-       // playerStats: getPlayerStats(allHistory, player.phone_number),
         balance: Number(phoneAndBalance.find(({ phone_number }) => phone_number === player.phone_number)?.balance) || 0
     };
 
@@ -332,11 +310,6 @@ async function fetchSortedPlayers(
     await sql`SELECT phone_number,sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number`
   ).rows as { phone_number: string; balance: string }[]
 
-
-  const allHistory = (
-      await sql`SELECT * FROM history`
-  ).rows as LogDB[];
-
   let results = [];
   switch (sortBy) {
     case 'name':
@@ -345,7 +318,7 @@ async function fetchSortedPlayers(
         SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}
         ORDER BY name ASC
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}`
-      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance, allHistory));
+      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance));
       break;
     case 'balance':
       results = (
@@ -353,7 +326,7 @@ async function fetchSortedPlayers(
         SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}`
       ).rows.sort((a, b) => b.balance - a.balance)
         .slice(offset, offset + ITEMS_PER_PAGE)
-        .map((player) => getPlayerWithExtraData(player, phoneAndBalance, allHistory))
+        .map((player) => getPlayerWithExtraData(player, phoneAndBalance))
       break;
     case 'phone':
       results = (
@@ -361,7 +334,7 @@ async function fetchSortedPlayers(
         SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}
         ORDER BY phone_number ASC
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}`
-      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance, allHistory))
+      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance))
       break;
     case 'notes':
       results = (
@@ -369,7 +342,7 @@ async function fetchSortedPlayers(
         SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}
         ORDER BY notes DESC
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}`
-      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance, allHistory))
+      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance))
       break;
     default:
       results = (
@@ -377,7 +350,7 @@ async function fetchSortedPlayers(
         SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}
         ORDER BY updated_at DESC
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}`
-      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance, allHistory))
+      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance))
   }
 
   return results;
