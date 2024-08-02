@@ -422,7 +422,21 @@
   display: flex;
   justify-content: space-between;
 }
+
+.transparent_background {
+  background: transparent;
+}
+.red_background{
+  background: #FF5555;
+}
+
+
 @media only screen and (max-width: 600px) {
+  .red_background{
+    background: transparent;
+  }
+
+
   .move-up-down-button {
     padding: 0;
     margin: 0;
