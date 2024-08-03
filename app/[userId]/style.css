@@ -432,6 +432,28 @@
 
 
 @media only screen and (max-width: 600px) {
+  .player_page_menu {
+    z-index: 999;
+    width: 80px;
+    height: 100px;
+    background: rgb(0, 112, 243);
+    color: white;
+    position: fixed;
+    right:0;
+    text-align: center;
+    padding-top: 64px;
+    font-weight: bold;
+    border: 1px solid black;
+    transition: top 2s;
+  }
+  .player_page_menu_opened{
+    top:0;
+  }
+
+  .player_page_menu_closed{
+    top:-110px;
+  }
+
   .red_background{
     background: transparent;
   }

@@ -42,19 +42,28 @@ export default async function PlayerPage({
   const player = await fetchPlayerByUserId(params.userId);
   if (!player) {
     return (
-      <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+      <div className="rtl flex h-screen flex-col md:flex-row md:overflow-hidden" style={{ marginTop:30, textAlign: 'center'}}>
         <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
-          <div>No data for this player yet..</div>
-          <div>
-            {/* eslint-disable-next-line react/no-unescaped-entities */}
-            לרישום לטורניר אנא פנה אלינו ל
-            whatsapp: 050-8874068
+          <div>אין מידע עבור שחקן זה</div>
+          <div style={{ marginTop:120}}>
+            לרישום לטורניר אנא פנה אלינו בוואסאפ
+          </div>
+          <div className="flex flex-grow" style={{marginTop: 5, textAlign: 'center', marginRight:70}}>
+
+            <div style={{marginTop:3}}>050-8874068</div>
+            <img
+                src="/whatsapp.png"
+                width={50}
+                height={50}
+                alt="runner"
+            />
+
           </div>
         </div>
       </div>
     );
   }
-  const { rsvpEnabled, playerRsvpEnabled } = await fetchFeatureFlags();
+  const {rsvpEnabled, playerRsvpEnabled} = await fetchFeatureFlags();
   const showRsvp = rsvpEnabled && playerRsvpEnabled;
   const todayTournament = await fetchTournamentByDay();
   const playerCurrentTournamentHistory =

@@ -6,12 +6,9 @@ import {
   PhoneIcon,
   BanknotesIcon,
 } from '@heroicons/react/24/outline';
-import Button from '@/app/ui/client/Button';
 import { createPlayer } from '@/app/lib/actions';
 import { useFormState, useFormStatus } from 'react-dom';
 import React, { useState } from 'react';
-import Spinner from '@/app/ui/client/Spinner';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
 
 export default function CreatePlayerForm({

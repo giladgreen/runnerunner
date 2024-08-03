@@ -1,7 +1,7 @@
 import SideNav from '@/app/ui/client/SideNav';
 import {fetchUserById} from "@/app/lib/data";
-import SignOutButton from "@/app/ui/client/SignOutButton";
 import {signOut} from "@/auth";
+import PlayerPageMenu from "@/app/ui/client/PlayerPageMenu";
 
 export default async function Layout({
   children,
@@ -37,11 +37,12 @@ export default async function Layout({
                 height={50}
                 alt="runner"
             />
-            <SignOutButton playerScreen signOut={async () => {
+            <PlayerPageMenu signout={async () => {
                 'use server';
 
                 await signOut({ redirect: true, redirectTo: '/' });
-            }} />
+            }}
+            />
         </div>
         <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
     </div>
