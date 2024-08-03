@@ -46,5 +46,5 @@ export default async function HomePage({
     );
   }
 
-  return <PlayerPage params={params} />;
+  return <PlayerPage params={params} playerPage/>;
 }

@@ -4,11 +4,19 @@ import { getPlayersPrizesContent } from '@/app/ui/client/helpers';
 
 export default async function PlayersPrizesPage({
   playerPhone,
+    playerPage
 }: {
   playerPhone?: string;
+  playerPage?: boolean;
 }) {
   const { chosenPrizes, deliveredPrizes, readyToBeDeliveredPrizes } =
     await fetchPlayersPrizes(playerPhone);
+
+
+  if (playerPage && !chosenPrizes?.length && !deliveredPrizes?.length && !readyToBeDeliveredPrizes?.length) {
+    return null;
+  }
+
   const prizesInformation = await fetchPrizesInfo();
   const chosenPrizesContent = (await getPlayersPrizesContent(
     chosenPrizes,

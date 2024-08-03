@@ -36,8 +36,10 @@ const YOU_ARE_ALREADY_IN_THE_GAME = 'אתה כבר במשחק';
 
 export default async function PlayerPage({
   params,
+  playerPage
 }: {
   params: { userId: string };
+  playerPage?:boolean;
 }) {
   const player = await fetchPlayerByUserId(params.userId);
   if (!player) {
@@ -216,7 +218,7 @@ export default async function PlayerPage({
             <TournamentsHistoryTable player={player}/>
 
             <div style={{width: 100, height: 10, margin: '10px 0'}}></div>
-            <PlayersPrizesPage playerPhone={player.phone_number}/>
+            <PlayersPrizesPage playerPhone={player.phone_number} playerPage={playerPage}/>
             <div style={{width: 100, height: 10, margin: '10px 0'}}></div>
             <PlayerHistoryTable player={player}/>
         </div>
