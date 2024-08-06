@@ -12,7 +12,10 @@ export default function AreYouSure({
   onCancel: () => void;
 }) {
   return (
-    <div className="confirmation-modal-wrapper rtl" style={{ textAlign: 'right'}}>
+    <div
+      className="confirmation-modal-wrapper rtl"
+      style={{ textAlign: 'right' }}
+    >
       <div className="confirmation-modal">
         <div>
           <b>{text}</b>

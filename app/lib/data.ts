@@ -293,12 +293,19 @@ async function fetchXPlayers(x: string, getXPlayers: () => PlayerDB[]) {
   return result;
 }
 
-function getPlayerWithExtraData(player: PlayerDB, phoneAndBalance: { phone_number: string; balance: string }[]) {
-    return {
-        ...player,
-        balance: Number(phoneAndBalance.find(({ phone_number }) => phone_number === player.phone_number)?.balance) || 0
-    };
-
+function getPlayerWithExtraData(
+  player: PlayerDB,
+  phoneAndBalance: { phone_number: string; balance: string }[],
+) {
+  return {
+    ...player,
+    balance:
+      Number(
+        phoneAndBalance.find(
+          ({ phone_number }) => phone_number === player.phone_number,
+        )?.balance,
+      ) || 0,
+  };
 }
 async function fetchSortedPlayers(
   query: string,
@@ -308,7 +315,7 @@ async function fetchSortedPlayers(
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
   const phoneAndBalance = (
     await sql`SELECT phone_number,sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number`
-  ).rows as { phone_number: string; balance: string }[]
+  ).rows as { phone_number: string; balance: string }[];
 
   let results = [];
   switch (sortBy) {
@@ -324,9 +331,10 @@ async function fetchSortedPlayers(
       results = (
         await sql<PlayerDB>`
         SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}`
-      ).rows.sort((a, b) => b.balance - a.balance)
+      ).rows
+        .sort((a, b) => b.balance - a.balance)
         .slice(offset, offset + ITEMS_PER_PAGE)
-        .map((player) => getPlayerWithExtraData(player, phoneAndBalance))
+        .map((player) => getPlayerWithExtraData(player, phoneAndBalance));
       break;
     case 'phone':
       results = (
@@ -334,7 +342,7 @@ async function fetchSortedPlayers(
         SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}
         ORDER BY phone_number ASC
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}`
-      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance))
+      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance));
       break;
     case 'notes':
       results = (
@@ -342,7 +350,7 @@ async function fetchSortedPlayers(
         SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}
         ORDER BY notes DESC
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}`
-      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance))
+      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance));
       break;
     default:
       results = (
@@ -350,7 +358,7 @@ async function fetchSortedPlayers(
         SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}
         ORDER BY updated_at DESC
         LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}`
-      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance))
+      ).rows.map((player) => getPlayerWithExtraData(player, phoneAndBalance));
   }
 
   return results;

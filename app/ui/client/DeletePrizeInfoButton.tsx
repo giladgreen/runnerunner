@@ -31,7 +31,7 @@ export default function DeletePrizeInfoButton({
           className="my-button delete-prize-button"
           style={{ background: 'orange' }}
         >
-            {text}
+          {text}
         </button>
       </div>
       {showConfirmation && (

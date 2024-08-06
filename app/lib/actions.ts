@@ -682,7 +682,7 @@ export async function givePlayerPrizeOrCredit(
         '## givePlayerPrizeOrCredit Player has already received prize',
       );
       return {
-        message:'איראה שגיאה',
+        message: 'איראה שגיאה',
       };
     }
     const tournament = tournamentResult.rows[0];

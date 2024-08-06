@@ -7,7 +7,8 @@ import {
   WrenchScrewdriverIcon,
   ArrowDownOnSquareIcon,
   GiftIcon,
-  InformationCircleIcon, PuzzlePieceIcon,
+  InformationCircleIcon,
+  PuzzlePieceIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

@@ -414,7 +414,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100VW;
+  width: 100vw;
   height: 60px;
   color: white;
   background: rgb(0, 112, 243);
@@ -426,38 +426,49 @@
 .transparent_background {
   background: transparent;
 }
-.red_background{
-  background: #FF5555;
+.red_background {
+  background: #ff5555;
 }
 
+.player_page_menu {
+  z-index: 999;
+  width: 80px;
+  height: 100px;
+  background: rgb(0, 112, 243);
+  color: white;
+  position: fixed;
+  right: 0;
+  text-align: center;
+  padding-top: 64px;
+  font-weight: bold;
+  border: 1px solid black;
+  transition: top 2s;
+}
+.player_page_menu_opened {
+  top: 0;
+}
 
+.player_page_menu_closed {
+  top: -210px;
+}
 @media only screen and (max-width: 600px) {
   .player_page_menu {
-    z-index: 999;
     width: 80px;
     height: 100px;
-    background: rgb(0, 112, 243);
-    color: white;
-    position: fixed;
-    right:0;
-    text-align: center;
+    right: 0;
     padding-top: 64px;
-    font-weight: bold;
-    border: 1px solid black;
-    transition: top 2s;
   }
-  .player_page_menu_opened{
-    top:0;
+  .player_page_menu_opened {
+    top: 0;
   }
 
-  .player_page_menu_closed{
-    top:-110px;
+  .player_page_menu_closed {
+    top: -110px;
   }
 
-  .red_background{
+  .red_background {
     background: transparent;
   }
-
 
   .move-up-down-button {
     padding: 0;
@@ -533,7 +544,6 @@
   }
 
   .give-credit-modal-button {
-
     font-size: 12px;
     img {
       max-width: unset;

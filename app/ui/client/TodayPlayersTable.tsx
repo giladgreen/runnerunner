@@ -167,13 +167,13 @@ export default function TodayPlayersTable({
                       <div>
                         <div className="mb-2 flex items-center">
                           <Image
-                              src={player.image_url}
-                              className="zoom-on-hover mr-2 rounded-full"
-                              width={40}
-                              height={40}
-                              alt={`${player.name}'s profile picture`}
+                            src={player.image_url}
+                            className="zoom-on-hover mr-2 rounded-full"
+                            width={40}
+                            height={40}
+                            alt={`${player.name}'s profile picture`}
                           />
-                          <div style={{margin: '0 6px', zoom: 1.5}}>
+                          <div style={{ margin: '0 6px', zoom: 1.5 }}>
                             {player.name}
                           </div>
                         </div>
@@ -182,27 +182,27 @@ export default function TodayPlayersTable({
                         </div>
                       </div>
                       {rsvpEnabled && isRsvpRequired && (
-                          <div className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                            <RSVPButton player={player}/>
-                          </div>
+                        <div className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
+                          <RSVPButton player={player} />
+                        </div>
                       )}
                       <div className="flex justify-end gap-3">
                         <OpenCreditModalButton
-                            players={playersWithEnoughCredit}
-                            player={player}
-                            tournaments={tournaments}
-                            userId={userId}
-                            setQuery={setQuery}
+                          players={playersWithEnoughCredit}
+                          player={player}
+                          tournaments={tournaments}
+                          userId={userId}
+                          setQuery={setQuery}
                         />
 
                         <OpenPositionModalButton
-                            player={player}
-                            initPosition={minPosition}
+                          player={player}
+                          initPosition={minPosition}
                         />
 
                         <OpenPrizeModalButton
-                            player={player}
-                            prizesInformation={prizesInformation}
+                          player={player}
+                          prizesInformation={prizesInformation}
                         />
                       </div>
                     </div>
@@ -211,13 +211,13 @@ export default function TodayPlayersTable({
                       <div>
                         <Link href={getLink(player)}>
                           <span
-                              className="text-xl font-medium"
-                              style={{
-                                color: formatCurrencyColor(player.balance),
-                              }}
+                            className="text-xl font-medium"
+                            style={{
+                              color: formatCurrencyColor(player.balance),
+                            }}
                           >
                             <span>קרדיט:</span>
-                            <b style={{marginRight: 5}}>
+                            <b style={{ marginRight: 5 }}>
                               {player.balance < 0 ? 'חוב של' : ''}
                             </b>
                             <b> {formatCurrency(Math.abs(player.balance))}</b>

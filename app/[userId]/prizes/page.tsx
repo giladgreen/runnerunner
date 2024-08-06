@@ -1,8 +1,8 @@
 import PlayersPrizesPage from '@/app/[userId]/prizes/PlayersPrizesPage';
 import { fetchUserById } from '@/app/lib/data';
 import React from 'react';
-import Link from "next/link";
-import {Button} from "primereact/button";
+import Link from 'next/link';
+import { Button } from 'primereact/button';
 
 export default async function PrizesPage({
   params,
@@ -25,15 +25,17 @@ export default async function PrizesPage({
       </div>
     );
   }
-  return <div className="rtl" >
-    <a href={`/${params.userId}/configurations/prizes`} style={{ marginTop: -15, color: 'blue'}}>
-      <u>
-
-        הגדרות פרסים
-      </u>
+  return (
+    <div className="rtl">
+      <a
+        href={`/${params.userId}/configurations/prizes`}
+        style={{ marginTop: -15, color: 'blue' }}
+      >
+        <u>הגדרות פרסים</u>
       </a>
-  <div style={{ marginTop: 30}}>
-    <PlayersPrizesPage />
-  </div>
-  </div>;
+      <div style={{ marginTop: 30 }}>
+        <PlayersPrizesPage />
+      </div>
+    </div>
+  );
 }

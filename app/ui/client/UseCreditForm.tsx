@@ -129,10 +129,11 @@ export default function UseCreditForm({
   }
 
   return (
-    <div className="edit-player-modal-inner-div rtl" style={{ textAlign: 'right'}}>
-
+    <div
+      className="edit-player-modal-inner-div rtl"
+      style={{ textAlign: 'right' }}
+    >
       <form action={dispatch} className="form-control">
-
         <div className="form-inner-control  rounded-md p-4 md:p-6">
           {/*  balance change */}
           <div className="mb-4">
@@ -277,11 +278,14 @@ export default function UseCreditForm({
             </div>
           )}
         </div>
-        { maxRebuyReached && <div style={{ color: 'red'}}>* שים לב: השחקן ניצל כבר את כל הכניסות שלו</div>}
+        {maxRebuyReached && (
+          <div style={{ color: 'red' }}>
+            * שים לב: השחקן ניצל כבר את כל הכניסות שלו
+          </div>
+        )}
         <div className="mt-6 flex justify-end gap-4">
           <SubmitButton />
         </div>
-
       </form>
       {hide && <CancelButton />}
     </div>

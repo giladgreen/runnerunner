@@ -15,7 +15,8 @@ import {
   setPlayerPosition,
   createPlayerUsageLog,
   State,
-  createPlayerNewCreditLog, deleteBug,
+  createPlayerNewCreditLog,
+  deleteBug,
 } from '../../app/lib/actions';
 
 function getFormData(data: any) {
@@ -76,7 +77,7 @@ describe('actions', () => {
 
         const bugsAfter2: BugDB[] = await fetchAllBugs();
         expect(bugsAfter2.length).toEqual(2);
-        const secondBug = bugsAfter2.find(b => b.id !== bug.id);
+        const secondBug = bugsAfter2.find((b) => b.id !== bug.id);
 
         await deleteBug({ prevPage: 'prevPage', id: bug.id });
 
@@ -145,7 +146,7 @@ describe('actions', () => {
 
         const secondTryResult = await signUp(null, 'prevState', formData);
         expect(secondTryResult).toEqual(
-            'משתמש בעל אותו מספר טלפון כבר קיים במערכת',
+          'משתמש בעל אותו מספר טלפון כבר קיים במערכת',
         );
       });
     });

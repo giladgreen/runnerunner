@@ -2,9 +2,13 @@ import { lusitana } from '@/app/ui/fonts';
 import {
   ArrowDownOnSquareIcon,
   BanknotesIcon,
-  GiftIcon,FlagIcon,
-  UserGroupIcon,PuzzlePieceIcon,
-  UserIcon,ArchiveBoxArrowDownIcon, ArrowDownOnSquareStackIcon
+  GiftIcon,
+  FlagIcon,
+  UserGroupIcon,
+  PuzzlePieceIcon,
+  UserIcon,
+  ArchiveBoxArrowDownIcon,
+  ArrowDownOnSquareStackIcon,
 } from '@heroicons/react/24/outline';
 import { DoubleTicksIcon, TickIcon } from '@/app/ui/icons';
 const iconMap = {

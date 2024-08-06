@@ -7,10 +7,10 @@ import Button from '@/app/ui/client/Button';
 import { useFormState, useFormStatus } from 'react-dom';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import Spinner from '@/app/ui/client/Spinner';
-import DeletePrizeInfoButton from "@/app/ui/client/DeletePrizeInfoButton";
+import DeletePrizeInfoButton from '@/app/ui/client/DeletePrizeInfoButton';
 
 export default function EditPrizeInfoForm({
-    userId,
+  userId,
   prize,
   prevPage,
 }: {
@@ -131,13 +131,13 @@ export default function EditPrizeInfoForm({
           <UpdatePrizeButton />
         </div>
       </form>
-     <div className="cellular" style={{ marginTop:50, marginRight: 30}} >
-       <DeletePrizeInfoButton
-           prize={prize}
-           userId={userId}
-           text={"מחיקת הגדרות פרס"}
-       />
-     </div>
+      <div className="cellular" style={{ marginTop: 50, marginRight: 30 }}>
+        <DeletePrizeInfoButton
+          prize={prize}
+          userId={userId}
+          text={'מחיקת הגדרות פרס'}
+        />
+      </div>
     </div>
   );
 }

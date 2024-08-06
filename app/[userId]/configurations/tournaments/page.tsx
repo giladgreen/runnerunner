@@ -29,7 +29,10 @@ export default async function TournamentsSetupPage({
   const tournaments = await fetchTournaments();
 
   return (
-    <div className="config-section rtl" style={{ textAlign: 'right', marginRight: -40 }}>
+    <div
+      className="config-section rtl"
+      style={{ textAlign: 'right', marginRight: -40 }}
+    >
       <div style={{ textAlign: 'right', marginRight: 50 }}>
         <b>
           <u>טורנירים:</u>
@@ -46,49 +49,49 @@ export default async function TournamentsSetupPage({
           <tr>
             <th
               scope="col"
-              className="px-4 py-5 font-medium sm:pl-6 smaller-on-mobile "
+              className="smaller-on-mobile px-4 py-5 font-medium sm:pl-6 "
               style={{ textAlign: 'right' }}
             >
               יום
             </th>
             <th
               scope="col"
-              className=" px-2 py-5 font-medium smaller-on-mobile"
+              className=" smaller-on-mobile px-2 py-5 font-medium"
               style={{ textAlign: 'right' }}
             >
               שם
             </th>
             <th
               scope="col"
-              className=" px-3 py-5 font-medium smaller-on-mobile"
+              className=" smaller-on-mobile px-3 py-5 font-medium"
               style={{ textAlign: 'right' }}
             >
               עלות כניסה
             </th>
             <th
               scope="col"
-              className=" px-3 py-5 font-medium smaller-on-mobile"
+              className=" smaller-on-mobile px-3 py-5 font-medium"
               style={{ textAlign: 'right' }}
             >
               עלות כניסה נוספת
             </th>
             <th
               scope="col"
-              className="px-3 py-5 font-medium smaller-on-mobile"
+              className="smaller-on-mobile px-3 py-5 font-medium"
               style={{ textAlign: 'right' }}
             >
               מספר שחקנים מירבי
             </th>
             <th
               scope="col"
-              className="px-3 py-5 font-medium smaller-on-mobile"
+              className="smaller-on-mobile px-3 py-5 font-medium"
               style={{ textAlign: 'right' }}
             >
               נדרש אישור הגעה
             </th>
             <th
               scope="col"
-              className="px-3 py-5 font-medium smaller-on-mobile"
+              className="smaller-on-mobile px-3 py-5 font-medium"
               style={{ textAlign: 'right' }}
             >
               <span className="sr-only">ערוך</span>
@@ -103,19 +106,24 @@ export default async function TournamentsSetupPage({
             >
               <td className="cellular smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
                 <a
-                    href={`/${
-                        params.userId
-                    }/configurations/tournaments/${tournament.day.toLowerCase()}/edit`}
-                    className="smaller-on-mobile rounded-md border p-2 hover:bg-gray-100"
-                    style={{zoom:1.2, color: 'blue', border: '0 solid transparent'}}
+                  href={`/${
+                    params.userId
+                  }/configurations/tournaments/${tournament.day.toLowerCase()}/edit`}
+                  className="smaller-on-mobile rounded-md border p-2 hover:bg-gray-100"
+                  style={{
+                    zoom: 1.2,
+                    color: 'blue',
+                    border: '0 solid transparent',
+                  }}
                 >
-                  <b><u  >
-                    {
-                    // @ts-ignore
-                    TRANSLATIONS[tournament.day].replace('יום', '')
-
-                  }
-                  </u></b>
+                  <b>
+                    <u>
+                      {
+                        // @ts-ignore
+                        TRANSLATIONS[tournament.day].replace('יום', '')
+                      }
+                    </u>
+                  </b>
                 </a>
               </td>
               <td className="wide-screen smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">

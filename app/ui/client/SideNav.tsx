@@ -50,11 +50,13 @@ export default async function SideNav({ userId }: { userId: string }) {
           style={{ width: isRegularUser ? '65vw' : '5vw' }}
         ></div>
 
-          <SignOutButton signOut={async () => {
-              'use server';
+        <SignOutButton
+          signOut={async () => {
+            'use server';
 
-              await signOut({ redirect: true, redirectTo: '/' });
-          }} />
+            await signOut({ redirect: true, redirectTo: '/' });
+          }}
+        />
       </div>
     </div>
   );

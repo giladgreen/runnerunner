@@ -120,13 +120,16 @@ export default async function PrizesInfoPage({
                     className=" smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3"
                     style={{ textAlign: 'right' }}
                   >
-                      <Link
-
-                          href={`/${params.userId}/configurations/prizes/${prize.id}/edit`}
-                      >
-                          <b><u className="cellular"   style={{ color: 'blue' }}>{prize.name}</u></b>
-                          <b className="wide-screen">{prize.name}</b>
-                      </Link>
+                    <Link
+                      href={`/${params.userId}/configurations/prizes/${prize.id}/edit`}
+                    >
+                      <b>
+                        <u className="cellular" style={{ color: 'blue' }}>
+                          {prize.name}
+                        </u>
+                      </b>
+                      <b className="wide-screen">{prize.name}</b>
+                    </Link>
                   </td>
 
                   <td

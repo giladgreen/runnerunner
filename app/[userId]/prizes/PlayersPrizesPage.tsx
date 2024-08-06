@@ -4,7 +4,7 @@ import { getPlayersPrizesContent } from '@/app/ui/client/helpers';
 
 export default async function PlayersPrizesPage({
   playerPhone,
-    playerPage
+  playerPage,
 }: {
   playerPhone?: string;
   playerPage?: boolean;
@@ -12,8 +12,12 @@ export default async function PlayersPrizesPage({
   const { chosenPrizes, deliveredPrizes, readyToBeDeliveredPrizes } =
     await fetchPlayersPrizes(playerPhone);
 
-
-  if (playerPage && !chosenPrizes?.length && !deliveredPrizes?.length && !readyToBeDeliveredPrizes?.length) {
+  if (
+    playerPage &&
+    !chosenPrizes?.length &&
+    !deliveredPrizes?.length &&
+    !readyToBeDeliveredPrizes?.length
+  ) {
     return null;
   }
 
@@ -25,12 +29,12 @@ export default async function PlayersPrizesPage({
   )) as JSX.Element;
   const deliveredPrizesContent = (await getPlayersPrizesContent(
     deliveredPrizes,
-      prizesInformation,
+    prizesInformation,
     false,
   )) as JSX.Element;
   const readyToBeDeliveredPrizesContent = (await getPlayersPrizesContent(
     readyToBeDeliveredPrizes,
-      prizesInformation,
+    prizesInformation,
     false,
   )) as JSX.Element;
   if (

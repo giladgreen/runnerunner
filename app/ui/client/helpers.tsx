@@ -23,8 +23,7 @@ export async function getFinalTablePlayersContent(
   const finalTablePlayers = await fetchFinalTablePlayers(date);
   const prizesInformation = await fetchPrizesInfo();
   const showSetPrizesCreditModalButton =
-    isTournamentsDataPage &&
-    finalTablePlayers.find((p) => !p.hasReceived);
+    isTournamentsDataPage && finalTablePlayers.find((p) => !p.hasReceived);
   if (!finalTablePlayers || finalTablePlayers.length === 0) return null;
   const textClass = isTournamentsDataPage
     ? 'text-tournaments-data-page'
@@ -188,8 +187,7 @@ export async function getPlayersPrizesContent(
               {!personal &&
                 !currentTournament &&
                 !playersPrize.delivered &&
-                !playersPrize.ready_to_be_delivered &&
-                 (
+                !playersPrize.ready_to_be_delivered && (
                   <SetPrizeAsReadyToBeDelivered id={playersPrize.id} />
                 )}
               {!personal &&
@@ -228,33 +226,32 @@ export async function getPlayersPrizesContent(
               <div>{playersPrize!.prize}</div>
 
               {!personal &&
-                  !currentTournament &&
-                  !playersPrize.delivered &&
-                  playersPrize.ready_to_be_delivered && (
-                      <SetPrizeAsDelivered id={playersPrize.id} />
-                  )}
+                !currentTournament &&
+                !playersPrize.delivered &&
+                playersPrize.ready_to_be_delivered && (
+                  <SetPrizeAsDelivered id={playersPrize.id} />
+                )}
               {!personal &&
-                  !currentTournament &&
-                  !playersPrize.delivered &&
-                  !playersPrize.ready_to_be_delivered &&
-                  (
-                      <SetPrizeAsReadyToBeDelivered id={playersPrize.id} />
-                  )}
+                !currentTournament &&
+                !playersPrize.delivered &&
+                !playersPrize.ready_to_be_delivered && (
+                  <SetPrizeAsReadyToBeDelivered id={playersPrize.id} />
+                )}
               {!personal &&
-                  !currentTournament &&
-                  !playersPrize.delivered &&
-                  playersPrize.ready_to_be_delivered && (
-                      <SetPrizeAsNotReadyToBeDelivered id={playersPrize.id} />
-                  )}
+                !currentTournament &&
+                !playersPrize.delivered &&
+                playersPrize.ready_to_be_delivered && (
+                  <SetPrizeAsNotReadyToBeDelivered id={playersPrize.id} />
+                )}
               {!personal && (
-                  <div style={{ margin: 0 }}>
-                    <OpenConvertPrizeToCreditButton
-                        prizeId={playersPrize.id}
-                        prizeName={playersPrize.prize}
-                        userId={userId}
-                        prizesInformation={prizesInformation}
-                    />
-                  </div>
+                <div style={{ margin: 0 }}>
+                  <OpenConvertPrizeToCreditButton
+                    prizeId={playersPrize.id}
+                    prizeName={playersPrize.prize}
+                    userId={userId}
+                    prizesInformation={prizesInformation}
+                  />
+                </div>
               )}
             </div>
           </div>
