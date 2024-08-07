@@ -820,12 +820,14 @@ export async function fetchTournaments() {
   noStore();
   try {
     const results = await getAllTournaments();
+
+
+
     results.forEach((tournament) => {
       if (results.find(t => t.day === tournament.day && t.id !== tournament.id)) {
         tournament.day_has_more_then_one = true;
       }
     })
-
 
     methodEnd('fetchTournaments');
     return results;

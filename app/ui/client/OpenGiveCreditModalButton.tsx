@@ -77,7 +77,7 @@ function SetGivePrizeForm({
     prevPage,
     stringDate,
   });
-  console.log('## userId', userId);
+
   // @ts-ignore
   const [_state, dispatch] = useFormState(
     // @ts-ignore

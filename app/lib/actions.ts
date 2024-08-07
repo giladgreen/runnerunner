@@ -726,8 +726,7 @@ export async function givePlayerPrizeOrCredit(
           await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`
         ).rows[0];
 
-        console.log('## userId', userId);
-        console.log('## userResult', userResult);
+
 
         const amount = creditWorth - prizeWorth;
         note += ` - `;
@@ -943,6 +942,77 @@ export async function updateTournament(
           `day:${t.day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`,
       );
     }
+
+  } catch (error) {
+    console.error('## updateTournament error', error);
+    return { message: 'איראה שגיאה' };
+  } finally {
+    revalidatePath(prevPage);
+    redirect(prevPage);
+  }
+}
+
+export async function createTournament(
+  { prevPage }: { prevPage: string },
+  _prevState: State,
+  formData: FormData,
+) {
+  noStore();
+  const CreateTournament = z.object({
+    day: z.string(),
+    buy_in: z.coerce.number(),
+    re_buy: z.coerce.number(),
+    max_players: z.coerce.number(),
+    rsvp_required: z.coerce.boolean(),
+    name: z.string(),
+  });
+
+  const validatedFields = CreateTournament.safeParse({
+    day: formData.get('day'),
+    name: formData.get('name'),
+    buy_in: formData.get('buy_in'),
+    re_buy: formData.get('re_buy'),
+    max_players: formData.get('max_players'),
+    rsvp_required: formData.get('rsvp_required'),
+  });
+
+  if (!validatedFields.success) {
+    console.error(
+      '## createTournament error',
+      validatedFields.error.flatten().fieldErrors,
+    );
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'איראה שגיאה',
+    };
+  }
+
+  const { day, name, buy_in, re_buy, max_players, rsvp_required } =
+    validatedFields.data;
+  const date = new Date().toISOString();
+
+  try {
+
+    const i = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ].indexOf(day) + 1
+
+
+    await sql`INSERT INTO tournaments (day,name, i, buy_in,re_buy,max_players, rsvp_required ) 
+        VALUES (${day},${name},${ i},${ buy_in},${re_buy},${max_players},${ rsvp_required})`;
+
+      sendEmail(
+          TARGET_MAIL,
+          'new tournaments created',
+          `day:${day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`,
+      );
+
 
   } catch (error) {
     console.error('## updateTournament error', error);
@@ -1186,7 +1256,7 @@ export async function convertPrizeToCredit(
     const { prizeId, prevPage, userId } = clientData;
 
     const amount = Number(formData.get('amount') as string);
-    console.log('## amount', amount);
+
     const prize = (
       await sql<PrizeDB>`SELECT * FROM prizes WHERE id = ${prizeId}`
     ).rows[0];
