@@ -125,11 +125,12 @@ WHERE P.phone_number = ${phoneNumber};`;
   return player;
 }
 
-async function getTodayTournament(day?: string) {
+async function getTodayTournaments(day?: string) {
   const dayOfTheWeek = day ?? getDayOfTheWeek();
   const todayTournamentResult =
     await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${dayOfTheWeek}`;
-  return todayTournamentResult.rows[0];
+
+  return todayTournamentResult.rows;
 }
 
 async function getAllTournaments() {
@@ -138,10 +139,10 @@ async function getAllTournaments() {
   return tournamentsResults.rows;
 }
 
-async function getDateWinnersRecord(date: string) {
+async function getDateWinnersRecords(date: string) {
   const winnersResult =
     await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
-  return winnersResult.rows[0];
+  return winnersResult.rows;
 }
 
 export async function getAllImages() {
@@ -179,12 +180,12 @@ export async function getAllPlayers() {
  JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number) AS H
     ON P.phone_number = H.phone_number`;
 
-  const [allPlayersResult, rsvpResults, todayHistoryUnfiltered, winnersRecord] =
+  const [allPlayersResult, rsvpResults, todayHistoryUnfiltered, winnersRecords] =
     await Promise.all([
       playersPromise,
       sql<RSVPDB>`SELECT * FROM rsvp;`,
       getTodayHistory(),
-      getDateWinnersRecord(todayDate),
+      getDateWinnersRecords(todayDate),
     ]);
   const allPlayers = allPlayersResult.rows;
 
@@ -193,7 +194,7 @@ export async function getAllPlayers() {
   const todayHistory = todayHistoryUnfiltered.filter(
     ({ type }) => type != 'prize' && type != 'credit_to_other',
   );
-
+const winnersRecord = winnersRecords[0];//TODO::: use all tournaments
   const winnersObject = winnersRecord ? JSON.parse(winnersRecord.winners) : {};
 
   allPlayers.forEach((player) => {
@@ -422,11 +423,11 @@ export async function fetchRSVPAndArrivalData() {
   methodStart();
   noStore();
   try {
-    const [allPlayers, todayHistoryWithZero, todayTournament] =
+    const [allPlayers, todayHistoryWithZero, todayTournaments] =
       await Promise.all([
         getAllPlayers(),
         getTodayHistory(),
-        getTodayTournament(),
+        getTodayTournaments(),
       ]);
     const todayHistory = todayHistoryWithZero.filter(
       (item) => item.change < 0 || item.type === 'credit_by_other',
@@ -435,6 +436,7 @@ export async function fetchRSVPAndArrivalData() {
       (player) => player.rsvpForToday,
     ).length;
 
+    const todayTournament = todayTournaments[0];//TODO::: use all tournaments
     const todayTournamentMaxPlayers = todayTournament.rsvp_required
       ? todayTournament?.max_players
       : null;
@@ -503,7 +505,8 @@ export async function fetchFinalTablePlayers(stringDate?: string) {
   noStore();
   try {
     const date = stringDate ?? getTodayShortDate();
-    const winnersResult = await getDateWinnersRecord(date);
+    const winnersResults = await getDateWinnersRecords(date);
+    const winnersResult = winnersResults[0];//TODO::: use all tournaments
     const winnersObject = winnersResult
       ? JSON.parse(winnersResult.winners)
       : {};
@@ -645,73 +648,7 @@ export async function fetchPlayersPagesCount(query: string) {
     throw new Error('Failed to fetch total number of players.');
   }
 }
-export async function fetchTodayPlayers(query?: string) {
-  methodStart();
-  noStore();
-  try {
-    const todayDate = getTodayShortDate();
 
-    const [winnersRecord, tournament, players, rsvp, todayHistoryUnfiltered] =
-      await Promise.all([
-        getDateWinnersRecord(todayDate),
-        getTodayTournament(),
-        getAllPlayers(),
-        getAllRsvps(),
-        getTodayHistory(),
-      ]);
-
-    const winnersObject = winnersRecord
-      ? JSON.parse(winnersRecord.winners)
-      : {};
-    const rsvp_required = tournament.rsvp_required;
-    const todayHistory = todayHistoryUnfiltered.filter(
-      ({ type }) => type != 'prize' && type != 'credit_to_other',
-    );
-
-    players.forEach((player) => {
-      const playerItems = todayHistory.filter(
-        ({ phone_number, change, type }) =>
-          phone_number === player.phone_number &&
-          (change < 0 || type === 'credit_by_other'),
-      ) as LogDB[];
-
-      player.arrived = playerItems.length > 0;
-      player.entries = playerItems.length;
-
-      player.name = player.name.trim();
-      player.historyLog = playerItems;
-
-      // @ts-ignore
-      player.position = winnersObject[player.phone_number]?.position || 0;
-      player.balance = Number(player.balance);
-
-      player.rsvps = rsvp
-        .filter(({ phone_number }) => phone_number === player.phone_number)
-        .map(({ date }) => date);
-      player.rsvpForToday = Boolean(
-        player.rsvps.find((date) => date === todayDate),
-      );
-    });
-
-    // @ts-ignore
-    const results = players.filter(
-      (p) =>
-        p.arrived ||
-        p.rsvpForToday ||
-        (query &&
-          query.length > 0 &&
-          (p.name.includes(query) || p.phone_number.includes(query))),
-    );
-
-    results.sort(nameComparator);
-    methodEnd('fetchTodayPlayers');
-    return results;
-  } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchTodayPlayers with error');
-    throw new Error('Failed to fetch the fetchTodayPlayers.');
-  }
-}
 
 export async function fetchTournamentsData() {
   methodStart();
@@ -882,9 +819,16 @@ export async function fetchTournaments() {
   methodStart();
   noStore();
   try {
-    const result = getAllTournaments();
+    const results = await getAllTournaments();
+    results.forEach((tournament) => {
+      if (results.find(t => t.day === tournament.day && t.id !== tournament.id)) {
+        tournament.day_has_more_then_one = true;
+      }
+    })
+
+
     methodEnd('fetchTournaments');
-    return result;
+    return results;
   } catch (error) {
     console.error('Database Error:', error);
     methodEnd('fetchTournaments with error');
@@ -949,34 +893,47 @@ export async function fetchPlayerCurrentTournamentHistory(phoneNumber: string) {
   methodStart();
   noStore();
   try {
-    const dayName = new Date().toLocaleString('en-us', { weekday: 'long' });
-
     const todayHistory = await getTodayHistory();
-    const result = todayHistory.filter(
+    const results = todayHistory.filter(
       ({ phone_number }) => phone_number === phoneNumber,
     );
     methodEnd('fetchPlayerCurrentTournamentHistory');
-    return result;
+    return results;
   } catch (error) {
     console.error('Database Error:', error);
-    methodEnd('fetchTournamentByDay with error');
-    throw new Error('Failed to fetchTournamentById.');
+    methodEnd('fetchPlayerCurrentTournamentHistory with error');
+    throw new Error('Failed to fetchPlayerCurrentTournamentHistory.');
   }
 }
-export async function fetchTournamentByDay(day?: string) {
+export async function fetchTournamentByTournamentId(tournamentId: string) {
+  methodStart();
+  noStore();
+  try {
+
+    const result = await sql<TournamentDB>`SELECT * FROM tournaments WHERE id = ${tournamentId}`;
+
+    methodEnd('fetchTournamentByTournamentId');
+    return result.rows[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    methodEnd('fetchTournamentByTournamentId with error');
+    throw new Error('Failed to fetchTournamentByTournamentId.');
+  }
+}
+export async function fetchTournamentsByDay(day?: string) {
   methodStart();
   noStore();
   try {
     const dayName =
       day ?? new Date().toLocaleString('en-us', { weekday: 'long' });
 
-    const result = await getTodayTournament(dayName);
-    methodEnd('fetchTournamentByDay');
-    return result;
+    const results = await getTodayTournaments(dayName);
+    methodEnd('fetchTournamentsByDay');
+    return results;
   } catch (error) {
     console.error('Database Error:', error);
-    methodEnd('fetchTournamentByDay with error');
-    throw new Error('Failed to fetchTournamentById.');
+    methodEnd('fetchTournamentsByDay with error');
+    throw new Error('Failed to fetchTournamentsById.');
   }
 }
 

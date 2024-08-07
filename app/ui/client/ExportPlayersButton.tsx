@@ -8,7 +8,7 @@ let lastSave = 0;
 function saveOtherDataToFile(
   playersPlaces: PlayerDB[],
   prizes: PrizeDB[],
-  tournament: TournamentDB,
+  tournaments: TournamentDB[],
   worker?: boolean,
 ) {
   if (worker) {
@@ -45,8 +45,8 @@ ${prizes
   )
   .join('\n')}`
     : '';
-
-  const fileData = `${tournament.name}
+//TODO::: use all tournaments
+  const fileData = `${tournaments[0].name}
 
 ${placesData}
 
@@ -106,12 +106,12 @@ export default function ExportPlayersButton({
   players,
   playersPlaces,
   worker,
-  tournament,
+  tournaments,
   prizes,
 }: {
   players: PlayerDB[];
   playersPlaces: PlayerDB[];
-  tournament: TournamentDB;
+  tournaments: TournamentDB[];
   prizes: PrizeDB[];
   worker?: boolean;
 }) {
@@ -121,7 +121,7 @@ export default function ExportPlayersButton({
         style={{ width: '100%', textAlign: 'center' }}
         onClick={() => {
           savePlayersDataToFile(players);
-          saveOtherDataToFile(playersPlaces, prizes, tournament, worker);
+          saveOtherDataToFile(playersPlaces, prizes, tournaments, worker);
         }}
       >
         <div style={{ textAlign: 'center', width: '100%' }}>לחץ כאן</div>

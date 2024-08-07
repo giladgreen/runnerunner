@@ -1,16 +1,15 @@
 import {
   fetchAllBugs,
   fetchAllPlayersForExport,
-  fetchFeatureFlags,
   fetchFinalTablePlayers,
   fetchPlayersPrizes,
-  fetchTournamentByDay,
+  fetchTournamentsByDay,
   fetchUserById,
 } from '@/app/lib/data';
 import ImportPlayersButton from '@/app/ui/client/ImportPlayersButton';
 import ExportPlayersButton from '@/app/ui/client/ExportPlayersButton';
 import { BugDB, PlayerDB } from '@/app/lib/definitions';
-import React, { Suspense } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import CreateBugForm from '@/app/ui/client/CreateBugForm';
 import { formatDateToLocal } from '@/app/lib/utils';
@@ -147,7 +146,7 @@ export default async function ConfigurationPage({
   const players = await fetchAllPlayersForExport();
   // const images = await fetchAllImagesForExport();
   const playersPlaces = await fetchFinalTablePlayers();
-  const tournament = await fetchTournamentByDay();
+  const tournaments = await fetchTournamentsByDay();
   const { chosenPrizes } = await fetchPlayersPrizes();
   const prizes = chosenPrizes;
 
@@ -171,7 +170,7 @@ export default async function ConfigurationPage({
             <ExportPlayersButton
               players={players as PlayerDB[]}
               playersPlaces={playersPlaces}
-              tournament={tournament}
+              tournaments={tournaments}
               prizes={prizes}
             />
           }

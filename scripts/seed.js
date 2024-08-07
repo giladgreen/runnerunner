@@ -6,11 +6,12 @@ const bcrypt = require('bcrypt');
 
 async function seedTournaments(client) {
   try {
+
     // Create the "users" table if it doesn't exist
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS tournaments (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-        day TEXT NOT NULL UNIQUE,
+        day TEXT NOT NULL,
         name TEXT NOT NULL,
         i INT NOT NULL,
         buy_in INT NOT NULL,
@@ -20,22 +21,35 @@ async function seedTournaments(client) {
         updated_at timestamp NOT NULL DEFAULT now()
       );
     `;
+    // Create the "users" table if it doesn't exist
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS deleted_tournaments (
+        id UUID PRIMARY KEY NOT NULL,
+        day TEXT NOT NULL,
+        name TEXT NOT NULL,
+        i INT NOT NULL,
+        buy_in INT NOT NULL,
+        re_buy INT NOT NULL,
+        max_players INT NOT NULL,
+        rsvp_required BOOLEAN NOT NULL,
+        deleted_at timestamp NOT NULL DEFAULT now(),
+        deleted_by TEXT
+      );
+    `;
 
     console.log(`Created "tournaments" table`);
-    const t = await client.sql`SELECT * FROM tournaments`;
-    if (t.rows.length > 0) {
-      return;
-    }
+    const existingTournaments = (await client.sql`SELECT * FROM tournaments`).rows;
+
     // Insert data into the "users" table
     const insertedTournaments = await Promise.all(
-      tournaments.map(async (tournament, index) => {
+      tournaments.filter(tournament => !existingTournaments.find(et => et.name === tournament.name && et.day === tournament.day)).map(async (tournament) => {
         return client.sql`
         INSERT INTO tournaments (day, name, buy_in, re_buy, max_players, rsvp_required,i)
         VALUES (${tournament.day}, ${tournament.name}, ${
           tournament.buy_in
         }, ${Math.max(tournament.buy_in - 100, 0)}, ${tournament.max_players},${
           tournament.rsvp_required
-        }, ${index + 1});
+        }, ${tournament.i});
       `;
       }),
     );
@@ -235,10 +249,12 @@ async function seedHistory(client) {
 
 async function seedWinners(client) {
   try {
+
     // Create the "winners" table if it doesn't exist
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS winners (
-         date VARCHAR(20) PRIMARY KEY,
+         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+         date VARCHAR(20),
          tournament_name TEXT NOT NULL,
          winners TEXT NOT NULL
       );

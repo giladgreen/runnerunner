@@ -3,8 +3,7 @@ import {
   fetchFeatureFlags,
   fetchPlayerByUserId,
   fetchRsvpCountForTodayTournament,
-  fetchTournamentByDay,
-  fetchPlayerCurrentTournamentHistory,
+  fetchPlayerCurrentTournamentHistory, fetchTournamentsByDay,
 } from '@/app/lib/data';
 import Image from 'next/image';
 import HistoryTable from '@/app/ui/client/HistoryTable';
@@ -66,7 +65,8 @@ export default async function PlayerPage({
   }
   const { rsvpEnabled, playerRsvpEnabled } = await fetchFeatureFlags();
   const showRsvp = rsvpEnabled && playerRsvpEnabled;
-  const todayTournament = await fetchTournamentByDay();
+  const todayTournaments = await fetchTournamentsByDay();
+  const todayTournament = todayTournaments[0];//TODO::: use all tournaments
   const playerCurrentTournamentHistory =
     await fetchPlayerCurrentTournamentHistory(player.phone_number);
   const playerArrived =

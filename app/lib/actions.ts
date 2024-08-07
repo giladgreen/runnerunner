@@ -561,10 +561,10 @@ export async function setPlayerPosition(
   }
 }
 
-async function getDateWinnersRecord(date: string) {
+async function getDateWinnersRecords(date: string) {
   const winnersResult =
     await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
-  return winnersResult.rows[0];
+  return winnersResult.rows;
 }
 
 export async function setPrizesCreditWorth(
@@ -576,13 +576,14 @@ export async function setPrizesCreditWorth(
 
   try {
     await startTransaction();
-    const winnersObject = await getDateWinnersRecord(date);
-    if (!winnersObject || !winnersObject.winners) {
+    const winnersObjects = await getDateWinnersRecords(date);
+    if (!winnersObjects || !winnersObjects.length) {
       console.error('## setPrizesCreditWorth Failed to find winnersObject');
       return {
         message: 'איראה שגיאה',
       };
     }
+    const winnersObject = winnersObjects[0];//TODO::: use all tournaments
     const currentWinnersObject = JSON.parse(winnersObject!.winners);
 
     let credits = [] as number[];
@@ -863,6 +864,34 @@ export async function updatePlayer(
   }
 }
 
+export async function deleteTournament(tournamentId: string, prevPage: string, userId:string ){
+  noStore();
+  try {
+    const user = (await sql`select * from users WHERE id = ${userId}`).rows[0];
+    const t = (await sql`select * from tournaments WHERE id = ${tournamentId}`).rows[0];
+    if (t){
+      await sql`INSERT INTO deleted_tournaments (id,day,name, i, buy_in,re_buy,max_players, rsvp_required, deleted_by ) 
+        VALUES (${t.id},${t.day},${t.name},${ t.i},${ t.buy_in},${t.re_buy},${t.max_players},${ t.rsvp_required},${ user ? (user.name ?? user.phone_number ?? userId) : userId})`;
+
+      await sql`
+      delete from tournaments
+      WHERE id = ${tournamentId}
+    `;
+      sendEmail(
+          TARGET_MAIL,
+          'tournaments deleted',
+          `day: ${t.day} name: ${t.name}, buy_in: ${t.buy_in}, re_buy: ${t.re_buy}, max_players: ${t.max_players}, rsvp_required: ${t.rsvp_required}`,
+      );
+    }
+
+  } catch (error) {
+    console.error('## deleteTournament error', error);
+    return { message: 'איראה שגיאה' };
+  } finally {
+    revalidatePath(prevPage);
+    redirect(prevPage);
+  }
+}
 export async function updateTournament(
   { id, prevPage }: { id: string; prevPage: string },
   _prevState: State,
@@ -901,16 +930,20 @@ export async function updateTournament(
   const date = new Date().toISOString();
 
   try {
-    await sql`
+    const t = (await sql`select * from tournaments WHERE id = ${id}`).rows[0];
+    if (t){
+      await sql`
       UPDATE tournaments
       SET name = ${name}, buy_in = ${buy_in},re_buy = ${re_buy},max_players = ${max_players},rsvp_required=${rsvp_required}, updated_at=${date}
       WHERE id = ${id}
     `;
-    sendEmail(
-      TARGET_MAIL,
-      'tournaments update',
-      `name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`,
-    );
+      sendEmail(
+          TARGET_MAIL,
+          'tournaments update',
+          `day:${t.day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`,
+      );
+    }
+
   } catch (error) {
     console.error('## updateTournament error', error);
     return { message: 'איראה שגיאה' };

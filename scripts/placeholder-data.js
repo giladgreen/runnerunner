@@ -213,6 +213,15 @@ const tournaments = [
     buy_in: 300,
     max_players: 100,
     rsvp_required: true,
+    i: 1,
+  },
+  {
+    day: 'Sunday',
+    name: 'טורניר פתח תקווה',
+    buy_in: 250,
+    max_players: 150,
+    rsvp_required: true,
+    i: 1,
   },
   {
     day: 'Monday',
@@ -220,6 +229,7 @@ const tournaments = [
     buy_in: 300,
     max_players: 100,
     rsvp_required: true,
+    i: 2,
   },
   {
     day: 'Tuesday',
@@ -227,6 +237,7 @@ const tournaments = [
     buy_in: 300,
     max_players: 100,
     rsvp_required: true,
+    i: 3,
   },
   {
     day: 'Wednesday',
@@ -234,6 +245,7 @@ const tournaments = [
     buy_in: 250,
     max_players: 100,
     rsvp_required: true,
+    i: 4,
   },
   {
     day: 'Thursday',
@@ -241,6 +253,7 @@ const tournaments = [
     buy_in: 400,
     max_players: 100,
     rsvp_required: true,
+    i: 5,
   },
   {
     day: 'Friday',
@@ -248,6 +261,7 @@ const tournaments = [
     buy_in: 200,
     max_players: 0,
     rsvp_required: true,
+    i: 6,
   },
   {
     day: 'Saturday',
@@ -255,6 +269,7 @@ const tournaments = [
     buy_in: 250,
     max_players: 100,
     rsvp_required: false,
+    i: 7,
   },
 ];
 

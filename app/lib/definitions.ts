@@ -118,6 +118,7 @@ export type TournamentDB = {
   re_buy: number;
   max_players: number;
   rsvp_required: boolean;
+  day_has_more_then_one: boolean;
 };
 
 export type FeatureFlagDB = {

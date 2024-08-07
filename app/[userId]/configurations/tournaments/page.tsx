@@ -4,6 +4,7 @@ import React from 'react';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { TRANSLATIONS } from '@/app/lib/definitions';
+import DeleteTournamentButton from "@/app/ui/client/DeleteTournamentButton";
 
 export default async function TournamentsSetupPage({
   params,
@@ -154,11 +155,12 @@ export default async function TournamentsSetupPage({
                   <Link
                     href={`/${
                       params.userId
-                    }/configurations/tournaments/${tournament.day.toLowerCase()}/edit`}
+                    }/configurations/tournaments/${tournament.id}/edit`}
                     className="smaller-on-mobile rounded-md border p-2 hover:bg-gray-100"
                   >
                     <PencilIcon className="w-5" />
                   </Link>
+                  { tournament.day_has_more_then_one && <DeleteTournamentButton tournamentId={tournament.id} userId={params.userId} />}
                 </div>
               </td>
             </tr>
