@@ -17,17 +17,19 @@ function OpenConvertPrizeToCreditForm({
   hide,
   prevPage,
   prizesInformation,
+  tournamentId,
 }: {
   userId?: string;
   prizeId: string;
   prizeName: string;
   hide?: () => void;
   prevPage: string;
+  tournamentId: string | null;
   prizesInformation: PrizeInfoDB[];
 }) {
   const initialState = { message: null, errors: {} };
   const prizeInfo = prizesInformation.find((prize) => prize.name === prizeName);
-  const data = { prizeId, prevPage, userId: userId! };
+  const data = { prizeId, prevPage, userId: userId!, tournamentId };
   const convertPrizeToCreditWithData = convertPrizeToCredit.bind(null, data);
   const [selectedPrize, setSelectedPrize] = useState<PrizeInfoDB | undefined>(
     prizeInfo,
@@ -91,10 +93,12 @@ export default function OpenConvertPrizeToCreditButton({
   prizeName,
   userId,
   prizesInformation,
+  tournamentId,
 }: {
   prizeId: string;
   prizeName: string;
   userId?: string;
+  tournamentId: string | null;
   prizesInformation: PrizeInfoDB[];
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
@@ -126,6 +130,7 @@ export default function OpenConvertPrizeToCreditButton({
           prizeName={prizeName}
           userId={userId}
           prizesInformation={prizesInformation}
+          tournamentId={tournamentId}
         />
       </div>
     </div>

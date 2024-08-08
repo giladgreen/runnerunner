@@ -1,19 +1,13 @@
-import { getFinalTablePlayersContent } from '@/app/ui/client/helpers';
+'use client';
+
 import Card from '@/app/ui/client/Card';
-export default async function FinalTablePlayers({
+export default function FinalTablePlayers({
   title,
-  params,
+  content,
 }: {
   title: string;
-  params: { userId: string };
+  content: JSX.Element;
 }) {
-  const date = new Date().toISOString().slice(0, 10);
-
-  const content = (await getFinalTablePlayersContent(
-    date,
-    false,
-    params.userId,
-  )) as JSX.Element;
   if (!content) return null;
 
   return (

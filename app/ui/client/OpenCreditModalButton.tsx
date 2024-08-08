@@ -12,10 +12,12 @@ export default function OpenCreditModalButton({
   tournaments,
   players,
   setQuery,
+  tournamentId,
 }: {
   player: PlayerDB;
   tournaments: TournamentDB[];
   players: PlayerDB[];
+  tournamentId: string | null;
   userId: string;
   setQuery: (val: string) => void;
 }) {
@@ -62,6 +64,7 @@ export default function OpenCreditModalButton({
           prevPage={prevPage}
           userId={userId}
           setQuery={setQuery}
+          tournamentId={tournamentId}
         />
       </div>
     </div>

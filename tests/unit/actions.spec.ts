@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 jest.mock('node-fetch', () => jest.fn());
 import { sql } from '@vercel/postgres';
 import {
@@ -164,7 +166,9 @@ describe('actions', () => {
       'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Smiley.svg/220px-Smiley.svg.png';
     let formData: FormData;
     beforeEach(async () => {
-      await sql`INSERT INTO users (id, name, phone_number,password, is_admin) VALUES (${userId}, 'gilad','0587869910','password', true)`;
+      const hashedPassword = await bcrypt.hash('123456', 10);
+
+      await sql`INSERT INTO users (id, name, phone_number,password, is_admin) VALUES (${userId}, 'gilad','0587869910',${hashedPassword}, true)`;
     });
 
     describe('when creating a legal new player', () => {

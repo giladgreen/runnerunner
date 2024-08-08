@@ -20,12 +20,14 @@ function SetGivePrizeForm({
   stringDate,
   userId,
   prizesInformation,
+  tournamentId,
 }: {
   stringDate?: string;
   player: PlayerDB;
   hide?: () => void;
   prevPage: string;
   userId?: string;
+  tournamentId: string | null;
   prizesInformation: PrizeInfoDB[];
 }) {
   const initialState = { message: null, errors: {} };
@@ -76,6 +78,7 @@ function SetGivePrizeForm({
     playerId: player.id,
     prevPage,
     stringDate,
+    tournamentId,
   });
 
   // @ts-ignore
@@ -268,11 +271,13 @@ export default function OpenGiveCreditModalButton({
   stringDate,
   userId,
   prizesInformation,
+  tournamentId,
 }: {
   player: PlayerDB;
   hasReceived: boolean;
   stringDate?: string;
   userId?: string;
+  tournamentId: string | null;
   prizesInformation: PrizeInfoDB[];
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
@@ -304,6 +309,7 @@ export default function OpenGiveCreditModalButton({
             stringDate={stringDate}
             userId={userId}
             prizesInformation={prizesInformation}
+            tournamentId={tournamentId}
           />
         </div>
       )}

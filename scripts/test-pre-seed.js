@@ -15,7 +15,7 @@ process.env.POSTGRES_PASSWORD = 'gU9uDTSOLw8e';
 process.env.POSTGRES_DATABASE = 'verceldb';
 
 async function main() {
-  console.log('## pre test start');
+  console.log('>> pre test start');
   const client = await db.connect();
   await client.sql`DROP TABLE IF EXISTS tournaments;`;
   await client.sql`DROP TABLE IF EXISTS players;`;

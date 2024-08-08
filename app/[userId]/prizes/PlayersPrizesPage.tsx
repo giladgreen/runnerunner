@@ -25,16 +25,19 @@ export default async function PlayersPrizesPage({
   const chosenPrizesContent = (await getPlayersPrizesContent(
     chosenPrizes,
     prizesInformation,
+    null,
     false,
   )) as JSX.Element;
   const deliveredPrizesContent = (await getPlayersPrizesContent(
     deliveredPrizes,
     prizesInformation,
+    null,
     false,
   )) as JSX.Element;
   const readyToBeDeliveredPrizesContent = (await getPlayersPrizesContent(
     readyToBeDeliveredPrizes,
     prizesInformation,
+    null,
     false,
   )) as JSX.Element;
   if (

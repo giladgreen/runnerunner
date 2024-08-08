@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 
 async function seedTournaments(client) {
   try {
-
     // Create the "users" table if it doesn't exist
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS tournaments (
@@ -38,12 +37,20 @@ async function seedTournaments(client) {
     `;
 
     console.log(`Created "tournaments" table`);
-    const existingTournaments = (await client.sql`SELECT * FROM tournaments`).rows;
+    const existingTournaments = (await client.sql`SELECT * FROM tournaments`)
+      .rows;
 
     // Insert data into the "users" table
     const insertedTournaments = await Promise.all(
-      tournaments.filter(tournament => !existingTournaments.find(et => et.name === tournament.name && et.day === tournament.day)).map(async (tournament) => {
-        return client.sql`
+      tournaments
+        .filter(
+          (tournament) =>
+            !existingTournaments.find(
+              (et) => et.name === tournament.name && et.day === tournament.day,
+            ),
+        )
+        .map(async (tournament) => {
+          return client.sql`
         INSERT INTO tournaments (day, name, buy_in, re_buy, max_players, rsvp_required,i)
         VALUES (${tournament.day}, ${tournament.name}, ${
           tournament.buy_in
@@ -51,7 +58,7 @@ async function seedTournaments(client) {
           tournament.rsvp_required
         }, ${tournament.i});
       `;
-      }),
+        }),
     );
 
     console.log(`Seeded ${insertedTournaments.length} tournaments`);
@@ -95,7 +102,7 @@ async function seedUsers(client) {
 
     console.log(`Created "users" table`);
 
-    const existingUsers = (await client.sql`select * from users`).rows;
+    const existingUsers = (await client.sql`SELECT * FROM users`).rows;
     const usersToInsert = users.filter(
       (user) =>
         !existingUsers.find((u) => u.phone_number === user.phone_number),
@@ -208,6 +215,7 @@ async function seedHistory(client) {
          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
          phone_number VARCHAR(20) NOT NULL,
          change INT NOT NULL,
+         tournament_id TEXT,
          type VARCHAR(20) NOT NULL,
          note VARCHAR(255) NOT NULL,
          archive BOOLEAN NOT NULL DEFAULT FALSE,
@@ -226,6 +234,7 @@ async function seedHistory(client) {
          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
          phone_number VARCHAR(20) NOT NULL,
          change INT NOT NULL,
+         tournament_id TEXT,
          type VARCHAR(20) NOT NULL,
          note VARCHAR(255) NOT NULL,
          archive BOOLEAN NOT NULL DEFAULT FALSE,
@@ -256,6 +265,7 @@ async function seedWinners(client) {
          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
          date VARCHAR(20),
          tournament_name TEXT NOT NULL,
+         tournament_id TEXT NOT NULL,
          winners TEXT NOT NULL
       );
     `;
@@ -279,6 +289,7 @@ async function seedRSVP(client) {
          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
          date VARCHAR(20) NOT NULL,
          phone_number TEXT NOT NULL,
+         tournament_id TEXT,
         created_at timestamp with time zone NOT NULL DEFAULT now()
       );
     `;
@@ -290,7 +301,7 @@ async function seedRSVP(client) {
          id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
          date VARCHAR(20) NOT NULL,
          phone_number TEXT NOT NULL,
-        created_at timestamp with time zone NOT NULL DEFAULT now(),
+         tournament_id TEXT,
         deleted_at timestamp NOT NULL DEFAULT now()
       );
     `;
@@ -461,11 +472,11 @@ async function _fillUpHistory(client) {
 }
 
 async function seed() {
-  console.log('## main start');
+  console.log('>> main start');
 
   const client = await db.connect();
   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
-  console.log('## db connected');
+  console.log('>> db connected');
   await seedUsers(client);
 
   await seedTournaments(client);
@@ -482,7 +493,7 @@ async function seed() {
 }
 
 function tests() {
-  console.log('## tests seed');
+  console.log('>> tests seed');
   process.env.POSTGRES_URL =
     'postgres://default:gU9uDTSOLw8e@ep-restless-violet-a2nk8a48-pooler.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require';
   process.env.POSTGRES_PRISMA_URL =

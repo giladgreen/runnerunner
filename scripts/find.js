@@ -39,7 +39,7 @@ const levenshteinDistance = (s, t) => {
 };
 
 async function main() {
-  console.log('## find start');
+  console.log('>> find start');
 
   const client = await db.connect();
   try {

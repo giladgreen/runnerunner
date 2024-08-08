@@ -11,14 +11,20 @@ export default function RSVPButton({
   player,
   stringDate,
   text,
+  tournamentId,
 }: {
   player: PlayerDB;
   stringDate?: string;
   text?: string;
+  tournamentId: string;
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const date = stringDate ?? new Date().toISOString().slice(0, 10);
-  const isRsvpForDate = player.rsvps.includes(date);
+  const isRsvpForDate = Boolean(
+    player.rsvps.find(
+      (r) => r.date === date && r.tournamentId === tournamentId,
+    ),
+  );
 
   const [optimisticIsRsvpForDate, addOptimisticIsRsvpForDate] =
     useOptimistic<boolean>(isRsvpForDate, (state: boolean) => !state);
@@ -31,11 +37,16 @@ export default function RSVPButton({
           addOptimisticIsRsvpForDate(!isRsvpForDate);
         });
 
-        rsvpPlayerForDay(player.phone_number, date, !isRsvpForDate, prevPage);
+        rsvpPlayerForDay(
+          player.phone_number,
+          date,
+          tournamentId,
+          !isRsvpForDate,
+          prevPage,
+        );
       }}
     >
       <span className="pointer" style={{ display: 'flex' }}>
-        {' '}
         <div
           style={{
             margin: '0 5px',
@@ -45,8 +56,8 @@ export default function RSVPButton({
             borderRadius: 15,
             background: optimisticIsRsvpForDate ? 'green' : 'white',
           }}
-        />{' '}
-      </span>{' '}
+        />
+      </span>
       {text}
     </div>
   );

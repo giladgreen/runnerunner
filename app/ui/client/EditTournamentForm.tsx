@@ -1,7 +1,7 @@
 'use client';
 import { updateTournament } from '@/app/lib/actions';
 
-import { TournamentForm, TRANSLATIONS } from '@/app/lib/definitions';
+import {TournamentDB, TournamentForm, TRANSLATIONS} from '@/app/lib/definitions';
 
 import Link from 'next/link';
 import Button from '@/app/ui/client/Button';
@@ -17,7 +17,7 @@ export default function EditTournamentForm({
   userId,
   prevPage,
 }: {
-  tournament: TournamentForm;
+  tournament: TournamentDB;
   userId: string;
   prevPage: string;
 }) {

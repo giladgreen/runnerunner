@@ -12,17 +12,6 @@ export type UserDB = {
   created_at: string;
 };
 
-export type PlayerForm = {
-  id: string;
-  name: string;
-  phone_number: string;
-  image_url: string;
-  updated_at: string;
-  balance: number;
-  note: string;
-  notes: string;
-  rsvps: string[];
-};
 export type ImageDB = {
   phone_number: string;
   image_url: string;
@@ -45,12 +34,12 @@ export type PlayerDB = {
   note: string;
   notes: string;
   historyLog: LogDB[];
-  arrived: boolean;
+  arrived?: string;
   entries: number;
-  rsvpForToday: boolean;
+  rsvpForToday?: string;
   hasReceived: boolean;
   creditWorth: number;
-  rsvps: string[];
+  rsvps: Array<{ date: string; tournamentId: string }>;
   tournamentsData: TournamentPlayerData[];
   allowed_marketing?: boolean;
 };
@@ -72,8 +61,10 @@ export type PrizeDB = {
   created_at: string;
 };
 export type WinnerDB = {
+  id: string;
   date: string;
   tournament_name: string;
+  tournament_id: string;
   winners: string;
 };
 export type RSVPDB = {
@@ -81,6 +72,7 @@ export type RSVPDB = {
   date: string;
   phone_number: string;
   created_at: string;
+  tournament_id: string;
 };
 export type Counts = {
   phone_number: string;
@@ -107,6 +99,7 @@ export type LogDB = {
   type: string;
   other_player_phone_number: string;
   archive?: boolean;
+  tournament_id?: string;
   //updated by
 };
 
@@ -119,6 +112,16 @@ export type TournamentDB = {
   max_players: number;
   rsvp_required: boolean;
   day_has_more_then_one: boolean;
+
+  rsvpForToday: number;
+  todayTournamentMaxPlayers: number;
+  arrivedToday: number;
+  todayCreditIncome: number;
+  todayCashIncome: number;
+  todayTransferIncome: number;
+  reEntriesCount: number;
+
+  playersPlaces: PlayerDB[];
 };
 
 export type FeatureFlagDB = {

@@ -7,7 +7,7 @@ import {
   createPlayerUsageLog,
 } from '@/app/lib/actions';
 import { useFormState, useFormStatus } from 'react-dom';
-import { PlayerDB, PlayerForm } from '@/app/lib/definitions';
+import { PlayerDB } from '@/app/lib/definitions';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Spinner from '@/app/ui/client/Spinner';
@@ -18,7 +18,7 @@ export function UseCreditForPrizeForm({
   userId,
   prevPage,
 }: {
-  player: PlayerForm;
+  player: PlayerDB;
   userId: string;
   prevPage: string;
 }) {
@@ -28,6 +28,7 @@ export function UseCreditForPrizeForm({
     player,
     prevPage,
     userId,
+    tournamentId: null,
   });
 
   const initialText = `שחקן המיר קרדיט בפרס`;
@@ -167,7 +168,7 @@ export function AddToBalanceForm({
   userId,
   prevPage,
 }: {
-  player: PlayerForm;
+  player: PlayerDB;
   userId: string;
   prevPage: string;
 }) {
@@ -175,7 +176,7 @@ export function AddToBalanceForm({
 
   const createPlayerNewCreditLogWithPlayerData = createPlayerNewCreditLog.bind(
     null,
-    { player, prevPage, userId },
+    { player, prevPage, userId, tournamentId: null },
   );
   // @ts-ignore
   const [state2, dispatch] = useFormState(

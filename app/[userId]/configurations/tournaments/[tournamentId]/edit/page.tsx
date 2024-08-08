@@ -6,10 +6,10 @@ export default async function tournamentEditPage({
 }: {
   params: { userId: string; tournamentId: string };
 }) {
-  const tournament = await fetchTournamentByTournamentId(
-      params.tournamentId
-  );
-
+  const tournament = await fetchTournamentByTournamentId(params.tournamentId);
+    if (!tournament){
+        return null;
+    }
   return (
     <main className="rtl">
       <Breadcrumbs

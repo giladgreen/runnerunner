@@ -3,7 +3,7 @@
 import Button from '@/app/ui/client/Button';
 import { setPlayerPrize } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import { PlayerForm, PrizeInfoDB } from '@/app/lib/definitions';
+import { PlayerDB, PrizeInfoDB } from '@/app/lib/definitions';
 import SearchablePrizesDropdown from '@/app/ui/client/SearchablePrizesDropdown';
 import React, { useState } from 'react';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
@@ -13,11 +13,13 @@ export default function SetPrizeForm({
   hide,
   prevPage,
   prizesInformation,
+  tournamentId,
 }: {
-  player: PlayerForm;
+  player: PlayerDB;
   hide?: () => void;
   prevPage: string;
   prizesInformation: PrizeInfoDB[];
+  tournamentId: string;
 }) {
   const [selectedPrize, setSelectedPrize] = useState<PrizeInfoDB | undefined>(
     undefined,
@@ -25,6 +27,7 @@ export default function SetPrizeForm({
   const initialState = { message: null, errors: {} };
   const setPlayerPrizeWithPlayerId = setPlayerPrize.bind(null, {
     playerId: player.id,
+    tournamentId,
     prevPage,
   });
   // @ts-ignore

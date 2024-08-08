@@ -39,10 +39,13 @@ export default async function PlayersTable({
   // @ts-ignore
   const dayOfTheWeekToShow = TRANSLATIONS[dayOfTheWeek];
   const tournaments = await fetchTournaments();
-  const todayTournament = tournaments.find(
+
+  const todayTournaments = tournaments.filter(
     (tournament) => tournament.day === dayOfTheWeek,
   );
-  const rsvp_required = todayTournament!.rsvp_required;
+  const isRsvpNotRequired =
+    todayTournaments.length === 0 ||
+    !todayTournaments.find((t) => t.rsvp_required && t.max_players > 0);
 
   return (
     <div className="rtl mt-6 flow-root">
@@ -143,15 +146,24 @@ export default async function PlayersTable({
                 >
                   <Sort text="תאריך עדכון" sortTerm="updated_at" />
                 </th>
-                {rsvp_required && rsvpEnabled && (
-                  <th
-                    scope="col"
-                    className="px-3 py-5 font-medium"
-                    style={{ textAlign: 'right' }}
-                  >
-                    אישור הגעה - {dayOfTheWeekToShow}
-                  </th>
-                )}
+                {rsvpEnabled &&
+                  !isRsvpNotRequired &&
+                  todayTournaments
+                    .filter((t) => t.rsvp_required && t.max_players > 0)
+                    .map((todayTournament) => {
+                      return (
+                        <th
+                          key={todayTournament.id}
+                          scope="col"
+                          className="px-3 py-5 font-medium"
+                          style={{ textAlign: 'right' }}
+                        >
+                          <div>אישור הגעה - {dayOfTheWeekToShow}</div>
+                          <div>{todayTournament.name}</div>
+                        </th>
+                      );
+                    })}
+
                 <th
                   scope="col"
                   className="relative py-3 pl-6 pr-3"
@@ -212,11 +224,24 @@ export default async function PlayersTable({
                       {formatDateToLocal(player.updated_at)}
                     </Link>
                   </td>
-                  {rsvp_required && rsvpEnabled && (
-                    <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                      <RSVPButton player={player} />
-                    </td>
-                  )}
+                  {rsvpEnabled &&
+                    !isRsvpNotRequired &&
+                    todayTournaments
+                      .filter((t) => t.rsvp_required && t.max_players > 0)
+                      .map((todayTournament) => {
+                        return (
+                          <td
+                            key={todayTournament.id}
+                            className="rsvp-icon pointer whitespace-nowrap px-3 py-3"
+                          >
+                            <RSVPButton
+                              player={player}
+                              tournamentId={todayTournament?.id!}
+                            />
+                          </td>
+                        );
+                      })}
+
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <div className="flex justify-end gap-3">
                       <UpdatePlayerButton id={player.id} userId={userId} />

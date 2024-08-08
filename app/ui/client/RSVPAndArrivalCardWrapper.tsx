@@ -1,4 +1,5 @@
-import { fetchFeatureFlags, fetchRSVPAndArrivalData } from '@/app/lib/data';
+'use client';
+
 import { formatCurrency } from '@/app/lib/utils';
 import {
   ArrowLeftOnRectangleIcon,
@@ -8,14 +9,13 @@ import {
 import { Suspense } from 'react';
 import { CardsSkeleton } from '@/app/ui/skeletons';
 import Card from '@/app/ui/client/Card';
+import { TournamentDB } from '@/app/lib/definitions';
 
-export default async function RSVPAndArrivalCardWrapper({
-  params,
+export default function RSVPAndArrivalCardWrapper({
+  todayTournament,
 }: {
-  params: { userId: string };
+  todayTournament: TournamentDB;
 }) {
-  const { rsvpEnabled } = await fetchFeatureFlags();
-
   const {
     rsvpForToday,
     todayTournamentMaxPlayers,
@@ -24,10 +24,9 @@ export default async function RSVPAndArrivalCardWrapper({
     todayCashIncome,
     todayTransferIncome,
     reEntriesCount,
-    todayTournament,
-  } = await fetchRSVPAndArrivalData();
-  const { rsvp_required } = todayTournament;
-  const rsvpForTodayText = rsvp_required
+  } = todayTournament;
+
+  const rsvpForTodayText = todayTournament.rsvp_required
     ? `${rsvpForToday}${
         todayTournamentMaxPlayers ? ` / ${todayTournamentMaxPlayers}` : ''
       }`
@@ -136,28 +135,26 @@ export default async function RSVPAndArrivalCardWrapper({
       style={{ marginBottom: 20 }}
     >
       <Suspense fallback={<CardsSkeleton count={4} />}>
-        <Card title="הכנסות" value={todayIncome} type="money" />
         <Card
-          title="כניסות מחדש"
-          value={<div>{reEntriesCount}</div>}
-          type="money"
+          title="אישורי הרשמה"
+          value={<div>{rsvpForTodayText}</div>}
+          type="rsvp"
           oneLine
         />
-
         <Card
           title="הגעה"
           value={<div>{arrivedToday}</div>}
           type="arrived"
           oneLine
         />
-        {rsvpEnabled && (
-          <Card
-            title="אישורי הרשמה"
-            value={<div>{rsvpForTodayText}</div>}
-            type="rsvp"
-            oneLine
-          />
-        )}
+
+        <Card
+          title="כניסות מחדש"
+          value={<div>{reEntriesCount}</div>}
+          type="money"
+          oneLine
+        />
+        <Card title="הכנסות" value={todayIncome} type="money" />
       </Suspense>
     </div>
   );

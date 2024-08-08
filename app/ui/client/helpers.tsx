@@ -1,4 +1,4 @@
-import { fetchFinalTablePlayers, fetchPrizesInfo } from '@/app/lib/data';
+import {fetchFinalTablePlayers, fetchPrizesInfo, fetchTournamentByTournamentId} from '@/app/lib/data';
 import { PlayerDB, PrizeDB, PrizeInfoDB } from '@/app/lib/definitions';
 import OpenGiveCreditModalButton from '@/app/ui/client/OpenGiveCreditModalButton';
 import Image from 'next/image';
@@ -14,13 +14,20 @@ import {
 } from '@heroicons/react/24/solid';
 import SetPrizeAsReadyToBeDelivered from '@/app/ui/client/SetPrizeAsReadyToBeDelivered';
 import SetPrizeAsNotReadyToBeDelivered from '@/app/ui/client/SetPrizeAsNotReadyToBeDelivered';
+import ResetPlayersPositionsButton from "@/app/ui/client/ResetPlayersPositionsButton";
 
 export async function getFinalTablePlayersContent(
   date: string,
+  tournamentId: string,
   isTournamentsDataPage: boolean,
   userId?: string,
 ) {
-  const finalTablePlayers = await fetchFinalTablePlayers(date);
+
+  const tournament = await fetchTournamentByTournamentId(tournamentId);
+
+  if (!tournament) return null;
+  const tournamentName = tournament.name;
+  const finalTablePlayers = await fetchFinalTablePlayers(tournamentId, date);
   const prizesInformation = await fetchPrizesInfo();
   const showSetPrizesCreditModalButton =
     isTournamentsDataPage && finalTablePlayers.find((p) => !p.hasReceived);
@@ -35,6 +42,12 @@ export async function getFinalTablePlayersContent(
       style={{ marginBottom: 30, display: 'flex', marginRight: 0 }}
     >
       <div>
+        { !isTournamentsDataPage && <ResetPlayersPositionsButton
+            tournamentId={tournamentId}
+            tournamentName={tournamentName}
+            date={date}
+        />}
+
         {finalTablePlayers.map((finalTablePlayer: PlayerDB) => {
           return (
             <div
@@ -47,6 +60,7 @@ export async function getFinalTablePlayersContent(
                 hasReceived={finalTablePlayer.hasReceived}
                 stringDate={date}
                 userId={userId}
+                tournamentId={tournamentId}
                 prizesInformation={prizesInformation}
               />
               <div className={textClass} style={{ margin: '0 2px 0 4px' }}>
@@ -105,7 +119,9 @@ export async function getFinalTablePlayersContent(
         {showSetPrizesCreditModalButton && (
           <OpenSetPrizesCreditModalButton
             date={date}
+            tournamentId={tournamentId}
             players={finalTablePlayers}
+            tournamentName={tournamentName}
           />
         )}
       </div>
@@ -139,6 +155,7 @@ export async function getFinalTablePlayersContent(
 export async function getPlayersPrizesContent(
   playersPrizes: PrizeDB[],
   prizesInformation: PrizeInfoDB[],
+  tournamentId: string | null,
   personal?: boolean,
   userId?: string,
   currentTournament?: boolean,
@@ -203,6 +220,7 @@ export async function getPlayersPrizesContent(
                     prizeName={playersPrize.prize}
                     userId={userId}
                     prizesInformation={prizesInformation}
+                    tournamentId={tournamentId}
                   />
                 </div>
               )}
@@ -250,6 +268,7 @@ export async function getPlayersPrizesContent(
                     prizeName={playersPrize.prize}
                     userId={userId}
                     prizesInformation={prizesInformation}
+                    tournamentId={tournamentId}
                   />
                 </div>
               )}

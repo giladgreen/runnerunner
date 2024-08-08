@@ -17,8 +17,10 @@ export default function UseCreditForm({
   prevPage,
   userId,
   setQuery,
+  tournamentId,
 }: {
   players: PlayerDB[];
+  tournamentId: string | null;
   prevPage: string;
   player: PlayerDB;
   tournaments: TournamentDB[];
@@ -31,14 +33,13 @@ export default function UseCreditForm({
     player,
     prevPage,
     userId,
+    tournamentId,
   });
   const now = new Date();
   const dayOfTheWeek = now
     .toLocaleString('en-us', { weekday: 'long' })
     .toLowerCase();
-  const tournament = tournaments.find(
-    (t) => t.day.toLowerCase() === dayOfTheWeek,
-  );
+  const tournament = tournaments.find((t) => t.id === tournamentId);
   // @ts-ignore
   const historyLog = player.historyLog || [];
 
@@ -78,16 +79,7 @@ export default function UseCreditForm({
     if (note !== initialNote) {
       setNote(initialNote);
     }
-  }, [
-    player,
-    tournaments,
-    amount,
-    setAmount,
-    initialAmount,
-    note,
-    setNote,
-    initialNote,
-  ]);
+  }, [player, tournaments, setAmount, initialAmount, setNote, initialNote]);
 
   function SubmitButton() {
     const { pending } = useFormStatus();
@@ -153,6 +145,10 @@ export default function UseCreditForm({
                   aria-describedby="change-error"
                   value={amount}
                   onChange={(e) => {
+                    console.log(
+                      'calling setAmount with',
+                      Number(e.target.value),
+                    );
                     setAmount(Number(e.target.value));
                   }}
                 />

@@ -1,15 +1,11 @@
 import MVPPlayers from '@/app/ui/client/MVPPlayers';
 import DebtPlayers from '@/app/ui/client/DebtPlayers';
-import {
-  fetchFeatureFlags,
-  fetchRSVPAndArrivalData,
-  fetchUserById,
-} from '@/app/lib/data';
-import TodayTournamentNameCardWrapper from '@/app/ui/client/TodayTournamentNameCardWrapper';
-import RSVPAndArrivalCardWrapper from '@/app/ui/client/RSVPAndArrivalCardWrapper';
-import FinalTablePlayers from '@/app/ui/client/FinalTablePlayers';
+import { fetchRSVPAndArrivalData, fetchUserById } from '@/app/lib/data';
 import GeneralPlayersCardWrapper from '@/app/ui/client/GeneralPlayersCardWrapper';
 import PlayerPage from '@/app/ui/client/PlayerPage';
+import { TournamentDB } from '@/app/lib/definitions';
+import AdminHomePage from '@/app/ui/client/AdminHomePage';
+import { getFinalTablePlayersContent } from '@/app/ui/client/helpers';
 
 export default async function HomePage({
   params,
@@ -21,21 +17,22 @@ export default async function HomePage({
   const isWorker = user.is_worker;
 
   if (isAdmin || isWorker) {
-    const { todayTournament } = await fetchRSVPAndArrivalData();
-    const todayHasTournament =
-      todayTournament.max_players > 0 || !todayTournament.rsvp_required;
+    const { todayTournaments } = await fetchRSVPAndArrivalData();
+
+    const date = new Date().toISOString().slice(0, 10);
+    const contents: Array<JSX.Element | null> = await Promise.all(
+      todayTournaments.map((t) =>
+        getFinalTablePlayersContent(date, t.id, false, params.userId),
+      ),
+    );
 
     return (
       <div>
-        <div className="full-width flex w-full items-center justify-between">
-          <TodayTournamentNameCardWrapper params={params} />
-        </div>
-        {todayHasTournament && <RSVPAndArrivalCardWrapper params={params} />}
-        {todayHasTournament && (
-          <div style={{ marginTop: 40 }}>
-            <FinalTablePlayers title="דירוג טורניר נוכחי" params={params} />
-          </div>
-        )}
+        <AdminHomePage
+          todayTournaments={todayTournaments as TournamentDB[]}
+          contents={contents}
+        />
+
         <hr style={{ marginBottom: 30, marginTop: 10 }} />
         <GeneralPlayersCardWrapper />
         <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">

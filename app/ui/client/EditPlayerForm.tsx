@@ -2,7 +2,7 @@
 import { updatePlayer } from '@/app/lib/actions';
 import { CldUploadWidget } from 'next-cloudinary';
 
-import { PlayerDB, PlayerForm, TournamentDB } from '@/app/lib/definitions';
+import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import Link from 'next/link';
 import { useFormState } from 'react-dom';
 import { PencilIcon } from '@heroicons/react/24/outline';
@@ -20,7 +20,7 @@ export default function EditPlayerForm({
   userId,
 }: {
   userId: string;
-  player: PlayerForm;
+  player: PlayerDB;
   rsvpEnabled: boolean;
   tournaments: TournamentDB[];
 }) {
@@ -49,9 +49,13 @@ export default function EditPlayerForm({
   const today = days.indexOf(dayOfTheWeek);
 
   const rsvpsForTheNextWeek = tournaments
-    .slice(today)
-    .map((tournament, index) => {
-      const date = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * index);
+    .filter((tournament) => days.indexOf(tournament.day) >= today)
+    .map((tournament) => {
+      const tournamentDayIndex = days.indexOf(tournament.day);
+      const date = new Date(
+        new Date().getTime() +
+          1000 * 60 * 60 * 24 * (tournamentDayIndex - today),
+      );
       const dayOfTheWeek = date.toLocaleString('en-us', { weekday: 'long' });
       const stringDate = date.toISOString().slice(0, 10);
       // @ts-ignore
@@ -66,11 +70,11 @@ export default function EditPlayerForm({
                 player={player as PlayerDB}
                 stringDate={stringDate}
                 text={text}
+                tournamentId={tournament.id}
               />
             )
           ) : (
             <div style={{ display: 'flex' }}>
-              {' '}
               <div
                 style={{
                   border: '1px solid black',
@@ -80,7 +84,7 @@ export default function EditPlayerForm({
                   margin: '0 8px',
                   cursor: 'no-drop',
                 }}
-              />{' '}
+              />
               {text}
             </div>
           )}

@@ -69,7 +69,7 @@ async function main() {
   // }
 
   await client.sql`alter table prizes add column ready_to_be_delivered BOOLEAN DEFAULT FALSE`;
-  console.log('## done');
+  console.log('>> done');
 
   await client.end();
 }

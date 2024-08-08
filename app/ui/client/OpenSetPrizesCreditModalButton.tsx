@@ -15,17 +15,22 @@ function SetPrizesCreditForm({
   date,
   hide,
   prevPage,
+  tournamentId,
+  tournamentName,
 }: {
   date: string;
   players: PlayerDB[];
   hide?: () => void;
   prevPage: string;
+  tournamentId: string;
+  tournamentName: string;
 }) {
   const initialState = { message: null, errors: {} };
 
   const setPrizesCreditWorthWithDate = setPrizesCreditWorth.bind(null, {
     date,
     prevPage,
+    tournamentId,
   });
   // @ts-ignore
   const [_state, dispatch] = useFormState(
@@ -45,8 +50,11 @@ function SetPrizesCreditForm({
       style={{ textAlign: 'right' }}
     >
       <form action={dispatch} className="form-control">
-        <label className="mb-2 block text-sm font-medium">
-          הגדר שווי פרסים בקרדיט - {date}
+        <label className="mb-2 block text-sm font-medium" style={{ marginBottom: 5}}>
+          <div> הגדר שווי פרסים בקרדיט  </div>
+          <div>{tournamentName}</div>
+          <div>  {date}</div>
+
         </label>
         <div>
           {positions.map((player) => {
@@ -95,9 +103,13 @@ function SetPrizesCreditForm({
 
 export default function OpenSetPrizesCreditModalButton({
   date,
+  tournamentId,
+  tournamentName,
   players,
 }: {
   date: string;
+  tournamentId: string;
+  tournamentName: string;
   players: PlayerDB[];
 }) {
   const [show, setShow] = React.useState(false);
@@ -127,6 +139,8 @@ export default function OpenSetPrizesCreditModalButton({
           players={players}
           hide={close}
           prevPage={prevPage}
+          tournamentId={tournamentId}
+          tournamentName={tournamentName}
         />
       </div>
     </div>

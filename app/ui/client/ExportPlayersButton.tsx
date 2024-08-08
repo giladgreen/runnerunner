@@ -45,8 +45,8 @@ ${prizes
   )
   .join('\n')}`
     : '';
-//TODO::: use all tournaments
-  const fileData = `${tournaments[0].name}
+
+  const fileData = `${tournaments.map((t) => t.name).join(', ')}
 
 ${placesData}
 

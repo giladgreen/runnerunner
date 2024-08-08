@@ -71,6 +71,7 @@ export default function TodayPlayersTable({
   isRsvpRequired,
   tournaments,
   prizesInformation,
+  tournamentId,
 }: {
   allPlayers: PlayerDB[];
   userId: string;
@@ -79,6 +80,7 @@ export default function TodayPlayersTable({
   rsvpPlayersCount: number;
   tournaments: TournamentDB[];
   prizesInformation: PrizeInfoDB[];
+  tournamentId: string;
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
 
@@ -97,12 +99,18 @@ export default function TodayPlayersTable({
           .sort(nameComparator)
           .slice(0, 20)
       : allPlayers
-          .filter((p) => p.arrived || p.rsvpForToday)
+          .filter(
+            (p) =>
+              p.arrived === tournamentId || p.rsvpForToday === tournamentId,
+          )
           .sort(nameComparator);
 
-  const arrivedPlayers = allPlayers.filter((player) => player.arrived).length;
+  const arrivedPlayers = allPlayers.filter(
+    (player) => player.arrived === tournamentId,
+  ).length;
   const arrivedWithoutRSVPPlayers = allPlayers.filter(
-    (player) => player.arrived && !player.rsvpForToday,
+    (player) =>
+      player.arrived === tournamentId && player.rsvpForToday !== tournamentId,
   ).length;
 
   const header =
@@ -120,10 +128,20 @@ export default function TodayPlayersTable({
 
   const minPosition = getMinPosition(players);
 
+  const now = new Date();
+  const dayOfTheWeek = now
+    .toLocaleString('en-us', { weekday: 'long' })
+    .toLowerCase();
+
+  const currentTournaments = tournaments.filter(
+    (t) =>
+      t.day.toLowerCase() === dayOfTheWeek &&
+      (!tournamentId || tournamentId === t.id),
+  );
+  const currentTournament = currentTournaments[0];
   return (
     <>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <CreateNewTodayPlayerButton params={{ userId }} />
         <button
           className="pointer rounded-md border p-2 hover:bg-gray-100"
           onClick={() => {
@@ -141,6 +159,7 @@ export default function TodayPlayersTable({
           }}
           value={query}
         />
+        <CreateNewTodayPlayerButton params={{ userId }} />
       </div>
       <div className="rtl mt-4 flex items-center justify-between gap-2 md:mt-8">
         <div className="full-width rtl mt-6 flow-root">
@@ -183,26 +202,32 @@ export default function TodayPlayersTable({
                       </div>
                       {rsvpEnabled && isRsvpRequired && (
                         <div className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                          <RSVPButton player={player} />
+                          <RSVPButton
+                            player={player}
+                            tournamentId={currentTournament?.id!}
+                          />
                         </div>
                       )}
                       <div className="flex justify-end gap-3">
                         <OpenCreditModalButton
                           players={playersWithEnoughCredit}
                           player={player}
-                          tournaments={tournaments}
                           userId={userId}
                           setQuery={setQuery}
+                          tournaments={tournaments}
+                          tournamentId={tournamentId}
                         />
 
                         <OpenPositionModalButton
                           player={player}
                           initPosition={minPosition}
+                          tournamentId={tournamentId}
                         />
 
                         <OpenPrizeModalButton
                           player={player}
                           prizesInformation={prizesInformation}
+                          tournamentId={tournamentId}
                         />
                       </div>
                     </div>
@@ -227,8 +252,10 @@ export default function TodayPlayersTable({
                       </div>
                       <div>
                         {rsvpEnabled &&
-                          player.rsvpForToday &&
-                          player.arrived && <DoubleTicksIcon size={24} />}
+                          player.rsvpForToday === tournamentId &&
+                          player.arrived === tournamentId && (
+                            <DoubleTicksIcon size={24} />
+                          )}
                       </div>
                     </div>
                   </div>
@@ -345,11 +372,14 @@ export default function TodayPlayersTable({
 
                       {rsvpEnabled && isRsvpRequired && (
                         <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                          <RSVPButton player={player} />
+                          <RSVPButton
+                            player={player}
+                            tournamentId={currentTournament?.id!}
+                          />
                         </td>
                       )}
                       <td className="rsvp-icon whitespace-nowrap px-3 py-3 ">
-                        {player.arrived ? '✔️' : ''}
+                        {player.arrived === currentTournament.id ? '✔️' : ''}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3 ">
                         <EntriesButton player={player} />
@@ -370,16 +400,19 @@ export default function TodayPlayersTable({
                             tournaments={tournaments}
                             userId={userId}
                             setQuery={setQuery}
+                            tournamentId={tournamentId}
                           />
 
                           <OpenPositionModalButton
                             player={player}
                             initPosition={minPosition}
+                            tournamentId={tournamentId}
                           />
 
                           <OpenPrizeModalButton
                             player={player}
                             prizesInformation={prizesInformation}
+                            tournamentId={tournamentId}
                           />
                         </div>
                       </td>

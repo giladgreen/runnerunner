@@ -3,25 +3,27 @@
 import { HashtagIcon } from '@heroicons/react/24/outline';
 import Button from '@/app/ui/client/Button';
 import { setPlayerPosition } from '@/app/lib/actions';
-import { useFormState } from 'react-dom';
-import { PlayerForm } from '@/app/lib/definitions';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
 import { useEffect, useState } from 'react';
+import { PlayerDB } from '@/app/lib/definitions';
 
 export default function SetPositionForm({
   player,
   hide,
   prevPage,
   initPosition,
+  tournamentId,
 }: {
-  player: PlayerForm;
+  player: PlayerDB;
   hide?: () => void;
   prevPage: string;
   initPosition: number;
+  tournamentId: string;
 }) {
   const setPlayerPositionWithPlayerId = setPlayerPosition.bind(null, {
     playerId: player.id,
     prevPage,
+    tournamentId,
   });
 
   const [position, setPosition] = useState(initPosition);

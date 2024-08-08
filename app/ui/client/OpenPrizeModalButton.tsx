@@ -1,6 +1,6 @@
 'use client';
 
-import { PlayerDB, PlayerForm, PrizeInfoDB } from '@/app/lib/definitions';
+import { PlayerDB, PrizeInfoDB } from '@/app/lib/definitions';
 import React from 'react';
 
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -10,9 +10,11 @@ import { GiftIcon, HashtagIcon } from '@heroicons/react/24/solid';
 export default function OpenPrizeModalButton({
   player,
   prizesInformation,
+  tournamentId,
 }: {
   player: PlayerDB;
   prizesInformation: PrizeInfoDB[];
+  tournamentId: string;
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const [show, setShow] = React.useState(false);
@@ -34,10 +36,11 @@ export default function OpenPrizeModalButton({
 
       <div className={show ? 'edit-player-modal' : 'hidden'}>
         <SetPrizeForm
-          player={player as unknown as PlayerForm}
+          player={player}
           hide={close}
           prevPage={prevPage}
           prizesInformation={prizesInformation}
+          tournamentId={tournamentId}
         />
       </div>
     </div>

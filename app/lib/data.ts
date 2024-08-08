@@ -20,7 +20,6 @@ import {
   getTodayShortDate,
   sumArrayByProp,
   positionComparator,
-  nameComparator,
   phoneNumberComparator,
 } from './utils';
 import { redirect } from 'next/navigation';
@@ -59,11 +58,6 @@ async function getAllRsvps() {
 }
 
 async function getUserById(userId: string) {
-  // const all =
-  //     await sql<UserDB>`SELECT * FROM users;`;
-  //
-  // console.log(all.rows.map((user) => `${user.id} ${user.name}  ${user.phone_number}`))
-
   const usersResult =
     await sql<UserDB>`SELECT * FROM users WHERE id = ${userId};`;
   return usersResult.rows[0] ?? null;
@@ -80,6 +74,7 @@ async function getPlayerTournamentsHistory(phoneNumber: string) {
     return {
       date: item.date,
       tournament_name: item.tournament_name,
+      tournament_id: item.tournament_id,
       place,
     };
   });
@@ -101,15 +96,18 @@ WHERE P.id = ${playerId};`;
   ]);
 
   player.historyLog = historyData.rows;
-  player.rsvps = rsvpResults.rows.map(({ date }) => date);
+  player.rsvps = rsvpResults.rows.map(({ date, tournament_id }) => ({
+    date,
+    tournamentId: tournament_id,
+  }));
 
   return player;
 }
 
-async function isPlayerRsvp(playerPhoneNumber: string, date: string) {
+async function getPlayerRsvpsForDate(playerPhoneNumber: string, date: string) {
   const rsvpResults =
     await sql<RSVPDB>`SELECT * FROM rsvp WHERE date = ${date} AND phone_number = ${playerPhoneNumber};`;
-  return rsvpResults.rows.length > 0;
+  return rsvpResults.rows;
 }
 
 async function getPlayerByPhoneNumber(phoneNumber: string) {
@@ -133,13 +131,27 @@ async function getTodayTournaments(day?: string) {
   return todayTournamentResult.rows;
 }
 
-async function getAllTournaments() {
-  const tournamentsResults =
-    await sql<TournamentDB>`SELECT * FROM tournaments ORDER BY i ASC`;
-  return tournamentsResults.rows;
+async function getAllTournaments(includeDeleted?: boolean) {
+  let tournaments = (await sql<TournamentDB>`SELECT * FROM tournaments ORDER BY i ASC`).rows;
+
+  if (includeDeleted) {
+    const deletedTournamentsResults =
+        (await sql<TournamentDB>`SELECT * FROM deleted_tournaments ORDER BY i ASC`).rows;
+
+    // @ts-ignore
+    tournaments = [...tournaments, ...deletedTournamentsResults].sort((a,b) => a.i - b.i);
+  }
+
+  return tournaments;
 }
 
-async function getDateWinnersRecords(date: string) {
+async function getTournamentWinnersRecord(tournamentId: string, date: string) {
+  const winnersResult =
+    await sql<WinnerDB>`SELECT * FROM winners WHERE date=${date} AND tournament_id = ${tournamentId}`;
+  return winnersResult.rows[0];
+}
+
+async function getTournamentWinnersRecordsByDate(date: string) {
   const winnersResult =
     await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
   return winnersResult.rows;
@@ -180,32 +192,41 @@ export async function getAllPlayers() {
  JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number) AS H
     ON P.phone_number = H.phone_number`;
 
-  const [allPlayersResult, rsvpResults, todayHistoryUnfiltered, winnersRecords] =
-    await Promise.all([
-      playersPromise,
-      sql<RSVPDB>`SELECT * FROM rsvp;`,
-      getTodayHistory(),
-      getDateWinnersRecords(todayDate),
-    ]);
+  const [
+    allPlayersResult,
+    rsvpResults,
+    todayHistoryUnfiltered,
+    winnersRecords,
+  ] = await Promise.all([
+    playersPromise,
+    sql<RSVPDB>`SELECT * FROM rsvp;`,
+    getTodayHistory(),
+    getTournamentWinnersRecordsByDate(todayDate),
+  ]);
   const allPlayers = allPlayersResult.rows;
 
-  const rsvp = rsvpResults.rows;
+  const allRsvps = rsvpResults.rows;
 
   const todayHistory = todayHistoryUnfiltered.filter(
     ({ type }) => type != 'prize' && type != 'credit_to_other',
   );
-const winnersRecord = winnersRecords[0];//TODO::: use all tournaments
-  const winnersObject = winnersRecord ? JSON.parse(winnersRecord.winners) : {};
+
+  const winnersObjects = winnersRecords.map((winnersRecord) =>
+    winnersRecord ? JSON.parse(winnersRecord.winners) : {},
+  );
 
   allPlayers.forEach((player) => {
     player.balance = Number(player.balance);
-    player.rsvps = rsvp
-      .filter(({ phone_number }) => phone_number === player.phone_number)
-      .map(({ date }) => date);
-
-    player.rsvpForToday = Boolean(
-      player.rsvps.find((date) => date === todayDate),
+    const rsvps = allRsvps.filter(
+      ({ phone_number }) => phone_number === player.phone_number,
     );
+    player.rsvps = rsvps.map(({ date, tournament_id }) => ({
+      date,
+      tournamentId: tournament_id,
+    }));
+
+    player.rsvpForToday = rsvps.find(({ date }) => date === todayDate)
+      ?.tournament_id;
 
     const playerItems = todayHistory.filter(
       ({ phone_number, change, type }) =>
@@ -213,9 +234,15 @@ const winnersRecord = winnersRecords[0];//TODO::: use all tournaments
         (change < 0 || type === 'credit_by_other'),
     ) as LogDB[];
 
-    player.position = winnersObject[player.phone_number]?.position || 0;
+    const winnersObject = winnersObjects.find(
+      (winnersObject) => winnersObject[player.phone_number],
+    );
+    player.position = winnersObject
+      ? winnersObject[player.phone_number]?.position || 0
+      : 0;
 
-    player.arrived = playerItems.length > 0;
+    player.arrived =
+      playerItems.length > 0 ? playerItems[0].tournament_id : undefined;
     player.entries = playerItems.length;
 
     player.name = player.name.trim();
@@ -248,7 +275,7 @@ async function getTopDebtPlayers() {
 
 async function fetchTopPlayers(
   players: PlayerDB[],
-  rsvp: RSVPDB[] = [],
+  allRsvps: RSVPDB[] = [],
   todayHistory: LogDB[] = [],
 ) {
   try {
@@ -256,19 +283,23 @@ async function fetchTopPlayers(
 
     players.forEach((player) => {
       player.balance = Number(player.balance);
-      player.arrived = Boolean(
-        todayHistory.find(
-          ({ phone_number, change, type }) =>
-            phone_number === player.phone_number &&
-            (change < 0 || type === 'credit_by_other'),
-        ),
+      player.arrived = todayHistory.find(
+        ({ phone_number, change, type }) =>
+          phone_number === player.phone_number &&
+          (change < 0 || type === 'credit_by_other'),
+      )?.tournament_id;
+
+      const rsvps = allRsvps.filter(
+        ({ phone_number }) => phone_number === player.phone_number,
       );
-      player.rsvps = rsvp
-        .filter(({ phone_number }) => phone_number === player.phone_number)
-        .map(({ date }) => date);
-      player.rsvpForToday = Boolean(
-        player.rsvps.find((date) => date === todayDate),
-      );
+
+      player.rsvps = rsvps.map(({ date, tournament_id }) => ({
+        date,
+        tournamentId: tournament_id,
+      }));
+
+      player.rsvpForToday = rsvps.find(({ date }) => date === todayDate)
+        ?.tournament_id;
     });
     return players;
   } catch (error) {
@@ -297,7 +328,7 @@ async function fetchXPlayers(x: string, getXPlayers: () => PlayerDB[]) {
 function getPlayerWithExtraData(
   player: PlayerDB,
   phoneAndBalance: { phone_number: string; balance: string }[],
-) {
+): PlayerDB {
   return {
     ...player,
     balance:
@@ -318,7 +349,7 @@ async function fetchSortedPlayers(
     await sql`SELECT phone_number,sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number`
   ).rows as { phone_number: string; balance: string }[];
 
-  let results = [];
+  let results: PlayerDB[];
   switch (sortBy) {
     case 'name':
       results = (
@@ -429,68 +460,61 @@ export async function fetchRSVPAndArrivalData() {
         getTodayHistory(),
         getTodayTournaments(),
       ]);
-    const todayHistory = todayHistoryWithZero.filter(
-      (item) => item.change < 0 || item.type === 'credit_by_other',
-    );
-    const rsvpForToday = allPlayers.filter(
-      (player) => player.rsvpForToday,
-    ).length;
-
-    const todayTournament = todayTournaments[0];//TODO::: use all tournaments
-    const todayTournamentMaxPlayers = todayTournament.rsvp_required
-      ? todayTournament?.max_players
-      : null;
-
-    if (todayHistory.length === 0) {
-      return {
-        rsvpForToday,
-        arrivedToday: 0,
-        todayCreditIncome: 0,
-        todayCashIncome: 0,
-        todayTransferIncome: 0,
-        reEntriesCount: 0,
-        todayTournamentMaxPlayers,
-        todayTournament,
-      };
-    }
-    const reEntriesCount =
-      todayHistory.length -
-      Array.from(new Set(todayHistory.map(({ phone_number }) => phone_number)))
-        .length;
-
-    const todayCreditIncome = sumArrayByProp(
-      todayHistory.filter(
-        ({ type }) => type === 'credit' || type === 'credit_to_other',
-      ),
-      'change',
-    );
-    const todayCashIncome = sumArrayByProp(
-      todayHistory.filter(({ type }) => type === 'cash'),
-      'change',
-    );
-    const todayTransferIncome = sumArrayByProp(
-      todayHistory.filter(({ type }) => type === 'wire'),
-      'change',
-    );
-    const arrivedToday = Array.from(
-      new Set(todayHistory.map(({ phone_number }) => phone_number)),
-    ).length;
 
     methodEnd('fetchRSVPAndArrivalData');
+
     return {
-      rsvpForToday,
-      arrivedToday,
-      todayCreditIncome:
-        todayCreditIncome < 0 ? -1 * todayCreditIncome : todayCreditIncome,
-      todayCashIncome:
-        todayCashIncome < 0 ? -1 * todayCashIncome : todayCashIncome,
-      todayTransferIncome:
-        todayTransferIncome < 0
-          ? -1 * todayTransferIncome
-          : todayTransferIncome,
-      reEntriesCount,
-      todayTournamentMaxPlayers,
-      todayTournament,
+      todayTournaments: todayTournaments.map((t) => {
+        const rsvpForToday = allPlayers.filter(
+          (player) => t.id === player.rsvpForToday,
+        ).length;
+
+        const todayHistory = todayHistoryWithZero.filter(
+          (item) =>
+            (item.change < 0 || item.type === 'credit_by_other') &&
+            item.tournament_id === t.id,
+        );
+        const reEntriesCount =
+          todayHistory.length -
+          Array.from(
+            new Set(todayHistory.map(({ phone_number }) => phone_number)),
+          ).length;
+
+        const todayCreditIncome = sumArrayByProp(
+          todayHistory.filter(
+            ({ type }) => type === 'credit' || type === 'credit_to_other',
+          ),
+          'change',
+        );
+        const todayCashIncome = sumArrayByProp(
+          todayHistory.filter(({ type }) => type === 'cash'),
+          'change',
+        );
+        const todayTransferIncome = sumArrayByProp(
+          todayHistory.filter(({ type }) => type === 'wire'),
+          'change',
+        );
+
+        const arrivedToday = Array.from(
+          new Set(todayHistory.map(({ phone_number }) => phone_number)),
+        ).length;
+
+        return {
+          ...t,
+          rsvpForToday,
+          arrivedToday,
+          todayCreditIncome:
+            todayCreditIncome < 0 ? -1 * todayCreditIncome : todayCreditIncome,
+          todayCashIncome:
+            todayCashIncome < 0 ? -1 * todayCashIncome : todayCashIncome,
+          todayTransferIncome:
+            todayTransferIncome < 0
+              ? -1 * todayTransferIncome
+              : todayTransferIncome,
+          reEntriesCount,
+          todayTournamentMaxPlayers: t.rsvp_required ? t.max_players : null,
+        } as TournamentDB;
+      }),
     };
   } catch (error) {
     console.error('Database Error:', error);
@@ -500,13 +524,14 @@ export async function fetchRSVPAndArrivalData() {
   }
 }
 
-export async function fetchFinalTablePlayers(stringDate?: string) {
+export async function fetchFinalTablePlayers(
+  tournamentId: string,
+  date: string,
+) {
   methodStart();
   noStore();
   try {
-    const date = stringDate ?? getTodayShortDate();
-    const winnersResults = await getDateWinnersRecords(date);
-    const winnersResult = winnersResults[0];//TODO::: use all tournaments
+    const winnersResult = await getTournamentWinnersRecord(tournamentId, date);
     const winnersObject = winnersResult
       ? JSON.parse(winnersResult.winners)
       : {};
@@ -533,7 +558,7 @@ export async function fetchFinalTablePlayers(stringDate?: string) {
   }
 }
 
-export async function fetchTodaysPlayersPhoneNumbers() {
+export async function fetchTodayPlayersPhoneNumbers() {
   const todayArrivals = (await getTodayHistory()).map(
     ({ phone_number }) => phone_number,
   );
@@ -563,7 +588,7 @@ export async function fetchPlayersPrizes(playerPhoneNumber?: string) {
       : prizes.filter((prize) => prize.phone_number === playerPhoneNumber);
     methodEnd('fetchPlayersPrizes');
 
-    const resultObject = {
+    return {
       chosenPrizes: result.filter(
         (p) => !p.delivered && !p.ready_to_be_delivered,
       ),
@@ -572,7 +597,6 @@ export async function fetchPlayersPrizes(playerPhoneNumber?: string) {
       ),
       deliveredPrizes: result.filter((p) => p.delivered),
     };
-    return resultObject;
   } catch (error) {
     console.error('Database Error:', error);
     methodEnd('fetchPlayersPrizes with error');
@@ -599,7 +623,7 @@ export async function fetchFilteredPlayers(
          GROUP BY phone_number
     `;
 
-    const [playersHistoryCountResult, players, rsvp] = await Promise.all([
+    const [playersHistoryCountResult, players, allRsvps] = await Promise.all([
       playersHistoryCountResultPromise,
       playersResultPromise,
       getAllRsvps(),
@@ -614,12 +638,16 @@ export async function fetchFilteredPlayers(
         ({ phone_number }) => phone_number === player.phone_number,
       );
       player.historyCount = historyCount?.count ?? 0;
-      player.rsvps = rsvp
-        .filter(({ phone_number }) => phone_number === player.phone_number)
-        .map(({ date }) => date);
-      player.rsvpForToday = Boolean(
-        player.rsvps.find((date) => date === todayDate),
+      const rsvps = allRsvps.filter(
+        ({ phone_number }) => phone_number === player.phone_number,
       );
+      player.rsvps = rsvps.map(({ date, tournament_id }) => ({
+        date,
+        tournamentId: tournament_id,
+      }));
+
+      player.rsvpForToday = rsvps.find(({ date }) => date === todayDate)
+        ?.tournament_id;
     });
     methodEnd('fetchFilteredPlayers');
     return players;
@@ -649,103 +677,96 @@ export async function fetchPlayersPagesCount(query: string) {
   }
 }
 
-
 export async function fetchTournamentsData() {
   methodStart();
   noStore();
   try {
     const [tournaments, history] = await Promise.all([
-      getAllTournaments(),
+      getAllTournaments(true),
       getAllHistory(),
     ]);
 
     const dateToPlayerMap = {};
 
-    const result = history.reduce(
-      (acc, { phone_number, change, type, updated_at }) => {
-        const newAcc = { ...acc };
-        const dateAsString =
-          typeof updated_at === 'string'
-            ? new Date(updated_at).toISOString()
-            : (updated_at as Date).toISOString();
-        const dateObj = new Date(updated_at);
-        const tournament = tournaments.find(
-          ({ day }) => day === getDayOfTheWeek(dateObj),
-        );
+    const result = history
+      .filter((item) => item.tournament_id && item.change < 0)
+      .reduce(
+        (acc, { phone_number, change, type, updated_at, tournament_id }) => {
+          const newAcc = { ...acc };
+          const dateAsString =
+            typeof updated_at === 'string'
+              ? new Date(updated_at).toISOString()
+              : (updated_at as Date).toISOString();
+          const tournament = tournaments.find(
+            ({ id }) =>
+              id === tournament_id,
+          );
 
-        if (
-          dateObj.getTime() < new Date('2024-06-15T10:00:00.000Z').getTime()
-        ) {
-          return newAcc;
-        }
-        const date = dateAsString.slice(0, 10);
-        // @ts-ignore
-        if (!newAcc[date]) {
+          const date = dateAsString.slice(0, 10);
           // @ts-ignore
-          newAcc[date] = {
-            tournamentName: tournament?.name,
-            cash: 0,
-            credit: 0,
-            wire: 0,
-            total: 0,
-            players: 0,
-            entries: 0,
-            reentries: 0,
-            date,
-          };
-        }
-
-        const amount = change > 0 ? change : -1 * change;
-        // @ts-ignore
-        newAcc[date].total += amount;
-        // @ts-ignore
-        newAcc[date].entries += 1;
-        // @ts-ignore
-        newAcc[date][type] += amount;
-
-        // @ts-ignore
-        const datePlayers = dateToPlayerMap[date];
-        if (datePlayers) {
-          if (!datePlayers.includes(phone_number)) {
-            datePlayers.push(phone_number);
+          if (!newAcc[date]) {
             // @ts-ignore
-            newAcc[date].players += 1;
+            newAcc[date] = {};
+          }
+          // @ts-ignore
+          if (!newAcc[date][tournament?.id]) {
+            // @ts-ignore
+            newAcc[date][tournament?.id] = {
+              tournamentId: tournament?.id,
+              tournamentName: tournament?.name,
+              cash: 0,
+              credit: 0,
+              wire: 0,
+              total: 0,
+              players: 0,
+              entries: 0,
+              reentries: 0,
+              date,
+            };
+          }
+
+          const amount = -1 * change;
+
+          // @ts-ignore
+          newAcc[date][tournament?.id].total += amount;
+          // @ts-ignore
+          newAcc[date][tournament?.id].entries += 1;
+          // @ts-ignore
+          newAcc[date][tournament?.id][type] += amount;
+
+          // @ts-ignore
+          if (!dateToPlayerMap[date]) {
+            // @ts-ignore
+            dateToPlayerMap[date] = {};
+          }
+          // @ts-ignore
+          const datePlayers = dateToPlayerMap[date][tournament?.id];
+          if (datePlayers) {
+            if (!datePlayers.includes(phone_number)) {
+              datePlayers.push(phone_number);
+              // @ts-ignore
+              newAcc[date][tournament?.id].players += 1;
+            } else {
+              // @ts-ignore
+              newAcc[date][tournament?.id].reentries += 1;
+            }
           } else {
             // @ts-ignore
-            newAcc[date].reentries += 1;
+            dateToPlayerMap[date][tournament?.id] = [phone_number];
+            // @ts-ignore
+            newAcc[date][tournament?.id].players += 1;
           }
-        } else {
-          // @ts-ignore
-          dateToPlayerMap[date] = [phone_number];
-          // @ts-ignore
-          newAcc[date].players += 1;
-        }
 
-        return newAcc;
-      },
-      {},
-    );
+          return newAcc;
+        },
+        {},
+      );
     methodEnd('fetchTournamentsData');
 
     return result;
   } catch (error) {
     console.error('Database Error:', error);
     methodEnd('fetchTournamentsData with error');
-    throw new Error('Failed to fetch the fetch incomes.');
-  }
-}
-
-export async function fetchPlayersWithEnoughCredit() {
-  methodStart();
-  try {
-    const result = await getAllPlayers();
-    methodEnd('fetchPlayersWithEnoughCredit');
-    return result
-      .filter((player) => player.balance > -2000)
-      .sort(nameComparator);
-  } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchPlayersWithEnoughCredit with error');
     throw new Error('Failed to fetch the fetch incomes.');
   }
 }
@@ -802,32 +823,27 @@ export async function fetchAllPlayersForExport() {
     throw new Error('Failed to fetch bugs.');
   }
 }
-export async function fetchAllImagesForExport() {
-  methodStart();
-  noStore();
-  try {
-    const result = await getAllImages();
-    methodEnd('fetchAllPlayersForExport');
-    return result;
-  } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchAllPlayersForExport with error');
-    throw new Error('Failed to fetch bugs.');
-  }
-}
 export async function fetchTournaments() {
   methodStart();
   noStore();
   try {
     const results = await getAllTournaments();
 
-
-
     results.forEach((tournament) => {
-      if (results.find(t => t.day === tournament.day && t.id !== tournament.id)) {
+      tournament.rsvpForToday = 0;
+      tournament.todayTournamentMaxPlayers = 0;
+      tournament.arrivedToday = 0;
+      tournament.todayCreditIncome = 0;
+      tournament.todayCashIncome = 0;
+      tournament.todayTransferIncome = 0;
+      tournament.reEntriesCount = 0;
+
+      if (
+        results.find((t) => t.day === tournament.day && t.id !== tournament.id)
+      ) {
         tournament.day_has_more_then_one = true;
       }
-    })
+    });
 
     methodEnd('fetchTournaments');
     return results;
@@ -910,12 +926,16 @@ export async function fetchPlayerCurrentTournamentHistory(phoneNumber: string) {
 export async function fetchTournamentByTournamentId(tournamentId: string) {
   methodStart();
   noStore();
+  const allTournaments = (await sql<TournamentDB>`SELECT * FROM tournaments`).rows;
+  const allDeletedTournaments = (await sql<TournamentDB>`SELECT * FROM deleted_tournaments`).rows;
+
   try {
-
-    const result = await sql<TournamentDB>`SELECT * FROM tournaments WHERE id = ${tournamentId}`;
-
+    let result = allTournaments.find(t=>t.id === tournamentId);
+    if (!result) {
+      result = allDeletedTournaments.find(t=>t.id === tournamentId);
+    }
     methodEnd('fetchTournamentByTournamentId');
-    return result.rows[0];
+    return result
   } catch (error) {
     console.error('Database Error:', error);
     methodEnd('fetchTournamentByTournamentId with error');
@@ -939,13 +959,15 @@ export async function fetchTournamentsByDay(day?: string) {
   }
 }
 
-export async function fetchRsvpCountForTodayTournament() {
+export async function fetchRsvpCountForTodayTournament(tournamentId: string) {
   methodStart();
   noStore();
   try {
-    const rsvps = await getAllRsvps();
     const todayDate = getTodayShortDate();
-    const result = rsvps.filter((rsvp) => rsvp.date === todayDate).length;
+    const rsvps = await getAllRsvps();
+    const result = rsvps.filter(
+      (rsvp) => rsvp.tournament_id === tournamentId && rsvp.date === todayDate,
+    ).length;
     methodEnd('fetchRsvpCountForTodayTournament');
     return result;
   } catch (error) {
@@ -965,17 +987,17 @@ export async function fetchPlayerByUserId(userId: string) {
     }
 
     const playerPhoneNumber = user.phone_number;
-    // const playersResult = await sql<PlayerDB>`SELECT * FROM players WHERE phone_number = ${playerPhoneNumber};`;
     const player = await getPlayerByPhoneNumber(playerPhoneNumber);
 
     if (player) {
-      const [historyLog, rsvpForToday, tournamentsData] = await Promise.all([
+      const [historyLog, rsvpsForToday, tournamentsData] = await Promise.all([
         getPlayerHistory(playerPhoneNumber),
-        isPlayerRsvp(playerPhoneNumber, getTodayShortDate()),
+        getPlayerRsvpsForDate(playerPhoneNumber, getTodayShortDate()),
         getPlayerTournamentsHistory(playerPhoneNumber),
       ]);
       player.historyLog = historyLog;
-      player.rsvpForToday = rsvpForToday;
+      player.rsvpForToday =
+        rsvpsForToday.length > 0 ? rsvpsForToday[0].tournament_id : undefined;
       player.tournamentsData = tournamentsData;
     }
     methodEnd('fetchPlayerByUserId');

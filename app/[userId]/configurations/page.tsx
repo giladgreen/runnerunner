@@ -144,11 +144,15 @@ export default async function ConfigurationPage({
   const ffEnabled = importEnabled;
   const bugs = await fetchAllBugs();
   const players = await fetchAllPlayersForExport();
+
+  //TODO::: fix export here..
   // const images = await fetchAllImagesForExport();
-  const playersPlaces = await fetchFinalTablePlayers();
-  const tournaments = await fetchTournamentsByDay();
-  const { chosenPrizes } = await fetchPlayersPrizes();
-  const prizes = chosenPrizes;
+  // const tournaments = await fetchTournamentsByDay();
+  // for (const tournament of tournaments) {
+  //   tournament.playersPlaces = await  fetchFinalTablePlayers(tournament.id);
+  // }
+  // const { chosenPrizes } = await fetchPlayersPrizes();
+  // const prizes = chosenPrizes;
 
   return (
     <div className="full-width rtl" style={{ marginBottom: 20 }}>
@@ -164,19 +168,20 @@ export default async function ConfigurationPage({
         className="full-width rtl grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
         style={{ marginBottom: 20 }}
       >
-        <Card
-          title="ייצוא קרדיט שחקנים לקובץ CSV"
-          value={
-            <ExportPlayersButton
-              players={players as PlayerDB[]}
-              playersPlaces={playersPlaces}
-              tournaments={tournaments}
-              prizes={prizes}
-            />
-          }
-          type="export"
-          oneLine
-        />
+        {/*        {tournaments.map(t => <Card key={t.id}*/}
+        {/*            title={`${t.name} -*/}
+        {/*"ייצוא קרדיט שחקנים לקובץ CSV"`}*/}
+        {/*            value={*/}
+        {/*              <ExportPlayersButton*/}
+        {/*                  players={players as PlayerDB[]}*/}
+        {/*                  playersPlaces={t.playersPlaces}*/}
+        {/*                  tournaments={tournaments}*/}
+        {/*                  prizes={prizes}*/}
+        {/*              />*/}
+        {/*            }*/}
+        {/*            type="export"*/}
+
+        {/*        />)}*/}
 
         <Card
           title="ייצוא רשימת שחקנים שאישרו תוכן שיווקי"

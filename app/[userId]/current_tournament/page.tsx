@@ -1,17 +1,22 @@
-import TodayPlayersTable from '@/app/ui/client/TodayPlayersTable';
 import {
   fetchFeatureFlags,
+  fetchPlayersPrizes,
   fetchPrizesInfo,
+  fetchRSVPAndArrivalData,
+  fetchTodayPlayersPhoneNumbers,
   fetchTournaments,
   fetchUserById,
   getAllPlayers,
 } from '@/app/lib/data';
-import FinalTablePlayers from '@/app/ui/client/FinalTablePlayers';
-import PlayersPrizes from '@/app/ui/client/PlayersPrizes';
-import RSVPAndArrivalCardWrapper from '@/app/ui/client/RSVPAndArrivalCardWrapper';
+
 import TodayTournamentNameCardWrapper from '@/app/ui/client/TodayTournamentNameCardWrapper';
 import React from 'react';
 import RegisterSave from '@/app/ui/client/RegisterSave';
+import {
+  getFinalTablePlayersContent,
+  getPlayersPrizesContent,
+} from '@/app/ui/client/helpers';
+import CurrentTournamentPage from '@/app/ui/client/CurrentTournamentPage';
 
 export default async function CurrentTournament({
   params,
@@ -38,31 +43,24 @@ export default async function CurrentTournament({
   }
 
   const prizesInformation = await fetchPrizesInfo();
-  const tournaments = await fetchTournaments();
+
   const { rsvpEnabled } = await fetchFeatureFlags();
 
-  const now = new Date();
-  const dayOfTheWeek = now.toLocaleString('en-us', { weekday: 'long' });
-  const todayTournament = tournaments.find(
-    (tournament) => tournament.day === dayOfTheWeek,
-  );
-  const isRsvpRequired = todayTournament!.rsvp_required;
+  const { todayTournaments } = await fetchRSVPAndArrivalData();
 
-  // @ts-ignore
-  const rsvpPlayers = allPlayers.filter((player) => player.rsvpForToday);
-  const rsvpPlayersCount = rsvpPlayers.length;
+  const noTournamentsToday =
+    todayTournaments.length === 0 ||
+    !todayTournaments.find((t) => t.max_players > 0 || !t.rsvp_required);
 
-  const noTournamentToday =
-    todayTournament?.max_players === 0 && isRsvpRequired;
-  if (noTournamentToday) {
+  if (noTournamentsToday) {
     return (
       <div className="full-width w-full">
         <RegisterSave players={allPlayers} />
         <div className="full-width flex w-full items-center justify-between">
-          <TodayTournamentNameCardWrapper params={params} />
+          <TodayTournamentNameCardWrapper todayTournament={null} />
         </div>
         <a
-          href={`/${params.userId}/configurations/tournaments/${todayTournament?.day}/edit`}
+          href={`/${params.userId}/configurations/tournaments`}
           className="flex h-10 items-center rounded-lg bg-blue-400 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:bg-blue-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
         >
           <div style={{ textAlign: 'center', width: '100%' }}>
@@ -73,32 +71,48 @@ export default async function CurrentTournament({
     );
   }
 
+  const date = new Date().toISOString().slice(0, 10);
+  const finalTablePlayersContents: Array<JSX.Element | null> = await Promise.all(
+    todayTournaments.map((t) =>
+      getFinalTablePlayersContent(date, t.id, false, params.userId),
+    ),
+  );
+
+  const todayPlayersPhoneNumbers = await fetchTodayPlayersPhoneNumbers();
+
+  const { chosenPrizes } = await fetchPlayersPrizes();
+
+  const playersPrizes = chosenPrizes.filter((p) =>
+    todayPlayersPhoneNumbers.includes(p.phone_number),
+  );
+
+  const prizesContents: Array<JSX.Element | null> = await Promise.all(
+    todayTournaments.map((todayTournament) =>
+      getPlayersPrizesContent(
+        playersPrizes.filter(
+          (prize) =>
+            allPlayers.find(
+              (player) => player.phone_number === prize.phone_number,
+            )?.rsvpForToday === todayTournament.id,
+        ),
+        prizesInformation,
+        todayTournament.id,
+        false,
+        params.userId,
+        true,
+      ),
+    ),
+  );
+
   return (
-    <div className="full-width w-full">
-      <RegisterSave players={allPlayers} />
-      <div className="full-width flex w-full items-center justify-between">
-        <TodayTournamentNameCardWrapper params={params} />
-      </div>
-      <div className="full-width flex w-full items-center justify-between">
-        <RSVPAndArrivalCardWrapper params={params} />
-      </div>
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <FinalTablePlayers title="דירוג מנצחים" params={params} />
-      </div>
-
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <PlayersPrizes title="פרסים" showOnlyToday params={params} />
-      </div>
-
-      <TodayPlayersTable
-        prizesInformation={prizesInformation}
-        tournaments={tournaments}
-        rsvpPlayersCount={rsvpPlayersCount}
-        isRsvpRequired={isRsvpRequired}
-        allPlayers={allPlayers}
-        userId={params.userId}
-        rsvpEnabled={rsvpEnabled}
-      />
-    </div>
+    <CurrentTournamentPage
+      prizesContents={prizesContents}
+      rsvpEnabled={rsvpEnabled}
+      prizesInformation={prizesInformation}
+      allPlayers={allPlayers}
+      params={params}
+      todayTournaments={todayTournaments}
+      finalTablePlayersContents={finalTablePlayersContents}
+    />
   );
 }

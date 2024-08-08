@@ -10,7 +10,6 @@ import { redirect } from 'next/navigation';
 import { AuthError } from 'next-auth';
 import {
   PlayerDB,
-  PlayerForm,
   UserDB,
   TournamentDB,
   WinnerDB,
@@ -24,7 +23,7 @@ import {
 
 import { signIn } from '../../auth';
 import { unstable_noStore as noStore } from 'next/dist/server/web/spec-extension/unstable-no-store';
-const DAY = 24 * 60 * 60 * 1000;
+
 const TARGET_MAIL = 'green.gilad+runner@gmail.com';
 let clearOldRsvpLastRun = new Date('2024-06-15T10:00:00.000Z').getTime();
 
@@ -98,20 +97,20 @@ function sendEmail(to: string, subject: string, body: string) {
     subject,
     text: body,
   };
-  console.log('## sending email to:', to);
-  console.log('## subject:', subject);
-  console.log('## body:', body);
+  console.log('>> sending email to:', to);
+  console.log('>> subject:', subject);
+  console.log('>> body:', body);
   if (process.env.LOCAL === 'true') {
-    console.log('## skipping sending email locally');
+    console.log('>> skipping sending email locally');
     return;
   }
   transporter.sendMail(
     mailOptions,
     function (error: any, info: { response: string }) {
       if (error) {
-        console.error('error sending mail:', error.message);
+        console.error('>> error sending mail:', error.message);
       } else {
-        console.log('Email sent: ' + info.response);
+        console.log('>> Email sent: ' + info.response);
       }
     },
   );
@@ -132,13 +131,13 @@ function cancelTransaction() {
 export async function removeOldRsvp() {
   try {
     await startTransaction();
-    console.log('## remove Old Rsvp');
+    console.log('>> remove Old Rsvp');
     const rsvpItemsResult =
       await sql<RSVPDB>`SELECT * FROM rsvp WHERE created_at < now() - interval '48 hour'`;
     const rsvpItems = rsvpItemsResult.rows;
     await Promise.all(
       rsvpItems.map((item) => {
-        return sql`INSERT INTO deleted_rsvp (id, date, phone_number, created_at) VALUES (${item.id},${item.date},${item.phone_number},${item.created_at})`;
+        return sql`INSERT INTO deleted_rsvp (id, date, phone_number, tournament_id) VALUES (${item.id},${item.date},${item.phone_number},${item.tournament_id})`;
       }),
     );
     await sql`DELETE FROM rsvp WHERE created_at < now() - interval '48 hour'`;
@@ -160,13 +159,14 @@ function insertIntoImages(phoneNumber: string, imageUrls: string) {
 
 function insertIntoHistory(
   phoneNumber: string,
+  tournamentId: string | null,
   balance: number,
   note = '',
   type = 'credit',
 ) {
   return sql`
-      INSERT INTO history (phone_number, change, note, type)
-      VALUES (${phoneNumber}, ${balance}, ${note}, ${type})
+      INSERT INTO history (phone_number, change, note, type, tournament_id)
+      VALUES (${phoneNumber}, ${balance}, ${note}, ${type}, ${tournamentId})
     `;
 }
 async function touchPlayer(phoneNumber: string) {
@@ -188,7 +188,7 @@ async function insertIntoPlayers(
           VALUES (${name}, ${phoneNumber}, ${imageUrl} , ${notes ?? ''})
         `;
 
-    await insertIntoHistory(phoneNumber, balance, note, 'credit');
+    await insertIntoHistory(phoneNumber, null, balance, note, 'credit');
     await commitTransaction();
   } catch (e) {
     await cancelTransaction();
@@ -323,7 +323,7 @@ async function handleCreditByOther(
   type: string,
   otherPlayerPhoneNumber: string,
   note: string,
-  player: PlayerForm,
+  player: PlayerDB,
 ) {
   noStore();
   let otherPlayer;
@@ -364,11 +364,12 @@ async function handleCreditByOther(
 }
 
 export async function createPlayerLog(
-  player: PlayerForm,
+  player: PlayerDB,
   formData: FormData,
   prevPage: string,
   usage: boolean,
   userId: string,
+  tournamentId: string | null,
 ) {
   noStore();
   const CreateUsageLog = z.object({
@@ -421,24 +422,24 @@ export async function createPlayerLog(
     await startTransaction();
     if (useOtherPlayerCredit) {
       await sql`
-              INSERT INTO history (phone_number, change, note, type, updated_by, other_player_phone_number)
+              INSERT INTO history (phone_number, change, note, type, updated_by, other_player_phone_number, tournament_id)
               VALUES 
               (${
                 player.phone_number
               }, ${0}, ${historyNote}, ${'credit_by_other'}, ${username}, ${
                 otherPlayerPhoneNumber as string
-              }),
+              }, ${tournamentId}),
               (${
                 otherPlayerPhoneNumber as string
-              }, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username}, '')
+              }, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username}, '', ${tournamentId})
             `;
     } else {
       await sql`
-              INSERT INTO history (phone_number, change, note, type, updated_by)
-              VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type}, ${username})
+              INSERT INTO history (phone_number, change, note, type, updated_by, tournament_id)
+              VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type}, ${username}, ${tournamentId})
             `;
     }
-    const date = new Date().toISOString();
+
     const playerPhoneToUpdate =
       useOtherPlayerCredit && otherPlayer
         ? otherPlayer.phone_number
@@ -459,7 +460,12 @@ export async function createPlayerLog(
 }
 
 export async function createPlayerUsageLog(
-  data: { player: PlayerForm; prevPage: string; userId: string },
+  data: {
+    player: PlayerDB;
+    prevPage: string;
+    userId: string;
+    tournamentId: string | null;
+  },
   _prevState: State,
   formData: FormData,
 ) {
@@ -470,11 +476,17 @@ export async function createPlayerUsageLog(
     data.prevPage,
     true,
     data.userId,
+    data.tournamentId,
   );
 }
 
 export async function createPlayerNewCreditLog(
-  data: { player: PlayerForm; prevPage: string; userId: string },
+  data: {
+    player: PlayerDB;
+    prevPage: string;
+    userId: string;
+    tournamentId: string | null;
+  },
   _prevState: State,
   formData: FormData,
 ) {
@@ -485,16 +497,21 @@ export async function createPlayerNewCreditLog(
     data.prevPage,
     false,
     data.userId,
+    data.tournamentId,
   );
 }
 
 export async function setPlayerPosition(
-  { playerId, prevPage }: { playerId: string; prevPage: string },
+  {
+    playerId,
+    prevPage,
+    tournamentId,
+  }: { playerId: string; prevPage: string; tournamentId: string },
   formData: FormData,
 ) {
   noStore();
   const newPosition = Number(formData.get('position') as string);
-  console.log('# setPlayerPosition.  newPosition', newPosition);
+
   if (isNaN(newPosition) || newPosition < 0) {
     return {
       message: 'איראה שגיאה',
@@ -502,7 +519,6 @@ export async function setPlayerPosition(
   }
   try {
     const date = new Date().toISOString().slice(0, 10);
-    const today = new Date().toLocaleString('en-us', { weekday: 'long' });
 
     const player = await getPlayerById(playerId);
     if (!player) {
@@ -513,16 +529,22 @@ export async function setPlayerPosition(
     }
 
     const [todayTournamentResult, winnersResult] = await Promise.all([
-      sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${today};`,
-      sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`,
+      sql<TournamentDB>`SELECT * FROM tournaments WHERE id = ${tournamentId};`,
+      sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date} AND tournament_id = ${tournamentId}`,
     ]);
 
     const todayTournament = todayTournamentResult.rows[0];
     let winnersObject: WinnerDB | undefined = winnersResult.rows[0];
     if (!winnersObject) {
       const allWinners = await sql<WinnerDB>`SELECT * FROM winners`;
-      winnersObject = allWinners.rows.find((item) => item.date === date);
+      winnersObject = allWinners.rows.find(
+        (item) => item.date === date && item.tournament_id === tournamentId,
+      );
+      if (winnersObject) {
+        console.warn('# This code is not redundant - we actually get here..');
+      }
     }
+
     if (winnersObject) {
       const newWinnersObject = {
         ...JSON.parse(winnersObject.winners),
@@ -535,9 +557,10 @@ export async function setPlayerPosition(
       if (newPosition == 0) {
         delete newWinnersObject[player.phone_number];
       }
+
       await sql`UPDATE winners SET winners=${JSON.stringify(
         newWinnersObject,
-      )} WHERE date = ${date}`;
+      )} WHERE id = ${winnersObject.id}`;
     } else {
       const newWinnersObject = {
         [player.phone_number]: {
@@ -546,9 +569,10 @@ export async function setPlayerPosition(
           creditWorth: -1,
         },
       };
-      await sql`INSERT INTO winners (date, tournament_name, winners) VALUES (${date}, ${
+
+      await sql`INSERT INTO winners (date, tournament_name, tournament_id, winners) VALUES (${date}, ${
         todayTournament.name
-      }, ${JSON.stringify(newWinnersObject)})`;
+      },${tournamentId}, ${JSON.stringify(newWinnersObject)})`;
     }
   } catch (error) {
     console.error('## create log error', error);
@@ -561,14 +585,18 @@ export async function setPlayerPosition(
   }
 }
 
-async function getDateWinnersRecords(date: string) {
+async function getDateWinnersRecord(date: string, tournamentId: string) {
   const winnersResult =
-    await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`;
-  return winnersResult.rows;
+    await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date} AND tournament_id = ${tournamentId}`;
+  return winnersResult.rows[0];
 }
 
 export async function setPrizesCreditWorth(
-  { date, prevPage }: { date: string; prevPage: string },
+  {
+    date,
+    tournamentId,
+    prevPage,
+  }: { date: string; prevPage: string; tournamentId: string },
   _prevState: State,
   formData: FormData,
 ) {
@@ -576,14 +604,14 @@ export async function setPrizesCreditWorth(
 
   try {
     await startTransaction();
-    const winnersObjects = await getDateWinnersRecords(date);
-    if (!winnersObjects || !winnersObjects.length) {
+    const winnersObject = await getDateWinnersRecord(date, tournamentId);
+
+    if (!winnersObject) {
       console.error('## setPrizesCreditWorth Failed to find winnersObject');
       return {
         message: 'איראה שגיאה',
       };
     }
-    const winnersObject = winnersObjects[0];//TODO::: use all tournaments
     const currentWinnersObject = JSON.parse(winnersObject!.winners);
 
     let credits = [] as number[];
@@ -599,7 +627,7 @@ export async function setPrizesCreditWorth(
 
     await sql`UPDATE winners SET winners=${JSON.stringify(
       currentWinnersObject,
-    )} WHERE date = ${date}`;
+    )} WHERE id = ${winnersObject.id}`;
 
     await commitTransaction();
   } catch (error) {
@@ -619,11 +647,13 @@ export async function givePlayerPrizeOrCredit(
     playerId,
     userId,
     prevPage,
+    tournamentId,
   }: {
     stringDate?: string;
     userId: string;
     playerId: string;
     prevPage: string;
+    tournamentId: string | null;
   },
   _prevState: State,
   formData: FormData,
@@ -650,11 +680,10 @@ export async function givePlayerPrizeOrCredit(
       (formData.get('update_player_credit') as string) === 'on';
 
     const date = stringDate ?? new Date().toISOString().slice(0, 10);
-    const day = new Date(date).toLocaleString('en-us', { weekday: 'long' });
 
     const [tournamentResult, winnersResult] = await Promise.all([
-      sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${day};`,
-      sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date}`,
+      sql<TournamentDB>`SELECT * FROM tournaments WHERE id = ${tournamentId};`,
+      sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date} AND tournament_id = ${tournamentId}`,
     ]);
 
     const winners = winnersResult.rows[0];
@@ -688,6 +717,7 @@ export async function givePlayerPrizeOrCredit(
     }
     const tournament = tournamentResult.rows[0];
     const tournamentName = tournament.name;
+
     // @ts-ignore
     const place = POSITIONS[position];
     let note = ` ${tournamentName}, מקום ${place}`;
@@ -709,10 +739,10 @@ export async function givePlayerPrizeOrCredit(
         await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`
       ).rows[0];
       await sql`
-          INSERT INTO history (phone_number, change, note, type, updated_by)
+          INSERT INTO history (phone_number, change, note, type, updated_by, tournament_id)
           VALUES (${player.phone_number}, ${amount}, ${note}, 'credit', ${
             userResult?.name ?? 'unknown'
-          })
+          }, ${tournamentId})
         `;
     } else if (type === 'prize') {
       const todayTournamentData = `${tournamentName} ${date}`;
@@ -726,17 +756,15 @@ export async function givePlayerPrizeOrCredit(
           await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`
         ).rows[0];
 
-
-
         const amount = creditWorth - prizeWorth;
         note += ` - `;
         note += ` לקח פרס בשווי `;
         note += `${prizeWorth}`;
 
-        await sql`INSERT INTO history (phone_number, change, note, type, updated_by)
+        await sql`INSERT INTO history (phone_number, change, note, type, updated_by, tournament_id)
         VALUES (${player.phone_number}, ${amount}, ${note}, 'credit', ${
           userResult?.name ?? 'unknown'
-        })`;
+        }, ${tournamentId})`;
       }
     }
 
@@ -747,7 +775,7 @@ export async function givePlayerPrizeOrCredit(
 
     await sql`UPDATE winners SET winners=${JSON.stringify(
       newWinnersObject,
-    )} WHERE date = ${winners.date}`;
+    )} WHERE id = ${winners.id}`;
 
     await commitTransaction();
   } catch (error) {
@@ -762,7 +790,11 @@ export async function givePlayerPrizeOrCredit(
   }
 }
 export async function setPlayerPrize(
-  { playerId, prevPage }: { playerId: string; prevPage: string },
+  {
+    playerId,
+    prevPage,
+    tournamentId,
+  }: { playerId: string; prevPage: string; tournamentId: string },
   _prevState: State,
   formData: FormData,
 ) {
@@ -781,10 +813,9 @@ export async function setPlayerPrize(
         message: 'איראה שגיאה',
       };
     }
-    const today = new Date().toLocaleString('en-us', { weekday: 'long' });
 
     const todayTournamentResult =
-      await sql<TournamentDB>`SELECT * FROM tournaments WHERE day = ${today};`;
+      await sql<TournamentDB>`SELECT * FROM tournaments WHERE id = ${tournamentId};`;
     const todayTournament = todayTournamentResult.rows[0];
     const date = new Date().toISOString().slice(0, 10);
     const todayTournamentData = `${todayTournament.name} ${date}`;
@@ -863,26 +894,34 @@ export async function updatePlayer(
   }
 }
 
-export async function deleteTournament(tournamentId: string, prevPage: string, userId:string ){
+export async function deleteTournament(
+  tournamentId: string,
+  prevPage: string,
+  userId: string,
+) {
   noStore();
   try {
-    const user = (await sql`select * from users WHERE id = ${userId}`).rows[0];
-    const t = (await sql`select * from tournaments WHERE id = ${tournamentId}`).rows[0];
-    if (t){
+    const user = (await sql`SELECT * FROM users WHERE id = ${userId}`).rows[0];
+    const tournamentToDelete = (
+      await sql`SELECT * FROM tournaments WHERE id = ${tournamentId}`
+    ).rows[0];
+    if (tournamentToDelete) {
       await sql`INSERT INTO deleted_tournaments (id,day,name, i, buy_in,re_buy,max_players, rsvp_required, deleted_by ) 
-        VALUES (${t.id},${t.day},${t.name},${ t.i},${ t.buy_in},${t.re_buy},${t.max_players},${ t.rsvp_required},${ user ? (user.name ?? user.phone_number ?? userId) : userId})`;
+        VALUES (${tournamentToDelete.id},${tournamentToDelete.day},${
+          tournamentToDelete.name
+        },${tournamentToDelete.i},${tournamentToDelete.buy_in},${
+          tournamentToDelete.re_buy
+        },${tournamentToDelete.max_players},${
+          tournamentToDelete.rsvp_required
+        },${user ? user.name ?? user.phone_number ?? userId : userId})`;
 
-      await sql`
-      delete from tournaments
-      WHERE id = ${tournamentId}
-    `;
+      await sql`DELETE FROM tournaments WHERE id = ${tournamentId}`;
       sendEmail(
-          TARGET_MAIL,
-          'tournaments deleted',
-          `day: ${t.day} name: ${t.name}, buy_in: ${t.buy_in}, re_buy: ${t.re_buy}, max_players: ${t.max_players}, rsvp_required: ${t.rsvp_required}`,
+        TARGET_MAIL,
+        'tournaments deleted',
+        `day: ${tournamentToDelete.day} name: ${tournamentToDelete.name}, buy_in: ${tournamentToDelete.buy_in}, re_buy: ${tournamentToDelete.re_buy}, max_players: ${tournamentToDelete.max_players}, rsvp_required: ${tournamentToDelete.rsvp_required}`,
       );
     }
-
   } catch (error) {
     console.error('## deleteTournament error', error);
     return { message: 'איראה שגיאה' };
@@ -929,20 +968,21 @@ export async function updateTournament(
   const date = new Date().toISOString();
 
   try {
-    const t = (await sql`select * from tournaments WHERE id = ${id}`).rows[0];
-    if (t){
+    const tournamentToUpdate = (
+      await sql`SELECT * FROM tournaments WHERE id = ${id}`
+    ).rows[0];
+    if (tournamentToUpdate) {
       await sql`
       UPDATE tournaments
       SET name = ${name}, buy_in = ${buy_in},re_buy = ${re_buy},max_players = ${max_players},rsvp_required=${rsvp_required}, updated_at=${date}
       WHERE id = ${id}
     `;
       sendEmail(
-          TARGET_MAIL,
-          'tournaments update',
-          `day:${t.day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`,
+        TARGET_MAIL,
+        'tournaments update',
+        `day:${tournamentToUpdate.day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`,
       );
     }
-
   } catch (error) {
     console.error('## updateTournament error', error);
     return { message: 'איראה שגיאה' };
@@ -989,31 +1029,27 @@ export async function createTournament(
 
   const { day, name, buy_in, re_buy, max_players, rsvp_required } =
     validatedFields.data;
-  const date = new Date().toISOString();
 
   try {
-
-    const i = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-    ].indexOf(day) + 1
-
+    const i =
+      [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+      ].indexOf(day) + 1;
 
     await sql`INSERT INTO tournaments (day,name, i, buy_in,re_buy,max_players, rsvp_required ) 
-        VALUES (${day},${name},${ i},${ buy_in},${re_buy},${max_players},${ rsvp_required})`;
+        VALUES (${day},${name},${i},${buy_in},${re_buy},${max_players},${rsvp_required})`;
 
-      sendEmail(
-          TARGET_MAIL,
-          'new tournaments created',
-          `day:${day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`,
-      );
-
-
+    sendEmail(
+      TARGET_MAIL,
+      'new tournaments created',
+      `day:${day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`,
+    );
   } catch (error) {
     console.error('## updateTournament error', error);
     return { message: 'איראה שגיאה' };
@@ -1146,8 +1182,8 @@ VALUES (${player.id}, ${player.name}, ${player.phone_number}, ${player.notes}, $
 
     await Promise.all(
       playerHistory.map((historyLog) => {
-        return sql`INSERT INTO deleted_history (id, phone_number, change , type, note , archive , other_player_phone_number, updated_by, updated_at ) 
-      VALUES (${historyLog.id}, ${historyLog.phone_number}, ${historyLog.change}, ${historyLog.type}, ${historyLog.note}, ${historyLog.archive}, ${historyLog.other_player_phone_number}, ${historyLog.updated_by}, ${historyLog.updated_at})`;
+        return sql`INSERT INTO deleted_history (id, phone_number, change , type, note , archive , other_player_phone_number, updated_by, updated_at, tournament_id ) 
+      VALUES (${historyLog.id}, ${historyLog.phone_number}, ${historyLog.change}, ${historyLog.type}, ${historyLog.note}, ${historyLog.archive}, ${historyLog.other_player_phone_number}, ${historyLog.updated_by}, ${historyLog.updated_at}, ${historyLog.tournament_id})`;
       }),
     );
     await sql`DELETE FROM history WHERE phone_number = ${phone_number}`;
@@ -1244,8 +1280,18 @@ export async function setPrizeAsNotReadyToBeDelivered({
   }
 }
 
+export async function resetTournamentPositions(tournamentId: string, date: string, prevPage: string) {
+  noStore();
+  await sql<WinnerDB>`DELETE FROM winners WHERE date = ${date} AND tournament_id = ${tournamentId}`;
+  revalidatePath(prevPage);
+}
 export async function convertPrizeToCredit(
-  clientData: { userId: string; prizeId: string; prevPage: string },
+  clientData: {
+    userId: string;
+    prizeId: string;
+    prevPage: string;
+    tournamentId: string | null;
+  },
   _prevState: State,
   formData: FormData,
 ) {
@@ -1253,7 +1299,7 @@ export async function convertPrizeToCredit(
   try {
     await startTransaction();
 
-    const { prizeId, prevPage, userId } = clientData;
+    const { prizeId, prevPage, userId, tournamentId } = clientData;
 
     const amount = Number(formData.get('amount') as string);
 
@@ -1269,10 +1315,10 @@ export async function convertPrizeToCredit(
     let note = ` שחקן המיר פרס בקרדיט: ${prize.prize}`;
     note += `(${prize.tournament})`;
     await sql`
-          INSERT INTO history (phone_number, change, note, type, updated_by)
+          INSERT INTO history (phone_number, change, note, type, updated_by, tournament_id)
           VALUES (${playerPhoneNumber}, ${amount}, ${note}, 'credit', ${
             userResult?.name ?? 'unknown'
-          })
+          }, ${tournamentId})
         `;
 
     await sql`INSERT INTO deleted_prizes (id, tournament, phone_number, prize, ready_to_be_delivered, delivered, created_at)
@@ -1510,14 +1556,18 @@ VALUES (${user.id}, ${user.phone_number},  ${user.password}, ${user.name}, ${use
 export async function rsvpPlayerForDay(
   phone_number: string,
   date: string,
+  tournamentId: string,
   val: boolean,
   prevPage: string,
 ) {
   noStore();
   try {
-    const rsvpResult =
+    const rsvpResults =
       await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${phone_number} AND date = ${date}`;
-    const existingRsvp = rsvpResult.rows[0];
+
+    const existingRsvp = rsvpResults.rows.find(
+      (r) => r.tournament_id === tournamentId,
+    );
 
     if (val && existingRsvp) {
       //already rsvp
@@ -1528,11 +1578,26 @@ export async function rsvpPlayerForDay(
       return;
     }
     if (val && !existingRsvp) {
-      await sql`INSERT INTO rsvp (date, phone_number) VALUES (${date}, ${phone_number})`;
-    } else if (existingRsvp) {
+      const otherExistingRsvp = rsvpResults.rows.find(
+        (r) => r.tournament_id !== tournamentId,
+      );
       try {
         await startTransaction();
-        await sql`INSERT INTO deleted_rsvp (id,date,phone_number, created_at ) VALUES (${existingRsvp.id}, ${existingRsvp.date}, ${existingRsvp.phone_number}, ${existingRsvp.created_at})`;
+        if (otherExistingRsvp) {
+          await sql`INSERT INTO deleted_rsvp (id,date,phone_number, tournament_id ) VALUES (${otherExistingRsvp.id}, ${otherExistingRsvp.date}, ${otherExistingRsvp.phone_number},${otherExistingRsvp.tournament_id})`;
+          await sql`DELETE FROM rsvp WHERE id = ${otherExistingRsvp.id}`;
+        }
+        await sql`INSERT INTO rsvp (date, phone_number, tournament_id) VALUES (${date}, ${phone_number}, ${tournamentId})`;
+
+        await commitTransaction();
+      } catch (error) {
+        await cancelTransaction();
+        throw error;
+      }
+    } else if (existingRsvp && !val) {
+      try {
+        await startTransaction();
+        await sql`INSERT INTO deleted_rsvp (id,date,phone_number, tournament_id ) VALUES (${existingRsvp.id}, ${existingRsvp.date}, ${existingRsvp.phone_number},${existingRsvp.tournament_id})`;
         await sql`DELETE FROM rsvp WHERE id = ${existingRsvp.id}`;
         await commitTransaction();
       } catch (error) {
@@ -1549,7 +1614,7 @@ export async function rsvpPlayerForDay(
   }
 }
 
-export async function undoPlayerLastLog(
+export async function undoPlayerLastLog( //TODO::: add tournament_id and make sure you undo from correct tournament
   phone_number: string,
   prevPage: string,
 ) {
@@ -1605,15 +1670,15 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
 
     await startTransaction();
 
-    await sql`DELETE from history;`;
-    await sql`DELETE from players;`;
+    await sql`DELETE FROM history;`;
+    await sql`DELETE FROM players;`;
 
-    console.log('## import step: 1 - get existing DB data');
+    console.log('>> import step: 1 - get existing DB data');
 
-    console.log('## import step: 2 - insert NEW data');
+    console.log('>> import step: 2 - insert NEW data');
 
     const date = '2024-01-01T10:10:00.000Z';
-    console.log(`## playersToInsert ${playersToInsert.length}`);
+    console.log(`>> playersToInsert ${playersToInsert.length}`);
 
     let counter = 0;
     playersToInsert.forEach((p) => {
@@ -1622,12 +1687,12 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
       );
 
       if (existingImage) {
-        console.log('## setting player image:', existingImage.image_url);
+        console.log('>> setting player image:', existingImage.image_url);
         p.image_url = existingImage.image_url;
       } else {
         p.image_url = '/players/default.png';
         if (counter < 10) {
-          console.log('## did not found image:', p.phone_number);
+          console.log('>> did not found image:', p.phone_number);
         }
         counter++;
       }
@@ -1660,7 +1725,7 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
     );
     await commitTransaction();
 
-    console.log('## import Done');
+    console.log('>> import Done');
     sendEmail(
       TARGET_MAIL,
       'Import is done',
@@ -1669,9 +1734,9 @@ export async function importPlayers(playersToInsert: PlayerDB[]) {
   } catch (error) {
     await cancelTransaction();
     // @ts-ignore
-    console.log(`## import error: ${error.message}`);
+    console.log(`>> import error: ${error.message}`);
 
-    console.log('## Rollback Done');
+    console.log('>> Rollback Done');
     return {
       message: 'איראה שגיאה',
     };

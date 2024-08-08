@@ -1,8 +1,7 @@
-import CreatePlayerForm from '@/app/ui/client/CreatePlayerForm';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 import { fetchUserById } from '@/app/lib/data';
 import React from 'react';
-import CreateTournamentForm from "@/app/ui/client/CreateTournamentForm";
+import CreateTournamentForm from '@/app/ui/client/CreateTournamentForm';
 
 export default async function CreatePlayerPage({
   params,
