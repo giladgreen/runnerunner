@@ -1,5 +1,3 @@
-import 'react-tabs/style/react-tabs.css';
-import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 import {
   fetchFeatureFlags,
   fetchPlayerByUserId,
@@ -7,12 +5,9 @@ import {
   fetchRsvpCountForTodayTournament,
   fetchTournamentsByDay,
 } from '@/app/lib/data';
-import Image from 'next/image';
-import TournamentsHistoryTable from '@/app/ui/client/TournamentsHistoryTable';
-import PlayersPrizesPage from '@/app/[userId]/prizes/PlayersPrizesPage';
+
 import React from 'react';
-import PlayerHistoryTable from '@/app/ui/client/PlayerHistoryTable';
-import PlayerPageRegistrationSection from '@/app/ui/client/PlayerPageRegistrationSection';
+
 import { rsvpPlayerForDay } from '@/app/lib/actions';
 import PlayerPageClientCell from "@/app/ui/client/PlayerPageClientCell";
 import { getPlayersPrizesContents} from "@/app/ui/client/helpers";

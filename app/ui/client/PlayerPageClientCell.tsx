@@ -1,6 +1,5 @@
 'use client';
 
-import 'react-tabs/style/react-tabs.css';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 import Image from 'next/image';

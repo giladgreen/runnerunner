@@ -1,7 +1,5 @@
 'use client';
 
-import 'react-tabs/style/react-tabs.css';
-
 import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import {
