@@ -1,16 +1,17 @@
-import { fetchPlayersPrizes, fetchPrizesInfo } from '@/app/lib/data';
+'use client';
 import Card from '@/app/ui/client/Card';
-import { getPlayersPrizesContent } from '@/app/ui/client/helpers';
+import {PrizeDB} from "@/app/lib/definitions";
 
-export default async function PlayersPrizesPage({
-  playerPhone,
+export default function PlayersPrizesPage({
   playerPage,
+  playerPrizes,
+  prizesContents
 }: {
-  playerPhone?: string;
   playerPage?: boolean;
+  playerPrizes:{ chosenPrizes: PrizeDB[], deliveredPrizes: PrizeDB[], readyToBeDeliveredPrizes: PrizeDB[] }
+  prizesContents:{ chosenPrizesContent: JSX.Element, deliveredPrizesContent: JSX.Element, readyToBeDeliveredPrizesContent: JSX.Element }
 }) {
-  const { chosenPrizes, deliveredPrizes, readyToBeDeliveredPrizes } =
-    await fetchPlayersPrizes(playerPhone);
+  const { chosenPrizes, deliveredPrizes, readyToBeDeliveredPrizes } =playerPrizes;
 
   if (
     playerPage &&
@@ -20,26 +21,8 @@ export default async function PlayersPrizesPage({
   ) {
     return null;
   }
+const {chosenPrizesContent, deliveredPrizesContent,readyToBeDeliveredPrizesContent } = prizesContents;
 
-  const prizesInformation = await fetchPrizesInfo();
-  const chosenPrizesContent = (await getPlayersPrizesContent(
-    chosenPrizes,
-    prizesInformation,
-    null,
-    false,
-  )) as JSX.Element;
-  const deliveredPrizesContent = (await getPlayersPrizesContent(
-    deliveredPrizes,
-    prizesInformation,
-    null,
-    false,
-  )) as JSX.Element;
-  const readyToBeDeliveredPrizesContent = (await getPlayersPrizesContent(
-    readyToBeDeliveredPrizes,
-    prizesInformation,
-    null,
-    false,
-  )) as JSX.Element;
   if (
     !chosenPrizesContent &&
     !deliveredPrizesContent &&

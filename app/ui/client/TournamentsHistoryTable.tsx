@@ -1,13 +1,14 @@
+'use client';
 import { PlayerDB } from '@/app/lib/definitions';
 
-export default async function TournamentsHistoryTable({
+export default function TournamentsHistoryTable({
   player,
 }: {
   player: PlayerDB;
 }) {
   const tournamentsData = player.tournamentsData;
   if (tournamentsData.length === 0) {
-    return null;
+    return <div>אין נתונים להצגה</div>;
   }
   return (
     <div className="rtl" style={{ marginTop: 30, marginBottom: 20 }}>

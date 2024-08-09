@@ -1,10 +1,10 @@
 import EditPlayerForm from '@/app/ui/client/EditPlayerForm';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 import {
-  fetchFeatureFlags,
-  fetchPlayerById,
-  fetchTournaments,
-  fetchUserById,
+    fetchFeatureFlags,
+    fetchPlayerById, fetchPlayersPrizes, fetchPrizesInfo,
+    fetchTournaments,
+    fetchUserById,
 } from '@/app/lib/data';
 import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 import CreateLogForm from '@/app/ui/client/CreateLogForm';
@@ -13,6 +13,7 @@ import TournamentsHistoryTable from '@/app/ui/client/TournamentsHistoryTable';
 import PlayersPrizesPage from '@/app/[userId]/prizes/PlayersPrizesPage';
 import NotFound from '@/app/[userId]/players/[playerId]/edit/NotFound';
 import React from 'react';
+import {getPlayersPrizesContent, getPlayersPrizesContents} from "@/app/ui/client/helpers";
 
 export default async function EditPlayerPage({
   params,
@@ -40,11 +41,22 @@ export default async function EditPlayerPage({
   const { rsvpEnabled } = await fetchFeatureFlags();
   const tournaments = await fetchTournaments();
   const player = await fetchPlayerById(playerId, true);
+  const prizesInformation = await fetchPrizesInfo();
 
   if (!player) {
     return <NotFound params={params} />;
   }
-  player.id = playerId;
+  const playerPrizes = await fetchPlayersPrizes(player?.phone_number);
+  const { chosenPrizes, deliveredPrizes, readyToBeDeliveredPrizes } =playerPrizes;
+    const prizesContents = await getPlayersPrizesContents(
+        chosenPrizes,
+        deliveredPrizes,
+        readyToBeDeliveredPrizes,
+        prizesInformation,
+        null,
+        false,
+    );
+    player.id = playerId;
   return (
     <main>
       <Breadcrumbs
@@ -101,7 +113,7 @@ export default async function EditPlayerPage({
         <TournamentsHistoryTable player={player} />
 
         <div style={{ marginTop: 50 }}>
-          <PlayersPrizesPage playerPhone={player.phone_number} />
+          <PlayersPrizesPage playerPrizes={playerPrizes} prizesContents={prizesContents}/>
         </div>
       </div>
     </main>

@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-
-import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import { ArrowRightIcon, ArrowRightOnRectangleIcon, Bars3Icon} from '@heroicons/react/24/outline';
 
 export default function PlayerPageMenu({ signout }: { signout: () => void }) {
   const [showMenu, setShowMenu] = useState(false);
@@ -15,28 +14,39 @@ export default function PlayerPageMenu({ signout }: { signout: () => void }) {
         }}
       >
         <span className="sr-only">תפריט</span>
-        <EllipsisVerticalIcon
+        <Bars3Icon
           className="w-8"
           style={{ marginTop: 7, marginRight: -7 }}
         />
       </button>
 
-      <div
-        className={`rtl player_page_menu ${
-          showMenu ? 'player_page_menu_opened' : 'player_page_menu_closed'
-        }`}
-        onClick={() => {
-          setShowMenu((val) => !val);
-        }}
-      >
-        <button
-          onClick={() => {
-            signout();
-          }}
+        <div
+            className={`rtl player_page_menu ${
+                showMenu ? 'player_page_menu_opened' : 'player_page_menu_closed'
+            }`}
         >
-          התנתק
-        </button>
-      </div>
+            <div className="player_page_menu_header" onClick={() => {
+                setShowMenu((val) => !val);
+            }}>
+                <ArrowRightIcon style={{ maxHeight: 30 }}/>
+            </div>
+            <div className="player_page_menu_body">
+
+                <div
+                    style={{marginTop: 20}}
+                    onClick={() => {
+                        signout();
+                    }}
+                    className="flex"
+                >
+
+                    <ArrowRightOnRectangleIcon style={{maxHeight: 30}}/>
+                    יציאה
+
+                </div>
+            </div>
+
+        </div>
     </div>
   );
 }

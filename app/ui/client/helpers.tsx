@@ -280,6 +280,46 @@ export async function getPlayersPrizesContent(
   );
 }
 
+
+export async function getPlayersPrizesContents(
+    chosenPrizes: PrizeDB[],
+    deliveredPrizes: PrizeDB[],
+    readyToBeDeliveredPrizes: PrizeDB[],
+    prizesInformation: PrizeInfoDB[],
+    tournamentId: string | null,
+    personal?: boolean,
+    userId?: string,
+    currentTournament?: boolean,
+) {
+  const chosenPrizesContent = (await getPlayersPrizesContent(
+      chosenPrizes,
+      prizesInformation,
+      tournamentId,
+      personal,
+      userId,
+      currentTournament
+  )) as JSX.Element;
+  const deliveredPrizesContent = (await getPlayersPrizesContent(
+      deliveredPrizes,
+      prizesInformation,
+      tournamentId,
+      personal,
+      userId,
+      currentTournament
+  )) as JSX.Element;
+  const readyToBeDeliveredPrizesContent = (await getPlayersPrizesContent(
+      readyToBeDeliveredPrizes,
+      prizesInformation,
+      tournamentId,
+      personal,
+      userId,
+      currentTournament
+  )) as JSX.Element;
+
+  return {chosenPrizesContent, deliveredPrizesContent, readyToBeDeliveredPrizesContent}
+}
+
+
 export function getDayIncome(dateItem: {
   total: number;
   credit: number;

@@ -1,8 +1,9 @@
 import PlayersPrizesPage from '@/app/[userId]/prizes/PlayersPrizesPage';
-import { fetchUserById } from '@/app/lib/data';
+import {fetchPlayersPrizes, fetchPrizesInfo, fetchUserById} from '@/app/lib/data';
 import React from 'react';
 import Link from 'next/link';
 import { Button } from 'primereact/button';
+import {getPlayersPrizesContent, getPlayersPrizesContents} from "@/app/ui/client/helpers";
 
 export default async function PrizesPage({
   params,
@@ -25,7 +26,19 @@ export default async function PrizesPage({
       </div>
     );
   }
-  return (
+    const playerPrizes = await fetchPlayersPrizes(user?.phone_number);
+    const prizesInformation = await fetchPrizesInfo();
+  const { chosenPrizes, deliveredPrizes, readyToBeDeliveredPrizes } =playerPrizes;
+  const prizesContents = await getPlayersPrizesContents(
+      chosenPrizes,
+      deliveredPrizes,
+      readyToBeDeliveredPrizes,
+      prizesInformation,
+      null,
+      false,
+  );
+
+    return (
     <div className="rtl">
       <a
         href={`/${params.userId}/configurations/prizes`}
@@ -34,7 +47,7 @@ export default async function PrizesPage({
         <u>הגדרות פרסים</u>
       </a>
       <div style={{ marginTop: 30 }}>
-        <PlayersPrizesPage />
+        <PlayersPrizesPage playerPrizes={playerPrizes} prizesContents={prizesContents}/>
       </div>
     </div>
   );

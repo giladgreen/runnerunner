@@ -431,39 +431,38 @@
 }
 
 .player_page_menu {
-  z-index: 999;
-  width: 80px;
-  height: 100px;
-  background: rgb(0, 112, 243);
+  z-index: 99999;
+  width: 200px;
+  height: 100vh;
+  background: rgb(0, 90, 223);
   color: white;
   position: fixed;
   right: 0;
-  text-align: center;
-  padding-top: 64px;
+  top: 0;
+  text-align: right;
   font-weight: bold;
-  border: 1px solid black;
-  transition: top 2s;
+  transition: right 1s;
+  padding-right: 10px;
+}
+.player_page_menu_header {
+  border-bottom: 2px solid rgb(0, 50, 200);
+  height: 60px;
+  padding-top: 16px;
 }
 .player_page_menu_opened {
-  top: 0;
+  right: 0;
 }
 
 .player_page_menu_closed {
-  top: -210px;
+  right: -200px;
 }
 @media only screen and (max-width: 600px) {
   .player_page_menu {
-    width: 80px;
-    height: 100px;
-    right: 0;
-    padding-top: 64px;
-  }
-  .player_page_menu_opened {
-    top: 0;
+    width: 50vw;
   }
 
   .player_page_menu_closed {
-    top: -110px;
+    right: -50vw;
   }
 
   .red_background {
