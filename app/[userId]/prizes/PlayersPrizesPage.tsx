@@ -19,7 +19,7 @@ export default function PlayersPrizesPage({
     !deliveredPrizes?.length &&
     !readyToBeDeliveredPrizes?.length
   ) {
-    return null;
+    return <div>אין מידע להצגה</div>
   }
 const {chosenPrizesContent, deliveredPrizesContent,readyToBeDeliveredPrizesContent } = prizesContents;
 
