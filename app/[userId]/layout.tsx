@@ -30,18 +30,18 @@ export default async function Layout({
   }
 
   return (
-    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-      <div className="player-header">
-        <img src="/runner-white-logo.png" width={50} height={50} alt="runner" />
-        <PlayerPageMenu
-          signout={async () => {
-            'use server';
+      <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+          <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+          <div className="player-header">
+              <img src="/runner-white-logo.png" width={50} height={50} alt="runner"/>
+              <PlayerPageMenu
+                  signout={async () => {
+                      'use server';
 
-            await signOut({ redirect: true, redirectTo: '/' });
-          }}
-        />
+                      await signOut({redirect: true, redirectTo: '/'});
+                  }}
+              />
+          </div>
       </div>
-      <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
-    </div>
   );
 }
