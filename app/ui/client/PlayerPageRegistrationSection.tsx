@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, {useState} from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import {
   LogDB,
@@ -9,6 +9,7 @@ import {
   TRANSLATIONS,
 } from '@/app/lib/definitions';
 import {formatCurrency} from "@/app/lib/utils";
+import Spinner from "@/app/ui/client/Spinner";
 
 const NO_NEED_FOR_RSVP = 'אין צורך ברישום לטורניר של היום';
 const YOU_ARE_ALREADY_REGISTERED = 'אתה רשום לטורניר של היום';
@@ -28,7 +29,9 @@ const CLICK_HERE_TO_REGISTER = 'לרישום לחץ כאן';
 const YOU_ARE_ALREADY_IN_THE_GAME = 'אתה כבר במשחק';
 
 export function SingleTournament({ showingTabs, onSubmit, index,todayTournament, playerCurrentTournamentHistory, player, rsvpCountsForTodayTournaments}:{showingTabs:boolean, onSubmit: (a: string, b: boolean) => void, index:number, rsvpCountsForTodayTournaments: number[], player:PlayerDB, todayTournament: TournamentDB, playerCurrentTournamentHistory:LogDB[]}){
-  const { rsvp_required, max_players } = todayTournament;
+    const [pending, setPending] = useState(false);
+
+    const { rsvp_required, max_players } = todayTournament;
   const playerArrived =
       playerCurrentTournamentHistory.filter(
           ({ type, change, tournament_id }) =>
@@ -142,14 +145,22 @@ export function SingleTournament({ showingTabs, onSubmit, index,todayTournament,
                           </div>
 
                           <form
-                              action={() =>
-                                  onSubmit(
-                                      todayTournament.id,
-                                      isRegisterForTodayTournament,
-                                  )
-                              }
+                              action={() =>{
+                                     setPending(true);
+                                     setTimeout(() => {
+                                         setPending(false);
+                                     },1500);
+                                  setTimeout(() => {
+                                      onSubmit(
+                                          todayTournament.id,
+                                          isRegisterForTodayTournament,
+                                      )
+                                  },10);
+
+                                 } }
                           >
-                              <button
+                              {  pending && <Spinner size={90} style={{ marginRight: '35vw'}}/>}
+                              {  !pending && <button
                                   style={{
                                       border: '1px solid black',
                                       padding: 15,
@@ -162,7 +173,7 @@ export function SingleTournament({ showingTabs, onSubmit, index,todayTournament,
                                   {isRegisterForTodayTournament
                                       ? CLICK_HERE_TO_UNREGISTER
                                       : CLICK_HERE_TO_REGISTER}
-                              </button>
+                              </button>}
                           </form>
                       </div>
                   )}
