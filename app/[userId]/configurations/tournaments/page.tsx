@@ -111,7 +111,7 @@ export default async function TournamentsSetupPage({
                   <a
                       href={`/${
                           params.userId
-                      }/configurations/tournaments/${tournament.day.toLowerCase()}/edit`}
+                      }/configurations/tournaments/${tournament.id}/edit`}
                       className="smaller-on-mobile rounded-md border p-2 hover:bg-gray-100"
                       style={{
                         zoom: 1.2,

@@ -14,7 +14,7 @@ import TodayPlayersTable from '@/app/ui/client/TodayPlayersTable';
 export default function CurrentTournamentPage({
   todayTournaments,
   params,
-                                                  finalTablePlayersContents,
+  finalTablePlayersContents,
   allPlayers,
   prizesInformation,
   rsvpEnabled,

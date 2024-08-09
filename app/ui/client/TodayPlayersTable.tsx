@@ -250,6 +250,10 @@ export default function TodayPlayersTable({
                         </Link>
                         <div className="text-l font-medium">{player.notes}</div>
                       </div>
+                      { player.entries > 0 && <div className="flex">
+                        כניסות:
+                        <EntriesButton player={player} />
+                      </div>}
                       <div>
                         {rsvpEnabled &&
                           player.rsvpForToday === tournamentId &&
@@ -257,6 +261,7 @@ export default function TodayPlayersTable({
                             <DoubleTicksIcon size={24} />
                           )}
                       </div>
+
                     </div>
                   </div>
                 ))}

@@ -135,26 +135,25 @@ export default function RSVPAndArrivalCardWrapper({
       style={{ marginBottom: 20 }}
     >
       <Suspense fallback={<CardsSkeleton count={4} />}>
+        <Card title="הכנסות" value={todayIncome} type="money" />
+        <Card
+            title="כניסות מחדש"
+            value={<div>{reEntriesCount}</div>}
+            type="money"
+            oneLine
+        />
+        <Card
+            title="הגעה"
+            value={<div>{arrivedToday}</div>}
+            type="arrived"
+            oneLine
+        />
         <Card
           title="אישורי הרשמה"
           value={<div>{rsvpForTodayText}</div>}
           type="rsvp"
           oneLine
         />
-        <Card
-          title="הגעה"
-          value={<div>{arrivedToday}</div>}
-          type="arrived"
-          oneLine
-        />
-
-        <Card
-          title="כניסות מחדש"
-          value={<div>{reEntriesCount}</div>}
-          type="money"
-          oneLine
-        />
-        <Card title="הכנסות" value={todayIncome} type="money" />
       </Suspense>
     </div>
   );
