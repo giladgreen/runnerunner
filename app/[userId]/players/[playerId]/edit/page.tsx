@@ -14,6 +14,7 @@ import PlayersPrizesPage from '@/app/[userId]/prizes/PlayersPrizesPage';
 import NotFound from '@/app/[userId]/players/[playerId]/edit/NotFound';
 import React from 'react';
 import {getPlayersPrizesContent, getPlayersPrizesContents} from "@/app/ui/client/helpers";
+import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
 
 export default async function EditPlayerPage({
   params,
@@ -24,17 +25,7 @@ export default async function EditPlayerPage({
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
   if (!isAdmin && !isWorker) {
-    return (
-      <div className="w-full">
-        <div className="flex w-full items-center justify-between">
-          <h1 className="text-2xl">
-            <b>
-              <u>אין לך הרשאות לראות עמוד זה</u>
-            </b>
-          </h1>
-        </div>
-      </div>
-    );
+      return <NoPermissionsPage />
   }
 
   const playerId = params.playerId;

@@ -17,6 +17,7 @@ import {
   getPlayersPrizesContent,
 } from '@/app/ui/client/helpers';
 import CurrentTournamentPage from '@/app/ui/client/CurrentTournamentPage';
+import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
 
 export default async function CurrentTournament({
   params,
@@ -29,17 +30,7 @@ export default async function CurrentTournament({
   const allPlayers = await getAllPlayers();
 
   if (!isAdmin && !isWorker) {
-    return (
-      <div className="w-full">
-        <div className="flex w-full items-center justify-between">
-          <h1 className="text-2xl">
-            <b>
-              <u>אין לך הרשאות לראות עמוד זה</u>
-            </b>
-          </h1>
-        </div>
-      </div>
-    );
+    return <NoPermissionsPage />
   }
 
   const prizesInformation = await fetchPrizesInfo();

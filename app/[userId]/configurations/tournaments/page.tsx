@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { TRANSLATIONS } from '@/app/lib/definitions';
 import DeleteTournamentButton from '@/app/ui/client/DeleteTournamentButton';
 import {Button} from "primereact/button";
+import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
 
 export default async function TournamentsSetupPage({
   params,
@@ -16,17 +17,7 @@ export default async function TournamentsSetupPage({
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
   if (!isAdmin && !isWorker) {
-    return (
-      <div className="w-full">
-        <div className="flex w-full items-center justify-between">
-          <h1 className="text-2xl">
-            <b>
-              <u>אין לך הרשאות לראות עמוד זה</u>
-            </b>
-          </h1>
-        </div>
-      </div>
-    );
+    return <NoPermissionsPage />
   }
   const tournaments = await fetchTournaments();
 

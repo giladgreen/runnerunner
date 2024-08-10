@@ -17,6 +17,7 @@ import ExportPlayersWithMarketingInfoButton from '@/app/ui/client/ExportPlayersW
 import { CardsSkeleton } from '@/app/ui/skeletons';
 import Card from '@/app/ui/client/Card';
 import DeleteBugButton from '@/app/ui/client/DeleteBugButton';
+import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
 
 function TournamentsLink({ userId }: { userId: string }) {
   return (
@@ -128,17 +129,7 @@ export default async function ConfigurationPage({
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
   if (!isAdmin && !isWorker) {
-    return (
-      <div className="w-full">
-        <div className="flex w-full items-center justify-between">
-          <h1 className="text-2xl">
-            <b>
-              <u>אין לך הרשאות לראות עמוד זה</u>
-            </b>
-          </h1>
-        </div>
-      </div>
-    );
+    return <NoPermissionsPage />
   }
   const importEnabled = user.is_admin && user.phone_number === '0587869910';
   const ffEnabled = importEnabled;

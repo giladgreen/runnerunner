@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Button } from 'primereact/button';
 import DeletePrizeInfoButton from '@/app/ui/client/DeletePrizeInfoButton';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
+import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
 
 export default async function PrizesInfoPage({
   params,
@@ -18,17 +19,7 @@ export default async function PrizesInfoPage({
 
   const prizes = await fetchPrizesInfo();
   if (!isAdmin && !isWorker) {
-    return (
-      <div className="w-full">
-        <div className="flex w-full items-center justify-between">
-          <h1 className={`${lusitana.className} text-2xl`}>
-            <b>
-              <u>אין לך הרשאות לראות עמוד זה</u>
-            </b>
-          </h1>
-        </div>
-      </div>
-    );
+      return <NoPermissionsPage />
   }
 
   const prizesCount = prizes.length;

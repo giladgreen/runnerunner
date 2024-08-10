@@ -65,7 +65,7 @@ export default function CurrentTournamentPage({
           allPlayers={allPlayers}
           userId={params.userId}
           rsvpEnabled={rsvpEnabled}
-          tournamentId={todayTournament?.id}
+          tournamentId={todayTournament.id}
         />
       </div>
     );
@@ -118,7 +118,7 @@ export default function CurrentTournamentPage({
                   allPlayers={allPlayers}
                   userId={params.userId}
                   rsvpEnabled={rsvpEnabled}
-                  tournamentId={todayTournament?.id}
+                  tournamentId={todayTournament.id}
                 />
               </div>
             </TabPanel>

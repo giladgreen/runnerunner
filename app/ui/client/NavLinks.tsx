@@ -5,7 +5,6 @@ import {
   HomeIcon,
   BanknotesIcon,
   WrenchScrewdriverIcon,
-  ArrowDownOnSquareIcon,
   GiftIcon,
   InformationCircleIcon,
   PuzzlePieceIcon,
@@ -17,7 +16,7 @@ import { UserDB } from '@/app/lib/definitions';
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
-const links = (userId: string) => [
+export const Nevigationlinks = (userId: string) => [
   {
     name: 'עמוד הבית',
     href: `/${userId}`,
@@ -55,6 +54,13 @@ const links = (userId: string) => [
   },
 
   {
+    name: 'מדריך למשתמש',
+    href: `/${userId}/user_guide`,
+    icon: InformationCircleIcon,
+    admin: true,
+    worker: true,
+  },
+  {
     name: 'הגדרות',
     href: `/${userId}/configurations`,
     icon: WrenchScrewdriverIcon,
@@ -76,7 +82,7 @@ export default function NavLinks({ user }: { user: UserDB }) {
   const isPlayer = !isAdmin && !isWorker;
   return (
     <>
-      {links(user.id)
+      {Nevigationlinks(user.id)
         .filter(
           (link) =>
             (isAdmin && link.admin) ||

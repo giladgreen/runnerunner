@@ -6,6 +6,7 @@ import { PlayersTableSkeleton } from '@/app/ui/skeletons';
 import React, { Suspense } from 'react';
 import { fetchPlayersPagesCount, fetchUserById } from '@/app/lib/data';
 import GeneralPlayersCardWrapper from '@/app/ui/client/GeneralPlayersCardWrapper';
+import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
 
 export default async function Page({
   searchParams,
@@ -22,17 +23,7 @@ export default async function Page({
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
   if (!isAdmin && !isWorker) {
-    return (
-      <div className="w-full">
-        <div className="flex w-full items-center justify-between">
-          <h1 className="text-2xl">
-            <b>
-              <u>אין לך הרשאות לראות עמוד זה</u>
-            </b>
-          </h1>
-        </div>
-      </div>
-    );
+      return <NoPermissionsPage />
   }
 
   const query = searchParams?.query || '';

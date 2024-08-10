@@ -139,6 +139,8 @@ export default function TodayPlayersTable({
       (!tournamentId || tournamentId === t.id),
   );
   const currentTournament = currentTournaments[0];
+  console.log('## tournamentId',tournamentId)
+  console.log('## currentTournaments',currentTournaments)
   return (
     <>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
