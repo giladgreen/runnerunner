@@ -139,6 +139,8 @@ export default function TodayPlayersTable({
       (!tournamentId || tournamentId === t.id),
   );
   const currentTournament = currentTournaments[0];
+  console.log('## dayOfTheWeek',dayOfTheWeek)
+  console.log('## tournaments',tournaments)
   console.log('## tournamentId',tournamentId)
   console.log('## currentTournaments',currentTournaments)
   return (
