@@ -450,18 +450,19 @@ export async function fetchGeneralPlayersCardData() {
   }
 }
 
-export async function fetchRSVPAndArrivalData() {
+export async function fetchRSVPAndArrivalData(dayOfTheWeek: string) {
   methodStart();
   noStore();
   try {
-    const [allPlayers, todayHistoryWithZero, todayTournaments] =
+    const [allPlayers, todayHistoryWithZero, allTournaments] =
       await Promise.all([
         getAllPlayers(),
         getTodayHistory(),
-        getTodayTournaments(),
+        getAllTournaments(),
       ]);
 
     methodEnd('fetchRSVPAndArrivalData');
+    const todayTournaments = allTournaments.filter(t => t.day === dayOfTheWeek);
 
     return {
       todayTournaments: todayTournaments.map((t) => {

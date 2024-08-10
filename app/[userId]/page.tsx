@@ -17,7 +17,9 @@ export default async function HomePage({
   const isWorker = user.is_worker;
 
   if (isAdmin || isWorker) {
-    const { todayTournaments } = await fetchRSVPAndArrivalData();
+      const dayOfTheWeek = (new Date()).toLocaleString('en-us', { weekday: 'long' });
+
+      const { todayTournaments } = await fetchRSVPAndArrivalData(dayOfTheWeek);
 
     const date = new Date().toISOString().slice(0, 10);
     const contents: Array<JSX.Element | null> = await Promise.all(

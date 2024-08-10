@@ -36,8 +36,9 @@ export default async function CurrentTournament({
   const prizesInformation = await fetchPrizesInfo();
 
   const { rsvpEnabled } = await fetchFeatureFlags();
+  const dayOfTheWeek = (new Date()).toLocaleString('en-us', { weekday: 'long' });
 
-  const { todayTournaments } = await fetchRSVPAndArrivalData();
+  const { todayTournaments } = await fetchRSVPAndArrivalData(dayOfTheWeek);
 
   const noTournamentsToday =
     todayTournaments.length === 0 ||
