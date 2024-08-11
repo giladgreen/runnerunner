@@ -1,7 +1,8 @@
 import { fetchTournamentsData } from '@/app/lib/data';
-import { formatDateToLocal } from '@/app/lib/utils';
 import { getFinalTablePlayersContent } from '@/app/ui/client/helpers';
 import { getDayIncome } from '@/app/ui/client/helpers';
+import {formatDateToLocal, getTodayShortDate} from "@/app/lib/serverDateUtils";
+import {dateComparator} from "@/app/lib/utils";
 
 export default async function TournamentsDataPage({
   userId,
@@ -11,7 +12,7 @@ export default async function TournamentsDataPage({
   const tournamentsObject = await fetchTournamentsData();
 
   const tournamentsData = Object.keys(tournamentsObject);
-  tournamentsData.sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
+  tournamentsData.sort(dateComparator);
   const tournamentsFullData = tournamentsData
     .map((tournamentData) => {
       // @ts-ignore
@@ -87,7 +88,7 @@ export default async function TournamentsDataPage({
           <tbody className="bg-white">
             {tournamentsFullData.map(async (dateItem) => {
               const dayIncome = getDayIncome(dateItem);
-              const date = new Date(dateItem.date).toISOString().slice(0, 10);
+              const date = getTodayShortDate(dateItem.date);
 
               const finalTableData = await getFinalTablePlayersContent(
                 date,

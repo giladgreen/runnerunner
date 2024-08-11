@@ -16,23 +16,22 @@ import {
   WinnerDB,
 } from './definitions';
 import {
-  getDayOfTheWeek,
-  getTodayShortDate,
   sumArrayByProp,
   positionComparator,
   phoneNumberComparator,
 } from './utils';
 import { redirect } from 'next/navigation';
+import {getCurrentDate, getDayOfTheWeek, getTodayShortDate} from "@/app/lib/serverDateUtils";
 
 const ITEMS_PER_PAGE = 30;
 const TOP_COUNT = 8;
 
 let start = 0;
 function methodStart() {
-  start = new Date().getTime();
+  start = getCurrentDate().getTime();
 }
 function methodEnd(methodName: string) {
-  const now = new Date().getTime();
+  const now = getCurrentDate().getTime();
   const diff = now - start;
   if (diff > 600) {
     console.warn('Method End', methodName, '      ', diff, 'milli');
@@ -696,7 +695,7 @@ export async function fetchTournamentsData() {
           const newAcc = { ...acc };
           const dateAsString =
             typeof updated_at === 'string'
-              ? new Date(updated_at).toISOString()
+              ? getCurrentDate(updated_at).toISOString()
               : (updated_at as Date).toISOString();
           const tournament = tournaments.find(
             ({ id }) =>
@@ -947,8 +946,9 @@ export async function fetchTournamentsByDay(day?: string) {
   methodStart();
   noStore();
   try {
+    //TODO: might need to adjust date to israel time
     const dayName =
-      day ?? new Date().toLocaleString('en-us', { weekday: 'long' });
+      day ?? getDayOfTheWeek();
 
     const results = await getTodayTournaments(dayName);
     methodEnd('fetchTournamentsByDay');

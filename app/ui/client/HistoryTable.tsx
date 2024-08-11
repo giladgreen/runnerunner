@@ -1,11 +1,10 @@
 import {
-  formatDateToLocal,
   formatCurrency,
-  getTime,
   formatType,
   formatCurrencyColor,
 } from '@/app/lib/utils';
 import { PlayerDB } from '@/app/lib/definitions';
+import {formatDateToLocal, getTime} from "@/app/lib/serverDateUtils";
 
 export default async function HistoryTable({
   player,

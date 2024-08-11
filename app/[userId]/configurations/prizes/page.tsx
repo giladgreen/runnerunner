@@ -1,12 +1,13 @@
 import { lusitana } from '@/app/ui/fonts';
 import { fetchPrizesInfo, fetchUserById } from '@/app/lib/data';
 import React from 'react';
-import { formatCurrency, formatDateToLocalWithTime } from '@/app/lib/utils';
+import { formatCurrency } from '@/app/lib/utils';
 import Link from 'next/link';
 import { Button } from 'primereact/button';
 import DeletePrizeInfoButton from '@/app/ui/client/DeletePrizeInfoButton';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
+import {formatDateToLocalWithTime} from "@/app/lib/serverDateUtils";
 
 export default async function PrizesInfoPage({
   params,

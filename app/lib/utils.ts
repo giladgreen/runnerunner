@@ -1,6 +1,6 @@
 import { PlayerDB, UserDB } from '@/app/lib/definitions';
 
-const HOUR = 60 * 60 * 1000;
+
 
 export const formatCurrency = (balance: number) => {
   const res = (balance ?? 0).toLocaleString('en-US', {
@@ -41,36 +41,6 @@ export const formatType = (type: string) => {
   return type;
 };
 
-export const formatDateToLocal = (dateStr: string, locale: string = 'he') => {
-  const date = new Date(dateStr);
-  const options: Intl.DateTimeFormatOptions = {
-    dateStyle: 'full',
-    timeZone: 'Asia/Jerusalem',
-  };
-  const formatter = new Intl.DateTimeFormat(locale, options);
-  return formatter.format(date);
-};
-
-export const formatDateToLocalWithTime = (
-  dateStr: string,
-  locale: string = 'he',
-) => {
-  const date = formatDateToLocal(dateStr, locale);
-  const dateObject = new Date(new Date(dateStr).getTime() + 3 * HOUR);
-  const time = `${dateObject.getHours()}:${dateObject.getMinutes()}`;
-
-  return `${time},     ${date}`;
-};
-
-export const getTime = (dateStr: string) => {
-  const date = new Date(dateStr);
-  const modifiedDate = new Date(date.getTime() + 3 * HOUR);
-  return modifiedDate
-    .toLocaleString('en-GB')
-    .split(',')[1]
-    .trim()
-    .substring(0, 5);
-};
 
 export const generatePagination = (currentPage: number, totalPages: number) => {
   // If the total number of pages is 7 or less,
@@ -116,13 +86,8 @@ export function nameComparator(a: PlayerDB, b: PlayerDB) {
   return a.name < b.name ? -1 : 1;
 }
 
-export function getTodayShortDate() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-export function getDayOfTheWeek(date?: Date) {
-  const base = date ?? new Date();
-  return base.toLocaleString('en-us', { weekday: 'long' });
+export function dateComparator(a: string | number, b: string | number) {
+  return new Date(b).getTime() - new Date(a).getTime();
 }
 
 export function sumArrayByProp(array: any[], propName: string) {

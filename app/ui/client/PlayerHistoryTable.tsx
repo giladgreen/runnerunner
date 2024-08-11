@@ -1,11 +1,10 @@
 'use client';
 import {
-  formatDateToLocal,
   formatCurrency,
-  getTime,
   formatType,
 } from '@/app/lib/utils';
 import { PlayerDB } from '@/app/lib/definitions';
+import {formatDateToLocal, getTime} from "@/app/lib/clientDateUtils";
 
 export default function PlayerHistoryTable({
   player,

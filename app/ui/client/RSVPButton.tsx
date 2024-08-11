@@ -7,6 +7,7 @@ import { PlayerDB } from '@/app/lib/definitions';
 import { rsvpPlayerForDay } from '@/app/lib/actions';
 import { usePathname } from 'next/navigation';
 import { useSearchParams } from 'next/dist/client/components/navigation';
+import {getTodayDate} from "@/app/lib/clientDateUtils";
 export default function RSVPButton({
   player,
   stringDate,
@@ -19,7 +20,7 @@ export default function RSVPButton({
   tournamentId: string;
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
-  const date = stringDate ?? new Date().toISOString().slice(0, 10);
+  const date = stringDate ?? getTodayDate();
   const isRsvpForDate = Boolean(
     player.rsvps.find(
       (r) => r.date === date && r.tournamentId === tournamentId,

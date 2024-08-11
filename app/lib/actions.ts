@@ -23,9 +23,10 @@ import {
 
 import { signIn } from '../../auth';
 import { unstable_noStore as noStore } from 'next/dist/server/web/spec-extension/unstable-no-store';
+import {getCurrentDate, getTodayShortDate, getUpdatedAtFormat} from "@/app/lib/serverDateUtils";
 
 const TARGET_MAIL = 'green.gilad+runner@gmail.com';
-let clearOldRsvpLastRun = new Date('2024-06-15T10:00:00.000Z').getTime();
+let clearOldRsvpLastRun = getCurrentDate('2024-06-15T10:00:00.000Z').getTime();
 
 const ADMINS = ['0587869910', '0524803571', '0524803577', '0508874068'];
 const WORKERS = ['0526841902'];
@@ -131,7 +132,7 @@ function cancelTransaction() {
 export async function removeOldRsvp() {
   try {
     await startTransaction();
-    console.log('>> remove Old Rsvp');
+    console.log('>> remove Old Rsvp, clearOldRsvpLastRun:', clearOldRsvpLastRun);
     const rsvpItemsResult =
       await sql<RSVPDB>`SELECT * FROM rsvp WHERE created_at < now() - interval '48 hour'`;
     const rsvpItems = rsvpItemsResult.rows;
@@ -142,7 +143,7 @@ export async function removeOldRsvp() {
     );
     await sql`DELETE FROM rsvp WHERE created_at < now() - interval '48 hour'`;
     await commitTransaction();
-    clearOldRsvpLastRun = new Date().getTime();
+    clearOldRsvpLastRun = getCurrentDate().getTime();
   } catch (error) {
     await cancelTransaction();
     console.error('rsvpPlayerForDay Error:', error);
@@ -170,7 +171,7 @@ function insertIntoHistory(
     `;
 }
 async function touchPlayer(phoneNumber: string) {
-  return sql`UPDATE players SET updated_at=${new Date().toISOString()} WHERE phone_number = ${phoneNumber}`;
+  return sql`UPDATE players SET updated_at=${getUpdatedAtFormat()} WHERE phone_number = ${phoneNumber}`;
 }
 
 async function insertIntoPlayers(
@@ -518,7 +519,7 @@ export async function setPlayerPosition(
     };
   }
   try {
-    const date = new Date().toISOString().slice(0, 10);
+    const date = getTodayShortDate();
 
     const player = await getPlayerById(playerId);
     if (!player) {
@@ -679,7 +680,7 @@ export async function givePlayerPrizeOrCredit(
     const updatePlayerCredit =
       (formData.get('update_player_credit') as string) === 'on';
 
-    const date = stringDate ?? new Date().toISOString().slice(0, 10);
+    const date = stringDate ?? getTodayShortDate();
 
     const [tournamentResult, winnersResult] = await Promise.all([
       sql<TournamentDB>`SELECT * FROM tournaments WHERE id = ${tournamentId};`,
@@ -817,7 +818,7 @@ export async function setPlayerPrize(
     const todayTournamentResult =
       await sql<TournamentDB>`SELECT * FROM tournaments WHERE id = ${tournamentId};`;
     const todayTournament = todayTournamentResult.rows[0];
-    const date = new Date().toISOString().slice(0, 10);
+    const date = getTodayShortDate();
     const todayTournamentData = `${todayTournament.name} ${date}`;
     await sql`INSERT INTO prizes (tournament, phone_number, prize) VALUES (${todayTournamentData}, ${player.phone_number}, ${newPrize})`;
   } catch (error) {
@@ -876,7 +877,7 @@ export async function updatePlayer(
     console.error('## add image error', error);
   }
 
-  const date = new Date().toISOString();
+  const date = getUpdatedAtFormat();
   try {
     await sql`
       UPDATE players
@@ -965,7 +966,7 @@ export async function updateTournament(
 
   const { name, buy_in, re_buy, max_players, rsvp_required } =
     validatedFields.data;
-  const date = new Date().toISOString();
+  const date = getUpdatedAtFormat();
 
   try {
     const tournamentToUpdate = (
@@ -1122,7 +1123,7 @@ export async function updatePrizeInfo(
   }
 
   try {
-    await sql`UPDATE prizes_info SET name = ${name}, extra = ${extra}, credit = ${credit}, created_at = ${new Date().toISOString()} WHERE id = ${prizeId}`;
+    await sql`UPDATE prizes_info SET name = ${name}, extra = ${extra}, credit = ${credit}, created_at = ${getUpdatedAtFormat()} WHERE id = ${prizeId}`;
   } catch (error) {
     return { message: 'איראה שגיאה' };
   } finally {
@@ -1405,7 +1406,7 @@ export async function signUp(
     `;
 
   if (existingPlayer) {
-    await sql`UPDATE players SET updated_at=${new Date().toISOString()}, allowed_marketing=${
+    await sql`UPDATE players SET updated_at=${getUpdatedAtFormat()}, allowed_marketing=${
       marketing_approve === 'on'
     } WHERE phone_number = ${phoneNumber}`;
   } else {

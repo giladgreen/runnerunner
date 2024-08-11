@@ -3,6 +3,7 @@
 import Button from '@/app/ui/client/Button';
 import React from 'react';
 import { PlayerDB, PrizeDB, TournamentDB } from '@/app/lib/definitions';
+import {getTodayDate} from "@/app/lib/clientDateUtils";
 
 export default function ExportPlayersWithMarketingInfoButton({
   players,
@@ -17,7 +18,7 @@ export default function ExportPlayersWithMarketingInfoButton({
       <Button
         style={{ textAlign: 'center', width: '100%' }}
         onClick={() => {
-          const todayDate = new Date().toISOString().slice(0, 10);
+          const todayDate = getTodayDate();
           const data = `name, phone number,
 ${allowed_marketing_players.map((player) => {
   return `${player.name},${player.phone_number}`;

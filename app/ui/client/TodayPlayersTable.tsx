@@ -22,6 +22,7 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import { setPlayerPosition } from '@/app/lib/actions';
 import { usePathname, useSearchParams } from 'next/navigation';
 import DeletePositionButton from '@/app/ui/client/DeletePositionButton';
+import {getDayOfTheWeek} from "@/app/lib/clientDateUtils";
 
 function getMinPosition(players: PlayerDB[]) {
   const positions = players
@@ -128,10 +129,7 @@ export default function TodayPlayersTable({
 
   const minPosition = getMinPosition(players);
 
-  const now = new Date();
-  const dayOfTheWeek = now
-    .toLocaleString('en-us', { weekday: 'long' })
-    .toLowerCase();
+  const dayOfTheWeek = getDayOfTheWeek().toLowerCase();
 
   const currentTournaments = tournaments.filter(
     (t) =>

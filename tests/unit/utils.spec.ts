@@ -1,17 +1,14 @@
 import {
   formatCurrency,
   formatType,
-  formatDateToLocal,
-  getTime,
   generatePagination,
   positionComparator,
   phoneNumberComparator,
   nameComparator,
-  getTodayShortDate,
-  getDayOfTheWeek,
   sumArrayByProp,
-} from '../../app/lib/utils';
-import { PlayerDB, UserDB } from '../../app/lib/definitions';
+} from '@/app/lib/utils';
+import { PlayerDB, UserDB } from '@/app/lib/definitions';
+import {formatDateToLocal, getDayOfTheWeek, getTime, getTodayShortDate} from "@/app/lib/serverDateUtils";
 
 describe('test utils', () => {
   afterEach(() => {

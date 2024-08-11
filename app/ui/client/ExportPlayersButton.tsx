@@ -3,6 +3,7 @@
 import Button from '@/app/ui/client/Button';
 import React from 'react';
 import { PlayerDB, PrizeDB, TournamentDB } from '@/app/lib/definitions';
+import {getCurrentDate, getTodayDate} from "@/app/lib/clientDateUtils";
 
 let lastSave = 0;
 function saveOtherDataToFile(
@@ -71,12 +72,12 @@ ${prizesData}
   document.body.removeChild(dataLink);
 }
 export function savePlayersDataToFile(players: PlayerDB[]) {
-  const now = new Date();
+  const now = getCurrentDate();
   if (now.getTime() - lastSave < 5000) {
     return;
   }
   lastSave = now.getTime();
-  const todayDate = now.toISOString().slice(0, 10);
+  const todayDate = getTodayDate();
 
   const creditData = `phone number, name, balance, notes
 ${players

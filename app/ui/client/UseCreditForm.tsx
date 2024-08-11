@@ -8,6 +8,7 @@ import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import { useEffect, useState } from 'react';
 import SearchablePlayersDropdown from '@/app/ui/client/SearchablePlayersDropdown';
 import Spinner from '@/app/ui/client/Spinner';
+import {getCurrentDate, getDayOfTheWeek} from "@/app/lib/clientDateUtils";
 
 export default function UseCreditForm({
   players,
@@ -35,19 +36,16 @@ export default function UseCreditForm({
     userId,
     tournamentId,
   });
-  const now = new Date();
-  const dayOfTheWeek = now
-    .toLocaleString('en-us', { weekday: 'long' })
-    .toLowerCase();
+
   const tournament = tournaments.find((t) => t.id === tournamentId);
   // @ts-ignore
   const historyLog = player.historyLog || [];
 
   const isToday = (date: Date) => {
-    return new Date().getTime() - date.getTime() < 12 * 60 * 60 * 1000;
+    return ((getCurrentDate()).getTime() - date.getTime()) < 12 * 60 * 60 * 1000;
   };
   const todayHistory = historyLog.filter((log) =>
-    isToday(new Date(log.updated_at)),
+    isToday(getCurrentDate(log.updated_at)),
   );
   const isRebuy = todayHistory.length > 0;
   const entryText = isRebuy ? 'כניסה נוספת' : 'כניסה';

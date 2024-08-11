@@ -11,6 +11,7 @@ import React from 'react';
 import { rsvpPlayerForDay } from '@/app/lib/actions';
 import PlayerPageClientCell from "@/app/ui/client/PlayerPageClientCell";
 import { getPlayersPrizesContents} from "@/app/ui/client/helpers";
+import {getTodayShortDate} from "@/app/lib/serverDateUtils";
 
 export default async function PlayerPage({
   params,
@@ -61,7 +62,7 @@ export default async function PlayerPage({
     isRegisterForTodayTournament: boolean,
   ) => {
     'use server';
-    const todayDate = new Date().toISOString().slice(0, 10);
+    const todayDate = getTodayShortDate();
     await rsvpPlayerForDay(
       player.phone_number,
       todayDate,

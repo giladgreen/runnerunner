@@ -12,6 +12,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { TRANSLATIONS } from '@/app/lib/definitions';
 import Image from 'next/image';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
+import {getCurrentDate, getDayOfTheWeek} from "@/app/lib/clientDateUtils";
 
 export default function EditPlayerForm({
   player,
@@ -36,7 +37,7 @@ export default function EditPlayerForm({
 
   const [state, dispatch] = useFormState(updatePlayerWithId, initialState);
 
-  const dayOfTheWeek = new Date().toLocaleString('en-us', { weekday: 'long' });
+  const dayOfTheWeek = getDayOfTheWeek();
   const days = [
     'Sunday',
     'Monday',
@@ -52,11 +53,9 @@ export default function EditPlayerForm({
     .filter((tournament) => days.indexOf(tournament.day) >= today)
     .map((tournament) => {
       const tournamentDayIndex = days.indexOf(tournament.day);
-      const date = new Date(
-        new Date().getTime() +
-          1000 * 60 * 60 * 24 * (tournamentDayIndex - today),
-      );
-      const dayOfTheWeek = date.toLocaleString('en-us', { weekday: 'long' });
+      const x = getCurrentDate().getTime() + (1000 * 60 * 60 * 24 * (tournamentDayIndex - today))
+      const date = getCurrentDate(x);
+      const dayOfTheWeek = getDayOfTheWeek();
       const stringDate = date.toISOString().slice(0, 10);
       // @ts-ignore
       const text = ` ${TRANSLATIONS[dayOfTheWeek]} - ${tournament.name}`;

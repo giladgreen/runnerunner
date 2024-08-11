@@ -4,7 +4,6 @@ import {
   fetchPrizesInfo,
   fetchRSVPAndArrivalData,
   fetchTodayPlayersPhoneNumbers,
-  fetchTournaments,
   fetchUserById,
   getAllPlayers,
 } from '@/app/lib/data';
@@ -18,6 +17,7 @@ import {
 } from '@/app/ui/client/helpers';
 import CurrentTournamentPage from '@/app/ui/client/CurrentTournamentPage';
 import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
+import {getDayOfTheWeek, getTodayShortDate} from "@/app/lib/serverDateUtils";
 
 export default async function CurrentTournament({
   params,
@@ -36,7 +36,7 @@ export default async function CurrentTournament({
   const prizesInformation = await fetchPrizesInfo();
 
   const { rsvpEnabled } = await fetchFeatureFlags();
-  const dayOfTheWeek = (new Date()).toLocaleString('en-us', { weekday: 'long' });
+  const dayOfTheWeek = getDayOfTheWeek();
 
   const { todayTournaments } = await fetchRSVPAndArrivalData(dayOfTheWeek);
 
@@ -63,7 +63,7 @@ export default async function CurrentTournament({
     );
   }
 
-  const date = new Date().toISOString().slice(0, 10);
+  const date = getTodayShortDate();
   const finalTablePlayersContents: Array<JSX.Element | null> = await Promise.all(
     todayTournaments.map((t) =>
       getFinalTablePlayersContent(date, t.id, false, params.userId),
