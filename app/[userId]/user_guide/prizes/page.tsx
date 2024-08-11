@@ -2,6 +2,7 @@ import {  fetchUserById } from '@/app/lib/data';
 import React from "react";
 import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function UserGuidePrizesPage({
   params,
@@ -101,11 +102,20 @@ export default async function UserGuidePrizesPage({
         <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
             בעמוד זה ניתן
         </div>
-        <div className="flex w-full items-center justify-between " >
-א. להמיר פרס של שחקן לקרדיט עבור אותו שחקן
+        <div className="flex w-full items-center justify-between ">
+            א. להמיר פרס של שחקן לקרדיט עבור אותו שחקן
         </div>
-        <div className="flex w-full items-center justify-between " >
-ב. להזיז פרס בין סטטוסים
+        <div className="flex w-full items-center justify-between ">
+            ב. להזיז פרס בין סטטוסים
         </div>
+
+        <div className="rtl flex " style={{marginTop: 20}}>
+            על מנת ליצור ולערוך את הפרסים ושוויים, הסתכלו ב
+            <Link href={`/${params.userId}/user_guide/edit_prizes`}>
+               <u style={{ color: 'blue'}}> יצירה ועריכת פרסים</u>
+            </Link>
+        </div>
+
+
     </div>
 }

@@ -71,6 +71,13 @@ export default async function UserGuidePage({
             </Link>
         </div>
         <div className="flex w-full items-center justify-between guide-link" style={{marginTop: 20}}>
+            <Link href={`/${params.userId}/user_guide/edit_prizes`}>
+
+                יצירה ועריכת פרסים
+
+            </Link>
+        </div>
+        <div className="flex w-full items-center justify-between guide-link" style={{marginTop: 20}}>
             <Link href={`/${params.userId}/user_guide/tournaments`}>
 
                    הגדרות טורנירים
