@@ -27,8 +27,8 @@ export const getTime = (serverDateStr: string) => {
         .substring(0, 5);
 };
 
-export function getDayOfTheWeek(){
-    return (getCurrentDate()).toLocaleString('en-us', { weekday: 'long' });
+export function getDayOfTheWeek(date?: string | number){
+    return (getCurrentDate(date)).toLocaleString('en-us', { weekday: 'long' });
 }
 
 export function getTodayDate(){

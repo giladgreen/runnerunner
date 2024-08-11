@@ -28,7 +28,7 @@ export default async function UserGuidePrizesPage({
         <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
             אם שחקן זוכה בפרס (נניח בטורניר באונטי)
         </div>
-        <div className="flex w-full items-center justify-between " >
+        <div className="flex w-full items-center justify-between ">
             ניתן לסמן זאת על ידי מציאת השחקן ולחיצה על הכפתור:
         </div>
         <div className="flex w-full items-center justify-between " style={{marginTop: 10}}>
@@ -41,7 +41,7 @@ export default async function UserGuidePrizesPage({
             />
         </div>
         <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
-ייפתח טופס בחירה שבו ניתן לבחור מבין פרסים קיימים או להקליד שם של פרס שלא ברשימה
+            ייפתח טופס בחירה שבו ניתן לבחור מבין פרסים קיימים או להקליד שם של פרס שלא ברשימה
         </div>
         <div className="flex w-full items-center justify-between " style={{marginTop: 10}}>
             <Image
@@ -51,6 +51,61 @@ export default async function UserGuidePrizesPage({
                 alt="prizes2"
                 style={{border: "1px solid black"}}
             />
+        </div>
+        <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
+            בעמוד הטורניר הנוכחי, יופיעו כל ההשחקנים שנרשמו לטורניר ויש להם פרסים שעוד לא נמסרו:
+        </div>
+        <div className="flex w-full items-center justify-between " style={{marginTop: 10}}>
+            <Image
+                src="/user_guide/prizes/3.png"
+                width={900}
+                height={1}
+                alt="prizes3"
+                style={{border: "1px solid black"}}
+            />
+        </div>
+
+        <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
+            על ידי לחיצה על הכפתור בשורה של הפרס ניתן לפתוח את הטופס הבא
+        </div>
+        <div className="flex w-full items-center justify-between " style={{marginTop: 10}}>
+            <Image
+                src="/user_guide/prizes/4.png"
+                width={300}
+                height={1}
+                alt="prizes4"
+                style={{border: "1px solid black"}}
+            />
+        </div>
+
+        <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
+            ובטופס ניתן להמיר את הפרס בקרדיט עבור השחקן
+        </div>
+        <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
+            אם לא מוזן כבר ערך או אם רוצים - ניתן גם להזין ערך אחר
+        </div>
+
+
+        <div className="flex w-full items-center justify-between " style={{marginTop: 40}}>
+            בעמוד הפרסים, ניתן לראות את כל הפרסים של כל השחקנים בכל הסטטוסים
+        </div>
+        <div className="flex w-full items-center justify-between " style={{marginTop: 10}}>
+            <Image
+                src="/user_guide/prizes/5.png"
+                width={1000}
+                height={1}
+                alt="prizes5"
+                style={{border: "1px solid black"}}
+            />
+        </div>
+        <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
+            בעמוד זה ניתן
+        </div>
+        <div className="flex w-full items-center justify-between " >
+א. להמיר פרס של שחקן לקרדיט עבור אותו שחקן
+        </div>
+        <div className="flex w-full items-center justify-between " >
+ב. להזיז פרס בין סטטוסים
         </div>
     </div>
 }

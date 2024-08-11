@@ -29,11 +29,11 @@ export default async function UserGuideRegistrationPage({
             יש מספר אפשרויות לרישום שחקנים לטורניר:
         </div>
         <div className="flex w-full items-center justify-between ">
-            1. השחקן נכנס בעצמו ונרשם. במקרה כזה הוא יכול להירשם רק לטורניר של אותו היום
+            1. השחקן נכנס בעצמו ונרשם. במקרה כזה הוא יכול להירשם רק לטורניר של אותו היום.
         </div>
 
         <div className="flex w-full items-center justify-between ">
-            2. רישום על ידי עובד. במקרה כזה עובד יכול לרשום את השחקן גם לטורנירים של ימים אחרים
+            2. רישום על ידי עובד. במקרה כזה עובד יכול לרשום את השחקן גם לטורנירים של ימים אחרים.
         </div>
         <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
             על מנת לרשום את השחקן לטורניר של היום, עליך למצוא את השחקן ברשימת השחקנים
@@ -55,7 +55,7 @@ export default async function UserGuideRegistrationPage({
             />
         </div>
         <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
-            ואז לסמן בעמודה המתאימה (ירוק אומר שהוא כבר רשום)
+            ואז לסמן בעמודה המתאימה -עיגול ריק לא רשום, עיגול ירוק  רשום
         </div>
 
         <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
@@ -83,8 +83,24 @@ export default async function UserGuideRegistrationPage({
                 style={{border: "1px solid black"}}
             />
         </div>
+
+
         <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
-בטורניר שאין בו חובת רישום גם לא ניתן לרשום שחקנים
+            על מנת לרשום שחקן לטורניר בהמשך השבוע, יש להיכנס לעמוד השחקן, ובו ניתן לסמן
+        </div>
+        <div className="flex w-full items-center justify-between " style={{marginTop: 10}}>
+            <Image
+                src="/user_guide/registration/4.png"
+                width={400}
+                height={1}
+                alt="registration4"
+                style={{border: "1px solid black"}}
+            />
+        </div>
+
+
+        <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
+            בטורניר שאין בו חובת רישום גם לא יהיה ניתן לרשום שחקנים
         </div>
 
     </div>

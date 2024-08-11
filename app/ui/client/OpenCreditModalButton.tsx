@@ -36,7 +36,7 @@ export default function OpenCreditModalButton({
           setShow(true);
         }}
       >
-        <span className="sr-only">Pay</span>
+        <span className="sr-only">הכנס</span>
         <div
           title="הכנס"
           style={{
@@ -50,7 +50,7 @@ export default function OpenCreditModalButton({
           }}
         >
           <b>
-            <div style={{ marginTop: -2 }}>₪</div>{' '}
+            <div>₪</div>{' '}
           </b>
         </div>
         {/*<PlusCircleIcon className="w-6" title="הכנס" />*/}

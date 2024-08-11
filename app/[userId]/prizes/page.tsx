@@ -17,7 +17,7 @@ export default async function PrizesPage({
   if (!isAdmin && !isWorker) {
     return <NoPermissionsPage />
   }
-    const playerPrizes = await fetchPlayersPrizes(user?.phone_number);
+    const playerPrizes = await fetchPlayersPrizes();
     const prizesInformation = await fetchPrizesInfo();
   const { chosenPrizes, deliveredPrizes, readyToBeDeliveredPrizes } =playerPrizes;
   const prizesContents = await getPlayersPrizesContents(

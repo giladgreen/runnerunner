@@ -53,9 +53,8 @@ export default function EditPlayerForm({
     .filter((tournament) => days.indexOf(tournament.day) >= today)
     .map((tournament) => {
       const tournamentDayIndex = days.indexOf(tournament.day);
-      const x = getCurrentDate().getTime() + (1000 * 60 * 60 * 24 * (tournamentDayIndex - today))
-      const date = getCurrentDate(x);
-      const dayOfTheWeek = getDayOfTheWeek();
+      const date = getCurrentDate(getCurrentDate().getTime() + (1000 * 60 * 60 * 24 * (tournamentDayIndex - today)));
+      const dayOfTheWeek = getDayOfTheWeek(date.getTime());
       const stringDate = date.toISOString().slice(0, 10);
       // @ts-ignore
       const text = ` ${TRANSLATIONS[dayOfTheWeek]} - ${tournament.name}`;

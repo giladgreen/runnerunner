@@ -41,7 +41,7 @@ export default async function UserGuideEntriesPage({
             />
         </div>
         <div className="flex w-full items-center justify-between " style={{marginTop: 10}}>
-            בשלב זה כדאי לוודא אם השחקן רשום לטורניר
+            בשלב זה ניתן לוודא שהשחקן רשום לטורניר
         </div>
 
         <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
@@ -70,10 +70,10 @@ export default async function UserGuideEntriesPage({
         </div>
 
         <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
-            א. הסכום ימולא אוטומטית (אך ניתן לשנות במידת הצורך)
+            א. הסכום יתמלא אוטומטית (אך ניתן לשנות במידת הצורך)
         </div>
         <div className="flex w-full items-center justify-between " style={{marginTop: 5}}>
-            ב. הסיבה גם כן תמולא בצורה אוטומטית (ושוב, ניתן לשנות אם צריך)
+            ב. הסיבה גם כן תתמלא בצורה אוטומטית (ושוב, ניתן לשנות אם צריך)
         </div>
         <div className="flex w-full items-center justify-between " style={{marginTop: 5}}>
             ג. אם יש לשחקן מספיק קרדיט, ברירת המחדל תהיה לסמן הורדה של קרדיט
@@ -81,7 +81,6 @@ export default async function UserGuideEntriesPage({
         <div className="flex w-full items-center justify-between ">
             ניתן כמובן לשנות לאמצעי תשלום אחר אם השחקן מבקש
         </div>
-
         <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
             אם השחקן משלם במזומן - מסמנים מזומן
         </div>
