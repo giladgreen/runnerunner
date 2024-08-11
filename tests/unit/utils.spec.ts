@@ -6,9 +6,9 @@ import {
   phoneNumberComparator,
   nameComparator,
   sumArrayByProp,
-} from '@/app/lib/utils';
-import { PlayerDB, UserDB } from '@/app/lib/definitions';
-import {formatDateToLocal, getDayOfTheWeek, getTime, getTodayShortDate} from "@/app/lib/serverDateUtils";
+} from '../../app/lib/utils';
+import { PlayerDB, UserDB } from '../..//app/lib/definitions';
+import {formatDateToLocal, getDayOfTheWeek, getTime, getTodayShortDate} from "../../app/lib/serverDateUtils";
 
 describe('test utils', () => {
   afterEach(() => {
@@ -298,15 +298,27 @@ describe('test utils', () => {
   describe('getDayOfTheWeek', () => {
     describe('when given a date', () => {
       it('should return correct day of the week', async () => {
-        const result = getDayOfTheWeek(new Date('2024-06-11'));
+        const result = getDayOfTheWeek(new Date('2024-06-11T23:00:00'));
         expect(result).toEqual('Tuesday');
       });
       it('should return correct day of the week', async () => {
-        const result = getDayOfTheWeek(new Date('2024-07-11'));
+        const result = getDayOfTheWeek(new Date('2024-06-12T03:00:00'));
+        expect(result).toEqual('Tuesday');
+      });
+      it('should return correct day of the week', async () => {
+        const result = getDayOfTheWeek(new Date('2024-07-11T23:00:00'));
         expect(result).toEqual('Thursday');
       });
       it('should return correct day of the week', async () => {
-        const result = getDayOfTheWeek(new Date('2024-08-11'));
+        const result = getDayOfTheWeek(new Date('2024-07-12T05:00:00'));
+        expect(result).toEqual('Thursday');
+      });
+      it('should return correct day of the week', async () => {
+        const result = getDayOfTheWeek(new Date('2024-08-11T23:00:00'));
+        expect(result).toEqual('Sunday');
+      });
+      it('should return correct day of the week', async () => {
+        const result = getDayOfTheWeek(new Date('2024-08-12T01:00:00'));
         expect(result).toEqual('Sunday');
       });
     });

@@ -23,7 +23,7 @@ import {
 
 import { signIn } from '../../auth';
 import { unstable_noStore as noStore } from 'next/dist/server/web/spec-extension/unstable-no-store';
-import {getCurrentDate, getTodayShortDate, getUpdatedAtFormat} from "@/app/lib/serverDateUtils";
+import {getCurrentDate, getTodayShortDate, getUpdatedAtFormat} from "./serverDateUtils";
 
 const TARGET_MAIL = 'green.gilad+runner@gmail.com';
 let clearOldRsvpLastRun = getCurrentDate('2024-06-15T10:00:00.000Z').getTime();

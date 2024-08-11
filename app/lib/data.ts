@@ -21,7 +21,7 @@ import {
   phoneNumberComparator,
 } from './utils';
 import { redirect } from 'next/navigation';
-import {getCurrentDate, getDayOfTheWeek, getTodayShortDate} from "@/app/lib/serverDateUtils";
+import {getCurrentDate, getDayOfTheWeek, getTodayShortDate} from "./serverDateUtils";
 
 const ITEMS_PER_PAGE = 30;
 const TOP_COUNT = 8;

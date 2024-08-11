@@ -5,14 +5,14 @@ export function getCurrentDate(date?: string | number){
     return date ? new Date(date) : new Date();
 }
 
-
 export function getDayOfTheWeek(date?: Date) {
-    const base = date ?? getCurrentDate();
+    let base = date ?? getCurrentDate();
+    base = getCurrentDate(base.getTime() -(6 * HOUR));
     return base.toLocaleString('en-us', { weekday: 'long' });
 }
 
-export function getTodayShortDate(date?: string | number) {//TODO: might need to adjust date to israel time - check where we call it from
-    return getCurrentDate(date).toISOString().slice(0, 10);
+export function getTodayShortDate(date?: string | number) {
+    return getCurrentDate((getCurrentDate(date)).getTime() -(6 * HOUR)).toISOString().slice(0, 10);
 }
 
 export function getUpdatedAtFormat() {

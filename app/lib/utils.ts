@@ -1,4 +1,4 @@
-import { PlayerDB, UserDB } from '@/app/lib/definitions';
+import { PlayerDB, UserDB } from './definitions';
 
 
 
