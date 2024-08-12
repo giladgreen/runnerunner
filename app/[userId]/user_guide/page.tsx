@@ -1,16 +1,9 @@
-import MVPPlayers from '@/app/ui/client/MVPPlayers';
-import DebtPlayers from '@/app/ui/client/DebtPlayers';
-import { fetchRSVPAndArrivalData, fetchUserById } from '@/app/lib/data';
-import GeneralPlayersCardWrapper from '@/app/ui/client/GeneralPlayersCardWrapper';
-import PlayerPage from '@/app/ui/client/PlayerPage';
-import { TournamentDB } from '@/app/lib/definitions';
-import AdminHomePage from '@/app/ui/client/AdminHomePage';
-import { getFinalTablePlayersContent } from '@/app/ui/client/helpers';
+import { fetchUserById } from '@/app/lib/data';
+
 import React from "react";
 import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
 import Link from "next/link";
-import {Button} from "primereact/button";
-import Image from "next/image";
+
 
 export default async function UserGuidePage({
   params,
@@ -33,26 +26,11 @@ export default async function UserGuidePage({
                 </b>
             </h1>
         </div>
-        <div className="flex w-full items-center justify-between " style={{marginTop: 20}}>
-            עמוד טורניר נוכחי:
+        <div className="flex w-full items-center justify-between guide-link" style={{marginTop: 30}}>
+            <Link href={`/${params.userId}/user_guide/current_tournament`}>
+                עמוד הטורניר הנוכחי
+            </Link>
         </div>
-        <div className="flex w-full items-center justify-between " style={{marginTop: 10}}>
-          כאשר מקלידים שם או מספר בשורת החיפוש, יציג את תוצאות החיפוש,
-        </div>
-        <div className="flex w-full items-center justify-between " style={{marginTop: 10}}>
-          כאשר שורת החיפוש ריקה, יציג את השחקנים שאישרו הגעה ו\או נכנסו לטורניר
-        </div>
-        <div className="flex w-full items-center justify-between " style={{marginTop: 10}}>
-            <Image
-                src="/user_guide/1.png"
-                width={1000}
-                height={1}
-                alt="general"
-                style={{border: "1px solid black"}}
-            />
-        </div>
-
-
         <div className="flex w-full items-center justify-between guide-link" style={{marginTop: 20}}>
             <Link href={`/${params.userId}/user_guide/create_player`}>
                 יצירת שחקן חדש
