@@ -187,6 +187,7 @@ async function getAllHistory() {
 
 export async function getAllPlayers() {
   const todayDate = getTodayShortDate();
+
   const playersPromise = sql<PlayerDB>`SELECT * FROM players AS P 
  JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number) AS H
     ON P.phone_number = H.phone_number`;
@@ -582,10 +583,12 @@ export async function fetchPlayersPrizes(playerPhoneNumber?: string) {
       const player = players.find((p) => p.phone_number === prize.phone_number);
       if (player) {
         prize.player = player;
+      }else{
+        console.warn('>>> prize is missing player', prize);
       }
     });
     const result = !playerPhoneNumber
-      ? prizes
+      ? prizes.filter((prize) => Boolean(prize.player))
       : prizes.filter((prize) => prize.phone_number === playerPhoneNumber);
     methodEnd('fetchPlayersPrizes');
 
