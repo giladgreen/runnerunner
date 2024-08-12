@@ -132,10 +132,10 @@ export default function TodayPlayersTable({
   const dayOfTheWeek = getDayOfTheWeek().toLowerCase();
 
   const currentTournaments = tournaments.filter(
-    (t) =>
-      t.day.toLowerCase() === dayOfTheWeek &&
+    (t) => t.day.toLowerCase() === dayOfTheWeek &&
       (!tournamentId || tournamentId === t.id),
   );
+
   const currentTournament = currentTournaments[0];
 
   return (
@@ -378,7 +378,7 @@ export default function TodayPlayersTable({
                         <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
                           <RSVPButton
                             player={player}
-                            tournamentId={currentTournament?.id!}
+                            tournamentId={currentTournament.id!}
                           />
                         </td>
                       )}

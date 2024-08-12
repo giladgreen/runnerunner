@@ -8,7 +8,7 @@ import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import { useEffect, useState } from 'react';
 import SearchablePlayersDropdown from '@/app/ui/client/SearchablePlayersDropdown';
 import Spinner from '@/app/ui/client/Spinner';
-import {getCurrentDate, getDayOfTheWeek} from "@/app/lib/clientDateUtils";
+import {getCurrentDate } from "@/app/lib/clientDateUtils";
 
 export default function UseCreditForm({
   players,

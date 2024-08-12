@@ -28,7 +28,9 @@ export const getTime = (serverDateStr: string) => {
 };
 
 export function getDayOfTheWeek(date?: string | number){
-    return (getCurrentDate(date)).toLocaleString('en-us', { weekday: 'long' });
+    let base = date ? getCurrentDate(date) : getCurrentDate();
+    base = getCurrentDate(base.getTime() -(6 * HOUR));
+    return base.toLocaleString('en-us', { weekday: 'long' });
 }
 
 export function getTodayDate(){
