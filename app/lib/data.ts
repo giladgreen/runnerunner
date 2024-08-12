@@ -703,7 +703,9 @@ export async function fetchTournamentsData() {
             ({ id }) =>
               id === tournament_id,
           );
-
+          if (!tournament){
+            return newAcc;
+          }
           const date = dateAsString.slice(0, 10);
           // @ts-ignore
           if (!newAcc[date]) {
@@ -711,11 +713,11 @@ export async function fetchTournamentsData() {
             newAcc[date] = {};
           }
           // @ts-ignore
-          if (!newAcc[date][tournament?.id]) {
+          if (!newAcc[date][tournament_id]) {
             // @ts-ignore
-            newAcc[date][tournament?.id] = {
-              tournamentId: tournament?.id,
-              tournamentName: tournament?.name,
+            newAcc[date][tournament_id] = {
+              tournamentId: tournament_id,
+              tournamentName: tournament.name,
               cash: 0,
               credit: 0,
               wire: 0,
@@ -730,11 +732,11 @@ export async function fetchTournamentsData() {
           const amount = -1 * change;
 
           // @ts-ignore
-          newAcc[date][tournament?.id].total += amount;
+          newAcc[date][tournament_id].total += amount;
           // @ts-ignore
-          newAcc[date][tournament?.id].entries += 1;
+          newAcc[date][tournament_id].entries += 1;
           // @ts-ignore
-          newAcc[date][tournament?.id][type] += amount;
+          newAcc[date][tournament_id][type] += amount;
 
           // @ts-ignore
           if (!dateToPlayerMap[date]) {
@@ -742,21 +744,21 @@ export async function fetchTournamentsData() {
             dateToPlayerMap[date] = {};
           }
           // @ts-ignore
-          const datePlayers = dateToPlayerMap[date][tournament?.id];
+          const datePlayers = dateToPlayerMap[date][tournament_id];
           if (datePlayers) {
             if (!datePlayers.includes(phone_number)) {
               datePlayers.push(phone_number);
               // @ts-ignore
-              newAcc[date][tournament?.id].players += 1;
+              newAcc[date][tournament_id].players += 1;
             } else {
               // @ts-ignore
-              newAcc[date][tournament?.id].reentries += 1;
+              newAcc[date][tournament_id].reentries += 1;
             }
           } else {
             // @ts-ignore
-            dateToPlayerMap[date][tournament?.id] = [phone_number];
+            dateToPlayerMap[date][tournament_id] = [phone_number];
             // @ts-ignore
-            newAcc[date][tournament?.id].players += 1;
+            newAcc[date][tournament_id].players += 1;
           }
 
           return newAcc;
