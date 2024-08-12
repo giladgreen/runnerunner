@@ -137,10 +137,7 @@ export default function TodayPlayersTable({
       (!tournamentId || tournamentId === t.id),
   );
   const currentTournament = currentTournaments[0];
-  console.log('## dayOfTheWeek',dayOfTheWeek)
-  console.log('## tournaments',tournaments)
-  console.log('## tournamentId',tournamentId)
-  console.log('## currentTournaments',currentTournaments)
+
   return (
     <>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
@@ -386,7 +383,7 @@ export default function TodayPlayersTable({
                         </td>
                       )}
                       <td className="rsvp-icon whitespace-nowrap px-3 py-3 ">
-                        {player.arrived === currentTournament.id ? '✔️' : ''}
+                        {player.arrived === currentTournament?.id ? '✔️' : ''}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3 ">
                         <EntriesButton player={player} />

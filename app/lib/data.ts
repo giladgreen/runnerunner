@@ -146,7 +146,7 @@ async function getAllTournaments(includeDeleted?: boolean) {
 
 async function getTournamentWinnersRecord(tournamentId: string, date: string) {
   const winnersResult =
-    await sql<WinnerDB>`SELECT * FROM winners WHERE date=${date} AND tournament_id = ${tournamentId}`;
+      await sql<WinnerDB>`SELECT * FROM winners WHERE date=${date} AND tournament_id = ${tournamentId}`;
   return winnersResult.rows[0];
 }
 
@@ -532,6 +532,7 @@ export async function fetchFinalTablePlayers(
   noStore();
   try {
     const winnersResult = await getTournamentWinnersRecord(tournamentId, date);
+
     const winnersObject = winnersResult
       ? JSON.parse(winnersResult.winners)
       : {};
@@ -697,6 +698,7 @@ export async function fetchTournamentsData() {
             typeof updated_at === 'string'
               ? getCurrentDate(updated_at).toISOString()
               : (updated_at as Date).toISOString();
+
           const tournament = tournaments.find(
             ({ id }) =>
               id === tournament_id,

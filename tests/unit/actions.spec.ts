@@ -176,7 +176,6 @@ describe('actions', () => {
         });
       });
       it.skip('should return correct results', async () => {
-        console.log(' ##### test 1')
         // arrange
         const imagesBefore = await getAllImages();
         expect(imagesBefore).toEqual([]);
@@ -185,10 +184,8 @@ describe('actions', () => {
         expect(playerHistoryBefore).toEqual([]);
         const playersBefore: PlayerDB[] = await fetchAllPlayersForExport();
         expect(playersBefore).toEqual([]);
-        console.log(' ##### test 2')
         // act
         await createPlayer('prevState', {} as State, formData);
-        console.log(' ##### test 3')
         // assert
         const imagesAfter: ImageDB[] = await getAllImages();
         expect(imagesAfter.length).toEqual(1);
@@ -196,7 +193,6 @@ describe('actions', () => {
         expect(imagesAfter[0].image_url).toEqual(imageUrl);
 
         const playersAfter: PlayerDB[] = await fetchAllPlayersForExport();
-        console.log(' ##### test 4')
         expect(playersAfter.length).toEqual(1);
         const createdPlayer = playersAfter[0];
         expect(createdPlayer?.phone_number).toEqual(phoneNumber);
@@ -209,7 +205,6 @@ describe('actions', () => {
         expect(createdPlayer?.rsvps).toEqual([]);
 
         const playerHistoryAfter: LogDB[] = await getPlayerHistory(phoneNumber);
-        console.log(' ##### test 5')
         expect(playerHistoryAfter.length).toEqual(1);
         const playerHistory = playerHistoryAfter[0];
         expect(playerHistory.phone_number).toEqual(phoneNumber);
@@ -225,7 +220,6 @@ describe('actions', () => {
           {} as State,
           formData,
         );
-        console.log(' ##### test 6')
         expect(secondTryResult).toEqual({
           errors: {
             phone_number: ['player already exists'],
@@ -244,7 +238,6 @@ describe('actions', () => {
             image_url: imageUrl,
           }),
         );
-        console.log(' ##### test 7')
         await createPlayerUsageLog(
           { player: createdPlayer, prevPage: 'prevPage', userId, tournamentId },
           {} as State,
@@ -265,7 +258,6 @@ describe('actions', () => {
             other_player: otherPlayerPhone,
           }),
         );
-        console.log(' ##### test 8')
         await createPlayerNewCreditLog(
           { player: createdPlayer, prevPage: 'prevPage', userId, tournamentId },
           {} as State,
@@ -275,7 +267,6 @@ describe('actions', () => {
             note,
           }),
         );
-        console.log(' ##### test 9')
         const positionInput = {
           playerId: createdPlayer.id,
           prevPage: 'prevPage',
@@ -288,7 +279,6 @@ describe('actions', () => {
             position: 3,
           }),
         );
-        console.log(' ##### test 10')
         // @ts-ignore
         await setPlayerPosition(
           positionInput,
@@ -296,14 +286,12 @@ describe('actions', () => {
             position: 0,
           }),
         );
-        console.log(' ##### test 11')
         const badRequestResult = await setPlayerPosition(
           positionInput,
           getFormData({
             position: 'nan',
           }),
         );
-        console.log(' ##### test 12')
         expect(badRequestResult).toEqual({
           message: 'איראה שגיאה',
         });

@@ -26,7 +26,7 @@ export default async function TournamentsDataPage({
 
   let tournamentsRange = '';
   if (tournamentsData.length > 1) {
-    console.log();
+
     const first = formatDateToLocal(tournamentsData[0]).split(',')[1];
     const last = formatDateToLocal(
       tournamentsData[tournamentsData.length - 1],
@@ -88,7 +88,7 @@ export default async function TournamentsDataPage({
           <tbody className="bg-white">
             {tournamentsFullData.map(async (dateItem) => {
               const dayIncome = getDayIncome(dateItem);
-              const date = getTodayShortDate(dateItem.date);
+              const date = dateItem.date;
 
               const finalTableData = await getFinalTablePlayersContent(
                 date,

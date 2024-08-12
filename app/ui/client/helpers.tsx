@@ -24,11 +24,11 @@ export async function getFinalTablePlayersContent(
 ) {
 
   const tournament = await fetchTournamentByTournamentId(tournamentId);
-
   if (!tournament) return null;
   const tournamentName = tournament.name;
   const finalTablePlayers = await fetchFinalTablePlayers(tournamentId, date);
   const prizesInformation = await fetchPrizesInfo();
+
   const showSetPrizesCreditModalButton =
     isTournamentsDataPage && finalTablePlayers.find((p) => !p.hasReceived);
   if (!finalTablePlayers || finalTablePlayers.length === 0) return null;
