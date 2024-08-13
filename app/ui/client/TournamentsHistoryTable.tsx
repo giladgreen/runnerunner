@@ -8,7 +8,7 @@ export default function TournamentsHistoryTable({
 }) {
   const tournamentsData = player.tournamentsData;
   if (tournamentsData.length === 0) {
-    return <div>אין נתוני טורנירים להצגה</div>;
+    return <div></div>;
   }
   return (
     <div className="rtl" style={{ marginTop: 30, marginBottom: 20 }}>

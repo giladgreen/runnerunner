@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { ArrowRightIcon, ArrowRightOnRectangleIcon, Bars3Icon} from '@heroicons/react/24/outline';
 import {Nevigationlinks} from "@/app/ui/client/NavLinks";
 import Link from "next/link";
-import clsx from "clsx";
 import {usePathname} from "next/navigation";
 
 export default function AdminPageMenu({ userId, isAdmin, isWorker, signout }: { userId:string, signout: () => void, isAdmin:boolean, isWorker:boolean }) {

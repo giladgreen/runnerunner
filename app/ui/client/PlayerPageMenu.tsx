@@ -1,9 +1,14 @@
 'use client';
 import React, { useState } from 'react';
 import { ArrowRightIcon, ArrowRightOnRectangleIcon, Bars3Icon} from '@heroicons/react/24/outline';
+import { Nevigationlinks } from "@/app/ui/client/NavLinks";
+import Link from "next/link";
+import {usePathname} from "next/navigation";
 
-export default function PlayerPageMenu({ signout }: { signout: () => void }) {
+export default function PlayerPageMenu({ signout, userId, showRsvp }: { userId:string, signout: () => void, showRsvp:boolean }) {
   const [showMenu, setShowMenu] = useState(false);
+    const pathname = usePathname();
+
 
   return (
     <div>
@@ -28,12 +33,38 @@ export default function PlayerPageMenu({ signout }: { signout: () => void }) {
             <div className="player_page_menu_header" onClick={() => {
                 setShowMenu((val) => !val);
             }}>
-                <ArrowRightIcon style={{ maxHeight: 30 }}/>
+                <ArrowRightIcon style={{maxHeight: 30}}/>
             </div>
             <div className="player_page_menu_body">
+                {Nevigationlinks(userId).filter(link => (link.player)).filter(link => showRsvp || !link.isRsvp).map((link) => {
+                    const LinkIcon = link.icon;
+                    return (
+                        <Link
+                            onClick={() => {
+                                setTimeout(() => {
+                                    setShowMenu(false);
+                                }, 300)
+                            }}
+                            key={link.name}
+                            href={link.href}
+                            style={{
+                                marginTop: 10,
+                                color: 'white',
+                                display: 'flex',
+                                background: pathname === link.href ? 'rgba(255,255,255,0.2)' : 'transparent',
+                                padding: 10,
+                                borderRadius: 10,
+                                marginLeft: 8
+                            }}
+                        >
+                            <LinkIcon className="w-6" style={{margin: '0 4px'}}/>
+                            <div>{link.name}</div>
+                        </Link>
+                    );
 
+                })}
                 <div
-                    style={{marginTop: 20}}
+                    style={{marginTop: 50, marginRight: 10}}
                     onClick={() => {
                         signout();
                     }}

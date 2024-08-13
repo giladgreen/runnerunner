@@ -1,10 +1,6 @@
 TODO:
-
-- BUG: need to use the same day in server as client.. - validate at 00:30
 - 
-- הוספת הסבר על אקספורט כולל שמירה עם הקיצור
-- 
-- in player mobile - replace tabs with menu
+-  add more UT
 - fix skipped UT
 - טקסט עבור תנאי שימוש
 - change style to class name

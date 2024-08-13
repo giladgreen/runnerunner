@@ -280,7 +280,6 @@ export async function getPlayersPrizesContent(
   );
 }
 
-
 export async function getPlayersPrizesContents(
     chosenPrizes: PrizeDB[],
     deliveredPrizes: PrizeDB[],

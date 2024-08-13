@@ -1,5 +1,5 @@
 import SideNav from '@/app/ui/client/SideNav';
-import { fetchUserById } from '@/app/lib/data';
+import {fetchFeatureFlags, fetchUserById} from '@/app/lib/data';
 import { signOut } from '@/auth';
 import PlayerPageMenu from '@/app/ui/client/PlayerPageMenu';
 import AdminPageMenu from "@/app/ui/client/AdminPageMenu";
@@ -47,12 +47,17 @@ export default async function Layout({
     );
   }
 
+    const { rsvpEnabled, playerRsvpEnabled } = await fetchFeatureFlags();
+    const showRsvp = rsvpEnabled && playerRsvpEnabled;
+
     return (
         <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
             <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
             <div className="player-header">
                 <img src="/runner-white-logo.png" width={50} height={50} alt="runner"/>
                 <PlayerPageMenu
+                    showRsvp={showRsvp}
+                    userId={params.userId}
                     signout={async () => {
                         'use server';
 

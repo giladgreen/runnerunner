@@ -73,6 +73,25 @@ export const Nevigationlinks = (userId: string) => [
     icon: InformationCircleIcon,
     player: true,
   },
+  {
+    name: 'רישום',
+    href: `/${userId}/player-registration`,
+    icon: PuzzlePieceIcon,
+    player: true,
+    isRsvp: true,
+  },
+  {
+    name: 'הסטורית קרדיט',
+    href: `/${userId}/player-credit-history`,
+    icon: BanknotesIcon,
+    player: true,
+  },
+  {
+    name: ' פרסים',
+    href: `/${userId}/player-prizes`,
+    icon: GiftIcon,
+    player: true,
+  },
 ];
 
 export default function NavLinks({ user }: { user: UserDB }) {
