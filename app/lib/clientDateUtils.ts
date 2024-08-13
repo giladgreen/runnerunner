@@ -6,7 +6,6 @@ export function getCurrentDate(date?: string | number){
     return date ? new Date(date) : new Date();
 }
 
-
 export const formatDateToLocal = (dateStr: string, locale: string = 'he') => {
     const date = getCurrentDate(dateStr);
     const options: Intl.DateTimeFormatOptions = {

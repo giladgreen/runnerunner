@@ -1,7 +1,5 @@
 import { PlayerDB, UserDB } from './definitions';
 
-
-
 export const formatCurrency = (balance: number) => {
   const res = (balance ?? 0).toLocaleString('en-US', {
     style: 'currency',
@@ -87,7 +85,7 @@ export function nameComparator(a: PlayerDB, b: PlayerDB) {
 }
 
 export function dateComparator(a: string | number, b: string | number) {
-  return new Date(b).getTime() - new Date(a).getTime();
+  return (new Date(b).getTime() - new Date(a).getTime()) < 0 ? -1 : 1;
 }
 
 export function sumArrayByProp(array: any[], propName: string) {
