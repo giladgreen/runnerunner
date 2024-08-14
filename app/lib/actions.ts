@@ -233,7 +233,7 @@ export async function createPlayer(
   if (existingPlayer) {
     return {
       errors: {
-        phone_number: ['player already exists'],
+        phone_number: ['שחקן עם מספר זה כבר קיים'],
       },
     };
   }
