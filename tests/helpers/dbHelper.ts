@@ -76,7 +76,12 @@ export async function getAllPlayers() {
    return  (await sql<PlayerDB>`
             SELECT * 
             FROM players`).rows;
+}
 
+export async function getAllDeletedPlayers() {
+   return  (await sql<PlayerDB>`
+            SELECT * 
+            FROM deleted_players`).rows;
 }
 
 export async function getAllUsers() {
