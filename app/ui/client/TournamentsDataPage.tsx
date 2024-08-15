@@ -1,8 +1,11 @@
 import { fetchTournamentsData } from '@/app/lib/data';
 import { getFinalTablePlayersContent } from '@/app/ui/client/helpers';
 import { getDayIncome } from '@/app/ui/client/helpers';
-import {formatDateToLocal, getTodayShortDate} from "@/app/lib/serverDateUtils";
-import {dateComparator} from "@/app/lib/utils";
+import {
+  formatDateToLocal,
+  getTodayShortDate,
+} from '@/app/lib/serverDateUtils';
+import { dateComparator } from '@/app/lib/utils';
 
 export default async function TournamentsDataPage({
   userId,
@@ -26,7 +29,6 @@ export default async function TournamentsDataPage({
 
   let tournamentsRange = '';
   if (tournamentsData.length > 1) {
-
     const first = formatDateToLocal(tournamentsData[0]).split(',')[1];
     const last = formatDateToLocal(
       tournamentsData[tournamentsData.length - 1],

@@ -5,10 +5,16 @@ import {
   positionComparator,
   phoneNumberComparator,
   nameComparator,
-  sumArrayByProp, dateComparator,
+  sumArrayByProp,
+  dateComparator,
 } from '../../app/lib/utils';
 import { PlayerDB, UserDB } from '../..//app/lib/definitions';
-import {formatDateToLocal, getDayOfTheWeek, getTime, getTodayShortDate} from "../../app/lib/serverDateUtils";
+import {
+  formatDateToLocal,
+  getDayOfTheWeek,
+  getTime,
+  getTodayShortDate,
+} from '../../app/lib/serverDateUtils';
 
 describe('test utils', () => {
   afterEach(() => {
@@ -288,24 +294,23 @@ describe('test utils', () => {
   describe('dateComparator', () => {
     describe('when given 2 dates', () => {
       it('should return correct date order ', async () => {
-        const dateA =  '2024-11-13';
-        const dateB =  '2024-11-17';
+        const dateA = '2024-11-13';
+        const dateB = '2024-11-17';
         const result = dateComparator(dateA, dateB);
         expect(result).toEqual(1);
       });
       it('should return correct date order ', async () => {
-        const dateA =  '2024-11-17';
-        const dateB =  '2024-11-13';
+        const dateA = '2024-11-17';
+        const dateB = '2024-11-13';
         const result = dateComparator(dateA, dateB);
         expect(result).toEqual(-1);
       });
       it('should return correct date order ', async () => {
-        const dateA =  '2024-11-13';
-        const dateB =  '2024-11-13';
+        const dateA = '2024-11-13';
+        const dateB = '2024-11-13';
         const result = dateComparator(dateA, dateB);
         expect(result).toEqual(1);
       });
-
     });
   });
 

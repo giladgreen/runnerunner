@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { Button } from 'primereact/button';
 import DeletePrizeInfoButton from '@/app/ui/client/DeletePrizeInfoButton';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
-import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
-import {formatDateToLocalWithTime} from "@/app/lib/serverDateUtils";
+import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
+import { formatDateToLocalWithTime } from '@/app/lib/serverDateUtils';
 
 export default async function PrizesInfoPage({
   params,
@@ -20,7 +20,7 @@ export default async function PrizesInfoPage({
 
   const prizes = await fetchPrizesInfo();
   if (!isAdmin && !isWorker) {
-      return <NoPermissionsPage />
+    return <NoPermissionsPage />;
   }
 
   const prizesCount = prizes.length;

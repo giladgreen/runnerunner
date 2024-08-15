@@ -1,16 +1,9 @@
 'use client';
-import {
-  formatCurrency,
-  formatType,
-} from '@/app/lib/utils';
+import { formatCurrency, formatType } from '@/app/lib/utils';
 import { PlayerDB } from '@/app/lib/definitions';
-import {formatDateToLocal, getTime} from "@/app/lib/clientDateUtils";
+import { formatDateToLocal, getTime } from '@/app/lib/clientDateUtils';
 
-export default function PlayerHistoryTable({
-  player,
-}: {
-  player: PlayerDB;
-}) {
+export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
   const balances = [] as number[];
 
   const historyLog = player.historyLog

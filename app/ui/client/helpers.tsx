@@ -1,4 +1,8 @@
-import {fetchFinalTablePlayers, fetchPrizesInfo, fetchTournamentByTournamentId} from '@/app/lib/data';
+import {
+  fetchFinalTablePlayers,
+  fetchPrizesInfo,
+  fetchTournamentByTournamentId,
+} from '@/app/lib/data';
 import { PlayerDB, PrizeDB, PrizeInfoDB } from '@/app/lib/definitions';
 import OpenGiveCreditModalButton from '@/app/ui/client/OpenGiveCreditModalButton';
 import Image from 'next/image';
@@ -14,7 +18,7 @@ import {
 } from '@heroicons/react/24/solid';
 import SetPrizeAsReadyToBeDelivered from '@/app/ui/client/SetPrizeAsReadyToBeDelivered';
 import SetPrizeAsNotReadyToBeDelivered from '@/app/ui/client/SetPrizeAsNotReadyToBeDelivered';
-import ResetPlayersPositionsButton from "@/app/ui/client/ResetPlayersPositionsButton";
+import ResetPlayersPositionsButton from '@/app/ui/client/ResetPlayersPositionsButton';
 
 export async function getFinalTablePlayersContent(
   date: string,
@@ -22,7 +26,6 @@ export async function getFinalTablePlayersContent(
   isTournamentsDataPage: boolean,
   userId?: string,
 ) {
-
   const tournament = await fetchTournamentByTournamentId(tournamentId);
   if (!tournament) return null;
   const tournamentName = tournament.name;
@@ -42,11 +45,13 @@ export async function getFinalTablePlayersContent(
       style={{ marginBottom: 30, display: 'flex', marginRight: 0 }}
     >
       <div>
-        { !isTournamentsDataPage && <ResetPlayersPositionsButton
+        {!isTournamentsDataPage && (
+          <ResetPlayersPositionsButton
             tournamentId={tournamentId}
             tournamentName={tournamentName}
             date={date}
-        />}
+          />
+        )}
 
         {finalTablePlayers.map((finalTablePlayer: PlayerDB) => {
           return (
@@ -281,43 +286,46 @@ export async function getPlayersPrizesContent(
 }
 
 export async function getPlayersPrizesContents(
-    chosenPrizes: PrizeDB[],
-    deliveredPrizes: PrizeDB[],
-    readyToBeDeliveredPrizes: PrizeDB[],
-    prizesInformation: PrizeInfoDB[],
-    tournamentId: string | null,
-    personal?: boolean,
-    userId?: string,
-    currentTournament?: boolean,
+  chosenPrizes: PrizeDB[],
+  deliveredPrizes: PrizeDB[],
+  readyToBeDeliveredPrizes: PrizeDB[],
+  prizesInformation: PrizeInfoDB[],
+  tournamentId: string | null,
+  personal?: boolean,
+  userId?: string,
+  currentTournament?: boolean,
 ) {
   const chosenPrizesContent = (await getPlayersPrizesContent(
-      chosenPrizes,
-      prizesInformation,
-      tournamentId,
-      personal,
-      userId,
-      currentTournament
+    chosenPrizes,
+    prizesInformation,
+    tournamentId,
+    personal,
+    userId,
+    currentTournament,
   )) as JSX.Element;
   const deliveredPrizesContent = (await getPlayersPrizesContent(
-      deliveredPrizes,
-      prizesInformation,
-      tournamentId,
-      personal,
-      userId,
-      currentTournament
+    deliveredPrizes,
+    prizesInformation,
+    tournamentId,
+    personal,
+    userId,
+    currentTournament,
   )) as JSX.Element;
   const readyToBeDeliveredPrizesContent = (await getPlayersPrizesContent(
-      readyToBeDeliveredPrizes,
-      prizesInformation,
-      tournamentId,
-      personal,
-      userId,
-      currentTournament
+    readyToBeDeliveredPrizes,
+    prizesInformation,
+    tournamentId,
+    personal,
+    userId,
+    currentTournament,
   )) as JSX.Element;
 
-  return {chosenPrizesContent, deliveredPrizesContent, readyToBeDeliveredPrizesContent}
+  return {
+    chosenPrizesContent,
+    deliveredPrizesContent,
+    readyToBeDeliveredPrizesContent,
+  };
 }
-
 
 export function getDayIncome(dateItem: {
   total: number;

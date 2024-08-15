@@ -2,10 +2,7 @@ import Image from 'next/image';
 import Sort from '@/app/ui/sort';
 import UpdatePlayerButton from '@/app/ui/client/UpdatePlayerButton';
 import DeletePlayerButton from '@/app/ui/client/DeletePlayerButton';
-import {
-  formatCurrency,
-  formatCurrencyColor,
-} from '@/app/lib/utils';
+import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 import {
   fetchFeatureFlags,
   fetchFilteredPlayers,
@@ -16,7 +13,7 @@ import Link from 'next/link';
 import RSVPButton from '@/app/ui/client/RSVPButton';
 import { TRANSLATIONS } from '@/app/lib/definitions';
 import React from 'react';
-import {formatDateToLocal, getDayOfTheWeek} from "@/app/lib/serverDateUtils";
+import { formatDateToLocal, getDayOfTheWeek } from '@/app/lib/serverDateUtils';
 
 export default async function PlayersTable({
   query,
@@ -33,7 +30,6 @@ export default async function PlayersTable({
   const isAdmin = user.is_admin;
   const { rsvpEnabled } = await fetchFeatureFlags();
   const players = await fetchFilteredPlayers(query, currentPage, sortBy);
-
 
   const dayOfTheWeek = getDayOfTheWeek();
   // @ts-ignore

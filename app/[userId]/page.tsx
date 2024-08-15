@@ -6,7 +6,7 @@ import PlayerPage from '@/app/ui/client/PlayerPage';
 import { TournamentDB } from '@/app/lib/definitions';
 import AdminHomePage from '@/app/ui/client/AdminHomePage';
 import { getFinalTablePlayersContent } from '@/app/ui/client/helpers';
-import {getDayOfTheWeek, getTodayShortDate} from "@/app/lib/serverDateUtils";
+import { getDayOfTheWeek, getTodayShortDate } from '@/app/lib/serverDateUtils';
 
 export default async function HomePage({
   params,
@@ -18,9 +18,9 @@ export default async function HomePage({
   const isWorker = user.is_worker;
 
   if (isAdmin || isWorker) {
-      const dayOfTheWeek = getDayOfTheWeek();
+    const dayOfTheWeek = getDayOfTheWeek();
 
-      const { todayTournaments } = await fetchRSVPAndArrivalData(dayOfTheWeek);
+    const { todayTournaments } = await fetchRSVPAndArrivalData(dayOfTheWeek);
 
     const date = getTodayShortDate();
     const contents: Array<JSX.Element | null> = await Promise.all(

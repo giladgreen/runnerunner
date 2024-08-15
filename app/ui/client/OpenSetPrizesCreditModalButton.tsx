@@ -50,11 +50,13 @@ function SetPrizesCreditForm({
       style={{ textAlign: 'right' }}
     >
       <form action={dispatch} className="form-control">
-        <label className="mb-2 block text-sm font-medium" style={{ marginBottom: 5}}>
-          <div> הגדר שווי פרסים בקרדיט  </div>
+        <label
+          className="mb-2 block text-sm font-medium"
+          style={{ marginBottom: 5 }}
+        >
+          <div> הגדר שווי פרסים בקרדיט </div>
           <div>{tournamentName}</div>
-          <div>  {date}</div>
-
+          <div> {date}</div>
         </label>
         <div>
           {positions.map((player) => {

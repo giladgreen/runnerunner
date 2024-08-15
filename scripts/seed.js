@@ -258,7 +258,6 @@ async function seedHistory(client) {
 
 async function seedWinners(client) {
   try {
-
     // Create the "winners" table if it doesn't exist
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS winners (

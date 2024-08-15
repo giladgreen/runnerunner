@@ -22,7 +22,7 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import { setPlayerPosition } from '@/app/lib/actions';
 import { usePathname, useSearchParams } from 'next/navigation';
 import DeletePositionButton from '@/app/ui/client/DeletePositionButton';
-import {getDayOfTheWeek} from "@/app/lib/clientDateUtils";
+import { getDayOfTheWeek } from '@/app/lib/clientDateUtils';
 
 function getMinPosition(players: PlayerDB[]) {
   const positions = players
@@ -132,7 +132,8 @@ export default function TodayPlayersTable({
   const dayOfTheWeek = getDayOfTheWeek().toLowerCase();
 
   const currentTournaments = tournaments.filter(
-    (t) => t.day.toLowerCase() === dayOfTheWeek &&
+    (t) =>
+      t.day.toLowerCase() === dayOfTheWeek &&
       (!tournamentId || tournamentId === t.id),
   );
 
@@ -249,10 +250,12 @@ export default function TodayPlayersTable({
                         </Link>
                         <div className="text-l font-medium">{player.notes}</div>
                       </div>
-                      { player.entries > 0 && <div className="flex">
-                        כניסות:
-                        <EntriesButton player={player} />
-                      </div>}
+                      {player.entries > 0 && (
+                        <div className="flex">
+                          כניסות:
+                          <EntriesButton player={player} />
+                        </div>
+                      )}
                       <div>
                         {rsvpEnabled &&
                           player.rsvpForToday === tournamentId &&
@@ -260,7 +263,6 @@ export default function TodayPlayersTable({
                             <DoubleTicksIcon size={24} />
                           )}
                       </div>
-
                     </div>
                   </div>
                 ))}

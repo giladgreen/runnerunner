@@ -17,8 +17,8 @@ export default function OpenPositionModalButton({
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const [show, setShow] = React.useState(false);
-  const enableButton =   player.arrived === tournamentId;
-  const tooltip = enableButton ? 'קבע דירוג' :'';
+  const enableButton = player.arrived === tournamentId;
+  const tooltip = enableButton ? 'קבע דירוג' : '';
   const close = () => {
     setShow(false);
   };
@@ -27,14 +27,20 @@ export default function OpenPositionModalButton({
       <button
         className="pointer rounded-md border p-2 hover:bg-gray-100"
         onClick={() => {
-            if (enableButton) {
-                setShow(true);
-            }
-
+          if (enableButton) {
+            setShow(true);
+          }
         }}
       >
         <span className="sr-only">Position</span>
-        <HashtagIcon className="w-6" title={tooltip} style={{ color: enableButton ? 'black':'gray',  cursor: enableButton ? 'pointer':'no-drop'  }} />
+        <HashtagIcon
+          className="w-6"
+          title={tooltip}
+          style={{
+            color: enableButton ? 'black' : 'gray',
+            cursor: enableButton ? 'pointer' : 'no-drop',
+          }}
+        />
       </button>
       <div className={show ? 'edit-player-modal' : 'hidden'}>
         <SetPositionForm

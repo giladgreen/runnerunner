@@ -39,7 +39,6 @@ export const formatType = (type: string) => {
   return type;
 };
 
-
 export const generatePagination = (currentPage: number, totalPages: number) => {
   // If the total number of pages is 7 or less,
   // display all pages without any ellipsis.
@@ -85,7 +84,7 @@ export function nameComparator(a: PlayerDB, b: PlayerDB) {
 }
 
 export function dateComparator(a: string | number, b: string | number) {
-  return (new Date(b).getTime() - new Date(a).getTime()) < 0 ? -1 : 1;
+  return new Date(b).getTime() - new Date(a).getTime() < 0 ? -1 : 1;
 }
 
 export function sumArrayByProp(array: any[], propName: string) {

@@ -1,7 +1,7 @@
 import TournamentsDataPage from '@/app/ui/client/TournamentsDataPage';
 import { fetchUserById } from '@/app/lib/data';
 import React from 'react';
-import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
+import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 
 export default async function TournamentsPage({
   params,
@@ -12,7 +12,7 @@ export default async function TournamentsPage({
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
   if (!isAdmin && !isWorker) {
-    return <NoPermissionsPage />
+    return <NoPermissionsPage />;
   }
   return <TournamentsDataPage userId={params.userId} />;
 }

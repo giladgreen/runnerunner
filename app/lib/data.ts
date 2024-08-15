@@ -21,7 +21,11 @@ import {
   phoneNumberComparator,
 } from './utils';
 import { redirect } from 'next/navigation';
-import {getCurrentDate, getDayOfTheWeek, getTodayShortDate} from "./serverDateUtils";
+import {
+  getCurrentDate,
+  getDayOfTheWeek,
+  getTodayShortDate,
+} from './serverDateUtils';
 
 const ITEMS_PER_PAGE = 30;
 const TOP_COUNT = 8;
@@ -131,14 +135,19 @@ async function getTodayTournaments(day?: string) {
 }
 
 async function getAllTournaments(includeDeleted?: boolean) {
-  let tournaments = (await sql<TournamentDB>`SELECT * FROM tournaments ORDER BY i ASC`).rows;
+  let tournaments = (
+    await sql<TournamentDB>`SELECT * FROM tournaments ORDER BY i ASC`
+  ).rows;
 
   if (includeDeleted) {
-    const deletedTournamentsResults =
-        (await sql<TournamentDB>`SELECT * FROM deleted_tournaments ORDER BY i ASC`).rows;
+    const deletedTournamentsResults = (
+      await sql<TournamentDB>`SELECT * FROM deleted_tournaments ORDER BY i ASC`
+    ).rows;
 
     // @ts-ignore
-    tournaments = [...tournaments, ...deletedTournamentsResults].sort((a,b) => a.i - b.i);
+    tournaments = [...tournaments, ...deletedTournamentsResults].sort(
+      (a, b) => a.i - b.i,
+    );
   }
 
   return tournaments;
@@ -146,7 +155,7 @@ async function getAllTournaments(includeDeleted?: boolean) {
 
 async function getTournamentWinnersRecord(tournamentId: string, date: string) {
   const winnersResult =
-      await sql<WinnerDB>`SELECT * FROM winners WHERE date=${date} AND tournament_id = ${tournamentId}`;
+    await sql<WinnerDB>`SELECT * FROM winners WHERE date=${date} AND tournament_id = ${tournamentId}`;
   return winnersResult.rows[0];
 }
 
@@ -462,7 +471,9 @@ export async function fetchRSVPAndArrivalData(dayOfTheWeek: string) {
       ]);
 
     methodEnd('fetchRSVPAndArrivalData');
-    const todayTournaments = allTournaments.filter(t => t.day === dayOfTheWeek);
+    const todayTournaments = allTournaments.filter(
+      (t) => t.day === dayOfTheWeek,
+    );
 
     return {
       todayTournaments: todayTournaments.map((t) => {
@@ -583,7 +594,7 @@ export async function fetchPlayersPrizes(playerPhoneNumber?: string) {
       const player = players.find((p) => p.phone_number === prize.phone_number);
       if (player) {
         prize.player = player;
-      }else{
+      } else {
         console.warn('>>> prize is missing player', prize);
       }
     });
@@ -702,11 +713,8 @@ export async function fetchTournamentsData() {
               ? getCurrentDate(updated_at).toISOString()
               : (updated_at as Date).toISOString();
 
-          const tournament = tournaments.find(
-            ({ id }) =>
-              id === tournament_id,
-          );
-          if (!tournament){
+          const tournament = tournaments.find(({ id }) => id === tournament_id);
+          if (!tournament) {
             return newAcc;
           }
           const date = dateAsString.slice(0, 10);
@@ -933,16 +941,19 @@ export async function fetchPlayerCurrentTournamentHistory(phoneNumber: string) {
 export async function fetchTournamentByTournamentId(tournamentId: string) {
   methodStart();
   noStore();
-  const allTournaments = (await sql<TournamentDB>`SELECT * FROM tournaments`).rows;
-  const allDeletedTournaments = (await sql<TournamentDB>`SELECT * FROM deleted_tournaments`).rows;
+  const allTournaments = (await sql<TournamentDB>`SELECT * FROM tournaments`)
+    .rows;
+  const allDeletedTournaments = (
+    await sql<TournamentDB>`SELECT * FROM deleted_tournaments`
+  ).rows;
 
   try {
-    let result = allTournaments.find(t=>t.id === tournamentId);
+    let result = allTournaments.find((t) => t.id === tournamentId);
     if (!result) {
-      result = allDeletedTournaments.find(t=>t.id === tournamentId);
+      result = allDeletedTournaments.find((t) => t.id === tournamentId);
     }
     methodEnd('fetchTournamentByTournamentId');
-    return result
+    return result;
   } catch (error) {
     console.error('Database Error:', error);
     methodEnd('fetchTournamentByTournamentId with error');
@@ -954,8 +965,7 @@ export async function fetchTournamentsByDay(day?: string) {
   noStore();
   try {
     //TODO: might need to adjust date to israel time
-    const dayName =
-      day ?? getDayOfTheWeek();
+    const dayName = day ?? getDayOfTheWeek();
 
     const results = await getTodayTournaments(dayName);
     methodEnd('fetchTournamentsByDay');

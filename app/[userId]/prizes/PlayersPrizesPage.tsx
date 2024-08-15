@@ -1,17 +1,26 @@
 'use client';
 import Card from '@/app/ui/client/Card';
-import {PrizeDB} from "@/app/lib/definitions";
+import { PrizeDB } from '@/app/lib/definitions';
 
 export default function PlayersPrizesPage({
   playerPage,
   playerPrizes,
-  prizesContents
+  prizesContents,
 }: {
   playerPage?: boolean;
-  playerPrizes:{ chosenPrizes: PrizeDB[], deliveredPrizes: PrizeDB[], readyToBeDeliveredPrizes: PrizeDB[] }
-  prizesContents:{ chosenPrizesContent: JSX.Element, deliveredPrizesContent: JSX.Element, readyToBeDeliveredPrizesContent: JSX.Element }
+  playerPrizes: {
+    chosenPrizes: PrizeDB[];
+    deliveredPrizes: PrizeDB[];
+    readyToBeDeliveredPrizes: PrizeDB[];
+  };
+  prizesContents: {
+    chosenPrizesContent: JSX.Element;
+    deliveredPrizesContent: JSX.Element;
+    readyToBeDeliveredPrizesContent: JSX.Element;
+  };
 }) {
-  const { chosenPrizes, deliveredPrizes, readyToBeDeliveredPrizes } =playerPrizes;
+  const { chosenPrizes, deliveredPrizes, readyToBeDeliveredPrizes } =
+    playerPrizes;
 
   if (
     playerPage &&
@@ -19,9 +28,13 @@ export default function PlayersPrizesPage({
     !deliveredPrizes?.length &&
     !readyToBeDeliveredPrizes?.length
   ) {
-    return <div>אין מידע להצגה</div>
+    return <div>אין מידע להצגה</div>;
   }
-const {chosenPrizesContent, deliveredPrizesContent,readyToBeDeliveredPrizesContent } = prizesContents;
+  const {
+    chosenPrizesContent,
+    deliveredPrizesContent,
+    readyToBeDeliveredPrizesContent,
+  } = prizesContents;
 
   if (
     !chosenPrizesContent &&

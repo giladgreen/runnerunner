@@ -7,7 +7,7 @@ import { PlayerDB } from '@/app/lib/definitions';
 import { rsvpPlayerForDay } from '@/app/lib/actions';
 import { usePathname } from 'next/navigation';
 import { useSearchParams } from 'next/dist/client/components/navigation';
-import {getTodayDate} from "@/app/lib/clientDateUtils";
+import { getTodayDate } from '@/app/lib/clientDateUtils';
 export default function RSVPButton({
   player,
   stringDate,

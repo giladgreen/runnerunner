@@ -10,8 +10,8 @@ import CreateBugForm from '@/app/ui/client/CreateBugForm';
 import ExportPlayersWithMarketingInfoButton from '@/app/ui/client/ExportPlayersWithMarketingInfoButton';
 import Card from '@/app/ui/client/Card';
 import DeleteBugButton from '@/app/ui/client/DeleteBugButton';
-import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
-import {formatDateToLocal} from "@/app/lib/serverDateUtils";
+import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
+import { formatDateToLocal } from '@/app/lib/serverDateUtils';
 
 function TournamentsLink({ userId }: { userId: string }) {
   return (
@@ -123,7 +123,7 @@ export default async function ConfigurationPage({
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
   if (!isAdmin && !isWorker) {
-    return <NoPermissionsPage />
+    return <NoPermissionsPage />;
   }
   const importEnabled = user.is_admin && user.phone_number === '0587869910';
   const ffEnabled = importEnabled;

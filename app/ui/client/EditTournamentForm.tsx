@@ -1,7 +1,11 @@
 'use client';
 import { updateTournament } from '@/app/lib/actions';
 
-import {TournamentDB, TournamentForm, TRANSLATIONS} from '@/app/lib/definitions';
+import {
+  TournamentDB,
+  TournamentForm,
+  TRANSLATIONS,
+} from '@/app/lib/definitions';
 
 import Link from 'next/link';
 import Button from '@/app/ui/client/Button';

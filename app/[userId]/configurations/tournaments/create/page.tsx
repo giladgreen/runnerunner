@@ -2,7 +2,7 @@ import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 import { fetchUserById } from '@/app/lib/data';
 import React from 'react';
 import CreateTournamentForm from '@/app/ui/client/CreateTournamentForm';
-import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
+import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 
 export default async function CreatePlayerPage({
   params,
@@ -13,7 +13,7 @@ export default async function CreatePlayerPage({
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
   if (!isAdmin && !isWorker) {
-      return <NoPermissionsPage />
+    return <NoPermissionsPage />;
   }
   return (
     <main>

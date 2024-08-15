@@ -3,7 +3,7 @@
 import Button from '@/app/ui/client/Button';
 import React from 'react';
 import { PlayerDB, PrizeDB, TournamentDB } from '@/app/lib/definitions';
-import {getCurrentDate, getTodayDate} from "@/app/lib/clientDateUtils";
+import { getCurrentDate, getTodayDate } from '@/app/lib/clientDateUtils';
 
 let lastSave = 0;
 function saveOtherDataToFile(

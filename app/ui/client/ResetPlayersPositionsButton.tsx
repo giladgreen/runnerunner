@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
-import AreYouSure from "@/app/ui/client/AreYouSure";
-import { resetTournamentPositions} from "@/app/lib/actions";
-import {usePathname, useSearchParams} from "next/navigation";
+import AreYouSure from '@/app/ui/client/AreYouSure';
+import { resetTournamentPositions } from '@/app/lib/actions';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 export default function ResetPlayersPositionsButton({
   tournamentId,
@@ -25,20 +25,25 @@ export default function ResetPlayersPositionsButton({
           setShow(true);
         }}
         className="pointer"
-        style={{ justifyContent: 'center', color: 'blue', marginLeft: 0, marginBottom:20 }}
+        style={{
+          justifyContent: 'center',
+          color: 'blue',
+          marginLeft: 0,
+          marginBottom: 20,
+        }}
       >
         <u> איפוס דירוג </u>
       </div>
 
       <div className={show ? 'edit-player-modal' : 'hidden'}>
         <AreYouSure
-            onConfirm={() => {
-              setShow(false);
-              resetTournamentPositions(tournamentId, date, prevPage);
-            }}
-            onCancel={() => setShow(false)}
-            subtext={tournamentName}
-            text="האם לאפס את מיקומי השחקנים עבור טורניר זה?"
+          onConfirm={() => {
+            setShow(false);
+            resetTournamentPositions(tournamentId, date, prevPage);
+          }}
+          onCancel={() => setShow(false)}
+          subtext={tournamentName}
+          text="האם לאפס את מיקומי השחקנים עבור טורניר זה?"
         />
       </div>
     </div>

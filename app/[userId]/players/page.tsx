@@ -6,7 +6,7 @@ import { PlayersTableSkeleton } from '@/app/ui/skeletons';
 import React, { Suspense } from 'react';
 import { fetchPlayersPagesCount, fetchUserById } from '@/app/lib/data';
 import GeneralPlayersCardWrapper from '@/app/ui/client/GeneralPlayersCardWrapper';
-import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
+import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 
 export default async function Page({
   searchParams,
@@ -23,7 +23,7 @@ export default async function Page({
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
   if (!isAdmin && !isWorker) {
-      return <NoPermissionsPage />
+    return <NoPermissionsPage />;
   }
 
   const query = searchParams?.query || '';

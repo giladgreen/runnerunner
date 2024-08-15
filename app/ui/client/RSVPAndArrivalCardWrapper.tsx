@@ -137,16 +137,16 @@ export default function RSVPAndArrivalCardWrapper({
       <Suspense fallback={<CardsSkeleton count={4} />}>
         <Card title="הכנסות" value={todayIncome} type="money" />
         <Card
-            title="כניסות מחדש"
-            value={<div>{reEntriesCount}</div>}
-            type="money"
-            oneLine
+          title="כניסות מחדש"
+          value={<div>{reEntriesCount}</div>}
+          type="money"
+          oneLine
         />
         <Card
-            title="הגעה"
-            value={<div>{arrivedToday}</div>}
-            type="arrived"
-            oneLine
+          title="הגעה"
+          value={<div>{arrivedToday}</div>}
+          type="arrived"
+          oneLine
         />
         <Card
           title="אישורי הרשמה"

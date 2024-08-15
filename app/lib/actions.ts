@@ -23,7 +23,11 @@ import {
 
 import { signIn } from '../../auth';
 import { unstable_noStore as noStore } from 'next/dist/server/web/spec-extension/unstable-no-store';
-import {getCurrentDate, getTodayShortDate, getUpdatedAtFormat} from "./serverDateUtils";
+import {
+  getCurrentDate,
+  getTodayShortDate,
+  getUpdatedAtFormat,
+} from './serverDateUtils';
 
 const TARGET_MAIL = 'green.gilad+runner@gmail.com';
 let clearOldRsvpLastRun = getCurrentDate('2024-06-15T10:00:00.000Z').getTime();
@@ -132,7 +136,10 @@ function cancelTransaction() {
 export async function removeOldRsvp() {
   try {
     await startTransaction();
-    console.log('>> remove Old Rsvp, clearOldRsvpLastRun:', clearOldRsvpLastRun);
+    console.log(
+      '>> remove Old Rsvp, clearOldRsvpLastRun:',
+      clearOldRsvpLastRun,
+    );
     const rsvpItemsResult =
       await sql<RSVPDB>`SELECT * FROM rsvp WHERE created_at < now() - interval '48 hour'`;
     const rsvpItems = rsvpItemsResult.rows;
@@ -1281,7 +1288,11 @@ export async function setPrizeAsNotReadyToBeDelivered({
   }
 }
 
-export async function resetTournamentPositions(tournamentId: string, date: string, prevPage: string) {
+export async function resetTournamentPositions(
+  tournamentId: string,
+  date: string,
+  prevPage: string,
+) {
   noStore();
   await sql<WinnerDB>`DELETE FROM winners WHERE date = ${date} AND tournament_id = ${tournamentId}`;
   revalidatePath(prevPage);

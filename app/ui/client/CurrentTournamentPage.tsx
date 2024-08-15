@@ -22,7 +22,7 @@ export default function CurrentTournamentPage({
   rsvpEnabled: boolean;
   todayTournaments: TournamentDB[];
   params: { userId: string };
-    finalTablePlayersContents: Array<JSX.Element | null>;
+  finalTablePlayersContents: Array<JSX.Element | null>;
   allPlayers: PlayerDB[];
   prizesInformation: PrizeInfoDB[];
   prizesContents: Array<JSX.Element | null>;
@@ -74,9 +74,9 @@ export default function CurrentTournamentPage({
   return (
     <div className="rtl">
       <Tabs>
-        <TabList >
+        <TabList>
           {todayTournaments.map((todayTournament) => (
-            <Tab key={todayTournament.id} > {todayTournament.name}</Tab>
+            <Tab key={todayTournament.id}> {todayTournament.name}</Tab>
           ))}
         </TabList>
 
@@ -84,7 +84,19 @@ export default function CurrentTournamentPage({
           return (
             <TabPanel key={todayTournament.id}>
               <div className="full-width w-full">
-                <div style={{ position:'fixed', top: 5, left: 5, textAlign:'center', background:'orange', padding: '5px 10px', zIndex:99}}>{todayTournament.name}</div>
+                <div
+                  style={{
+                    position: 'fixed',
+                    top: 5,
+                    left: 5,
+                    textAlign: 'center',
+                    background: 'orange',
+                    padding: '5px 10px',
+                    zIndex: 99,
+                  }}
+                >
+                  {todayTournament.name}
+                </div>
                 <RegisterSave players={allPlayers} />
                 <div className="full-width flex w-full items-center justify-between">
                   <TodayTournamentNameCardWrapper

@@ -16,8 +16,8 @@ import {
   getPlayersPrizesContent,
 } from '@/app/ui/client/helpers';
 import CurrentTournamentPage from '@/app/ui/client/CurrentTournamentPage';
-import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
-import {getDayOfTheWeek, getTodayShortDate} from "@/app/lib/serverDateUtils";
+import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
+import { getDayOfTheWeek, getTodayShortDate } from '@/app/lib/serverDateUtils';
 
 export default async function CurrentTournament({
   params,
@@ -30,7 +30,7 @@ export default async function CurrentTournament({
   const allPlayers = await getAllPlayers();
 
   if (!isAdmin && !isWorker) {
-    return <NoPermissionsPage />
+    return <NoPermissionsPage />;
   }
 
   const prizesInformation = await fetchPrizesInfo();
@@ -64,11 +64,12 @@ export default async function CurrentTournament({
   }
 
   const date = getTodayShortDate();
-  const finalTablePlayersContents: Array<JSX.Element | null> = await Promise.all(
-    todayTournaments.map((t) =>
-      getFinalTablePlayersContent(date, t.id, false, params.userId),
-    ),
-  );
+  const finalTablePlayersContents: Array<JSX.Element | null> =
+    await Promise.all(
+      todayTournaments.map((t) =>
+        getFinalTablePlayersContent(date, t.id, false, params.userId),
+      ),
+    );
 
   const todayPlayersPhoneNumbers = await fetchTodayPlayersPhoneNumbers();
 

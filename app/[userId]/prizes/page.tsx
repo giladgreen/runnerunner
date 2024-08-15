@@ -1,10 +1,17 @@
 import PlayersPrizesPage from '@/app/[userId]/prizes/PlayersPrizesPage';
-import {fetchPlayersPrizes, fetchPrizesInfo, fetchUserById} from '@/app/lib/data';
+import {
+  fetchPlayersPrizes,
+  fetchPrizesInfo,
+  fetchUserById,
+} from '@/app/lib/data';
 import React from 'react';
 import Link from 'next/link';
 import { Button } from 'primereact/button';
-import {getPlayersPrizesContent, getPlayersPrizesContents} from "@/app/ui/client/helpers";
-import NoPermissionsPage from "@/app/ui/client/NoPermissionsPage";
+import {
+  getPlayersPrizesContent,
+  getPlayersPrizesContents,
+} from '@/app/ui/client/helpers';
+import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 
 export default async function PrizesPage({
   params,
@@ -15,21 +22,22 @@ export default async function PrizesPage({
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
   if (!isAdmin && !isWorker) {
-    return <NoPermissionsPage />
+    return <NoPermissionsPage />;
   }
-    const playerPrizes = await fetchPlayersPrizes();
-    const prizesInformation = await fetchPrizesInfo();
-  const { chosenPrizes, deliveredPrizes, readyToBeDeliveredPrizes } =playerPrizes;
+  const playerPrizes = await fetchPlayersPrizes();
+  const prizesInformation = await fetchPrizesInfo();
+  const { chosenPrizes, deliveredPrizes, readyToBeDeliveredPrizes } =
+    playerPrizes;
   const prizesContents = await getPlayersPrizesContents(
-      chosenPrizes,
-      deliveredPrizes,
-      readyToBeDeliveredPrizes,
-      prizesInformation,
-      null,
-      false,
+    chosenPrizes,
+    deliveredPrizes,
+    readyToBeDeliveredPrizes,
+    prizesInformation,
+    null,
+    false,
   );
 
-    return (
+  return (
     <div className="rtl">
       <a
         href={`/${params.userId}/configurations/prizes`}
@@ -38,7 +46,10 @@ export default async function PrizesPage({
         <u>הגדרות פרסים</u>
       </a>
       <div style={{ marginTop: 30 }}>
-        <PlayersPrizesPage playerPrizes={playerPrizes} prizesContents={prizesContents}/>
+        <PlayersPrizesPage
+          playerPrizes={playerPrizes}
+          prizesContents={prizesContents}
+        />
       </div>
     </div>
   );

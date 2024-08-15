@@ -1,10 +1,8 @@
-import {
-  fetchPlayerByUserId,
-} from '@/app/lib/data';
+import { fetchPlayerByUserId } from '@/app/lib/data';
 
 import React from 'react';
-import PlayerPagePlayerDetails from "@/app/ui/client/PlayerPagePlayerDetails";
-import NoPlayerPage from "@/app/ui/client/NoPlayerPage";
+import PlayerPagePlayerDetails from '@/app/ui/client/PlayerPagePlayerDetails';
+import NoPlayerPage from '@/app/ui/client/NoPlayerPage';
 
 export default async function PlayerPage({
   params,
@@ -13,14 +11,12 @@ export default async function PlayerPage({
 }) {
   const player = await fetchPlayerByUserId(params.userId);
   if (!player) {
-    return <NoPlayerPage/>
+    return <NoPlayerPage />;
   }
 
   return (
-    <div className="rtl" style={{ marginTop:20}}>
-      <PlayerPagePlayerDetails
-          player={player}
-      />
+    <div className="rtl" style={{ marginTop: 20 }}>
+      <PlayerPagePlayerDetails player={player} />
     </div>
   );
 }
