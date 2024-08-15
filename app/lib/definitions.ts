@@ -105,6 +105,7 @@ export type LogDB = {
 
 export type TournamentDB = {
   id: string;
+  i?: number;
   name: string;
   day: string;
   buy_in: number;
