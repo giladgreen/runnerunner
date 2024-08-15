@@ -10,7 +10,7 @@
     "pprettier": "prettier --write --ignore-unknown .",
     "pprettier:check": "prettier --check --ignore-unknown .",
     "seed": "node -r dotenv/config ./scripts/run-seed.js",
-    "start": "next start",
+    "start": "next start ",
     "test": "node ./scripts/test-pre-seed.js && jest tests/unit",
     "test:coverage": "node ./scripts/test-pre-seed.js && jest tests/unit --coverage"
   },
