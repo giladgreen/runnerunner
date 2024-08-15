@@ -1,12 +1,12 @@
 jest.mock('node-fetch', () => jest.fn());
 
-import { PlayerDB, UserDB, LogDB, BugDB, ImageDB } from '@/app/lib/definitions';
+import {PlayerDB, UserDB, LogDB, BugDB, ImageDB, TournamentDB, PrizeInfoDB} from '@/app/lib/definitions';
 import {
   signUp,
   createReport,
   createPlayer,
   State,
-  deleteBug,
+  deleteBug, createTournament, deleteTournament, createPrizeInfo, deletePrizeInfo,
 } from '../../app/lib/actions';
 import {
   createDefaultUser,
@@ -14,15 +14,21 @@ import {
   getFormData,
   clearDB,
   getAllBugs,
-  getAllPlayers, getAllUsers, getAllImages
+  getAllPlayers,
+  getAllUsers,
+  getAllImages,
+  getAllTournaments,
+  getAllDeletedTournaments,
+  getAllDeletedBugs,
+  getAllPrizesInfo, getAllDeletedPrizesInfo
 } from "../helpers/dbHelper";
 
 
 
 describe('actions', () => {
   const PHONE = '0587869900';
-  const tournamentId = 'tournamentId';
   beforeEach(async () => {
+    process.env.LOCAL = 'true';
     await clearDB()
   });
 
@@ -36,12 +42,16 @@ describe('actions', () => {
         // arrange 1
         const bugsBefore: BugDB[] = await getAllBugs();
         expect(bugsBefore).toEqual([]);
+        const deletedBugsBefore: BugDB[] = await getAllDeletedBugs();
+        expect(deletedBugsBefore).toEqual([]);
         const description = 'do that and that';
         const  formData = getFormData({ description });
         // act 1
         await createReport('prevPage', formData);
 
         // assert 1
+        const deletedBugsAfter: BugDB[] = await getAllDeletedBugs();
+        expect(deletedBugsAfter).toEqual([]);
         const bugsAfter: BugDB[] = await getAllBugs();
         expect(bugsAfter.length).toEqual(1);
         const bug = bugsAfter[0];
@@ -67,7 +77,123 @@ describe('actions', () => {
         expect(bugsAfterDelete.length).toEqual(1);
         const bugAfterDelete = bugsAfterDelete[0];
         expect(bugAfterDelete).toEqual(secondBug);
+
+        const deletedBugsAfterDelete: BugDB[] = await getAllDeletedBugs();
+        expect(deletedBugsAfterDelete.length).toEqual(1);
+        const deletedBug = deletedBugsAfterDelete[0];
+        expect(deletedBug.id).toEqual(bug.id);
+        expect(deletedBug.description).toEqual(bug.description);
+
       }, 10000);
+    });
+  });
+
+  describe('tournaments', () => {
+    const userId = 'b96c34a5-57dd-4ac2-9393-3890a2531f23';
+
+    beforeEach(async () => {
+      await createDefaultUser(userId)
+    });
+
+    describe('get create and delete tournaments', () => {
+      it('should all work as expected', async () => {
+        // arrange
+        const deletedTournamentsBefore: TournamentDB[] = await getAllDeletedTournaments();
+        const tournamentsBefore: TournamentDB[] = await getAllTournaments();
+        expect(deletedTournamentsBefore).toEqual([]);
+        expect(tournamentsBefore).toEqual([]);
+        const day = 'Monday';
+        const name = 'Tel-Aviv';
+        const buy_in = 400;
+        const re_buy  =300;
+        const max_players  =50;
+        const rsvp_required = true;
+        const  formData = getFormData({ day, name, buy_in, re_buy, max_players, rsvp_required });
+
+        //act
+        await createTournament({prevPage:'prevPage'},{} as State, formData);
+
+        // assert
+        const deletedTournamentsAfter: TournamentDB[] = await getAllDeletedTournaments();
+        expect(deletedTournamentsAfter).toEqual([]);
+
+        const tournamentsAfter: TournamentDB[] = await getAllTournaments();
+        expect(tournamentsAfter.length).toEqual(1);
+        const tournament = tournamentsAfter[0];
+        expect(tournament.day).toEqual(day);
+        // @ts-ignore
+        expect(tournament.i).toEqual(2);
+        expect(tournament.name).toEqual(name);
+        expect(tournament.buy_in).toEqual(buy_in);
+        expect(tournament.re_buy).toEqual(re_buy);
+        expect(tournament.max_players).toEqual(max_players);
+        expect(tournament.rsvp_required).toEqual(rsvp_required);
+
+        await deleteTournament(tournament.id,'prevPage', userId)
+        const tournamentsAfterDelete: TournamentDB[] = await getAllTournaments();
+        expect(tournamentsAfterDelete).toEqual([]);
+
+        const deletedTournamentsAfterDelete: TournamentDB[] = await getAllDeletedTournaments();
+        expect(deletedTournamentsAfterDelete.length).toEqual(1);
+        const deletedTournament = deletedTournamentsAfterDelete[0];
+        expect(deletedTournament.id).toEqual(tournament.id);
+        expect(deletedTournament.day).toEqual(day);
+        // @ts-ignore
+        expect(deletedTournament.i).toEqual(2);
+        expect(deletedTournament.name).toEqual(name);
+        expect(deletedTournament.buy_in).toEqual(buy_in);
+        expect(deletedTournament.re_buy).toEqual(re_buy);
+        expect(deletedTournament.max_players).toEqual(max_players);
+        expect(deletedTournament.rsvp_required).toEqual(rsvp_required);
+      }, 30000);
+    });
+  });
+
+  describe('prizes info', () => {
+    const userId = 'b96c34a5-55dd-4ac2-9393-3890a2531f23';
+
+    beforeEach(async () => {
+      await createDefaultUser(userId)
+    });
+
+    describe('get create and delete prizes info', () => {
+      it('should all work as expected', async () => {
+        // arrange
+        const deletedPrizeInfoBefore: PrizeInfoDB[] = await getAllDeletedPrizesInfo();
+        const PrizeInfoBefore: PrizeInfoDB[] = await getAllPrizesInfo();
+        expect(deletedPrizeInfoBefore).toEqual([]);
+        expect(PrizeInfoBefore).toEqual([]);
+        const name = 'Air-pods';
+        const extra = 'extra..';
+        const credit  ='500';
+        const formData = getFormData({  name, extra, credit });
+
+        //act
+        await createPrizeInfo({prevPage:'prevPage'},{} as State, formData);
+
+        // assert
+        const deletedPrizeInfoAfter: PrizeInfoDB[] = await getAllDeletedPrizesInfo();
+        const PrizeInfoAfter: PrizeInfoDB[] = await getAllPrizesInfo();
+        expect(deletedPrizeInfoAfter).toEqual([]);
+        expect(PrizeInfoAfter.length).toEqual(1);
+        const prizeInfo = PrizeInfoAfter[0];
+        expect(prizeInfo.name).toEqual(name);
+        expect(prizeInfo.extra).toEqual(extra);
+        expect(prizeInfo.credit).toEqual(Number(credit));
+
+        await deletePrizeInfo({ prizeId: prizeInfo.id, prevPage: 'prevPage' })
+
+        const deletedPrizeInfoAfterDelete: PrizeInfoDB[] = await getAllDeletedPrizesInfo();
+        const PrizeInfoAfterDelete: PrizeInfoDB[] = await getAllPrizesInfo();
+        expect(deletedPrizeInfoAfterDelete.length).toEqual(1);
+        expect(PrizeInfoAfterDelete).toEqual([]);
+
+        const deletedPrizeInfo = deletedPrizeInfoAfterDelete[0];
+        expect(deletedPrizeInfo.id).toEqual(prizeInfo.id);
+        expect(deletedPrizeInfo.name).toEqual(name);
+        expect(deletedPrizeInfo.extra).toEqual(extra);
+        expect(deletedPrizeInfo.credit).toEqual(Number(credit));
+      }, 30000);
     });
   });
 
@@ -91,7 +217,7 @@ describe('actions', () => {
           name: 'israel israeli',
           marketing_approve: 'on',
         });
-        process.env.LOCAL = 'true'
+
 
         // act
         await signUp(null, 'prevState', formData);
