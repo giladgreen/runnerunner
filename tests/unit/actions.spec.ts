@@ -1,4 +1,7 @@
+import NextAuth from "../helpers/mocks/next-auth";
 jest.mock('node-fetch', () => jest.fn());
+import { signIn } from '../../auth';
+
 const TEST_TIMEOUT = 15000;
 import {
   PlayerDB,
@@ -10,17 +13,17 @@ import {
   PrizeInfoDB,
 } from '@/app/lib/definitions';
 import {
-  signUp,
-  createReport,
-  createPlayer,
-  State,
-  deleteBug,
-  createTournament,
-  deleteTournament,
-  createPrizeInfo,
-  deletePrizeInfo,
-  deletePlayer,
-  createPlayerUsageLog,
+    signUp,
+    createReport,
+    createPlayer,
+    State,
+    deleteBug,
+    createTournament,
+    deleteTournament,
+    createPrizeInfo,
+    deletePrizeInfo,
+    deletePlayer,
+    createPlayerUsageLog, authenticate, deleteUser, updatePlayer,
 } from '../../app/lib/actions';
 import {
   createDefaultUser,
@@ -52,6 +55,120 @@ describe('actions', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
+
+  describe('signUp', () => {
+        describe('when creating a new user', () => {
+            it(
+                'should return correct results',
+                async () => {
+                    //assert 1
+                    const playersHistoryBefore: LogDB[] = await getHistoryLogs();
+                    expect(playersHistoryBefore).toEqual([]);
+
+                    const playersBefore: PlayerDB[] = await getAllPlayers();
+                    expect(playersBefore).toEqual([]);
+
+                    const usersBefore: UserDB[] = await getAllUsers();
+                    expect(usersBefore).toEqual([]);
+
+                    // arrange
+                    const formData = getFormData({
+                        phone_number: PHONE,
+                        password: '123456',
+                        name: 'israel israeli',
+                        marketing_approve: 'on',
+                    });
+
+                    // act
+                    await signUp(null, 'prevState', formData);
+
+                    // assert
+                    const usersAfter = await getAllUsers();
+                    expect(usersAfter.length).toEqual(1);
+                    const newUser = usersAfter[0];
+                    expect(newUser?.phone_number).toEqual(PHONE);
+                    expect(newUser?.is_admin).toEqual(false);
+                    expect(newUser?.is_worker).toEqual(false);
+                    expect(newUser?.name).toEqual('israel israeli');
+
+                    const playersAfter: PlayerDB[] = await getAllPlayers();
+                    expect(playersAfter.length).toEqual(1);
+                    const createdPlayer = playersAfter[0];
+                    expect(createdPlayer?.phone_number).toEqual(PHONE);
+                    expect(createdPlayer?.allowed_marketing).toEqual(true);
+                    expect(createdPlayer?.image_url).toEqual('/players/default.png');
+                    expect(createdPlayer?.name).toEqual('israel israeli');
+
+                    const playerHistoryAfter: LogDB[] = await getHistoryLogs();
+                    expect(playerHistoryAfter.length).toEqual(1);
+                    const playerHistory = playerHistoryAfter[0];
+                    expect(playerHistory.phone_number).toEqual(PHONE);
+                    expect(playerHistory?.archive).toEqual(true);
+                    expect(playerHistory?.change).toEqual(0);
+                    expect(playerHistory?.note).toEqual('אתחול');
+                    expect(playerHistory?.other_player_phone_number).toEqual(null);
+                    expect(playerHistory?.type).toEqual('credit');
+                    expect(playerHistory?.updated_by).toEqual('admin');
+
+
+                    // act
+                    await deleteUser({ id: newUser.id, prevPage: 'prevPage'});
+
+                    // assert
+                    const usersAfterDelete = await getAllUsers();
+                    expect(usersAfterDelete.length).toEqual(0);
+                },
+                TEST_TIMEOUT,
+            );
+        });
+        describe('when trying to create existing user', () => {
+            it(
+                'should return correct error',
+                async () => {
+                    // arrange
+                    const formData = getFormData({
+                        phone_number: PHONE,
+                        password: '123456',
+                        name: 'israel israeli',
+                        marketing_approve: 'on',
+                    });
+                    process.env.LOCAL = 'true';
+
+                    // act
+                    await signUp(null, 'prevState', formData);
+                    const secondTryResult = await signUp(null, 'prevState', formData);
+                    // assert
+                    expect(secondTryResult).toEqual(
+                        'משתמש בעל אותו מספר טלפון כבר קיים במערכת',
+                    );
+                },
+                TEST_TIMEOUT,
+            );
+        });
+    });
+
+  describe('authenticate', () => {
+    describe('when calling authenticate with a phone number', () => {
+        it(
+            'should call the signIn with correct arguments',
+            async () => {
+
+                // arrange
+                const formData = getFormData({
+                    email: '587-869900 -',
+                });
+
+                // act
+                await authenticate( 'prevState', formData);
+
+                // assert
+                expect(signIn).toHaveBeenCalledWith('credentials', formData)
+
+            },
+            TEST_TIMEOUT,
+        );
+    });
+});
 
   describe('bugs', () => {
     describe('get create and delete bugs', () => {
@@ -250,89 +367,6 @@ describe('actions', () => {
     });
   });
 
-  describe('signUp', () => {
-    describe('when creating a new user', () => {
-      it(
-        'should return correct results',
-        async () => {
-          //assert 1
-          const playersHistoryBefore: LogDB[] = await getHistoryLogs();
-          expect(playersHistoryBefore).toEqual([]);
-
-          const playersBefore: PlayerDB[] = await getAllPlayers();
-          expect(playersBefore).toEqual([]);
-
-          const usersBefore: UserDB[] = await getAllUsers();
-          expect(usersBefore).toEqual([]);
-
-          // arrange
-          const formData = getFormData({
-            phone_number: PHONE,
-            password: '123456',
-            name: 'israel israeli',
-            marketing_approve: 'on',
-          });
-
-          // act
-          await signUp(null, 'prevState', formData);
-
-          // assert
-          const usersAfter = await getAllUsers();
-          expect(usersAfter.length).toEqual(1);
-          const newUser = usersAfter[0];
-          expect(newUser?.phone_number).toEqual(PHONE);
-          expect(newUser?.is_admin).toEqual(false);
-          expect(newUser?.is_worker).toEqual(false);
-          expect(newUser?.name).toEqual('israel israeli');
-
-          const playersAfter: PlayerDB[] = await getAllPlayers();
-          expect(playersAfter.length).toEqual(1);
-          const createdPlayer = playersAfter[0];
-          expect(createdPlayer?.phone_number).toEqual(PHONE);
-          expect(createdPlayer?.allowed_marketing).toEqual(true);
-          expect(createdPlayer?.image_url).toEqual('/players/default.png');
-          expect(createdPlayer?.name).toEqual('israel israeli');
-
-          const playerHistoryAfter: LogDB[] = await getHistoryLogs();
-          expect(playerHistoryAfter.length).toEqual(1);
-          const playerHistory = playerHistoryAfter[0];
-          expect(playerHistory.phone_number).toEqual(PHONE);
-          expect(playerHistory?.archive).toEqual(true);
-          expect(playerHistory?.change).toEqual(0);
-          expect(playerHistory?.note).toEqual('אתחול');
-          expect(playerHistory?.other_player_phone_number).toEqual(null);
-          expect(playerHistory?.type).toEqual('credit');
-          expect(playerHistory?.updated_by).toEqual('admin');
-        },
-        TEST_TIMEOUT,
-      );
-    });
-    describe('when trying to create existing user', () => {
-      it(
-        'should return correct error',
-        async () => {
-          // arrange
-          const formData = getFormData({
-            phone_number: PHONE,
-            password: '123456',
-            name: 'israel israeli',
-            marketing_approve: 'on',
-          });
-          process.env.LOCAL = 'true';
-
-          // act
-          await signUp(null, 'prevState', formData);
-          const secondTryResult = await signUp(null, 'prevState', formData);
-          // assert
-          expect(secondTryResult).toEqual(
-            'משתמש בעל אותו מספר טלפון כבר קיים במערכת',
-          );
-        },
-        TEST_TIMEOUT,
-      );
-    });
-  });
-
   describe('players', () => {
     const userId = 'b96c34a5-57dd-4ac2-9393-3890a2531f2d';
     const phoneNumber = '0587861100';
@@ -347,7 +381,7 @@ describe('actions', () => {
     });
 
     describe('create players', () => {
-      describe('when creating a legal new player & delete it', () => {
+      describe('when creating a legal new player, then update it then delete it', () => {
         it(
           'should return correct results',
           async () => {
@@ -402,6 +436,28 @@ describe('actions', () => {
             expect(playerHistory?.type).toEqual('credit');
             expect(playerHistory?.updated_by).toEqual('admin');
 
+            //arrange
+              const newName = 'new name';
+              const newNotes =  'some new notes';
+            //act
+            await updatePlayer({ id: createdPlayer.id, prevPage:'prevPage' },
+              {} as State,
+              getFormData({
+                  name: newName,
+                  notes: newNotes,
+              }))
+
+            //assert
+            const playersAfterUpdate: PlayerDB[] = await getAllPlayers();
+            expect(playersAfterUpdate.length).toEqual(1);
+            const updatedPlayer = playersAfterUpdate[0];
+            expect(updatedPlayer?.phone_number).toEqual(phoneNumber);
+            expect(updatedPlayer?.allowed_marketing).toEqual(false);
+            expect(updatedPlayer?.notes).toEqual(newNotes);
+            expect(updatedPlayer?.image_url).toEqual(imageUrl);
+            expect(updatedPlayer?.name).toEqual(newName);
+
+            // act
             await deletePlayer({ id: createdPlayer.id, prevPage: '' });
 
             const playersAfterDelete: PlayerDB[] = await getAllPlayers();
@@ -413,9 +469,9 @@ describe('actions', () => {
             expect(deletedPlayer?.id).toEqual(createdPlayer.id);
             expect(deletedPlayer?.phone_number).toEqual(phoneNumber);
             expect(deletedPlayer?.allowed_marketing).toEqual(false);
-            expect(deletedPlayer?.notes).toEqual(notes);
+            expect(deletedPlayer?.notes).toEqual(newNotes);
             expect(deletedPlayer?.image_url).toEqual(imageUrl);
-            expect(deletedPlayer?.name).toEqual(name);
+            expect(deletedPlayer?.name).toEqual(newName);
           },
           TEST_TIMEOUT,
         );
@@ -490,57 +546,6 @@ describe('actions', () => {
                 phone_number: ['שחקן עם מספר זה כבר קיים'],
               },
             });
-            //
-            // await createPlayer(
-            //   'prevState',
-            //   {} as State,
-            //   getFormData({
-            //     phone_number: otherPlayerPhone,
-            //     name,
-            //     balance: 400,
-            //     note,
-            //     notes,
-            //     image_url: imageUrl,
-            //   }),
-            // );
-
-            // await createPlayerNewCreditLog(
-            //   { player: createdPlayer, prevPage: 'prevPage', userId, tournamentId },
-            //   {} as State,
-            //   getFormData({
-            //     type: 'credit',
-            //     change: 450,
-            //     note,
-            //   }),
-            // );
-            // const positionInput = {
-            //   playerId: createdPlayer.id,
-            //   prevPage: 'prevPage',
-            //   tournamentId,
-            // };
-            // // @ts-ignore
-            // await setPlayerPosition(
-            //   positionInput,
-            //   getFormData({
-            //     position: 3,
-            //   }),
-            // );
-            // // @ts-ignore
-            // await setPlayerPosition(
-            //   positionInput,
-            //   getFormData({
-            //     position: 0,
-            //   }),
-            // );
-            // const badRequestResult = await setPlayerPosition(
-            //   positionInput,
-            //   getFormData({
-            //     position: 'nan',
-            //   }),
-            // );
-            // expect(badRequestResult).toEqual({
-            //   message: 'איראה שגיאה',
-            // });
           },
           TEST_TIMEOUT,
         );
@@ -864,3 +869,29 @@ describe('actions', () => {
     });
   });
 });
+
+
+//TODO:
+//
+//
+//updatePlayer
+//updateTournament
+//updatePrizeInfo
+//updateNewPlayerName
+//updateFFValue
+//updateIsUserAdmin
+//updateIsUserWorker
+
+//rsvpPlayerForDay
+//undoPlayerLastLog
+
+//convertPrizeToCredit
+// removeOldRsvp
+//setPlayerPosition
+//resetTournamentPositions
+//setPrizesCreditWorth
+//givePlayerPrizeOrCredit
+//setPlayerPrize
+//setPrizeAsReadyToBeDelivered
+//setPrizeAsNotReadyToBeDelivered
+//importPlayers

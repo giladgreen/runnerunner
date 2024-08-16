@@ -17,6 +17,9 @@ export function getFormData(data: any) {
         if (prop === key) return data[key];
       }
     },
+    set: (prop: string, value: any) => {
+      data[prop] = value;
+    }
   } as FormData;
 }
 

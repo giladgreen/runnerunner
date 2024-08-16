@@ -880,13 +880,14 @@ export async function updatePlayer(
   const image_url = formData.get('image_url') as string;
 
   const { name, notes } = validatedFields.data;
-
+  let imageHasChanged = false;
   try {
     if (
       image_url &&
       image_url.length > 2 &&
       image_url !== '/players/default.png'
     ) {
+      imageHasChanged = true;
       const player = await getPlayerById(id);
       if (player && player.image_url !== image_url) {
         await sql`INSERT INTO images (phone_number, image_url) VALUES (${player.phone_number}, ${image_url})`;
@@ -898,13 +899,23 @@ export async function updatePlayer(
 
   const date = getUpdatedAtFormat();
   try {
-    await sql`
+    if (imageHasChanged){
+      await sql`
       UPDATE players
       SET name = ${name},
       image_url = ${image_url},
       notes = ${notes}, 
       updated_at=${date}
       WHERE id = ${id} `;
+    } else{
+      await sql`
+      UPDATE players
+      SET name = ${name},
+      notes = ${notes}, 
+      updated_at=${date}
+      WHERE id = ${id} `;
+    }
+
   } catch (error) {
     console.error('## updatePlayer error', error);
     return { message: 'איראה שגיאה' };
@@ -1561,8 +1572,8 @@ export async function deleteUser({
       return;
     }
 
-    await sql`INSERT INTO deleted_users (id, phone_number, password, name, is_admin, is_worker, created_at) 
-VALUES (${user.id}, ${user.phone_number},  ${user.password}, ${user.name}, ${user.is_admin}, ${user.is_worker}, ${user.created_at})`;
+    await sql`INSERT INTO deleted_users (id, phone_number, password, name, is_admin, is_worker) 
+VALUES (${user.id}, ${user.phone_number},  ${user.password}, ${user.name}, ${user.is_admin}, ${user.is_worker})`;
 
     await sql`DELETE FROM users WHERE id = ${id}`;
 

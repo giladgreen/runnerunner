@@ -47,7 +47,7 @@ export declare class AuthError extends Error {
 export default function NextAuth() {
   return {
     auth: () => {},
-    signIn: () => {},
+    signIn: jest.fn(),
     signOut: () => {},
   };
 }
