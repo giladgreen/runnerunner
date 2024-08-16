@@ -144,8 +144,8 @@ async function getAllTournaments(includeDeleted?: boolean) {
       await sql<TournamentDB>`SELECT * FROM deleted_tournaments ORDER BY i ASC`
     ).rows;
 
-    tournaments = [...tournaments, ...deletedTournamentsResults].sort(
-      (a, b) => ((a.i ?? 1) - (b.i ?? 1)) ? -1 : 1,
+    tournaments = [...tournaments, ...deletedTournamentsResults].sort((a, b) =>
+      (a.i ?? 1) - (b.i ?? 1) ? -1 : 1,
     );
   }
 

@@ -137,7 +137,6 @@ function cancelTransaction() {
   return sql`ROLLBACK;`;
 }
 
-
 function insertIntoBugs(description: string) {
   return sql`INSERT INTO bugs (description) VALUES (${description})`;
 }
@@ -217,10 +216,10 @@ WHERE P.id = ${playerId};`;
 }
 
 async function handleCreditByOther(
-    type: string,
-    otherPlayerPhoneNumber: string,
-    note: string,
-    player: PlayerDB,
+  type: string,
+  otherPlayerPhoneNumber: string,
+  note: string,
+  player: PlayerDB,
 ) {
   noStore();
   let otherPlayer;
@@ -232,11 +231,11 @@ async function handleCreditByOther(
     if (!otherPlayerPhoneNumber) {
       console.error('### did not get other person data');
       return {
-        message: 'לא נמצא מידע על שחקן',
+        message: 'חסר מספר הטלפון של השחקן האחר',
       };
     }
     otherPlayer = await getPlayerByPhoneNumber(
-        otherPlayerPhoneNumber as string,
+      otherPlayerPhoneNumber as string,
     );
     if (!otherPlayer) {
       console.error('### did not find other person data');
@@ -261,12 +260,12 @@ async function handleCreditByOther(
 }
 
 async function createPlayerLog(
-    player: PlayerDB,
-    formData: FormData,
-    prevPage: string,
-    usage: boolean,
-    userId: string,
-    tournamentId: string | null,
+  player: PlayerDB,
+  formData: FormData,
+  prevPage: string,
+  usage: boolean,
+  userId: string,
+  tournamentId: string | null,
 ) {
   noStore();
   const CreateUsageLog = z.object({
@@ -287,9 +286,9 @@ async function createPlayerLog(
   }
 
   const user = (
-      await sql<UserDB>`SELECT * FROM users WHERE id = ${
-          userId && userId.trim().length > 0 ? userId : MOCK_UUID
-      }`
+    await sql<UserDB>`SELECT * FROM users WHERE id = ${
+      userId && userId.trim().length > 0 ? userId : MOCK_UUID
+    }`
   ).rows[0];
   const username = user?.name ?? user?.phone_number ?? 'unknown';
   const change = validatedFields.data.change * (usage ? -1 : 1);
@@ -304,10 +303,10 @@ async function createPlayerLog(
     otherHistoryNote,
     message,
   } = await handleCreditByOther(
-      type,
-      otherPlayerPhoneNumber,
-      validatedFields.data.note,
-      player,
+    type,
+    otherPlayerPhoneNumber,
+    validatedFields.data.note,
+    player,
   );
   if (message) {
     return {
@@ -322,13 +321,13 @@ async function createPlayerLog(
               INSERT INTO history (phone_number, change, note, type, updated_by, other_player_phone_number, tournament_id)
               VALUES 
               (${
-          player.phone_number
-      }, ${0}, ${historyNote}, ${'credit_by_other'}, ${username}, ${
-          otherPlayerPhoneNumber as string
-      }, ${tournamentId}),
+                player.phone_number
+              }, ${0}, ${historyNote}, ${'credit_by_other'}, ${username}, ${
+                otherPlayerPhoneNumber as string
+              }, ${tournamentId}),
               (${
-          otherPlayerPhoneNumber as string
-      }, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username}, '', ${tournamentId})
+                otherPlayerPhoneNumber as string
+              }, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username}, '', ${tournamentId})
             `;
     } else {
       await sql`
@@ -338,9 +337,9 @@ async function createPlayerLog(
     }
 
     const playerPhoneToUpdate =
-        useOtherPlayerCredit && otherPlayer
-            ? otherPlayer.phone_number
-            : player.phone_number;
+      useOtherPlayerCredit && otherPlayer
+        ? otherPlayer.phone_number
+        : player.phone_number;
     await touchPlayer(playerPhoneToUpdate);
 
     await commitTransaction();
@@ -358,7 +357,7 @@ async function createPlayerLog(
 
 async function getDateWinnersRecord(date: string, tournamentId: string) {
   const winnersResult =
-      await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date} AND tournament_id = ${tournamentId}`;
+    await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date} AND tournament_id = ${tournamentId}`;
   return winnersResult.rows[0];
 }
 
@@ -466,16 +465,16 @@ export async function removeOldRsvp() {
   try {
     await startTransaction();
     console.log(
-        '>> remove Old Rsvp, clearOldRsvpLastRun:',
-        clearOldRsvpLastRun,
+      '>> remove Old Rsvp, clearOldRsvpLastRun:',
+      clearOldRsvpLastRun,
     );
     const rsvpItemsResult =
-        await sql<RSVPDB>`SELECT * FROM rsvp WHERE created_at < now() - interval '48 hour'`;
+      await sql<RSVPDB>`SELECT * FROM rsvp WHERE created_at < now() - interval '48 hour'`;
     const rsvpItems = rsvpItemsResult.rows;
     await Promise.all(
-        rsvpItems.map((item) => {
-          return sql`INSERT INTO deleted_rsvp (id, date, phone_number, tournament_id) VALUES (${item.id},${item.date},${item.phone_number},${item.tournament_id})`;
-        }),
+      rsvpItems.map((item) => {
+        return sql`INSERT INTO deleted_rsvp (id, date, phone_number, tournament_id) VALUES (${item.id},${item.date},${item.phone_number},${item.tournament_id})`;
+      }),
     );
     await sql`DELETE FROM rsvp WHERE created_at < now() - interval '48 hour'`;
     await commitTransaction();
@@ -611,7 +610,6 @@ export async function setPlayerPosition(
     redirect(prevPage);
   }
 }
-
 
 export async function setPrizesCreditWorth(
   {

@@ -58,14 +58,18 @@ export async function createDefaultPlayer() {
   await sql`INSERT INTO players (name, phone_number, notes) VALUES ('gilad green','0587869910','sweet dude')`;
   await sql`INSERT INTO history (phone_number, change, note, type, archive) VALUES ('0587869910',0,'cool cool cool','credit',true)`;
 
-  return (await sql<PlayerDB>`select * from players where phone_number='0587869910'`).rows[0];
+  return (
+    await sql<PlayerDB>`select * from players where phone_number='0587869910'`
+  ).rows[0];
 }
 
 export async function createOtherPlayer() {
   await sql`INSERT INTO players (name, phone_number, notes) VALUES ('someone else','0542609910','some dude')`;
   await sql`INSERT INTO history (phone_number, change, note, type, archive) VALUES ('0542609910',1000,'cool cool cool','credit',true)`;
 
-  return (await sql<PlayerDB>`select * from players where phone_number='0542609910'`).rows[0];
+  return (
+    await sql<PlayerDB>`select * from players where phone_number='0542609910'`
+  ).rows[0];
 }
 
 export async function createDefaultTournament() {

@@ -4,7 +4,7 @@ import {
   getDayOfTheWeek,
   getTime,
   getTodayShortDate,
-  formatDateToLocalWithTime
+  formatDateToLocalWithTime,
 } from '../../app/lib/serverDateUtils';
 
 describe('test utils', () => {
@@ -170,7 +170,7 @@ describe('test utils', () => {
   describe('formatDateToLocalWithTime', () => {
     describe('when passing an empty string argument', () => {
       it('should return current time', async () => {
-        const dateStr = ''
+        const dateStr = '';
         const result = formatDateToLocalWithTime(dateStr);
 
         const options: Intl.DateTimeFormatOptions = {
@@ -179,8 +179,10 @@ describe('test utils', () => {
         };
         const formatter = new Intl.DateTimeFormat('he', options);
         const date = formatter.format(new Date());
-        const dateObject = new Date(new Date().getTime() + 3 * 60 * 60 * 1000 );
-        expect(result).toEqual(`${dateObject.getHours()}:${dateObject.getMinutes()},     ${date}`);
+        const dateObject = new Date(new Date().getTime() + 3 * 60 * 60 * 1000);
+        expect(result).toEqual(
+          `${dateObject.getHours()}:${dateObject.getMinutes()},     ${date}`,
+        );
       });
     });
     describe('when passing a string argument', () => {
@@ -194,8 +196,12 @@ describe('test utils', () => {
         };
         const formatter = new Intl.DateTimeFormat('he', options);
         const date = formatter.format(new Date());
-        const dateObject = new Date(new Date('2024-08-16T12:07:45.332Z').getTime() + 3 * 60 * 60 * 1000 );
-        expect(result).toEqual(`${dateObject.getHours()}:${dateObject.getMinutes()},     ${date}`);
+        const dateObject = new Date(
+          new Date('2024-08-16T12:07:45.332Z').getTime() + 3 * 60 * 60 * 1000,
+        );
+        expect(result).toEqual(
+          `${dateObject.getHours()}:${dateObject.getMinutes()},     ${date}`,
+        );
       });
     });
   });
