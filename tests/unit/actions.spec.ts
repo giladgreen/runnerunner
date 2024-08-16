@@ -23,7 +23,7 @@ import {
     createPrizeInfo,
     deletePrizeInfo,
     deletePlayer,
-    createPlayerUsageLog, authenticate, deleteUser, updatePlayer,
+    createPlayerUsageLog, authenticate, deleteUser, updatePlayer, updateTournament,
 } from '../../app/lib/actions';
 import {
   createDefaultUser,
@@ -44,6 +44,7 @@ import {
   createDefaultTournament,
   createOtherPlayer,
 } from '../helpers/dbHelper';
+import assert from "node:assert";
 
 describe('actions', () => {
   const PHONE = '0587869900';
@@ -232,7 +233,7 @@ describe('actions', () => {
       await createDefaultUser(userId);
     });
 
-    describe('get create and delete tournaments', () => {
+    describe('get, create,update and delete tournaments', () => {
       it(
         'should all work as expected',
         async () => {
@@ -273,7 +274,6 @@ describe('actions', () => {
           expect(tournamentsAfter.length).toEqual(1);
           const tournament = tournamentsAfter[0];
           expect(tournament.day).toEqual(day);
-          // @ts-ignore
           expect(tournament.i).toEqual(2);
           expect(tournament.name).toEqual(name);
           expect(tournament.buy_in).toEqual(buy_in);
@@ -281,6 +281,34 @@ describe('actions', () => {
           expect(tournament.max_players).toEqual(max_players);
           expect(tournament.rsvp_required).toEqual(rsvp_required);
 
+          const newName = 'new name';
+          const newBuyIn = 700;
+          const newReBuy = 600;
+          const newMaxPlayers = 200;
+          const newRsvpRequired = false;
+          await updateTournament({ id: tournament.id, prevPage:'prevPage' },
+              {} as State,
+              getFormData({
+                  name: newName,
+                  buy_in: newBuyIn,
+                  re_buy: newReBuy,
+                  max_players: newMaxPlayers,
+                  rsvp_required: newRsvpRequired,
+              }))
+
+           //assert
+            const tournamentsAfterUpdate: TournamentDB[] = await getAllTournaments();
+            expect(tournamentsAfterUpdate.length).toEqual(1);
+            const tournamentAfterUpdate = tournamentsAfterUpdate[0];
+            expect(tournamentAfterUpdate.day).toEqual(day);
+            expect(tournamentAfterUpdate.i).toEqual(2);
+            expect(tournamentAfterUpdate.name).toEqual(newName);
+            expect(tournamentAfterUpdate.buy_in).toEqual(newBuyIn);
+            expect(tournamentAfterUpdate.re_buy).toEqual(newReBuy);
+            expect(tournamentAfterUpdate.max_players).toEqual(newMaxPlayers);
+            expect(tournamentAfterUpdate.rsvp_required).toEqual(newRsvpRequired);
+
+          //act
           await deleteTournament(tournament.id, 'prevPage', userId);
           const tournamentsAfterDelete: TournamentDB[] =
             await getAllTournaments();
@@ -294,11 +322,11 @@ describe('actions', () => {
           expect(deletedTournament.day).toEqual(day);
           // @ts-ignore
           expect(deletedTournament.i).toEqual(2);
-          expect(deletedTournament.name).toEqual(name);
-          expect(deletedTournament.buy_in).toEqual(buy_in);
-          expect(deletedTournament.re_buy).toEqual(re_buy);
-          expect(deletedTournament.max_players).toEqual(max_players);
-          expect(deletedTournament.rsvp_required).toEqual(rsvp_required);
+          expect(deletedTournament.name).toEqual(newName);
+          expect(deletedTournament.buy_in).toEqual(newBuyIn);
+          expect(deletedTournament.re_buy).toEqual(newReBuy);
+          expect(deletedTournament.max_players).toEqual(newMaxPlayers);
+          expect(deletedTournament.rsvp_required).toEqual(newRsvpRequired);
         },
         TEST_TIMEOUT,
       );
@@ -874,7 +902,7 @@ describe('actions', () => {
 //TODO:
 //
 //
-//updatePlayer
+//
 //updateTournament
 //updatePrizeInfo
 //updateNewPlayerName
