@@ -1,7 +1,7 @@
 import { PlayerDB, UserDB } from './definitions';
 
 export const formatCurrency = (balance: number) => {
-  const res = (balance ?? 0).toLocaleString('en-US', {
+  const res = balance.toLocaleString('en-US', {
     style: 'currency',
     currency: 'ILS',
   });

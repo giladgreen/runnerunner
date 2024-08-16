@@ -7,6 +7,7 @@ import {
   nameComparator,
   sumArrayByProp,
   dateComparator,
+  formatCurrencyColor,
 } from '../../app/lib/utils';
 import { PlayerDB, UserDB } from '../..//app/lib/definitions';
 import {
@@ -26,6 +27,12 @@ describe('test utils', () => {
       it('should return correct format', async () => {
         const result = formatCurrency(100);
         expect(result).toEqual('₪100');
+      });
+    });
+    describe('when legal 0 amount', () => {
+      it('should return correct format', async () => {
+        const result = formatCurrency(0);
+        expect(result).toEqual('₪0');
       });
     });
     describe('when legal positive amount', () => {
@@ -362,6 +369,22 @@ describe('test utils', () => {
       it('should sum array By the given Prop', async () => {
         const result = sumArrayByProp([{ x: 7 }, { x: 12 }], 'x');
         expect(result).toEqual(19);
+      });
+    });
+  });
+  describe('formatCurrencyColor', () => {
+    describe('when given a balance value', () => {
+      it('should return correct color', async () => {
+        const result = formatCurrencyColor(300);
+        expect(result).toEqual('green');
+      });
+      it('should return correct color', async () => {
+        const result = formatCurrencyColor(-300);
+        expect(result).toEqual('red');
+      });
+      it('should return correct color', async () => {
+        const result = formatCurrencyColor(0);
+        expect(result).toEqual('gray');
       });
     });
   });
