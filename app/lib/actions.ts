@@ -84,6 +84,10 @@ export type State = {
   };
   message?: string | null;
 };
+
+////////////
+//  sync function
+////////////
 function sendEmail(to: string, subject: string, body: string) {
   const auth = {
     user: process.env.EMAIL_ADDRESS,
@@ -133,29 +137,6 @@ function cancelTransaction() {
   return sql`ROLLBACK;`;
 }
 
-export async function removeOldRsvp() {
-  try {
-    await startTransaction();
-    console.log(
-      '>> remove Old Rsvp, clearOldRsvpLastRun:',
-      clearOldRsvpLastRun,
-    );
-    const rsvpItemsResult =
-      await sql<RSVPDB>`SELECT * FROM rsvp WHERE created_at < now() - interval '48 hour'`;
-    const rsvpItems = rsvpItemsResult.rows;
-    await Promise.all(
-      rsvpItems.map((item) => {
-        return sql`INSERT INTO deleted_rsvp (id, date, phone_number, tournament_id) VALUES (${item.id},${item.date},${item.phone_number},${item.tournament_id})`;
-      }),
-    );
-    await sql`DELETE FROM rsvp WHERE created_at < now() - interval '48 hour'`;
-    await commitTransaction();
-    clearOldRsvpLastRun = getCurrentDate().getTime();
-  } catch (error) {
-    await cancelTransaction();
-    console.error('rsvpPlayerForDay Error:', error);
-  }
-}
 
 function insertIntoBugs(description: string) {
   return sql`INSERT INTO bugs (description) VALUES (${description})`;
@@ -177,6 +158,11 @@ function insertIntoHistory(
       VALUES (${phoneNumber}, ${balance}, ${note}, ${type}, ${tournamentId})
     `;
 }
+
+////////////
+//  async function
+////////////
+
 async function touchPlayer(phoneNumber: string) {
   return sql`UPDATE players SET updated_at=${getUpdatedAtFormat()} WHERE phone_number = ${phoneNumber}`;
 }
@@ -204,6 +190,181 @@ async function insertIntoPlayers(
   }
 }
 
+async function getPlayerByPhoneNumber(phoneNumber: string) {
+  const playersResult = await sql<PlayerDB>`SELECT * FROM players AS P 
+JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE phone_number = ${phoneNumber} AND (type = 'credit_to_other' OR type ='credit' OR type ='prize') GROUP BY phone_number) AS H
+ON P.phone_number = H.phone_number
+WHERE P.phone_number = ${phoneNumber};`;
+
+  const player = playersResult.rows[0] ?? null;
+  if (player) {
+    player.balance = Number(player.balance);
+  }
+  return player;
+}
+
+async function getPlayerById(playerId: string) {
+  const playerResult = await sql<PlayerDB>`SELECT * FROM players AS P 
+JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number) AS H
+ON P.phone_number = H.phone_number
+WHERE P.id = ${playerId};`;
+
+  const player = playerResult?.rows[0] ?? null;
+  if (player) {
+    player.balance = Number(player.balance);
+  }
+  return player;
+}
+
+async function handleCreditByOther(
+    type: string,
+    otherPlayerPhoneNumber: string,
+    note: string,
+    player: PlayerDB,
+) {
+  noStore();
+  let otherPlayer;
+  let useOtherPlayerCredit;
+  let historyNote;
+  let otherHistoryNote;
+
+  if (type === 'credit_by_other') {
+    if (!otherPlayerPhoneNumber) {
+      console.error('### did not get other person data');
+      return {
+        message: 'לא נמצא מידע על שחקן',
+      };
+    }
+    otherPlayer = await getPlayerByPhoneNumber(
+        otherPlayerPhoneNumber as string,
+    );
+    if (!otherPlayer) {
+      console.error('### did not find other person data');
+      return {
+        message: 'לא נמצא מידע על שחקן',
+      };
+    }
+    useOtherPlayerCredit = true;
+    historyNote = `${note}
+(על חשבון ${otherPlayer.name} ${otherPlayer.phone_number} ) `;
+
+    otherHistoryNote = `${note}
+(לטובת ${player.name} ${player.phone_number} ) `;
+  }
+
+  return {
+    otherPlayer: otherPlayer as unknown as PlayerDB,
+    useOtherPlayerCredit,
+    historyNote,
+    otherHistoryNote,
+  };
+}
+
+async function createPlayerLog(
+    player: PlayerDB,
+    formData: FormData,
+    prevPage: string,
+    usage: boolean,
+    userId: string,
+    tournamentId: string | null,
+) {
+  noStore();
+  const CreateUsageLog = z.object({
+    change: z.coerce.number(),
+    note: z.string().min(1, 'change note can not be left empty'),
+  });
+
+  const validatedFields = CreateUsageLog.safeParse({
+    change: formData.get('change'),
+    note: formData.get('note'),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'שדה חסר, אין אפשרות לסיים את הפעולה',
+    };
+  }
+
+  const user = (
+      await sql<UserDB>`SELECT * FROM users WHERE id = ${
+          userId && userId.trim().length > 0 ? userId : MOCK_UUID
+      }`
+  ).rows[0];
+  const username = user?.name ?? user?.phone_number ?? 'unknown';
+  const change = validatedFields.data.change * (usage ? -1 : 1);
+
+  let type = usage ? (formData.get('type') as string) ?? 'prize' : 'credit';
+
+  const otherPlayerPhoneNumber = formData.get('other_player') as string;
+  const {
+    otherPlayer,
+    useOtherPlayerCredit,
+    historyNote,
+    otherHistoryNote,
+    message,
+  } = await handleCreditByOther(
+      type,
+      otherPlayerPhoneNumber,
+      validatedFields.data.note,
+      player,
+  );
+  if (message) {
+    return {
+      message,
+    };
+  }
+
+  try {
+    await startTransaction();
+    if (useOtherPlayerCredit) {
+      await sql`
+              INSERT INTO history (phone_number, change, note, type, updated_by, other_player_phone_number, tournament_id)
+              VALUES 
+              (${
+          player.phone_number
+      }, ${0}, ${historyNote}, ${'credit_by_other'}, ${username}, ${
+          otherPlayerPhoneNumber as string
+      }, ${tournamentId}),
+              (${
+          otherPlayerPhoneNumber as string
+      }, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username}, '', ${tournamentId})
+            `;
+    } else {
+      await sql`
+              INSERT INTO history (phone_number, change, note, type, updated_by, tournament_id)
+              VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type}, ${username}, ${tournamentId})
+            `;
+    }
+
+    const playerPhoneToUpdate =
+        useOtherPlayerCredit && otherPlayer
+            ? otherPlayer.phone_number
+            : player.phone_number;
+    await touchPlayer(playerPhoneToUpdate);
+
+    await commitTransaction();
+  } catch (error) {
+    await cancelTransaction();
+    console.error('### create log error', error);
+    return {
+      message: 'איראה שגיאה',
+    };
+  } finally {
+    revalidatePath(prevPage);
+    redirect(prevPage);
+  }
+}
+
+async function getDateWinnersRecord(date: string, tournamentId: string) {
+  const winnersResult =
+      await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date} AND tournament_id = ${tournamentId}`;
+  return winnersResult.rows[0];
+}
+
+////////////
+//  exported function
+////////////
 export async function createReport(prevPage: string, formData: FormData) {
   noStore();
   const description = formData.get('description') as string;
@@ -301,169 +462,27 @@ phone: ${phone_number}`,
   }
 }
 
-async function getPlayerByPhoneNumber(phoneNumber: string) {
-  const playersResult = await sql<PlayerDB>`SELECT * FROM players AS P 
-JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE phone_number = ${phoneNumber} AND (type = 'credit_to_other' OR type ='credit' OR type ='prize') GROUP BY phone_number) AS H
-ON P.phone_number = H.phone_number
-WHERE P.phone_number = ${phoneNumber};`;
-
-  const player = playersResult.rows[0] ?? null;
-  if (player) {
-    player.balance = Number(player.balance);
-  }
-  return player;
-}
-
-async function getPlayerById(playerId: string) {
-  const playerResult = await sql<PlayerDB>`SELECT * FROM players AS P 
-JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number) AS H
-ON P.phone_number = H.phone_number
-WHERE P.id = ${playerId};`;
-
-  const player = playerResult?.rows[0] ?? null;
-  if (player) {
-    player.balance = Number(player.balance);
-  }
-  return player;
-}
-
-async function handleCreditByOther(
-  type: string,
-  otherPlayerPhoneNumber: string,
-  note: string,
-  player: PlayerDB,
-) {
-  noStore();
-  let otherPlayer;
-  let useOtherPlayerCredit;
-  let historyNote;
-  let otherHistoryNote;
-
-  if (type === 'credit_by_other') {
-    if (!otherPlayerPhoneNumber) {
-      console.error('### did not get other person data');
-      return {
-        message: 'לא נמצא מידע על שחקן',
-      };
-    }
-    otherPlayer = await getPlayerByPhoneNumber(
-      otherPlayerPhoneNumber as string,
-    );
-    if (!otherPlayer) {
-      console.error('### did not find other person data');
-      return {
-        message: 'לא נמצא מידע על שחקן',
-      };
-    }
-    useOtherPlayerCredit = true;
-    historyNote = `${note}
-(על חשבון ${otherPlayer.name} ${otherPlayer.phone_number} ) `;
-
-    otherHistoryNote = `${note}
-(לטובת ${player.name} ${player.phone_number} ) `;
-  }
-
-  return {
-    otherPlayer: otherPlayer as unknown as PlayerDB,
-    useOtherPlayerCredit,
-    historyNote,
-    otherHistoryNote,
-  };
-}
-
-export async function createPlayerLog(
-  player: PlayerDB,
-  formData: FormData,
-  prevPage: string,
-  usage: boolean,
-  userId: string,
-  tournamentId: string | null,
-) {
-  noStore();
-  const CreateUsageLog = z.object({
-    change: z.coerce.number(),
-    note: z.string().min(1, 'change note can not be left empty'),
-  });
-
-  const validatedFields = CreateUsageLog.safeParse({
-    change: formData.get('change'),
-    note: formData.get('note'),
-  });
-
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: 'שדה חסר, אין אפשרות לסיים את הפעולה',
-    };
-  }
-
-  const user = (
-    await sql<UserDB>`SELECT * FROM users WHERE id = ${
-      userId && userId.trim().length > 0 ? userId : MOCK_UUID
-    }`
-  ).rows[0];
-  const username = user?.name ?? user?.phone_number ?? 'unknown';
-  const change = validatedFields.data.change * (usage ? -1 : 1);
-
-  let type = usage ? (formData.get('type') as string) ?? 'prize' : 'credit';
-
-  const otherPlayerPhoneNumber = formData.get('other_player') as string;
-  const {
-    otherPlayer,
-    useOtherPlayerCredit,
-    historyNote,
-    otherHistoryNote,
-    message,
-  } = await handleCreditByOther(
-    type,
-    otherPlayerPhoneNumber,
-    validatedFields.data.note,
-    player,
-  );
-  if (message) {
-    return {
-      message,
-    };
-  }
-
+export async function removeOldRsvp() {
   try {
     await startTransaction();
-    if (useOtherPlayerCredit) {
-      await sql`
-              INSERT INTO history (phone_number, change, note, type, updated_by, other_player_phone_number, tournament_id)
-              VALUES 
-              (${
-                player.phone_number
-              }, ${0}, ${historyNote}, ${'credit_by_other'}, ${username}, ${
-                otherPlayerPhoneNumber as string
-              }, ${tournamentId}),
-              (${
-                otherPlayerPhoneNumber as string
-              }, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username}, '', ${tournamentId})
-            `;
-    } else {
-      await sql`
-              INSERT INTO history (phone_number, change, note, type, updated_by, tournament_id)
-              VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type}, ${username}, ${tournamentId})
-            `;
-    }
-
-    const playerPhoneToUpdate =
-      useOtherPlayerCredit && otherPlayer
-        ? otherPlayer.phone_number
-        : player.phone_number;
-    await touchPlayer(playerPhoneToUpdate);
-
+    console.log(
+        '>> remove Old Rsvp, clearOldRsvpLastRun:',
+        clearOldRsvpLastRun,
+    );
+    const rsvpItemsResult =
+        await sql<RSVPDB>`SELECT * FROM rsvp WHERE created_at < now() - interval '48 hour'`;
+    const rsvpItems = rsvpItemsResult.rows;
+    await Promise.all(
+        rsvpItems.map((item) => {
+          return sql`INSERT INTO deleted_rsvp (id, date, phone_number, tournament_id) VALUES (${item.id},${item.date},${item.phone_number},${item.tournament_id})`;
+        }),
+    );
+    await sql`DELETE FROM rsvp WHERE created_at < now() - interval '48 hour'`;
     await commitTransaction();
+    clearOldRsvpLastRun = getCurrentDate().getTime();
   } catch (error) {
     await cancelTransaction();
-    console.error('### create log error', error);
-    return {
-      message: 'איראה שגיאה',
-    };
-  } finally {
-    revalidatePath(prevPage);
-    redirect(prevPage);
+    console.error('rsvpPlayerForDay Error:', error);
   }
 }
 
@@ -593,11 +612,6 @@ export async function setPlayerPosition(
   }
 }
 
-async function getDateWinnersRecord(date: string, tournamentId: string) {
-  const winnersResult =
-    await sql<WinnerDB>`SELECT * FROM winners WHERE date = ${date} AND tournament_id = ${tournamentId}`;
-  return winnersResult.rows[0];
-}
 
 export async function setPrizesCreditWorth(
   {

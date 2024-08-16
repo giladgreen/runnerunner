@@ -21,27 +21,58 @@ export function getFormData(data: any) {
 }
 
 export async function clearDB() {
-  await sql`DELETE FROM bugs`;
-  await sql`DELETE FROM users`;
-  await sql`DELETE FROM players`;
-  await sql`DELETE FROM history`;
   await sql`DELETE FROM images`;
-  await sql`DELETE FROM tournaments`;
-  await sql`DELETE FROM prizes_info`;
-  await sql`DELETE FROM deleted_tournaments`;
-  await sql`DELETE FROM deleted_users`;
+
+  await sql`DELETE FROM bugs`;
   await sql`DELETE FROM deleted_bugs`;
+
+  await sql`DELETE FROM users`;
+  await sql`DELETE FROM deleted_users`;
+
+  await sql`DELETE FROM players`;
   await sql`DELETE FROM deleted_players`;
+
+  await sql`DELETE FROM history`;
   await sql`DELETE FROM deleted_history`;
-  await sql`DELETE FROM deleted_rsvp`;
-  await sql`DELETE FROM deleted_prizes`;
+
+  await sql`DELETE FROM tournaments`;
+  await sql`DELETE FROM deleted_tournaments`;
+
+  await sql`DELETE FROM prizes_info`;
   await sql`DELETE FROM deleted_prizes_info`;
+
+  await sql`DELETE FROM rsvp`;
+  await sql`DELETE FROM deleted_rsvp`;
+
+  await sql`DELETE FROM prizes`;
+  await sql`DELETE FROM deleted_prizes`;
 }
 
 export async function createDefaultUser(userId: string) {
   const hashedPassword = await bcrypt.hash('123456', 10);
 
   await sql`INSERT INTO users (id, name, phone_number,password, is_admin) VALUES (${userId}, 'gilad','0587869910',${hashedPassword}, true)`;
+}
+
+export async function createDefaultPlayer() {
+  await sql`INSERT INTO players (name, phone_number, notes) VALUES ('gilad green','0587869910','sweet dude')`;
+  await sql`INSERT INTO history (phone_number, change, note, type, archive) VALUES ('0587869910',0,'cool cool cool','credit',true)`;
+
+  return (await sql<PlayerDB>`select * from players where phone_number='0587869910'`).rows[0];
+}
+
+export async function createOtherPlayer() {
+  await sql`INSERT INTO players (name, phone_number, notes) VALUES ('someone else','0542609910','some dude')`;
+  await sql`INSERT INTO history (phone_number, change, note, type, archive) VALUES ('0542609910',1000,'cool cool cool','credit',true)`;
+
+  return (await sql<PlayerDB>`select * from players where phone_number='0542609910'`).rows[0];
+}
+
+export async function createDefaultTournament() {
+  await sql`INSERT INTO tournaments (day,name, i, buy_in,re_buy,max_players, rsvp_required ) 
+        VALUES ('Sunday','PT',1,250,150,90,true)`;
+
+  return (await sql<TournamentDB>`select * from tournaments`).rows[0];
 }
 
 export async function getHistoryLogs(phoneNumber?: string) {
