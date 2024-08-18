@@ -11,7 +11,7 @@ import {
 } from '../../app/lib/utils';
 import { PlayerDB, UserDB } from '../..//app/lib/definitions';
 import {
-  formatDateToLocal,
+  formatDateToLocal, getCurrentDate,
   getDayOfTheWeek,
   getTime,
   getTodayShortDate,
@@ -325,7 +325,7 @@ describe('test utils', () => {
     describe('when ', () => {
       it('should return correct val', async () => {
         const result = getTodayShortDate();
-        const expectedResult = new Date().toISOString().slice(0, 10);
+        const expectedResult = new Date((new Date()).getTime() - (6 * 60 *60 * 1000)).toISOString().slice(0, 10);
         expect(result).toEqual(expectedResult);
       });
     });

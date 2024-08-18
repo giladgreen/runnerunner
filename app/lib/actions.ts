@@ -899,7 +899,7 @@ export async function updatePlayer(
 
   const date = getUpdatedAtFormat();
   try {
-    if (imageHasChanged){
+    if (imageHasChanged) {
       await sql`
       UPDATE players
       SET name = ${name},
@@ -907,7 +907,7 @@ export async function updatePlayer(
       notes = ${notes}, 
       updated_at=${date}
       WHERE id = ${id} `;
-    } else{
+    } else {
       await sql`
       UPDATE players
       SET name = ${name},
@@ -915,7 +915,6 @@ export async function updatePlayer(
       updated_at=${date}
       WHERE id = ${id} `;
     }
-
   } catch (error) {
     console.error('## updatePlayer error', error);
     return { message: 'איראה שגיאה' };
@@ -1492,7 +1491,7 @@ export async function updateNewPlayerName(
   }
 }
 
-export async function updateFFValue(
+export async function updateFFValue(//TODO: only admin can call the APIS?..
   name: string,
   newValue: boolean,
   prevPage: string,

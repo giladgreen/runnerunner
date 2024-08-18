@@ -2,12 +2,13 @@ import bcrypt from 'bcrypt';
 import { sql } from '@vercel/postgres';
 import {
   BugDB,
+  FeatureFlagDB,
   ImageDB,
   LogDB,
   PlayerDB,
   PrizeInfoDB,
   TournamentDB,
-  UserDB,
+  UserDB, WinnerDB,
 } from '@/app/lib/definitions';
 
 export function getFormData(data: any) {
@@ -19,12 +20,14 @@ export function getFormData(data: any) {
     },
     set: (prop: string, value: any) => {
       data[prop] = value;
-    }
+    },
   } as FormData;
 }
 
 export async function clearDB() {
+  await sql`DELETE FROM winners`;
   await sql`DELETE FROM images`;
+  await sql`DELETE FROM feature_flags`;
 
   await sql`DELETE FROM bugs`;
   await sql`DELETE FROM deleted_bugs`;
@@ -148,4 +151,16 @@ export async function getAllUsers() {
 
 export async function getAllImages() {
   return (await sql<ImageDB>`SELECT * FROM images`).rows;
+}
+
+export async function getTournamentWinners(tournamentId: string) {
+  return (await sql<WinnerDB>`SELECT * FROM winners WHERE tournament_id = ${tournamentId}`).rows[0];
+}
+
+export async function getAllFF() {
+  return (await sql<FeatureFlagDB>`SELECT * FROM feature_flags`).rows;
+}
+
+export async function insertFF(name: string, is_open: boolean) {
+  await sql`INSERT INTO feature_flags (flag_name, is_open) VALUES (${name}, ${is_open});`;
 }
