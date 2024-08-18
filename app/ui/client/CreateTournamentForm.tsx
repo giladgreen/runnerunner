@@ -1,8 +1,6 @@
 'use client';
 import { createTournament } from '@/app/lib/actions';
 
-import { TRANSLATIONS } from '@/app/lib/definitions';
-
 import Link from 'next/link';
 import { useFormState } from 'react-dom';
 import { PencilIcon } from '@heroicons/react/24/outline';

@@ -125,7 +125,11 @@ describe('test utils', () => {
     describe('when not passing any argument', () => {
       it('should return correct date', async () => {
         const result = getTodayShortDate();
-        expect(result).toEqual(new Date((new Date()).getTime() - (6 * 60 * 60 * 1000)).toISOString().slice(0, 10));
+        expect(result).toEqual(
+          new Date(new Date().getTime() - 6 * 60 * 60 * 1000)
+            .toISOString()
+            .slice(0, 10),
+        );
       });
     });
     describe('when passing a string date', () => {

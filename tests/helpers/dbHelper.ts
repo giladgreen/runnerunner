@@ -7,8 +7,10 @@ import {
   LogDB,
   PlayerDB,
   PrizeInfoDB,
+  RSVPDB,
   TournamentDB,
-  UserDB, WinnerDB,
+  UserDB,
+  WinnerDB,
 } from '@/app/lib/definitions';
 
 export function getFormData(data: any) {
@@ -78,9 +80,29 @@ export async function createOtherPlayer() {
   ).rows[0];
 }
 
+export async function createTestPlayer(phoneNumber: string, name: string) {
+  await sql`INSERT INTO players (name, phone_number, notes) VALUES (${name},${phoneNumber},'some dude')`;
+  await sql`INSERT INTO history (phone_number, change, note, type, archive) VALUES (${phoneNumber},0,'init','credit',true)`;
+
+  return (
+    await sql<PlayerDB>`select * from players where phone_number=${phoneNumber}`
+  ).rows[0];
+}
+
 export async function createDefaultTournament() {
+  const today = new Date().toLocaleString('en-us', { weekday: 'long' });
+  const i =
+    [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ].indexOf(today) + 1;
   await sql`INSERT INTO tournaments (day,name, i, buy_in,re_buy,max_players, rsvp_required ) 
-        VALUES ('Sunday','PT',1,250,150,90,true)`;
+        VALUES (${today},'PT',${i},250,150,90,true)`;
 
   return (await sql<TournamentDB>`select * from tournaments`).rows[0];
 }
@@ -120,6 +142,13 @@ export async function getAllDeletedTournaments() {
 export async function getAllPrizesInfo() {
   return (await sql<PrizeInfoDB>`SELECT * FROM prizes_info`).rows;
 }
+export async function getAllRSVPs() {
+  return (await sql<RSVPDB>`SELECT * FROM rsvp`).rows;
+}
+
+export async function getAllDeletedRSVPs() {
+  return (await sql<RSVPDB>`SELECT * FROM deleted_rsvp`).rows;
+}
 
 export async function getAllDeletedPrizesInfo() {
   return (await sql<PrizeInfoDB>`SELECT * FROM deleted_prizes_info`).rows;
@@ -154,7 +183,9 @@ export async function getAllImages() {
 }
 
 export async function getTournamentWinners(tournamentId: string) {
-  return (await sql<WinnerDB>`SELECT * FROM winners WHERE tournament_id = ${tournamentId}`).rows[0];
+  return (
+    await sql<WinnerDB>`SELECT * FROM winners WHERE tournament_id = ${tournamentId}`
+  ).rows[0];
 }
 
 export async function getAllFF() {

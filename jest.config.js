@@ -28,10 +28,10 @@ module.exports = {
   collectCoverageFrom: ['app/**/*.ts'],
   coverageThreshold: {
     global: {
-      statements: 57,
-      branches: 51,
-      lines: 57,
-      functions: 70,
+      statements: 60,
+      branches: 56,
+      lines: 60,
+      functions: 72,
     },
   },
   coverageReporters: ['json-summary', 'lcov'],

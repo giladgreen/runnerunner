@@ -12,45 +12,54 @@ import {
   PrizeInfoDB,
 } from '@/app/lib/definitions';
 import {
-    signUp,
-    createReport,
-    createPlayer,
-    State,
-    deleteBug,
-    createTournament,
-    deleteTournament,
-    createPrizeInfo,
-    deletePrizeInfo,
-    deletePlayer,
-    createPlayerUsageLog,
-    authenticate,
-    deleteUser,
-    updatePlayer,
-    updateTournament,
-    updatePrizeInfo,
-    updateNewPlayerName,
-    updateFFValue, updateIsUserWorker, updateIsUserAdmin, undoPlayerLastLog, givePlayerPrizeOrCredit,
+  signUp,
+  createReport,
+  createPlayer,
+  State,
+  deleteBug,
+  createTournament,
+  deleteTournament,
+  createPrizeInfo,
+  deletePrizeInfo,
+  deletePlayer,
+  createPlayerUsageLog,
+  authenticate,
+  deleteUser,
+  updatePlayer,
+  updateTournament,
+  updatePrizeInfo,
+  updateNewPlayerName,
+  updateFFValue,
+  updateIsUserWorker,
+  updateIsUserAdmin,
+  undoPlayerLastLog,
+  givePlayerPrizeOrCredit,
+  rsvpPlayerForDay,
 } from '../../app/lib/actions';
 import {
-    createDefaultUser,
-    getHistoryLogs,
-    getFormData,
-    clearDB,
-    getAllBugs,
-    getAllPlayers,
-    getAllUsers,
-    getAllImages,
-    getAllTournaments,
-    getAllDeletedTournaments,
-    getAllDeletedBugs,
-    getAllPrizesInfo,
-    getAllDeletedPrizesInfo,
-    getAllDeletedPlayers,
-    createDefaultPlayer,
-    createDefaultTournament,
-    createOtherPlayer,
-    getAllFF,
-    insertFF, getTournamentWinners,
+  createDefaultUser,
+  getHistoryLogs,
+  getFormData,
+  clearDB,
+  getAllBugs,
+  getAllPlayers,
+  getAllUsers,
+  getAllImages,
+  getAllTournaments,
+  getAllDeletedTournaments,
+  getAllDeletedBugs,
+  getAllPrizesInfo,
+  getAllDeletedPrizesInfo,
+  getAllDeletedPlayers,
+  createDefaultPlayer,
+  createDefaultTournament,
+  createOtherPlayer,
+  getAllFF,
+  insertFF,
+  getTournamentWinners,
+  createTestPlayer,
+  getAllRSVPs,
+  getAllDeletedRSVPs,
 } from '../helpers/dbHelper';
 import assert from 'node:assert';
 
@@ -65,7 +74,7 @@ describe('actions', () => {
     jest.clearAllMocks();
   });
 
-  describe('signUp', () => {
+  describe('user / signUp', () => {
     describe('when creating a new user', () => {
       it(
         'should return correct results',
@@ -139,7 +148,7 @@ describe('actions', () => {
           expect(playerAfterNameUpdate?.name).toEqual(newName);
 
           //act
-          await updateIsUserWorker({ id: newUser.id, prevPage: 'prev'});
+          await updateIsUserWorker({ id: newUser.id, prevPage: 'prev' });
           //assert
           const usersAfterIsWorkerUpdate = await getAllUsers();
           const userAfterIsWorkerUpdate = usersAfterIsWorkerUpdate[0];
@@ -147,9 +156,8 @@ describe('actions', () => {
           expect(userAfterIsWorkerUpdate?.is_admin).toEqual(false);
           expect(userAfterIsWorkerUpdate?.is_worker).toEqual(true);
 
-
           //act
-          await updateIsUserAdmin({ id: newUser.id, prevPage: 'prev'});
+          await updateIsUserAdmin({ id: newUser.id, prevPage: 'prev' });
           //assert
           const usersAfterIsAdminUpdate = await getAllUsers();
           const userAfterIsAdminUpdate = usersAfterIsAdminUpdate[0];
@@ -164,8 +172,8 @@ describe('actions', () => {
           const usersAfterFailDelete = await getAllUsers();
           expect(usersAfterFailDelete).toEqual(usersAfterIsAdminUpdate);
 
-          await updateIsUserWorker({ id: newUser.id, prevPage: 'prev'});
-          await updateIsUserAdmin({ id: newUser.id, prevPage: 'prev'});
+          await updateIsUserWorker({ id: newUser.id, prevPage: 'prev' });
+          await updateIsUserAdmin({ id: newUser.id, prevPage: 'prev' });
           // act
           await deleteUser({ id: newUser.id, prevPage: 'prevPage' });
 
@@ -223,7 +231,7 @@ describe('actions', () => {
     });
   });
 
-  describe('bugs', () => {
+  describe('reports', () => {
     describe('get create and delete bugs', () => {
       it(
         'should all work as expected',
@@ -870,9 +878,9 @@ describe('actions', () => {
             //act
             await undoPlayerLastLog(player.phone_number, '');
             //assert
-            const playerHistoryLogsAfterUndo = await getHistoryLogs('0587869910');
+            const playerHistoryLogsAfterUndo =
+              await getHistoryLogs('0587869910');
             expect(playerHistoryLogsAfterUndo).toEqual(playerHistoryBefore);
-
           },
           TEST_TIMEOUT,
         );
@@ -1011,57 +1019,141 @@ describe('actions', () => {
       });
 
       describe('give player prize or credit', () => {
-          describe('give prize', () => {
-              it(
-                  'should return correct results',
-                  async () => {
-                      const tournamentWinnersBefore = await getTournamentWinners(tournamentId);
-                      const playerHistoryBefore = await getHistoryLogs('0587869910');
-                      expect(tournamentWinnersBefore).toEqual(undefined);
-                      expect(playerHistoryBefore.length).toEqual(1);
-                      //arrange
-                      const type = 'prize';
-                      const credit = '';
-                      const prize = '';
-                      const prize_worth = '';
-                      const credit_worth = '';
-                      const update_player_credit   = '';
-                      const stringDate = 'sunday 7';
-                      //act
-                      await givePlayerPrizeOrCredit({
-                              stringDate,
-                              userId,
-                              playerId: player.id,
-                              prevPage: '',
-                              tournamentId
-                          },
-                          {} as State, getFormData({ type, credit, prize,prize_worth, credit_worth, update_player_credit }));
-
-                      //assert
-                      const playerHistoryLogsAfterUndo = await getHistoryLogs('0587869910');
-                      expect(playerHistoryLogsAfterUndo).toEqual(playerHistoryBefore);
-                      const tournamentWinnersAfter = await getTournamentWinners(tournamentId);
-
-                  },
-                  TEST_TIMEOUT,
+        describe('give prize', () => {
+          it(
+            'should return correct results',
+            async () => {
+              const tournamentWinnersBefore =
+                await getTournamentWinners(tournamentId);
+              const playerHistoryBefore = await getHistoryLogs('0587869910');
+              expect(tournamentWinnersBefore).toEqual(undefined);
+              expect(playerHistoryBefore.length).toEqual(1);
+              //arrange
+              const type = 'prize';
+              const credit = '';
+              const prize = '';
+              const prize_worth = '';
+              const credit_worth = '';
+              const update_player_credit = '';
+              const stringDate = 'sunday 7';
+              //act
+              await givePlayerPrizeOrCredit(
+                {
+                  stringDate,
+                  userId,
+                  playerId: player.id,
+                  prevPage: '',
+                  tournamentId,
+                },
+                {} as State,
+                getFormData({
+                  type,
+                  credit,
+                  prize,
+                  prize_worth,
+                  credit_worth,
+                  update_player_credit,
+                }),
               );
-          });
+
+              //assert
+              const playerHistoryLogsAfterUndo =
+                await getHistoryLogs('0587869910');
+              expect(playerHistoryLogsAfterUndo).toEqual(playerHistoryBefore);
+              const tournamentWinnersAfter =
+                await getTournamentWinners(tournamentId);
+            },
+            TEST_TIMEOUT,
+          );
+        });
+      });
+    });
+
+    describe('tournaments rsvp, places, places worth', () => {
+      const player1PhoneNumber = '0587869901';
+      const player2PhoneNumber = '0587869902';
+      const player3PhoneNumber = '0587869903';
+      let player1: PlayerDB;
+      let player2: PlayerDB;
+      let player3: PlayerDB;
+      let tournamentId: string;
+      beforeEach(async () => {
+        player1 = await createTestPlayer(player1PhoneNumber, 'player1');
+        player2 = await createTestPlayer(player2PhoneNumber, 'player2');
+        player3 = await createTestPlayer(player3PhoneNumber, 'player3');
+        tournamentId = (await createDefaultTournament()).id;
+      }, TEST_TIMEOUT);
+      describe('players rsvps', () => {
+        it(
+          'should return correct results',
+          async () => {
+            //assert
+            const rsvpsBefore = await getAllRSVPs();
+            const deletedRsvpsBefore = await getAllDeletedRSVPs();
+            expect(rsvpsBefore.length).toEqual(0);
+            expect(deletedRsvpsBefore.length).toEqual(0);
+            //arrange
+            const date = new Date().toISOString().slice(0, 10);
+
+            //act
+            await rsvpPlayerForDay(
+              player1PhoneNumber,
+              date,
+              tournamentId,
+              true,
+              'prevPage',
+            );
+            await rsvpPlayerForDay(
+              player2PhoneNumber,
+              date,
+              tournamentId,
+              true,
+              'prevPage',
+            );
+            await rsvpPlayerForDay(
+              player3PhoneNumber,
+              date,
+              tournamentId,
+              true,
+              'prevPage',
+            );
+
+            //assert
+            const rsvpsAfterFirstRsvp = await getAllRSVPs();
+            const deletedRsvpsAfterFirstRsvp = await getAllDeletedRSVPs();
+            expect(rsvpsAfterFirstRsvp.length).toEqual(3);
+            expect(deletedRsvpsAfterFirstRsvp.length).toEqual(0);
+
+            await rsvpPlayerForDay(
+              player3PhoneNumber,
+              date,
+              tournamentId,
+              false,
+              'prevPage',
+            );
+
+            //assert
+            const rsvpsAfterSecondRsvp = await getAllRSVPs();
+            const deletedRsvpsAfterSecondRsvp = await getAllDeletedRSVPs();
+            expect(rsvpsAfterSecondRsvp.length).toEqual(2);
+            expect(deletedRsvpsAfterSecondRsvp.length).toEqual(1);
+          },
+          TEST_TIMEOUT,
+        );
       });
     });
   });
 });
 
 //TODO:
-
-//rsvpPlayerForDay
-
-//convertPrizeToCredit
-// removeOldRsvp
 //setPlayerPosition
 //resetTournamentPositions
 //setPrizesCreditWorth
-//
+
 //setPlayerPrize
 //setPrizeAsReadyToBeDelivered
 //setPrizeAsNotReadyToBeDelivered
+//convertPrizeToCredit
+
+// removeOldRsvp
 //importPlayers

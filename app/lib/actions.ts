@@ -1491,7 +1491,7 @@ export async function updateNewPlayerName(
   }
 }
 
-export async function updateFFValue(//TODO: only admin can call the APIS?..
+export async function updateFFValue( //TODO: only admin can call the APIS?..
   name: string,
   newValue: boolean,
   prevPage: string,
