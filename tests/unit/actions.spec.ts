@@ -12,29 +12,33 @@ import {
   PrizeInfoDB,
 } from '@/app/lib/definitions';
 import {
-    signUp,
-    createReport,
-    createPlayer,
-    State,
-    deleteBug,
-    createTournament,
-    deleteTournament,
-    createPrizeInfo,
-    deletePrizeInfo,
-    deletePlayer,
-    createPlayerUsageLog,
-    authenticate,
-    deleteUser,
-    updatePlayer,
-    updateTournament,
-    updatePrizeInfo,
-    updateNewPlayerName,
-    updateFFValue,
-    updateIsUserWorker,
-    updateIsUserAdmin,
-    undoPlayerLastLog,
-    givePlayerPrizeOrCredit,
-    rsvpPlayerForDay, setPlayerPosition, setPrizesCreditWorth, resetTournamentPositions, removeOldRsvp,
+  signUp,
+  createReport,
+  createPlayer,
+  State,
+  deleteBug,
+  createTournament,
+  deleteTournament,
+  createPrizeInfo,
+  deletePrizeInfo,
+  deletePlayer,
+  createPlayerUsageLog,
+  authenticate,
+  deleteUser,
+  updatePlayer,
+  updateTournament,
+  updatePrizeInfo,
+  updateNewPlayerName,
+  updateFFValue,
+  updateIsUserWorker,
+  updateIsUserAdmin,
+  undoPlayerLastLog,
+  givePlayerPrizeOrCredit,
+  rsvpPlayerForDay,
+  setPlayerPosition,
+  setPrizesCreditWorth,
+  resetTournamentPositions,
+  removeOldRsvp,
 } from '../../app/lib/actions';
 import {
   createDefaultUser,
@@ -1077,8 +1081,8 @@ describe('actions', () => {
         player1 = await createTestPlayer(player1PhoneNumber, 'player1');
         player2 = await createTestPlayer(player2PhoneNumber, 'player2');
         player3 = await createTestPlayer(player3PhoneNumber, 'player3');
-        tournament = (await createDefaultTournament());
-        tournamentId = tournament.id
+        tournament = await createDefaultTournament();
+        tournamentId = tournament.id;
       }, TEST_TIMEOUT);
       describe('rsvps', () => {
         it(
@@ -1139,116 +1143,185 @@ describe('actions', () => {
         );
       });
       describe('tournament places', () => {
-            it(
-                'should return correct results',
-                async () => {
-                    //assert
-                    const tournamentWinnersBefore = await getTournamentWinners(tournamentId);
-                    expect(tournamentWinnersBefore).toEqual(undefined);
+        it(
+          'should return correct results',
+          async () => {
+            //assert
+            const tournamentWinnersBefore =
+              await getTournamentWinners(tournamentId);
+            expect(tournamentWinnersBefore).toEqual(undefined);
 
-                    //act
-                    await setPlayerPosition({
-                        playerId: player3.id,
-                        prevPage: 'prevPage',
-                        tournamentId,
-                    },getFormData({  position: 3 }));
-                    await setPlayerPosition({
-                        playerId: player2.id,
-                        prevPage: 'prevPage',
-                        tournamentId,
-                    },getFormData({  position: 2 }));
-                    await setPlayerPosition({
-                        playerId: player1.id,
-                        prevPage: 'prevPage',
-                        tournamentId,
-                    },getFormData({  position: 1 }));
-
-                    //assert
-                    const tournamentWinnersAfter = await getTournamentWinners(tournamentId);
-                    expect(tournamentWinnersAfter?.tournament_id).toEqual(tournamentId);
-                    expect(tournamentWinnersAfter?.tournament_name).toEqual(tournament.name);
-                    const winners = JSON.parse(tournamentWinnersAfter?.winners || '{}');
-                    expect(winners[player1PhoneNumber]).toEqual({ position: 1, hasReceived: false, creditWorth: -1});
-                    expect(winners[player2PhoneNumber]).toEqual({ position: 2, hasReceived: false, creditWorth: -1});
-                    expect(winners[player3PhoneNumber]).toEqual({ position: 3, hasReceived: false, creditWorth: -1});
-
-                    //act
-                    const res = await setPrizesCreditWorth({
-                            date: tournamentWinnersAfter.date,
-                            tournamentId: '123',
-                            prevPage: 'prevPage',
-                        },
-                        {} as State,
-                        getFormData({  "#1": 1000, "#2": 500, "#3": 250 }));
-                    //assert
-                    expect(res).toEqual({  message: "איראה שגיאה" })
-                    //act
-                    await setPrizesCreditWorth({
-                        date: tournamentWinnersAfter.date,
-                        tournamentId,
-                        prevPage: 'prevPage',
-                    },
-                        {} as State,
-                        getFormData({  "#1": 1000, "#2": 500, "#3": 250 }));
-
-                    //assert
-                    const tournamentWinnersAfterCreditWorth = await getTournamentWinners(tournamentId);
-                    expect(tournamentWinnersAfterCreditWorth?.tournament_id).toEqual(tournamentId);
-                    expect(tournamentWinnersAfterCreditWorth?.tournament_name).toEqual(tournament.name);
-                    const winnersAfterCreditWorth = JSON.parse(tournamentWinnersAfterCreditWorth?.winners || '{}');
-                    expect(winnersAfterCreditWorth[player1PhoneNumber]).toEqual({ position: 1, hasReceived: false, creditWorth: 1000 });
-                    expect(winnersAfterCreditWorth[player2PhoneNumber]).toEqual({ position: 2, hasReceived: false, creditWorth: 500 });
-                    expect(winnersAfterCreditWorth[player3PhoneNumber]).toEqual({ position: 3, hasReceived: false, creditWorth: 250 });
-
-                    //act
-                    await setPlayerPosition({
-                        playerId: player3.id,
-                        prevPage: 'prevPage',
-                        tournamentId,
-                    },getFormData({  position: 0 }));
-                    //assert
-                    const tournamentWinnersAfterRemoveOnePlayerPosition = await getTournamentWinners(tournamentId);
-                    expect(tournamentWinnersAfterRemoveOnePlayerPosition?.tournament_id).toEqual(tournamentId);
-                    expect(tournamentWinnersAfterRemoveOnePlayerPosition?.tournament_name).toEqual(tournament.name);
-                    const winnersAfterRemoveOnePlayerPosition = JSON.parse(tournamentWinnersAfterRemoveOnePlayerPosition?.winners || '{}');
-                    expect(winnersAfterRemoveOnePlayerPosition[player1PhoneNumber]).toEqual({ position: 1, hasReceived: false, creditWorth: 1000 });
-                    expect(winnersAfterRemoveOnePlayerPosition[player2PhoneNumber]).toEqual({ position: 2, hasReceived: false, creditWorth: 500 });
-                    expect(winnersAfterRemoveOnePlayerPosition[player3PhoneNumber]).toEqual(undefined);
-
-                    //arrange
-                    const stringDate = 'sunday 7';
-                    //act
-                    await givePlayerPrizeOrCredit(
-                        {
-                            stringDate: tournamentWinnersAfter.date,
-                            userId,
-                            playerId: player1.id,
-                            prevPage: '',
-                            tournamentId,
-                        },
-                        {} as State,
-                        getFormData({
-                            type: 'prize',
-                            credit: '',
-                            prize: 'air pods',
-                            prize_worth: '600',
-                            credit_worth: '',
-                            update_player_credit: 'on',
-                        }),
-                    );
-
-                    //act
-                    await resetTournamentPositions(tournamentId, tournamentWinnersAfter.date, 'prevPage');
-
-                    //assert
-                    const tournamentWinnersAfterReset = await getTournamentWinners(tournamentId);
-                    expect(tournamentWinnersAfterReset).toEqual(undefined);
-
-                    await removeOldRsvp();
-                },
-                TEST_TIMEOUT,
+            //act
+            await setPlayerPosition(
+              {
+                playerId: player3.id,
+                prevPage: 'prevPage',
+                tournamentId,
+              },
+              getFormData({ position: 3 }),
             );
-        });
+            await setPlayerPosition(
+              {
+                playerId: player2.id,
+                prevPage: 'prevPage',
+                tournamentId,
+              },
+              getFormData({ position: 2 }),
+            );
+            await setPlayerPosition(
+              {
+                playerId: player1.id,
+                prevPage: 'prevPage',
+                tournamentId,
+              },
+              getFormData({ position: 1 }),
+            );
+
+            //assert
+            const tournamentWinnersAfter =
+              await getTournamentWinners(tournamentId);
+            expect(tournamentWinnersAfter?.tournament_id).toEqual(tournamentId);
+            expect(tournamentWinnersAfter?.tournament_name).toEqual(
+              tournament.name,
+            );
+            const winners = JSON.parse(tournamentWinnersAfter?.winners || '{}');
+            expect(winners[player1PhoneNumber]).toEqual({
+              position: 1,
+              hasReceived: false,
+              creditWorth: -1,
+            });
+            expect(winners[player2PhoneNumber]).toEqual({
+              position: 2,
+              hasReceived: false,
+              creditWorth: -1,
+            });
+            expect(winners[player3PhoneNumber]).toEqual({
+              position: 3,
+              hasReceived: false,
+              creditWorth: -1,
+            });
+
+            //act
+            const res = await setPrizesCreditWorth(
+              {
+                date: tournamentWinnersAfter.date,
+                tournamentId: '123',
+                prevPage: 'prevPage',
+              },
+              {} as State,
+              getFormData({ '#1': 1000, '#2': 500, '#3': 250 }),
+            );
+            //assert
+            expect(res).toEqual({ message: 'איראה שגיאה' });
+            //act
+            await setPrizesCreditWorth(
+              {
+                date: tournamentWinnersAfter.date,
+                tournamentId,
+                prevPage: 'prevPage',
+              },
+              {} as State,
+              getFormData({ '#1': 1000, '#2': 500, '#3': 250 }),
+            );
+
+            //assert
+            const tournamentWinnersAfterCreditWorth =
+              await getTournamentWinners(tournamentId);
+            expect(tournamentWinnersAfterCreditWorth?.tournament_id).toEqual(
+              tournamentId,
+            );
+            expect(tournamentWinnersAfterCreditWorth?.tournament_name).toEqual(
+              tournament.name,
+            );
+            const winnersAfterCreditWorth = JSON.parse(
+              tournamentWinnersAfterCreditWorth?.winners || '{}',
+            );
+            expect(winnersAfterCreditWorth[player1PhoneNumber]).toEqual({
+              position: 1,
+              hasReceived: false,
+              creditWorth: 1000,
+            });
+            expect(winnersAfterCreditWorth[player2PhoneNumber]).toEqual({
+              position: 2,
+              hasReceived: false,
+              creditWorth: 500,
+            });
+            expect(winnersAfterCreditWorth[player3PhoneNumber]).toEqual({
+              position: 3,
+              hasReceived: false,
+              creditWorth: 250,
+            });
+
+            //act
+            await setPlayerPosition(
+              {
+                playerId: player3.id,
+                prevPage: 'prevPage',
+                tournamentId,
+              },
+              getFormData({ position: 0 }),
+            );
+            //assert
+            const tournamentWinnersAfterRemoveOnePlayerPosition =
+              await getTournamentWinners(tournamentId);
+            expect(
+              tournamentWinnersAfterRemoveOnePlayerPosition?.tournament_id,
+            ).toEqual(tournamentId);
+            expect(
+              tournamentWinnersAfterRemoveOnePlayerPosition?.tournament_name,
+            ).toEqual(tournament.name);
+            const winnersAfterRemoveOnePlayerPosition = JSON.parse(
+              tournamentWinnersAfterRemoveOnePlayerPosition?.winners || '{}',
+            );
+            expect(
+              winnersAfterRemoveOnePlayerPosition[player1PhoneNumber],
+            ).toEqual({ position: 1, hasReceived: false, creditWorth: 1000 });
+            expect(
+              winnersAfterRemoveOnePlayerPosition[player2PhoneNumber],
+            ).toEqual({ position: 2, hasReceived: false, creditWorth: 500 });
+            expect(
+              winnersAfterRemoveOnePlayerPosition[player3PhoneNumber],
+            ).toEqual(undefined);
+
+            //arrange
+            const stringDate = 'sunday 7';
+            //act
+            await givePlayerPrizeOrCredit(
+              {
+                stringDate: tournamentWinnersAfter.date,
+                userId,
+                playerId: player1.id,
+                prevPage: '',
+                tournamentId,
+              },
+              {} as State,
+              getFormData({
+                type: 'prize',
+                credit: '',
+                prize: 'air pods',
+                prize_worth: '600',
+                credit_worth: '',
+                update_player_credit: 'on',
+              }),
+            );
+
+            //act
+            await resetTournamentPositions(
+              tournamentId,
+              tournamentWinnersAfter.date,
+              'prevPage',
+            );
+
+            //assert
+            const tournamentWinnersAfterReset =
+              await getTournamentWinners(tournamentId);
+            expect(tournamentWinnersAfterReset).toEqual(undefined);
+
+            await removeOldRsvp();
+          },
+          TEST_TIMEOUT,
+        );
+      });
     });
   });
 });

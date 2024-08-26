@@ -372,9 +372,9 @@ async function fetchSortedPlayers(
         await sql<PlayerDB>`
         SELECT * FROM players WHERE name::text ILIKE ${`%${query}%`} OR phone_number::text ILIKE ${`%${query}%`} OR notes::text ILIKE ${`%${query}%`}`
       ).rows
+        .map((player) => getPlayerWithExtraData(player, phoneAndBalance))
         .sort((a, b) => b.balance - a.balance)
-        .slice(offset, offset + ITEMS_PER_PAGE)
-        .map((player) => getPlayerWithExtraData(player, phoneAndBalance));
+        .slice(offset, offset + ITEMS_PER_PAGE);
       break;
     case 'phone':
       results = (

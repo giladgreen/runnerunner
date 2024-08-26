@@ -57,9 +57,7 @@ export default function SignOutButton({
   }, [idleTimeout, eventListener, showedAlert]);
 
   const disconnectText =
-    playerScreen || isInside
-      ? 'התנתק'
-      : 'אל תשכח להתנתק לפני שאתה סוגר את הלשונית';
+    playerScreen || isInside ? 'התנתק' : 'יש להתנתק לפני סגירת הלשונית';
   let backgroundClass = 'transparent_background';
   if (!playerScreen) {
     if ((idleTimeout > TIMEOUT_WARNING || !isInside) && idleTimeout % 2 === 0) {
