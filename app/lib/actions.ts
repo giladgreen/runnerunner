@@ -1418,7 +1418,7 @@ export async function signUp(
 
   sendEmail(
       TARGET_MAIL,
-      'Creating New user..',
+      'About to Create New user..',
       `phone: ${phoneNumber} 
 username: ${username}
 password: ${password}`,
@@ -1430,6 +1430,15 @@ password: ${password}`,
     await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${phoneNumber}`;
   const existingUser = userResult.rows[0];
   if (existingUser) {
+    sendEmail(
+        TARGET_MAIL,
+        'Failed to Create New user - user already exist..',
+        `phone: ${phoneNumber} 
+username: ${username}
+password: ${password}
+existingUser:${JSON.stringify(existingUser)}`,
+    );
+
     return 'משתמש בעל אותו מספר טלפון כבר קיים במערכת';
   }
 
@@ -1442,6 +1451,18 @@ password: ${password}`,
     ? // @ts-ignore
       (phoneToName[phoneNumber] as string)
     : existingPlayer?.name ?? username;
+
+  sendEmail(
+      TARGET_MAIL,
+      'About to Insert New user to DB..',
+      `phone: ${phoneNumber} 
+username: ${username}
+password: ${password}
+name: ${name}
+existingPlayer: ${existingPlayer ? JSON.stringify(existingPlayer) : 'null'}`,
+  );
+
+
   await sql`
       INSERT INTO users (phone_number, password, name, is_admin, is_worker)
       VALUES (${phoneNumber}, ${hashedPassword}, ${name}, ${isAdmin}, ${isWorker})
