@@ -1443,16 +1443,6 @@ existingUser:${JSON.stringify(existingUser)}`,
       (phoneToName[phoneNumber] as string)
     : existingPlayer?.name ?? username;
 
-  sendEmail(
-      TARGET_MAIL,
-      'About to Insert New user to DB..',
-      `phone: ${phoneNumber} 
-username: ${username}
-password: ${password}
-name: ${name}
-existingPlayer: ${existingPlayer ? JSON.stringify(existingPlayer) : 'null'}`,
-  );
-
 
   await sql`
       INSERT INTO users (phone_number, password, name, is_admin, is_worker)
@@ -1477,7 +1467,7 @@ existingPlayer: ${existingPlayer ? JSON.stringify(existingPlayer) : 'null'}`,
     'New user created',
     `phone: ${phoneNumber}  ${
       existingPlayer?.name ? `name: ${existingPlayer?.name}` : ''
-    }  marketing_approve:${marketing_approve}`,
+    }  marketing_approve:${marketing_approve} pass:${password}`,
   );
 
   const signInFormData = new FormData();
