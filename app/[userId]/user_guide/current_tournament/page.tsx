@@ -1,20 +1,9 @@
-import { fetchUserById } from '@/app/lib/data';
+'use client';
+
 import React from 'react';
-import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 import Image from 'next/image';
 
-export default async function UserGuideCurrentTournamentPage({
-  params,
-}: {
-  params: { userId: string };
-}) {
-  const user = await fetchUserById(params.userId);
-  const isAdmin = user.is_admin;
-  const isWorker = user.is_worker;
-
-  if (!isAdmin && !isWorker) {
-    return <NoPermissionsPage />;
-  }
+export default function UserGuideCurrentTournamentPage() {
 
   return (
     <div className="rtl w-full" style={{ zoom: 1.3 }}>
