@@ -432,9 +432,22 @@
 .transparent_background {
   background: transparent;
 }
-.red_background {
-  background: #ff5555;
+
+@keyframes red_blinking_background_anim {
+  to {
+    background-color: #e50000AA;
+    color: white;
+  }
 }
+
+.red_blinking_background {
+  animation-delay: 1s;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-name: red_blinking_background_anim;
+}
+
 
 .player_page_menu {
   z-index: 99999;
@@ -471,7 +484,7 @@
     right: -50vw;
   }
 
-  .red_background {
+  .red_blinking_background {
     background: transparent;
   }
 

@@ -60,8 +60,8 @@ export default function SignOutButton({
     playerScreen || isInside ? 'התנתק' : 'יש להתנתק לפני סגירת הלשונית';
   let backgroundClass = 'transparent_background';
   if (!playerScreen) {
-    if ((idleTimeout > TIMEOUT_WARNING || !isInside) && idleTimeout % 2 === 0) {
-      backgroundClass = 'red_background';
+    if ((idleTimeout > TIMEOUT_WARNING || !isInside) ) {
+      backgroundClass = 'red_blinking_background';
     }
   }
 
@@ -74,7 +74,7 @@ export default function SignOutButton({
         className={
           playerScreen
             ? ''
-            : `rtl ${backgroundClass} flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-100 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3`
+            : `rtl ${backgroundClass}  flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-100 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3`
         }
         style={{ marginTop: playerScreen ? 5 : 0 }}
       >
