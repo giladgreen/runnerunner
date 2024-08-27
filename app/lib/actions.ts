@@ -32,8 +32,8 @@ import {
 const TARGET_MAIL = 'green.gilad+runner@gmail.com';
 let clearOldRsvpLastRun = getCurrentDate('2024-06-15T10:00:00.000Z').getTime();
 
-const ADMINS = ['0587869910', '0524803571', '0524803577', '0508874068'];
-const WORKERS = ['0526841902'];
+const ADMINS = ['0587869910', '0524803571', '0524803577', '0508874068','0509108188','0526218302','0524447990','0543138583','0547403396','0549170324'];
+const WORKERS = ['0526841902','0523457654','0528359470'];
 const MOCK_UUID = '5d4d2a2a-fe47-4a63-a4db-13eeebd83054';
 const POSITIONS = {
   1: 'ראשון',
@@ -1414,15 +1414,6 @@ export async function signUp(
 
   const password = formData.get('password') as string;
   const username = formData.get('name') as string;
-
-
-  sendEmail(
-      TARGET_MAIL,
-      'About to Create New user..',
-      `phone: ${phoneNumber} 
-username: ${username}
-password: ${password}`,
-  );
 
   const marketing_approve = formData.get('marketing_approve') as string;
 
