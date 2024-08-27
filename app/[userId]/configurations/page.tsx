@@ -1,6 +1,6 @@
 import {
   fetchAllBugs,
-  fetchAllPlayersForExport,
+  fetchAllPlayersForExport, fetchFeatureFlags,
   fetchUserById,
 } from '@/app/lib/data';
 import ImportPlayersButton from '@/app/ui/client/ImportPlayersButton';
@@ -129,7 +129,7 @@ export default async function ConfigurationPage({
   const ffEnabled = importEnabled;
   const bugs = await fetchAllBugs();
   const players = await fetchAllPlayersForExport();
-
+const { prizesEnabled } = await fetchFeatureFlags();
   //TODO::: fix export here..
   // const images = await fetchAllImagesForExport();
   // const tournaments = await fetchTournamentsByDay();
@@ -179,12 +179,12 @@ export default async function ConfigurationPage({
           oneLine
         />
 
-        <Card
+        { prizesEnabled && <Card
           title="הגדרות פרסים"
           value={<PrizesInfoLink userId={params.userId} />}
           type="prize"
           oneLine
-        />
+        />}
 
         <Card
           title=" ניהול טורנירים"
