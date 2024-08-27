@@ -16,7 +16,6 @@ import PlayersPrizesPage from '@/app/[userId]/prizes/PlayersPrizesPage';
 import NotFound from '@/app/[userId]/players/[playerId]/edit/NotFound';
 import React from 'react';
 import {
-  getPlayersPrizesContent,
   getPlayersPrizesContents,
 } from '@/app/ui/client/helpers';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
@@ -34,7 +33,7 @@ export default async function EditPlayerPage({
   }
 
   const playerId = params.playerId;
-  const { rsvpEnabled } = await fetchFeatureFlags();
+  const { rsvpEnabled, prizesEnabled } = await fetchFeatureFlags();
   const tournaments = await fetchTournaments();
   const player = await fetchPlayerById(playerId, true);
   const prizesInformation = await fetchPrizesInfo();
@@ -109,12 +108,12 @@ export default async function EditPlayerPage({
 
         <TournamentsHistoryTable player={player} />
 
-        <div style={{ marginTop: 50 }}>
+        {prizesEnabled && <div style={{ marginTop: 50 }}>
           <PlayersPrizesPage
             playerPrizes={playerPrizes}
             prizesContents={prizesContents}
           />
-        </div>
+        </div>}
       </div>
     </main>
   );

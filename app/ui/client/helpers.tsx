@@ -21,6 +21,7 @@ import SetPrizeAsNotReadyToBeDelivered from '@/app/ui/client/SetPrizeAsNotReadyT
 import ResetPlayersPositionsButton from '@/app/ui/client/ResetPlayersPositionsButton';
 
 export async function getFinalTablePlayersContent(
+  prizesEnabled:boolean,
   date: string,
   tournamentId: string,
   isTournamentsDataPage: boolean,
@@ -67,6 +68,7 @@ export async function getFinalTablePlayersContent(
                 userId={userId}
                 tournamentId={tournamentId}
                 prizesInformation={prizesInformation}
+                prizesEnabled={prizesEnabled}
               />
               <div className={textClass} style={{ margin: '0 2px 0 4px' }}>
                 #{finalTablePlayer.position}

@@ -721,7 +721,7 @@ describe('actions', () => {
             // assert
             expect(resultObject).toEqual({
               errors: {
-                name: ['missing name'],
+                name: ['חסר שם'],
               },
             });
           },
@@ -780,7 +780,7 @@ describe('actions', () => {
             // assert
             expect(resultObject).toEqual({
               errors: {
-                phone_number: ['missing phone'],
+                phone_number: ['חסר מספר טלפון'],
               },
             });
           },
@@ -810,7 +810,7 @@ describe('actions', () => {
             // assert
             expect(resultObject).toEqual({
               errors: {
-                balance: ['illegal credit'],
+                balance: ['קרדיט לא חוקי'],
               },
             });
           },

@@ -44,15 +44,14 @@ export const Nevigationlinks = (userId: string) => [
     admin: true,
     worker: true,
   },
-
   {
     name: 'פרסים',
     href: `/${userId}/prizes`,
     icon: GiftIcon,
     admin: true,
     worker: true,
+    prizesLink: true,
   },
-
   {
     name: 'מדריך למשתמש',
     href: `/${userId}/user_guide`,
@@ -91,10 +90,11 @@ export const Nevigationlinks = (userId: string) => [
     href: `/${userId}/player-prizes`,
     icon: GiftIcon,
     player: true,
+    prizesLink: true,
   },
 ];
 
-export default function NavLinks({ user }: { user: UserDB }) {
+export default function NavLinks({ user, prizesEnabled }: { user: UserDB, prizesEnabled: boolean }) {
   const pathname = usePathname();
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
@@ -104,10 +104,12 @@ export default function NavLinks({ user }: { user: UserDB }) {
       {Nevigationlinks(user.id)
         .filter(
           (link) =>
+            (!link.prizesLink || prizesEnabled) && (
             (isAdmin && link.admin) ||
             (isWorker && link.worker) ||
-            (isPlayer && link.player),
+            (isPlayer && link.player)),
         )
+        .filter(Boolean)
         .map((link) => {
           const LinkIcon = link.icon;
           return (

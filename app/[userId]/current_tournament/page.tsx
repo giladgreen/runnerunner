@@ -35,7 +35,7 @@ export default async function CurrentTournament({
 
   const prizesInformation = await fetchPrizesInfo();
 
-  const { rsvpEnabled } = await fetchFeatureFlags();
+  const { rsvpEnabled, prizesEnabled } = await fetchFeatureFlags();
   const dayOfTheWeek = getDayOfTheWeek();
 
   const { todayTournaments } = await fetchRSVPAndArrivalData(dayOfTheWeek);
@@ -67,7 +67,7 @@ export default async function CurrentTournament({
   const finalTablePlayersContents: Array<JSX.Element | null> =
     await Promise.all(
       todayTournaments.map((t) =>
-        getFinalTablePlayersContent(date, t.id, false, params.userId),
+        getFinalTablePlayersContent(prizesEnabled, date, t.id, false, params.userId),
       ),
     );
 
@@ -100,6 +100,7 @@ export default async function CurrentTournament({
   return (
     <CurrentTournamentPage
       prizesContents={prizesContents}
+      prizesEnabled={prizesEnabled}
       rsvpEnabled={rsvpEnabled}
       prizesInformation={prizesInformation}
       allPlayers={allPlayers}

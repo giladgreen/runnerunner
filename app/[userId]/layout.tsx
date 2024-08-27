@@ -56,7 +56,7 @@ export default async function Layout({
     );
   }
 
-  const { rsvpEnabled, playerRsvpEnabled } = await fetchFeatureFlags();
+  const { rsvpEnabled, playerRsvpEnabled, prizesEnabled } = await fetchFeatureFlags();
   const showRsvp = rsvpEnabled && playerRsvpEnabled;
 
   return (
@@ -66,6 +66,7 @@ export default async function Layout({
         <img src="/runner-white-logo.png" width={50} height={50} alt="runner" />
         <PlayerPageMenu
           showRsvp={showRsvp}
+          prizesEnabled={prizesEnabled}
           userId={params.userId}
           signout={async () => {
             'use server';

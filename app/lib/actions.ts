@@ -407,21 +407,21 @@ export async function createPlayer(
   if (!name || name.trim().length < 1) {
     return {
       errors: {
-        name: ['missing name'],
+        name: ['חסר שם'],
       },
     };
   }
   if (!phoneNumber || phoneNumber.trim().length < 3) {
     return {
       errors: {
-        phone_number: ['missing phone'],
+        phone_number: ['חסר מספר טלפון'],
       },
     };
   }
   if (isNaN(Number(balance))) {
     return {
       errors: {
-        balance: ['illegal credit'],
+        balance: ['קרדיט לא חוקי'],
       },
     };
   }

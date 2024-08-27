@@ -873,6 +873,9 @@ export async function fetchFeatureFlags() {
   try {
     const flagsResult = await getAllFlags();
 
+    const prizesEnabled = Boolean(
+      flagsResult.find((flag) => flag.flag_name === 'prizes')?.is_open,
+    );
     const rsvpEnabled = Boolean(
       flagsResult.find((flag) => flag.flag_name === 'rsvp')?.is_open,
     );
@@ -888,6 +891,7 @@ export async function fetchFeatureFlags() {
     );
     methodEnd('fetchFeatureFlags');
     return {
+      prizesEnabled,
       rsvpEnabled,
       playerRsvpEnabled,
       usePhoneValidation,

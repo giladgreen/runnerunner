@@ -390,6 +390,7 @@ async function seedFF(client) {
     const flags = (await client.sql`SELECT * FROM feature_flags `).rows;
     const flagsToInsert = [
       { flag_name: 'rsvp', is_open: true },
+      { flag_name: 'prizes', is_open: true },
       { flag_name: 'player_can_rsvp', is_open: true },
       { flag_name: 'use_phone_validation', is_open: true },
     ];

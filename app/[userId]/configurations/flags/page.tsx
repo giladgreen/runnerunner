@@ -7,7 +7,7 @@ export default async function FlagsPage({
 }: {
   params: { userId: string };
 }) {
-  const { rsvpEnabled, playerRsvpEnabled, usePhoneValidation } =
+  const { rsvpEnabled, playerRsvpEnabled, usePhoneValidation, prizesEnabled } =
     await fetchFeatureFlags();
   const user = await fetchUserById(params.userId);
   const isAdmin = user.is_admin;
@@ -50,6 +50,21 @@ export default async function FlagsPage({
                 <UpdateFeatureFlag
                   featureName={'use_phone_validation'}
                   currentValue={Boolean(usePhoneValidation)}
+                  userId={params.userId}
+                />
+              </td>
+            </tr>
+            <tr
+              key={'prizesEnabled'}
+              className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+            >
+              <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                <b>Prizes</b>
+              </td>
+              <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3">
+                <UpdateFeatureFlag
+                  featureName={'prizes'}
+                  currentValue={Boolean(prizesEnabled)}
                   userId={params.userId}
                 />
               </td>

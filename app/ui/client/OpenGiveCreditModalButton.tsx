@@ -21,7 +21,9 @@ function SetGivePrizeForm({
   userId,
   prizesInformation,
   tournamentId,
+  prizesEnabled
 }: {
+  prizesEnabled: boolean;
   stringDate?: string;
   player: PlayerDB;
   hide?: () => void;
@@ -91,12 +93,17 @@ function SetGivePrizeForm({
   return (
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
-        <label
+        { prizesEnabled ? <label
           className="mb-2 block text-sm font-medium"
           style={{ textAlign: 'right' }}
         >
           תן פרס/קרדיט לשחקן
-        </label>
+        </label> : <label
+            className="mb-2 block text-sm font-medium"
+            style={{ textAlign: 'right' }}
+        >
+          תן קרדיט לשחקן
+        </label>}
 
         <div className="form-inner-control rounded-md p-4 md:p-6">
           <div className="relative mt-2 rounded-md">
@@ -122,7 +129,7 @@ function SetGivePrizeForm({
                     <b>קרדיט</b>
                   </label>
                 </div>
-                <div
+                {prizesEnabled && <div
                   className="align-items-center flex"
                   style={{ marginLeft: 40 }}
                 >
@@ -140,7 +147,7 @@ function SetGivePrizeForm({
                   >
                     <b>פרס</b>
                   </label>
-                </div>
+                </div>}
               </div>
             </div>
           </div>
@@ -272,9 +279,11 @@ export default function OpenGiveCreditModalButton({
   userId,
   prizesInformation,
   tournamentId,
+  prizesEnabled
 }: {
   player: PlayerDB;
   hasReceived: boolean;
+  prizesEnabled: boolean;
   stringDate?: string;
   userId?: string;
   tournamentId: string | null;
@@ -303,6 +312,7 @@ export default function OpenGiveCreditModalButton({
       {!hasReceived && (
         <div className={show ? 'edit-player-modal' : 'hidden'}>
           <SetGivePrizeForm
+              prizesEnabled={prizesEnabled}
             player={player}
             hide={close}
             prevPage={prevPage}

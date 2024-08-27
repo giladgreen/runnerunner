@@ -73,9 +73,11 @@ export default function TodayPlayersTable({
   tournaments,
   prizesInformation,
   tournamentId,
+  prizesEnabled
 }: {
   allPlayers: PlayerDB[];
   userId: string;
+  prizesEnabled: boolean;
   rsvpEnabled: boolean;
   isRsvpRequired: boolean;
   rsvpPlayersCount: number;
@@ -224,11 +226,11 @@ export default function TodayPlayersTable({
                           tournamentId={tournamentId}
                         />
 
-                        <OpenPrizeModalButton
+                        { prizesEnabled && <OpenPrizeModalButton
                           player={player}
                           prizesInformation={prizesInformation}
                           tournamentId={tournamentId}
-                        />
+                        /> }
                       </div>
                     </div>
 
@@ -415,11 +417,11 @@ export default function TodayPlayersTable({
                             tournamentId={tournamentId}
                           />
 
-                          <OpenPrizeModalButton
+                          { prizesEnabled && <OpenPrizeModalButton
                             player={player}
                             prizesInformation={prizesInformation}
                             tournamentId={tournamentId}
-                          />
+                          />}
                         </div>
                       </td>
                     </tr>

@@ -3,9 +3,10 @@ import NavLinks from '@/app/ui/client/NavLinks';
 
 import { signOut } from '@/auth';
 import SignOutButton from '@/app/ui/client/SignOutButton';
-import { fetchUserById } from '@/app/lib/data';
+import {fetchFeatureFlags, fetchUserById} from '@/app/lib/data';
 
 export default async function SideNav({ userId }: { userId: string }) {
+  const { prizesEnabled} = await fetchFeatureFlags();
   const user = await fetchUserById(userId);
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
@@ -43,7 +44,7 @@ export default async function SideNav({ userId }: { userId: string }) {
         <b> {user.name ?? user.phone_number}</b>
       </div>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
-        <NavLinks user={user} />
+        <NavLinks user={user} prizesEnabled={prizesEnabled} />
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
         <div
           className="cellular"

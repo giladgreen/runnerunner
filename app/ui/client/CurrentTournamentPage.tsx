@@ -17,9 +17,11 @@ export default function CurrentTournamentPage({
   allPlayers,
   prizesInformation,
   rsvpEnabled,
+  prizesEnabled,
   prizesContents,
 }: {
   rsvpEnabled: boolean;
+  prizesEnabled: boolean;
   todayTournaments: TournamentDB[];
   params: { userId: string };
   finalTablePlayersContents: Array<JSX.Element | null>;
@@ -50,12 +52,12 @@ export default function CurrentTournamentPage({
           />
         </div>
 
-        <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+          {prizesEnabled && <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
           <PlayersPrizes
             title="פרסים"
             prizesContent={prizesContents[0] as JSX.Element}
           />
-        </div>
+        </div>}
 
         <TodayPlayersTable
           prizesInformation={prizesInformation}
@@ -65,6 +67,7 @@ export default function CurrentTournamentPage({
           allPlayers={allPlayers}
           userId={params.userId}
           rsvpEnabled={rsvpEnabled}
+          prizesEnabled={prizesEnabled}
           tournamentId={todayTournament.id}
         />
       </div>
@@ -115,12 +118,12 @@ export default function CurrentTournamentPage({
                   />
                 </div>
 
-                <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+                  {prizesEnabled && <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                   <PlayersPrizes
                     title="פרסים"
                     prizesContent={prizesContents[index] as JSX.Element}
                   />
-                </div>
+                </div>}
 
                 <TodayPlayersTable
                   prizesInformation={prizesInformation}
@@ -130,6 +133,7 @@ export default function CurrentTournamentPage({
                   allPlayers={allPlayers}
                   userId={params.userId}
                   rsvpEnabled={rsvpEnabled}
+                  prizesEnabled={prizesEnabled}
                   tournamentId={todayTournament.id}
                 />
               </div>

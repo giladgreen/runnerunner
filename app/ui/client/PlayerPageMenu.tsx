@@ -13,10 +13,12 @@ export default function PlayerPageMenu({
   signout,
   userId,
   showRsvp,
+  prizesEnabled,
 }: {
   userId: string;
   signout: () => void;
   showRsvp: boolean;
+  prizesEnabled: boolean;
 }) {
   const [showMenu, setShowMenu] = useState(false);
   const pathname = usePathname();
@@ -48,7 +50,7 @@ export default function PlayerPageMenu({
         </div>
         <div className="player_page_menu_body">
           {Nevigationlinks(userId)
-            .filter((link) => link.player)
+            .filter((link) => link.player && (!link.prizesLink || prizesEnabled))
             .filter((link) => showRsvp || !link.isRsvp)
             .map((link) => {
               const LinkIcon = link.icon;
