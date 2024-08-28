@@ -750,7 +750,7 @@ describe('actions', () => {
             // assert
             expect(resultObject).toEqual({
               errors: {
-                name: ['missing name'],
+                name: ['חסר שם'],
               },
             });
           },
