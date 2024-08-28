@@ -1,0 +1,25 @@
+name: Run Tests
+
+on:
+  deployment_status:
+jobs:
+  run-tests:
+    if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test
+        env:
+          BASE_URL: ${{ github.event.deployment_status.environment_url }}
+          LOCAL: true
+          POSTGRES_URL:"postgres://default:gU9uDTSOLw8e@ep-restless-violet-a2nk8a48-pooler.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require"
+          POSTGRES_PRISMA_URL:"postgres://default:gU9uDTSOLw8e@ep-restless-violet-a2nk8a48-pooler.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=15"
+          POSTGRES_URL_NO_SSL:"postgres://default:gU9uDTSOLw8e@ep-restless-violet-a2nk8a48-pooler.eu-central-1.aws.neon.tech:5432/verceldb"
+          POSTGRES_URL_NON_POOLING:"postgres://default:gU9uDTSOLw8e@ep-restless-violet-a2nk8a48.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require"
+          POSTGRES_USER:"default"
+          POSTGRES_HOST:"ep-restless-violet-a2nk8a48-pooler.eu-central-1.aws.neon.tech"
+          POSTGRES_PASSWORD:"gU9uDTSOLw8e"
+          POSTGRES_DATABASE:"verceldb"
