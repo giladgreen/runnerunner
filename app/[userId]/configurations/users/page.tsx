@@ -111,7 +111,7 @@ export default async function UsersPage({
                   className="thin-column whitespace-nowrap py-3 pl-6 pr-3"
                   style={{ textAlign: 'right' }}
                 >
-                  {user.phone_number}
+                  {user.phone_number === 'alice' ? 'חסוי' :user.phone_number}
                 </td>
                 <td
                   className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3"
