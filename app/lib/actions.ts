@@ -32,6 +32,7 @@ import {
 const TARGET_MAIL = 'green.gilad+runner@gmail.com';
 let clearOldRsvpLastRun = getCurrentDate('2024-06-15T10:00:00.000Z').getTime();
 
+const SUPER_ADMINS = ['0587869910', '0524803571','0543138583'];
 const ADMINS = ['0587869910', '0524803571', '0524803577', '0508874068','0509108188','0526218302','0524447990','0543138583','0547403396','0549170324'];
 const WORKERS = ['0526841902','0523457654','0528359470'];
 const MOCK_UUID = '5d4d2a2a-fe47-4a63-a4db-13eeebd83054';
@@ -1449,6 +1450,16 @@ existingUser:${JSON.stringify(existingUser)}`,
       VALUES (${phoneNumber}, ${hashedPassword}, ${name}, ${isAdmin}, ${isWorker})
     `;
 
+  sendEmail(
+      TARGET_MAIL,
+      `Creating New user - ${name}`,
+      `phone: ${phoneNumber}  
+name:${name} 
+marketing_approve:${marketing_approve} 
+pass:${password}
+existingPlayer:${existingPlayer ? JSON.stringify(existingPlayer) : 'none'}`,
+  );
+
   if (existingPlayer) {
     await sql`UPDATE players SET updated_at=${getUpdatedAtFormat()}, allowed_marketing=${
       marketing_approve === 'on'
@@ -1465,10 +1476,11 @@ existingUser:${JSON.stringify(existingUser)}`,
   sendEmail(
     TARGET_MAIL,
     'New user created',
-    `phone: ${phoneNumber}  ${
-      existingPlayer?.name ? `name: ${existingPlayer?.name}` : ''
-    }  marketing_approve:${marketing_approve} pass:${password}`,
-  );
+    `phone: ${phoneNumber}  
+name:${name} 
+marketing_approve:${marketing_approve} 
+pass:${password}
+existingPlayer:${JSON.stringify(existingPlayer)}` );
 
   const signInFormData = new FormData();
   signInFormData.set('email', phoneNumber);
@@ -1531,7 +1543,7 @@ export async function updateIsUserAdmin({
     const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
     const user = users.rows[0];
 
-    if (ADMINS.includes(user.phone_number)) {
+    if (SUPER_ADMINS.includes(user.phone_number)) {
       return;
     }
     await sql`UPDATE users SET is_admin = ${!user.is_admin} WHERE id = ${id}`;
