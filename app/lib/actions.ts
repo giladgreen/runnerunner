@@ -1377,7 +1377,11 @@ export async function authenticate(
     let phoneNumber = ((formData.get('email') as string) ?? '')
       .trim()
       .replaceAll('-', '');
-    phoneNumber = `${phoneNumber.startsWith('0') ? '' : '0'}${phoneNumber}`;
+
+    if (!isNaN(Number(phoneNumber))){
+      phoneNumber = `${phoneNumber.startsWith('0') ? '' : '0'}${phoneNumber}`;
+    }
+
     formData.set('email', phoneNumber);
     await signIn('credentials', formData);
   } catch (error) {
