@@ -28,7 +28,7 @@ export default async function GeneralPlayersCardWrapper() {
         />
 
         <Card
-          title="חוב ראננר לשחקנים"
+          title="חוב ראנר לשחקנים"
           value={formatCurrency(totalRunnerDebt)}
           type="money"
           oneLine
