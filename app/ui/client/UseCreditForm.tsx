@@ -136,8 +136,8 @@ export default function UseCreditForm({
                   id="change"
                   name="change"
                   type="number"
-                  step="10"
-                  min={0}
+                  step="1"
+                  min={1}
                   placeholder="סכום"
                   className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                   aria-describedby="change-error"
