@@ -1509,6 +1509,7 @@ export async function updateNewPlayerName(
 ) {
   noStore();
   const name = formData.get('name') as string;
+
   try {
     const player = (await sql`SELECT * FROM players WHERE id = ${playerId}`)
       .rows[0];
@@ -1532,9 +1533,16 @@ export async function updateFFValue( //TODO: only admin can call the APIS?..
   newValue: boolean,
   prevPage: string,
 ) {
+
   noStore();
   try {
-    await sql`UPDATE feature_flags SET is_open = ${newValue} WHERE flag_name = ${name}`;
+    const existingFlag = (await sql`SELECT * FROM feature_flags WHERE flag_name = ${name}`).rows[0];
+    if (!existingFlag) {
+      await sql`INSERT INTO feature_flags (flag_name, is_open) VALUES (${name}, ${newValue})`;
+    } else {
+      await sql`UPDATE feature_flags SET is_open = ${newValue} WHERE flag_name = ${name}`;
+    }
+
   } catch (error) {
     console.error('Database updateFFValue Error:', error);
     return false;

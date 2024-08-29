@@ -166,9 +166,22 @@
   height: 80px;
 }
 
-.pe_signin_button > button {
-  border: 2px solid red;
+.div > pe_signin_button {
+  width: 100%;
 }
+.pe_signin_button {
+  margin-right:20px;
+  margin-left: 30px;
+}
+
+.pe_signin_button > button {
+  width: 100%;
+  /*zoom: 1.3;*/
+}
+.pe_signin_button > button > span {
+    margin-right: 6px;
+}
+
 
 .confirmation-modal-wrapper {
   background: rgba(0, 0, 0, 0.75);
