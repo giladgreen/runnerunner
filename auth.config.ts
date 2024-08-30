@@ -14,7 +14,6 @@ export const authConfig = {
       let isAdmin: boolean = false;
       let isWorker: boolean = false;
       let userUUID: string | undefined = undefined;
-
       if (isLoggedIn) {
         const usersResult =
           await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${
@@ -26,8 +25,7 @@ export const authConfig = {
         //  console.log('## userFromDB', userFromDB)
         userUUID = userFromDB?.id;
       }
-      // console.log('## loggedInUser', loggedInUser)
-      // console.log('## nextUrl.pathname', nextUrl.pathname)
+
 
       if (isLoggedIn && !nextUrl.pathname.includes(userUUID!)) {
         return Response.redirect(
@@ -36,6 +34,10 @@ export const authConfig = {
             nextUrl,
           ),
         );
+      }
+
+      if (!isLoggedIn && nextUrl.pathname.length > 40) {
+          return false;
       }
 
       return true;
