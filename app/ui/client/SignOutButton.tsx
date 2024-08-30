@@ -3,7 +3,7 @@ import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
 import React, { useCallback, useEffect, useState } from 'react';
 import AreYouSure from '@/app/ui/client/AreYouSure';
 
-const TIMEOUT = 15 * 60;
+const TIMEOUT = 30 * 60;
 const TIMEOUT_WARNING = TIMEOUT - 60;
 
 export default function SignOutButton({
