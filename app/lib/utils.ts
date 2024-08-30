@@ -79,6 +79,10 @@ export function phoneNumberComparator(a: UserDB, b: UserDB) {
   return a.phone_number < b.phone_number ? -1 : 1;
 }
 
+export function usernameComparator(a: UserDB, b: UserDB) {
+  return (a.name && b.name) ?  (a.name < b.name ? -1 : 1) : phoneNumberComparator(a,b);
+}
+
 export function nameComparator(a: PlayerDB, b: PlayerDB) {
   return a.name < b.name ? -1 : 1;
 }

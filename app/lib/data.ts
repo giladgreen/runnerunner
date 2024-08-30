@@ -18,7 +18,7 @@ import {
 import {
   sumArrayByProp,
   positionComparator,
-  phoneNumberComparator, nameComparator,
+  phoneNumberComparator, nameComparator, usernameComparator,
 } from './utils';
 import { redirect } from 'next/navigation';
 import {
@@ -801,7 +801,7 @@ export async function fetchAllUsers() {
       }
     });
 
-    const result = users.sort(nameComparator);
+    const result = users.sort(usernameComparator);
     methodEnd('fetchAllUsers');
     return result;
   } catch (error) {
