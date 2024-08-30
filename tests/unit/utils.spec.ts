@@ -7,6 +7,7 @@ import {
   nameComparator,
   sumArrayByProp,
   dateComparator,
+  usernameComparator,
   formatCurrencyColor,
 } from '../../app/lib/utils';
 import { PlayerDB, UserDB } from '../..//app/lib/definitions';
@@ -264,6 +265,53 @@ describe('test utils', () => {
     });
   });
 
+  describe('usernameComparator', () => {
+    describe('when given 2 players', () => {
+      it('should return correct position order ', async () => {
+        const userA = {
+          name: 'a',
+        } as UserDB;
+        const userB = {
+          name: 'b',
+        } as UserDB;
+        const result = usernameComparator(userA, userB);
+        expect(result).toEqual(-1);
+      });
+      it('should return correct position order ', async () => {
+        const userA = {
+          name: 'b',
+        } as UserDB;
+        const userB = {
+          name: 'a',
+        } as UserDB;
+        const result = usernameComparator(userA, userB);
+        expect(result).toEqual(1);
+      });
+      it('should return correct position order ', async () => {
+        const userA = {
+          name: 'b',
+        } as UserDB;
+        const userB = {
+          name: 'b',
+        } as UserDB;
+        const result = usernameComparator(userA, userB);
+        expect(result).toEqual(1);
+      });
+      it('should return correct position order ', async () => {
+        const userA = {
+          name: '',
+          phone_number:'b'
+        } as UserDB;
+        const userB = {
+          name: 'b',
+          phone_number:'a'
+        } as UserDB;
+        const result = usernameComparator(userA, userB);
+        expect(result).toEqual(1);
+      });
+    });
+  });
+
   describe('phoneNumberComparator', () => {
     describe('when given 2 users', () => {
       it('should return correct phone number order ', async () => {
@@ -377,6 +425,7 @@ describe('test utils', () => {
       });
     });
   });
+
   describe('formatCurrencyColor', () => {
     describe('when given a balance value', () => {
       it('should return correct color', async () => {
