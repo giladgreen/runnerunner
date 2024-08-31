@@ -1038,6 +1038,15 @@ export async function fetchUserById(id: string) {
   noStore();
   try {
     const result = await getUserById(id);
+
+    result.is_player = false;
+    if (result) {
+      const player = (await sql<PlayerDB>`SELECT * FROM players WHERE phone_number=${result.phone_number}`).rows[0]
+
+      if (player) {
+        result.is_player = true;
+      }
+    }
     methodEnd('fetchUserById');
     return result;
   } catch (error) {

@@ -9,6 +9,7 @@ export type UserDB = {
   name?: string;
   is_admin: boolean;
   is_worker: boolean;
+  is_player: boolean;
   created_at: string;
 };
 

@@ -24,6 +24,12 @@ export const Nevigationlinks = (userId: string) => [
     admin: true,
   },
   {
+    name: 'פרטי השחקן שלי',
+    href: `/${userId}/player_data`,
+    icon: InformationCircleIcon,
+    adminPlayer: true,
+  },
+  {
     name: 'טורניר נוכחי',
     href: `/${userId}/current_tournament`,
     icon: PuzzlePieceIcon,
@@ -74,20 +80,20 @@ export const Nevigationlinks = (userId: string) => [
   },
   {
     name: 'רישום',
-    href: `/${userId}/player-registration`,
+    href: `/${userId}/player_registration`,
     icon: PuzzlePieceIcon,
     player: true,
     isRsvp: true,
   },
   {
     name: 'הסטורית קרדיט',
-    href: `/${userId}/player-credit-history`,
+    href: `/${userId}/player_credit_history`,
     icon: BanknotesIcon,
     player: true,
   },
   {
     name: ' פרסים',
-    href: `/${userId}/player-prizes`,
+    href: `/${userId}/player_prizes`,
     icon: GiftIcon,
     player: true,
     prizesLink: true,
@@ -98,7 +104,9 @@ export default function NavLinks({ user, prizesEnabled }: { user: UserDB, prizes
   const pathname = usePathname();
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
-  const isPlayer = !isAdmin && !isWorker;
+  const isPlayer = !isAdmin && !isWorker && user.is_player;
+  const isAdminPlayer = (isAdmin || isWorker) && user.is_player;
+
   return (
     <>
       {Nevigationlinks(user.id)
@@ -107,6 +115,7 @@ export default function NavLinks({ user, prizesEnabled }: { user: UserDB, prizes
             (!link.prizesLink || prizesEnabled) && (
             (isAdmin && link.admin) ||
             (isWorker && link.worker) ||
+            (isAdminPlayer && link.adminPlayer) ||
             (isPlayer && link.player)),
         )
         .filter(Boolean)

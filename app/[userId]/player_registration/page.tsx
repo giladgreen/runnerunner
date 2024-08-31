@@ -12,9 +12,11 @@ import { rsvpPlayerForDay } from '@/app/lib/actions';
 import NoPlayerPage from '@/app/ui/client/NoPlayerPage';
 
 export default async function PlayerRegistrationPage({
+  isAdminPlayer,
   params,
 }: {
-  params: { userId: string };
+  isAdminPlayer?: boolean
+  params: { userId: string,  };
 }) {
   const player = await fetchPlayerByUserId(params.userId);
   if (!player) {
@@ -45,7 +47,7 @@ export default async function PlayerRegistrationPage({
       todayDate,
       todayTournamentId,
       !isRegisterForTodayTournament,
-      `/${params.userId}/player-registration`,
+      `/${params.userId}/${isAdminPlayer ? 'player_data' :'player_registration'}`,
     );
   };
   return (
