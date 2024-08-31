@@ -14,6 +14,7 @@ export default async function Layout({
   const user = await fetchUserById(params.userId);
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
+  const isAdminPlayer = (isAdmin || isWorker) && user.is_player;
   if (isAdmin || isWorker) {
     return (
       <div>
@@ -44,6 +45,7 @@ export default async function Layout({
               userId={params.userId}
               isAdmin={isAdmin}
               isWorker={isWorker}
+              isAdminPlayer={isAdminPlayer}
               signout={async () => {
                 'use server';
 

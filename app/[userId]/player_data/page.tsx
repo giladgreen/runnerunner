@@ -7,7 +7,7 @@ import PlayerRegistrationPage from "@/app/[userId]/player_registration/page";
 import PlayerCreditHistoryPage from "@/app/[userId]/player_credit_history/page";
 import PlayerPrizesPage from "@/app/[userId]/player_prizes/page";
 
-export default async function PlayerPage({
+export default async function PlayerDataPage({
   params,
 }: {
   params: { userId: string };
@@ -23,7 +23,7 @@ export default async function PlayerPage({
               <PlayerPagePlayerDetails player={player}/>
           </div>
           <div className="rtl" style={{marginTop: 20}}>
-              <PlayerRegistrationPage params={params} isAdminPlayer/>
+              <PlayerRegistrationPage params={{ ...params, isAdminPlayer: true}} />
           </div>
           <div className="rtl" style={{marginTop: 20}}>
               <PlayerCreditHistoryPage params={params}/>
