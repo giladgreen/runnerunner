@@ -7,7 +7,7 @@ import {
   nameComparator,
   sumArrayByProp,
   dateComparator,
-  usernameComparator,
+  usersComparator,
   formatCurrencyColor,
 } from '../../app/lib/utils';
 import { PlayerDB, UserDB } from '../..//app/lib/definitions';
@@ -265,7 +265,7 @@ describe('test utils', () => {
     });
   });
 
-  describe('usernameComparator', () => {
+  describe('usersComparator', () => {
     describe('when given 2 players', () => {
       it('should return correct position order ', async () => {
         const userA = {
@@ -274,7 +274,7 @@ describe('test utils', () => {
         const userB = {
           name: 'b',
         } as UserDB;
-        const result = usernameComparator(userA, userB);
+        const result = usersComparator(userA, userB);
         expect(result).toEqual(-1);
       });
       it('should return correct position order ', async () => {
@@ -284,7 +284,7 @@ describe('test utils', () => {
         const userB = {
           name: 'a',
         } as UserDB;
-        const result = usernameComparator(userA, userB);
+        const result = usersComparator(userA, userB);
         expect(result).toEqual(1);
       });
       it('should return correct position order ', async () => {
@@ -294,7 +294,7 @@ describe('test utils', () => {
         const userB = {
           name: 'b',
         } as UserDB;
-        const result = usernameComparator(userA, userB);
+        const result = usersComparator(userA, userB);
         expect(result).toEqual(1);
       });
       it('should return correct position order ', async () => {
@@ -306,7 +306,7 @@ describe('test utils', () => {
           name: 'b',
           phone_number:'a'
         } as UserDB;
-        const result = usernameComparator(userA, userB);
+        const result = usersComparator(userA, userB);
         expect(result).toEqual(1);
       });
     });
