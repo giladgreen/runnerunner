@@ -1426,25 +1426,27 @@ export async function signUp(
     await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${phoneNumber}`;
   const existingUser = userResult.rows[0];
   if (existingUser) {
+    await sql<UserDB>`delete FROM users WHERE id = ${existingUser.id}`;
     sendEmail(
         TARGET_MAIL,
-        'Failed to Create New user - user already exist..',
+        'Recreating user - user already exist..',
         `phone: ${phoneNumber} 
 username: ${username}
-password: ${password}
+new password: ${password}
 existingUser:${JSON.stringify(existingUser)}`,
     );
 
-    return 'משתמש בעל אותו מספר טלפון כבר קיים במערכת';
-  }
-  sendEmail(
-      TARGET_MAIL,
-      `About to Create New user - ${username}`,
-      `phone: ${phoneNumber}  
+  }else{
+    sendEmail(
+        TARGET_MAIL,
+        `About to Create New user - ${username}`,
+        `phone: ${phoneNumber}  
 name:${username} 
 marketing_approve:${marketing_approve} 
 pass:${password}`,
-  );
+    );
+
+  }
 
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -1478,12 +1480,14 @@ existingPlayer:${existingPlayer ? JSON.stringify(existingPlayer) : 'none'}`,
       marketing_approve === 'on'
     } WHERE phone_number = ${phoneNumber}`;
   } else {
-    await sql`
+    if (!existingUser){
+      await sql`
       INSERT INTO players (name, phone_number, allowed_marketing)
       VALUES (${name},${phoneNumber}, ${marketing_approve === 'on'})
     `;
 
-    await sql`INSERT INTO history (phone_number, change, note, type, archive) VALUES (${phoneNumber},0, 'אתחול','credit', true)`;
+      await sql`INSERT INTO history (phone_number, change, note, type, archive) VALUES (${phoneNumber},0, 'אתחול','credit', true)`;
+    }
   }
 
   sendEmail(
