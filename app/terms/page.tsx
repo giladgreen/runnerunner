@@ -4,8 +4,8 @@ export default async function TermsPage() {
   return (<div className="terms-of-service">
               <h1 className="header-h1">Terms of Service</h1>
               <h2 className="header-h2"><u>Introduction</u></h2>
-              <p className="pera">Welcome to {companyName} ("Company", "we", "our", "us"). The following
-                  Terms of Service ("Terms", "Terms of Service") govern your use of our website located at (together or individually "Service") operated by {companyName}.</p>
+              <p className="pera">Welcome to {companyName} (Company, we, our, us). The following
+                  Terms of Service (Terms, Terms of Service) govern your use of our website located at (together or individually Service) operated by {companyName}.</p>
               <p className="pera">By accessing or using our Service, you agree to be bound by these Terms. If
                   you disagree with any part of the terms, then you do not have permission to access the Service.</p>
               <h2 className="header-h2"><u>Accounts</u></h2>
@@ -48,7 +48,7 @@ export default async function TermsPage() {
                   if a remedy set forth herein is found to have failed of its essential purpose.</p>
               <h2 className="header-h2"><u>Disclaimer</u></h2>
               <p className="pera">Your use of the Service is at your sole risk. The Service is provided on an
-                  "AS IS" and "AS AVAILABLE" basis. The Service is provided without warranties of any kind, whether
+                  AS IS and AS AVAILABLE basis. The Service is provided without warranties of any kind, whether
                   express or implied, including, but not limited to, implied warranties of merchantability, fitness for
                   a particular purpose, non-infringement, or course of performance.</p>
               <p className="pera">{companyName} its subsidiaries, affiliates, and its licensors do not
