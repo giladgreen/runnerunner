@@ -24,7 +24,7 @@ export default async function HomePage() {
           <div>
             <SignInForm />
           </div>
-          <div style={{ marginTop: 60 }}>{`עוד אין לך חשבון?`}</div>
+          <div style={{ marginTop: 60 }}>{`עוד אין לך חשבון? שכחת סיסמא? `}</div>
           <div>
             <SignUpButton usePhoneValidation={usePhoneValidation} />
           </div>

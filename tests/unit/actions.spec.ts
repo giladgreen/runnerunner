@@ -188,9 +188,9 @@ describe('actions', () => {
         TEST_TIMEOUT,
       );
     });
-    describe('when trying to create existing user', () => {
+    describe('when trying to recreate existing user', () => {
       it(
-        'should return correct error',
+        'should update the user',
         async () => {
           // arrange
           const formData = getFormData({
@@ -203,11 +203,16 @@ describe('actions', () => {
 
           // act
           await signUp(null, 'prevState', formData);
-          const secondTryResult = await signUp(null, 'prevState', formData);
+
+            const formData2 = getFormData({
+                phone_number: PHONE,
+                password: '12345678',
+                name: 'israel israeli',
+                marketing_approve: 'on',
+            });
+          const secondTryResult = await signUp(null, 'prevState', formData2);
           // assert
-          expect(secondTryResult).toEqual(
-            'משתמש בעל אותו מספר טלפון כבר קיים במערכת',
-          );
+          expect(secondTryResult).toEqual(undefined);
         },
         TEST_TIMEOUT,
       );
