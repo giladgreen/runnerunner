@@ -98,6 +98,7 @@ export function SingleTournament({
     }
   }
 
+  const placesLeft = max_players - rsvpCountsForTodayTournaments[index];
   return (
     <div>
       {!showingTabs && (
@@ -145,16 +146,16 @@ export function SingleTournament({
                 marginBottom: 20,
               }}
             >
-              <div
+              { placesLeft < 20 && <div
                 style={{
                   marginBottom: 10,
                   color: isRegisterForTodayTournament ? 'transparent' : 'black',
                 }}
               >
                 נותרו עוד{' '}
-                <b> {max_players - rsvpCountsForTodayTournaments[index]} </b>
+                <b> {placesLeft} </b>
                 מקומות
-              </div>
+              </div>}
 
               <form
                 action={() => {
