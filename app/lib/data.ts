@@ -485,10 +485,13 @@ export async function fetchRSVPAndArrivalData(dayOfTheWeek: string) {
             (item.change < 0 || item.type === 'credit_by_other') &&
             item.tournament_id === t.id,
         );
+
+        const todayHistoryFiltered = todayHistory.filter(item => item.type!== 'credit_to_other');
+
         const reEntriesCount =
-          todayHistory.length -
+            todayHistoryFiltered.length -
           Array.from(
-            new Set(todayHistory.map(({ phone_number }) => phone_number)),
+            new Set(todayHistoryFiltered.map(({ phone_number }) => phone_number)),
           ).length;
 
         const todayCreditIncome = sumArrayByProp(
@@ -505,9 +508,9 @@ export async function fetchRSVPAndArrivalData(dayOfTheWeek: string) {
           todayHistory.filter(({ type }) => type === 'wire'),
           'change',
         );
-
+//TODO: take extra data from new table here
         const arrivedToday = Array.from(
-          new Set(todayHistory.map(({ phone_number }) => phone_number)),
+          new Set(todayHistoryFiltered.map(({ phone_number }) => phone_number)),
         ).length;
 
         return {

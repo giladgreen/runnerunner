@@ -1,12 +1,11 @@
 TODO:
 
 
- not a re-entry if someone else is on your credit
-
 - add ability to adjust the cash/transfer amounts
 
 - when pressing the add new user, if a phone number is in the search - use it
 
+- bug: in the player page history we dont show amount when used other person credit
 
 - user page - add the user agreement
 
