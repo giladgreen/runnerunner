@@ -202,7 +202,7 @@ export default function TodayPlayersTable({
                           {player.phone_number}
                         </div>
                       </div>
-                      {rsvpEnabled && isRsvpRequired && (
+                      {rsvpEnabled && isRsvpRequired && currentTournament && (
                         <div className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
                           <RSVPButton
                             player={player}
@@ -378,7 +378,7 @@ export default function TodayPlayersTable({
                         <Link href={getLink(player)}>{player.notes}</Link>
                       </td>
 
-                      {rsvpEnabled && isRsvpRequired && (
+                      {rsvpEnabled && isRsvpRequired && currentTournament && (
                         <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
                           <RSVPButton
                             player={player}
