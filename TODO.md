@@ -1,11 +1,11 @@
 TODO:
 
-
 - add ability to adjust the cash/transfer amounts
-
-- user page - add the user agreement
-
 - credit by other is slow
+
+
+
+
 
 - instead of debt users, as-is, compute who in total is in the wrost state
 - (i.e. times he spend money - the credit he got from winnings)
@@ -14,7 +14,6 @@ TODO:
 - fix skipped UT
 
 - change style to class name
-
 
 - separate the tests DB from local running DB
 -
