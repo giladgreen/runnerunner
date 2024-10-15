@@ -179,7 +179,7 @@ export default function CurrentTournamentIncomeDetailsPage({
                   <div>
                     {details.cashPlayers.map((player) => {
                       return (
-                        <div>
+                        <div key={`cash_${player.id}`}>
                           {player.name} ₪
                           {player.historyLog.reduce((sum, curLog) => {
                             return sum + -1 * curLog.change;
@@ -203,12 +203,12 @@ export default function CurrentTournamentIncomeDetailsPage({
                   <div>
                     {details.wirePlayers.map((player) => {
                       return (
-                        <div>
-                          {player.name} ₪
-                          {player.historyLog.reduce((sum, curLog) => {
-                            return sum + -1 * curLog.change;
-                          }, 0)}
-                        </div>
+                          <div key={`wire_${player.id}`}>
+                            {player.name} ₪
+                            {player.historyLog.reduce((sum, curLog) => {
+                              return sum + -1 * curLog.change;
+                            }, 0)}
+                          </div>
                       );
                     })}
                   </div>
@@ -227,12 +227,12 @@ export default function CurrentTournamentIncomeDetailsPage({
                   <div>
                     {details.creditPlayers.map((player) => {
                       return (
-                        <div>
-                          {player.name} ₪
-                          {player.historyLog.reduce((sum, curLog) => {
-                            return sum + -1 * curLog.change;
-                          }, 0)}
-                        </div>
+                          <div key={`credit_${player.id}`}>
+                            {player.name} ₪
+                            {player.historyLog.reduce((sum, curLog) => {
+                              return sum + -1 * curLog.change;
+                            }, 0)}
+                          </div>
                       );
                     })}
                   </div>
