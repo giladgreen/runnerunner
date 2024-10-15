@@ -161,7 +161,7 @@ export default function TodayPlayersTable({
           }}
           value={query}
         />
-        <CreateNewTodayPlayerButton params={{ userId }} />
+        <CreateNewTodayPlayerButton params={{ userId, query }} />
       </div>
       <div className="rtl mt-4 flex items-center justify-between gap-2 md:mt-8">
         <div className="full-width rtl mt-6 flow-root">

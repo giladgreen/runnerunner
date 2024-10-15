@@ -1,5 +1,7 @@
 'use client';
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
+import { useSearchParams } from 'next/navigation'
+
 import Link from 'next/link';
 import {
   PencilIcon,
@@ -7,7 +9,7 @@ import {
   BanknotesIcon,
 } from '@heroicons/react/24/outline';
 import { createPlayer } from '@/app/lib/actions';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormState } from 'react-dom';
 import React, { useState } from 'react';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
 
@@ -19,6 +21,9 @@ export default function CreatePlayerForm({
   prevPage: string;
 }) {
   const initialState = { message: null, errors: {} };
+  const searchParams = useSearchParams()
+
+  const query = searchParams.get('query');
 
   const createPlayerWithPrevPage = createPlayer.bind(null, prevPage);
   // @ts-ignore
@@ -27,6 +32,12 @@ export default function CreatePlayerForm({
     createPlayerWithPrevPage,
     initialState,
   );
+  const initialPhoneNumber = query && !isNaN(Number(query)) ? query : '';
+  const initialName = query && isNaN(Number(query)) ? query : '';
+
+
+  const [name, setName] = useState(initialName);
+  const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber);
   const [balanceNote, setBalanceNote] = useState('שחקן חדש');
   const [imageUrl, setImageUrl] = useState('');
   const [balance, setBalance] = useState(0);
@@ -47,6 +58,8 @@ export default function CreatePlayerForm({
                 id="name"
                 name="name"
                 type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 placeholder="הכנס שם"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="name-error"
@@ -77,6 +90,8 @@ export default function CreatePlayerForm({
                 id="phone_number"
                 name="phone_number"
                 type="text"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="הכנס מספר טלפון"
                 className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="phone_number-error"
