@@ -221,6 +221,7 @@ async function handleCreditByOther(
   otherPlayerPhoneNumber: string,
   note: string,
   player: PlayerDB,
+  amount: number,
 ) {
   noStore();
   let otherPlayer;
@@ -246,7 +247,7 @@ async function handleCreditByOther(
     }
     useOtherPlayerCredit = true;
     historyNote = `${note}
-(על חשבון ${otherPlayer.name} ${otherPlayer.phone_number} ) `;
+(${-1 * amount}₪ על חשבון ${otherPlayer.name} ${otherPlayer.phone_number} ) `;
 
     otherHistoryNote = `${note}
 (לטובת ${player.name} ${player.phone_number} ) `;
@@ -308,6 +309,7 @@ async function createPlayerLog(
     otherPlayerPhoneNumber,
     validatedFields.data.note,
     player,
+    change,
   );
   if (message) {
     return {
