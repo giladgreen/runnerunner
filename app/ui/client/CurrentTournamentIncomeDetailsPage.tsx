@@ -175,7 +175,7 @@ export default function CurrentTournamentIncomeDetailsPage({
                     שחקנים שנכנסו במזומן:
                     {details.cashPlayers.length}
                   </div>
-                  <div style={rowsStyle}>פירוט:</div>
+                  {details.cashPlayers.length && <div style={rowsStyle}>פירוט:</div>}
                   <div>
                     {details.cashPlayers.map((player) => {
                       return (
@@ -199,7 +199,7 @@ export default function CurrentTournamentIncomeDetailsPage({
                     שחקנים שנכנסו במזומן:
                     {details.wirePlayers.length}
                   </div>
-                  <div style={rowsStyle}>פירוט:</div>
+                  {details.wirePlayers.length && <div style={rowsStyle}>פירוט:</div>}
                   <div>
                     {details.wirePlayers.map((player) => {
                       return (
@@ -223,7 +223,7 @@ export default function CurrentTournamentIncomeDetailsPage({
                     שחקנים שנכנסו במזומן:
                     {details.creditPlayers.length}
                   </div>
-                  <div style={rowsStyle}>פירוט:</div>
+                  {details.creditPlayers.length && <div style={rowsStyle}>פירוט:</div>}
                   <div>
                     {details.creditPlayers.map((player) => {
                       return (
