@@ -15,9 +15,7 @@ import TournamentsHistoryTable from '@/app/ui/client/TournamentsHistoryTable';
 import PlayersPrizesPage from '@/app/[userId]/prizes/PlayersPrizesPage';
 import NotFound from '@/app/[userId]/players/[playerId]/edit/NotFound';
 import React from 'react';
-import {
-  getPlayersPrizesContents,
-} from '@/app/ui/client/helpers';
+import { getPlayersPrizesContents } from '@/app/ui/client/helpers';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 
 export default async function EditPlayerPage({
@@ -108,12 +106,14 @@ export default async function EditPlayerPage({
 
         <TournamentsHistoryTable player={player} />
 
-        {prizesEnabled && <div style={{ marginTop: 50 }}>
-          <PlayersPrizesPage
-            playerPrizes={playerPrizes}
-            prizesContents={prizesContents}
-          />
-        </div>}
+        {prizesEnabled && (
+          <div style={{ marginTop: 50 }}>
+            <PlayersPrizesPage
+              playerPrizes={playerPrizes}
+              prizesContents={prizesContents}
+            />
+          </div>
+        )}
       </div>
     </main>
   );

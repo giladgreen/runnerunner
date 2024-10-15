@@ -73,7 +73,7 @@ export default function TodayPlayersTable({
   tournaments,
   prizesInformation,
   tournamentId,
-  prizesEnabled
+  prizesEnabled,
 }: {
   allPlayers: PlayerDB[];
   userId: string;
@@ -226,11 +226,13 @@ export default function TodayPlayersTable({
                           tournamentId={tournamentId}
                         />
 
-                        { prizesEnabled && <OpenPrizeModalButton
-                          player={player}
-                          prizesInformation={prizesInformation}
-                          tournamentId={tournamentId}
-                        /> }
+                        {prizesEnabled && (
+                          <OpenPrizeModalButton
+                            player={player}
+                            prizesInformation={prizesInformation}
+                            tournamentId={tournamentId}
+                          />
+                        )}
                       </div>
                     </div>
 
@@ -417,11 +419,13 @@ export default function TodayPlayersTable({
                             tournamentId={tournamentId}
                           />
 
-                          { prizesEnabled && <OpenPrizeModalButton
-                            player={player}
-                            prizesInformation={prizesInformation}
-                            tournamentId={tournamentId}
-                          />}
+                          {prizesEnabled && (
+                            <OpenPrizeModalButton
+                              player={player}
+                              prizesInformation={prizesInformation}
+                              tournamentId={tournamentId}
+                            />
+                          )}
                         </div>
                       </td>
                     </tr>

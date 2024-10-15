@@ -3,11 +3,11 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import {usePathname} from "next/navigation";
+import { usePathname } from 'next/navigation';
 
 export default function UserGuidePrizesPage() {
-    const pathname = usePathname();
-    const link = pathname.replace('prizes', 'edit_prizes');
+  const pathname = usePathname();
+  const link = pathname.replace('prizes', 'edit_prizes');
 
   return (
     <div className="rtl w-full" style={{ zoom: 1.3 }}>

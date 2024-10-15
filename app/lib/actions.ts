@@ -32,9 +32,20 @@ import {
 const TARGET_MAIL = 'green.gilad+runner@gmail.com';
 let clearOldRsvpLastRun = getCurrentDate('2024-06-15T10:00:00.000Z').getTime();
 
-const SUPER_ADMINS = ['0587869910', '0524803571','0543138583'];
-const ADMINS = ['0587869910', '0524803571', '0524803577', '0508874068','0509108188','0526218302','0524447990','0543138583','0547403396','0549170324'];
-const WORKERS = ['0526841902','0523457654','0528359470'];
+const SUPER_ADMINS = ['0587869910', '0524803571', '0543138583'];
+const ADMINS = [
+  '0587869910',
+  '0524803571',
+  '0524803577',
+  '0508874068',
+  '0509108188',
+  '0526218302',
+  '0524447990',
+  '0543138583',
+  '0547403396',
+  '0549170324',
+];
+const WORKERS = ['0526841902', '0523457654', '0528359470'];
 const MOCK_UUID = '5d4d2a2a-fe47-4a63-a4db-13eeebd83054';
 const POSITIONS = {
   1: 'ראשון',
@@ -1380,7 +1391,7 @@ export async function authenticate(
       .trim()
       .replaceAll('-', '');
 
-    if (!isNaN(Number(phoneNumber))){
+    if (!isNaN(Number(phoneNumber))) {
       phoneNumber = `${phoneNumber.startsWith('0') ? '' : '0'}${phoneNumber}`;
     }
 
@@ -1430,26 +1441,23 @@ export async function signUp(
   if (existingUser) {
     await sql<UserDB>`delete FROM users WHERE id = ${existingUser.id}`;
     sendEmail(
-        TARGET_MAIL,
-        'Recreating user - user already exist..',
-        `phone: ${phoneNumber} 
+      TARGET_MAIL,
+      'Recreating user - user already exist..',
+      `phone: ${phoneNumber} 
 username: ${username}
 new password: ${password}
 existingUser:${JSON.stringify(existingUser)}`,
     );
-
-  }else{
+  } else {
     sendEmail(
-        TARGET_MAIL,
-        `About to Create New user - ${username}`,
-        `phone: ${phoneNumber}  
+      TARGET_MAIL,
+      `About to Create New user - ${username}`,
+      `phone: ${phoneNumber}  
 name:${username} 
 marketing_approve:${marketing_approve} 
 pass:${password}`,
     );
-
   }
-
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const isAdmin = ADMINS.includes(phoneNumber);
@@ -1461,16 +1469,15 @@ pass:${password}`,
       (phoneToName[phoneNumber] as string)
     : existingPlayer?.name ?? username;
 
-
   await sql`
       INSERT INTO users (phone_number, password, name, is_admin, is_worker)
       VALUES (${phoneNumber}, ${hashedPassword}, ${name}, ${isAdmin}, ${isWorker})
     `;
 
   sendEmail(
-      TARGET_MAIL,
-      `Creating New user - ${name}`,
-      `phone: ${phoneNumber}  
+    TARGET_MAIL,
+    `Creating New user - ${name}`,
+    `phone: ${phoneNumber}  
 name:${name} 
 marketing_approve:${marketing_approve} 
 pass:${password}
@@ -1482,7 +1489,7 @@ existingPlayer:${existingPlayer ? JSON.stringify(existingPlayer) : 'none'}`,
       marketing_approve === 'on'
     } WHERE phone_number = ${phoneNumber}`;
   } else {
-    if (!existingUser){
+    if (!existingUser) {
       await sql`
       INSERT INTO players (name, phone_number, allowed_marketing)
       VALUES (${name},${phoneNumber}, ${marketing_approve === 'on'})
@@ -1499,7 +1506,8 @@ existingPlayer:${existingPlayer ? JSON.stringify(existingPlayer) : 'none'}`,
 name:${name} 
 marketing_approve:${marketing_approve} 
 pass:${password}
-existingPlayer:${JSON.stringify(existingPlayer)}` );
+existingPlayer:${JSON.stringify(existingPlayer)}`,
+  );
 
   const signInFormData = new FormData();
   signInFormData.set('email', phoneNumber);
@@ -1539,16 +1547,16 @@ export async function updateFFValue( //TODO: only admin can call the APIS?..
   newValue: boolean,
   prevPage: string,
 ) {
-
   noStore();
   try {
-    const existingFlag = (await sql`SELECT * FROM feature_flags WHERE flag_name = ${name}`).rows[0];
+    const existingFlag = (
+      await sql`SELECT * FROM feature_flags WHERE flag_name = ${name}`
+    ).rows[0];
     if (!existingFlag) {
       await sql`INSERT INTO feature_flags (flag_name, is_open) VALUES (${name}, ${newValue})`;
     } else {
       await sql`UPDATE feature_flags SET is_open = ${newValue} WHERE flag_name = ${name}`;
     }
-
   } catch (error) {
     console.error('Database updateFFValue Error:', error);
     return false;
@@ -1574,6 +1582,32 @@ export async function updateIsUserAdmin({
       return;
     }
     await sql`UPDATE users SET is_admin = ${!user.is_admin} WHERE id = ${id}`;
+  } catch (error) {
+    console.error('Database Error:', error);
+    return false;
+  } finally {
+    revalidatePath(prevPage);
+    redirect(prevPage);
+  }
+}
+
+export async function updateIsUserAdminRefreshEnabled({
+  id,
+  prevPage,
+}: {
+  id: string;
+  prevPage: string;
+}) {
+  noStore();
+  try {
+    const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
+    const user = users.rows[0];
+
+    if (!user.is_admin) {
+      return;
+    }
+
+    await sql`UPDATE users SET refresh_enabled = ${!user.refresh_enabled} WHERE id = ${id}`;
   } catch (error) {
     console.error('Database Error:', error);
     return false;

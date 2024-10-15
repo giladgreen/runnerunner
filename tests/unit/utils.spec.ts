@@ -300,11 +300,11 @@ describe('test utils', () => {
       it('should return correct position order ', async () => {
         const userA = {
           name: '',
-          phone_number:'b'
+          phone_number: 'b',
         } as UserDB;
         const userB = {
           name: 'b',
-          phone_number:'a'
+          phone_number: 'a',
         } as UserDB;
         const result = usersComparator(userA, userB);
         expect(result).toEqual(1);

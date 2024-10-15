@@ -170,7 +170,7 @@
   width: 100%;
 }
 .pe_signin_button {
-  margin-right:20px;
+  margin-right: 20px;
   margin-left: 30px;
 }
 
@@ -179,9 +179,8 @@
   /*zoom: 1.3;*/
 }
 .pe_signin_button > button > span {
-    margin-right: 6px;
+  margin-right: 6px;
 }
-
 
 .confirmation-modal-wrapper {
   background: rgba(0, 0, 0, 0.75);
@@ -448,7 +447,7 @@
 
 @keyframes red_blinking_background_anim {
   to {
-    background-color: #e50000AA;
+    background-color: #e50000aa;
     color: white;
   }
 }
@@ -460,7 +459,6 @@
   animation-direction: alternate;
   animation-name: red_blinking_background_anim;
 }
-
 
 .player_page_menu {
   z-index: 99999;

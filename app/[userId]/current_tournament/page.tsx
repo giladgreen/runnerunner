@@ -27,6 +27,7 @@ export default async function CurrentTournament({
   const user = await fetchUserById(params.userId);
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
+  const refreshEnabled = user.refresh_enabled;
   const allPlayers = await getAllPlayers();
 
   if (!isAdmin && !isWorker) {
@@ -67,7 +68,13 @@ export default async function CurrentTournament({
   const finalTablePlayersContents: Array<JSX.Element | null> =
     await Promise.all(
       todayTournaments.map((t) =>
-        getFinalTablePlayersContent(prizesEnabled, date, t.id, false, params.userId),
+        getFinalTablePlayersContent(
+          prizesEnabled,
+          date,
+          t.id,
+          false,
+          params.userId,
+        ),
       ),
     );
 
@@ -107,6 +114,7 @@ export default async function CurrentTournament({
       params={params}
       todayTournaments={todayTournaments}
       finalTablePlayersContents={finalTablePlayersContents}
+      refreshEnabled={refreshEnabled}
     />
   );
 }

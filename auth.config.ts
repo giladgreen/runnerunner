@@ -26,7 +26,6 @@ export const authConfig = {
         userUUID = userFromDB?.id;
       }
 
-
       if (isLoggedIn && !nextUrl.pathname.includes(userUUID!)) {
         return Response.redirect(
           new URL(
@@ -37,7 +36,7 @@ export const authConfig = {
       }
 
       if (!isLoggedIn && nextUrl.pathname.length > 40) {
-          return false;
+        return false;
       }
 
       return true;

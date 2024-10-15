@@ -60,7 +60,7 @@ export default function SignOutButton({
     playerScreen || isInside ? 'התנתק' : 'יש להתנתק לפני סגירת הלשונית';
   let backgroundClass = 'transparent_background';
   if (!playerScreen) {
-    if ((idleTimeout > TIMEOUT_WARNING || !isInside) ) {
+    if (idleTimeout > TIMEOUT_WARNING || !isInside) {
       backgroundClass = 'red_blinking_background';
     }
   }

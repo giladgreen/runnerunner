@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import { UserDB } from '@/app/lib/definitions';
-import ClipboardDocumentCheckIcon from "@heroicons/react/24/outline/ClipboardDocumentCheckIcon";
+import ClipboardDocumentCheckIcon from '@heroicons/react/24/outline/ClipboardDocumentCheckIcon';
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
@@ -107,7 +107,13 @@ export const Nevigationlinks = (userId: string) => [
   },
 ];
 
-export default function NavLinks({ user, prizesEnabled }: { user: UserDB, prizesEnabled: boolean }) {
+export default function NavLinks({
+  user,
+  prizesEnabled,
+}: {
+  user: UserDB;
+  prizesEnabled: boolean;
+}) {
   const pathname = usePathname();
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
@@ -119,11 +125,11 @@ export default function NavLinks({ user, prizesEnabled }: { user: UserDB, prizes
       {Nevigationlinks(user.id)
         .filter(
           (link) =>
-            (!link.prizesLink || prizesEnabled) && (
-            (isAdmin && link.admin) ||
-            (isWorker && link.worker) ||
-            (isAdminPlayer && link.adminPlayer) ||
-            (isPlayer && link.player)),
+            (!link.prizesLink || prizesEnabled) &&
+            ((isAdmin && link.admin) ||
+              (isWorker && link.worker) ||
+              (isAdminPlayer && link.adminPlayer) ||
+              (isPlayer && link.player)),
         )
         .filter(Boolean)
         .map((link) => {

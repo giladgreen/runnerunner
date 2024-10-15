@@ -50,7 +50,9 @@ export default function PlayerPageMenu({
         </div>
         <div className="player_page_menu_body">
           {Nevigationlinks(userId)
-            .filter((link) => link.player && (!link.prizesLink || prizesEnabled))
+            .filter(
+              (link) => link.player && (!link.prizesLink || prizesEnabled),
+            )
             .filter((link) => showRsvp || !link.isRsvp)
             .map((link) => {
               const LinkIcon = link.icon;

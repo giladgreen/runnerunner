@@ -15,11 +15,7 @@ import {
   UserDB,
   WinnerDB,
 } from './definitions';
-import {
-  sumArrayByProp,
-  positionComparator,
-  usersComparator,
-} from './utils';
+import { sumArrayByProp, positionComparator, usersComparator } from './utils';
 import { redirect } from 'next/navigation';
 import {
   getCurrentDate,
@@ -486,12 +482,16 @@ export async function fetchRSVPAndArrivalData(dayOfTheWeek: string) {
             item.tournament_id === t.id,
         );
 
-        const todayHistoryFiltered = todayHistory.filter(item => item.type!== 'credit_to_other');
+        const todayHistoryFiltered = todayHistory.filter(
+          (item) => item.type !== 'credit_to_other',
+        );
 
         const reEntriesCount =
-            todayHistoryFiltered.length -
+          todayHistoryFiltered.length -
           Array.from(
-            new Set(todayHistoryFiltered.map(({ phone_number }) => phone_number)),
+            new Set(
+              todayHistoryFiltered.map(({ phone_number }) => phone_number),
+            ),
           ).length;
 
         const todayCreditIncome = sumArrayByProp(
@@ -508,7 +508,7 @@ export async function fetchRSVPAndArrivalData(dayOfTheWeek: string) {
           todayHistory.filter(({ type }) => type === 'wire'),
           'change',
         );
-//TODO: take extra data from new table here
+        //TODO: take extra data from new table here
         const arrivedToday = Array.from(
           new Set(todayHistoryFiltered.map(({ phone_number }) => phone_number)),
         ).length;
@@ -1044,7 +1044,9 @@ export async function fetchUserById(id: string) {
 
     result.is_player = false;
     if (result) {
-      const player = (await sql<PlayerDB>`SELECT * FROM players WHERE phone_number=${result.phone_number}`).rows[0]
+      const player = (
+        await sql<PlayerDB>`SELECT * FROM players WHERE phone_number=${result.phone_number}`
+      ).rows[0];
 
       if (player) {
         result.is_player = true;

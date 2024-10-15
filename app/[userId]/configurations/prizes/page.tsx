@@ -8,7 +8,7 @@ import DeletePrizeInfoButton from '@/app/ui/client/DeletePrizeInfoButton';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 import { formatDateToLocalWithTime } from '@/app/lib/serverDateUtils';
-import PrizesTable from "@/app/ui/client/PrizesTable";
+import PrizesTable from '@/app/ui/client/PrizesTable';
 
 export default async function PrizesInfoPage({
   params,
@@ -61,7 +61,7 @@ export default async function PrizesInfoPage({
       </div>
       {prizesCount > 0 && (
         <div className="rtl mt-4 flex items-center justify-between gap-2 md:mt-8">
-         <PrizesTable prizes={prizes} userId={params.userId} />
+          <PrizesTable prizes={prizes} userId={params.userId} />
         </div>
       )}
     </div>

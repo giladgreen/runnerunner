@@ -21,7 +21,7 @@ function SetGivePrizeForm({
   userId,
   prizesInformation,
   tournamentId,
-  prizesEnabled
+  prizesEnabled,
 }: {
   prizesEnabled: boolean;
   stringDate?: string;
@@ -93,17 +93,21 @@ function SetGivePrizeForm({
   return (
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
-        { prizesEnabled ? <label
-          className="mb-2 block text-sm font-medium"
-          style={{ textAlign: 'right' }}
-        >
-          תן פרס/קרדיט לשחקן
-        </label> : <label
+        {prizesEnabled ? (
+          <label
             className="mb-2 block text-sm font-medium"
             style={{ textAlign: 'right' }}
-        >
-          תן קרדיט לשחקן
-        </label>}
+          >
+            תן פרס/קרדיט לשחקן
+          </label>
+        ) : (
+          <label
+            className="mb-2 block text-sm font-medium"
+            style={{ textAlign: 'right' }}
+          >
+            תן קרדיט לשחקן
+          </label>
+        )}
 
         <div className="form-inner-control rounded-md p-4 md:p-6">
           <div className="relative mt-2 rounded-md">
@@ -129,25 +133,27 @@ function SetGivePrizeForm({
                     <b>קרדיט</b>
                   </label>
                 </div>
-                {prizesEnabled && <div
-                  className="align-items-center flex"
-                  style={{ marginLeft: 40 }}
-                >
-                  <input
-                    type="radio"
-                    value="prize"
-                    name="type"
-                    checked={type === 'prize'}
-                    onChange={() => setType('prize')}
-                  />
-                  <label
-                    htmlFor="prize"
-                    className="ml-2 "
-                    style={{ margin: '0 5px' }}
+                {prizesEnabled && (
+                  <div
+                    className="align-items-center flex"
+                    style={{ marginLeft: 40 }}
                   >
-                    <b>פרס</b>
-                  </label>
-                </div>}
+                    <input
+                      type="radio"
+                      value="prize"
+                      name="type"
+                      checked={type === 'prize'}
+                      onChange={() => setType('prize')}
+                    />
+                    <label
+                      htmlFor="prize"
+                      className="ml-2 "
+                      style={{ margin: '0 5px' }}
+                    >
+                      <b>פרס</b>
+                    </label>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -279,7 +285,7 @@ export default function OpenGiveCreditModalButton({
   userId,
   prizesInformation,
   tournamentId,
-  prizesEnabled
+  prizesEnabled,
 }: {
   player: PlayerDB;
   hasReceived: boolean;
@@ -312,7 +318,7 @@ export default function OpenGiveCreditModalButton({
       {!hasReceived && (
         <div className={show ? 'edit-player-modal' : 'hidden'}>
           <SetGivePrizeForm
-              prizesEnabled={prizesEnabled}
+            prizesEnabled={prizesEnabled}
             player={player}
             hide={close}
             prevPage={prevPage}

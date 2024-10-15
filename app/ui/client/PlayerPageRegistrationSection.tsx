@@ -146,16 +146,19 @@ export function SingleTournament({
                 marginBottom: 20,
               }}
             >
-              { placesLeft < 20 && <div
-                style={{
-                  marginBottom: 10,
-                  color: isRegisterForTodayTournament ? 'transparent' : 'black',
-                }}
-              >
-                נותרו עוד{' '}
-                <b> {placesLeft} </b>
-                מקומות
-              </div>}
+              {placesLeft < 20 && (
+                <div
+                  style={{
+                    marginBottom: 10,
+                    color: isRegisterForTodayTournament
+                      ? 'transparent'
+                      : 'black',
+                  }}
+                >
+                  נותרו עוד <b> {placesLeft} </b>
+                  מקומות
+                </div>
+              )}
 
               <form
                 action={() => {

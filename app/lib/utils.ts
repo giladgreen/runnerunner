@@ -84,7 +84,7 @@ export function usersComparator(a: UserDB, b: UserDB) {
     return -1;
   }
   if (!a.is_admin && b.is_admin) {
-      return 1;
+    return 1;
   }
   if (a.is_worker && !b.is_worker) {
     return -1;
@@ -93,7 +93,11 @@ export function usersComparator(a: UserDB, b: UserDB) {
     return 1;
   }
 
-  return (a.name && b.name && a.name.trim() !== b.name.trim()) ?  (a.name < b.name ? -1 : 1) : phoneNumberComparator(a,b);
+  return a.name && b.name && a.name.trim() !== b.name.trim()
+    ? a.name < b.name
+      ? -1
+      : 1
+    : phoneNumberComparator(a, b);
 }
 
 export function nameComparator(a: PlayerDB, b: PlayerDB) {

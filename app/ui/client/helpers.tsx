@@ -21,7 +21,7 @@ import SetPrizeAsNotReadyToBeDelivered from '@/app/ui/client/SetPrizeAsNotReadyT
 import ResetPlayersPositionsButton from '@/app/ui/client/ResetPlayersPositionsButton';
 
 export async function getFinalTablePlayersContent(
-  prizesEnabled:boolean,
+  prizesEnabled: boolean,
   date: string,
   tournamentId: string,
   isTournamentsDataPage: boolean,

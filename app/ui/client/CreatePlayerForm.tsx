@@ -1,6 +1,6 @@
 'use client';
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation';
 
 import Link from 'next/link';
 import {
@@ -21,7 +21,7 @@ export default function CreatePlayerForm({
   prevPage: string;
 }) {
   const initialState = { message: null, errors: {} };
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
   const query = searchParams.get('query');
 
@@ -34,7 +34,6 @@ export default function CreatePlayerForm({
   );
   const initialPhoneNumber = query && !isNaN(Number(query)) ? query : '';
   const initialName = query && isNaN(Number(query)) ? query : '';
-
 
   const [name, setName] = useState(initialName);
   const [phoneNumber, setPhoneNumber] = useState(initialPhoneNumber);

@@ -20,7 +20,7 @@ export default function AdminPageMenu({
   signout: () => void;
   isAdmin: boolean;
   isWorker: boolean;
-    isAdminPlayer: boolean;
+  isAdminPlayer: boolean;
 }) {
   const [showMenu, setShowMenu] = useState(false);
   const pathname = usePathname();
@@ -52,7 +52,10 @@ export default function AdminPageMenu({
         <div className="player_page_menu_body">
           {Nevigationlinks(userId)
             .filter(
-              (link) => (link.admin && isAdmin) || (link.worker && isWorker) || (link.adminPlayer && isAdminPlayer),
+              (link) =>
+                (link.admin && isAdmin) ||
+                (link.worker && isWorker) ||
+                (link.adminPlayer && isAdminPlayer),
             )
             .map((link) => {
               const LinkIcon = link.icon;

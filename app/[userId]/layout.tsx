@@ -58,7 +58,8 @@ export default async function Layout({
     );
   }
 
-  const { rsvpEnabled, playerRsvpEnabled, prizesEnabled } = await fetchFeatureFlags();
+  const { rsvpEnabled, playerRsvpEnabled, prizesEnabled } =
+    await fetchFeatureFlags();
   const showRsvp = rsvpEnabled && playerRsvpEnabled;
 
   return (

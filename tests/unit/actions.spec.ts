@@ -204,12 +204,12 @@ describe('actions', () => {
           // act
           await signUp(null, 'prevState', formData);
 
-            const formData2 = getFormData({
-                phone_number: PHONE,
-                password: '12345678',
-                name: 'israel israeli',
-                marketing_approve: 'on',
-            });
+          const formData2 = getFormData({
+            phone_number: PHONE,
+            password: '12345678',
+            name: 'israel israeli',
+            marketing_approve: 'on',
+          });
           const secondTryResult = await signUp(null, 'prevState', formData2);
           // assert
           expect(secondTryResult).toEqual(undefined);

@@ -8,6 +8,7 @@ export type UserDB = {
   password: string;
   name?: string;
   is_admin: boolean;
+  refresh_enabled: boolean;
   is_worker: boolean;
   is_player: boolean;
   created_at: string;

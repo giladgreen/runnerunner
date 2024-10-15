@@ -1,4 +1,4 @@
-import {fetchFeatureFlags, fetchTournamentsData} from '@/app/lib/data';
+import { fetchFeatureFlags, fetchTournamentsData } from '@/app/lib/data';
 import { getFinalTablePlayersContent } from '@/app/ui/client/helpers';
 import { getDayIncome } from '@/app/ui/client/helpers';
 import {
@@ -13,7 +13,7 @@ export default async function TournamentsDataPage({
   userId?: string;
 }) {
   const tournamentsObject = await fetchTournamentsData();
-const { prizesEnabled } = await fetchFeatureFlags();
+  const { prizesEnabled } = await fetchFeatureFlags();
   const tournamentsData = Object.keys(tournamentsObject);
   tournamentsData.sort(dateComparator);
   const tournamentsFullData = tournamentsData
@@ -93,7 +93,7 @@ const { prizesEnabled } = await fetchFeatureFlags();
               const date = dateItem.date;
 
               const finalTableData = await getFinalTablePlayersContent(
-                  prizesEnabled,
+                prizesEnabled,
                 date,
                 dateItem.tournamentId,
                 true,

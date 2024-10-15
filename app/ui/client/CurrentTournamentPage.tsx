@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import TodayTournamentNameCardWrapper from '@/app/ui/client/TodayTournamentNameCardWrapper';
 import RSVPAndArrivalCardWrapper from '@/app/ui/client/RSVPAndArrivalCardWrapper';
@@ -19,7 +19,9 @@ export default function CurrentTournamentPage({
   rsvpEnabled,
   prizesEnabled,
   prizesContents,
+  refreshEnabled,
 }: {
+  refreshEnabled: boolean;
   rsvpEnabled: boolean;
   prizesEnabled: boolean;
   todayTournaments: TournamentDB[];
@@ -29,6 +31,19 @@ export default function CurrentTournamentPage({
   prizesInformation: PrizeInfoDB[];
   prizesContents: Array<JSX.Element | null>;
 }) {
+
+  useEffect(() => {
+    const id = setInterval(async () => {
+        if (!refreshEnabled) {
+            return;
+        }
+        console.log('## refreshing page');
+        window.location.reload();
+    }, 30_000);
+
+    return () => clearInterval(id);
+  }, []);
+
   if (todayTournaments.length === 0) {
     return null;
   }
@@ -52,12 +67,14 @@ export default function CurrentTournamentPage({
           />
         </div>
 
-          {prizesEnabled && <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-          <PlayersPrizes
-            title="פרסים"
-            prizesContent={prizesContents[0] as JSX.Element}
-          />
-        </div>}
+        {prizesEnabled && (
+          <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+            <PlayersPrizes
+              title="פרסים"
+              prizesContent={prizesContents[0] as JSX.Element}
+            />
+          </div>
+        )}
 
         <TodayPlayersTable
           prizesInformation={prizesInformation}
@@ -118,12 +135,14 @@ export default function CurrentTournamentPage({
                   />
                 </div>
 
-                  {prizesEnabled && <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-                  <PlayersPrizes
-                    title="פרסים"
-                    prizesContent={prizesContents[index] as JSX.Element}
-                  />
-                </div>}
+                {prizesEnabled && (
+                  <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+                    <PlayersPrizes
+                      title="פרסים"
+                      prizesContent={prizesContents[index] as JSX.Element}
+                    />
+                  </div>
+                )}
 
                 <TodayPlayersTable
                   prizesInformation={prizesInformation}

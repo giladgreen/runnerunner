@@ -1,4 +1,4 @@
-import {fetchFeatureFlags, fetchUserById} from '@/app/lib/data';
+import { fetchFeatureFlags, fetchUserById } from '@/app/lib/data';
 
 import React from 'react';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
@@ -10,7 +10,7 @@ export default async function UserGuidePage({
   params: { userId: string };
 }) {
   const user = await fetchUserById(params.userId);
-  const {prizesEnabled } = await fetchFeatureFlags();
+  const { prizesEnabled } = await fetchFeatureFlags();
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
 
@@ -59,14 +59,16 @@ export default async function UserGuidePage({
           הכנסת שחקן לטורניר נוכחי
         </Link>
       </div>
-        {prizesEnabled && <div
-        className="guide-link flex w-full items-center justify-between"
-        style={{ marginTop: 20 }}
-      >
-        <Link href={`/${params.userId}/user_guide/prizes`}>
-          מתן פרס לשחקן והמרת פרס קיים לקרדיט
-        </Link>
-      </div>}
+      {prizesEnabled && (
+        <div
+          className="guide-link flex w-full items-center justify-between"
+          style={{ marginTop: 20 }}
+        >
+          <Link href={`/${params.userId}/user_guide/prizes`}>
+            מתן פרס לשחקן והמרת פרס קיים לקרדיט
+          </Link>
+        </div>
+      )}
       <div
         className="guide-link flex w-full items-center justify-between"
         style={{ marginTop: 20 }}
@@ -75,29 +77,35 @@ export default async function UserGuidePage({
           דירוג שחקנים בסוף טורניר
         </Link>
       </div>
-        {prizesEnabled ? <div
-            className="guide-link flex w-full items-center justify-between"
-            style={{marginTop: 20}}
+      {prizesEnabled ? (
+        <div
+          className="guide-link flex w-full items-center justify-between"
+          style={{ marginTop: 20 }}
         >
-            <Link href={`/${params.userId}/user_guide/places_credit_and_prizes`}>
-                קביעת שווי פרסים בקרדיט
-            </Link>
-        </div> : <div
-            className="guide-link flex w-full items-center justify-between"
-            style={{marginTop: 20}}
+          <Link href={`/${params.userId}/user_guide/places_credit_and_prizes`}>
+            קביעת שווי פרסים בקרדיט
+          </Link>
+        </div>
+      ) : (
+        <div
+          className="guide-link flex w-full items-center justify-between"
+          style={{ marginTop: 20 }}
         >
-            <Link href={`/${params.userId}/user_guide/places_credit`}>
-                קביעת שווי מיקום בקרדיט
-            </Link>
-        </div>}
-        {prizesEnabled && <div
-            className="guide-link flex w-full items-center justify-between"
-            style={{marginTop: 20}}
+          <Link href={`/${params.userId}/user_guide/places_credit`}>
+            קביעת שווי מיקום בקרדיט
+          </Link>
+        </div>
+      )}
+      {prizesEnabled && (
+        <div
+          className="guide-link flex w-full items-center justify-between"
+          style={{ marginTop: 20 }}
         >
-            <Link href={`/${params.userId}/user_guide/edit_prizes`}>
-                יצירה ועריכת פרסים
-            </Link>
-      </div>}
+          <Link href={`/${params.userId}/user_guide/edit_prizes`}>
+            יצירה ועריכת פרסים
+          </Link>
+        </div>
+      )}
       <div
         className="guide-link flex w-full items-center justify-between"
         style={{ marginTop: 20 }}

@@ -83,6 +83,7 @@ async function seedUsers(client) {
         name TEXT,
         is_admin BOOLEAN DEFAULT FALSE,
         is_worker BOOLEAN DEFAULT FALSE,
+        refresh_enabled BOOLEAN DEFAULT FALSE,
         created_at timestamp NOT NULL DEFAULT now()
       );
     `;
@@ -95,6 +96,7 @@ async function seedUsers(client) {
         name TEXT,
         is_admin BOOLEAN DEFAULT FALSE,
         is_worker BOOLEAN DEFAULT FALSE,
+        refresh_enabled BOOLEAN DEFAULT FALSE,
         created_at timestamp NOT NULL DEFAULT now(),
         deleted_at timestamp NOT NULL DEFAULT now()
       );

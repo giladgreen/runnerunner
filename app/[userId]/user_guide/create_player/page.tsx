@@ -4,7 +4,6 @@ import React from 'react';
 import Image from 'next/image';
 
 export default function UserGuideCreatePlayerPage() {
-
   return (
     <div className="rtl w-full" style={{ zoom: 1.3 }}>
       <div className="flex w-full items-center justify-between">

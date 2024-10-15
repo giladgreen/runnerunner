@@ -1,6 +1,10 @@
 import MVPPlayers from '@/app/ui/client/MVPPlayers';
 import DebtPlayers from '@/app/ui/client/DebtPlayers';
-import {fetchFeatureFlags, fetchRSVPAndArrivalData, fetchUserById} from '@/app/lib/data';
+import {
+  fetchFeatureFlags,
+  fetchRSVPAndArrivalData,
+  fetchUserById,
+} from '@/app/lib/data';
 import GeneralPlayersCardWrapper from '@/app/ui/client/GeneralPlayersCardWrapper';
 import PlayerPage from '@/app/ui/client/PlayerPage';
 import { TournamentDB } from '@/app/lib/definitions';
@@ -13,7 +17,7 @@ export default async function HomePage({
 }: {
   params: { userId: string };
 }) {
-    const { prizesEnabled } = await fetchFeatureFlags();
+  const { prizesEnabled } = await fetchFeatureFlags();
   const user = await fetchUserById(params.userId);
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
@@ -26,7 +30,13 @@ export default async function HomePage({
     const date = getTodayShortDate();
     const contents: Array<JSX.Element | null> = await Promise.all(
       todayTournaments.map((t) =>
-        getFinalTablePlayersContent(prizesEnabled, date, t.id, false, params.userId),
+        getFinalTablePlayersContent(
+          prizesEnabled,
+          date,
+          t.id,
+          false,
+          params.userId,
+        ),
       ),
     );
 

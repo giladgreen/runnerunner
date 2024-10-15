@@ -3,10 +3,10 @@ import NavLinks from '@/app/ui/client/NavLinks';
 
 import { signOut } from '@/auth';
 import SignOutButton from '@/app/ui/client/SignOutButton';
-import {fetchFeatureFlags, fetchUserById} from '@/app/lib/data';
+import { fetchFeatureFlags, fetchUserById } from '@/app/lib/data';
 
 export default async function SideNav({ userId }: { userId: string }) {
-  const { prizesEnabled} = await fetchFeatureFlags();
+  const { prizesEnabled } = await fetchFeatureFlags();
   const user = await fetchUserById(userId);
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;

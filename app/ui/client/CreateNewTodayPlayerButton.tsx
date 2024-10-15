@@ -6,7 +6,7 @@ import { UserPlusIcon } from '@heroicons/react/20/solid';
 export default function CreateNewTodayPlayerButton({
   params,
 }: {
-  params: { userId: string , query: string };
+  params: { userId: string; query: string };
 }) {
   const href = `/${params.userId}/current_tournament/create?query=${params.query}`;
   return (
