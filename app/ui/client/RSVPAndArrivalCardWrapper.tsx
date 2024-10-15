@@ -10,11 +10,16 @@ import { Suspense } from 'react';
 import { CardsSkeleton } from '@/app/ui/skeletons';
 import Card from '@/app/ui/client/Card';
 import { TournamentDB } from '@/app/lib/definitions';
+import Link from 'next/link';
 
 export default function RSVPAndArrivalCardWrapper({
   todayTournament,
+  incomeAsLink,
+  userId,
 }: {
   todayTournament: TournamentDB;
+  incomeAsLink: boolean;
+  userId?: string;
 }) {
   const {
     rsvpForToday,
@@ -31,7 +36,7 @@ export default function RSVPAndArrivalCardWrapper({
         todayTournamentMaxPlayers ? ` / ${todayTournamentMaxPlayers}` : ''
       }`
     : 'ללא';
-  const todayIncome = (
+  const todayIncomeContent = (
     <div>
       <div style={{ fontSize: 20, marginBottom: 10 }}>
         <b>
@@ -127,7 +132,13 @@ export default function RSVPAndArrivalCardWrapper({
       </div>
     </div>
   );
-
+  const todayIncome = incomeAsLink ? (
+    <Link href={`/${userId}/current_tournament/details`}>
+      {todayIncomeContent}
+    </Link>
+  ) : (
+    todayIncomeContent
+  );
   // const oneLinerStyle = {padding: 50, fontSize: 40}
   return (
     <div

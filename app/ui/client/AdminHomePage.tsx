@@ -10,9 +10,11 @@ import FinalTablePlayers from '@/app/ui/client/FinalTablePlayers';
 export default function AdminHomePage({
   todayTournaments,
   contents,
+  userId,
 }: {
   todayTournaments: TournamentDB[];
   contents: Array<JSX.Element | null>;
+  userId: string;
 }) {
   if (todayTournaments.length === 0) {
     return null;
@@ -35,6 +37,8 @@ export default function AdminHomePage({
           {todayHasTournament && (
             <RSVPAndArrivalCardWrapper
               todayTournament={todayTournament as TournamentDB}
+              incomeAsLink={true}
+              userId={userId}
             />
           )}
           {todayHasTournament && (
@@ -77,6 +81,7 @@ export default function AdminHomePage({
                 {todayHasTournament && (
                   <RSVPAndArrivalCardWrapper
                     todayTournament={todayTournament as TournamentDB}
+                    incomeAsLink={false}
                   />
                 )}
                 {todayHasTournament && (

@@ -45,6 +45,7 @@ export default async function HomePage({
         <AdminHomePage
           todayTournaments={todayTournaments as TournamentDB[]}
           contents={contents}
+          userId={params.userId}
         />
 
         <hr style={{ marginBottom: 30, marginTop: 10 }} />

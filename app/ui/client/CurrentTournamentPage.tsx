@@ -31,14 +31,13 @@ export default function CurrentTournamentPage({
   prizesInformation: PrizeInfoDB[];
   prizesContents: Array<JSX.Element | null>;
 }) {
-
   useEffect(() => {
     const id = setInterval(async () => {
-        if (!refreshEnabled) {
-            return;
-        }
-        console.log('## refreshing page');
-        window.location.reload();
+      if (!refreshEnabled) {
+        return;
+      }
+      console.log('## refreshing page');
+      window.location.reload();
     }, 30_000);
 
     return () => clearInterval(id);
@@ -58,7 +57,11 @@ export default function CurrentTournamentPage({
           <TodayTournamentNameCardWrapper todayTournament={todayTournament} />
         </div>
         <div className="full-width flex w-full items-center justify-between">
-          <RSVPAndArrivalCardWrapper todayTournament={todayTournament} />
+          <RSVPAndArrivalCardWrapper
+            todayTournament={todayTournament}
+            incomeAsLink={true}
+            userId={params.userId}
+          />
         </div>
         <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
           <FinalTablePlayers
@@ -126,6 +129,7 @@ export default function CurrentTournamentPage({
                 <div className="full-width flex w-full items-center justify-between">
                   <RSVPAndArrivalCardWrapper
                     todayTournament={todayTournament}
+                    incomeAsLink={false}
                   />
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
