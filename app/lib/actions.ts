@@ -19,6 +19,7 @@ import {
   PrizeDB,
   PrizeInfoDB,
   BugDB,
+  TournamentsAdjustmentsDB,
 } from './definitions';
 
 import { signIn } from '../../auth';
@@ -272,6 +273,70 @@ async function handleCreditByOther(
   };
 }
 
+async function createTournamentAdjustmentLog(
+  formData: FormData,
+  prevPage: string,
+  userId: string,
+  tournamentId: string,
+) {
+  const change = formData.get('change') as string;
+  const type = formData.get('type') as string;
+  const note = formData.get('note') as string;
+
+  const user = (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`)
+    .rows[0];
+  const username = user?.name ?? user?.phone_number ?? 'unknown';
+
+  try {
+    await sql`INSERT INTO tournaments_adjustments (tournament_id,type,change,reason,updated_by)
+              VALUES 
+              (${tournamentId}, ${type},${change}, ${note}, ${username})`;
+  } catch (error) {
+    console.error('### create TournamentAdjustment log error', error);
+    return {
+      message: 'איראה שגיאה',
+    };
+  } finally {
+    revalidatePath(prevPage);
+    redirect(prevPage);
+  }
+}
+
+async function deleteTournamentAdjustmentLog(
+  adjustmentId: string,
+  userId: string,
+  prevPage: string,
+) {
+  const user = (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`)
+    .rows[0];
+  const username = user?.name ?? user?.phone_number ?? 'unknown';
+
+  try {
+    const adjustment = (
+      await sql<TournamentsAdjustmentsDB>`SELECT * FROM tournaments_adjustments WHERE id = ${adjustmentId}`
+    ).rows[0];
+    if (!adjustment) {
+      return;
+    }
+    await startTransaction();
+    console.log('>> before remove tournament adjustment');
+    await sql`INSERT INTO deleted_tournaments_adjustments 
+          (id, tournament_id, type, change, reason, updated_by, deleted_by) 
+          VALUES
+           (${adjustment.id},${adjustment.tournament_id},${adjustment.type},${adjustment.change},${adjustment.reason},${adjustment.updated_by},${username})`;
+
+    await sql`DELETE FROM tournaments_adjustments WHERE id = ${adjustmentId}`;
+    console.log('>> after remove tournament adjustment');
+    await commitTransaction();
+  } catch (error) {
+    console.error('>> deleteTournamentAdjustmentLog Error:', error);
+    await cancelTransaction();
+  } finally {
+    revalidatePath(prevPage);
+    redirect(prevPage);
+  }
+}
+
 async function createPlayerLog(
   player: PlayerDB,
   formData: FormData,
@@ -517,6 +582,42 @@ export async function createPlayerUsageLog(
     true,
     data.userId,
     data.tournamentId,
+  );
+}
+
+export async function TournamentAdjustmentLog(
+  data: {
+    prevPage: string;
+    userId: string;
+    tournamentId: string;
+  },
+  _prevState: State,
+  formData: FormData,
+) {
+  noStore();
+  return createTournamentAdjustmentLog(
+    formData,
+    data.prevPage,
+    data.userId,
+    data.tournamentId,
+  );
+}
+
+export async function DeleteTournamentAdjustmentLog(
+  data: {
+    adjustmentId: string;
+    userId: string;
+    prevPage: string;
+  },
+  _prevState: State,
+  formData: FormData,
+) {
+  noStore();
+  console.log('## deleteTournamentAdjustmentLog', data);
+  return deleteTournamentAdjustmentLog(
+    data.adjustmentId,
+    data.userId,
+    data.prevPage,
   );
 }
 

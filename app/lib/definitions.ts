@@ -125,6 +125,17 @@ export type TournamentDB = {
   reEntriesCount: number;
 
   playersPlaces: PlayerDB[];
+  adjustments: TournamentsAdjustmentsDB[];
+};
+
+export type TournamentsAdjustmentsDB = {
+  id: string;
+  tournament_id: string;
+  type: string;
+  change: number;
+  reason: string;
+  updated_by: string;
+  updated_at: string;
 };
 
 export type FeatureFlagDB = {

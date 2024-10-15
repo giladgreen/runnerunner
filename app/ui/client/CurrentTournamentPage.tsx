@@ -129,7 +129,8 @@ export default function CurrentTournamentPage({
                 <div className="full-width flex w-full items-center justify-between">
                   <RSVPAndArrivalCardWrapper
                     todayTournament={todayTournament}
-                    incomeAsLink={false}
+                    incomeAsLink={true}
+                    userId={params.userId}
                   />
                 </div>
                 <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">

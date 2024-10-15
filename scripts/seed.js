@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 
 async function seedTournaments(client) {
   try {
-    // Create the "users" table if it doesn't exist
     const createTable = await client.sql`
       CREATE TABLE IF NOT EXISTS tournaments (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
@@ -20,7 +19,7 @@ async function seedTournaments(client) {
         updated_at timestamp NOT NULL DEFAULT now()
       );
     `;
-    // Create the "users" table if it doesn't exist
+
     await client.sql`
       CREATE TABLE IF NOT EXISTS deleted_tournaments (
         id UUID PRIMARY KEY NOT NULL,
@@ -37,6 +36,33 @@ async function seedTournaments(client) {
     `;
 
     console.log(`Created "tournaments" table`);
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS tournaments_adjustments (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        tournament_id UUID NOT NULL,
+        type TEXT NOT NULL,
+        change INT NOT NULL,
+        reason TEXT NOT NULL,
+        updated_by TEXT NOT NULL,
+        updated_at timestamp NOT NULL DEFAULT now()
+      );
+    `;
+
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS deleted_tournaments_adjustments (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        tournament_id UUID NOT NULL,
+        type TEXT NOT NULL,
+        change INT NOT NULL,
+        reason TEXT NOT NULL,
+        updated_by TEXT NOT NULL,
+        deleted_at timestamp NOT NULL DEFAULT now(),
+        deleted_by TEXT
+      );
+    `;
+
+    console.log(`Created "tournaments_adjustments" table`);
+
     const existingTournaments = (await client.sql`SELECT * FROM tournaments`)
       .rows;
 

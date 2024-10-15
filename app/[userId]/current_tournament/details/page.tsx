@@ -4,6 +4,7 @@ import {
   fetchTodayPlayersPhoneNumbers,
   fetchUserById,
   getAllPlayers,
+  getTodayTournamentsAdjustments,
 } from '@/app/lib/data';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 import React from 'react';
@@ -32,7 +33,12 @@ export default async function DetailsPage({
   const dayOfTheWeek = getDayOfTheWeek();
 
   const { todayTournaments } = await fetchRSVPAndArrivalData(dayOfTheWeek);
-
+  const todayTournamentsAdjustments = await getTodayTournamentsAdjustments();
+  todayTournaments.forEach((t) => {
+    t.adjustments = todayTournamentsAdjustments.filter(
+      (a) => a.tournament_id === t.id,
+    );
+  });
   const noTournamentsToday =
     todayTournaments.length === 0 ||
     !todayTournaments.find((t) => t.max_players > 0 || !t.rsvp_required);
@@ -77,6 +83,8 @@ export default async function DetailsPage({
     <CurrentTournamentIncomeDetailsPage
       todayTournaments={todayTournaments}
       players={playersWithHistoryLogRelevantForToday}
+      userId={params.userId}
+      refreshEnabled={user.refresh_enabled}
     />
   );
 }

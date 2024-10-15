@@ -12,6 +12,7 @@ import {
   PrizeInfoDB,
   RSVPDB,
   TournamentDB,
+  TournamentsAdjustmentsDB,
   UserDB,
   WinnerDB,
 } from './definitions';
@@ -146,6 +147,19 @@ async function getAllTournaments(includeDeleted?: boolean) {
   }
 
   return tournaments;
+}
+export async function getTodayTournamentsAdjustments() {
+  const todayTournaments = await getTodayTournaments();
+  const todayTournamentsIds = todayTournaments.map(({ id }) => id);
+  if (todayTournamentsIds.length === 0) {
+    return [];
+  }
+  const todayTournamentsAdjustments =
+    await sql<TournamentsAdjustmentsDB>`SELECT * FROM tournaments_adjustments WHERE updated_at > now() - interval '12 hour';`;
+
+  return todayTournamentsAdjustments.rows.filter((tournamentsAdjustment) =>
+    todayTournamentsIds.includes(tournamentsAdjustment.tournament_id),
+  );
 }
 
 async function getTournamentWinnersRecord(tournamentId: string, date: string) {
@@ -458,12 +472,17 @@ export async function fetchRSVPAndArrivalData(dayOfTheWeek: string) {
   methodStart();
   noStore();
   try {
-    const [allPlayers, todayHistoryWithZero, allTournaments] =
-      await Promise.all([
-        getAllPlayers(),
-        getTodayHistory(),
-        getAllTournaments(),
-      ]);
+    const [
+      allPlayers,
+      todayHistoryWithZero,
+      allTournaments,
+      todayTournamentsAdjustments,
+    ] = await Promise.all([
+      getAllPlayers(),
+      getTodayHistory(),
+      getAllTournaments(),
+      getTodayTournamentsAdjustments(),
+    ]);
 
     methodEnd('fetchRSVPAndArrivalData');
     const todayTournaments = allTournaments.filter(
@@ -472,6 +491,27 @@ export async function fetchRSVPAndArrivalData(dayOfTheWeek: string) {
 
     return {
       todayTournaments: todayTournaments.map((t) => {
+        const tournamentAdjustments = todayTournamentsAdjustments.filter(
+          (tournamentsAdjustment) =>
+            tournamentsAdjustment.tournament_id === t.id,
+        );
+        const cashAdjustments = tournamentAdjustments.filter(
+          (tournamentsAdjustment) => tournamentsAdjustment.type === 'cash',
+        );
+        const creditAdjustments = tournamentAdjustments.filter(
+          (tournamentsAdjustment) => tournamentsAdjustment.type === 'credit',
+        );
+        const wireAdjustments = tournamentAdjustments.filter(
+          (tournamentsAdjustment) => tournamentsAdjustment.type === 'wire',
+        );
+
+        const totalCashAdjustments = sumArrayByProp(cashAdjustments, 'change');
+        const totalCreditAdjustments = sumArrayByProp(
+          creditAdjustments,
+          'change',
+        );
+        const totalWireAdjustments = sumArrayByProp(wireAdjustments, 'change');
+
         const rsvpForToday = allPlayers.filter(
           (player) => t.id === player.rsvpForToday,
         ).length;
@@ -494,20 +534,32 @@ export async function fetchRSVPAndArrivalData(dayOfTheWeek: string) {
             ),
           ).length;
 
-        const todayCreditIncome = sumArrayByProp(
-          todayHistory.filter(
-            ({ type }) => type === 'credit' || type === 'credit_to_other',
-          ),
-          'change',
-        );
-        const todayCashIncome = sumArrayByProp(
-          todayHistory.filter(({ type }) => type === 'cash'),
-          'change',
-        );
-        const todayTransferIncome = sumArrayByProp(
-          todayHistory.filter(({ type }) => type === 'wire'),
-          'change',
-        );
+        const todayCreditIncome =
+          totalCreditAdjustments +
+          Math.abs(
+            sumArrayByProp(
+              todayHistory.filter(
+                ({ type }) => type === 'credit' || type === 'credit_to_other',
+              ),
+              'change',
+            ),
+          );
+        const todayCashIncome =
+          totalCashAdjustments +
+          Math.abs(
+            sumArrayByProp(
+              todayHistory.filter(({ type }) => type === 'cash'),
+              'change',
+            ),
+          );
+        const todayTransferIncome =
+          totalWireAdjustments +
+          Math.abs(
+            sumArrayByProp(
+              todayHistory.filter(({ type }) => type === 'wire'),
+              'change',
+            ),
+          );
         //TODO: take extra data from new table here
         const arrivedToday = Array.from(
           new Set(todayHistoryFiltered.map(({ phone_number }) => phone_number)),
@@ -517,14 +569,9 @@ export async function fetchRSVPAndArrivalData(dayOfTheWeek: string) {
           ...t,
           rsvpForToday,
           arrivedToday,
-          todayCreditIncome:
-            todayCreditIncome < 0 ? -1 * todayCreditIncome : todayCreditIncome,
-          todayCashIncome:
-            todayCashIncome < 0 ? -1 * todayCashIncome : todayCashIncome,
-          todayTransferIncome:
-            todayTransferIncome < 0
-              ? -1 * todayTransferIncome
-              : todayTransferIncome,
+          todayCreditIncome,
+          todayCashIncome,
+          todayTransferIncome,
           reEntriesCount,
           todayTournamentMaxPlayers: t.rsvp_required ? t.max_players : null,
         } as TournamentDB;

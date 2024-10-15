@@ -1,17 +1,43 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import RSVPAndArrivalCardWrapper from '@/app/ui/client/RSVPAndArrivalCardWrapper';
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
+import OpenTournamentAdjustmentChangeModalButton from '@/app/ui/client/OpenTournamentAdjustmentChangeModalButton';
+import {
+  DeleteTournamentAdjustmentLog,
+  TournamentAdjustmentLog,
+} from '@/app/lib/actions';
+import Button from '@/app/ui/client/Button';
+import { useFormState } from 'react-dom';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 export default function CurrentTournamentIncomeDetailsPage({
   todayTournaments,
   players,
+  userId,
+  refreshEnabled,
 }: {
   todayTournaments: TournamentDB[];
   players: PlayerDB[];
+  userId: string;
+  refreshEnabled: boolean;
 }) {
+  useEffect(() => {
+    const id = setInterval(async () => {
+      if (!refreshEnabled) {
+        return;
+      }
+      console.log('## refreshing page');
+      window.location.reload();
+    }, 30_000);
+
+    return () => clearInterval(id);
+  }, []);
+
+  const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
+
   if (todayTournaments.length === 0) {
     return null;
   }
@@ -49,6 +75,7 @@ export default function CurrentTournamentIncomeDetailsPage({
             todayCashIncome,
             todayTransferIncome,
             reEntriesCount,
+            adjustments,
           } = todayTournament;
 
           const cashPlayers = players.filter(
@@ -116,19 +143,72 @@ export default function CurrentTournamentIncomeDetailsPage({
           return (
             <TabPanel key={todayTournament.id}>
               <div className="full-width w-full">
+                {adjustments && adjustments.length > 0 && (
+                  <div
+                    style={rowsStyle}
+                    className="full-width flex w-full items-center justify-between"
+                  >
+                    שינויים ידניים:
+                  </div>
+                )}
+                {adjustments && adjustments.length > 0 && (
+                  <div>
+                    {adjustments.map((adjustment) => {
+                      const deleteTournamentAdjustmentLogWithExtraData =
+                        DeleteTournamentAdjustmentLog.bind(null, {
+                          prevPage,
+                          adjustmentId: adjustment.id,
+                          userId,
+                        });
+
+                      const money = `₪${Math.abs(Number(adjustment.change))}${
+                        adjustment.change < 0 ? '-' : ' '
+                      }`;
+
+                      return (
+                        <div key={adjustment.id} style={{ margin: '15px 0' }}>
+                          <div>
+                            <span style={{ margin: '0 5px' }}>שינוי של</span>
+                            <span style={{ margin: '0 5px' }}>{money}</span>
+                            <span style={{ margin: '0 5px' }}>
+                              ב
+                              {adjustment.type === 'cash'
+                                ? 'מזומן'
+                                : 'העברות בנקאיות'}
+                            </span>
+                          </div>
+                          <div>{adjustment.reason}</div>
+
+                          <form
+                            // @ts-ignore
+                            action={deleteTournamentAdjustmentLogWithExtraData}
+                          >
+                            <div
+                              style={{
+                                border: '1px solid black',
+                                maxWidth: 60,
+                                textAlign: 'center',
+                                borderRadius: 6,
+                              }}
+                            >
+                              <button type="submit">מחק</button>
+                            </div>
+                          </form>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
                 <div
-                  style={{
-                    position: 'fixed',
-                    top: 5,
-                    left: 5,
-                    textAlign: 'center',
-                    background: 'orange',
-                    padding: '5px 10px',
-                    zIndex: 99,
-                  }}
+                  style={rowsStyle}
+                  className="full-width flex w-full items-center justify-between"
                 >
-                  {todayTournament.name}
+                  <OpenTournamentAdjustmentChangeModalButton
+                    tournamentId={todayTournament.id}
+                    userId={userId}
+                  />
                 </div>
+                <hr style={rowsStyle}></hr>
                 <div
                   style={rowsStyle}
                   className="full-width flex w-full items-center justify-between"
@@ -175,7 +255,9 @@ export default function CurrentTournamentIncomeDetailsPage({
                     שחקנים שנכנסו במזומן:
                     {details.cashPlayers.length}
                   </div>
-                  {details.cashPlayers.length && <div style={rowsStyle}>פירוט:</div>}
+                  {details.cashPlayers.length && (
+                    <div style={rowsStyle}>פירוט:</div>
+                  )}
                   <div>
                     {details.cashPlayers.map((player) => {
                       return (
@@ -199,16 +281,18 @@ export default function CurrentTournamentIncomeDetailsPage({
                     שחקנים שנכנסו במזומן:
                     {details.wirePlayers.length}
                   </div>
-                  {details.wirePlayers.length && <div style={rowsStyle}>פירוט:</div>}
+                  {details.wirePlayers.length && (
+                    <div style={rowsStyle}>פירוט:</div>
+                  )}
                   <div>
                     {details.wirePlayers.map((player) => {
                       return (
-                          <div key={`wire_${player.id}`}>
-                            {player.name} ₪
-                            {player.historyLog.reduce((sum, curLog) => {
-                              return sum + -1 * curLog.change;
-                            }, 0)}
-                          </div>
+                        <div key={`wire_${player.id}`}>
+                          {player.name} ₪
+                          {player.historyLog.reduce((sum, curLog) => {
+                            return sum + -1 * curLog.change;
+                          }, 0)}
+                        </div>
                       );
                     })}
                   </div>
@@ -223,16 +307,18 @@ export default function CurrentTournamentIncomeDetailsPage({
                     שחקנים שנכנסו במזומן:
                     {details.creditPlayers.length}
                   </div>
-                  {details.creditPlayers.length && <div style={rowsStyle}>פירוט:</div>}
+                  {details.creditPlayers.length && (
+                    <div style={rowsStyle}>פירוט:</div>
+                  )}
                   <div>
                     {details.creditPlayers.map((player) => {
                       return (
-                          <div key={`credit_${player.id}`}>
-                            {player.name} ₪
-                            {player.historyLog.reduce((sum, curLog) => {
-                              return sum + -1 * curLog.change;
-                            }, 0)}
-                          </div>
+                        <div key={`credit_${player.id}`}>
+                          {player.name} ₪
+                          {player.historyLog.reduce((sum, curLog) => {
+                            return sum + -1 * curLog.change;
+                          }, 0)}
+                        </div>
                       );
                     })}
                   </div>
