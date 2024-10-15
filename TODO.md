@@ -3,9 +3,6 @@ TODO:
 
 - add ability to adjust the cash/transfer amounts
 
-- when pressing the add new user, if a phone number is in the search - use it
-
-
 - user page - add the user agreement
 
 - credit by other is slow

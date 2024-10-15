@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 import { UserDB } from '@/app/lib/definitions';
+import ClipboardDocumentCheckIcon from "@heroicons/react/24/outline/ClipboardDocumentCheckIcon";
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
@@ -89,6 +90,12 @@ export const Nevigationlinks = (userId: string) => [
     name: 'הסטורית קרדיט',
     href: `/${userId}/player_credit_history`,
     icon: BanknotesIcon,
+    player: true,
+  },
+  {
+    name: 'תקנון',
+    href: `/${userId}/terms`,
+    icon: ClipboardDocumentCheckIcon,
     player: true,
   },
   {
