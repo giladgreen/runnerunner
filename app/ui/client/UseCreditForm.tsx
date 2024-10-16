@@ -264,7 +264,9 @@ export default function UseCreditForm({
               <div className="relative">
                 <SearchablePlayersDropdown
                   playerId={player.id}
-                  players={players.filter((p) => p.id !== player.id)}
+                  players={players.filter(
+                    (p) => p.id !== player.id && p.balance > 0,
+                  )}
                   selectedVal={otherPlayer}
                   handleChange={(val: any) => setOtherPlayer(val)}
                 />
