@@ -43,9 +43,10 @@ export default function EditPlayerForm({
   );
 
   const [state, dispatch] = useFormState(updatePlayerWithId, initialState);
-  // @ts-ignore
+
   const [_state2, deletePlayerDispatch] = useFormState(
     deletePlayerWithId,
+      // @ts-ignore
     initialState2,
   );
 
