@@ -246,8 +246,9 @@ export async function getAllPlayers() {
       tournamentId: tournament_id,
     }));
 
-    player.rsvpForToday = rsvps.find(({ date }) => date === todayDate)
-      ?.tournament_id;
+    player.rsvpForToday = rsvps.find(
+      ({ date }) => date === todayDate,
+    )?.tournament_id;
 
     const playerItems = todayHistory.filter(
       ({ phone_number, change, type }) =>
@@ -265,7 +266,18 @@ export async function getAllPlayers() {
     player.arrived =
       playerItems.length > 0 ? playerItems[0].tournament_id : undefined;
     player.entries = playerItems.length;
-    player.entriesTooltipText = playerItems.reverse().map(item => item.type === 'cash' ? CASH : (item.type === 'wire' ? WIRE : (item.type === 'credit' ? CREDIT : CREDIT_BY_OTHER))  ).join(',');
+    player.entriesTooltipText = playerItems
+      .reverse()
+      .map((item) =>
+        item.type === 'cash'
+          ? CASH
+          : item.type === 'wire'
+            ? WIRE
+            : item.type === 'credit'
+              ? CREDIT
+              : CREDIT_BY_OTHER,
+      )
+      .join(',');
 
     player.name = player.name.trim();
     player.historyLog = playerItems;
@@ -320,8 +332,9 @@ async function fetchTopPlayers(
         tournamentId: tournament_id,
       }));
 
-      player.rsvpForToday = rsvps.find(({ date }) => date === todayDate)
-        ?.tournament_id;
+      player.rsvpForToday = rsvps.find(
+        ({ date }) => date === todayDate,
+      )?.tournament_id;
     });
     return players;
   } catch (error) {
@@ -714,8 +727,9 @@ export async function fetchFilteredPlayers(
         tournamentId: tournament_id,
       }));
 
-      player.rsvpForToday = rsvps.find(({ date }) => date === todayDate)
-        ?.tournament_id;
+      player.rsvpForToday = rsvps.find(
+        ({ date }) => date === todayDate,
+      )?.tournament_id;
     });
     methodEnd('fetchFilteredPlayers');
     return players;

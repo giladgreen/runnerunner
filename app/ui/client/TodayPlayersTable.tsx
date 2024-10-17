@@ -1,9 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useFormStatus } from 'react-dom';
-
-import Image from 'next/image';
 import Link from 'next/link';
 import {
   formatCurrency,
@@ -19,10 +16,10 @@ import OpenPrizeModalButton from '@/app/ui/client/OpenPrizeModalButton';
 import EntriesButton from '@/app/ui/client/EntriesButton';
 import CreateNewTodayPlayerButton from '@/app/ui/client/CreateNewTodayPlayerButton';
 import { TrashIcon } from '@heroicons/react/24/outline';
-import { setPlayerPosition } from '@/app/lib/actions';
 import { usePathname, useSearchParams } from 'next/navigation';
 import DeletePositionButton from '@/app/ui/client/DeletePositionButton';
 import { getDayOfTheWeek } from '@/app/lib/clientDateUtils';
+import Avatar from '@/app/ui/client/Avatar';
 
 function getMinPosition(players: PlayerDB[]) {
   const positions = players
@@ -120,14 +117,14 @@ export default function TodayPlayersTable({
     query.length > 0
       ? `מציג ${players.length} תוצאות `
       : rsvpEnabled && isRsvpRequired
-      ? `מציג  ${rsvpPlayersCount} שחקנים שאישרו הגעה, ${arrivedPlayers} שהגיעו. ${
-          arrivedWithoutRSVPPlayers > 0
-            ? arrivedWithoutRSVPPlayers > 1
-              ? `(${arrivedWithoutRSVPPlayers} שחקנים הגיעו מבלי לאשר הגעה)`
-              : `(שחקן אחד הגיע מבלי לאשר הגעה)`
-            : ''
-        }`
-      : `מציג ${arrivedPlayers} שחקנים שהגיעו.`;
+        ? `מציג  ${rsvpPlayersCount} שחקנים שאישרו הגעה, ${arrivedPlayers} שהגיעו. ${
+            arrivedWithoutRSVPPlayers > 0
+              ? arrivedWithoutRSVPPlayers > 1
+                ? `(${arrivedWithoutRSVPPlayers} שחקנים הגיעו מבלי לאשר הגעה)`
+                : `(שחקן אחד הגיע מבלי לאשר הגעה)`
+              : ''
+          }`
+        : `מציג ${arrivedPlayers} שחקנים שהגיעו.`;
 
   const minPosition = getMinPosition(players);
 
@@ -187,12 +184,9 @@ export default function TodayPlayersTable({
                     <div className="flex items-center justify-between border-b pb-4">
                       <div>
                         <div className="mb-2 flex items-center">
-                          <Image
-                            src={player.image_url}
-                            className="zoom-on-hover mr-2 rounded-full"
-                            width={40}
-                            height={40}
-                            alt={`${player.name}'s profile picture`}
+                          <Avatar
+                            player={player}
+                            tournamentId={currentTournament?.id}
                           />
                           <div style={{ margin: '0 6px', zoom: 1.5 }}>
                             {player.name}
@@ -202,14 +196,6 @@ export default function TodayPlayersTable({
                           {player.phone_number}
                         </div>
                       </div>
-                      {rsvpEnabled && isRsvpRequired && currentTournament && (
-                        <div className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                          <RSVPButton
-                            player={player}
-                            tournamentId={currentTournament?.id!}
-                          />
-                        </div>
-                      )}
                       <div className="flex justify-end gap-3">
                         <OpenCreditModalButton
                           players={playersWithEnoughCredit}
@@ -346,12 +332,9 @@ export default function TodayPlayersTable({
                     >
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="font-large flex items-center gap-3">
-                          <Image
-                            src={player.image_url}
-                            className="zoom-on-hover rounded-full"
-                            width={40}
-                            height={40}
-                            alt={`${player.name}'s profile picture`}
+                          <Avatar
+                            player={player}
+                            tournamentId={currentTournament?.id}
                           />
 
                           <Link href={getLink(player)}>

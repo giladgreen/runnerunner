@@ -22,8 +22,8 @@ function saveOtherDataToFile(
     addPlaces && addPrizes
       ? 'places_and_prizes'
       : addPlaces
-      ? 'places'
-      : 'prizes'
+        ? 'places'
+        : 'prizes'
   }.csv`;
 
   const placesData = addPlaces

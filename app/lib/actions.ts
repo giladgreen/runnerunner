@@ -371,7 +371,7 @@ async function createPlayerLog(
   const username = user?.name ?? user?.phone_number ?? 'unknown';
   const change = validatedFields.data.change * (usage ? -1 : 1);
 
-  let type = usage ? (formData.get('type') as string) ?? 'prize' : 'credit';
+  let type = usage ? ((formData.get('type') as string) ?? 'prize') : 'credit';
 
   const otherPlayerPhoneNumber = formData.get('other_player') as string;
   const {
@@ -1058,7 +1058,7 @@ export async function deleteTournament(
           tournamentToDelete.re_buy
         },${tournamentToDelete.max_players},${
           tournamentToDelete.rsvp_required
-        },${user ? user.name ?? user.phone_number ?? userId : userId})`;
+        },${user ? (user.name ?? user.phone_number ?? userId) : userId})`;
 
       await sql`DELETE FROM tournaments WHERE id = ${tournamentId}`;
       sendEmail(
@@ -1568,7 +1568,7 @@ pass:${password}`,
   const name = phoneToName[phoneNumber]
     ? // @ts-ignore
       (phoneToName[phoneNumber] as string)
-    : existingPlayer?.name ?? username;
+    : (existingPlayer?.name ?? username);
 
   await sql`
       INSERT INTO users (phone_number, password, name, is_admin, is_worker)
