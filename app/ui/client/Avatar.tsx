@@ -1,3 +1,5 @@
+'use client';
+
 import { PlayerDB } from '@/app/lib/definitions';
 import * as FlowbiteReact from 'flowbite-react';
 import React from 'react';
@@ -7,25 +9,28 @@ const getInitials = (name: string) => {
   return name
     .split(' ')
     .map((n) => n[0])
-    .join('');
+    .join('')
+    .slice(0, 2);
 };
 
 export default function Avatar({
   player,
-  tournamentId,
+  tournamentIds,
 }: {
   player: PlayerDB;
-  tournamentId?: string;
+  tournamentIds?: string[];
 }) {
   const isDefaultImage =
-    !player.image_url || (player.image_url ?? '').includes('default.png');
+    !player.image_url || player.image_url.includes('default.png');
   const date = getTodayDate();
-  const isRsvpForDate = Boolean(
-    player.rsvps.find(
-      (r) => r.date === date && r.tournamentId === tournamentId,
-    ),
-  );
-  const status = tournamentId
+  const isRsvpForDate =
+    tournamentIds &&
+    Boolean(
+      player.rsvps.find(
+        (r) => r.date === date && tournamentIds.includes(r.tournamentId),
+      ),
+    );
+  const status = tournamentIds
     ? isRsvpForDate
       ? 'online'
       : 'offline'

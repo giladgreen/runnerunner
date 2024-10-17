@@ -1,5 +1,5 @@
 'use client';
-import Button, {RedButton} from '@/app/ui/client/Button';
+import Button, { RedButton } from '@/app/ui/client/Button';
 import { useFormStatus } from 'react-dom';
 import React from 'react';
 import Spinner from '@/app/ui/client/Spinner';
@@ -38,7 +38,7 @@ export function RedSpinnerButton({
   }
 
   return (
-    <RedButton type="submit" onClick={onClick} >
+    <RedButton type="submit" onClick={onClick}>
       {text}
     </RedButton>
   );

@@ -1,5 +1,5 @@
 'use client';
-import {deletePlayer, updatePlayer} from '@/app/lib/actions';
+import { deletePlayer, updatePlayer } from '@/app/lib/actions';
 import { CldUploadWidget } from 'next-cloudinary';
 
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
@@ -11,7 +11,7 @@ import RSVPButton from '@/app/ui/client/RSVPButton';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { TRANSLATIONS } from '@/app/lib/definitions';
 import Image from 'next/image';
-import SpinnerButton, {RedSpinnerButton} from '@/app/ui/client/SpinnerButton';
+import SpinnerButton, { RedSpinnerButton } from '@/app/ui/client/SpinnerButton';
 import { getCurrentDate, getDayOfTheWeek } from '@/app/lib/clientDateUtils';
 
 export default function EditPlayerForm({
@@ -44,7 +44,10 @@ export default function EditPlayerForm({
 
   const [state, dispatch] = useFormState(updatePlayerWithId, initialState);
   // @ts-ignore
-  const [_state2, deletePlayerDispatch] = useFormState(deletePlayerWithId, initialState2);
+  const [_state2, deletePlayerDispatch] = useFormState(
+    deletePlayerWithId,
+    initialState2,
+  );
 
   const dayOfTheWeek = getDayOfTheWeek();
   const days = [
@@ -104,9 +107,11 @@ export default function EditPlayerForm({
 
   return (
     <>
-      { isAdmin &&  <form action={deletePlayerDispatch}>
-        <RedSpinnerButton text="מחק שחקן"  />
-      </form>}
+      {isAdmin && (
+        <form action={deletePlayerDispatch}>
+          <RedSpinnerButton text="מחק שחקן" />
+        </form>
+      )}
       <form action={dispatch}>
         <div className="rtl rounded-md bg-gray-50 p-4 md:p-6">
           {/* player name */}

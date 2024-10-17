@@ -186,7 +186,7 @@ export default function TodayPlayersTable({
                         <div className="mb-2 flex items-center">
                           <Avatar
                             player={player}
-                            tournamentId={currentTournament?.id}
+                            tournamentIds={[currentTournament?.id]}
                           />
                           <div style={{ margin: '0 6px', zoom: 1.5 }}>
                             {player.name}
@@ -334,7 +334,7 @@ export default function TodayPlayersTable({
                         <div className="font-large flex items-center gap-3">
                           <Avatar
                             player={player}
-                            tournamentId={currentTournament?.id}
+                            tournamentIds={[currentTournament?.id]}
                           />
 
                           <Link href={getLink(player)}>

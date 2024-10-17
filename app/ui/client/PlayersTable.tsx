@@ -14,6 +14,7 @@ import RSVPButton from '@/app/ui/client/RSVPButton';
 import { TRANSLATIONS } from '@/app/lib/definitions';
 import React from 'react';
 import { formatDateToLocal, getDayOfTheWeek } from '@/app/lib/serverDateUtils';
+import Avatar from '@/app/ui/client/Avatar';
 
 export default async function PlayersTable({
   query,
@@ -57,12 +58,9 @@ export default async function PlayersTable({
                   <div className="flex items-center justify-between border-b pb-4">
                     <div>
                       <div className="mb-2 flex items-center">
-                        <Image
-                          src={player.image_url}
-                          className="zoom-on-hover mr-2 rounded-full"
-                          width={40}
-                          height={40}
-                          alt={`${player.name}'s profile picture`}
+                        <Avatar
+                          player={player}
+                          tournamentIds={todayTournaments.map((t) => t.id)}
                         />
                         <div style={{ margin: '0 10px', zoom: 1.5 }}>
                           {player.name}
@@ -179,12 +177,9 @@ export default async function PlayersTable({
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
                     <Link href={`/${userId}/players/${player.id}/edit`}>
                       <div className="flex items-center gap-3">
-                        <Image
-                          src={player.image_url}
-                          className="zoom-on-hover rounded-full"
-                          width={40}
-                          height={40}
-                          alt={`${player.name}'s profile picture`}
+                        <Avatar
+                          player={player}
+                          tournamentIds={todayTournaments.map((t) => t.id)}
                         />
                         <div className="font-large">{player.name}</div>
                       </div>
