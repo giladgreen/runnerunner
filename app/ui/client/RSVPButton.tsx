@@ -8,15 +8,15 @@ import { rsvpPlayerForDay } from '@/app/lib/actions';
 import { usePathname } from 'next/navigation';
 import { useSearchParams } from 'next/dist/client/components/navigation';
 import { getTodayDate } from '@/app/lib/clientDateUtils';
+import {Switch} from "@nextui-org/react";
+
 export default function RSVPButton({
   player,
   stringDate,
-  text,
   tournamentId,
 }: {
   player: PlayerDB;
   stringDate?: string;
-  text?: string;
   tournamentId: string;
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
@@ -30,36 +30,25 @@ export default function RSVPButton({
   const [optimisticIsRsvpForDate, addOptimisticIsRsvpForDate] =
     useOptimistic<boolean>(isRsvpForDate, (state: boolean) => !state);
 
-  return (
-    <div
-      style={{ display: 'flex', margin: '5px 0' }}
-      onClick={() => {
+  const onClick= () => {
         startTransition(() => {
-          addOptimisticIsRsvpForDate(!isRsvpForDate);
+            addOptimisticIsRsvpForDate(!isRsvpForDate);
         });
 
         rsvpPlayerForDay(
-          player.phone_number,
-          date,
-          tournamentId,
-          !isRsvpForDate,
-          prevPage,
+            player.phone_number,
+            date,
+            tournamentId,
+            !isRsvpForDate,
+            prevPage,
         );
-      }}
+    };
+  return (
+    <div
+      style={{ display: 'flex', margin: '5px 0' }}
+      onClick={onClick}
     >
-      <span className="pointer" style={{ display: 'flex' }}>
-        <div
-          style={{
-            margin: '0 5px',
-            width: 30,
-            height: 30,
-            border: '1px solid black',
-            borderRadius: 15,
-            background: optimisticIsRsvpForDate ? 'green' : 'white',
-          }}
-        />
-      </span>
-      {text}
+        <Switch initialChecked={optimisticIsRsvpForDate} isSelected={optimisticIsRsvpForDate}  color="success"   onClick={onClick}/>
     </div>
   );
 }
