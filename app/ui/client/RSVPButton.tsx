@@ -14,8 +14,10 @@ export default function RSVPButton({
   player,
   stringDate,
   tournamentId,
+    text,
 }: {
   player: PlayerDB;
+  text?: string;
   stringDate?: string;
   tournamentId: string;
 }) {
@@ -49,6 +51,7 @@ export default function RSVPButton({
       onClick={onClick}
     >
         <Switch initialChecked={optimisticIsRsvpForDate} isSelected={optimisticIsRsvpForDate}  color="success"   onClick={onClick}/>
+        {text}
     </div>
   );
 }

@@ -13,6 +13,7 @@ import { TRANSLATIONS } from '@/app/lib/definitions';
 import Image from 'next/image';
 import SpinnerButton, { RedSpinnerButton } from '@/app/ui/client/SpinnerButton';
 import { getCurrentDate, getDayOfTheWeek } from '@/app/lib/clientDateUtils';
+import {Switch} from "@nextui-org/react";
 
 export default function EditPlayerForm({
   player,
@@ -89,16 +90,8 @@ export default function EditPlayerForm({
             )
           ) : (
             <div style={{ display: 'flex' }}>
-              <div
-                style={{
-                  border: '1px solid black',
-                  background: '#AAAAAA',
-                  width: 26,
-                  height: 26,
-                  margin: '0 8px',
-                  cursor: 'no-drop',
-                }}
-              />
+              <Switch initialChecked={false} disabled={true}/>
+
               {text}
             </div>
           )}
