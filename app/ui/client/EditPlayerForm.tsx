@@ -1,5 +1,5 @@
 'use client';
-import { updatePlayer } from '@/app/lib/actions';
+import {deletePlayer, updatePlayer} from '@/app/lib/actions';
 import { CldUploadWidget } from 'next-cloudinary';
 
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
@@ -11,7 +11,7 @@ import RSVPButton from '@/app/ui/client/RSVPButton';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { TRANSLATIONS } from '@/app/lib/definitions';
 import Image from 'next/image';
-import SpinnerButton from '@/app/ui/client/SpinnerButton';
+import SpinnerButton, {RedSpinnerButton} from '@/app/ui/client/SpinnerButton';
 import { getCurrentDate, getDayOfTheWeek } from '@/app/lib/clientDateUtils';
 
 export default function EditPlayerForm({
@@ -19,23 +19,32 @@ export default function EditPlayerForm({
   tournaments,
   rsvpEnabled,
   userId,
+  isAdmin,
 }: {
   userId: string;
   player: PlayerDB;
   rsvpEnabled: boolean;
+  isAdmin?: boolean;
   tournaments: TournamentDB[];
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const initialState = { message: null, errors: {} };
+  const initialState2 = { message: null, errors: {} };
   const updatePlayerWithId = updatePlayer.bind(null, {
     id: player.id,
     prevPage,
+  });
+  const deletePlayerWithId = deletePlayer.bind(null, {
+    id: player.id,
+    prevPage: '/',
   });
   const [imageUrl, setImageUrl] = useState(
     player.image_url ?? '/players/default.png',
   );
 
   const [state, dispatch] = useFormState(updatePlayerWithId, initialState);
+  // @ts-ignore
+  const [_state2, deletePlayerDispatch] = useFormState(deletePlayerWithId, initialState2);
 
   const dayOfTheWeek = getDayOfTheWeek();
   const days = [
@@ -95,6 +104,9 @@ export default function EditPlayerForm({
 
   return (
     <>
+      { isAdmin &&  <form action={deletePlayerDispatch}>
+        <RedSpinnerButton text="מחק שחקן"  />
+      </form>}
       <form action={dispatch}>
         <div className="rtl rounded-md bg-gray-50 p-4 md:p-6">
           {/* player name */}

@@ -73,6 +73,7 @@ export default async function EditPlayerPage({
         tournaments={tournaments}
         rsvpEnabled={Boolean(rsvpEnabled)}
         userId={params.userId}
+        isAdmin={isAdmin}
       />
       <div className="ltr">
         <div style={{ textAlign: 'right', zoom: 1.6 }}>
