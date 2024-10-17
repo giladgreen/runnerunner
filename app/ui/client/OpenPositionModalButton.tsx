@@ -4,7 +4,7 @@ import { PlayerDB } from '@/app/lib/definitions';
 import SetPositionForm from '@/app/ui/client/SetPositionForm';
 import React from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { HashtagIcon } from '@heroicons/react/24/solid';
+import {Button, Tooltip} from "flowbite-react";
 
 export default function OpenPositionModalButton({
   player,
@@ -18,30 +18,23 @@ export default function OpenPositionModalButton({
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const [show, setShow] = React.useState(false);
   const enableButton = player.arrived === tournamentId;
-  const tooltip = enableButton ? 'קבע דירוג' : '';
   const close = () => {
     setShow(false);
   };
   return (
     <div>
-      <button
-        className="pointer rounded-md border p-2 hover:bg-gray-100"
-        onClick={() => {
-          if (enableButton) {
-            setShow(true);
-          }
-        }}
-      >
-        <span className="sr-only">Position</span>
-        <HashtagIcon
-          className="w-6"
-          title={tooltip}
-          style={{
-            color: enableButton ? 'black' : 'gray',
-            cursor: enableButton ? 'pointer' : 'no-drop',
-          }}
-        />
-      </button>
+        <Tooltip
+            content="קבע מיקום"
+            color="primary"
+        >
+        <Button onClick={() => {
+            if (enableButton) {
+                setShow(true);
+            }
+        }} color="light" disabled={!enableButton}>
+            <span style={{ fontSize:22}}>#</span>
+        </Button>
+        </Tooltip>
       <div className={show ? 'edit-player-modal' : 'hidden'}>
         <SetPositionForm
           player={player}

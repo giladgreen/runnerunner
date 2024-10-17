@@ -1,5 +1,5 @@
 'use client';
-import { deletePlayer, updatePlayer } from '@/app/lib/actions';
+import {deletePlayer, undoPlayerLastLog, updatePlayer} from '@/app/lib/actions';
 import { CldUploadWidget } from 'next-cloudinary';
 
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
@@ -14,6 +14,8 @@ import Image from 'next/image';
 import SpinnerButton, { RedSpinnerButton } from '@/app/ui/client/SpinnerButton';
 import { getCurrentDate, getDayOfTheWeek } from '@/app/lib/clientDateUtils';
 import {Switch} from "@nextui-org/react";
+import AreYouSure from "@/app/ui/client/AreYouSure";
+import Spinner from "@/app/ui/client/Spinner";
 
 export default function EditPlayerForm({
   player,
@@ -28,6 +30,9 @@ export default function EditPlayerForm({
   isAdmin?: boolean;
   tournaments: TournamentDB[];
 }) {
+  const [showDeletePlayerConfirmation, setShowDeletePlayerConfirmation] = useState(false);
+  const [isDeletePlayerPending, setIsDeletePlayerPending] = useState(false);
+
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const initialState = { message: null, errors: {} };
   const initialState2 = { message: null, errors: {} };
@@ -102,9 +107,31 @@ export default function EditPlayerForm({
   return (
     <>
       {isAdmin && (
-        <form action={deletePlayerDispatch}>
-          <RedSpinnerButton text="מחק שחקן" />
-        </form>
+          <div>
+            <div
+                onClick={() => {
+                  setShowDeletePlayerConfirmation(true);
+                }}
+                className="pointer"
+            >
+              {isDeletePlayerPending ? <Spinner size={30} /> : <RedSpinnerButton text="מחק שחקן"/>}
+            </div>
+            {showDeletePlayerConfirmation && (
+                <AreYouSure
+                    onConfirm={() => {
+                      setShowDeletePlayerConfirmation(false);
+                      setIsDeletePlayerPending(true);
+                      deletePlayerDispatch();
+                      setTimeout(() => setIsDeletePlayerPending(false), 2600);
+                    }}
+                    onCancel={() => {
+                      setShowDeletePlayerConfirmation(false);
+                    }}
+                    subtext="הפעולה אינה הפיכה"
+                    text="מחיקת שחקן?"
+                />
+            )}
+          </div>
       )}
       <form action={dispatch}>
         <div className="rtl rounded-md bg-gray-50 p-4 md:p-6">
@@ -116,11 +143,11 @@ export default function EditPlayerForm({
             <div className="relative mt-2 rounded-md">
               <div className="relative">
                 <input
-                  id="name"
-                  name="name"
-                  defaultValue={player.name}
-                  placeholder="הכנס שם"
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                    id="name"
+                    name="name"
+                    defaultValue={player.name}
+                    placeholder="הכנס שם"
+                    className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                   aria-describedby="name-error"
                 />
               </div>

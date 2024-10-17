@@ -1,10 +1,9 @@
 'use client';
-
+import { Tooltip, Button } from "flowbite-react";
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import UseCreditForm from '@/app/ui/client/UseCreditForm';
 import React from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { PlusCircleIcon } from '@heroicons/react/24/solid';
 
 export default function OpenCreditModalButton({
   player,
@@ -30,31 +29,16 @@ export default function OpenCreditModalButton({
 
   return (
     <div>
-      <button
-        className="pointer rounded-md border p-2 hover:bg-gray-100"
-        onClick={() => {
-          setShow(true);
-        }}
-      >
-        <span className="sr-only">הכנס</span>
-        <div
-          title="הכנס"
-          style={{
-            border: '1px solid black',
-            color: 'white',
-            textAlign: 'center',
-            borderRadius: 12,
-            width: 20,
-            height: 20,
-            background: 'black',
-          }}
+        <Tooltip
+            content="שחקן שילם"
+            color="primary"
         >
-          <b>
-            <div>₪</div>{' '}
-          </b>
-        </div>
-        {/*<PlusCircleIcon className="w-6" title="הכנס" />*/}
-      </button>
+        <Button onClick={() => {
+            setShow(true);
+        }} color="light" >
+           <span style={{ fontSize:22}}>₪</span>
+        </Button>
+        </Tooltip>
       <div className={show ? 'edit-player-modal' : 'hidden'}>
         <UseCreditForm
           players={players}
