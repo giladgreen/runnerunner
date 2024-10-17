@@ -26,7 +26,10 @@ import {
 
 const ITEMS_PER_PAGE = 30;
 const TOP_COUNT = 8;
-
+const CASH = 'מזומן';
+const CREDIT = 'קרדיט';
+const WIRE = 'העברה';
+const CREDIT_BY_OTHER = 'קרדיט מאחרים';
 let start = 0;
 function methodStart() {
   start = getCurrentDate().getTime();
@@ -262,6 +265,7 @@ export async function getAllPlayers() {
     player.arrived =
       playerItems.length > 0 ? playerItems[0].tournament_id : undefined;
     player.entries = playerItems.length;
+    player.entriesTooltipText = playerItems.reverse().map(item => item.type === 'cash' ? CASH : (item.type === 'wire' ? WIRE : (item.type === 'credit' ? CREDIT : CREDIT_BY_OTHER))  ).join(',');
 
     player.name = player.name.trim();
     player.historyLog = playerItems;

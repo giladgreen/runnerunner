@@ -39,6 +39,7 @@ export type PlayerDB = {
   arrived?: string;
   entries: number;
   rsvpForToday?: string;
+  entriesTooltipText?: string;
   hasReceived: boolean;
   creditWorth: number;
   rsvps: Array<{ date: string; tournamentId: string }>;

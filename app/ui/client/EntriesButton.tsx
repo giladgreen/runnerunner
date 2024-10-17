@@ -7,8 +7,10 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import AreYouSure from '@/app/ui/client/AreYouSure';
 import Spinner from '@/app/ui/client/Spinner';
+import {Tooltip} from "@nextui-org/react";
 
-const formatPlayerEntries = (entries: number, isPending: boolean) => {
+
+const formatPlayerEntries = (entries: number, isPending: boolean, tooltipText?:string) => {
   if (isPending) {
     return <Spinner size={30} />;
   }
@@ -22,13 +24,15 @@ const formatPlayerEntries = (entries: number, isPending: boolean) => {
 
   const map = ['', 'one', 'two', 'three', 'four', 'five'];
   return (
-    <Image
-      src={`/${map[entries]}.png`}
-      alt={`players entries: ${entries}`}
-      className="zoom-on-hover mr-4"
-      width={35}
-      height={35}
-    />
+      <Tooltip content={tooltipText} color="primary" contentColor={undefined} css={undefined}>
+        <Image
+          src={`/${map[entries]}.png`}
+          alt={`players entries: ${entries}`}
+          className="zoom-on-hover mr-4"
+          width={35}
+          height={35}
+        />
+      </Tooltip>
   );
 };
 
@@ -38,6 +42,7 @@ export default function EntriesButton({ player }: { player: PlayerDB }) {
   const [isPending, setIsPending] = useState(false);
 
   const currentPage = `${usePathname()}?${useSearchParams().toString()}`;
+
   return (
     <div>
       <div
@@ -46,7 +51,7 @@ export default function EntriesButton({ player }: { player: PlayerDB }) {
         }}
         className="pointer"
       >
-        {formatPlayerEntries(player.entries ?? 0, isPending)}
+        {formatPlayerEntries(player.entries ?? 0, isPending, player.entriesTooltipText)}
       </div>
       {showConfirmation && (
         <AreYouSure
