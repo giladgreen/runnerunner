@@ -29,7 +29,7 @@ export default async function CreatePlayerPage({
       />
       <CreatePlayerForm
         userId={params.userId}
-        prevPage={`/${params.userId}/players`}
+        prevPage={`/${params.userId}/current_tournament`}
       />
     </main>
   );
