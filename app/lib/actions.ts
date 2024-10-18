@@ -613,7 +613,7 @@ export async function DeleteTournamentAdjustmentLog(
   formData: FormData,
 ) {
   noStore();
-  console.log('## deleteTournamentAdjustmentLog', data);
+
   return deleteTournamentAdjustmentLog(
     data.adjustmentId,
     data.userId,

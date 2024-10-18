@@ -25,6 +25,9 @@ export default async function WhalePlayers({
         <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
           <div className="bg-white px-6">
             {whales.map((player: PlayerDB, i) => {
+              let entries = ` ${player.historyEntriesCount}`;
+              entries += ` כניסות `;
+
               return (
                 <Link
                   key={player.id}
@@ -54,6 +57,11 @@ export default async function WhalePlayers({
                           {player.phone_number}
                         </div>
                       </div>
+                    </div>
+                    <div
+                      className={`${lusitana.className} rtl truncate text-sm font-medium md:text-base`}
+                    >
+                      {entries}
                     </div>
                     <div
                       className={`${lusitana.className} ltr truncate text-sm font-medium md:text-base`}

@@ -207,9 +207,9 @@ async function getAllHistory() {
   return todayHistoryResults.rows;
 }
 
-async function getBuyInsHistory(limit: number) {
+async function getBuyInsHistory(limit: number, minSum: number) {
   const todayHistoryResults =
-    await sql<BuyInDB>`select * FROM (SELECT phone_number, SUM(change) FROM history WHERE change < 0 AND type in ('cash','wire') GROUP BY phone_number) as A WHERE A.sum < -3000 ORDER BY A.sum LIMIT ${limit}`;
+    await sql<BuyInDB>`select * FROM (SELECT phone_number, SUM(change), COUNT(*) FROM history WHERE change < 0 AND type in ('cash','wire') GROUP BY phone_number) as A WHERE A.sum < ${minSum} ORDER BY A.sum LIMIT ${limit}`;
   return todayHistoryResults.rows;
 }
 
@@ -299,11 +299,6 @@ async function getAllUsers() {
 }
 
 async function getPlayersByPhoneNumbers(phoneNumbers: string[]) {
-  console.log('## phoneNumbers', phoneNumbers);
-  const where = phoneNumbers
-    .map((phoneNumber) => `phone_number = '${phoneNumber}'`)
-    .join(' OR ');
-
   const results = await Promise.all(
     phoneNumbers.map(
       (phoneNumber) =>
@@ -509,8 +504,8 @@ export async function fetchGeneralPlayersCardData() {
 }
 
 export async function fetchWhalePlayersData(): Promise<PlayerDB[]> {
-  const buyInHistory = await getBuyInsHistory(8);
-  console.log('## buyInHistory', buyInHistory);
+  const buyInHistory = await getBuyInsHistory(8, -2000);
+
   const playersPhoneNumbers = buyInHistory.map(
     ({ phone_number }) => phone_number,
   );
@@ -525,6 +520,11 @@ export async function fetchWhalePlayersData(): Promise<PlayerDB[]> {
   players.forEach((player) => {
     player.historyEntriesSum = Number(
       buyInHistory.find((p) => p.phone_number === player.phone_number)?.sum ||
+        0,
+    );
+
+    player.historyEntriesCount = Number(
+      buyInHistory.find((p) => p.phone_number === player.phone_number)?.count ||
         0,
     );
 
@@ -548,8 +548,6 @@ export async function fetchWhalePlayersData(): Promise<PlayerDB[]> {
       ({ date }) => date === todayDate,
     )?.tournament_id;
   });
-
-  console.log('## players', players);
 
   return players;
 }

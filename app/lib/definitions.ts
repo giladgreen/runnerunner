@@ -33,6 +33,7 @@ export type PlayerDB = {
   position: number;
   balance: number;
   historyEntriesSum: number;
+  historyEntriesCount: number;
   historyCount: number;
   note: string;
   notes: string;
@@ -110,6 +111,7 @@ export type LogDB = {
 export type BuyInDB = {
   phone_number: string;
   sum: number;
+  count: number;
 };
 
 export type TournamentDB = {
