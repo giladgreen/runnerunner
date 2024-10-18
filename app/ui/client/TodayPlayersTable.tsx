@@ -175,7 +175,6 @@ export default function TodayPlayersTable({
           <div className="inline-block min-w-full align-middle">
             <div className="w-full rounded-lg bg-gray-50 p-2 md:pt-0">
               <div className="md:hidden">
-
                 {players?.map((player: PlayerDB) => (
                   <div
                     key={player.id}
@@ -248,13 +247,18 @@ export default function TodayPlayersTable({
                         </div>
                       )}
                     </div>
-                    {rsvpEnabled && isRsvpRequired && currentTournament && <div style={{marginTop:10}} className="flex w-full items-center justify-between pt-4">
-                      רישום לטורניר
-                      <RSVPButton
+                    {rsvpEnabled && isRsvpRequired && currentTournament && (
+                      <div
+                        style={{ marginTop: 10 }}
+                        className="flex w-full items-center justify-between pt-4"
+                      >
+                        רישום לטורניר
+                        <RSVPButton
                           player={player}
                           tournamentId={currentTournament.id!}
-                      />
-                    </div>}
+                        />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

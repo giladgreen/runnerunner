@@ -1,31 +1,30 @@
 import clsx from 'clsx';
 import { lusitana } from '@/app/ui/fonts';
-import { fetchMVPPlayers } from '@/app/lib/data';
-import { formatCurrency } from '@/app/lib/utils';
+import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { PlayersSkeleton } from '@/app/ui/skeletons';
 import { PlayerDB } from '@/app/lib/definitions';
 import Avatar from '@/app/ui/client/Avatar';
 
-export default async function MVPPlayers({
+export default async function WhalePlayers({
   userId,
   tournamentsIds,
+  whales,
 }: {
   userId: string;
   tournamentsIds: string[];
+  whales: PlayerDB[];
 }) {
-  const mvpPlayers = await fetchMVPPlayers();
-
   return (
     <Suspense fallback={<PlayersSkeleton />}>
       <div className="rtl flex w-full flex-col md:col-span-4">
         <h2 className={`${lusitana.className} rtl mb-4 text-xl md:text-2xl`}>
-          שחקנים מובילים
+          לוויתנים
         </h2>
         <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
           <div className="bg-white px-6">
-            {mvpPlayers.map((player: PlayerDB, i) => {
+            {whales.map((player: PlayerDB, i) => {
               return (
                 <Link
                   key={player.id}
@@ -46,6 +45,7 @@ export default async function MVPPlayers({
                         style={{ marginLeft: 20, marginRight: 20 }}
                         tournamentIds={tournamentsIds}
                       />
+
                       <div className="min-w-0">
                         <div className="truncate text-sm font-semibold md:text-base">
                           {player.name}
@@ -57,8 +57,11 @@ export default async function MVPPlayers({
                     </div>
                     <div
                       className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
+                      style={{
+                        color: formatCurrencyColor(player.historyEntriesSum),
+                      }}
                     >
-                      {formatCurrency(player.balance)}
+                      {formatCurrency(player.historyEntriesSum)}
                     </div>
                   </div>
                 </Link>

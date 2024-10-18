@@ -1,20 +1,25 @@
 import clsx from 'clsx';
-import Image from 'next/image';
 import { lusitana } from '@/app/ui/fonts';
 import { fetchDebtPlayers } from '@/app/lib/data';
 import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 import Link from 'next/link';
-import { DoubleTicksIcon, TickIcon } from '@/app/ui/icons';
 import { Suspense } from 'react';
 import { PlayersSkeleton } from '@/app/ui/skeletons';
 import { PlayerDB } from '@/app/lib/definitions';
+import Avatar from '@/app/ui/client/Avatar';
 
-export default async function DebtPlayers({ userId }: { userId: string }) {
+export default async function DebtPlayers({
+  userId,
+  tournamentsIds,
+}: {
+  userId: string;
+  tournamentsIds: string[];
+}) {
   const debtPlayers = await fetchDebtPlayers();
 
   return (
     <Suspense fallback={<PlayersSkeleton />}>
-      <div className="flex w-full flex-col md:col-span-4">
+      <div className="rtl flex w-full flex-col md:col-span-4">
         <h2 className={`${lusitana.className} rtl mb-4 text-xl md:text-2xl`}>
           בעלי חוב
         </h2>
@@ -36,13 +41,12 @@ export default async function DebtPlayers({ userId }: { userId: string }) {
                     )}
                   >
                     <div className="flex items-center">
-                      <Image
-                        src={player.image_url}
-                        alt={`${player.name}'s profile picture`}
-                        className="zoom-on-hover mr-4 rounded-full"
-                        width={55}
-                        height={55}
+                      <Avatar
+                        player={player}
+                        style={{ marginLeft: 20, marginRight: 20 }}
+                        tournamentIds={tournamentsIds}
                       />
+
                       <div className="min-w-0">
                         <div className="truncate text-sm font-semibold md:text-base">
                           {player.name}
@@ -59,14 +63,6 @@ export default async function DebtPlayers({ userId }: { userId: string }) {
                       }}
                     >
                       {formatCurrency(player.balance)}
-                    </div>
-                    <div>
-                      {player.rsvpForToday && !player.arrived && (
-                        <TickIcon size={24} />
-                      )}
-                      {player.rsvpForToday && player.arrived && (
-                        <DoubleTicksIcon size={24} />
-                      )}
                     </div>
                   </div>
                 </Link>

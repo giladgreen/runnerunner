@@ -32,6 +32,7 @@ export type PlayerDB = {
   updated_at: string;
   position: number;
   balance: number;
+  historyEntriesSum: number;
   historyCount: number;
   note: string;
   notes: string;
@@ -104,6 +105,11 @@ export type LogDB = {
   archive?: boolean;
   tournament_id?: string;
   //updated by
+};
+
+export type BuyInDB = {
+  phone_number: string;
+  sum: number;
 };
 
 export type TournamentDB = {

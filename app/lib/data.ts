@@ -3,6 +3,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 
 import {
   BugDB,
+  BuyInDB,
   Counts,
   FeatureFlagDB,
   ImageDB,
@@ -206,6 +207,12 @@ async function getAllHistory() {
   return todayHistoryResults.rows;
 }
 
+async function getBuyInsHistory(limit: number) {
+  const todayHistoryResults =
+    await sql<BuyInDB>`select * FROM (SELECT phone_number, SUM(change) FROM history WHERE change < 0 AND type in ('cash','wire') GROUP BY phone_number) as A WHERE A.sum < -3000 ORDER BY A.sum LIMIT ${limit}`;
+  return todayHistoryResults.rows;
+}
+
 export async function getAllPlayers() {
   const todayDate = getTodayShortDate();
 
@@ -289,6 +296,22 @@ export async function getAllPlayers() {
 async function getAllUsers() {
   const usersResult = await sql<UserDB>`SELECT * FROM users`;
   return usersResult.rows;
+}
+
+async function getPlayersByPhoneNumbers(phoneNumbers: string[]) {
+  console.log('## phoneNumbers', phoneNumbers);
+  const where = phoneNumbers
+    .map((phoneNumber) => `phone_number = '${phoneNumber}'`)
+    .join(' OR ');
+
+  const results = await Promise.all(
+    phoneNumbers.map(
+      (phoneNumber) =>
+        sql<PlayerDB>`SELECT * FROM players WHERE phone_number=${phoneNumber}`,
+    ),
+  );
+
+  return results.map((res) => res.rows).flat();
 }
 
 async function getTopMVPPlayers() {
@@ -485,6 +508,51 @@ export async function fetchGeneralPlayersCardData() {
   }
 }
 
+export async function fetchWhalePlayersData(): Promise<PlayerDB[]> {
+  const buyInHistory = await getBuyInsHistory(8);
+  console.log('## buyInHistory', buyInHistory);
+  const playersPhoneNumbers = buyInHistory.map(
+    ({ phone_number }) => phone_number,
+  );
+  const [players, todayHistory, allRsvps] = await Promise.all([
+    getPlayersByPhoneNumbers(playersPhoneNumbers),
+    getTodayHistory(),
+    getAllRsvps(),
+  ]);
+
+  const todayDate = getTodayShortDate();
+
+  players.forEach((player) => {
+    player.historyEntriesSum = Number(
+      buyInHistory.find((p) => p.phone_number === player.phone_number)?.sum ||
+        0,
+    );
+
+    player.balance = Number(player.balance);
+    player.arrived = todayHistory.find(
+      ({ phone_number, change, type }) =>
+        phone_number === player.phone_number &&
+        (change < 0 || type === 'credit_by_other'),
+    )?.tournament_id;
+
+    const rsvps = allRsvps.filter(
+      ({ phone_number }) => phone_number === player.phone_number,
+    );
+
+    player.rsvps = rsvps.map(({ date, tournament_id }) => ({
+      date,
+      tournamentId: tournament_id,
+    }));
+
+    player.rsvpForToday = rsvps.find(
+      ({ date }) => date === todayDate,
+    )?.tournament_id;
+  });
+
+  console.log('## players', players);
+
+  return players;
+}
 export async function fetchRSVPAndArrivalData(dayOfTheWeek: string) {
   methodStart();
   noStore();

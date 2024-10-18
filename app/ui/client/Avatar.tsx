@@ -16,9 +16,11 @@ const getInitials = (name: string) => {
 export default function Avatar({
   player,
   tournamentIds,
+  style,
 }: {
   player: PlayerDB;
   tournamentIds?: string[];
+  style?: React.CSSProperties;
 }) {
   const isDefaultImage =
     !player.image_url || player.image_url.includes('default.png');
@@ -49,6 +51,7 @@ export default function Avatar({
       }
       statusPosition="top-right"
       size="md"
+      style={style}
     />
   );
 }

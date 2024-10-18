@@ -4,6 +4,7 @@ import {
   fetchFeatureFlags,
   fetchRSVPAndArrivalData,
   fetchUserById,
+  fetchWhalePlayersData,
 } from '@/app/lib/data';
 import GeneralPlayersCardWrapper from '@/app/ui/client/GeneralPlayersCardWrapper';
 import PlayerPage from '@/app/ui/client/PlayerPage';
@@ -11,6 +12,7 @@ import { TournamentDB } from '@/app/lib/definitions';
 import AdminHomePage from '@/app/ui/client/AdminHomePage';
 import { getFinalTablePlayersContent } from '@/app/ui/client/helpers';
 import { getDayOfTheWeek, getTodayShortDate } from '@/app/lib/serverDateUtils';
+import WhalePlayers from '@/app/ui/client/WhalePlayers';
 
 export default async function HomePage({
   params,
@@ -26,7 +28,8 @@ export default async function HomePage({
     const dayOfTheWeek = getDayOfTheWeek();
 
     const { todayTournaments } = await fetchRSVPAndArrivalData(dayOfTheWeek);
-
+    const whales = await fetchWhalePlayersData();
+    const hasWhales = whales && whales.length > 0;
     const date = getTodayShortDate();
     const contents: Array<JSX.Element | null> = await Promise.all(
       todayTournaments.map((t) =>
@@ -39,7 +42,7 @@ export default async function HomePage({
         ),
       ),
     );
-
+    const todayTournamentsIds = todayTournaments.map((t) => t.id);
     return (
       <div>
         <AdminHomePage
@@ -50,9 +53,24 @@ export default async function HomePage({
 
         <hr style={{ marginBottom: 30, marginTop: 10 }} />
         <GeneralPlayersCardWrapper />
-        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-          <MVPPlayers userId={params.userId} />
-          <DebtPlayers userId={params.userId} />
+        <div
+          className={`rtl mt-6 grid grid-cols-1 gap-6 md:grid-cols-5 lg:grid-cols-${hasWhales ? 12 : 8}`}
+        >
+          <MVPPlayers
+            userId={params.userId}
+            tournamentsIds={todayTournamentsIds}
+          />
+          <DebtPlayers
+            userId={params.userId}
+            tournamentsIds={todayTournamentsIds}
+          />
+          {hasWhales && (
+            <WhalePlayers
+              userId={params.userId}
+              tournamentsIds={todayTournamentsIds}
+              whales={whales}
+            />
+          )}
         </div>
       </div>
     );

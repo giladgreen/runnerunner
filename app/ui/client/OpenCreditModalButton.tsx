@@ -1,5 +1,5 @@
 'use client';
-import { Tooltip, Button } from "flowbite-react";
+import { Tooltip, Button } from 'flowbite-react';
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import UseCreditForm from '@/app/ui/client/UseCreditForm';
 import React from 'react';
@@ -29,16 +29,16 @@ export default function OpenCreditModalButton({
 
   return (
     <div>
-        <Tooltip
-            content="שחקן שילם"
-            color="primary"
-        >
-        <Button onClick={() => {
+      <Tooltip content="שחקן שילם" color="primary">
+        <Button
+          onClick={() => {
             setShow(true);
-        }} color="light" >
-           <span style={{ fontSize:22}}>₪</span>
+          }}
+          color="light"
+        >
+          <span style={{ fontSize: 22 }}>₪</span>
         </Button>
-        </Tooltip>
+      </Tooltip>
       <div className={show ? 'edit-player-modal' : 'hidden'}>
         <UseCreditForm
           players={players}
