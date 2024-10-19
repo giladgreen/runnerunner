@@ -23,6 +23,9 @@
   font-size: 11px;
 }
 
+.avatar-image {
+  zoom: 1.5;
+}
 .zoom-on-hover:hover {
   transform: scale(2);
   transition: transform 0.5s;
