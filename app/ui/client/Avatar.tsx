@@ -51,6 +51,7 @@ export default function Avatar({
       }
       statusPosition="top-right"
       size="md"
+      className="zoom-on-hover"
       style={style}
     />
   );

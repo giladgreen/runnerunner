@@ -23,7 +23,7 @@
   font-size: 11px;
 }
 .zoom-on-hover:hover {
-  transform: scale(1.6);
+  transform: scale(1.8);
   transition: transform 0.5s;
 }
 .justify-end {
