@@ -38,12 +38,11 @@ export default function EditPlayerForm({
     useState(false);
   const [isDeletePlayerPending, setIsDeletePlayerPending] = useState(false);
 
-  const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const initialState = { message: null, errors: {} };
   const initialState2 = { message: null, errors: {} };
   const updatePlayerWithId = updatePlayer.bind(null, {
     id: player.id,
-    prevPage,
+    prevPage: `/${userId}/players`,
   });
   const deletePlayerWithId = deletePlayer.bind(null, {
     id: player.id,
