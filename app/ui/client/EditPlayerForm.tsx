@@ -1,7 +1,6 @@
 'use client';
 import {
   deletePlayer,
-  undoPlayerLastLog,
   updatePlayer,
 } from '@/app/lib/actions';
 import { CldUploadWidget } from 'next-cloudinary';
@@ -12,14 +11,13 @@ import { useFormState } from 'react-dom';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import RSVPButton from '@/app/ui/client/RSVPButton';
-import { usePathname, useSearchParams } from 'next/navigation';
 import { TRANSLATIONS } from '@/app/lib/definitions';
-import Image from 'next/image';
 import SpinnerButton, { RedSpinnerButton } from '@/app/ui/client/SpinnerButton';
 import { getCurrentDate, getDayOfTheWeek } from '@/app/lib/clientDateUtils';
 import { Switch } from '@nextui-org/react';
 import AreYouSure from '@/app/ui/client/AreYouSure';
 import Spinner from '@/app/ui/client/Spinner';
+import * as FlowbiteReact from "flowbite-react";
 
 export default function EditPlayerForm({
   player,
@@ -205,6 +203,7 @@ export default function EditPlayerForm({
             כתובת תמונה
           </label>
           <div className="relative">
+
             <input
               id="image_url"
               name="image_url"
@@ -214,15 +213,17 @@ export default function EditPlayerForm({
               className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               aria-describedby="image_url-error"
             />
+
           </div>
           {imageUrl && (
-            <Image
-              src={imageUrl}
-              className="zoom-on-hover mr-2"
-              width={60}
-              height={60}
-              alt={`profile picture`}
-            />
+              <div style={{ marginTop: 4, alignSelf: 'right', alignItems:'right', width:40, alignContent: 'right'}}>
+                <FlowbiteReact.Avatar
+                    img={imageUrl}
+                    size="md"
+                    className="zoom-on-hover"
+
+                />
+              </div>
           )}
         </div>
         <div className="mt-6 flex justify-end gap-4">
