@@ -37,22 +37,28 @@ export default function Avatar({
       ? 'online'
       : 'offline'
     : undefined;
-  return (<div  className="avatar-image zoom-on-hover-bigger">
-    <FlowbiteReact.Avatar
-      img={isDefaultImage ? undefined : player.image_url}
-      placeholderInitials={
-        isDefaultImage ? getInitials(player.name) : undefined
-      }
-      rounded
-      bordered
-      status={status}
-      color={
-        player.balance < 0 ? 'failure' : player.balance > 0 ? 'success' : 'gray'
-      }
-      statusPosition="top-right"
-      size="md"
-      className="zoom-on-hover"
-      style={style}
-    /></div>
+  return (
+    <div className="avatar-image zoom-on-hover-bigger">
+      <FlowbiteReact.Avatar
+        img={isDefaultImage ? undefined : player.image_url}
+        placeholderInitials={
+          isDefaultImage ? getInitials(player.name) : undefined
+        }
+        rounded
+        bordered
+        status={status}
+        color={
+          player.balance < 0
+            ? 'failure'
+            : player.balance > 0
+              ? 'success'
+              : 'gray'
+        }
+        statusPosition="top-right"
+        size="md"
+        className="zoom-on-hover"
+        style={style}
+      />
+    </div>
   );
 }

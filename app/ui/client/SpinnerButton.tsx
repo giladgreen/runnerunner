@@ -7,7 +7,7 @@ import Spinner from '@/app/ui/client/Spinner';
 export default function SpinnerButton({
   text,
   onClick,
-  id
+  id,
 }: {
   id?: string;
   text: string;

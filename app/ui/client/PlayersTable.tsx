@@ -52,7 +52,7 @@ export default async function PlayersTable({
             {players?.map((player) => (
               <div
                 key={player.id}
-                className="mb-2 w-full rounded-md bg-white p-4 players-page-card"
+                className="players-page-card mb-2 w-full rounded-md bg-white p-4"
               >
                 <Link href={`/${userId}/players/${player.id}/edit`}>
                   <div className="flex items-center justify-between border-b pb-4 ">

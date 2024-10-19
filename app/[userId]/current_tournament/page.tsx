@@ -18,6 +18,7 @@ import {
 import CurrentTournamentPage from '@/app/ui/client/CurrentTournamentPage';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 import { getDayOfTheWeek, getTodayShortDate } from '@/app/lib/serverDateUtils';
+import {PrizeDB, PrizeInfoDB} from "@/app/lib/definitions";
 
 export default async function CurrentTournament({
   params,
@@ -27,19 +28,38 @@ export default async function CurrentTournament({
   const user = await fetchUserById(params.userId);
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
-  const refreshEnabled = user.refresh_enabled;
-  const allPlayers = await getAllPlayers();
-
   if (!isAdmin && !isWorker) {
     return <NoPermissionsPage />;
   }
 
-  const prizesInformation = await fetchPrizesInfo();
-
-  const { rsvpEnabled, prizesEnabled } = await fetchFeatureFlags();
   const dayOfTheWeek = getDayOfTheWeek();
+  const date = getTodayShortDate();
+  const [
+    allPlayers,
+    flags,
+    rsvpAndArrivalData,
+    todayPlayersPhoneNumbers,
+  ] = await Promise.all([
+    getAllPlayers(),
+    fetchFeatureFlags(),
+    fetchRSVPAndArrivalData(dayOfTheWeek),
+    fetchTodayPlayersPhoneNumbers(),
+  ]);
 
-  const { todayTournaments } = await fetchRSVPAndArrivalData(dayOfTheWeek);
+  const { todayTournaments } = rsvpAndArrivalData;
+  const { rsvpEnabled, prizesEnabled } = flags;
+
+  const refreshEnabled = user.refresh_enabled;
+  let chosenPrizes: Array<PrizeDB> = [];
+  let prizesInformation: Array<PrizeInfoDB> = [];
+  if (prizesEnabled){
+    const [serverPlayersPrizes, servePrizesInformation] = await Promise.all([
+      fetchPlayersPrizes(),
+      fetchPrizesInfo(),
+    ]);
+    prizesInformation = servePrizesInformation;
+    chosenPrizes = serverPlayersPrizes.chosenPrizes;
+  }
 
   const noTournamentsToday =
     todayTournaments.length === 0 ||
@@ -64,7 +84,6 @@ export default async function CurrentTournament({
     );
   }
 
-  const date = getTodayShortDate();
   const finalTablePlayersContents: Array<JSX.Element | null> =
     await Promise.all(
       todayTournaments.map((t) =>
@@ -78,15 +97,11 @@ export default async function CurrentTournament({
       ),
     );
 
-  const todayPlayersPhoneNumbers = await fetchTodayPlayersPhoneNumbers();
-
-  const { chosenPrizes } = await fetchPlayersPrizes();
-
   const playersPrizes = chosenPrizes.filter((p) =>
     todayPlayersPhoneNumbers.includes(p.phone_number),
   );
 
-  const prizesContents: Array<JSX.Element | null> = await Promise.all(
+  const prizesContents: Array<JSX.Element | null> = prizesEnabled ? await Promise.all(
     todayTournaments.map((todayTournament) =>
       getPlayersPrizesContent(
         playersPrizes.filter(
@@ -102,7 +117,7 @@ export default async function CurrentTournament({
         true,
       ),
     ),
-  );
+  ) : [];
 
   return (
     <CurrentTournamentPage
