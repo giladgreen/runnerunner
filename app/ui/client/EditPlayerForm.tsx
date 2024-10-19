@@ -232,7 +232,7 @@ export default function EditPlayerForm({
           >
             ביטול
           </Link>
-          <SpinnerButton text="עדכן שחקן" />
+          <SpinnerButton text="עדכן שחקן" id="submit-button"/>
         </div>
       </form>
       <div
@@ -246,6 +246,9 @@ export default function EditPlayerForm({
             // @ts-ignore
             const url = response?.info?.url;
             setImageUrl(url);
+            setTimeout(() => {
+              document.getElementById('submit-button')?.click();
+            }, 1000);
           }}
         >
           {({ open }) => {
