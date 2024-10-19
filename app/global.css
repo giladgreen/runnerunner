@@ -22,9 +22,17 @@
 .pera {
   font-size: 11px;
 }
+
 .zoom-on-hover:hover {
-  transform: scale(1.8);
+  transform: scale(2);
   transition: transform 0.5s;
+}
+
+.zoom-on-hover-bigger:hover {
+  transform: scale(5);
+  transition: transform 4s;
+  transition-delay: 1s;
+  z-index: 999999;
 }
 .justify-end {
   justify-content: flex-end;
