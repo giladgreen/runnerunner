@@ -89,21 +89,31 @@ export default function TodayPlayersTable({
   };
   const playersWithEnoughCredit = allPlayers.filter((p) => p.balance > -2000);
   const [query, setQuery] = useState('');
+const now = (new Date()).getTime();
+const fiveHoursAgo = now - (5 * 60 * 60 * 1000);
+
+  // @ts-ignore
+  allPlayers.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
 
   const players =
     query.length > 0
       ? allPlayers
           .filter(
-            (p) => p.name.includes(query) || p.phone_number.includes(query),
-          )
-          .sort(nameComparator)
-          .slice(0, 20)
+            (p) => (isNaN(Number(query)) && p.name.includes(query)) || (!isNaN(Number(query)) && p.phone_number.includes(query)),
+          ).slice(0, 20)
       : allPlayers
           .filter(
-            (p) =>
-              p.arrived === tournamentId || p.rsvpForToday === tournamentId,
-          )
-          .sort(nameComparator);
+            (p) => {
+              if (p.arrived === tournamentId) {
+                return true;
+              }
+              if (p.rsvpForToday === tournamentId) {
+                return true;
+              }
+              // @ts-ignore
+              return new Date(p.updated_at).getTime() > fiveHoursAgo;
+            }
+          );
 
   const arrivedPlayers = allPlayers.filter(
     (player) => player.arrived === tournamentId,
