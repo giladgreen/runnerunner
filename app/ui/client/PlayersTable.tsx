@@ -52,10 +52,10 @@ export default async function PlayersTable({
             {players?.map((player) => (
               <div
                 key={player.id}
-                className="mb-2 w-full rounded-md bg-white p-4"
+                className="mb-2 w-full rounded-md bg-white p-4 players-page-card"
               >
                 <Link href={`/${userId}/players/${player.id}/edit`}>
-                  <div className="flex items-center justify-between border-b pb-4">
+                  <div className="flex items-center justify-between border-b pb-4 ">
                     <div>
                       <div className="mb-2 flex items-center">
                         <Avatar
@@ -88,12 +88,6 @@ export default async function PlayersTable({
                       <b> {formatCurrency(Math.abs(player.balance))}</b>
                     </div>
                     <div className="text-l font-medium">{player.notes}</div>
-                  </div>
-                  <div className="flex justify-end gap-2">
-                    <UpdatePlayerButton id={player.id} userId={userId} />
-                    {isAdmin && (
-                      <DeletePlayerButton id={player.id} userId={userId} />
-                    )}
                   </div>
                 </div>
               </div>
