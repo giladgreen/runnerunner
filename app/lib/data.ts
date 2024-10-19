@@ -727,7 +727,7 @@ export async function fetchPlayersPrizes(playerPhoneNumber?: string) {
       if (player) {
         prize.player = player;
       } else {
-        console.warn('>>> prize is missing player', prize);
+        console.error('>>> prize is missing player', prize);
       }
     });
     const result = !playerPhoneNumber
