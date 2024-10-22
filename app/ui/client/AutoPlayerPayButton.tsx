@@ -81,7 +81,7 @@ export default function AutoPlayerPayButton({
     setPending(true);
     setTimeout(() => {
       setPending(false);
-    }, 6000);
+    }, 5000);
   };
 
   return (
