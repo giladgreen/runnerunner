@@ -108,6 +108,7 @@ export default function AutoPlayerPayButton({
             type="number"
             step="1"
             min={1}
+            readOnly
             value={initialAmount}
             style={{ visibility: 'hidden', display: 'none' }}
           />
@@ -116,7 +117,7 @@ export default function AutoPlayerPayButton({
             name="note"
             type="text"
             className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-            aria-describedby="note-error"
+            readOnly
             value={initialNote}
             style={{ visibility: 'hidden', display: 'none' }}
           />
@@ -126,7 +127,7 @@ export default function AutoPlayerPayButton({
             name="type"
             type="text"
             className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-            aria-describedby="note-error"
+            readOnly
             value={useCredit ? 'credit' : 'cash'}
             style={{ visibility: 'hidden', display: 'none' }}
           />

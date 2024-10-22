@@ -38,8 +38,12 @@ function methodStart() {
 function methodEnd(methodName: string) {
   const now = getCurrentDate().getTime();
   const diff = now - start;
-  if (diff > 600) {
+  if (diff > 900) {
+    console.error('Method End', methodName, '      ', diff, 'milli');
+  }else if (diff > 600) {
     console.warn('Method End', methodName, '      ', diff, 'milli');
+  } else {
+    console.info('Method End', methodName, '      ', diff, 'milli');
   }
 }
 
