@@ -176,13 +176,15 @@ export function SingleTournament({
                   <Spinner size={90} style={{ marginRight: '35vw' }} />
                 )}
                 {!pending && (
-                  <Button
-                      color={isRegisterForTodayTournament ? 'failure' : 'success'}
-                  >
-                    {isRegisterForTodayTournament
-                      ? CLICK_HERE_TO_UNREGISTER
-                      : CLICK_HERE_TO_REGISTER}
-                  </Button>
+                 <button>
+                   <Button
+                       color={isRegisterForTodayTournament ? 'failure' : 'success'}
+                   >
+                     {isRegisterForTodayTournament
+                         ? CLICK_HERE_TO_UNREGISTER
+                         : CLICK_HERE_TO_REGISTER}
+                   </Button>
+                 </button>
                 )}
               </form>
             </div>
