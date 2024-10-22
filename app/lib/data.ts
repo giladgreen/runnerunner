@@ -1,6 +1,6 @@
 import { sql } from '@vercel/postgres';
 import { unstable_noStore as noStore } from 'next/cache';
-
+import * as cache from './cache';
 import {
   BugDB,
   BuyInDB,
@@ -40,7 +40,7 @@ function methodEnd(methodName: string) {
   const diff = now - start;
   if (diff > 900) {
     console.error('Method End', methodName, '      ', diff, 'milli');
-  }else if (diff > 600) {
+  } else if (diff > 600) {
     console.warn('Method End', methodName, '      ', diff, 'milli');
   } else {
     console.info('Method End', methodName, '      ', diff, 'milli');
@@ -66,9 +66,16 @@ async function getAllRsvps() {
 }
 
 async function getUserById(userId: string) {
-  const usersResult =
-    await sql<UserDB>`SELECT * FROM users WHERE id = ${userId};`;
-  return usersResult.rows[0] ?? null;
+  const resultFromCache = await cache.getUserById(userId);
+  if (resultFromCache) {
+    return resultFromCache;
+  }
+
+  const user = (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`)
+    .rows[0];
+
+  await cache.saveUser(user);
+  return user;
 }
 
 async function getPlayerTournamentsHistory(phoneNumber: string) {

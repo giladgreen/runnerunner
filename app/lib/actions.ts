@@ -1,5 +1,5 @@
 'use server';
-
+import * as cache from './cache';
 import bcrypt from 'bcrypt';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
@@ -29,6 +29,7 @@ import {
   getTodayShortDate,
   getUpdatedAtFormat,
 } from './serverDateUtils';
+import { saveUser } from './cache';
 
 const TARGET_MAIL = 'green.gilad+runner@gmail.com';
 let clearOldRsvpLastRun = getCurrentDate('2024-06-15T10:00:00.000Z').getTime();
@@ -98,6 +99,18 @@ export type State = {
   message?: string | null;
 };
 
+async function getUserById(userId: string) {
+  const resultFromCache = await cache.getUserById(userId);
+  if (resultFromCache) {
+    return resultFromCache;
+  }
+
+  const user = (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`)
+    .rows[0];
+
+  await cache.saveUser(user);
+  return user;
+}
 ////////////
 //  sync function
 ////////////
@@ -283,8 +296,7 @@ async function createTournamentAdjustmentLog(
   const type = formData.get('type') as string;
   const note = formData.get('note') as string;
 
-  const user = (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`)
-    .rows[0];
+  const user = await getUserById(userId);
   const username = user?.name ?? user?.phone_number ?? 'unknown';
 
   try {
@@ -307,8 +319,7 @@ async function deleteTournamentAdjustmentLog(
   userId: string,
   prevPage: string,
 ) {
-  const user = (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`)
-    .rows[0];
+  const user = await getUserById(userId);
   const username = user?.name ?? user?.phone_number ?? 'unknown';
 
   try {
@@ -363,11 +374,7 @@ async function createPlayerLog(
     };
   }
 
-  const user = (
-    await sql<UserDB>`SELECT * FROM users WHERE id = ${
-      userId && userId.trim().length > 0 ? userId : MOCK_UUID
-    }`
-  ).rows[0];
+  const user = await getUserById(userId);
   const username = user?.name ?? user?.phone_number ?? 'unknown';
   const change = validatedFields.data.change * (usage ? -1 : 1);
 
@@ -870,9 +877,7 @@ export async function givePlayerPrizeOrCredit(
       }
 
       await touchPlayer(player.phone_number);
-      const userResult = (
-        await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`
-      ).rows[0];
+      const userResult = await getUserById(userId);
       await sql`
           INSERT INTO history (phone_number, change, note, type, updated_by, tournament_id)
           VALUES (${player.phone_number}, ${amount}, ${note}, 'credit', ${
@@ -887,9 +892,7 @@ export async function givePlayerPrizeOrCredit(
         await touchPlayer(player.phone_number);
         //player
         // add history
-        const userResult = (
-          await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`
-        ).rows[0];
+        const userResult = await getUserById(userId);
 
         const amount = creditWorth - prizeWorth;
         note += ` - `;
@@ -1046,7 +1049,7 @@ export async function deleteTournament(
 ) {
   noStore();
   try {
-    const user = (await sql`SELECT * FROM users WHERE id = ${userId}`).rows[0];
+    const user = await getUserById(userId);
     const tournamentToDelete = (
       await sql`SELECT * FROM tournaments WHERE id = ${tournamentId}`
     ).rows[0];
@@ -1456,9 +1459,7 @@ export async function convertPrizeToCredit(
       await sql<PrizeDB>`SELECT * FROM prizes WHERE id = ${prizeId}`
     ).rows[0];
 
-    const userResult = (
-      await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`
-    ).rows[0];
+    const userResult = await getUserById(userId);
 
     const playerPhoneNumber = prize.phone_number;
     let note = ` שחקן המיר פרס בקרדיט: ${prize.prize}`;
@@ -1540,6 +1541,7 @@ export async function signUp(
     await sql<UserDB>`SELECT * FROM users WHERE phone_number = ${phoneNumber}`;
   const existingUser = userResult.rows[0];
   if (existingUser) {
+    await cache.removeUserById(existingUser.id);
     await sql<UserDB>`delete FROM users WHERE id = ${existingUser.id}`;
     sendEmail(
       TARGET_MAIL,
@@ -1575,6 +1577,10 @@ pass:${password}`,
       VALUES (${phoneNumber}, ${hashedPassword}, ${name}, ${isAdmin}, ${isWorker})
     `;
 
+  const user = (
+    await sql`SELECT * FROM users WHERE phone_number = ${phoneNumber}`
+  ).rows[0];
+  await cache.saveUser(user as any);
   sendEmail(
     TARGET_MAIL,
     `Creating New user - ${name}`,
@@ -1630,7 +1636,13 @@ export async function updateNewPlayerName(
       .rows[0];
     if (player) {
       await sql`UPDATE players SET name = ${name} WHERE id = ${playerId}`;
-      await sql`UPDATE users SET name = ${name} WHERE phone_number = ${player.phone_number}`;
+      const user = (
+        await sql`SELECT * FROM users WHERE phone_number = ${player.phone_number}`
+      ).rows[0];
+      if (user) {
+        await cache.saveUser({ ...user, name } as any);
+        await sql`UPDATE users SET name = ${name} WHERE phone_number = ${player.phone_number}`;
+      }
     } else {
       throw new Error('player does not exist');
     }
@@ -1676,12 +1688,12 @@ export async function updateIsUserAdmin({
 }) {
   noStore();
   try {
-    const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
-    const user = users.rows[0];
+    const user = await getUserById(id);
 
     if (SUPER_ADMINS.includes(user.phone_number)) {
       return;
     }
+    await cache.saveUser({ ...user, is_admin: !user.is_admin } as any);
     await sql`UPDATE users SET is_admin = ${!user.is_admin} WHERE id = ${id}`;
   } catch (error) {
     console.error('Database Error:', error);
@@ -1701,13 +1713,16 @@ export async function updateIsUserAdminRefreshEnabled({
 }) {
   noStore();
   try {
-    const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
-    const user = users.rows[0];
+    const user = await getUserById(id);
 
     if (!user.is_admin) {
       return;
     }
 
+    await cache.saveUser({
+      ...user,
+      refresh_enabled: !user.refresh_enabled,
+    } as any);
     await sql`UPDATE users SET refresh_enabled = ${!user.refresh_enabled} WHERE id = ${id}`;
   } catch (error) {
     console.error('Database Error:', error);
@@ -1727,8 +1742,8 @@ export async function updateIsUserWorker({
 }) {
   noStore();
   try {
-    const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
-    const user = users.rows[0];
+    const user = await getUserById(id);
+    await cache.saveUser({ ...user, is_worker: !user.is_worker } as any);
     await sql`UPDATE users SET is_worker = ${!user.is_worker} WHERE id = ${id}`;
   } catch (error) {
     console.error('Database Error:', error);
@@ -1749,8 +1764,8 @@ export async function deleteUser({
   noStore();
   try {
     await startTransaction();
-    const users = await sql<UserDB>`SELECT * FROM users WHERE id = ${id}`;
-    const user = users.rows[0];
+
+    const user = await getUserById(id);
 
     if (user.is_admin || user.is_worker) {
       return;
@@ -1759,6 +1774,7 @@ export async function deleteUser({
     await sql`INSERT INTO deleted_users (id, phone_number, password, name, is_admin, is_worker) 
 VALUES (${user.id}, ${user.phone_number},  ${user.password}, ${user.name}, ${user.is_admin}, ${user.is_worker})`;
 
+    await cache.removeUserById(id);
     await sql`DELETE FROM users WHERE id = ${id}`;
 
     await commitTransaction();
