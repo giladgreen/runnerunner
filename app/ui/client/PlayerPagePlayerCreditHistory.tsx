@@ -11,18 +11,18 @@ export default function PlayerPagePlayerCreditHistory({
   player: PlayerDB;
 }) {
   return (
-      <div className="rtl" style={{marginTop: 50}}>
-          <hr/>
-          <TournamentsHistoryTable player={player}/>
-          <hr/>
-          <div style={{zoom: 2}}>
-              <u>
-                  <b>הסטוריית קרדיט</b>
-              </u>
-          </div>
-          <div style={{marginTop: 10}}>
-              <PlayerHistoryTable player={player}/>
-          </div>
+    <div className="rtl" style={{ marginTop: 50 }}>
+      <hr />
+      <TournamentsHistoryTable player={player} />
+      <hr />
+      <div style={{ zoom: 2 }}>
+        <u>
+          <b>הסטוריית קרדיט</b>
+        </u>
       </div>
+      <div style={{ marginTop: 10 }}>
+        <PlayerHistoryTable player={player} />
+      </div>
+    </div>
   );
 }

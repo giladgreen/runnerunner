@@ -35,16 +35,13 @@ const formatPlayerEntries = (
       enterDelay={1200}
       placement="bottom"
     >
-      <BlackTooltip
-          content="ביטול כניסה אחרונה"
-          color="default"
-      >
+      <BlackTooltip content="ביטול כניסה אחרונה" color="default">
         <Image
-            src={`/${map[entries]}.png`}
-            alt={`players entries: ${entries}`}
-            className="zoom-on-hover mr-4"
-            width={35}
-            height={35}
+          src={`/${map[entries]}.png`}
+          alt={`players entries: ${entries}`}
+          className="zoom-on-hover mr-4"
+          width={35}
+          height={35}
         />
       </BlackTooltip>
     </Tooltip>

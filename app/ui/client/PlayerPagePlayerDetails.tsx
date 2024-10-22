@@ -4,9 +4,9 @@ import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 import Image from 'next/image';
 import React from 'react';
 import { PlayerDB } from '@/app/lib/definitions';
-import * as FlowbiteReact from "flowbite-react";
-import {getInitials} from "@/app/ui/client/Avatar";
-import PlayerPagePlayerCreditHistory from "@/app/ui/client/PlayerPagePlayerCreditHistory";
+import * as FlowbiteReact from 'flowbite-react';
+import { getInitials } from '@/app/ui/client/Avatar';
+import PlayerPagePlayerCreditHistory from '@/app/ui/client/PlayerPagePlayerCreditHistory';
 
 export default function PlayerPagePlayerDetails({
   player,
@@ -14,27 +14,29 @@ export default function PlayerPagePlayerDetails({
   player: PlayerDB;
 }) {
   const isDefaultImage =
-      !player.image_url || player.image_url.includes('default.png');
+    !player.image_url || player.image_url.includes('default.png');
 
   return (
-    <div >
-      <div className="rtl" style={{ marginTop: 50, textAlign:'center',  zoom: 1.5, }}>
-
+    <div>
+      <div
+        className="rtl"
+        style={{ marginTop: 50, textAlign: 'center', zoom: 1.5 }}
+      >
         <div style={{ marginTop: 10 }}>
           <FlowbiteReact.Avatar
-              img={isDefaultImage ? undefined : player.image_url}
-              placeholderInitials={
-                isDefaultImage ? getInitials(player.name) : undefined
-              }
-              bordered
-              color={
-                player.balance < 0
-                    ? 'failure'
-                    : player.balance > 0
-                        ? 'success'
-                        : 'gray'
-              }
-              size="xl"
+            img={isDefaultImage ? undefined : player.image_url}
+            placeholderInitials={
+              isDefaultImage ? getInitials(player.name) : undefined
+            }
+            bordered
+            color={
+              player.balance < 0
+                ? 'failure'
+                : player.balance > 0
+                  ? 'success'
+                  : 'gray'
+            }
+            size="xl"
           />
 
           <div
@@ -51,7 +53,9 @@ export default function PlayerPagePlayerDetails({
           </div>
           <div>
             <span style={{ fontSize: 40 }}>קרדיט:</span>
-            <b style={{ marginRight: 5 }}>{player.balance < 0 ? 'חוב של' : ''}</b>
+            <b style={{ marginRight: 5 }}>
+              {player.balance < 0 ? 'חוב של' : ''}
+            </b>
             <span
               className="truncate font-semibold"
               style={{
@@ -63,7 +67,6 @@ export default function PlayerPagePlayerDetails({
             </span>
           </div>
         </div>
-
       </div>
       <PlayerPagePlayerCreditHistory player={player} />
     </div>

@@ -1,6 +1,6 @@
 'use client';
 import { Tooltip, Button } from 'flowbite-react';
-import { HiOutlineDotsVertical } from "react-icons/hi";
+import { HiOutlineDotsVertical } from 'react-icons/hi';
 
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import UseCreditForm from '@/app/ui/client/UseCreditForm';
@@ -37,9 +37,9 @@ export default function OpenCreditModalButton({
             setShow(true);
           }}
           color="light"
-          style={{ width: 20}}
+          style={{ width: 20 }}
         >
-          <HiOutlineDotsVertical className=" h-5 w-5"/>
+          <HiOutlineDotsVertical className=" h-5 w-5" />
         </Button>
       </Tooltip>
       <div className={show ? 'edit-player-modal' : 'hidden'}>
