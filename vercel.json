@@ -7,9 +7,6 @@
     }
   ],
   "functions": {
-    "**/*.*": {
-      "maxDuration": 15
-    },
     "*.*": {
       "maxDuration": 15
     }
