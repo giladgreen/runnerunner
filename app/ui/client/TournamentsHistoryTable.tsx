@@ -12,9 +12,9 @@ export default function TournamentsHistoryTable({
   }
   return (
     <div className="rtl" style={{ marginTop: 30, marginBottom: 20 }}>
-      <div className="rtl">
+      <div className="rtl" style={{ zoom: 2 }}>
         <u>
-          <b>הסטורית זכיות</b>
+          <b>הסטוריית זכיות</b>
         </u>
       </div>
       <table className="rtl min-w-full text-gray-900 md:table">

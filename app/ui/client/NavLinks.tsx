@@ -74,7 +74,7 @@ export const Nevigationlinks = (userId: string) => [
     worker: true,
   },
   {
-    name: 'פרטי שחקן',
+    name: 'מידע',
     href: `/${userId}`,
     icon: InformationCircleIcon,
     player: true,
@@ -85,12 +85,6 @@ export const Nevigationlinks = (userId: string) => [
     icon: PuzzlePieceIcon,
     player: true,
     isRsvp: true,
-  },
-  {
-    name: 'הסטורית קרדיט',
-    href: `/${userId}/player_credit_history`,
-    icon: BanknotesIcon,
-    player: true,
   },
   {
     name: 'תקנון',

@@ -1,6 +1,6 @@
 TODO:
 
-- hover over the entries should show a tooltip with how the user has paid..
+- default pay button with option to open modal (and add toast)
 
 - add UNDO
 -

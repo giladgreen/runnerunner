@@ -5,7 +5,7 @@ import * as FlowbiteReact from 'flowbite-react';
 import React from 'react';
 import { getTodayDate } from '@/app/lib/clientDateUtils';
 
-const getInitials = (name: string) => {
+export const getInitials = (name: string) => {
   return name
     .split(' ')
     .map((n) => n[0])
