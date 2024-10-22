@@ -77,6 +77,13 @@ export default function AutoPlayerPayButton({
   };
   const tooltipContent = getTooltipContent();
 
+  const onButtonClick = () => {
+    setPending(true);
+    setTimeout(() => {
+      setPending(false);
+    }, 2300);
+  };
+
   return (
     <>
       {pending && (
@@ -94,7 +101,7 @@ export default function AutoPlayerPayButton({
       )}
 
       {!pending && (
-        <form action={dispatch}>
+        <form onSubmit={onButtonClick} action={dispatch}>
           <input
             id="change"
             name="change"
@@ -128,12 +135,6 @@ export default function AutoPlayerPayButton({
             <Button
               type="submit"
               color="light"
-              onClick={() => {
-                setPending(true);
-                setTimeout(() => {
-                  setPending(false);
-                }, 2300);
-              }}
               disabled={maxRebuyReached}
               className={maxRebuyReached ? ' gray-on-hover bg-gray-500' : ''}
             >
