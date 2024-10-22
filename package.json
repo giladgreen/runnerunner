@@ -25,6 +25,7 @@
     "@types/jest": "^29.5.12",
     "@types/node": "20.5.7",
     "@types/nodemailer": "^6.4.15",
+    "@vercel/kv": "^3.0.0",
     "@vercel/postgres": "^0.5.1",
     "@vercel/speed-insights": "^1.0.12",
     "autoprefixer": "10.4.15",
