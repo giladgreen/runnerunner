@@ -1,4 +1,5 @@
 'use client';
+import {Button, Toast} from "flowbite-react";
 
 import React, { useState } from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
@@ -175,20 +176,13 @@ export function SingleTournament({
                   <Spinner size={90} style={{ marginRight: '35vw' }} />
                 )}
                 {!pending && (
-                  <button
-                    style={{
-                      border: '1px solid black',
-                      padding: 15,
-                      zoom: 1.6,
-                      margin: 5,
-                      borderRadius: 4,
-                      background: registrationActionBackgroundColor,
-                    }}
+                  <Button
+                      color={isRegisterForTodayTournament ? 'failure' : 'success'}
                   >
                     {isRegisterForTodayTournament
                       ? CLICK_HERE_TO_UNREGISTER
                       : CLICK_HERE_TO_REGISTER}
-                  </button>
+                  </Button>
                 )}
               </form>
             </div>
