@@ -20,6 +20,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import DeletePositionButton from '@/app/ui/client/DeletePositionButton';
 import { getDayOfTheWeek } from '@/app/lib/clientDateUtils';
 import Avatar from '@/app/ui/client/Avatar';
+import AutoPlayerPayButton from "@/app/ui/client/AutoPlayerPayButton";
 
 function getMinPosition(players: PlayerDB[]) {
   const positions = players
@@ -207,6 +208,7 @@ export default function TodayPlayersTable({
                         </div>
                       </div>
                       <div className="flex justify-end gap-3">
+
                         <OpenCreditModalButton
                           players={playersWithEnoughCredit}
                           player={player}
@@ -215,6 +217,13 @@ export default function TodayPlayersTable({
                           tournaments={tournaments}
                           tournamentId={tournamentId}
                         />
+                        <AutoPlayerPayButton
+                            player={player}
+                            userId={userId}
+                            tournaments={tournaments}
+                            tournamentId={tournamentId}
+                        />
+
 
                         <OpenPositionModalButton
                           player={player}
@@ -402,6 +411,7 @@ export default function TodayPlayersTable({
 
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
+
                           <OpenCreditModalButton
                             players={playersWithEnoughCredit}
                             player={player}
@@ -409,6 +419,12 @@ export default function TodayPlayersTable({
                             userId={userId}
                             setQuery={setQuery}
                             tournamentId={tournamentId}
+                          />
+                          <AutoPlayerPayButton
+                              player={player}
+                              userId={userId}
+                              tournaments={tournaments}
+                              tournamentId={tournamentId}
                           />
 
                           <OpenPositionModalButton

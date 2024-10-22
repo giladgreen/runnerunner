@@ -277,12 +277,12 @@ export async function getAllPlayers() {
       .reverse()
       .map((item) =>
         item.type === 'cash'
-          ? CASH
+          ? ` ${CASH} ${item.change  * -1}`
           : item.type === 'wire'
-            ? WIRE
+            ?  ` ${WIRE} ${item.change  * -1}`
             : item.type === 'credit'
-              ? CREDIT
-              : CREDIT_BY_OTHER,
+              ?  ` ${CREDIT} ${item.change  * -1}`
+              :  ` ${CREDIT_BY_OTHER} ${item.change * -1}`,
       )
       .join(',');
 

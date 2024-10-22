@@ -8,7 +8,7 @@ import { useState } from 'react';
 import AreYouSure from '@/app/ui/client/AreYouSure';
 import Spinner from '@/app/ui/client/Spinner';
 import { Tooltip } from '@nextui-org/react';
-
+import { Tooltip as BlackTooltip } from 'flowbite-react';
 const formatPlayerEntries = (
   entries: number,
   isPending: boolean,
@@ -32,14 +32,21 @@ const formatPlayerEntries = (
       color="primary"
       contentColor={undefined}
       css={undefined}
+      enterDelay={1200}
+      placement="bottom"
     >
-      <Image
-        src={`/${map[entries]}.png`}
-        alt={`players entries: ${entries}`}
-        className="zoom-on-hover mr-4"
-        width={35}
-        height={35}
-      />
+      <BlackTooltip
+          content="ביטול כניסה אחרונה"
+          color="default"
+      >
+        <Image
+            src={`/${map[entries]}.png`}
+            alt={`players entries: ${entries}`}
+            className="zoom-on-hover mr-4"
+            width={35}
+            height={35}
+        />
+      </BlackTooltip>
     </Tooltip>
   );
 };
