@@ -392,7 +392,7 @@ function getPlayerWithExtraData(
       ) || 0,
   };
 }
-async function fetchSortedPlayers(
+async function getSortedPlayers(
   query: string,
   sortBy: string,
   currentPage: number,
@@ -760,7 +760,7 @@ export async function fetchFilteredPlayers(
   noStore();
 
   try {
-    const playersResultPromise = fetchSortedPlayers(query, sortBy, currentPage);
+    const playersResultPromise = getSortedPlayers(query, sortBy, currentPage);
 
     const playersHistoryCountResultPromise = sql<Counts>`
       SELECT
