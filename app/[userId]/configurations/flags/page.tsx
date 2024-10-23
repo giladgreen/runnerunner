@@ -119,6 +119,7 @@ function UpdateFeatureFlag({
 }) {
   const onSubmit = async (_formData: FormData) => {
     'use server';
+
     await updateFFValue(
       featureName,
       !currentValue,

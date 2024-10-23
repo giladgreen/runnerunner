@@ -35,10 +35,16 @@ let start = 0;
 function methodStart() {
   start = getCurrentDate().getTime();
 }
-function methodEnd(methodName: string) {
+function methodEnd(methodName: string, error?: string) {
   const now = getCurrentDate().getTime();
   const diff = now - start;
-  if (diff > 900) {
+
+  if (error) {
+    console.error('Method End', methodName, '      ', diff, 'milli', 'error:',error);
+    return;
+  }
+
+  if (diff > 1000) {
     console.error('Method End', methodName, '      ', diff, 'milli');
   } else if (diff > 600) {
     console.warn('Method End', methodName, '      ', diff, 'milli');
@@ -47,8 +53,14 @@ function methodEnd(methodName: string) {
   }
 }
 
-async function getAllFlags() {
+async function getAllFlags(): Promise<FeatureFlagDB[]> {
+  const flagsFromCache = await cache.getFF();
+  if (flagsFromCache) {
+    return flagsFromCache;
+  }
+
   const data = await sql<FeatureFlagDB>`SELECT * FROM feature_flags`;
+  await cache.saveFF(data.rows);
   return data.rows;
 }
 async function getAllBugs() {
@@ -375,18 +387,24 @@ async function fetchTopPlayers(
 async function fetchXPlayers(x: string, getXPlayers: () => PlayerDB[]) {
   methodStart();
   noStore();
-  const [players, todayHistoryUnfiltered, rsvp] = await Promise.all([
-    getXPlayers(),
-    getTodayHistory(),
-    getAllRsvps(),
-  ]);
-  const todayHistory = todayHistoryUnfiltered.filter(
-    ({ type }) => type != 'prize' && type != 'credit_to_other',
-  );
+  try {
+    const [players, todayHistoryUnfiltered, rsvp] = await Promise.all([
+      getXPlayers(),
+      getTodayHistory(),
+      getAllRsvps(),
+    ]);
+    const todayHistory = todayHistoryUnfiltered.filter(
+        ({type}) => type != 'prize' && type != 'credit_to_other',
+    );
 
-  const result = await fetchTopPlayers(players, rsvp, todayHistory);
-  methodEnd(x);
-  return result;
+    const result = await fetchTopPlayers(players, rsvp, todayHistory);
+    methodEnd(x);
+    return result;
+  } catch (e) {
+    // @ts-ignore
+    methodEnd(`${x} with error`, error?.message);
+    throw new Error(`Failed to ${x}.`);
+  }
 }
 
 function getPlayerWithExtraData(
@@ -459,16 +477,19 @@ async function getSortedPlayers(
 
   return results;
 }
-/////////////////////////////////////////
-/////////////////////////////////////////
-/////////////////////////////////////////
 
 export async function fetchPrizesInfo() {
   const prizes =
-    await sql<PrizeInfoDB>`SELECT * FROM prizes_info ORDER BY name`;
+      await sql<PrizeInfoDB>`SELECT * FROM prizes_info ORDER BY name`;
 
   return prizes.rows;
 }
+
+
+/////////////////////////////////////////
+/////////////////////////////////////////
+/////////////////////////////////////////
+
 
 export async function fetchMVPPlayers() {
   return fetchXPlayers(
@@ -508,9 +529,9 @@ export async function fetchGeneralPlayersCardData() {
       totalPlayersDebt,
     };
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchGeneralPlayersCardData with error');
-    throw new Error('Failed to fetch card data.');
+    // @ts-ignore
+    methodEnd('fetchGeneralPlayersCardData with error', error?.message);
+    throw new Error('Failed to fetchGeneralPlayersCardData.');
   }
 }
 
@@ -672,10 +693,10 @@ export async function fetchRSVPAndArrivalData(dayOfTheWeek: string) {
       }),
     };
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchRSVPAndArrivalData with error');
+    // @ts-ignore
+    methodEnd('fetchRSVPAndArrivalData with error', error?.message);
 
-    throw new Error('Failed to fetch card data.');
+    throw new Error('Failed to fetchRSVPAndArrivalData.');
   }
 }
 
@@ -708,9 +729,9 @@ export async function fetchFinalTablePlayers(
     methodEnd('fetchFinalTablePlayers');
     return result;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchFinalTablePlayers with error');
-    throw new Error('Failed to fetch final table players data.');
+    // @ts-ignore
+    methodEnd('fetchFinalTablePlayers with error', error?.message);
+    throw new Error('Failed to fetchFinalTablePlayers.');
   }
 }
 
@@ -756,9 +777,9 @@ export async function fetchPlayersPrizes(playerPhoneNumber?: string) {
       deliveredPrizes: result.filter((p) => p.delivered),
     };
   } catch (error) {
-    console.error('Database Error:', error);
+    // @ts-ignore
     methodEnd('fetchPlayersPrizes with error');
-    throw new Error('Failed to fetch final table players data.');
+    throw new Error('Failed to fetchPlayersPrizes.');
   }
 }
 
@@ -811,9 +832,9 @@ export async function fetchFilteredPlayers(
     methodEnd('fetchFilteredPlayers');
     return players;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchFilteredPlayers with error');
-    throw new Error('Failed to fetch FilteredPlayers.');
+    // @ts-ignore
+    methodEnd('fetchFilteredPlayers with error', error?.message);
+    throw new Error('Failed to fetchFilteredPlayers.');
   }
 }
 export async function fetchPlayersPagesCount(query: string) {
@@ -830,9 +851,9 @@ export async function fetchPlayersPagesCount(query: string) {
     methodEnd('fetchPlayersPagesCount');
     return totalPages;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchPlayersPagesCount with error');
-    throw new Error('Failed to fetch total number of players.');
+    // @ts-ignore
+    methodEnd('fetchPlayersPagesCount with error', error?.message);
+    throw new Error('Failed to fetchPlayersPagesCount.');
   }
 }
 
@@ -924,9 +945,9 @@ export async function fetchTournamentsData() {
 
     return result;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchTournamentsData with error');
-    throw new Error('Failed to fetch the fetch incomes.');
+    // @ts-ignore
+    methodEnd('fetchTournamentsData with error', error?.message);
+    throw new Error('Failed to fetchTournamentsData.');
   }
 }
 
@@ -950,9 +971,9 @@ export async function fetchAllUsers() {
     methodEnd('fetchAllUsers');
     return result;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchAllUsers with error');
-    throw new Error('Failed to fetch total number of users.');
+    // @ts-ignore
+    methodEnd('fetchAllUsers with error', error?.message);
+    throw new Error('Failed to fetchAllUsers.');
   }
 }
 
@@ -964,9 +985,9 @@ export async function fetchAllBugs() {
     methodEnd('fetchAllBugs');
     return result;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchAllBugs with error');
-    throw new Error('Failed to fetch bugs.');
+    // @ts-ignore
+    methodEnd('fetchAllBugs with error', error?.message);
+    throw new Error('Failed to fetchAllBugs.');
   }
 }
 export async function fetchAllPlayersForExport() {
@@ -977,9 +998,9 @@ export async function fetchAllPlayersForExport() {
     methodEnd('fetchAllPlayersForExport');
     return result;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchAllPlayersForExport with error');
-    throw new Error('Failed to fetch bugs.');
+    // @ts-ignore
+    methodEnd('fetchAllPlayersForExport with error', error?.message);
+    throw new Error('Failed to fetchAllPlayersForExport.');
   }
 }
 export async function fetchTournaments() {
@@ -1007,9 +1028,9 @@ export async function fetchTournaments() {
     methodEnd('fetchTournaments');
     return results;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchTournaments with error');
-    throw new Error('Failed to fetch tournaments.');
+    // @ts-ignore
+    methodEnd('fetchTournaments with error', error?.message);
+    throw new Error('Failed to fetchTournaments.');
   }
 }
 export async function fetchFeatureFlags() {
@@ -1064,8 +1085,8 @@ export async function fetchPlayerById(
     methodEnd('fetchPlayerById');
     return player;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchPlayerById with error');
+    // @ts-ignore
+    methodEnd('fetchPlayerById with error', error?.message);
     throw new Error('Failed to fetchPlayerById.');
   }
 }
@@ -1081,8 +1102,8 @@ export async function fetchPlayerCurrentTournamentHistory(phoneNumber: string) {
     methodEnd('fetchPlayerCurrentTournamentHistory');
     return results;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchPlayerCurrentTournamentHistory with error');
+    // @ts-ignore
+    methodEnd('fetchPlayerCurrentTournamentHistory with error', error?.message);
     throw new Error('Failed to fetchPlayerCurrentTournamentHistory.');
   }
 }
@@ -1103,8 +1124,8 @@ export async function fetchTournamentByTournamentId(tournamentId: string) {
     methodEnd('fetchTournamentByTournamentId');
     return result;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchTournamentByTournamentId with error');
+    // @ts-ignore
+    methodEnd('fetchTournamentByTournamentId with error', error?.message);
     throw new Error('Failed to fetchTournamentByTournamentId.');
   }
 }
@@ -1119,9 +1140,9 @@ export async function fetchTournamentsByDay(day?: string) {
     methodEnd('fetchTournamentsByDay');
     return results;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchTournamentsByDay with error');
-    throw new Error('Failed to fetchTournamentsById.');
+    // @ts-ignore
+    methodEnd('fetchTournamentsByDay with error', error?.message);
+    throw new Error('Failed to fetchTournamentsByDay.');
   }
 }
 
@@ -1137,9 +1158,9 @@ export async function fetchRsvpCountForTodayTournament(tournamentId: string) {
     methodEnd('fetchRsvpCountForTodayTournament');
     return result;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchRsvpCountForTodayTournament with error');
-    throw new Error('Failed to fetchTournamentById.');
+    // @ts-ignore
+    methodEnd('fetchRsvpCountForTodayTournament with error', error?.message);
+    throw new Error('Failed to fetchRsvpCountForTodayTournament.');
   }
 }
 
@@ -1169,14 +1190,15 @@ export async function fetchPlayerByUserId(userId: string) {
     methodEnd('fetchPlayerByUserId');
     return player;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchPlayerByUserId with error');
+    // @ts-ignore
+    methodEnd('fetchPlayerByUserId with error', error?.message);
     throw new Error('Failed to fetchPlayerByUserId.');
   }
 }
 
 export async function fetchUserById(id: string) {
   if (!id || id === 'undefined') {
+    console.error('no id, redirecting to home url');
     return redirect(`/`);
   }
   methodStart();
@@ -1197,8 +1219,8 @@ export async function fetchUserById(id: string) {
     methodEnd('fetchUserById');
     return result;
   } catch (error) {
-    console.error('Database Error:', error);
-    methodEnd('fetchUserById with error');
+    // @ts-ignore
+    methodEnd('fetchUserById with error.', error?.message);
     redirect(`/`);
   }
 }

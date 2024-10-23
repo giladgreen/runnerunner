@@ -1,10 +1,10 @@
 import { kv } from '@vercel/kv';
-import { UserDB } from '@/app/lib/definitions';
+import {FeatureFlagDB, UserDB} from '@/app/lib/definitions';
 
 export async function get(key: string, entityType: string = '') {
   try {
     const result = await kv.hget<string>(`entity-type-${entityType}`, key);
-    if (!result) {
+    if (!Boolean(result)) {
       result;
     }
     console.log(`found ${entityType} in cache. (key: ${key})`);
@@ -35,14 +35,22 @@ export async function del(key: string, entityType: string = '') {
   }
 }
 
-export async function getUserById(userId: string) {
+export async function getUserById(userId: string): Promise<UserDB | null> {
   return await get(userId, 'user');
 }
 
-export async function saveUser(user: UserDB) {
-  return await set(user.id, user, 'user');
+export async function saveUser(user: UserDB): Promise<void> {
+  await set(user.id, user, 'user');
 }
 
-export async function removeUserById(userId: string) {
-  return await del(userId, 'user');
+export async function removeUserById(userId: string): Promise<void> {
+  await del(userId, 'user');
+}
+
+export async function getFF(): Promise<FeatureFlagDB[] | null> {
+  return await get('flag', 'flags');
+}
+
+export async function saveFF(flags: FeatureFlagDB[]): Promise<void> {
+  await set('flag', flags, 'flags');
 }

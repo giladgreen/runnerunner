@@ -19,7 +19,7 @@ import {
   PrizeDB,
   PrizeInfoDB,
   BugDB,
-  TournamentsAdjustmentsDB,
+  TournamentsAdjustmentsDB, FeatureFlagDB,
 } from './definitions';
 
 import { signIn } from '../../auth';
@@ -1662,9 +1662,21 @@ export async function updateFFValue( //TODO: only admin can call the APIS?..
 ) {
   noStore();
   try {
+    const allFlagsFromCache = await cache.getFF();
+    if (allFlagsFromCache){
+      allFlagsFromCache.forEach((flag: FeatureFlagDB) => {
+        if (flag.flag_name === name) {
+          flag.is_open = newValue;
+        }
+      });
+
+      await cache.saveFF(allFlagsFromCache)
+    }
+
     const existingFlag = (
       await sql`SELECT * FROM feature_flags WHERE flag_name = ${name}`
     ).rows[0];
+
     if (!existingFlag) {
       await sql`INSERT INTO feature_flags (flag_name, is_open) VALUES (${name}, ${newValue})`;
     } else {
