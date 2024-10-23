@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   formatCurrency,
@@ -96,16 +96,16 @@ export default function TodayPlayersTable({
   // @ts-ignore
   allPlayers.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
 
-  const players =
+  const getFilteredPlayers = (playerToFilter: PlayerDB[]) =>
     query.length > 0
-      ? allPlayers
+      ? playerToFilter
           .filter(
             (p) =>
               (isNaN(Number(query)) && p.name.includes(query)) ||
               (!isNaN(Number(query)) && p.phone_number.includes(query)),
           )
           .slice(0, 20)
-      : allPlayers.filter((p) => {
+      : playerToFilter.filter((p) => {
           if (p.arrived === tournamentId) {
             return true;
           }
@@ -115,6 +115,28 @@ export default function TodayPlayersTable({
           // @ts-ignore
           return new Date(p.updated_at).getTime() > fiveHoursAgo;
         });
+
+  const [players, setPlayers] = useState<PlayerDB[]>(
+    getFilteredPlayers(allPlayers),
+  );
+
+  const updatePlayer = (playerToUpdate: PlayerDB) => {
+    setPlayers((prevPlayers) => {
+      const exisingPlayer = prevPlayers.find((p) => p.id === playerToUpdate.id);
+      if (!exisingPlayer) {
+        return prevPlayers;
+      }
+      const newPlayersArray = [
+        playerToUpdate,
+        ...prevPlayers.filter((p) => p.id !== playerToUpdate.id),
+      ];
+      return getFilteredPlayers(newPlayersArray);
+    });
+  };
+
+  useEffect(() => {
+    setPlayers(getFilteredPlayers(allPlayers));
+  }, [query, allPlayers]);
 
   const arrivedPlayers = allPlayers.filter(
     (player) => player.arrived === tournamentId,
@@ -222,6 +244,7 @@ export default function TodayPlayersTable({
                             userId={userId}
                             tournaments={tournaments}
                             tournamentId={tournamentId}
+                            updatePlayer={updatePlayer}
                           />
                         </div>
 
@@ -262,7 +285,10 @@ export default function TodayPlayersTable({
                       {player.entries > 0 && (
                         <div className="flex">
                           כניסות:
-                          <EntriesButton player={player} />
+                          <EntriesButton
+                            player={player}
+                            updatePlayer={updatePlayer}
+                          />
                         </div>
                       )}
                     </div>
@@ -399,7 +425,10 @@ export default function TodayPlayersTable({
                         {player.arrived === currentTournament?.id ? '✔️' : ''}
                       </td>
                       <td className="whitespace-nowrap px-3 py-3 ">
-                        <EntriesButton player={player} />
+                        <EntriesButton
+                          player={player}
+                          updatePlayer={updatePlayer}
+                        />
                       </td>
 
                       <td className="whitespace-nowrap px-3 py-3 ">
@@ -421,6 +450,7 @@ export default function TodayPlayersTable({
                               tournamentId={tournamentId}
                             />
                             <AutoPlayerPayButton
+                              updatePlayer={updatePlayer}
                               player={player}
                               userId={userId}
                               tournaments={tournaments}

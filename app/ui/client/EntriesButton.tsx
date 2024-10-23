@@ -9,6 +9,7 @@ import AreYouSure from '@/app/ui/client/AreYouSure';
 import Spinner from '@/app/ui/client/Spinner';
 import { Tooltip } from '@nextui-org/react';
 import { Tooltip as BlackTooltip } from 'flowbite-react';
+import searchablePlayersDropdown from '@/app/ui/client/SearchablePlayersDropdown';
 const formatPlayerEntries = (
   entries: number,
   isPending: boolean,
@@ -48,7 +49,13 @@ const formatPlayerEntries = (
   );
 };
 
-export default function EntriesButton({ player }: { player: PlayerDB }) {
+export default function EntriesButton({
+  player,
+  updatePlayer,
+}: {
+  player: PlayerDB;
+  updatePlayer: (p: PlayerDB) => void;
+}) {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const [isPending, setIsPending] = useState(false);
@@ -75,7 +82,24 @@ export default function EntriesButton({ player }: { player: PlayerDB }) {
             setShowConfirmation(false);
             undoPlayerLastLog(player.phone_number, currentPage);
             setIsPending(true);
-            setTimeout(() => setIsPending(false), 4500);
+            const historyLogToRemove =
+              player.historyLog[player.historyLog.length - 1];
+            const newBalance =
+              historyLogToRemove.type === 'credit'
+                ? player.balance - historyLogToRemove.change
+                : player.balance;
+            const entries = player.entries - 1;
+            const arrived = entries > 0 ? player.arrived : '';
+            setTimeout(() => {
+              updatePlayer({
+                ...player,
+                entries,
+                historyLog: player.historyLog.slice(0, -1),
+                balance: newBalance,
+                arrived,
+              });
+              setIsPending(false);
+            }, 1000);
           }}
           onCancel={() => {
             setShowConfirmation(false);

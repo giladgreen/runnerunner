@@ -28,7 +28,7 @@ export function getFormData(data: any) {
 
 export async function clearDB() {
   await sql`DELETE FROM winners`;
-  await sql`DELETE FROM images`;
+  // await sql`DELETE FROM images`;
   await sql`DELETE FROM feature_flags`;
 
   await sql`DELETE FROM bugs`;

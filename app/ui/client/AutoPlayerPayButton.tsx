@@ -1,6 +1,6 @@
 'use client';
 import { Tooltip, Button } from 'flowbite-react';
-import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
+import { LogDB, PlayerDB, TournamentDB } from '@/app/lib/definitions';
 
 import React from 'react';
 import { createPlayerUsageLog } from '@/app/lib/actions';
@@ -14,11 +14,13 @@ export default function AutoPlayerPayButton({
   userId,
   tournaments,
   tournamentId,
+  updatePlayer,
 }: {
   player: PlayerDB;
   tournaments: TournamentDB[];
   tournamentId: string | null;
   userId: string;
+  updatePlayer: (p: PlayerDB) => void;
 }) {
   const initialState = { message: null, errors: {} };
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
@@ -79,9 +81,31 @@ export default function AutoPlayerPayButton({
 
   const onButtonClick = () => {
     setPending(true);
+    const historyLog: LogDB[] = player.historyLog;
+    historyLog.push({
+      updated_at: new Date(),
+      id: `${new Date().getTime()}`,
+      phone_number: player.phone_number,
+      change: initialAmount,
+      note: initialNote,
+      type: useCredit ? 'credit' : 'cash',
+    } as unknown as LogDB);
+
+    const newBalance = useCredit
+      ? player.balance - initialAmount
+      : player.balance;
+    const arrived = tournamentId ? tournamentId : undefined;
+
     setTimeout(() => {
+      updatePlayer({
+        ...player,
+        historyLog,
+        entries: player.entries + 1,
+        balance: newBalance,
+        arrived,
+      });
       setPending(false);
-    }, 5000);
+    }, 1000);
   };
 
   return (
