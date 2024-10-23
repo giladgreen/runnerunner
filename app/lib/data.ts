@@ -293,7 +293,7 @@ export async function getAllPlayers() {
             ? ` ${WIRE} ${item.change * -1}`
             : item.type === 'credit'
               ? ` ${CREDIT} ${item.change * -1}`
-              : ` ${CREDIT_BY_OTHER} ${item.change * -1}`,
+              : ` ${CREDIT_BY_OTHER}`,
       )
       .join(',');
 

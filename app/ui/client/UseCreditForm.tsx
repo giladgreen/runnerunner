@@ -87,7 +87,7 @@ export default function UseCreditForm({
         setTimeout(() => {
           hide?.();
           setQuery('');
-        }, 1800);
+        }, 4500);
       }
       setIsPending(pending);
     }, [pending]);
