@@ -25,7 +25,7 @@ import {
   getTodayShortDate,
 } from './serverDateUtils';
 
-const ITEMS_PER_PAGE = 30;
+const ITEMS_PER_PAGE = 56;
 const TOP_COUNT = 8;
 const CASH = 'מזומן';
 const CREDIT = 'קרדיט';

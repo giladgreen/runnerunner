@@ -49,7 +49,6 @@ export default function RSVPButton({
     <div style={{ display: 'flex', margin: '5px 0' }} onClick={onClick}>
       <Switch
         initialChecked={optimisticIsRsvpForDate}
-        isSelected={optimisticIsRsvpForDate}
         color="success"
         onClick={onClick}
       />

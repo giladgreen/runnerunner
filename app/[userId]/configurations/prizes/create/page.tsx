@@ -1,11 +1,10 @@
 'use client';
 import React from 'react';
 import { createPrizeInfo } from '@/app/lib/actions';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormState } from 'react-dom';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import Button from '@/app/ui/client/Button';
-import Spinner from '@/app/ui/client/Spinner';
+
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
 
 export default function CreateNewPrizesInfoPage({

@@ -488,15 +488,39 @@ async function seedImages(client) {
   }
 }
 
-async function _fillUpHistory(client) {
-  const total = 30 * 150;
-  for (let i = 0; i < total; i++) {
-    console.log(i, ' / ', total);
-    await client.sql`INSERT INTO history (phone_number, change, type, note, updated_by)
-        VALUES ('144',100, 'test', 'test', 'admin');`;
+// async function _fillUpHistory(client) {
+//   const total = 30 * 150;
+//   for (let i = 0; i < total; i++) {
+//     console.log(i, ' / ', total);
+//     await client.sql`INSERT INTO history (phone_number, change, type, note, updated_by)
+//         VALUES ('144',100, 'test', 'test', 'admin');`;
+//   }
+// }
+
+async function _deletePlayers(client) {
+  const players = (await client.sql`SELECT * FROM players AS P 
+ JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE type = 'credit_to_other' OR type ='credit' OR type ='prize' GROUP BY phone_number) AS H
+    ON P.phone_number = H.phone_number`).rows;
+
+  const history = (await client.sql`SELECT phone_number, count(*) FROM history GROUP BY phone_number`).rows;
+
+  players.forEach((player) => {
+    const item = history.find((h) => h.phone_number === player.phone_number);
+    // @ts-ignore
+    player.historyCount =  item?.count ?? 0;
+  })
+
+  const playersToDelete = players.filter((player) => Number(player.balance) === 0 && (!player.image_url || player.image_url === '/players/default.png') && player.historyCount <= 1).map((player) => player.phone_number);
+  console.log('all', players.length);
+  console.log('playersToDelete', playersToDelete.length);
+  let index = 0;
+  for (const phoneNumber of playersToDelete){
+    index++;
+    await client.sql`DELETE FROM players WHERE phone_number = ${phoneNumber}`;
+    console.log('deleted', index,'/', playersToDelete.length,'     ', phoneNumber);
+
   }
 }
-
 async function seed() {
   console.log('>> main start');
 
