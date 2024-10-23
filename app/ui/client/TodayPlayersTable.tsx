@@ -91,7 +91,7 @@ export default function TodayPlayersTable({
   const playersWithEnoughCredit = allPlayers.filter((p) => p.balance > -2000);
   const [query, setQuery] = useState('');
   const now = new Date().getTime();
-  const fiveHoursAgo = now - 5 * 60 * 60 * 1000;
+  const fiveMinutesAgo = now - 5 * 60 * 1000;
 
   // @ts-ignore
   allPlayers.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
@@ -113,7 +113,7 @@ export default function TodayPlayersTable({
             return true;
           }
           // @ts-ignore
-          return new Date(p.updated_at).getTime() > fiveHoursAgo;
+          return new Date(p.updated_at).getTime() > fiveMinutesAgo;
         });
 
   const [players, setPlayers] = useState<PlayerDB[]>(

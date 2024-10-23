@@ -1,4 +1,4 @@
-const { db } = require('@vercel/postgres');
+const { db, sql} = require('@vercel/postgres');
 ///SELECT indexname, tablename, indexdef FROM pg_indexes
 
 const { users, tournaments } = require('./placeholder-data.js');
@@ -514,6 +514,7 @@ async function seed() {
   await seedPrizes(client);
   await seedImages(client);
   await seedFF(client);
+
 
   await client.end();
 }
