@@ -18,13 +18,11 @@ export default function UserGuideRegistrationPage() {
         יש מספר אפשרויות לרישום שחקנים לטורניר:
       </div>
       <div className="flex w-full items-center justify-between ">
-        1. השחקן נכנס בעצמו ונרשם. במקרה כזה הוא יכול להירשם רק לטורניר של אותו
-        היום.
+        1. השחקן נכנס בעצמו ונרשם.
       </div>
 
       <div className="flex w-full items-center justify-between ">
-        2. רישום על ידי עובד. במקרה כזה עובד יכול לרשום את השחקן גם לטורנירים של
-        ימים אחרים.
+        2. רישום על ידי עובד.
       </div>
       <div
         className="flex w-full items-center justify-between "
