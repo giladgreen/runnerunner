@@ -34,7 +34,7 @@ export function getRSVPSForTheNextWeek(
   if (tournamentsToRegister.length === 0) {
     return null;
   }
-  console.log('>>>>> tournamentsToRegister', tournamentsToRegister);
+
   const rsvpsForTheNextWeek = tournamentsToRegister.map((tournament) => {
     const tournamentDayIndex = days.indexOf(tournament.day);
     const date = getCurrentDate(
@@ -45,7 +45,7 @@ export function getRSVPSForTheNextWeek(
     const stringDate = date.toISOString().slice(0, 10);
 
     const tournamentMaxPlayers = tournament.max_players;
-    const tournamentCurrentRegisteredPlayers = 5; //TODO
+    const tournamentCurrentRegisteredPlayers = tournament.rsvpForToday;
     const placesLeft =
       tournamentMaxPlayers - tournamentCurrentRegisteredPlayers;
 

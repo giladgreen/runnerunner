@@ -1015,14 +1015,40 @@ export async function fetchTournaments() {
   try {
     const results = await getAllTournaments();
 
+    const allRsvps = await getAllRsvps();
+
+    const dayOfTheWeek = getDayOfTheWeek();
+    const days = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ];
+    const today = days.indexOf(dayOfTheWeek);
+
     results.forEach((tournament) => {
-      tournament.rsvpForToday = 0;
+      const tournamentDayIndex = days.indexOf(tournament.day);
+      const date = getCurrentDate(
+        getCurrentDate().getTime() +
+          1000 * 60 * 60 * 24 * (tournamentDayIndex - today),
+      );
+
       tournament.todayTournamentMaxPlayers = 0;
       tournament.arrivedToday = 0;
       tournament.todayCreditIncome = 0;
       tournament.todayCashIncome = 0;
       tournament.todayTransferIncome = 0;
       tournament.reEntriesCount = 0;
+      tournament.date = date.toISOString().slice(0, 10);
+
+      tournament.rsvpForToday = allRsvps.filter(
+        (r) =>
+          new Date(r.date).toISOString().slice(0, 10) === tournament.date &&
+          r.tournament_id === tournament.id,
+      ).length;
 
       if (
         results.find((t) => t.day === tournament.day && t.id !== tournament.id)
