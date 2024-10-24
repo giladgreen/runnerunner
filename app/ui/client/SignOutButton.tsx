@@ -1,5 +1,5 @@
 'use client';
-import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/outline';
+import { ArrowRightStartOnRectangleIcon } from '@heroicons/react/24/outline';
 import React, { useCallback, useEffect, useState } from 'react';
 import AreYouSure from '@/app/ui/client/AreYouSure';
 const MINUTE = 60;
@@ -80,7 +80,7 @@ export default function SignOutButton({
         }
         style={{ marginTop: playerScreen ? 5 : 0 }}
       >
-        <ArrowRightEndOnRectangleIcon className={playerScreen ? 'w-10' : 'w-6'} />
+        <ArrowRightStartOnRectangleIcon className={playerScreen ? 'w-10' : 'w-6'} />
         {!playerScreen && (
           <div className="hidden md:block">{disconnectText}</div>
         )}
