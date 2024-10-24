@@ -11,7 +11,8 @@ export default async function Layout({
   children: React.ReactNode;
   params: { userId: string };
 }) {
-  const user = await fetchUserById(params.userId);
+  const [user, { rsvpEnabled, playerRsvpEnabled, prizesEnabled }]  = await Promise.all([fetchUserById(params.userId), fetchFeatureFlags()])
+
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
   const isAdminPlayer = (isAdmin || isWorker) && user.is_player;
@@ -45,6 +46,7 @@ export default async function Layout({
               userId={params.userId}
               isAdmin={isAdmin}
               isWorker={isWorker}
+              prizesEnabled={prizesEnabled}
               isAdminPlayer={isAdminPlayer}
               signout={async () => {
                 'use server';
@@ -58,8 +60,7 @@ export default async function Layout({
     );
   }
 
-  const { rsvpEnabled, playerRsvpEnabled, prizesEnabled } =
-    await fetchFeatureFlags();
+
   const showRsvp = rsvpEnabled && playerRsvpEnabled;
 
   return (

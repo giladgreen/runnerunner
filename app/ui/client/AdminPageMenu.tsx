@@ -15,15 +15,26 @@ export default function AdminPageMenu({
   isWorker,
   isAdminPlayer,
   signout,
+  prizesEnabled
 }: {
   userId: string;
   signout: () => void;
   isAdmin: boolean;
   isWorker: boolean;
   isAdminPlayer: boolean;
+  prizesEnabled: boolean;
 }) {
+
   const [showMenu, setShowMenu] = useState(false);
   const pathname = usePathname();
+  const linksToShow = Nevigationlinks(userId)
+      .filter(
+          (link) =>
+              ((link.admin && isAdmin) ||
+              (link.worker && isWorker) ||
+              (link.adminPlayer && isAdminPlayer)) && (!link.prizesLink || prizesEnabled),
+      );
+
   return (
     <div>
       <button
@@ -50,13 +61,7 @@ export default function AdminPageMenu({
           <ArrowRightIcon style={{ maxHeight: 30 }} />
         </div>
         <div className="player_page_menu_body">
-          {Nevigationlinks(userId)
-            .filter(
-              (link) =>
-                (link.admin && isAdmin) ||
-                (link.worker && isWorker) ||
-                (link.adminPlayer && isAdminPlayer),
-            )
+          {linksToShow
             .map((link) => {
               const LinkIcon = link.icon;
               return (

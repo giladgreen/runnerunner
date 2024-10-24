@@ -11,9 +11,8 @@ import RSVPButton from '@/app/ui/client/RSVPButton';
 import {PlayerDB, TournamentDB, TRANSLATIONS} from '@/app/lib/definitions';
 import React, {useState} from 'react';
 import { formatDateToLocal, getDayOfTheWeek } from '@/app/lib/clientDateUtils';
-import Avatar, {getInitials} from '@/app/ui/client/Avatar';
+import Avatar from '@/app/ui/client/Avatar';
 import {Card, Switch} from "@nextui-org/react";
-import * as FlowbiteReact from 'flowbite-react';
 
 
 export default function PlayersTable({
@@ -37,8 +36,6 @@ export default function PlayersTable({
   // @ts-ignore
   const dayOfTheWeekToShow = TRANSLATIONS[dayOfTheWeek];
 
-
-console.log('tableView', tableView)
   return (
     <div className="rtl mt-6 flow-root">
      <div className="flex only-wide-screen">
@@ -53,8 +50,6 @@ console.log('tableView', tableView)
            }}
        />
        <BlackTooltip content="טבלה"><ListBulletIcon className="h-[18px] w-[18px]" style={{ marginTop: 5, marginRight: 6, marginLeft: 6}}/></BlackTooltip>
-
-
      </div>
 
       <div className="inline-block min-w-full align-middle">
@@ -66,14 +61,16 @@ console.log('tableView', tableView)
                 key={player.id}
                 className="players-page-card mb-2 w-full rounded-md bg-white p-4"
               >
-                <Link href={`/${userId}/players/${player.id}/edit`}>
+
                   <div className="flex items-center justify-between border-b pb-4 ">
                     <div>
                       <div className="mb-2 flex items-center">
-                        <Avatar
-                          player={player}
-                          tournamentIds={todayTournaments.map((t) => t.id)}
-                        />
+                        <Link href={`/${userId}/players/${player.id}/edit`}>
+                            <Avatar
+                              player={player}
+                              tournamentIds={todayTournaments.map((t) => t.id)}
+                            />
+                        </Link>
                         <div style={{ margin: '0 10px', zoom: 1.5 }}>
                           {player.name}
                         </div>
@@ -81,9 +78,21 @@ console.log('tableView', tableView)
                       <div className="text-sm text-gray-500">
                         {player.phone_number}
                       </div>
+                        {rsvpEnabled && todayTournaments.length === 1 && todayTournaments[0].rsvp_required && todayTournaments[0] && (
+                            <div
+                                style={{ marginTop: 10 }}
+                                className="flex w-full items-center justify-between pt-4"
+                            >
+                                רישום לטורניר
+                                <RSVPButton
+                                    player={player}
+                                    tournamentId={todayTournaments[0].id!}
+                                />
+                            </div>
+                        )}
                     </div>
                   </div>
-                </Link>
+
 
                 <div className="flex w-full items-center justify-between pt-4">
                   <div>
