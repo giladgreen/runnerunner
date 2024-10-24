@@ -44,7 +44,6 @@ export default function UserGuideCurrentTournamentPage() {
       >
         כאשר מחפשים שחקן ולא מוצאים אותו, לחיצה על יצירת שחקן חדש תפתח את עמוד יצירת השחקן עם השם\טלפון שהוקלד בחיפוש
       </div>
-
       <div
         className="flex w-full items-center justify-between "
         style={{ marginTop: 20 }}
