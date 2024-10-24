@@ -57,7 +57,7 @@ export default function RSVPButton({
           color="success"
           onClick={onClick}
         />
-        <div>{text}</div>
+        <div style={{ marginTop: 3,marginRight:5 }} >{text}</div>
       </div>
       {boldText && (
         <div style={{ marginTop: 4, marginBottom: 30 }}>
