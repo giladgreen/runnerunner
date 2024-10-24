@@ -56,7 +56,7 @@ export default function UserGuideRegistrationPage() {
         className="flex w-full items-center justify-between "
         style={{ marginTop: 20 }}
       >
-        ואז לסמן בעמודה המתאימה -עיגול ריק לא רשום, עיגול ירוק רשום
+        ואז לסמן בעמודה המתאימה -ירוק פירושו רשום
       </div>
 
       <div
