@@ -1,23 +1,17 @@
 'use client';
 
 import React from 'react';
-import { LogDB, PlayerDB, TournamentDB } from '@/app/lib/definitions';
+import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import PlayerPageRegistrationSection from '@/app/ui/client/PlayerPageRegistrationSection';
 
 export default function PlayerPagePlayerRegistration({
   player,
   showRsvp,
-  todayTournaments,
-  rsvpCountsForTodayTournaments,
-  playerCurrentTournamentHistory,
-  onSubmit,
+  thisWeekTournaments,
 }: {
   player: PlayerDB;
   showRsvp: boolean;
-  todayTournaments: TournamentDB[];
-  rsvpCountsForTodayTournaments: number[];
-  playerCurrentTournamentHistory: LogDB[];
-  onSubmit: (a: string, b: boolean) => void;
+  thisWeekTournaments: TournamentDB[];
 }) {
   return (
     <div className="rtl" style={{ marginTop: 50 }}>
@@ -31,10 +25,7 @@ export default function PlayerPagePlayerRegistration({
           <div>
             <PlayerPageRegistrationSection
               player={player}
-              todayTournaments={todayTournaments}
-              onSubmit={onSubmit}
-              rsvpCountsForTodayTournaments={rsvpCountsForTodayTournaments}
-              playerCurrentTournamentHistory={playerCurrentTournamentHistory}
+              thisWeekTournaments={thisWeekTournaments}
             />
           </div>
         ) : (

@@ -2,7 +2,6 @@
 
 // @ts-ignore
 import { startTransition, useOptimistic } from 'react';
-
 import { PlayerDB } from '@/app/lib/definitions';
 import { rsvpPlayerForDay } from '@/app/lib/actions';
 import { usePathname } from 'next/navigation';
@@ -15,11 +14,15 @@ export default function RSVPButton({
   stringDate,
   tournamentId,
   text,
+  boldText,
+  disabled,
 }: {
   player: PlayerDB;
   text?: string;
+  boldText?: string;
   stringDate?: string;
   tournamentId: string;
+  disabled?: boolean;
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const date = stringDate ?? getTodayDate();
@@ -46,13 +49,21 @@ export default function RSVPButton({
     );
   };
   return (
-    <div style={{ display: 'flex', margin: '5px 0' }} onClick={onClick}>
-      <Switch
-        initialChecked={optimisticIsRsvpForDate}
-        color="success"
-        onClick={onClick}
-      />
-      {text}
+    <div>
+      <div style={{ display: 'flex', margin: '5px 0' }} onClick={onClick}>
+        <Switch
+          disabled={disabled}
+          initialChecked={optimisticIsRsvpForDate}
+          color="success"
+          onClick={onClick}
+        />
+        <div>{text}</div>
+      </div>
+      {boldText && (
+        <div style={{ marginTop: 4, marginBottom: 30 }}>
+          <b>{boldText}</b>
+        </div>
+      )}
     </div>
   );
 }

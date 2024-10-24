@@ -15,7 +15,7 @@ export default function AdminPageMenu({
   isWorker,
   isAdminPlayer,
   signout,
-  prizesEnabled
+  prizesEnabled,
 }: {
   userId: string;
   signout: () => void;
@@ -24,16 +24,15 @@ export default function AdminPageMenu({
   isAdminPlayer: boolean;
   prizesEnabled: boolean;
 }) {
-
   const [showMenu, setShowMenu] = useState(false);
   const pathname = usePathname();
-  const linksToShow = Nevigationlinks(userId)
-      .filter(
-          (link) =>
-              ((link.admin && isAdmin) ||
-              (link.worker && isWorker) ||
-              (link.adminPlayer && isAdminPlayer)) && (!link.prizesLink || prizesEnabled),
-      );
+  const linksToShow = Nevigationlinks(userId).filter(
+    (link) =>
+      ((link.admin && isAdmin) ||
+        (link.worker && isWorker) ||
+        (link.adminPlayer && isAdminPlayer)) &&
+      (!link.prizesLink || prizesEnabled),
+  );
 
   return (
     <div>
@@ -61,36 +60,35 @@ export default function AdminPageMenu({
           <ArrowRightIcon style={{ maxHeight: 30 }} />
         </div>
         <div className="player_page_menu_body">
-          {linksToShow
-            .map((link) => {
-              const LinkIcon = link.icon;
-              return (
-                <Link
-                  onClick={() => {
-                    setTimeout(() => {
-                      setShowMenu(false);
-                    }, 300);
-                  }}
-                  key={link.name}
-                  href={link.href}
-                  style={{
-                    marginTop: 10,
-                    color: 'white',
-                    display: 'flex',
-                    background:
-                      pathname === link.href
-                        ? 'rgba(255,255,255,0.2)'
-                        : 'transparent',
-                    padding: 10,
-                    borderRadius: 10,
-                    marginLeft: 8,
-                  }}
-                >
-                  <LinkIcon className="w-6" style={{ margin: '0 4px' }} />
-                  <div>{link.name}</div>
-                </Link>
-              );
-            })}
+          {linksToShow.map((link) => {
+            const LinkIcon = link.icon;
+            return (
+              <Link
+                onClick={() => {
+                  setTimeout(() => {
+                    setShowMenu(false);
+                  }, 300);
+                }}
+                key={link.name}
+                href={link.href}
+                style={{
+                  marginTop: 10,
+                  color: 'white',
+                  display: 'flex',
+                  background:
+                    pathname === link.href
+                      ? 'rgba(255,255,255,0.2)'
+                      : 'transparent',
+                  padding: 10,
+                  borderRadius: 10,
+                  marginLeft: 8,
+                }}
+              >
+                <LinkIcon className="w-6" style={{ margin: '0 4px' }} />
+                <div>{link.name}</div>
+              </Link>
+            );
+          })}
           <div
             style={{ marginTop: 50, marginRight: 10 }}
             onClick={() => {

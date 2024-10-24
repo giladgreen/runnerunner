@@ -1,7 +1,5 @@
 import {
-  fetchPlayersPrizes,
   fetchRSVPAndArrivalData,
-  fetchTodayPlayersPhoneNumbers,
   fetchUserById,
   getAllPlayers,
   getTodayTournamentsAdjustments,
@@ -9,13 +7,7 @@ import {
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 import React from 'react';
 import CurrentTournamentIncomeDetailsPage from '@/app/ui/client/CurrentTournamentIncomeDetailsPage';
-import { getDayOfTheWeek, getTodayShortDate } from '@/app/lib/serverDateUtils';
-import RegisterSave from '@/app/ui/client/RegisterSave';
-import TodayTournamentNameCardWrapper from '@/app/ui/client/TodayTournamentNameCardWrapper';
-import {
-  getFinalTablePlayersContent,
-  getPlayersPrizesContent,
-} from '@/app/ui/client/helpers';
+import { getDayOfTheWeek } from '@/app/lib/serverDateUtils';
 
 export default async function DetailsPage({
   params,

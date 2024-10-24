@@ -1,5 +1,5 @@
 import { kv } from '@vercel/kv';
-import {FeatureFlagDB, UserDB} from '@/app/lib/definitions';
+import { FeatureFlagDB, UserDB } from '@/app/lib/definitions';
 
 export async function get(key: string, entityType: string = '') {
   try {

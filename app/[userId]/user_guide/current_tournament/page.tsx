@@ -23,8 +23,8 @@ export default function UserGuideCurrentTournamentPage() {
         className="flex w-full items-center justify-between "
         style={{ marginTop: 10 }}
       >
-          כאשר שורת החיפוש ריקה, יציג את השחקנים שאישרו הגעה ו\או נכנסו לטורניר
-      ואת השחקנים שעודכנו בדקות האחרונות
+        כאשר שורת החיפוש ריקה, יציג את השחקנים שאישרו הגעה ו\או נכנסו לטורניר
+        ואת השחקנים שעודכנו בדקות האחרונות
       </div>
       <div
         className="flex w-full items-center justify-between "
@@ -42,7 +42,8 @@ export default function UserGuideCurrentTournamentPage() {
         className="flex w-full items-center justify-between "
         style={{ marginTop: 3 }}
       >
-        כאשר מחפשים שחקן ולא מוצאים אותו, לחיצה על יצירת שחקן חדש תפתח את עמוד יצירת השחקן עם השם\טלפון שהוקלד בחיפוש
+        כאשר מחפשים שחקן ולא מוצאים אותו, לחיצה על יצירת שחקן חדש תפתח את עמוד
+        יצירת השחקן עם השם\טלפון שהוקלד בחיפוש
       </div>
       <div
         className="flex w-full items-center justify-between "

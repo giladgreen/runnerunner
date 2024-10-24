@@ -40,7 +40,15 @@ function methodEnd(methodName: string, error?: string) {
   const diff = now - start;
 
   if (error) {
-    console.error('Method End', methodName, '      ', diff, 'milli', 'error:',error);
+    console.error(
+      'Method End',
+      methodName,
+      '      ',
+      diff,
+      'milli',
+      'error:',
+      error,
+    );
     return;
   }
 
@@ -394,7 +402,7 @@ async function fetchXPlayers(x: string, getXPlayers: () => PlayerDB[]) {
       getAllRsvps(),
     ]);
     const todayHistory = todayHistoryUnfiltered.filter(
-        ({type}) => type != 'prize' && type != 'credit_to_other',
+      ({ type }) => type != 'prize' && type != 'credit_to_other',
     );
 
     const result = await fetchTopPlayers(players, rsvp, todayHistory);
@@ -480,16 +488,14 @@ async function getSortedPlayers(
 
 export async function fetchPrizesInfo() {
   const prizes =
-      await sql<PrizeInfoDB>`SELECT * FROM prizes_info ORDER BY name`;
+    await sql<PrizeInfoDB>`SELECT * FROM prizes_info ORDER BY name`;
 
   return prizes.rows;
 }
 
-
 /////////////////////////////////////////
 /////////////////////////////////////////
 /////////////////////////////////////////
-
 
 export async function fetchMVPPlayers() {
   return fetchXPlayers(
@@ -1175,6 +1181,15 @@ export async function fetchPlayerByUserId(userId: string) {
 
     const playerPhoneNumber = user.phone_number;
     const player = await getPlayerByPhoneNumber(playerPhoneNumber);
+
+    const rsvps = (await sql<RSVPDB>`SELECT * FROM rsvp;`).rows.filter(
+      ({ phone_number }) => phone_number === player.phone_number,
+    );
+
+    player.rsvps = rsvps.map(({ date, tournament_id }) => ({
+      date,
+      tournamentId: tournament_id,
+    }));
 
     if (player) {
       const [historyLog, rsvpsForToday, tournamentsData] = await Promise.all([

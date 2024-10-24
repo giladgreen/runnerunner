@@ -1,20 +1,16 @@
 'use client';
 import { deletePlayer, updatePlayer } from '@/app/lib/actions';
 import { CldUploadWidget } from 'next-cloudinary';
-
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import Link from 'next/link';
 import { useFormState } from 'react-dom';
 import { PencilIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
-import RSVPButton from '@/app/ui/client/RSVPButton';
-import { TRANSLATIONS } from '@/app/lib/definitions';
 import SpinnerButton, { RedSpinnerButton } from '@/app/ui/client/SpinnerButton';
-import { getCurrentDate, getDayOfTheWeek } from '@/app/lib/clientDateUtils';
-import { Switch } from '@nextui-org/react';
 import AreYouSure from '@/app/ui/client/AreYouSure';
 import Spinner from '@/app/ui/client/Spinner';
 import * as FlowbiteReact from 'flowbite-react';
+import { getRSVPSForTheNextWeek } from '@/app/lib/clientUtils';
 
 export default function EditPlayerForm({
   player,
@@ -55,53 +51,11 @@ export default function EditPlayerForm({
     initialState2,
   );
 
-  const dayOfTheWeek = getDayOfTheWeek();
-  const days = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ];
-  const today = days.indexOf(dayOfTheWeek);
-
-  const rsvpsForTheNextWeek = tournaments
-    .filter((tournament) => days.indexOf(tournament.day) >= today)
-    .map((tournament) => {
-      const tournamentDayIndex = days.indexOf(tournament.day);
-      const date = getCurrentDate(
-        getCurrentDate().getTime() +
-          1000 * 60 * 60 * 24 * (tournamentDayIndex - today),
-      );
-      const dayOfTheWeek = getDayOfTheWeek(date.getTime());
-      const stringDate = date.toISOString().slice(0, 10);
-      // @ts-ignore
-      const text = ` ${TRANSLATIONS[dayOfTheWeek]} - ${tournament.name}`;
-      return (
-        <div key={tournament.id} className="tournament_rsvp_line">
-          {tournament.rsvp_required ? (
-            tournament.max_players === 0 ? (
-              ''
-            ) : (
-              <RSVPButton
-                player={player as PlayerDB}
-                stringDate={stringDate}
-                text={text}
-                tournamentId={tournament.id}
-              />
-            )
-          ) : (
-            <div style={{ display: 'flex' }}>
-              <Switch initialChecked={false} disabled={true} />
-
-              {text}
-            </div>
-          )}
-        </div>
-      );
-    });
+  const rsvpsForTheNextWeek = getRSVPSForTheNextWeek(
+    tournaments,
+    player,
+    false,
+  );
 
   return (
     <>

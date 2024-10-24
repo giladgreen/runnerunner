@@ -3,7 +3,7 @@ import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
 import React, { useCallback, useEffect, useState } from 'react';
 import AreYouSure from '@/app/ui/client/AreYouSure';
 const MINUTE = 60;
-const TIMEOUT = (15 * MINUTE) ;
+const TIMEOUT = 15 * MINUTE;
 const TIMEOUT_WARNING = TIMEOUT - MINUTE;
 
 export default function SignOutButton({
@@ -51,7 +51,7 @@ export default function SignOutButton({
     }
     if (idleTimeout > TIMEOUT && !showedAlert) {
       setShowedAlert(true);
-      setTimeout( signOut,1000)
+      setTimeout(signOut, 1000);
       signOut();
       alert('התנתקת מהמערכת בשל חוסר פעילות');
       signOut();
