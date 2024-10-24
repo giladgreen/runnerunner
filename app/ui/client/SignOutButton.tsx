@@ -1,10 +1,10 @@
 'use client';
-import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
+import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/outline';
 import React, { useCallback, useEffect, useState } from 'react';
 import AreYouSure from '@/app/ui/client/AreYouSure';
-
-const TIMEOUT = 30 * 60;
-const TIMEOUT_WARNING = TIMEOUT - 60;
+const MINUTE = 60;
+const TIMEOUT = (15 * MINUTE) ;
+const TIMEOUT_WARNING = TIMEOUT - MINUTE;
 
 export default function SignOutButton({
   signOut,
@@ -51,6 +51,8 @@ export default function SignOutButton({
     }
     if (idleTimeout > TIMEOUT && !showedAlert) {
       setShowedAlert(true);
+      setTimeout( signOut,1000)
+      signOut();
       alert('התנתקת מהמערכת בשל חוסר פעילות');
       signOut();
     }
@@ -78,7 +80,7 @@ export default function SignOutButton({
         }
         style={{ marginTop: playerScreen ? 5 : 0 }}
       >
-        <ArrowRightOnRectangleIcon className={playerScreen ? 'w-10' : 'w-6'} />
+        <ArrowRightEndOnRectangleIcon className={playerScreen ? 'w-10' : 'w-6'} />
         {!playerScreen && (
           <div className="hidden md:block">{disconnectText}</div>
         )}
