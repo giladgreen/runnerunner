@@ -12,6 +12,7 @@ import SpinnerButton from '@/app/ui/client/SpinnerButton';
 import { CreditCardIcon } from '@heroicons/react/24/outline';
 import { formatCurrency } from '@/app/lib/utils';
 import { Checkbox } from 'primereact/checkbox';
+import {Tooltip} from "flowbite-react";
 
 function SetGivePrizeForm({
   player,
@@ -311,8 +312,12 @@ export default function OpenGiveCreditModalButton({
             setShow(true);
           }}
         >
-          <span className="sr-only">Convert to Credit</span>
-          <CreditCardIcon className="w-6" title="המר לקרדיט" />
+          <Tooltip
+              content="המר לקרדיט"
+              color="primary"
+          >
+            <CreditCardIcon className="w-6" title="המר לקרדיט" />
+          </Tooltip>
         </button>
       )}
       {!hasReceived && (

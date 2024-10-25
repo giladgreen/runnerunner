@@ -304,18 +304,37 @@ export async function getAllPlayers() {
     player.arrived =
       playerItems.length > 0 ? playerItems[0].tournament_id : undefined;
     player.entries = playerItems.length;
+    const lastItem = playerItems[0];
+    player.undoEntriesTooltipText = '';
+
+    const map = {
+        cash: CASH,
+        wire: WIRE,
+        credit: CREDIT,
+        credit_by_other: CREDIT_BY_OTHER,
+        };
+
+
+    if (lastItem){
+      const number = lastItem.change !== 0 ? lastItem.change * -1 : ((lastItem.note.split('₪')[0]).replace(/[^\d]+/g, ''))
+      player.undoEntriesTooltipText = `ביטול הכניסה האחרונה של ₪${number}`;
+      // @ts-ignore
+      player.undoEntriesTooltipText += ` ב${map[lastItem.type]}`;
+    }
+
     player.entriesTooltipText = playerItems
       .reverse()
-      .map((item) =>
-        item.type === 'cash'
-          ? ` ${CASH} ${item.change * -1}`
-          : item.type === 'wire'
-            ? ` ${WIRE} ${item.change * -1}`
-            : item.type === 'credit'
-              ? ` ${CREDIT} ${item.change * -1}`
-              : ` ${CREDIT_BY_OTHER}`,
+      .map((item) => {
+            const number = item.change !== 0 ? item.change * -1 : ((item.note.split('₪')[0]).replace(/[^\d]+/g, ''))
+            let  result = ` ₪${number}`
+            // @ts-ignore
+             result += ` ב${map[item.type]}`
+        
+            return  result;
+          }
+       ,
       )
-      .join(',');
+
 
     player.name = player.name.trim();
     player.historyLog = playerItems;

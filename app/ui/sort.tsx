@@ -1,5 +1,6 @@
 'use client';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
+import {Tooltip} from "flowbite-react";
 
 export default function Sort({
   text,
@@ -19,14 +20,19 @@ export default function Sort({
   };
 
   return (
+      <Tooltip
+          content={`מיון על פי ${text}`}
+          color="primary"
+
+      >
     <div
       className="sort-cursor"
-      title={`Sort by ${text}`}
       onClick={(e) => {
         handleSort();
       }}
     >
       {text}
     </div>
+        </Tooltip>
   );
 }

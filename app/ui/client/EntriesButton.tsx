@@ -13,7 +13,8 @@ import { Tooltip as BlackTooltip } from 'flowbite-react';
 const formatPlayerEntries = (
   entries: number,
   isPending: boolean,
-  tooltipText?: string,
+  prevEntriesTooltipText?: string[],
+  undoTooltipText?: string,
 ) => {
   if (isPending) {
     return <Spinner size={30} />;
@@ -29,14 +30,18 @@ const formatPlayerEntries = (
   const map = ['', 'one', 'two', 'three', 'four', 'five'];
   return (
     <Tooltip
-      content={tooltipText}
-      color="primary"
+        content={prevEntriesTooltipText ? <ul className="rtl">
+          <div><u>פירוט כניסות:</u></div>
+          <div>
+          {prevEntriesTooltipText.map(row => (<li key={row}>{row}</li>))}
+          </div></ul> : <div/>}
+      color="success"
       contentColor={undefined}
       css={undefined}
       enterDelay={1200}
       placement="bottom"
     >
-      <BlackTooltip content="ביטול כניסה אחרונה" color="default">
+      <BlackTooltip content={undoTooltipText} color="default">
         <Image
           src={`/${map[entries]}.png`}
           alt={`players entries: ${entries}`}
@@ -61,7 +66,7 @@ export default function EntriesButton({
   const [isPending, setIsPending] = useState(false);
 
   const currentPage = `${usePathname()}?${useSearchParams().toString()}`;
-
+const entriesCount = player.entries ?? 0;
   return (
     <div>
       <div
@@ -71,9 +76,10 @@ export default function EntriesButton({
         className="pointer"
       >
         {formatPlayerEntries(
-          player.entries ?? 0,
+          entriesCount,
           isPending,
           player.entriesTooltipText,
+          player.undoEntriesTooltipText,
         )}
       </div>
       {showConfirmation && (
@@ -104,8 +110,8 @@ export default function EntriesButton({
           onCancel={() => {
             setShowConfirmation(false);
           }}
-          subtext="ביטול הכניסה האחרונה של השחקן"
-          text="ביטול כניסה אחרונה?"
+          text="ביטול הכניסה האחרונה של השחקן"
+          subtext={ player.undoEntriesTooltipText ?? ''}
         />
       )}
     </div>

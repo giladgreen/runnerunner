@@ -148,7 +148,6 @@ export default function PlayersTable({
                     <th
                       scope="col"
                       className="px-3 py-5 font-medium "
-                      title="מיון לפי קרדיט"
                       style={{ textAlign: 'right' }}
                     >
                       <Sort text="קרדיט" sortTerm="balance" />
@@ -156,7 +155,6 @@ export default function PlayersTable({
                     <th
                       scope="col"
                       className="px-3 py-5 font-medium "
-                      title="מיון לפי הערות"
                       style={{ textAlign: 'right' }}
                     >
                       <Sort text="הערות" sortTerm="notes" />
@@ -164,7 +162,6 @@ export default function PlayersTable({
                     <th
                       scope="col"
                       className="px-3 py-5 font-medium "
-                      title="מיון לפי תאריך עדכון"
                       style={{ textAlign: 'right' }}
                     >
                       <Sort text="תאריך עדכון" sortTerm="updated_at" />

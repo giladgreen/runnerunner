@@ -5,11 +5,10 @@ import Link from 'next/link';
 import {
   formatCurrency,
   formatCurrencyColor,
-  nameComparator,
 } from '@/app/lib/utils';
 import RSVPButton from '@/app/ui/client/RSVPButton';
 import OpenCreditModalButton from '@/app/ui/client/OpenCreditModalButton';
-import { DoubleTicksIcon } from '@/app/ui/icons';
+import { Tooltip  } from 'flowbite-react';
 import { PlayerDB, PrizeInfoDB, TournamentDB } from '@/app/lib/definitions';
 import OpenPositionModalButton from '@/app/ui/client/OpenPositionModalButton';
 import OpenPrizeModalButton from '@/app/ui/client/OpenPrizeModalButton';
@@ -179,9 +178,13 @@ export default function TodayPlayersTable({
           onClick={() => {
             setQuery('');
           }}
+          disabled={query.length === 0}
         >
-          <span className="sr-only">Clear</span>
-          <TrashIcon className="w-6" title="נקה" />
+          <Tooltip
+              content="נקה שורת חיפוש"
+          >
+            <TrashIcon className="w-6"  color={query.length === 0 ? '#AAAAAA':undefined} cursor={query.length === 0 ? 'no-drop':undefined}/>
+          </Tooltip>
         </button>
         <input
           className="rtl peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -191,7 +194,9 @@ export default function TodayPlayersTable({
           }}
           value={query}
         />
+
         <CreateNewTodayPlayerButton params={{ userId, query }} />
+
       </div>
       <div className="rtl mt-4 flex items-center justify-between gap-2 md:mt-8">
         <div className="full-width rtl mt-6 flow-root">
