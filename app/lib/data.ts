@@ -316,7 +316,15 @@ export async function getAllPlayers() {
 
 
     if (lastItem){
-      const number = lastItem.change !== 0 ? lastItem.change * -1 : ((lastItem.note.split('₪')[0]).replace(/[^\d]+/g, ''))
+      let number = lastItem.change * -1;
+      if (number === 0) {
+        try{
+          number = Number(((lastItem.note.split('₪')[0]).replace(/[^\d]+/g, '')))
+        }catch(_e){
+          number = 0;
+        }
+      }
+
       player.undoEntriesTooltipText = `ביטול הכניסה האחרונה של ₪${number}`;
       // @ts-ignore
       player.undoEntriesTooltipText += ` ב${map[lastItem.type]}`;
@@ -325,11 +333,18 @@ export async function getAllPlayers() {
     player.entriesTooltipText = playerItems
       .reverse()
       .map((item) => {
-            const number = item.change !== 0 ? item.change * -1 : ((item.note.split('₪')[0]).replace(/[^\d]+/g, ''))
+            let number = item.change * -1;
+            if (number === 0) {
+              try{
+                number = Number(((item.note.split('₪')[0]).replace(/[^\d]+/g, '')))
+              }catch(_e){
+                number = 0;
+              }
+            }
             let  result = ` ₪${number}`
             // @ts-ignore
              result += ` ב${map[item.type]}`
-        
+
             return  result;
           }
        ,
