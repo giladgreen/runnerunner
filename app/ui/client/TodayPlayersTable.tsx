@@ -55,7 +55,7 @@ function getMinPosition(players: PlayerDB[]) {
   }
 
   if (players.length > 10) {
-    return 9;
+    return 8;
   }
 
   return players.length;
@@ -139,7 +139,8 @@ export default function TodayPlayersTable({
 
   const arrivedPlayers = allPlayers.filter(
     (player) => player.arrived === tournamentId,
-  ).length;
+  );
+  const arrivedPlayersCount = arrivedPlayers.length;
   const arrivedWithoutRSVPPlayers = allPlayers.filter(
     (player) =>
       player.arrived === tournamentId && player.rsvpForToday !== tournamentId,
@@ -149,16 +150,17 @@ export default function TodayPlayersTable({
     query.length > 0
       ? `מציג ${players.length} תוצאות `
       : rsvpEnabled && isRsvpRequired
-        ? `מציג  ${rsvpPlayersCount} שחקנים שאישרו הגעה, ${arrivedPlayers} שהגיעו. ${
+        ? `מציג  ${rsvpPlayersCount} שחקנים שאישרו הגעה, ${arrivedPlayersCount} שהגיעו. ${
             arrivedWithoutRSVPPlayers > 0
               ? arrivedWithoutRSVPPlayers > 1
                 ? `(${arrivedWithoutRSVPPlayers} שחקנים הגיעו מבלי לאשר הגעה)`
                 : `(שחקן אחד הגיע מבלי לאשר הגעה)`
               : ''
           }`
-        : `מציג ${arrivedPlayers} שחקנים שהגיעו.`;
+        : `מציג ${arrivedPlayersCount} שחקנים שהגיעו.`;
 
-  const minPosition = getMinPosition(players);
+
+  const minPosition = getMinPosition(arrivedPlayers);
 
   const dayOfTheWeek = getDayOfTheWeek().toLowerCase();
 
