@@ -1801,6 +1801,54 @@ VALUES (${user.id}, ${user.phone_number},  ${user.password}, ${user.name}, ${use
   }
 }
 
+export async function registerPlayerForDay( phone_number: string,
+                                     date: string,
+                                     tournamentId: string,
+                                     val: boolean){
+  const rsvpResults =
+      await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${phone_number} AND date = ${date}`;
+
+  const existingRsvp = rsvpResults.rows.find(
+      (r) => r.tournament_id === tournamentId,
+  );
+
+  if (val && existingRsvp) {
+    //already rsvp
+    return;
+  }
+  if (!val && !existingRsvp) {
+    //already not rsvp
+    return;
+  }
+  if (val && !existingRsvp) {
+    const otherExistingRsvp = rsvpResults.rows.find(
+        (r) => r.tournament_id !== tournamentId,
+    );
+    try {
+      await startTransaction();
+      if (otherExistingRsvp) {
+        await sql`INSERT INTO deleted_rsvp (id,date,phone_number, tournament_id ) VALUES (${otherExistingRsvp.id}, ${otherExistingRsvp.date}, ${otherExistingRsvp.phone_number},${otherExistingRsvp.tournament_id})`;
+        await sql`DELETE FROM rsvp WHERE id = ${otherExistingRsvp.id}`;
+      }
+      await sql`INSERT INTO rsvp (date, phone_number, tournament_id) VALUES (${date}, ${phone_number}, ${tournamentId})`;
+
+      await commitTransaction();
+    } catch (error) {
+      await cancelTransaction();
+      throw error;
+    }
+  } else if (existingRsvp && !val) {
+    try {
+      await startTransaction();
+      await sql`INSERT INTO deleted_rsvp (id,date,phone_number, tournament_id ) VALUES (${existingRsvp.id}, ${existingRsvp.date}, ${existingRsvp.phone_number},${existingRsvp.tournament_id})`;
+      await sql`DELETE FROM rsvp WHERE id = ${existingRsvp.id}`;
+      await commitTransaction();
+    } catch (error) {
+      await cancelTransaction();
+      throw error;
+    }
+  }
+}
 export async function rsvpPlayerForDay(
   phone_number: string,
   date: string,
@@ -1810,49 +1858,10 @@ export async function rsvpPlayerForDay(
 ) {
   noStore();
   try {
-    const rsvpResults =
-      await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${phone_number} AND date = ${date}`;
-
-    const existingRsvp = rsvpResults.rows.find(
-      (r) => r.tournament_id === tournamentId,
-    );
-
-    if (val && existingRsvp) {
-      //already rsvp
-      return;
-    }
-    if (!val && !existingRsvp) {
-      //already not rsvp
-      return;
-    }
-    if (val && !existingRsvp) {
-      const otherExistingRsvp = rsvpResults.rows.find(
-        (r) => r.tournament_id !== tournamentId,
-      );
-      try {
-        await startTransaction();
-        if (otherExistingRsvp) {
-          await sql`INSERT INTO deleted_rsvp (id,date,phone_number, tournament_id ) VALUES (${otherExistingRsvp.id}, ${otherExistingRsvp.date}, ${otherExistingRsvp.phone_number},${otherExistingRsvp.tournament_id})`;
-          await sql`DELETE FROM rsvp WHERE id = ${otherExistingRsvp.id}`;
-        }
-        await sql`INSERT INTO rsvp (date, phone_number, tournament_id) VALUES (${date}, ${phone_number}, ${tournamentId})`;
-
-        await commitTransaction();
-      } catch (error) {
-        await cancelTransaction();
-        throw error;
-      }
-    } else if (existingRsvp && !val) {
-      try {
-        await startTransaction();
-        await sql`INSERT INTO deleted_rsvp (id,date,phone_number, tournament_id ) VALUES (${existingRsvp.id}, ${existingRsvp.date}, ${existingRsvp.phone_number},${existingRsvp.tournament_id})`;
-        await sql`DELETE FROM rsvp WHERE id = ${existingRsvp.id}`;
-        await commitTransaction();
-      } catch (error) {
-        await cancelTransaction();
-        throw error;
-      }
-    }
+    await registerPlayerForDay( phone_number,
+        date,
+        tournamentId,
+        val);
   } catch (error) {
     console.error('rsvpPlayerForDay Error:', error);
     return false;
