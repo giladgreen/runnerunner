@@ -162,9 +162,9 @@ export default function AutoPlayerPayButton({
               color="light"
               disabled={maxRebuyReached}
               className={maxRebuyReached ? ' gray-on-hover bg-gray-500' : ''}
-              style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0 }}
+              style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0, paddingTop:0, paddingBottom: 4 }}
             >
-              <span style={{ fontSize: 30 }}>₪</span>
+              <span style={{ fontSize: 29 }}>₪</span>
             </Button>
           </Tooltip>
         </form>

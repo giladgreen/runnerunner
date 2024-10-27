@@ -33,7 +33,7 @@ export default function OpenPositionModalButton({
           color="light"
           disabled={!enableButton}
         >
-          <span style={{ fontSize: 22 }}>#</span>
+          <span style={{ fontSize: 24 }}>#</span>
         </Button>
       </Tooltip>
       <div className={show ? 'edit-player-modal' : 'hidden'}>
