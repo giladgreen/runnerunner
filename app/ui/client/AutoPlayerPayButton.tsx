@@ -110,14 +110,20 @@ export default function AutoPlayerPayButton({
 
   return (
     <>
-      {pending && (
+      {(pending) && (
         <div
           style={{
-            border: '1px solid white',
+            border: '1px solid #e2e8f0',
             borderRadius: 3,
-            marginRight: 8,
-            marginTop: 5,
-            width: 40,
+            marginRight: 0,
+            marginTop: 0,
+            width: 60,
+            borderBottomRightRadius: 0,
+            borderTopRightRadius: 0,
+            borderBottomLeftRadius: 4,
+            borderTopLeftRadius: 4,
+            paddingTop:5,
+            paddingRight:10,
           }}
         >
           <Spinner size={33} />
