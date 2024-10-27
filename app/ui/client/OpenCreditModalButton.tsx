@@ -37,7 +37,7 @@ export default function OpenCreditModalButton({
             setShow(true);
           }}
           color="light"
-          style={{ width: 20 }}
+          style={{ width: 20, borderBottomLeftRadius: 0, borderTopLeftRadius: 0, borderLeft: 0 }}
         >
           <HiOutlineDotsVertical className=" h-5 w-5" />
         </Button>

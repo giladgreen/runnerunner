@@ -23,12 +23,13 @@ export default async function SideNav({ userId }: { userId: string }) {
             alt="runner"
           />
         </div>
-        <div className="wide-screen">
+        <div className="wide-screen"  style={{ padding: '10px 0' }}>
           <img
             src="/runner-white-logo.png"
             width={166}
             height={166}
             alt="runner"
+            style={{ marginRight: 30 }}
           />
         </div>
       </Link>
