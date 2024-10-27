@@ -34,7 +34,7 @@
 .zoom-on-hover-bigger:hover {
   transform: scale(5);
   transition: transform 4s;
-  transition-delay: 1s;
+  transition-delay: 2s;
   z-index: 999999;
 }
 .justify-end {
