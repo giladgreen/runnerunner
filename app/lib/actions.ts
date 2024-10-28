@@ -86,6 +86,7 @@ export type State = {
     balance?: string[];
     change?: string[];
     phone_number?: string[];
+    new_phone_number?: string[];
     note?: string[];
     notes?: string[];
     description?: string[];
@@ -976,9 +977,20 @@ export async function updatePlayer(
   formData: FormData,
 ) {
   noStore();
+
+  const player = await getPlayerById(id);
+  if (!player) {
+    console.error('## updatePlayer: player not found'
+    );
+    return {
+      message: 'לא נמצא שחקן עם מזהה זה',
+    };
+  }
+
   const UpdatePlayer = z.object({
     name: z.string().min(1, 'name can not be left empty'),
     notes: z.string(),
+    new_phone_number: z.string().optional()
   });
 
   const validatedFields = UpdatePlayer.safeParse({
@@ -998,8 +1010,10 @@ export async function updatePlayer(
   }
   const image_url = formData.get('image_url') as string;
 
+
   const { name, notes } = validatedFields.data;
   let imageHasChanged = false;
+
   try {
     if (
       image_url &&
@@ -1007,7 +1021,7 @@ export async function updatePlayer(
       image_url !== '/players/default.png'
     ) {
       imageHasChanged = true;
-      const player = await getPlayerById(id);
+
       if (player && player.image_url !== image_url) {
         await sql`INSERT INTO images (phone_number, image_url) VALUES (${player.phone_number}, ${image_url})`;
       }
@@ -1034,6 +1048,17 @@ export async function updatePlayer(
       updated_at=${date}
       WHERE id = ${id} `;
     }
+    const oldPhoneNumber = player.phone_number;
+    let newPhoneNumber = ((formData.get('new_phone_number') ?? oldPhoneNumber) as string).replaceAll('-', '');
+    newPhoneNumber = `${newPhoneNumber.startsWith('0') ? '' : '0'}${newPhoneNumber}`;
+    if (newPhoneNumber && newPhoneNumber !== oldPhoneNumber) {
+      await sql`UPDATE players SET phone_number = ${newPhoneNumber} WHERE phone_number = ${oldPhoneNumber} `;
+      await sql`UPDATE history SET phone_number = ${newPhoneNumber} WHERE phone_number = ${oldPhoneNumber} `;
+      await sql`UPDATE rsvp SET phone_number = ${newPhoneNumber} WHERE phone_number = ${oldPhoneNumber} `;
+      await sql`UPDATE prizes SET phone_number = ${newPhoneNumber} WHERE phone_number = ${oldPhoneNumber} `;
+      await sql`UPDATE images SET phone_number = ${newPhoneNumber} WHERE phone_number = ${oldPhoneNumber} `;
+    }
+
   } catch (error) {
     console.error('## updatePlayer error', error);
     return { message: 'איראה שגיאה' };

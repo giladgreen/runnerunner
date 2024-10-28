@@ -119,7 +119,33 @@ export default function EditPlayerForm({
               </div>
             </div>
           </div>
-
+          {/* player phone number */}
+          <div className="mb-4">
+            <label htmlFor="new_phone_number" className="mb-2 block text-sm font-medium">
+              מספר הטלפון של השחקן
+            </label>
+            <div className="relative mt-2 rounded-md">
+              <div className="relative">
+                <input
+                    id="new_phone_number"
+                    name="new_phone_number"
+                    defaultValue={player.phone_number}
+                    placeholder="הכנס מספר"
+                    className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                    aria-describedby="new_phone_number-error"
+                />
+              </div>
+              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <div id="new_phone_number-error" aria-live="polite" aria-atomic="true">
+                {state?.errors?.new_phone_number &&
+                    state?.errors.new_phone_number.map((error: string) => (
+                        <div className="mt-2 text-sm text-red-500" key={error}>
+                          {error}
+                        </div>
+                    ))}
+              </div>
+            </div>
+          </div>
           {/* player notes */}
           <div className="mb-4">
             <label htmlFor="notes" className="mb-2 block text-sm font-medium">

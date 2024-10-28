@@ -219,7 +219,7 @@ async function seedPlayers(client) {
   );
 `;
 
-    await client.sql`CREATE INDEX IF NOT EXISTS players_idx ON players (phone_number);`;
+    await client.sql`CREATE UNIQUE INDEX IF NOT EXISTS players_idx ON players (phone_number);`;
     await client.sql`CREATE INDEX IF NOT EXISTS players_name_idx ON players (name);`;
 
     console.log(`Created "players" table`);
@@ -580,3 +580,4 @@ module.exports = {
   tests,
   seed,
 };
+

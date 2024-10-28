@@ -34,6 +34,8 @@ export default function ImportPlayersButton() {
               let nameColumnIndex = 0;
               reader.onload = async function (e) {
                 const fileContent = (e?.target?.result ?? '') as string;
+                const phoneNumbers = {} as any;
+
                 const players = fileContent
                   .split('\n')
                   .map((line: string) => {
@@ -47,22 +49,30 @@ export default function ImportPlayersButton() {
                     }
                     const parts = line.split(',');
 
+                    let phoneNumber = parts[nameColumnIndex === 0 ? 1 : 0].trim().replaceAll('-', '');
+                    if (!phoneNumber.startsWith('0')) {
+                          phoneNumber = '0' + phoneNumber;
+                    }
+
+                    const newBalance = Number(parts[2]);
+                    const existingPlayer = phoneNumbers[phoneNumber];
+                     if (existingPlayer) {
+                         if (Number(existingPlayer.balance) === 0 && newBalance !== 0) {
+                             existingPlayer.balance = newBalance;
+                         }
+                         return null;
+                    }
 
                     const player = {
-                      phone_number: parts[nameColumnIndex === 0 ? 1 : 0].trim().replaceAll('-', ''),
+                      phone_number: phoneNumber,
                       image_url: '',
                       name: parts[nameColumnIndex].trim(),
-                      balance: Number(parts[2]),
+                      balance: newBalance,
                       notes: '',
                     };
-                    if (!player.phone_number.startsWith('0')) {
-                      player.phone_number = '0' + player.phone_number;
-                    }
-                    if (!player.notes) {
-                      player.notes = '';
-                    } else {
-                      player.notes = player.notes.trim();
-                    }
+
+                    phoneNumbers[phoneNumber] = player;
+
                     return player;
                   })
                   .filter(Boolean) as PlayerDB[];
