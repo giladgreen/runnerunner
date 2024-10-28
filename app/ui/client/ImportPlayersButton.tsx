@@ -31,6 +31,7 @@ export default function ImportPlayersButton() {
               let file = e?.target?.files[0];
 
               let reader = new FileReader();
+              let nameColumnIndex = 0;
               reader.onload = async function (e) {
                 const fileContent = (e?.target?.result ?? '') as string;
                 const players = fileContent
@@ -40,13 +41,17 @@ export default function ImportPlayersButton() {
                       return false;
                     }
                     if (line.includes('name') && line.includes('balance')) {
+                        const lineParts = line.split(',');
+                        nameColumnIndex = lineParts.findIndex(item => item.includes('name'));
                       return false;
                     }
                     const parts = line.split(',');
+
+
                     const player = {
-                      phone_number: parts[0].trim().replaceAll('-', ''),
+                      phone_number: parts[nameColumnIndex === 0 ? 1 : 0].trim().replaceAll('-', ''),
                       image_url: '',
-                      name: parts[1].trim(),
+                      name: parts[nameColumnIndex].trim(),
                       balance: Number(parts[2]),
                       notes: '',
                     };
