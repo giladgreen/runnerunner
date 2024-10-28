@@ -110,7 +110,7 @@ export default function AutoPlayerPayButton({
 
   return (
     <>
-      {(pending) && (
+      {pending && (
         <div
           style={{
             border: '1px solid #e2e8f0',
@@ -122,8 +122,8 @@ export default function AutoPlayerPayButton({
             borderTopRightRadius: 0,
             borderBottomLeftRadius: 4,
             borderTopLeftRadius: 4,
-            paddingTop:5,
-            paddingRight:10,
+            paddingTop: 5,
+            paddingRight: 10,
           }}
         >
           <Spinner size={33} />
@@ -168,7 +168,12 @@ export default function AutoPlayerPayButton({
               color="light"
               disabled={maxRebuyReached}
               className={maxRebuyReached ? ' gray-on-hover bg-gray-500' : ''}
-              style={{ borderBottomRightRadius: 0, borderTopRightRadius: 0, paddingTop:0, paddingBottom: 4 }}
+              style={{
+                borderBottomRightRadius: 0,
+                borderTopRightRadius: 0,
+                paddingTop: 0,
+                paddingBottom: 4,
+              }}
             >
               <span style={{ fontSize: 29 }}>₪</span>
             </Button>

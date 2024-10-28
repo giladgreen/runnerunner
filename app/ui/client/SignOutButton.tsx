@@ -51,11 +51,10 @@ export default function SignOutButton({
     }
     if (idleTimeout > TIMEOUT && !showedAlert) {
       setShowedAlert(true);
-      setTimeout(()=>{
+      setTimeout(() => {
         window.location.href = `/logged_out`;
       }, 1000);
       signOut();
-
     }
   }, [idleTimeout, eventListener, showedAlert]);
 
@@ -63,7 +62,7 @@ export default function SignOutButton({
     playerScreen || isInside ? 'התנתק' : 'יש להתנתק לפני סגירת הלשונית';
   let backgroundClass = 'transparent_background';
   if (!playerScreen) {
-    if ((idleTimeout > TIMEOUT_WARNING) || !isInside) {
+    if (idleTimeout > TIMEOUT_WARNING || !isInside) {
       backgroundClass = 'red_blinking_background';
     }
   }
@@ -87,7 +86,7 @@ export default function SignOutButton({
         )}
         {!playerScreen && idleTimeout > TIMEOUT_WARNING && idleTimeout > 0 && (
           <div className="hidden md:block" style={{ margin: '0 20px' }}>
-            ({TIMEOUT - idleTimeout > 0 ? (TIMEOUT - idleTimeout) : ''})
+            ({TIMEOUT - idleTimeout > 0 ? TIMEOUT - idleTimeout : ''})
           </div>
         )}
       </button>
@@ -98,8 +97,8 @@ export default function SignOutButton({
             signOut();
           }}
           onCancel={() => setShowConfirmation(false)}
-          subtext=""
-          text="האם להתנתק?"
+          action="התנתקות"
+          question="האם אתה בטוח?"
         />
       )}
     </div>

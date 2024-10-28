@@ -580,4 +580,3 @@ module.exports = {
   tests,
   seed,
 };
-

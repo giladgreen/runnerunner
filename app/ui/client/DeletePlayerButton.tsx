@@ -36,8 +36,8 @@ export default function DeletePlayerButton({
             deletePlayerWithId();
           }}
           onCancel={() => setShowConfirmation(false)}
-          subtext="הסטוריית השחקן תימחק גם"
-          text="האם למחוק שחקן?"
+          action="הסטוריית השחקן תימחק גם"
+          question="האם אתה בטוח?"
         />
       )}
     </div>

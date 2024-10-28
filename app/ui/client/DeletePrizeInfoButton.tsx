@@ -41,8 +41,8 @@ export default function DeletePrizeInfoButton({
             deletePrizeInfoWithId();
           }}
           onCancel={() => setShowConfirmation(false)}
-          subtext=""
-          text="האם למחוק פרס?"
+          action="מחיקת הפרס"
+          question="האם אתה בטוח?"
         />
       )}
     </div>

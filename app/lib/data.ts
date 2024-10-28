@@ -308,19 +308,18 @@ export async function getAllPlayers() {
     player.undoEntriesTooltipText = '';
 
     const map = {
-        cash: CASH,
-        wire: WIRE,
-        credit: CREDIT,
-        credit_by_other: CREDIT_BY_OTHER,
-        };
+      cash: CASH,
+      wire: WIRE,
+      credit: CREDIT,
+      credit_by_other: CREDIT_BY_OTHER,
+    };
 
-
-    if (lastItem){
+    if (lastItem) {
       let number = lastItem.change * -1;
       if (number === 0) {
-        try{
-          number = Number(((lastItem.note.split('₪')[0]).replace(/[^\d]+/g, '')))
-        }catch(_e){
+        try {
+          number = Number(lastItem.note.split('₪')[0].replace(/[^\d]+/g, ''));
+        } catch (_e) {
           number = 0;
         }
       }
@@ -330,26 +329,21 @@ export async function getAllPlayers() {
       player.undoEntriesTooltipText += ` ב${map[lastItem.type]}`;
     }
 
-    player.entriesTooltipText = playerItems
-      .reverse()
-      .map((item) => {
-            let number = item.change * -1;
-            if (number === 0) {
-              try{
-                number = Number(((item.note.split('₪')[0]).replace(/[^\d]+/g, '')))
-              }catch(_e){
-                number = 0;
-              }
-            }
-            let  result = ` ₪${number}`
-            // @ts-ignore
-             result += ` ב${map[item.type]}`
+    player.entriesTooltipText = playerItems.reverse().map((item) => {
+      let number = item.change * -1;
+      if (number === 0) {
+        try {
+          number = Number(item.note.split('₪')[0].replace(/[^\d]+/g, ''));
+        } catch (_e) {
+          number = 0;
+        }
+      }
+      let result = ` ₪${number}`;
+      // @ts-ignore
+      result += ` ב${map[item.type]}`;
 
-            return  result;
-          }
-       ,
-      )
-
+      return result;
+    });
 
     player.name = player.name.trim();
     player.historyLog = playerItems;

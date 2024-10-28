@@ -3,11 +3,11 @@ import React from 'react';
 export default function AreYouSure({
   onConfirm,
   onCancel,
-  text,
-  subtext,
+  action,
+  question,
 }: {
-  text: string;
-  subtext?: string;
+  action: string;
+  question?: string;
   onConfirm: () => void;
   onCancel: () => void;
 }) {
@@ -18,15 +18,17 @@ export default function AreYouSure({
     >
       <div className="confirmation-modal">
         <div>
-          <b>{text}</b>
+          <b>{action}</b>
         </div>
-        {subtext && <div style={{ fontSize: 13 }}>{subtext}</div>}
+        {question && (
+          <div style={{ fontSize: 16, marginTop: 20 }}>{question}</div>
+        )}
         <div className="confirmation-modal-buttons">
           <button
             className="confirmation-modal-button rounded-md border p-2 hover:bg-gray-100"
             onClick={onCancel}
           >
-            <span>ביטול</span>
+            <span style={{ fontSize: 20 }}>שיניתי דעתי</span>
           </button>
           <button
             className="confirmation-modal-button rounded-md border p-2 hover:bg-gray-100"
@@ -34,7 +36,7 @@ export default function AreYouSure({
               onConfirm();
             }}
           >
-            <span>כן</span>
+            <span style={{ fontSize: 20 }}>בטוח</span>
           </button>
         </div>
       </div>

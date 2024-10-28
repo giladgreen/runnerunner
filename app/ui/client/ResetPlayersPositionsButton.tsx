@@ -42,8 +42,8 @@ export default function ResetPlayersPositionsButton({
             resetTournamentPositions(tournamentId, date, prevPage);
           }}
           onCancel={() => setShow(false)}
-          subtext={tournamentName}
-          text="האם לאפס את מיקומי השחקנים עבור טורניר זה?"
+          action={`${tournamentName}   איפוס מיקומי שחקנים `}
+          question="האם אתה בטוח?"
         />
       </div>
     </div>

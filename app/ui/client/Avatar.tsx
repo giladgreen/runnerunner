@@ -38,7 +38,9 @@ export default function Avatar({
       : 'offline'
     : undefined;
   return (
-    <div className={`avatar-image ${ isDefaultImage ? '' : 'zoom-on-hover-bigger'}`}>
+    <div
+      className={`avatar-image ${isDefaultImage ? '' : 'zoom-on-hover-bigger'}`}
+    >
       <FlowbiteReact.Avatar
         img={isDefaultImage ? undefined : player.image_url}
         placeholderInitials={

@@ -3,8 +3,11 @@ import { usePathname } from 'next/navigation';
 import { useSearchParams } from 'next/dist/client/components/navigation';
 import React from 'react';
 import { setPrizeAsNotReadyToBeDelivered } from '@/app/lib/actions';
-import {ArrowDownOnSquareIcon, ArrowUpOnSquareIcon} from '@heroicons/react/24/outline';
-import {Tooltip} from "flowbite-react";
+import {
+  ArrowDownOnSquareIcon,
+  ArrowUpOnSquareIcon,
+} from '@heroicons/react/24/outline';
+import { Tooltip } from 'flowbite-react';
 
 export default function SetPrizeAsNotReadyToBeDelivered({
   id,
@@ -27,12 +30,9 @@ export default function SetPrizeAsNotReadyToBeDelivered({
           setPrizeAsNotReadyToBeDeliveredWithId();
         }}
       >
-          <Tooltip
-              content="הפרס עוד לא מוכן למסירה"
-              color="primary"
-          >
-              <ArrowUpOnSquareIcon className="w-6" />
-          </Tooltip>
+        <Tooltip content="הפרס עוד לא מוכן למסירה" color="primary">
+          <ArrowUpOnSquareIcon className="w-6" />
+        </Tooltip>
       </button>
     </div>
   );

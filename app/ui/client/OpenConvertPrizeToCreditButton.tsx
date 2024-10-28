@@ -9,7 +9,7 @@ import SearchablePrizesDropdown from '@/app/ui/client/SearchablePrizesDropdown';
 import { PrizeInfoDB } from '@/app/lib/definitions';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
 import { CreditCardIcon } from '@heroicons/react/24/outline';
-import {Tooltip} from "flowbite-react";
+import { Tooltip } from 'flowbite-react';
 
 function OpenConvertPrizeToCreditForm({
   userId,
@@ -119,11 +119,8 @@ export default function OpenConvertPrizeToCreditButton({
           setShow(true);
         }}
       >
-        <Tooltip
-            content="המר לקרדיט"
-            color="primary"
-        >
-            <CreditCardIcon className="w-6" title="המר לקרדיט" />
+        <Tooltip content="המר לקרדיט" color="primary">
+          <CreditCardIcon className="w-6" title="המר לקרדיט" />
         </Tooltip>
       </button>
 

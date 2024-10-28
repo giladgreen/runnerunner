@@ -30,11 +30,22 @@ const formatPlayerEntries = (
   const map = ['', 'one', 'two', 'three', 'four', 'five'];
   return (
     <Tooltip
-        content={prevEntriesTooltipText ? <ul className="rtl">
-          <div><u>פירוט כניסות:</u></div>
-          <div>
-          {prevEntriesTooltipText.map(row => (<li key={row}>{row}</li>))}
-          </div></ul> : <div/>}
+      content={
+        prevEntriesTooltipText ? (
+          <ul className="rtl">
+            <div>
+              <u>פירוט כניסות:</u>
+            </div>
+            <div>
+              {prevEntriesTooltipText.map((row) => (
+                <li key={row}>{row}</li>
+              ))}
+            </div>
+          </ul>
+        ) : (
+          <div />
+        )
+      }
       color="success"
       contentColor={undefined}
       css={undefined}
@@ -66,7 +77,7 @@ export default function EntriesButton({
   const [isPending, setIsPending] = useState(false);
 
   const currentPage = `${usePathname()}?${useSearchParams().toString()}`;
-const entriesCount = player.entries ?? 0;
+  const entriesCount = player.entries ?? 0;
   return (
     <div>
       <div
@@ -110,8 +121,8 @@ const entriesCount = player.entries ?? 0;
           onCancel={() => {
             setShowConfirmation(false);
           }}
-          text="ביטול הכניסה האחרונה של השחקן"
-          subtext={ player.undoEntriesTooltipText ?? ''}
+          action={player.undoEntriesTooltipText ?? ''}
+          question="האם אתה בטוח?"
         />
       )}
     </div>

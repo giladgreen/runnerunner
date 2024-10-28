@@ -1,4 +1,4 @@
-import {fetchTournaments} from "@/app/lib/data";
+import { fetchTournaments } from '@/app/lib/data';
 
 export async function GET(request: Request) {
   try {

@@ -36,8 +36,8 @@ export default function DeleteBugButton({
             deleteBugWithId();
           }}
           onCancel={() => setShowConfirmation(false)}
-          subtext=""
-          text="האם למחוק את באג?"
+          action="מחיקת הבאג"
+          question="האם אתה בטוח?"
         />
       )}
     </div>

@@ -3,8 +3,11 @@ import { usePathname } from 'next/navigation';
 import { useSearchParams } from 'next/dist/client/components/navigation';
 import React from 'react';
 import { setPrizeAsReadyToBeDelivered } from '@/app/lib/actions';
-import {ArrowDownOnSquareIcon, ArrowUpOnSquareIcon} from '@heroicons/react/24/outline';
-import {Tooltip} from "flowbite-react";
+import {
+  ArrowDownOnSquareIcon,
+  ArrowUpOnSquareIcon,
+} from '@heroicons/react/24/outline';
+import { Tooltip } from 'flowbite-react';
 
 export default function SetPrizeAsReadyToBeDelivered({ id }: { id: string }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
@@ -25,13 +28,9 @@ export default function SetPrizeAsReadyToBeDelivered({ id }: { id: string }) {
           setPrizeAsReadyToBeDeliveredWithId();
         }}
       >
-          <Tooltip
-              content="פרס מוכן למסירה"
-              color="primary"
-          >
-              <ArrowDownOnSquareIcon className="w-6" />
-          </Tooltip>
-
+        <Tooltip content="פרס מוכן למסירה" color="primary">
+          <ArrowDownOnSquareIcon className="w-6" />
+        </Tooltip>
       </button>
     </div>
   );

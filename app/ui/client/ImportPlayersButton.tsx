@@ -43,24 +43,28 @@ export default function ImportPlayersButton() {
                       return false;
                     }
                     if (line.includes('name') && line.includes('balance')) {
-                        const lineParts = line.split(',');
-                        nameColumnIndex = lineParts.findIndex(item => item.includes('name'));
+                      const lineParts = line.split(',');
+                      nameColumnIndex = lineParts.findIndex((item) =>
+                        item.includes('name'),
+                      );
                       return false;
                     }
                     const parts = line.split(',');
 
-                    let phoneNumber = parts[nameColumnIndex === 0 ? 1 : 0].trim().replaceAll('-', '');
+                    let phoneNumber = parts[nameColumnIndex === 0 ? 1 : 0]
+                      .trim()
+                      .replaceAll('-', '');
                     if (!phoneNumber.startsWith('0')) {
-                          phoneNumber = '0' + phoneNumber;
+                      phoneNumber = '0' + phoneNumber;
                     }
 
                     const newBalance = Number(parts[2]);
                     const existingPlayer = phoneNumbers[phoneNumber];
-                     if (existingPlayer) {
-                         if (Number(existingPlayer.balance) < newBalance) {
-                             existingPlayer.balance = newBalance;
-                         }
-                         return null;
+                    if (existingPlayer) {
+                      if (Number(existingPlayer.balance) < newBalance) {
+                        existingPlayer.balance = newBalance;
+                      }
+                      return null;
                     }
 
                     const player = {
@@ -87,8 +91,8 @@ export default function ImportPlayersButton() {
             element?.click();
           }}
           onCancel={() => setShowConfirmation(false)}
-          subtext="פעולה זאת תמחוק את כל השחקנים הקיימים ואת ההסטוריה שלה ואינה הפיכה"
-          text="האם אתה בטוח?"
+          action="פעולה זאת תמחוק את כל השחקנים הקיימים ואת ההסטוריה שלה ואינה הפיכה"
+          question="האם אתה בטוח?"
         />
       )}
     </>

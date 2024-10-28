@@ -2,13 +2,10 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import {
-  formatCurrency,
-  formatCurrencyColor,
-} from '@/app/lib/utils';
+import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 import RSVPButton from '@/app/ui/client/RSVPButton';
 import OpenCreditModalButton from '@/app/ui/client/OpenCreditModalButton';
-import { Tooltip  } from 'flowbite-react';
+import { Tooltip } from 'flowbite-react';
 import { PlayerDB, PrizeInfoDB, TournamentDB } from '@/app/lib/definitions';
 import OpenPositionModalButton from '@/app/ui/client/OpenPositionModalButton';
 import OpenPrizeModalButton from '@/app/ui/client/OpenPrizeModalButton';
@@ -159,7 +156,6 @@ export default function TodayPlayersTable({
           }`
         : `מציג ${arrivedPlayersCount} שחקנים שהגיעו.`;
 
-
   const minPosition = getMinPosition(arrivedPlayers);
 
   const dayOfTheWeek = getDayOfTheWeek().toLowerCase();
@@ -182,10 +178,12 @@ export default function TodayPlayersTable({
           }}
           disabled={query.length === 0}
         >
-          <Tooltip
-              content="נקה שורת חיפוש"
-          >
-            <TrashIcon className="w-6"  color={query.length === 0 ? '#AAAAAA':undefined} cursor={query.length === 0 ? 'no-drop':undefined}/>
+          <Tooltip content="נקה שורת חיפוש">
+            <TrashIcon
+              className="w-6"
+              color={query.length === 0 ? '#AAAAAA' : undefined}
+              cursor={query.length === 0 ? 'no-drop' : undefined}
+            />
           </Tooltip>
         </button>
         <input
@@ -198,7 +196,6 @@ export default function TodayPlayersTable({
         />
 
         <CreateNewTodayPlayerButton params={{ userId, query }} />
-
       </div>
       <div className="rtl mt-4 flex items-center justify-between gap-2 md:mt-8">
         <div className="full-width rtl mt-6 flow-root">

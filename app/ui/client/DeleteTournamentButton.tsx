@@ -39,8 +39,8 @@ export default function DeleteTournamentButton({
             );
           }}
           onCancel={() => setShowConfirmation(false)}
-          subtext=""
-          text="האם למחוק טורניר?"
+          action="מחיקת טורניר"
+          question="האם אתה בטוח?"
         />
       )}
     </div>

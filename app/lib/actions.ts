@@ -980,8 +980,7 @@ export async function updatePlayer(
 
   const player = await getPlayerById(id);
   if (!player) {
-    console.error('## updatePlayer: player not found'
-    );
+    console.error('## updatePlayer: player not found');
     return {
       message: 'לא נמצא שחקן עם מזהה זה',
     };
@@ -990,7 +989,7 @@ export async function updatePlayer(
   const UpdatePlayer = z.object({
     name: z.string().min(1, 'name can not be left empty'),
     notes: z.string(),
-    new_phone_number: z.string().optional()
+    new_phone_number: z.string().optional(),
   });
 
   const validatedFields = UpdatePlayer.safeParse({
@@ -1009,7 +1008,6 @@ export async function updatePlayer(
     };
   }
   const image_url = formData.get('image_url') as string;
-
 
   const { name, notes } = validatedFields.data;
   let imageHasChanged = false;
@@ -1049,7 +1047,9 @@ export async function updatePlayer(
       WHERE id = ${id} `;
     }
     const oldPhoneNumber = player.phone_number;
-    let newPhoneNumber = ((formData.get('new_phone_number') ?? oldPhoneNumber) as string).replaceAll('-', '');
+    let newPhoneNumber = (
+      (formData.get('new_phone_number') ?? oldPhoneNumber) as string
+    ).replaceAll('-', '');
     newPhoneNumber = `${newPhoneNumber.startsWith('0') ? '' : '0'}${newPhoneNumber}`;
     if (newPhoneNumber && newPhoneNumber !== oldPhoneNumber) {
       await sql`UPDATE players SET phone_number = ${newPhoneNumber} WHERE phone_number = ${oldPhoneNumber} `;
@@ -1058,7 +1058,6 @@ export async function updatePlayer(
       await sql`UPDATE prizes SET phone_number = ${newPhoneNumber} WHERE phone_number = ${oldPhoneNumber} `;
       await sql`UPDATE images SET phone_number = ${newPhoneNumber} WHERE phone_number = ${oldPhoneNumber} `;
     }
-
   } catch (error) {
     console.error('## updatePlayer error', error);
     return { message: 'איראה שגיאה' };
@@ -1826,15 +1825,17 @@ VALUES (${user.id}, ${user.phone_number},  ${user.password}, ${user.name}, ${use
   }
 }
 
-export async function registerPlayerForDay( phone_number: string,
-                                     date: string,
-                                     tournamentId: string,
-                                     val: boolean){
+export async function registerPlayerForDay(
+  phone_number: string,
+  date: string,
+  tournamentId: string,
+  val: boolean,
+) {
   const rsvpResults =
-      await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${phone_number} AND date = ${date}`;
+    await sql<RSVPDB>`SELECT * FROM rsvp WHERE phone_number = ${phone_number} AND date = ${date}`;
 
   const existingRsvp = rsvpResults.rows.find(
-      (r) => r.tournament_id === tournamentId,
+    (r) => r.tournament_id === tournamentId,
   );
 
   if (val && existingRsvp) {
@@ -1847,7 +1848,7 @@ export async function registerPlayerForDay( phone_number: string,
   }
   if (val && !existingRsvp) {
     const otherExistingRsvp = rsvpResults.rows.find(
-        (r) => r.tournament_id !== tournamentId,
+      (r) => r.tournament_id !== tournamentId,
     );
     try {
       await startTransaction();
@@ -1883,10 +1884,7 @@ export async function rsvpPlayerForDay(
 ) {
   noStore();
   try {
-    await registerPlayerForDay( phone_number,
-        date,
-        tournamentId,
-        val);
+    await registerPlayerForDay(phone_number, date, tournamentId, val);
   } catch (error) {
     console.error('rsvpPlayerForDay Error:', error);
     return false;
