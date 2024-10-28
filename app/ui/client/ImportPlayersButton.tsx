@@ -57,7 +57,7 @@ export default function ImportPlayersButton() {
                     const newBalance = Number(parts[2]);
                     const existingPlayer = phoneNumbers[phoneNumber];
                      if (existingPlayer) {
-                         if (Number(existingPlayer.balance) === 0 && newBalance !== 0) {
+                         if (Number(existingPlayer.balance) < newBalance) {
                              existingPlayer.balance = newBalance;
                          }
                          return null;
