@@ -352,7 +352,7 @@ export async function getAllPlayers() {
       }
       const adjustment = tournamentsAdjustmentsLogs.find(
         (tournamentsAdjustment) =>
-          tournamentsAdjustment.history_log_id === lastItem.id,
+          tournamentsAdjustment.history_log_id === item.id,
       );
       // @ts-ignore
       let type = map[item.type as string] as string;
