@@ -32,6 +32,7 @@ export type PlayerDB = {
   updated_at: string;
   position: number;
   balance: number;
+  hasUser: boolean;
   historyEntriesSum: number;
   historyEntriesCount: number;
   historyCount: number;
