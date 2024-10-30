@@ -54,6 +54,7 @@ export default function RSVPButton({
         <Switch
           disabled={disabled}
           initialChecked={optimisticIsRsvpForDate}
+          color="success"
           onClick={onClick}
         />
         <div style={{ marginTop: 3, marginRight: 5 }}>{text}</div>

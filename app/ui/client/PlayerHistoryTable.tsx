@@ -1,11 +1,19 @@
 'use client';
 import {
   formatCurrency,
+  formatCurrencyColor,
   formatType,
 } from '@/app/lib/utils';
 import { PlayerDB } from '@/app/lib/definitions';
 import { formatDateToLocal, getTime } from '@/app/lib/clientDateUtils';
-
+import Avatar from '@/app/ui/client/Avatar';
+import Link from 'next/link';
+import RSVPButton from '@/app/ui/client/RSVPButton';
+import EntriesButton from '@/app/ui/client/EntriesButton';
+import DeletePositionButton from '@/app/ui/client/DeletePositionButton';
+import OpenCreditModalButton from '@/app/ui/client/OpenCreditModalButton';
+import OpenPositionModalButton from '@/app/ui/client/OpenPositionModalButton';
+import OpenPrizeModalButton from '@/app/ui/client/OpenPrizeModalButton';
 import React from 'react';
 
 export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {

@@ -257,14 +257,12 @@ export async function getAllPlayers() {
     tournamentsAdjustmentsLogsResults,
     todayHistoryUnfiltered,
     winnersRecords,
-    allUsers
   ] = await Promise.all([
     playersPromise,
     sql<RSVPDB>`SELECT * FROM rsvp;`,
     sql<TournamentsAdjustmentsDB>`SELECT * FROM tournaments_adjustments WHERE updated_at > now() - interval '12 hour';`,
     getTodayHistory(),
     getTournamentWinnersRecordsByDate(todayDate),
-    getAllUsers()
   ]);
   const allPlayers = allPlayersResult.rows;
   const tournamentsAdjustmentsLogs = tournamentsAdjustmentsLogsResults.rows;
@@ -279,8 +277,6 @@ export async function getAllPlayers() {
   );
 
   allPlayers.forEach((player) => {
-    const user = allUsers.find(({ phone_number }) => phone_number === player.phone_number);
-    player.hasUser = Boolean(user);
     player.balance = Number(player.balance);
     const rsvps = allRsvps.filter(
       ({ phone_number }) => phone_number === player.phone_number,

@@ -43,7 +43,7 @@ export default async function MVPPlayers({
                     <div className="flex items-center">
                       <Avatar
                         player={player}
-                        style={{ marginLeft: 20 }}
+                        style={{ marginLeft: 20, marginRight: 20 }}
                         tournamentIds={tournamentsIds}
                       />
                       <div className="min-w-0">
