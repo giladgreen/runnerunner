@@ -265,7 +265,7 @@ export async function getAllPlayers() {
     getTournamentWinnersRecordsByDate(todayDate),
   ]);
   const allPlayers = allPlayersResult.rows;
-  const tournamentsAdjustmentsLogs = tournamentsAdjustmentsLogsResults.rows
+  const tournamentsAdjustmentsLogs = tournamentsAdjustmentsLogsResults.rows;
   const allRsvps = rsvpResults.rows;
 
   const todayHistory = todayHistoryUnfiltered.filter(
@@ -289,7 +289,7 @@ export async function getAllPlayers() {
     player.rsvpForToday = rsvps.find(
       ({ date }) => date === todayDate,
     )?.tournament_id;
-//TODO: get all the tournamt adjusment logs for this day, and if any of them had the history log of the current player add them
+    //TODO: get all the tournamt adjusment logs for this day, and if any of them had the history log of the current player add them
     const playerItems = todayHistory.filter(
       ({ phone_number, change, type }) =>
         phone_number === player.phone_number &&
@@ -324,15 +324,17 @@ export async function getAllPlayers() {
         } catch (_e) {
           number = 0;
         }
-
       }
-      const adjustment =  tournamentsAdjustmentsLogs.find((tournamentsAdjustment) => tournamentsAdjustment.history_log_id === lastItem.id)
+      const adjustment = tournamentsAdjustmentsLogs.find(
+        (tournamentsAdjustment) =>
+          tournamentsAdjustment.history_log_id === lastItem.id,
+      );
       // @ts-ignore
-      let type = map[lastItem.type as string]  as string;
-      if (adjustment){
+      let type = map[lastItem.type as string] as string;
+      if (adjustment) {
         number += adjustment.change;
         // @ts-ignore
-        type += `/${map[adjustment.type as string]}`
+        type += `/${map[adjustment.type as string]}`;
       }
       player.undoEntriesTooltipText = `ביטול הכניסה האחרונה של ₪${number}`;
       // @ts-ignore
@@ -348,13 +350,16 @@ export async function getAllPlayers() {
           number = 0;
         }
       }
-      const adjustment =  tournamentsAdjustmentsLogs.find((tournamentsAdjustment) => tournamentsAdjustment.history_log_id === lastItem.id)
+      const adjustment = tournamentsAdjustmentsLogs.find(
+        (tournamentsAdjustment) =>
+          tournamentsAdjustment.history_log_id === lastItem.id,
+      );
       // @ts-ignore
-      let type = map[item.type as string]  as string;
-      if (adjustment){
+      let type = map[item.type as string] as string;
+      if (adjustment) {
         number += adjustment.change;
         // @ts-ignore
-        type += `/${map[adjustment.type as string]}`
+        type += `/${map[adjustment.type as string]}`;
       }
       let result = ` ₪${number}`;
       // @ts-ignore

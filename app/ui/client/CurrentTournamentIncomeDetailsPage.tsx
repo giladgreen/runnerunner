@@ -263,9 +263,11 @@ export default function CurrentTournamentIncomeDetailsPage({
                       return (
                         <div key={`cash_${player.id}`}>
                           {player.name} ₪
-                          {player.historyLog.reduce((sum, curLog) => {
-                            return sum + -1 * curLog.change;
-                          }, 0)}
+                          {player.historyLog
+                            .filter((item) => item.type === 'cash')
+                            .reduce((sum, curLog) => {
+                              return sum + -1 * curLog.change;
+                            }, 0)}
                         </div>
                       );
                     })}
@@ -289,9 +291,11 @@ export default function CurrentTournamentIncomeDetailsPage({
                       return (
                         <div key={`wire_${player.id}`}>
                           {player.name} ₪
-                          {player.historyLog.reduce((sum, curLog) => {
-                            return sum + -1 * curLog.change;
-                          }, 0)}
+                          {player.historyLog
+                            .filter((item) => item.type === 'wire')
+                            .reduce((sum, curLog) => {
+                              return sum + -1 * curLog.change;
+                            }, 0)}
                         </div>
                       );
                     })}
@@ -315,9 +319,11 @@ export default function CurrentTournamentIncomeDetailsPage({
                       return (
                         <div key={`credit_${player.id}`}>
                           {player.name} ₪
-                          {player.historyLog.reduce((sum, curLog) => {
-                            return sum + -1 * curLog.change;
-                          }, 0)}
+                          {player.historyLog
+                            .filter((item) => item.type === 'credit')
+                            .reduce((sum, curLog) => {
+                              return sum + -1 * curLog.change;
+                            }, 0)}
                         </div>
                       );
                     })}

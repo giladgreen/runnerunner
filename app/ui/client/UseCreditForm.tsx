@@ -93,7 +93,6 @@ export default function UseCreditForm({
         setWasTrue(true);
       }
       setIsPending(pending);
-
     }, [pending]);
 
     useEffect(() => {
