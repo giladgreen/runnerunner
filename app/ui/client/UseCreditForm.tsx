@@ -99,6 +99,7 @@ export default function UseCreditForm({
       if (wasTrue && !isPending) {
         hide?.();
         setQuery('');
+        setWasTrue(false);
       }
     }, [isPending, wasTrue]);
 

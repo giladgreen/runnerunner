@@ -26,6 +26,7 @@ export default function OpenCreditModalButton({
   const [show, setShow] = React.useState(false);
 
   const close = () => {
+    console.log('## close clicked');
     setShow(false);
   };
 
@@ -35,6 +36,7 @@ export default function OpenCreditModalButton({
         <Button
           onClick={() => {
             setShow(true);
+            console.log('## show clicked');
           }}
           color="light"
           style={{
