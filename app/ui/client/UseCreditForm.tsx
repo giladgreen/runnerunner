@@ -69,6 +69,7 @@ export default function UseCreditForm({
   );
 
   const useCredit = amount < player.balance;
+  const [wasTrue, setWasTrue] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [isSplit, setIsSplit] = useState(false);
   const [type, setType] = useState(useCredit ? 'credit' : 'cash');
@@ -89,13 +90,19 @@ export default function UseCreditForm({
 
     useEffect(() => {
       if (pending) {
-        setTimeout(() => {
-          hide?.();
-          setQuery('');
-        }, 4500);
+        setWasTrue(true);
       }
       setIsPending(pending);
+
     }, [pending]);
+
+    useEffect(() => {
+      if (wasTrue && !isPending) {
+        console.log('## calling hide');
+        hide?.();
+        setQuery('');
+      }
+    }, [isPending, wasTrue]);
 
     if (pending) {
       return <Spinner size={40} style={{ marginRight: 30 }} />;
