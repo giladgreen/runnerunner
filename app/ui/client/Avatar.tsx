@@ -1,5 +1,6 @@
 'use client';
-
+import { styled } from '@mui/material/styles';
+import Badge from '@mui/material/Badge';
 import { PlayerDB } from '@/app/lib/definitions';
 import * as FlowbiteReact from 'flowbite-react';
 import React from 'react';
@@ -12,6 +13,24 @@ export const getInitials = (name: string) => {
     .join('')
     .slice(0, 2);
 };
+
+const getProps = (color: string)=> ({
+  backgroundColor: color,
+  color,
+  marginTop: -2,
+  marginRight: -2,
+  boxShadow: `0 0 0 2px white`,
+  '&::after': {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    borderRadius: '50%',
+    border: '1px solid currentColor',
+    content: '""',
+  },
+})
 
 export default function Avatar({
   player,
@@ -32,15 +51,27 @@ export default function Avatar({
         (r) => r.date === date && tournamentIds.includes(r.tournamentId),
       ),
     );
-  const status = tournamentIds
-    ? isRsvpForDate
-      ? 'online'
-      : 'offline'
-    : undefined;
+
+  const isRSVP = tournamentIds && isRsvpForDate;
+  //const hasUser = player.hasUser;
+
+  const RSVPBadge  = styled(Badge)(() => ({
+    '& .MuiBadge-badge': {
+      ...getProps(isRSVP ? '#0072F5' : '#999999')
+    },
+  }));
+
+
   return (
     <div
       className={`avatar-image ${isDefaultImage ? '' : 'zoom-on-hover-bigger'}`}
     >
+      <RSVPBadge
+          overlap="circular"
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          variant="dot"
+          className="zoom-on-hover"
+      >
       <FlowbiteReact.Avatar
         img={isDefaultImage ? undefined : player.image_url}
         placeholderInitials={
@@ -48,7 +79,7 @@ export default function Avatar({
         }
         rounded
         bordered
-        status={status}
+
         color={
           player.balance < 0
             ? 'failure'
@@ -56,11 +87,10 @@ export default function Avatar({
               ? 'success'
               : 'gray'
         }
-        statusPosition="top-right"
         size="md"
-        className="zoom-on-hover"
         style={style}
       />
+      </RSVPBadge>
     </div>
   );
 }
