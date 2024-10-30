@@ -98,7 +98,6 @@ export default function UseCreditForm({
 
     useEffect(() => {
       if (wasTrue && !isPending) {
-        console.log('## calling hide');
         hide?.();
         setQuery('');
       }
