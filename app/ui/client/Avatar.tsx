@@ -55,6 +55,9 @@ export default function Avatar({
   const isRSVP = tournamentIds && isRsvpForDate;
   const hasUser = player.hasUser;
 
+  console.log('########')
+  console.log('## player', player.name,'isRSVP',isRSVP,'hasUser',hasUser )
+
   const RSVPBadge  = styled(Badge)(() => ({
     '& .MuiBadge-badge': {
       ...getProps(isRSVP ? '#0072F5' : '#999999')

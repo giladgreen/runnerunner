@@ -381,6 +381,7 @@ export async function getAllPlayers() {
 
 async function getAllUsers() {
   const usersResult = await sql<UserDB>`SELECT * FROM users`;
+
   return usersResult.rows;
 }
 
@@ -863,12 +864,11 @@ export async function fetchFilteredPlayers(
          GROUP BY phone_number
     `;
 
-    const getUsersPromise =  getAllUsers();
     const [playersHistoryCountResult, players, allRsvps, allUsers] = await Promise.all([
       playersHistoryCountResultPromise,
       playersResultPromise,
       getAllRsvps(),
-      getUsersPromise
+      getAllUsers()
     ]);
     const playersHistoryCount = playersHistoryCountResult.rows;
 
