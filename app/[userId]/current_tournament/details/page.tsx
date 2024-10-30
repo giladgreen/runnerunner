@@ -77,6 +77,7 @@ export default async function DetailsPage({
       players={playersWithHistoryLogRelevantForToday}
       userId={params.userId}
       refreshEnabled={user.refresh_enabled}
+      todayTournamentAdjustments={todayTournamentsAdjustments}
     />
   );
 }

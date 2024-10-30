@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import RSVPAndArrivalCardWrapper from '@/app/ui/client/RSVPAndArrivalCardWrapper';
-import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
+import {PlayerDB, TournamentDB, TournamentsAdjustmentsDB} from '@/app/lib/definitions';
 import OpenTournamentAdjustmentChangeModalButton from '@/app/ui/client/OpenTournamentAdjustmentChangeModalButton';
 import {
   DeleteTournamentAdjustmentLog,
@@ -18,8 +18,10 @@ export default function CurrentTournamentIncomeDetailsPage({
   players,
   userId,
   refreshEnabled,
+  todayTournamentAdjustments
 }: {
   todayTournaments: TournamentDB[];
+  todayTournamentAdjustments: TournamentsAdjustmentsDB[];
   players: PlayerDB[];
   userId: string;
   refreshEnabled: boolean;
@@ -78,6 +80,23 @@ export default function CurrentTournamentIncomeDetailsPage({
             adjustments,
           } = todayTournament;
 
+          const tournamentAdjustments = todayTournamentAdjustments.filter(item => item.tournament_id === todayTournament.id);
+          players.forEach((player) => {
+            const ids = player.historyLog.map((entry) => entry.id);
+            const playerTournamentAdjustments = tournamentAdjustments.filter((item) => ids.includes(item.history_log_id));
+
+            playerTournamentAdjustments.forEach((adjustment) => {
+              if (!player.historyLog.find(item => item.id === adjustment.id)) {
+                player.historyLog.push({
+                  id: adjustment.id,
+                  change: adjustment.change * -1,
+                  tournament_id: adjustment.tournament_id,
+                  type: adjustment.type,
+                } as any)
+              }
+            })
+
+          })
           const cashPlayers = players.filter(
             (p) =>
               p.historyLog.filter(
@@ -86,6 +105,7 @@ export default function CurrentTournamentIncomeDetailsPage({
                   entry.type === 'cash',
               ).length > 0,
           );
+
           const creditPlayers = players.filter(
             (p) =>
               p.historyLog.filter(
