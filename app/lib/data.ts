@@ -209,7 +209,7 @@ async function getTournamentWinnersRecordsByDate(date: string) {
   return winnersResult.rows;
 }
 
-export async function getAllImages() {
+export async function _getAllImages() {
   const images = await sql<ImageDB>`
             SELECT * 
             FROM images`;
@@ -863,15 +863,20 @@ export async function fetchFilteredPlayers(
          GROUP BY phone_number
     `;
 
-    const [playersHistoryCountResult, players, allRsvps] = await Promise.all([
+    const getUsersPromise =  getAllUsers();
+    const [playersHistoryCountResult, players, allRsvps, allUsers] = await Promise.all([
       playersHistoryCountResultPromise,
       playersResultPromise,
       getAllRsvps(),
+      getUsersPromise
     ]);
     const playersHistoryCount = playersHistoryCountResult.rows;
 
     const todayDate = getTodayShortDate();
     players.forEach((player) => {
+      const user = allUsers.find(({ phone_number }) => phone_number === player.phone_number);
+      player.hasUser = Boolean(user);
+
       player.balance = Number(player.balance);
 
       const historyCount = playersHistoryCount.find(
@@ -1178,22 +1183,6 @@ export async function fetchPlayerById(
   }
 }
 
-export async function fetchPlayerCurrentTournamentHistory(phoneNumber: string) {
-  methodStart();
-  noStore();
-  try {
-    const todayHistory = await getTodayHistory();
-    const results = todayHistory.filter(
-      ({ phone_number }) => phone_number === phoneNumber,
-    );
-    methodEnd('fetchPlayerCurrentTournamentHistory');
-    return results;
-  } catch (error) {
-    // @ts-ignore
-    methodEnd('fetchPlayerCurrentTournamentHistory with error', error?.message);
-    throw new Error('Failed to fetchPlayerCurrentTournamentHistory.');
-  }
-}
 export async function fetchTournamentByTournamentId(tournamentId: string) {
   methodStart();
   noStore();
@@ -1214,40 +1203,6 @@ export async function fetchTournamentByTournamentId(tournamentId: string) {
     // @ts-ignore
     methodEnd('fetchTournamentByTournamentId with error', error?.message);
     throw new Error('Failed to fetchTournamentByTournamentId.');
-  }
-}
-export async function fetchTournamentsByDay(day?: string) {
-  methodStart();
-  noStore();
-  try {
-    //TODO: might need to adjust date to israel time
-    const dayName = day ?? getDayOfTheWeek();
-
-    const results = await getTodayTournaments(dayName);
-    methodEnd('fetchTournamentsByDay');
-    return results;
-  } catch (error) {
-    // @ts-ignore
-    methodEnd('fetchTournamentsByDay with error', error?.message);
-    throw new Error('Failed to fetchTournamentsByDay.');
-  }
-}
-
-export async function fetchRsvpCountForTodayTournament(tournamentId: string) {
-  methodStart();
-  noStore();
-  try {
-    const todayDate = getTodayShortDate();
-    const rsvps = await getAllRsvps();
-    const result = rsvps.filter(
-      (rsvp) => rsvp.tournament_id === tournamentId && rsvp.date === todayDate,
-    ).length;
-    methodEnd('fetchRsvpCountForTodayTournament');
-    return result;
-  } catch (error) {
-    // @ts-ignore
-    methodEnd('fetchRsvpCountForTodayTournament with error', error?.message);
-    throw new Error('Failed to fetchRsvpCountForTodayTournament.');
   }
 }
 

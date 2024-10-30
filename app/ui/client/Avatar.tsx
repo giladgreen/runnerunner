@@ -53,11 +53,18 @@ export default function Avatar({
     );
 
   const isRSVP = tournamentIds && isRsvpForDate;
-  //const hasUser = player.hasUser;
+  const hasUser = player.hasUser;
 
   const RSVPBadge  = styled(Badge)(() => ({
     '& .MuiBadge-badge': {
       ...getProps(isRSVP ? '#0072F5' : '#999999')
+    },
+  }));
+
+
+  const UserBadge  = styled(Badge)(() => ({
+    '& .MuiBadge-badge': {
+      ...getProps(hasUser ? '#008800' : '#999999')
     },
   }));
 
@@ -71,6 +78,11 @@ export default function Avatar({
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           variant="dot"
           className="zoom-on-hover"
+      >
+      <UserBadge
+          overlap="circular"
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          variant="dot"
       >
       <FlowbiteReact.Avatar
         img={isDefaultImage ? undefined : player.image_url}
@@ -90,6 +102,7 @@ export default function Avatar({
         size="md"
         style={style}
       />
+      </UserBadge>
       </RSVPBadge>
     </div>
   );
