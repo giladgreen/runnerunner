@@ -85,9 +85,11 @@ export type State = {
     credit?: string[];
     balance?: string[];
     change?: string[];
+    change2?: string[];
     phone_number?: string[];
     new_phone_number?: string[];
     note?: string[];
+    note2?: string[];
     notes?: string[];
     description?: string[];
     amount?: string[];
@@ -359,28 +361,54 @@ async function createPlayerLog(
   tournamentId: string | null,
 ) {
   noStore();
+
   const CreateUsageLog = z.object({
+    type: z.coerce.string(),
+    type2: z.coerce.string().optional().nullable(),
     change: z.coerce.number(),
+    change2: z.coerce.number().optional().nullable(),
+    split: z.coerce.string(),
     note: z.string().min(1, 'change note can not be left empty'),
+    note2: z
+      .string()
+      .min(0, 'change note can not be left empty')
+      .optional()
+      .nullable(),
   });
 
   const validatedFields = CreateUsageLog.safeParse({
+    type: formData.get('type'),
+    type2: formData.get('type2'),
     change: formData.get('change'),
+    change2: formData.get('change2'),
     note: formData.get('note'),
+    note2: formData.get('note2'),
+    split: formData.get('split'),
   });
 
   if (!validatedFields.success) {
+    console.log(
+      '## createPlayerLog. errors',
+      validatedFields.error.flatten().fieldErrors,
+    );
+
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: 'שדה חסר, אין אפשרות לסיים את הפעולה',
     };
   }
+  console.log('## createPlayerLog, no errors');
 
+  const isSplit = validatedFields.data.split === 'true';
   const user = await getUserById(userId);
   const username = user?.name ?? user?.phone_number ?? 'unknown';
   const change = validatedFields.data.change * (usage ? -1 : 1);
+  const change2 = validatedFields.data.change2 ?? 0;
+  const note = validatedFields.data.note;
+  const note2 = validatedFields.data.note2;
 
-  let type = usage ? ((formData.get('type') as string) ?? 'prize') : 'credit';
+  const type = usage ? ((formData.get('type') as string) ?? 'prize') : 'credit';
+  const type2 = isSplit ? (formData.get('type2') as string) : '';
 
   const otherPlayerPhoneNumber = formData.get('other_player') as string;
   const {
@@ -392,7 +420,7 @@ async function createPlayerLog(
   } = await handleCreditByOther(
     type,
     otherPlayerPhoneNumber,
-    validatedFields.data.note,
+    note,
     player,
     change,
   );
@@ -418,12 +446,35 @@ async function createPlayerLog(
               }, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username}, '', ${tournamentId})
             `;
     } else {
+      console.log(
+        '## createPlayerLog, insert into history',
+        'phone_number',
+        player.phone_number,
+        'change',
+        change,
+        'note',
+        note,
+        'type',
+        type,
+        'updated_by',
+        username,
+        'tournament_id',
+        tournamentId,
+      );
       await sql`
               INSERT INTO history (phone_number, change, note, type, updated_by, tournament_id)
-              VALUES (${player.phone_number}, ${change}, ${validatedFields.data.note}, ${type}, ${username}, ${tournamentId})
+              VALUES (${player.phone_number}, ${change}, ${note}, ${type}, ${username}, ${tournamentId})
             `;
     }
-
+    if (isSplit) {
+      console.log('## createPlayerLog, split');
+      const results =
+        await sql`SELECT * FROM history WHERE phone_number = ${player.phone_number} ORDER BY updated_at DESC LIMIT 1`;
+      const historyLogId = results.rows[0].id;
+      await sql`INSERT INTO tournaments_adjustments (tournament_id,type,change,reason,history_log_id, updated_by)
+              VALUES 
+              (${tournamentId}, ${type2},${change2}, ${note2}, ${historyLogId}, ${username})`;
+    }
     const playerPhoneToUpdate =
       useOtherPlayerCredit && otherPlayer
         ? otherPlayer.phone_number
@@ -1905,7 +1956,7 @@ export async function undoPlayerLastLog( //TODO::: add tournament_id and make su
     const logsResult =
       await sql<LogDB>`SELECT * FROM history WHERE phone_number = ${phone_number} AND type != 'credit_to_other' ORDER BY updated_at DESC LIMIT 1`;
     const lastLog = logsResult.rows[0];
-
+    const historyLogId = lastLog.id;
     if (lastLog) {
       const amount = lastLog.change;
       const type = lastLog.type;
@@ -1918,6 +1969,7 @@ export async function undoPlayerLastLog( //TODO::: add tournament_id and make su
         await touchPlayer(phone_number);
       }
       await sql`DELETE FROM history where id = ${lastLog.id}`;
+      await sql`DELETE FROM tournaments_adjustments where history_log_id = ${lastLog.id}`;
       if (otherPlayerPhoneNumber) {
         const otherPlayerLogsResult =
           await sql<LogDB>`SELECT * FROM history WHERE phone_number = ${otherPlayerPhoneNumber} AND type = 'credit_to_other' ORDER BY updated_at DESC LIMIT 1`;

@@ -145,6 +145,7 @@ export type TournamentsAdjustmentsDB = {
   type: string;
   change: number;
   reason: string;
+  history_log_id: string;
   updated_by: string;
   updated_at: string;
 };

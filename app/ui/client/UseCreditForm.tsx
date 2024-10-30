@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import SearchablePlayersDropdown from '@/app/ui/client/SearchablePlayersDropdown';
 import Spinner from '@/app/ui/client/Spinner';
 import { getCurrentDate } from '@/app/lib/clientDateUtils';
+import { Switch } from '@nextui-org/react';
 
 export default function UseCreditForm({
   players,
@@ -60,14 +61,18 @@ export default function UseCreditForm({
   );
 
   const [amount, setAmount] = useState(initialAmount);
+  const [amount2, setAmount2] = useState(0);
   const [note, setNote] = useState(initialNote);
+  const [note2, setNote2] = useState('שחקן פיצל כניסה');
   const [otherPlayer, setOtherPlayer] = useState<PlayerDB | undefined>(
     undefined,
   );
 
   const useCredit = amount < player.balance;
   const [isPending, setIsPending] = useState(false);
+  const [isSplit, setIsSplit] = useState(false);
   const [type, setType] = useState(useCredit ? 'credit' : 'cash');
+  const [type2, setType2] = useState('cash');
 
   useEffect(() => {
     if (amount !== initialAmount) {
@@ -279,6 +284,145 @@ export default function UseCreditForm({
             * שים לב: השחקן ניצל כבר את כל הכניסות שלו
           </div>
         )}
+        <div
+          className="mt-6 flex justify-start gap-4"
+          style={{ marginRight: 15 }}
+        >
+          <Switch
+            isSelected={isSplit}
+            onChange={() => {
+              setIsSplit(!isSplit);
+            }}
+          />
+          <div style={{ display: 'none', visibility: 'hidden' }}>
+            <div>
+              <input
+                type="radio"
+                value="true"
+                name="split"
+                checked={isSplit}
+                readOnly
+              />
+              <input
+                type="radio"
+                value="false"
+                name="split"
+                checked={!isSplit}
+                readOnly
+              />
+            </div>
+          </div>
+        </div>
+        <div style={{ marginTop: 3 }}>פיצול הכניסה</div>
+        <div
+          className="form-inner-control  rounded-md p-4 md:p-6"
+          style={{
+            display: isSplit ? undefined : 'none',
+            visibility: isSplit ? undefined : 'hidden',
+          }}
+        >
+          {/*  balance change 2 */}
+          <div className="mb-4">
+            <label htmlFor="change2" className="mb-2 block text-sm font-medium">
+              סכום שני
+            </label>
+            <div className="relative mt-2 rounded-md">
+              <div className="relative">
+                <input
+                  id="change2"
+                  name="change2"
+                  type="number"
+                  step="1"
+                  min={0}
+                  placeholder="סכום"
+                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  aria-describedby="change2-error"
+                  value={amount2}
+                  onChange={(e) => {
+                    console.log(
+                      'calling setAmount2 with',
+                      Number(e.target.value),
+                    );
+                    setAmount2(Number(e.target.value));
+                  }}
+                />
+                <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              </div>
+              <div id="change2-error" aria-live="polite" aria-atomic="true">
+                {state1?.errors?.change2 &&
+                  state1?.errors.change2.map((error: string) => (
+                    <div className="mt-2 text-sm text-red-500" key={error}>
+                      {error}
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+
+          {/* note 2 */}
+          <div className="mb-4">
+            <label htmlFor="note2" className="mb-2 block text-sm font-medium">
+              סיבה
+            </label>
+            <div className="relative">
+              <input
+                id="note2"
+                name="note2"
+                type="text"
+                placeholder="הערה"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="note-error"
+                required
+                value={note2}
+                onChange={(e) => {
+                  setNote2(e.target.value);
+                }}
+              />
+
+              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            </div>
+            <div id="note2-error" aria-live="polite" aria-atomic="true">
+              {state1?.errors?.note2 &&
+                state1?.errors.note2.map((error: string) => (
+                  <div className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          {/* type 2 */}
+          <div className="rtl relative mt-2 rounded-md">
+            <div className="rsvp-section relative">
+              <div className="justify-content-center radio flex flex-wrap gap-3">
+                <div className="align-items-center flex">
+                  <input
+                    type="radio"
+                    value="cash"
+                    name="type2"
+                    checked={type2 === 'cash'}
+                    onChange={() => setType2('cash')}
+                  />
+                  <label htmlFor="cash" className="ml-2">
+                    מזומן
+                  </label>
+                </div>
+                <div className="align-items-center flex">
+                  <input
+                    type="radio"
+                    value="wire"
+                    name="type2"
+                    checked={type2 === 'wire'}
+                    onChange={() => setType2('wire')}
+                  />
+                  <label htmlFor="wire" className="ml-2">
+                    העברה
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="mt-6 flex justify-end gap-4">
           <SubmitButton />
         </div>

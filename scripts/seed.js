@@ -43,6 +43,7 @@ async function seedTournaments(client) {
         type TEXT NOT NULL,
         change INT NOT NULL,
         reason TEXT NOT NULL,
+        history_log_id TEXT,
         updated_by TEXT NOT NULL,
         updated_at timestamp NOT NULL DEFAULT now()
       );
@@ -55,6 +56,7 @@ async function seedTournaments(client) {
         type TEXT NOT NULL,
         change INT NOT NULL,
         reason TEXT NOT NULL,
+        history_log_id TEXT,
         updated_by TEXT NOT NULL,
         deleted_at timestamp NOT NULL DEFAULT now(),
         deleted_by TEXT
