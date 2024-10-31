@@ -14,24 +14,6 @@ export const getInitials = (name: string) => {
     .slice(0, 2);
 };
 
-const getProps = (color: string) => ({
-  backgroundColor: color,
-  color,
-  marginTop: -2,
-  marginRight: -2,
-  boxShadow: `0 0 0 2px white`,
-  '&::after': {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    borderRadius: '50%',
-    border: '1px solid currentColor',
-    content: '""',
-  },
-});
-
 export default function Avatar({
   player,
   tournamentIds,
@@ -56,16 +38,28 @@ export default function Avatar({
   const hasUser = player.hasUser;
 
   const RSVPBadge = styled(Badge)(() => ({
-    '& .MuiBadge-badge': {
-      ...getProps(isRSVP ? '#0072F5' : '#999999'),
-    },
+    '& .MuiBadge-badge':{
+      backgroundColor: isRSVP ? '#0072F5' : '#999999',
+      color: isRSVP ? '#0072F5' : '#999999',
+      width: 10,
+      height: 10,
+      marginTop: -3,
+      marginRight: -3,
+      borderRadius: '50%',
+      boxShadow: `0 0 0 2px white`,
+      '&::after': {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
+        border: '1px solid currentColor',
+        content: '""',
+      },
+    }
   }));
 
-  const UserBadge = styled(Badge)(() => ({
-    '& .MuiBadge-badge': {
-      ...getProps(hasUser ? '#008800' : '#999999'),
-    },
-  }));
 
   return (
     <div
@@ -77,11 +71,6 @@ export default function Avatar({
         variant="dot"
         className="zoom-on-hover"
       >
-        <UserBadge
-          overlap="circular"
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-          variant="dot"
-        >
           <FlowbiteReact.Avatar
             img={isDefaultImage ? undefined : player.image_url}
             placeholderInitials={
@@ -98,8 +87,10 @@ export default function Avatar({
             }
             size="md"
             style={style}
+            statusPosition={'bottom-right'}
+            status={hasUser ? 'online' : 'offline'}
           />
-        </UserBadge>
+
       </RSVPBadge>
     </div>
   );
