@@ -43,7 +43,7 @@ export default async function DebtPlayers({
                     <div className="flex items-center">
                       <Avatar
                         player={player}
-                        style={{ marginLeft: 20 }}
+                        style={{ marginLeft: 20, marginRight: 3 }}
                         tournamentIds={tournamentsIds}
                       />
 
