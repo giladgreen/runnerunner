@@ -26,6 +26,18 @@
 .avatar-image {
   zoom: 1.5;
 }
+
+.full-size-fixed-div {
+  background: transparent;
+  z-index: 910;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+
 .zoom-on-hover:hover {
   transform: scale(2);
   transition: transform 0.5s;
@@ -35,7 +47,7 @@
   transform: scale(5);
   transition: transform 4s;
   transition-delay: 2s;
-  z-index: 999999;
+  z-index: 99;
 }
 .justify-end {
   justify-content: flex-end;

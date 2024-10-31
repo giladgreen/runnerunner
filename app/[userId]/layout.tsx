@@ -36,25 +36,27 @@ export default async function Layout({
           >
             {children}
           </div>
-          <div className="player-header">
-            <img
-              src="/runner-white-logo.png"
-              width={50}
-              height={50}
-              alt="runner"
-            />
-            <AdminPageMenu
-              userId={params.userId}
-              isAdmin={isAdmin}
-              isWorker={isWorker}
-              prizesEnabled={prizesEnabled}
-              isAdminPlayer={isAdminPlayer}
-              signout={async () => {
-                'use server';
+          <div className="full-size-fixed-div">
+              <div className="player-header ">
+                <img
+                  src="/runner-white-logo.png"
+                  width={50}
+                  height={50}
+                  alt="runner"
+                />
+                <AdminPageMenu
+                  userId={params.userId}
+                  isAdmin={isAdmin}
+                  isWorker={isWorker}
+                  prizesEnabled={prizesEnabled}
+                  isAdminPlayer={isAdminPlayer}
+                  signout={async () => {
+                    'use server';
 
-                await signOut({ redirect: true, redirectTo: '/' });
-              }}
-            />
+                    await signOut({ redirect: true, redirectTo: '/' });
+                  }}
+                />
+              </div>
           </div>
         </div>
       </div>
