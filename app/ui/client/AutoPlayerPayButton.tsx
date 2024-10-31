@@ -50,6 +50,7 @@ export default function AutoPlayerPayButton({
   const maxRebuyReached = todayHistory.length >= 3;
   const initialNote = `${tournament!.name} - ${entryText}`;
   const initialAmount = isRebuy ? tournament!.re_buy : tournament!.buy_in;
+  const prevAmount = todayHistory.length < 2 ? tournament!.buy_in : tournament!.re_buy;
   // @ts-ignore
   const [state1, dispatch] = useFormState(
     // @ts-ignore
@@ -57,8 +58,9 @@ export default function AutoPlayerPayButton({
     initialState,
   );
 
-  const useCredit = initialAmount < player.balance;
+  const useCredit = initialAmount <= player.balance;
 
+  const prevUsedCredit = useCredit ? true : todayHistory[todayHistory.length -1]?.type === 'credit';
   const getTooltipContent = () => {
     if (maxRebuyReached) {
       return 'שחקן הגיע למספר הכניסות המירבי';
@@ -210,8 +212,8 @@ export default function AutoPlayerPayButton({
                   <b>{player.name}</b>{' '}
                   {' נכנס ב ' +
                     '₪' +
-                    initialAmount +
-                    (useCredit ? ' מהקרדיט' : ' במזומן')}{' '}
+                    prevAmount +
+                    (prevUsedCredit ? ' מהקרדיט' : ' במזומן')}{' '}
                 </span>
               }
             />
