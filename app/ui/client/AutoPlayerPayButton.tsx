@@ -8,6 +8,7 @@ import { getCurrentDate } from '@/app/lib/clientDateUtils';
 import { useFormState } from 'react-dom';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Spinner from '@/app/ui/client/Spinner';
+import Snackbar, {SnackbarCloseReason} from "@mui/material/Snackbar";
 
 export default function AutoPlayerPayButton({
   player,
@@ -78,9 +79,10 @@ export default function AutoPlayerPayButton({
     return result;
   };
   const tooltipContent = getTooltipContent();
-
+  const toastMessage = player.name + ' נכנס ב ' +'₪'+ initialAmount + (useCredit ? ' מהקרדיט' : ' במזומן');
   const onButtonClick = () => {
     setPending(true);
+    handleClick();
     const historyLog: LogDB[] = player.historyLog;
     historyLog.push({
       updated_at: new Date(),
@@ -107,6 +109,25 @@ export default function AutoPlayerPayButton({
       setPending(false);
     }, 1000);
   };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (
+      event: React.SyntheticEvent | Event,
+      reason?: SnackbarCloseReason,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+
 
   return (
     <>
@@ -177,6 +198,13 @@ export default function AutoPlayerPayButton({
             >
               <span style={{ fontSize: 29 }}>₪</span>
             </Button>
+            <Snackbar
+                className="only-wide-screen"
+                open={open}
+                autoHideDuration={4000}
+                onClose={handleClose}
+                message={toastMessage}
+            />
           </Tooltip>
         </form>
       )}

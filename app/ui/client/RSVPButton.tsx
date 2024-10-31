@@ -1,7 +1,8 @@
 'use client';
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 
 // @ts-ignore
-import { startTransition, useOptimistic } from 'react';
+import React, { startTransition, useOptimistic } from 'react';
 import { PlayerDB } from '@/app/lib/definitions';
 import { rsvpPlayerForDay } from '@/app/lib/actions';
 import { usePathname } from 'next/navigation';
@@ -35,7 +36,28 @@ export default function RSVPButton({
   const [optimisticIsRsvpForDate, addOptimisticIsRsvpForDate] =
     useOptimistic<boolean>(isRsvpForDate, (state: boolean) => !state);
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (
+      event: React.SyntheticEvent | Event,
+      reason?: SnackbarCloseReason,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+
+
   const onClick = () => {
+    handleClick();
+
     startTransition(() => {
       addOptimisticIsRsvpForDate(!isRsvpForDate);
     });
@@ -49,7 +71,7 @@ export default function RSVPButton({
     );
   };
   return (
-    <div>
+    <div >
       <div style={{ display: 'flex', margin: '5px 0' }} onClick={onClick}>
         <Switch
           disabled={disabled}
@@ -63,6 +85,13 @@ export default function RSVPButton({
           <b>{boldText}</b>
         </div>
       )}
+      <Snackbar
+          className="only-wide-screen"
+          open={open}
+          autoHideDuration={4000}
+          onClose={handleClose}
+          message={`${player.name} ${!isRsvpForDate ? 'אישר הגעה' : 'ביטל רישום הגעה'}`}
+      />
     </div>
   );
 }
