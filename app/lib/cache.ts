@@ -1,13 +1,13 @@
 import { kv } from '@vercel/kv';
 import { FeatureFlagDB, UserDB } from '@/app/lib/definitions';
-
+const DEBUG_MODE = process.env.NODE_ENV !== 'development';
 export async function get(key: string, entityType: string = '') {
   try {
     const result = await kv.hget<string>(`entity-type-${entityType}`, key);
     if (!Boolean(result)) {
       result;
     }
-    console.log(`found ${entityType} in cache. (key: ${key})`);
+    DEBUG_MODE && console.log(`found ${entityType} in cache. (key: ${key})`);
     return typeof result === 'string' ? JSON.parse(result as string) : result;
   } catch (e) {
     console.error(e);
@@ -17,7 +17,7 @@ export async function get(key: string, entityType: string = '') {
 
 export async function set(key: string, value: any, entityType: string = '') {
   try {
-    console.log(`saving ${entityType} to cache. (key: ${key})`);
+    DEBUG_MODE && console.log(`saving ${entityType} to cache. (key: ${key})`);
     const data = typeof value === 'string' ? value : JSON.stringify(value);
     return await kv.hset(`entity-type-${entityType}`, { [key]: data });
   } catch (e) {

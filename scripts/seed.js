@@ -113,6 +113,7 @@ async function seedUsers(client) {
         is_worker BOOLEAN DEFAULT FALSE,
         refresh_enabled BOOLEAN DEFAULT FALSE,
         created_at timestamp NOT NULL DEFAULT now()
+        last_logged_in_at timestamp NOT NULL DEFAULT now()
       );
     `;
 
@@ -558,8 +559,17 @@ async function seed() {
   await seedImages(client);
   await seedFF(client);
 
+
   await client.end();
 }
+
+/*
+cheat shit
+
+  await client.sql`ALTER TABLE users ADD created_at timestamp DEFAULT now()`;
+
+ */
+
 
 function tests() {
   console.log('>> tests seed');

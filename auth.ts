@@ -4,7 +4,12 @@ import { authConfig } from './auth.config';
 import { sql } from '@vercel/postgres';
 import type { UserDB } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
-
+import * as cache from '@/app/lib/cache';
+async function updateUserLastLoggedInDate(phone_number: string,){
+  await sql<UserDB>`UPDATE users SET last_logged_in_at = now() WHERE phone_number=${phone_number}`;
+  const user =  (await sql<UserDB>`SELECT * FROM users WHERE phone_number=${phone_number}`).rows[0];
+  cache.saveUser(user);
+}
 async function getUserByPhoneNumber(
   phone_number: string,
 ): Promise<UserDB | undefined> {
@@ -29,7 +34,11 @@ export const { auth, signIn, signOut } = NextAuth({
         if (!user) return null;
         const passwordsMatch = await bcrypt.compare(password, user.password);
 
-        if (passwordsMatch) return { ...user, email: user.phone_number };
+        if (passwordsMatch){
+          updateUserLastLoggedInDate(phone_number);
+
+          return { ...user, email: user.phone_number };
+        }
 
         console.error('Error: Invalid credentials');
         return null;

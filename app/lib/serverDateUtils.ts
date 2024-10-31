@@ -52,3 +52,33 @@ export const getTime = (dateStr: string) => {
     .trim()
     .substring(0, 5);
 };
+
+export const formatTimePassedSince = (dateStr: string) => {
+  const date = getCurrentDate(dateStr);
+  const dateAsMiilis = date.getTime();
+  const now = getCurrentDate().getTime();
+  const modifiedNow = getCurrentDate(now - 2 * HOUR);
+  const timePassedInMillis = modifiedNow.getTime() - dateAsMiilis;
+  const timePassedInSeconds = Math.floor(timePassedInMillis / 1000);
+console.log('dateStr', dateStr);
+console.log('now', getCurrentDate());
+console.log('modifiedNow', modifiedNow);
+console.log('timePassedInMillis', timePassedInMillis);
+console.log('timePassedInSeconds', timePassedInSeconds);
+  if (timePassedInSeconds < 120){
+    return 'לפני רגע';
+  }
+
+  if (timePassedInSeconds < 3600){
+    return `לפני ${Math.floor(timePassedInSeconds / 60)} דקות`;
+  }
+
+  if (timePassedInSeconds < 7200){
+      return 'לפני כשעה';
+  }
+  if (timePassedInSeconds < 86400){
+    return `לפני ${Math.floor(timePassedInSeconds / 3600)} שעות`;
+  }
+
+  return formatDateToLocalWithTime(dateStr);
+}

@@ -12,6 +12,7 @@ export type UserDB = {
   is_worker: boolean;
   is_player: boolean;
   created_at: string;
+  last_logged_in_at: string;
 };
 
 export type ImageDB = {

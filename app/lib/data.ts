@@ -25,6 +25,8 @@ import {
   getTodayShortDate,
 } from './serverDateUtils';
 
+const DEBUG_MODE = process.env.NODE_ENV !== 'development';
+
 const ITEMS_PER_PAGE = 56;
 const TOP_COUNT = 8;
 const CASH = 'מזומן';
@@ -55,10 +57,16 @@ function methodEnd(methodName: string, error?: string) {
   if (diff > 1000) {
     console.error('Method End', methodName, '      ', diff, 'milli');
   } else if (diff > 600) {
-    console.warn('Method End', methodName, '      ', diff, 'milli');
+    DEBUG_MODE && console.warn('Method End', methodName, '      ', diff, 'milli');
   } else {
-    console.info('Method End', methodName, '      ', diff, 'milli');
+    DEBUG_MODE && console.info('Method End', methodName, '      ', diff, 'milli');
   }
+}
+
+async function updateUserLastLoggedInDate(phone_number: string,){
+  await sql<UserDB>`UPDATE users SET last_logged_in_at = now() WHERE phone_number=${phone_number}`;
+  const user =  (await sql<UserDB>`SELECT * FROM users WHERE phone_number=${phone_number}`).rows[0];
+  cache.saveUser(user);
 }
 
 async function getAllFlags(): Promise<FeatureFlagDB[]> {
@@ -87,14 +95,17 @@ async function getAllRsvps() {
 
 async function getUserById(userId: string) {
   const resultFromCache = await cache.getUserById(userId);
+
   if (resultFromCache) {
+    updateUserLastLoggedInDate(resultFromCache.phone_number)
     return resultFromCache;
   }
 
   const user = (await sql<UserDB>`SELECT * FROM users WHERE id = ${userId}`)
     .rows[0];
 
-  await cache.saveUser(user);
+  updateUserLastLoggedInDate(user.phone_number)
+
   return user;
 }
 
