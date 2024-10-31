@@ -8,7 +8,7 @@ import { getCurrentDate } from '@/app/lib/clientDateUtils';
 import { useFormState } from 'react-dom';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Spinner from '@/app/ui/client/Spinner';
-import Snackbar, {SnackbarCloseReason} from "@mui/material/Snackbar";
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 
 export default function AutoPlayerPayButton({
   player,
@@ -79,10 +79,13 @@ export default function AutoPlayerPayButton({
     return result;
   };
   const tooltipContent = getTooltipContent();
-  const toastMessage = player.name + ' נכנס ב ' +'₪'+ initialAmount + (useCredit ? ' מהקרדיט' : ' במזומן');
+
   const onButtonClick = () => {
     setPending(true);
-    handleClick();
+    if (open) {
+      setOpen(false);
+    }
+    setTimeout(handleClick, 10);
     const historyLog: LogDB[] = player.historyLog;
     historyLog.push({
       updated_at: new Date(),
@@ -117,8 +120,8 @@ export default function AutoPlayerPayButton({
   };
 
   const handleClose = (
-      event: React.SyntheticEvent | Event,
-      reason?: SnackbarCloseReason,
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason,
   ) => {
     if (reason === 'clickaway') {
       return;
@@ -126,8 +129,6 @@ export default function AutoPlayerPayButton({
 
     setOpen(false);
   };
-
-
 
   return (
     <>
@@ -199,11 +200,20 @@ export default function AutoPlayerPayButton({
               <span style={{ fontSize: 29 }}>₪</span>
             </Button>
             <Snackbar
-                className="only-wide-screen"
-                open={open}
-                autoHideDuration={4000}
-                onClose={handleClose}
-                message={toastMessage}
+              className="only-wide-screen"
+              open={open}
+              autoHideDuration={2000}
+              onClose={handleClose}
+              message={
+                <span style={{ fontSize: 20 }}>
+                  {' '}
+                  <b>{player.name}</b>{' '}
+                  {' נכנס ב ' +
+                    '₪' +
+                    initialAmount +
+                    (useCredit ? ' מהקרדיט' : ' במזומן')}{' '}
+                </span>
+              }
             />
           </Tooltip>
         </form>

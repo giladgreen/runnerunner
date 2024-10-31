@@ -43,8 +43,8 @@ export default function RSVPButton({
   };
 
   const handleClose = (
-      event: React.SyntheticEvent | Event,
-      reason?: SnackbarCloseReason,
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason,
   ) => {
     if (reason === 'clickaway') {
       return;
@@ -53,10 +53,11 @@ export default function RSVPButton({
     setOpen(false);
   };
 
-
-
   const onClick = () => {
-    handleClick();
+    if (open) {
+      setOpen(false);
+    }
+    setTimeout(handleClick, 10);
 
     startTransition(() => {
       addOptimisticIsRsvpForDate(!isRsvpForDate);
@@ -70,8 +71,9 @@ export default function RSVPButton({
       prevPage,
     );
   };
+
   return (
-    <div >
+    <div>
       <div style={{ display: 'flex', margin: '5px 0' }} onClick={onClick}>
         <Switch
           disabled={disabled}
@@ -86,11 +88,17 @@ export default function RSVPButton({
         </div>
       )}
       <Snackbar
-          className="only-wide-screen"
-          open={open}
-          autoHideDuration={4000}
-          onClose={handleClose}
-          message={`${player.name} ${!isRsvpForDate ? 'אישר הגעה' : 'ביטל רישום הגעה'}`}
+        className="only-wide-screen"
+        open={open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        message={
+          <span style={{ fontSize: 20 }}>
+            {' '}
+            <b>{player.name}</b>{' '}
+            {!isRsvpForDate ? 'אישר הגעה' : 'ביטל רישום הגעה'}{' '}
+          </span>
+        }
       />
     </div>
   );

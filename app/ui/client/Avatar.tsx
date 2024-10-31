@@ -14,7 +14,7 @@ export const getInitials = (name: string) => {
     .slice(0, 2);
 };
 
-const getProps = (color: string)=> ({
+const getProps = (color: string) => ({
   backgroundColor: color,
   color,
   marginTop: -2,
@@ -30,7 +30,7 @@ const getProps = (color: string)=> ({
     border: '1px solid currentColor',
     content: '""',
   },
-})
+});
 
 export default function Avatar({
   player,
@@ -55,54 +55,51 @@ export default function Avatar({
   const isRSVP = tournamentIds && isRsvpForDate;
   const hasUser = player.hasUser;
 
-  const RSVPBadge  = styled(Badge)(() => ({
+  const RSVPBadge = styled(Badge)(() => ({
     '& .MuiBadge-badge': {
-      ...getProps(isRSVP ? '#0072F5' : '#999999')
+      ...getProps(isRSVP ? '#0072F5' : '#999999'),
     },
   }));
 
-
-  const UserBadge  = styled(Badge)(() => ({
+  const UserBadge = styled(Badge)(() => ({
     '& .MuiBadge-badge': {
-      ...getProps(hasUser ? '#008800' : '#999999')
+      ...getProps(hasUser ? '#008800' : '#999999'),
     },
   }));
-
 
   return (
     <div
       className={`avatar-image ${isDefaultImage ? '' : 'zoom-on-hover-bigger'}`}
     >
       <RSVPBadge
-          overlap="circular"
-          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-          variant="dot"
-          className="zoom-on-hover"
+        overlap="circular"
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        variant="dot"
+        className="zoom-on-hover"
       >
-      <UserBadge
+        <UserBadge
           overlap="circular"
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           variant="dot"
-      >
-      <FlowbiteReact.Avatar
-        img={isDefaultImage ? undefined : player.image_url}
-        placeholderInitials={
-          isDefaultImage ? getInitials(player.name) : undefined
-        }
-        rounded
-        bordered
-
-        color={
-          player.balance < 0
-            ? 'failure'
-            : player.balance > 0
-              ? 'success'
-              : 'gray'
-        }
-        size="md"
-        style={style}
-      />
-      </UserBadge>
+        >
+          <FlowbiteReact.Avatar
+            img={isDefaultImage ? undefined : player.image_url}
+            placeholderInitials={
+              isDefaultImage ? getInitials(player.name) : undefined
+            }
+            rounded
+            bordered
+            color={
+              player.balance < 0
+                ? 'failure'
+                : player.balance > 0
+                  ? 'success'
+                  : 'gray'
+            }
+            size="md"
+            style={style}
+          />
+        </UserBadge>
       </RSVPBadge>
     </div>
   );

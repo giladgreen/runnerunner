@@ -257,14 +257,14 @@ export async function getAllPlayers() {
     tournamentsAdjustmentsLogsResults,
     todayHistoryUnfiltered,
     winnersRecords,
-    allUsers
+    allUsers,
   ] = await Promise.all([
     playersPromise,
     sql<RSVPDB>`SELECT * FROM rsvp;`,
     sql<TournamentsAdjustmentsDB>`SELECT * FROM tournaments_adjustments WHERE updated_at > now() - interval '12 hour';`,
     getTodayHistory(),
     getTournamentWinnersRecordsByDate(todayDate),
-    getAllUsers()
+    getAllUsers(),
   ]);
   const allPlayers = allPlayersResult.rows;
   const tournamentsAdjustmentsLogs = tournamentsAdjustmentsLogsResults.rows;
@@ -279,7 +279,9 @@ export async function getAllPlayers() {
   );
 
   allPlayers.forEach((player) => {
-    const user = allUsers.find(({ phone_number }) => phone_number === player.phone_number);
+    const user = allUsers.find(
+      ({ phone_number }) => phone_number === player.phone_number,
+    );
     player.hasUser = Boolean(user);
     player.balance = Number(player.balance);
     const rsvps = allRsvps.filter(
@@ -864,17 +866,20 @@ export async function fetchFilteredPlayers(
          GROUP BY phone_number
     `;
 
-    const [playersHistoryCountResult, players, allRsvps, allUsers] = await Promise.all([
-      playersHistoryCountResultPromise,
-      playersResultPromise,
-      getAllRsvps(),
-      getAllUsers()
-    ]);
+    const [playersHistoryCountResult, players, allRsvps, allUsers] =
+      await Promise.all([
+        playersHistoryCountResultPromise,
+        playersResultPromise,
+        getAllRsvps(),
+        getAllUsers(),
+      ]);
     const playersHistoryCount = playersHistoryCountResult.rows;
 
     const todayDate = getTodayShortDate();
     players.forEach((player) => {
-      const user = allUsers.find(({ phone_number }) => phone_number === player.phone_number);
+      const user = allUsers.find(
+        ({ phone_number }) => phone_number === player.phone_number,
+      );
       player.hasUser = Boolean(user);
 
       player.balance = Number(player.balance);

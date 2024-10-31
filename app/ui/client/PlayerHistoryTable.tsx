@@ -1,8 +1,5 @@
 'use client';
-import {
-  formatCurrency,
-  formatType,
-} from '@/app/lib/utils';
+import { formatCurrency, formatType } from '@/app/lib/utils';
 import { PlayerDB } from '@/app/lib/definitions';
 import { formatDateToLocal, getTime } from '@/app/lib/clientDateUtils';
 import React from 'react';
