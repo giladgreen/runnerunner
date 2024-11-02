@@ -1,9 +1,9 @@
 import { fetchGeneralPlayersCardData } from '@/app/lib/data';
 import { Suspense } from 'react';
 import { CardsSkeleton } from '@/app/ui/skeletons';
-import { formatCurrency } from '@/app/lib/utils';
 import Card from '@/app/ui/client/Card';
-import NumberTicker from "@/components/ui/number-ticker";
+import NumberTicker from "@/app/ui/components/ui/number-ticker";
+
 
 export default async function GeneralPlayersCardWrapper() {
   const {
@@ -23,7 +23,7 @@ export default async function GeneralPlayersCardWrapper() {
         />
         <Card
           title="שחקנים עם חוב"
-          value={<NumberTicker value={numberOfPlayersWithDebt} useCurrency={false}/>}
+          value={<NumberTicker value={numberOfPlayersWithDebt} />}
           type="debt"
           oneLine
         />
@@ -36,7 +36,7 @@ export default async function GeneralPlayersCardWrapper() {
         />
         <Card
           title="סה״כ שחקנים"
-          value={<NumberTicker value={totalNumberOfPlayers} useCurrency={false}/>}
+          value={<NumberTicker value={totalNumberOfPlayers} />}
           type="players"
           oneLine
         />
