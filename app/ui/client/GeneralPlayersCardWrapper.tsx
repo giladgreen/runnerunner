@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { CardsSkeleton } from '@/app/ui/skeletons';
 import { formatCurrency } from '@/app/lib/utils';
 import Card from '@/app/ui/client/Card';
+import NumberTicker from "@/components/ui/number-ticker";
 
 export default async function GeneralPlayersCardWrapper() {
   const {
@@ -16,26 +17,26 @@ export default async function GeneralPlayersCardWrapper() {
       <Suspense fallback={<CardsSkeleton count={4} />}>
         <Card
           title=" סה״כ חוב שחקנים"
-          value={formatCurrency(totalPlayersDebt)}
+          value={<NumberTicker value={totalPlayersDebt} useCurrency/>}
           type="money"
           oneLine
         />
         <Card
           title="שחקנים עם חוב"
-          value={numberOfPlayersWithDebt}
+          value={<NumberTicker value={numberOfPlayersWithDebt} useCurrency={false}/>}
           type="debt"
           oneLine
         />
 
         <Card
           title="חוב ראנר לשחקנים"
-          value={formatCurrency(totalRunnerDebt)}
+          value={<NumberTicker value={totalRunnerDebt} useCurrency/>}
           type="money"
           oneLine
         />
         <Card
           title="סה״כ שחקנים"
-          value={totalNumberOfPlayers}
+          value={<NumberTicker value={totalNumberOfPlayers} useCurrency={false}/>}
           type="players"
           oneLine
         />
