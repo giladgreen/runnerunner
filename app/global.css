@@ -26,6 +26,9 @@
 .avatar-image {
   zoom: 1.5;
 }
+.default-image-avatar >.relative >.relative{
+  background: rgb(224, 242, 254);
+}
 
 .full-size-fixed-div {
   background: transparent;

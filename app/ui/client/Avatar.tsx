@@ -76,6 +76,7 @@ export default function Avatar({
             placeholderInitials={
               isDefaultImage ? getInitials(player.name) : undefined
             }
+            className="default-image-avatar"
             rounded
             bordered
             color={
