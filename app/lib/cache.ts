@@ -1,9 +1,10 @@
 import { kv } from '@vercel/kv';
 import { FeatureFlagDB, UserDB } from '@/app/lib/definitions';
-const DEBUG_MODE = process.env.NODE_ENV !== 'development';
+const local = process.env.LOCAL === 'true';
+const DEBUG_MODE = !local;
 export async function get(key: string, entityType: string = '') {
   try {
-    const result = await kv.hget<string>(`entity-type-${entityType}`, key);
+    const result = await kv.hget<string>(`${local ? 'local-' :''}entity-type-${entityType}`, key);
     if (!Boolean(result)) {
       result;
     }
@@ -19,7 +20,7 @@ export async function set(key: string, value: any, entityType: string = '') {
   try {
     DEBUG_MODE && console.log(`saving ${entityType} to cache. (key: ${key})`);
     const data = typeof value === 'string' ? value : JSON.stringify(value);
-    return await kv.hset(`entity-type-${entityType}`, { [key]: data });
+    return await kv.hset(`${local ? 'local-' :''}entity-type-${entityType}`, { [key]: data });
   } catch (e) {
     console.error(e);
     return null;
@@ -28,7 +29,7 @@ export async function set(key: string, value: any, entityType: string = '') {
 
 export async function del(key: string, entityType: string = '') {
   try {
-    return await kv.del(`entity-type-${entityType}`, key);
+    return await kv.del(`${local ? 'local-' :''}entity-type-${entityType}`, key);
   } catch (e) {
     console.error(e);
     return null;
