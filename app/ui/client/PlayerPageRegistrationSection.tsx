@@ -23,14 +23,9 @@ export default function PlayerPageRegistrationSection({
   return (
     <div>
       <div
-        className="rtl"
-        style={{
-          marginTop: 45,
-          border: '2px solid blue',
-          borderRadius: 5,
-          padding: 10,
-        }}
+        className="rtl rsvp-for-next-week"
       >
+        <img src="/runner-big.png"/>
         <div className="rtl" style={{ textAlign: 'right' }}>
           <u>אישורי הגעה לשבוע הקרוב</u>
         </div>

@@ -14,12 +14,8 @@ export default function PlayerPagePlayerRegistration({
   thisWeekTournaments: TournamentDB[];
 }) {
   return (
-    <div className="rtl" style={{ marginTop: 50 }}>
-      <div style={{ zoom: 2 }}>
-        <u>
-          <b>רישום</b>
-        </u>
-      </div>
+    <div className="rsvp-for-next-week-page" >
+    <div  style={{ marginTop: 50 }} className="rtl">
       <div style={{ marginTop: 10 }}>
         {showRsvp ? (
           <div>
@@ -32,6 +28,7 @@ export default function PlayerPagePlayerRegistration({
           <div>לא נתמך זמנית</div>
         )}
       </div>
+    </div>
     </div>
   );
 }

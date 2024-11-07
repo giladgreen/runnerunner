@@ -143,6 +143,24 @@ input[type='number']::-webkit-outer-spin-button {
   width: 100%;
 }
 
+
+.rsvp-for-next-week {
+  margin-top: 20px;
+  border: 4px solid #000072;
+  border-radius: 25px;
+  padding: 30px;
+  font-size: 1.3em;
+
+  img {
+    visibility: hidden;
+  }
+}
+
+.rsvp-for-next-week > img {
+  width: 1px;
+}
+
+
 @media only screen and (max-width: 600px) {
   .terms-of-service {
     margin: 10px;
@@ -151,5 +169,26 @@ input[type='number']::-webkit-outer-spin-button {
 
   .players-page-card {
     zoom: 1.7;
+  }
+
+  .rsvp-for-next-week-page {
+    height: 120%;
+    background: #0070f344;
+  }
+
+  .rsvp-for-next-week {
+    margin-top: 45px;
+    border: 2px solid transparent;
+
+    padding: 10px;
+  }
+
+  .rsvp-for-next-week > img {
+    width: 100%;
+    visibility: visible;
+  }
+
+  .p-6{
+    padding: 0;
   }
 }
