@@ -9,6 +9,7 @@ import FinalTablePlayers from '@/app/ui/client/FinalTablePlayers';
 import RegisterSave from '@/app/ui/client/RegisterSave';
 import PlayersPrizes from '@/app/ui/client/PlayersPrizes';
 import TodayPlayersTable from '@/app/ui/client/TodayPlayersTable';
+import {AnimatedGradientText} from "@/app/ui/components/ui/animated-gradient-text";
 
 export default function CurrentTournamentPage({
   todayTournaments,
@@ -108,22 +109,16 @@ export default function CurrentTournamentPage({
             <TabPanel key={todayTournament.id}>
               <div className="full-width w-full">
                 <div
-                  style={{
-                    position: 'fixed',
-                    top: 5,
-                    left: 5,
-                    textAlign: 'center',
-                    background: 'orange',
-                    padding: '5px 10px',
-                    zIndex: 99,
-                  }}
+                  className="current_tournament_fly_card"
                 >
-                  {todayTournament.name}
+                  <AnimatedGradientText>
+                     {todayTournament.name}
+                  </AnimatedGradientText>
                 </div>
-                <RegisterSave players={allPlayers} />
+                <RegisterSave players={allPlayers}/>
                 <div className="full-width flex w-full items-center justify-between">
                   <TodayTournamentNameCardWrapper
-                    todayTournament={todayTournament}
+                      todayTournament={todayTournament}
                   />
                 </div>
                 <div className="full-width flex w-full items-center justify-between">

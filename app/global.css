@@ -39,7 +39,15 @@
   width: 100vw;
   height: 10vh;
 }
+.current_tournament_fly_card {
+  position: fixed;
+  top: 6px;
+  left: 25px;
+  text-align: center;
+  padding: 5px 10px;
+  z-index: 99;
 
+}
 .zoom-on-hover:hover {
   transform: scale(2);
   transition: transform 0.5s;
