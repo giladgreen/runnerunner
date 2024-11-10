@@ -160,7 +160,6 @@ input[type='number']::-webkit-outer-spin-button {
   width: 1px;
 }
 
-
 @media only screen and (max-width: 600px) {
   .terms-of-service {
     margin: 10px;

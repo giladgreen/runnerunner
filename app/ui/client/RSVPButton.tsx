@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation';
 import { useSearchParams } from 'next/dist/client/components/navigation';
 import { getTodayDate } from '@/app/lib/clientDateUtils';
 import { Switch } from '@nextui-org/react';
+import Alert from "@mui/material/Alert";
 
 export default function RSVPButton({
   player,
@@ -92,14 +93,20 @@ export default function RSVPButton({
         open={open}
         autoHideDuration={2000}
         onClose={handleClose}
-        message={
-          <span style={{ fontSize: 20 }}>
-            {' '}
-            <b>{player.name}</b>{' '}
-            {!isRsvpForDate ? 'אישר הגעה' : 'ביטל רישום הגעה'}{' '}
+      >
+        <Alert
+            icon={false}
+            severity="info"
+            variant="filled"
+            sx={{width: '100%'}}
+        >
+              <span style={{fontSize: 20}}>
+
+                <b>{player.name}</b>{' '}
+                {!isRsvpForDate ? 'אישר הגעה' : 'ביטל רישום הגעה'}{' '}
           </span>
-        }
-      />
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

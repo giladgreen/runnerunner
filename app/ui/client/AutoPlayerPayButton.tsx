@@ -9,6 +9,7 @@ import { useFormState } from 'react-dom';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Spinner from '@/app/ui/client/Spinner';
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 export default function AutoPlayerPayButton({
   player,
@@ -122,7 +123,7 @@ export default function AutoPlayerPayButton({
   };
 
   const handleClose = (
-    event: React.SyntheticEvent | Event,
+    _event: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason,
   ) => {
     if (reason === 'clickaway') {
@@ -206,17 +207,23 @@ export default function AutoPlayerPayButton({
               open={open}
               autoHideDuration={2000}
               onClose={handleClose}
-              message={
-                <span style={{ fontSize: 20 }}>
+            >
+              <Alert
+                icon={false}
+                  severity="success"
+                  variant="filled"
+                  sx={{width: '100%'}}
+              >
+                <span style={{fontSize: 20}}>
                   {' '}
                   <b>{player.name}</b>{' '}
                   {' נכנס ב ' +
-                    '₪' +
-                    prevAmount +
-                    (prevUsedCredit ? ' מהקרדיט' : ' במזומן')}{' '}
+                      '₪' +
+                      prevAmount +
+                      (prevUsedCredit ? ' מהקרדיט' : ' במזומן')}{' '}
                 </span>
-              }
-            />
+              </Alert>
+            </Snackbar>
           </Tooltip>
         </form>
       )}
