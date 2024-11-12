@@ -36,11 +36,11 @@ export const formatDateToLocalWithTime = (
 ) => {
   const date = formatDateToLocal(dateStr, locale);
   const dateObject = getCurrentDate(
-    getCurrentDate(dateStr).getTime() + 3 * HOUR,
+    getCurrentDate(dateStr).getTime() + 2 * HOUR,
   );
   const time = `${dateObject.getHours()}:${dateObject.getMinutes()}`;
-
-  return `${time},     ${date}`;
+  const dateparts = date.split(',');
+  return `${dateparts[1]}, ${dateparts[0]},  בשעה ${time}`;
 };
 
 export const getTime = (dateStr: string) => {
