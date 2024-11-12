@@ -60,11 +60,7 @@ export const formatTimePassedSince = (dateStr: string) => {
   const modifiedNow = getCurrentDate(now - 2 * HOUR);
   const timePassedInMillis = modifiedNow.getTime() - dateAsMiilis;
   const timePassedInSeconds = Math.floor(timePassedInMillis / 1000);
-console.log('dateStr', dateStr);
-console.log('now', getCurrentDate());
-console.log('modifiedNow', modifiedNow);
-console.log('timePassedInMillis', timePassedInMillis);
-console.log('timePassedInSeconds', timePassedInSeconds);
+
   if (timePassedInSeconds < 120){
     return 'לפני רגע';
   }

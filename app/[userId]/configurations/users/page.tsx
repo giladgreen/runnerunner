@@ -1,4 +1,5 @@
 import { lusitana } from '@/app/ui/fonts';
+import { Tooltip } from 'flowbite-react';
 import { fetchAllUsers, fetchUserById } from '@/app/lib/data';
 import React from 'react';
 import { UserDB } from '@/app/lib/definitions';
@@ -9,7 +10,7 @@ import {
   updateIsUserWorker,
 } from '@/app/lib/actions';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
-import {formatDateToLocalWithTime, formatTimePassedSince} from "@/app/lib/serverDateUtils";
+import { formatDateToLocalWithTime, formatTimePassedSince } from '@/app/lib/serverDateUtils';
 
 export default async function UsersPage({
   params,
@@ -156,7 +157,9 @@ export default async function UsersPage({
                     className="thin-column whitespace-nowrap py-3 pl-6 pr-3"
                     style={{textAlign: 'center'}}
                 >
+                  <Tooltip placement={'left'} content={formatDateToLocalWithTime(user.last_logged_in_at)} color="primary">
                   {formatTimePassedSince(user.last_logged_in_at)}
+                  </Tooltip>
                 </td>
               </tr>
           ))}
