@@ -56,9 +56,9 @@ export const getTime = (dateStr: string) => {
 export const formatTimePassedSince = (dateStr: string) => {
   const date = getCurrentDate(dateStr);
   const dateAsMiilis = date.getTime();
-  const now = getCurrentDate().getTime();
-  const modifiedNow = getCurrentDate(now - 2 * HOUR);
-  const timePassedInMillis = modifiedNow.getTime() - dateAsMiilis;
+  // const now = getCurrentDate().getTime();
+  // const modifiedNow = getCurrentDate(now - 2 * HOUR);
+  const timePassedInMillis = (new Date()).getTime() - dateAsMiilis;
   const timePassedInSeconds = Math.floor(timePassedInMillis / 1000);
 
   if (timePassedInSeconds < 120){
