@@ -168,7 +168,15 @@ input[type='number']::-webkit-outer-spin-button {
   width: 1px;
 }
 
+.margin-bottom-wide{
+  margin-bottom: 25px;
+}
+
 @media only screen and (max-width: 600px) {
+  .margin-bottom-wide{
+    margin-bottom: 0;
+  }
+
   .terms-of-service {
     margin: 10px;
     max-width: 90%;

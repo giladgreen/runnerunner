@@ -87,6 +87,7 @@ export function getRSVPSForTheNextWeek(
             ''
           ) : (
             <RSVPButton
+              isPlayerPage={isPlayerPage}
               disabled={
                 tournamentCurrentRegisteredPlayers >= tournamentMaxPlayers
               }

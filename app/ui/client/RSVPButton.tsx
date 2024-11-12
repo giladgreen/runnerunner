@@ -18,6 +18,7 @@ export default function RSVPButton({
   text,
   boldText,
   disabled,
+  isPlayerPage
 }: {
   player: PlayerDB;
   text?: string;
@@ -25,6 +26,7 @@ export default function RSVPButton({
   stringDate?: string;
   tournamentId: string;
   disabled?: boolean;
+  isPlayerPage?: boolean;
 }) {
   const prevPage = `${usePathname()}?${useSearchParams().toString()}`;
   const date = stringDate ?? getTodayDate();
@@ -73,21 +75,30 @@ export default function RSVPButton({
     );
   };
 
-  return (
-    <div>
-      <div style={{ display: 'flex', margin: '5px 0' }} onClick={onClick}>
-        <Switch
-          disabled={disabled}
-          initialChecked={optimisticIsRsvpForDate}
-          onClick={onClick}
-        />
-        <div style={{ marginTop: 3, marginRight: 5 }}>{text}</div>
-      </div>
+  const rsvpSwitch = <>
+    <div style={{ display: 'block', margin: '15px 0' }}>
+      {text && <div style={{ marginTop: 3, marginRight: 5 }}>{text}</div>}
       {boldText && (
-        <div style={{ marginTop: 4, marginBottom: 30 }}>
+        <div style={{ marginTop: 4, marginBottom: 4 }}>
           <b>{boldText}</b>
         </div>
       )}
+        <div style={{ display: 'flex', marginBottom: 5}}>
+          {text && <span style={{ marginRight: 5, marginLeft: 10 }}>{!optimisticIsRsvpForDate ? 'לרישום:':'לביטול רישום:'}</span>}
+          <Switch
+            disabled={disabled}
+            initialChecked={optimisticIsRsvpForDate}
+            onClick={onClick}
+          />
+        </div>
+      </div>
+
+    </>
+    ;
+
+    return (
+    <div className={isPlayerPage ? 'margin-bottom-wide' : ''} >
+      {rsvpSwitch}
       <Snackbar
         className="only-wide-screen"
         open={open}

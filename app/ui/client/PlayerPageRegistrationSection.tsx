@@ -16,9 +16,6 @@ export default function PlayerPageRegistrationSection({
     player,
     true,
   );
-  if (!rsvpsForTheNextWeek === null) {
-    <div>אין טורנירים נוספים השבוע</div>;
-  }
 
   return (
     <div>
@@ -26,10 +23,15 @@ export default function PlayerPageRegistrationSection({
         className="rtl rsvp-for-next-week"
       >
         <img src="/runner-big.png"/>
-        <div className="rtl" style={{ textAlign: 'right' }}>
-          <u>טורנירי השבוע הקרוב</u>
-        </div>
-        <div>{rsvpsForTheNextWeek}</div>
+        { (rsvpsForTheNextWeek) ? (<>
+          <div className="rtl" style={{ textAlign: 'center' }}>
+            <u>טורנירי השבוע הקרוב</u>
+          </div>
+          <div>{rsvpsForTheNextWeek}</div>
+        </>) : (<div className="rtl" style={{ textAlign: 'center' }}>
+          <u>אין טורנירים נוספים השבוע</u>
+        </div>)}
+
       </div>
     </div>
   );

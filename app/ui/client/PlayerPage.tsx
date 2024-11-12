@@ -16,7 +16,7 @@ export default async function PlayerPage({
 
   return (
     <div className="rtl" style={{ marginTop: 20 }}>
-      <PlayerPagePlayerDetails player={player} />
+      <PlayerPagePlayerDetails player={player} showHistoryData={true}/>
     </div>
   );
 }

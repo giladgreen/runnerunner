@@ -10,8 +10,10 @@ import PlayerPagePlayerCreditHistory from '@/app/ui/client/PlayerPagePlayerCredi
 
 export default function PlayerPagePlayerDetails({
   player,
+                                                  showHistoryData
 }: {
   player: PlayerDB;
+  showHistoryData: boolean
 }) {
   const isDefaultImage =
     !player.image_url || player.image_url.includes('default.png');
@@ -68,7 +70,7 @@ export default function PlayerPagePlayerDetails({
           </div>
         </div>
       </div>
-      <PlayerPagePlayerCreditHistory player={player} />
+      {showHistoryData ?? <PlayerPagePlayerCreditHistory player={player} />}
     </div>
   );
 }
