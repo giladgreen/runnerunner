@@ -4,8 +4,9 @@ import { HashtagIcon } from '@heroicons/react/24/outline';
 import Button from '@/app/ui/client/Button';
 import { setPlayerPosition } from '@/app/lib/actions';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { PlayerDB } from '@/app/lib/definitions';
+import { ConfettiButton } from '@/app/ui/components/ui/confetti';
 
 export default function SetPositionForm({
   player,
@@ -30,6 +31,29 @@ export default function SetPositionForm({
   useEffect(() => {
     setPosition(initPosition);
   }, [initPosition]);
+
+  const particleCount= useMemo(()=> {
+    if (position === 0) return 0;
+
+    if (position > 10) return 30;
+
+    if (position > 3) {
+      return 20 * (11 - position);
+    }
+
+    if (position === 3) {
+      return 200;
+    }
+
+    if (position === 2) {
+      return 250;
+    }
+
+    return 1000;
+
+  },[position])
+
+
   return (
     <div className="edit-player-modal-inner-div">
       <form action={setPlayerPositionWithPlayerId} className="form-control">
@@ -67,13 +91,15 @@ export default function SetPositionForm({
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-4">
-          <SpinnerButton text="עדכן" onClick={() => hide?.()} />
+          <ConfettiButton  style={{ marginTop: -52, marginRight: 20 }} onClick={()=>{hide?.()}} particleCount={particleCount}>עדכן</ConfettiButton>
         </div>
       </form>
+
       {hide && (
         <Button onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
           ביטול
         </Button>
+
       )}
     </div>
   );
