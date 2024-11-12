@@ -8,6 +8,7 @@ import {
 } from '@/app/lib/clientDateUtils';
 import RSVPButton from '@/app/ui/client/RSVPButton';
 import { Switch } from '@nextui-org/react';
+import BlurFade from '@/app/ui/components/ui/blur-fade';
 
 export function getRSVPSForTheNextWeek(
   tournaments: TournamentDB[],
@@ -35,7 +36,7 @@ export function getRSVPSForTheNextWeek(
     return null;
   }
 
-  const rsvpsForTheNextWeek = tournamentsToRegister.map((tournament) => {
+  const rsvpsForTheNextWeek = tournamentsToRegister.filter(tournament => !tournament.rsvp_required || tournament.max_players !== 0).map((tournament, index) => {
     const tournamentDayIndex = days.indexOf(tournament.day);
     const date = getCurrentDate(
       getCurrentDate().getTime() +
@@ -79,7 +80,7 @@ export function getRSVPSForTheNextWeek(
       }
     }
 
-    return (
+    const item = (
       <div key={tournament.id} className="tournament_rsvp_line">
         {tournament.rsvp_required ? (
           tournament.max_players === 0 ? (
@@ -98,12 +99,13 @@ export function getRSVPSForTheNextWeek(
           )
         ) : (
           <div style={{ display: 'flex' }}>
-            <Switch initialChecked={false} disabled={true} />
             {text}
           </div>
         )}
       </div>
     );
+
+    return isPlayerPage ? <BlurFade delay={index * 0.6}><div className="user-tournament-rsvp-item">{item}</div></BlurFade> : item;
   });
 
   return rsvpsForTheNextWeek;

@@ -572,6 +572,13 @@
     display: flex;
   }
 
+  .user-tournament-rsvp-item{
+    margin-top:10px;
+    border: 2px solid rgb(0, 112, 243);
+    border-radius: 20px;
+    padding-right: 10px;
+    background: white;
+  }
   .give-credit-modal-button {
     font-size: 12px;
     img {

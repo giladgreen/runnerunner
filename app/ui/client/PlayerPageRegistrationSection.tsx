@@ -27,7 +27,7 @@ export default function PlayerPageRegistrationSection({
       >
         <img src="/runner-big.png"/>
         <div className="rtl" style={{ textAlign: 'right' }}>
-          <u>אישורי הגעה לשבוע הקרוב</u>
+          <u>טורנירי השבוע הקרוב</u>
         </div>
         <div>{rsvpsForTheNextWeek}</div>
       </div>

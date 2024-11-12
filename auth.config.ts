@@ -29,7 +29,7 @@ export const authConfig = {
       if (isLoggedIn && !nextUrl.pathname.includes(userUUID!)) {
         return Response.redirect(
           new URL(
-            `/${userUUID}${isAdmin || isWorker ? '/current_tournament' : ''}`,
+            `/${userUUID}${isAdmin || isWorker ? '/current_tournament' : '/player_registration'}`,
             nextUrl,
           ),
         );
