@@ -15,6 +15,8 @@ async function seedTournaments(client) {
         buy_in INT NOT NULL,
         re_buy INT NOT NULL,
         max_players INT NOT NULL,
+        start_time TEXT NOT NULL,
+        initial_stack INT NOT NULL,
         rsvp_required BOOLEAN NOT NULL,
         updated_at timestamp NOT NULL DEFAULT now()
       );
@@ -29,6 +31,8 @@ async function seedTournaments(client) {
         buy_in INT NOT NULL,
         re_buy INT NOT NULL,
         max_players INT NOT NULL,
+        start_time TEXT NOT NULL,
+        initial_stack INT NOT NULL,
         rsvp_required BOOLEAN NOT NULL,
         deleted_at timestamp NOT NULL DEFAULT now(),
         deleted_by TEXT

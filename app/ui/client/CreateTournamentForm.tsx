@@ -160,6 +160,71 @@ export default function CreateTournamentForm({
           </div>
         </div>
 
+        {/* tournament time */}
+        <div className="mb-4">
+          <label
+            htmlFor="start_time"
+            className="mb-2 block text-sm font-medium"
+            style={{ textAlign: 'right' }}
+          >
+            שעת התחלה
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="start_time"
+                name="start_time"
+                defaultValue={'20:00'}
+                placeholder=" שעת התחלה"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="start_time-error"
+              />
+            </div>
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <div id="start_time-error" aria-live="polite" aria-atomic="true">
+              {state?.errors?.start_time &&
+                state?.errors.start_time.map((error: string) => (
+                  <div className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+
+        {/* initial_stack */}
+        <div className="mb-4">
+          <label
+            htmlFor="initial_stack"
+            className="mb-2 block text-sm font-medium"
+            style={{ textAlign: 'right' }}
+          >
+            ערימה התחלתית
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="initial_stack"
+                name="initial_stack"
+                type="number"
+                min={0}
+                defaultValue={75000}
+                placeholder="ערימה התחלתית"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="buy_in-error"
+              />
+            </div>
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <div id="initial_stack-error" aria-live="polite" aria-atomic="true">
+              {state?.errors?.initial_stack &&
+                state?.errors.initial_stack.map((error: string) => (
+                  <div className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
         {/* buy_in */}
         <div className="mb-4">
           <label

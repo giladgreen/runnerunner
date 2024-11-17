@@ -50,6 +50,13 @@ export default async function TournamentsSetupPage({
             </th>
             <th
               scope="col"
+              className="smaller-on-mobile px-4 py-5 font-medium sm:pl-6 "
+              style={{ textAlign: 'right' }}
+            >
+              שעה
+            </th>
+            <th
+              scope="col"
               className=" smaller-on-mobile px-2 py-5 font-medium"
               style={{ textAlign: 'right' }}
             >
@@ -68,6 +75,13 @@ export default async function TournamentsSetupPage({
               style={{ textAlign: 'right' }}
             >
               עלות כניסה נוספת
+            </th>
+            <th
+              scope="col"
+              className=" smaller-on-mobile px-3 py-5 font-medium"
+              style={{ textAlign: 'right' }}
+            >
+             ערימה התחלתית
             </th>
             <th
               scope="col"
@@ -119,12 +133,15 @@ export default async function TournamentsSetupPage({
                 </a>
               </td>
               <td className="wide-screen smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
-                <b className="wide-screen">
+                <b>
                   {
                     // @ts-ignore
                     TRANSLATIONS[tournament.day].replace('יום', '')
                   }
                 </b>
+              </td>
+              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
+                {tournament.start_time}
               </td>
               <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
                 {tournament.name}
@@ -134,6 +151,9 @@ export default async function TournamentsSetupPage({
               </td>
               <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
                 {formatCurrency(tournament.re_buy)}
+              </td>
+              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
+                {tournament.initial_stack}
               </td>
               <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
                 {tournament.max_players}

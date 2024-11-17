@@ -80,6 +80,7 @@ const phoneToName = {
 };
 export type State = {
   errors?: {
+    start_time?: string[];
     name?: string[];
     extra?: string[];
     credit?: string[];
@@ -95,6 +96,7 @@ export type State = {
     amount?: string[];
     position?: string[];
     prize?: string[];
+    initial_stack?: string[];
     buy_in?: string[];
     re_buy?: string[];
     max_players?: string[];
@@ -1164,8 +1166,10 @@ export async function updateTournament(
     buy_in: z.coerce.number(),
     re_buy: z.coerce.number(),
     max_players: z.coerce.number(),
+    initial_stack: z.coerce.number(),
     rsvp_required: z.coerce.boolean(),
     name: z.string(),
+    start_time: z.string(),
   });
 
   const validatedFields = UpdateTournament.safeParse({
@@ -1174,6 +1178,8 @@ export async function updateTournament(
     re_buy: formData.get('re_buy'),
     max_players: formData.get('max_players'),
     rsvp_required: formData.get('rsvp_required'),
+    initial_stack: formData.get('initial_stack'),
+    start_time: formData.get('start_time'),
   });
 
   if (!validatedFields.success) {
@@ -1187,7 +1193,7 @@ export async function updateTournament(
     };
   }
 
-  const { name, buy_in, re_buy, max_players, rsvp_required } =
+  const { name, buy_in, re_buy, max_players, rsvp_required, start_time, initial_stack } =
     validatedFields.data;
   const date = getUpdatedAtFormat();
 
@@ -1198,13 +1204,13 @@ export async function updateTournament(
     if (tournamentToUpdate) {
       await sql`
       UPDATE tournaments
-      SET name = ${name}, buy_in = ${buy_in},re_buy = ${re_buy},max_players = ${max_players},rsvp_required=${rsvp_required}, updated_at=${date}
+      SET name = ${name}, buy_in = ${buy_in},re_buy = ${re_buy},initial_stack=${initial_stack},start_time=${start_time}, max_players = ${max_players},rsvp_required=${rsvp_required}, updated_at=${date}
       WHERE id = ${id}
     `;
       sendEmail(
         TARGET_MAIL,
         'tournaments update',
-        `day:${tournamentToUpdate.day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`,
+        `day:${tournamentToUpdate.day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}, start_time: ${start_time}, initial_stack: ${initial_stack}`,
       );
     }
   } catch (error) {
@@ -1226,9 +1232,11 @@ export async function createTournament(
     day: z.string(),
     buy_in: z.coerce.number(),
     re_buy: z.coerce.number(),
+    initial_stack: z.coerce.number(),
     max_players: z.coerce.number(),
     rsvp_required: z.coerce.boolean(),
     name: z.string(),
+    start_time: z.string(),
   });
 
   const validatedFields = CreateTournament.safeParse({
@@ -1238,6 +1246,8 @@ export async function createTournament(
     re_buy: formData.get('re_buy'),
     max_players: formData.get('max_players'),
     rsvp_required: formData.get('rsvp_required'),
+    initial_stack: formData.get('initial_stack'),
+    start_time: formData.get('start_time'),
   });
 
   if (!validatedFields.success) {
@@ -1251,7 +1261,7 @@ export async function createTournament(
     };
   }
 
-  const { day, name, buy_in, re_buy, max_players, rsvp_required } =
+  const { day, name, buy_in, re_buy, max_players, rsvp_required, initial_stack, start_time } =
     validatedFields.data;
 
   try {
@@ -1266,13 +1276,13 @@ export async function createTournament(
         'Saturday',
       ].indexOf(day) + 1;
 
-    await sql`INSERT INTO tournaments (day,name, i, buy_in,re_buy,max_players, rsvp_required ) 
-        VALUES (${day},${name},${i},${buy_in},${re_buy},${max_players},${rsvp_required})`;
+    await sql`INSERT INTO tournaments (day,name, i, buy_in,re_buy,max_players, rsvp_required, initial_stack, start_time  ) 
+        VALUES (${day},${name},${i},${buy_in},${re_buy},${max_players},${rsvp_required}, ${initial_stack}, ${start_time})`;
 
     sendEmail(
       TARGET_MAIL,
       'new tournaments created',
-      `day:${day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}`,
+      `day:${day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required},  start_time: ${start_time}, initial_stack: ${initial_stack}`,
     );
   } catch (error) {
     console.error('## updateTournament error', error);
@@ -1935,7 +1945,11 @@ export async function rsvpPlayerForDay(
 ) {
   noStore();
   try {
+    console.log('## calling registerPlayerForDay', phone_number, date, tournamentId, val);
+
     await registerPlayerForDay(phone_number, date, tournamentId, val);
+    console.log('## calling registerPlayerForDay done');
+
   } catch (error) {
     console.error('rsvpPlayerForDay Error:', error);
     return false;

@@ -8,9 +8,10 @@ import * as FlowbiteReact from 'flowbite-react';
 import { getInitials } from '@/app/ui/client/Avatar';
 import PlayerPagePlayerCreditHistory from '@/app/ui/client/PlayerPagePlayerCreditHistory';
 
+const showCredit = false;//TODO: change to true once we start working with the system instead of excel
 export default function PlayerPagePlayerDetails({
   player,
-                                                  showHistoryData
+  showHistoryData
 }: {
   player: PlayerDB;
   showHistoryData: boolean
@@ -53,7 +54,7 @@ export default function PlayerPagePlayerDetails({
           >
             {player.phone_number}
           </div>
-          <div>
+          {showCredit && <div>
             <span style={{ fontSize: 40 }}>קרדיט:</span>
             <b style={{ marginRight: 5 }}>
               {player.balance < 0 ? 'חוב של' : ''}
@@ -67,7 +68,7 @@ export default function PlayerPagePlayerDetails({
             >
               <b> {formatCurrency(Math.abs(player.balance))}</b>
             </span>
-          </div>
+          </div>}
         </div>
       </div>
       {showHistoryData ?? <PlayerPagePlayerCreditHistory player={player} />}

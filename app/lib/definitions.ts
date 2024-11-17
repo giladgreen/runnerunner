@@ -123,9 +123,11 @@ export type TournamentDB = {
   name: string;
   date: string;
   day: string;
+  start_time: string;
   buy_in: number;
   re_buy: number;
   max_players: number;
+  initial_stack: number;
   rsvp_required: boolean;
   day_has_more_then_one: boolean;
 

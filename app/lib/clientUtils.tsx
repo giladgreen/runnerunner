@@ -4,11 +4,10 @@ import { PlayerDB, TournamentDB, TRANSLATIONS } from '@/app/lib/definitions';
 import {
   getCurrentDate,
   getDayOfTheWeek,
-  getTodayDate,
 } from '@/app/lib/clientDateUtils';
 import RSVPButton from '@/app/ui/client/RSVPButton';
-import { Switch } from '@nextui-org/react';
-import BlurFade from '@/app/ui/components/ui/blur-fade';
+import React from 'react';
+import PlayerTournamentRegistration from '@/app/ui/client/PlayerTournamentRegistration';
 
 export function getRSVPSForTheNextWeek(
   tournaments: TournamentDB[],
@@ -36,78 +35,85 @@ export function getRSVPSForTheNextWeek(
     return null;
   }
 
-  const rsvpsForTheNextWeek = tournamentsToRegister.filter(tournament => !tournament.rsvp_required || tournament.max_players !== 0).map((tournament, index) => {
-    const tournamentDayIndex = days.indexOf(tournament.day);
-    const date = getCurrentDate(
-      getCurrentDate().getTime() +
-        1000 * 60 * 60 * 24 * (tournamentDayIndex - today),
-    );
-    const dayOfTheWeek = getDayOfTheWeek(date.getTime());
-    const stringDate = date.toISOString().slice(0, 10);
+  const rsvpsForTheNextWeek = tournamentsToRegister
+    .filter(
+      (tournament) => !tournament.rsvp_required || tournament.max_players !== 0,
+    )
+    .map((tournament, index) => {
+      const tournamentDayIndex = days.indexOf(tournament.day);
+      const date = getCurrentDate(
+        getCurrentDate().getTime() +
+          1000 * 60 * 60 * 24 * (tournamentDayIndex - today),
+      );
+      const dayOfTheWeek = getDayOfTheWeek(date.getTime());
+      const stringDate = date.toISOString().slice(0, 10);
 
-    const tournamentMaxPlayers = tournament.max_players;
-    const tournamentCurrentRegisteredPlayers = tournament.rsvpForToday;
-    const placesLeft =
-      tournamentMaxPlayers - tournamentCurrentRegisteredPlayers;
+      const tournamentMaxPlayers = tournament.max_players;
+      const tournamentCurrentRegisteredPlayers = tournament.rsvpForToday;
+      const placesLeft =
+        tournamentMaxPlayers - tournamentCurrentRegisteredPlayers;
 
-    const isPlayerRsvpForDate = Boolean(
-      player.rsvps.find(
-        (r) =>
-          new Date(r.date).toISOString().slice(0, 10) === stringDate &&
-          r.tournamentId === tournament.id,
-      ),
-    );
+      const isPlayerRsvpForDate = Boolean(
+        player.rsvps.find(
+          (r) =>
+            new Date(r.date).toISOString().slice(0, 10) === stringDate &&
+            r.tournamentId === tournament.id,
+        ),
+      );
 
-    // @ts-ignore
-    let text = ` ${TRANSLATIONS[dayOfTheWeek]} - ${tournament.name}   `;
-    let boldText = '';
-    if (!tournament.rsvp_required) {
-      text += '(אין צורך ברישום)';
-    } else {
-      if (tournamentCurrentRegisteredPlayers >= tournamentMaxPlayers) {
-        text += '(אין יותר מקום)';
-      } else if (placesLeft <= 20) {
-        text += `(נשארו ${placesLeft} מקומות אחרונים)`;
-      }
-      if (isPlayerPage) {
-        boldText = isPlayerRsvpForDate
-          ? 'אתה רשום לטורניר זה'
-          : ' אינך רשום לטורניר';
+      // @ts-ignore
+      let text = ` ${TRANSLATIONS[dayOfTheWeek]} - ${tournament.name}   `;
+      let boldText = '';
+      const registrationNeeded = tournament.rsvp_required;
+      if (!tournament.rsvp_required) {
+        text += '(אין צורך ברישום)';
       } else {
-        boldText = isPlayerRsvpForDate
-          ? ' השחקן רשום לטורניר'
-          : ' השחקן אינו רשום לטורניר';
+        if (tournamentCurrentRegisteredPlayers >= tournamentMaxPlayers) {
+          text += '(אין יותר מקום)';
+        } else if (placesLeft <= 20) {
+          text += `(נשארו ${placesLeft} מקומות אחרונים)`;
+        }
+        if (isPlayerPage) {
+          boldText = isPlayerRsvpForDate
+            ? 'אתה רשום לטורניר זה'
+            : ' אינך רשום לטורניר';
+        } else {
+          boldText = isPlayerRsvpForDate
+            ? ' השחקן רשום לטורניר'
+            : ' השחקן אינו רשום לטורניר';
+        }
       }
-    }
 
-    const item = (
-      <div key={tournament.id} className="tournament_rsvp_line">
-        {tournament.rsvp_required ? (
-          tournament.max_players === 0 ? (
-            ''
-          ) : (
-            <RSVPButton
-              isPlayerPage={isPlayerPage}
-              disabled={
-                tournamentCurrentRegisteredPlayers >= tournamentMaxPlayers
-              }
-              player={player}
-              stringDate={stringDate}
-              text={text}
-              boldText={boldText}
-              tournamentId={tournament.id}
-            />
-          )
-        ) : (
-          <div style={{ display: 'flex' }}>
-            {text}
+      if (!isPlayerPage) {
+        return (
+          <div key={tournament.id} className="tournament_rsvp_line">
+            {tournament.rsvp_required ? (
+              tournament.max_players === 0 ? (
+                ''
+              ) : (
+                <RSVPButton
+                  isPlayerPage={isPlayerPage}
+                  disabled={
+                    tournamentCurrentRegisteredPlayers >= tournamentMaxPlayers
+                  }
+                  player={player}
+                  stringDate={stringDate}
+                  text={text}
+                  boldText={boldText}
+                  tournamentId={tournament.id}
+                />
+              )
+            ) : (
+              <div style={{ display: 'flex' }}>{text}</div>
+            )}
           </div>
-        )}
-      </div>
-    );
+        );
+      }
 
-    return isPlayerPage ? <BlurFade delay={index * 0.6}><div className="user-tournament-rsvp-item">{item}</div></BlurFade> : item;
-  });
+
+      return <PlayerTournamentRegistration key={tournament.id} dayOfTheWeek={dayOfTheWeek} tournament={tournament} stringDate={stringDate} index={index} player={player} isPlayerRsvpForDate={isPlayerRsvpForDate}/>
+
+    });
 
   return rsvpsForTheNextWeek;
 }

@@ -4,13 +4,13 @@ import React from 'react';
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import { getRSVPSForTheNextWeek } from '@/app/lib/clientUtils';
 
-export default function PlayerPageRegistrationSection({
+const PlayerPageRegistrationSection = ({
   player,
   thisWeekTournaments,
 }: {
   player: PlayerDB;
   thisWeekTournaments: TournamentDB[];
-}) {
+})=> {
   const rsvpsForTheNextWeek = getRSVPSForTheNextWeek(
     thisWeekTournaments,
     player,
@@ -27,7 +27,7 @@ export default function PlayerPageRegistrationSection({
           <div className="rtl" style={{ textAlign: 'center' }}>
             <u>טורנירי השבוע הקרוב</u>
           </div>
-          <div>{rsvpsForTheNextWeek}</div>
+          <div className="user-tournament-rsvps">{rsvpsForTheNextWeek}</div>
         </>) : (<div className="rtl" style={{ textAlign: 'center' }}>
           <u>אין טורנירים נוספים השבוע</u>
         </div>)}
@@ -36,3 +36,5 @@ export default function PlayerPageRegistrationSection({
     </div>
   );
 }
+
+export default PlayerPageRegistrationSection;
