@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import {
- ArrowTurnDownLeftIcon, BanknotesIcon,
+ ArrowDownLeftIcon, BanknotesIcon,
    ClockIcon, UsersIcon
 } from '@heroicons/react/24/outline';
 import { usePathname } from 'next/navigation';
@@ -263,7 +263,7 @@ const [pending, setPending] = React.useState(false);
               }}
             >
               <div style={{ display: 'flex' }}>
-                <ArrowTurnDownLeftIcon
+                <ArrowDownLeftIcon
                   style={{ width: 20, marginLeft: 6 }}
                 />
                 <b>רישום</b>
