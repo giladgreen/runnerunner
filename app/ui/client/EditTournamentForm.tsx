@@ -223,6 +223,76 @@ export default function EditTournamentForm({
             </div>
           </div>
         </div>
+
+        {/* phase_length */}
+        <div className="mb-4">
+          <label
+            htmlFor="phase_length"
+            className="mb-2 block text-sm font-medium"
+            style={{ textAlign: 'right' }}
+          >
+            משך שלב
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="phase_length"
+                name="phase_length"
+                type="number"
+                min={0}
+                defaultValue={tournament.phase_length}
+                placeholder=" משך שלב"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="phase_length-error"
+              />
+            </div>
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <div id="phase_length-error" aria-live="polite" aria-atomic="true">
+              {state?.errors?.phase_length &&
+                state?.errors.phase_length.map((error: string) => (
+                  <div className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+
+
+        {/* last_phase_for_rebuy */}
+        <div className="mb-4">
+          <label
+            htmlFor="last_phase_for_rebuy"
+            className="mb-2 block text-sm font-medium"
+            style={{ textAlign: 'right' }}
+          >
+            שלב אחרון לכניסה נוספת
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="last_phase_for_rebuy"
+                name="last_phase_for_rebuy"
+                type="number"
+                min={0}
+                defaultValue={tournament.last_phase_for_rebuy}
+                placeholder=" שלב אחרון לכניסה נוספת"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                aria-describedby="last_phase_for_rebuy-error"
+              />
+            </div>
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <div id="last_phase_for_rebuy-error" aria-live="polite" aria-atomic="true">
+              {state?.errors?.last_phase_for_rebuy &&
+                state?.errors.last_phase_for_rebuy.map((error: string) => (
+                  <div className="mt-2 text-sm text-red-500" key={error}>
+                    {error}
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+
         {/* max_players */}
         <div className="rsvp-section mb-4">
           <label

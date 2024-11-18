@@ -101,6 +101,8 @@ export type State = {
     re_buy?: string[];
     max_players?: string[];
     rsvp_required?: string[];
+    phase_length?: string[];
+    last_phase_for_rebuy?: string[];
   };
   message?: string | null;
 };
@@ -1167,6 +1169,8 @@ export async function updateTournament(
     re_buy: z.coerce.number(),
     max_players: z.coerce.number(),
     initial_stack: z.coerce.number(),
+    phase_length: z.coerce.number(),
+    last_phase_for_rebuy: z.coerce.number(),
     rsvp_required: z.coerce.boolean(),
     name: z.string(),
     start_time: z.string(),
@@ -1180,6 +1184,8 @@ export async function updateTournament(
     rsvp_required: formData.get('rsvp_required'),
     initial_stack: formData.get('initial_stack'),
     start_time: formData.get('start_time'),
+    phase_length: formData.get('phase_length'),
+    last_phase_for_rebuy: formData.get('last_phase_for_rebuy'),
   });
 
   if (!validatedFields.success) {
@@ -1193,7 +1199,7 @@ export async function updateTournament(
     };
   }
 
-  const { name, buy_in, re_buy, max_players, rsvp_required, start_time, initial_stack } =
+  const { name, buy_in, re_buy, max_players, rsvp_required, start_time, initial_stack, last_phase_for_rebuy, phase_length } =
     validatedFields.data;
   const date = getUpdatedAtFormat();
 
@@ -1204,13 +1210,13 @@ export async function updateTournament(
     if (tournamentToUpdate) {
       await sql`
       UPDATE tournaments
-      SET name = ${name}, buy_in = ${buy_in},re_buy = ${re_buy},initial_stack=${initial_stack},start_time=${start_time}, max_players = ${max_players},rsvp_required=${rsvp_required}, updated_at=${date}
+      SET name = ${name}, buy_in = ${buy_in},re_buy = ${re_buy},last_phase_for_rebuy = ${last_phase_for_rebuy},phase_length = ${phase_length},initial_stack=${initial_stack},start_time=${start_time}, max_players = ${max_players},rsvp_required=${rsvp_required}, updated_at=${date}
       WHERE id = ${id}
     `;
       sendEmail(
         TARGET_MAIL,
         'tournaments update',
-        `day:${tournamentToUpdate.day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}, start_time: ${start_time}, initial_stack: ${initial_stack}`,
+        `day:${tournamentToUpdate.day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required}, start_time: ${start_time}, initial_stack: ${initial_stack}, last_phase_for_rebuy: ${last_phase_for_rebuy}, phase_length: ${phase_length} `,
       );
     }
   } catch (error) {
@@ -1237,6 +1243,8 @@ export async function createTournament(
     rsvp_required: z.coerce.boolean(),
     name: z.string(),
     start_time: z.string(),
+    phase_length: z.coerce.number(),
+    last_phase_for_rebuy: z.coerce.number(),
   });
 
   const validatedFields = CreateTournament.safeParse({
@@ -1248,6 +1256,8 @@ export async function createTournament(
     rsvp_required: formData.get('rsvp_required'),
     initial_stack: formData.get('initial_stack'),
     start_time: formData.get('start_time'),
+    phase_length: formData.get('phase_length'),
+    last_phase_for_rebuy: formData.get('last_phase_for_rebuy'),
   });
 
   if (!validatedFields.success) {
@@ -1261,7 +1271,7 @@ export async function createTournament(
     };
   }
 
-  const { day, name, buy_in, re_buy, max_players, rsvp_required, initial_stack, start_time } =
+  const { day, name, buy_in, re_buy, max_players, rsvp_required, initial_stack, start_time, last_phase_for_rebuy, phase_length } =
     validatedFields.data;
 
   try {
@@ -1276,13 +1286,13 @@ export async function createTournament(
         'Saturday',
       ].indexOf(day) + 1;
 
-    await sql`INSERT INTO tournaments (day,name, i, buy_in,re_buy,max_players, rsvp_required, initial_stack, start_time  ) 
-        VALUES (${day},${name},${i},${buy_in},${re_buy},${max_players},${rsvp_required}, ${initial_stack}, ${start_time})`;
+    await sql`INSERT INTO tournaments (day,name, i, buy_in,re_buy,max_players, rsvp_required, initial_stack, start_time, last_phase_for_rebuy, phase_length  ) 
+        VALUES (${day},${name},${i},${buy_in},${re_buy},${max_players},${rsvp_required}, ${initial_stack}, ${start_time}, ${last_phase_for_rebuy}, ${phase_length})`;
 
     sendEmail(
       TARGET_MAIL,
       'new tournaments created',
-      `day:${day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required},  start_time: ${start_time}, initial_stack: ${initial_stack}`,
+      `day:${day}, name: ${name}, buy_in: ${buy_in}, re_buy: ${re_buy}, max_players: ${max_players}, rsvp_required: ${rsvp_required},  start_time: ${start_time}, initial_stack: ${initial_stack}, last_phase_for_rebuy: ${last_phase_for_rebuy}, phase_length: ${phase_length}`,
     );
   } catch (error) {
     console.error('## updateTournament error', error);

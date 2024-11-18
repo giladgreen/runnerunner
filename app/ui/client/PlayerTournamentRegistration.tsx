@@ -26,6 +26,11 @@ const [pending, setPending] = React.useState(false);
   const placesLeft =
     tournamentMaxPlayers - tournamentCurrentRegisteredPlayers;
 
+  const timeBeforeLastRebuy = (tournament.last_phase_for_rebuy + 2 ) * tournament.phase_length;
+  const date = new Date('2024-01-01T' + tournament.start_time + ':00');
+  const endDate = new Date(date.getTime() + (timeBeforeLastRebuy * 60_000));
+  const endDateTime = endDate.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+
   return  <BlurFade key={tournament.id} delay={index * 0.6}>
     <div className="user-tournament-rsvp-item">
       <div
@@ -120,7 +125,7 @@ const [pending, setPending] = React.useState(false);
                 <ClockIcon style={{ width: 20, marginLeft: 6 }} />
                 משך שלב
               </div>
-              15 דקות
+              {tournament.phase_length}  דקות
             </div>
 
             <div
@@ -222,11 +227,13 @@ const [pending, setPending] = React.useState(false);
             >
               <div style={{ display: 'flex' }}>
                 <ClockIcon style={{ width: 20, marginLeft: 6 }} />
-                כניסה מאוחרת, עד שלב עשר
+                כניסה מאוחרת, עד שלב
+               <span style={{ margin: '0 3px' }}> {tournament.last_phase_for_rebuy}</span>
               </div>
 
               <div style={{ display: 'flex' }}>
-                ±22:30
+                ±
+                {endDateTime}
               </div>
 
             </div>

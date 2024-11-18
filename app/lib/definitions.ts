@@ -128,9 +128,10 @@ export type TournamentDB = {
   re_buy: number;
   max_players: number;
   initial_stack: number;
+  phase_length: number;
+  last_phase_for_rebuy: number;
   rsvp_required: boolean;
   day_has_more_then_one: boolean;
-
   rsvpForToday: number;
   todayTournamentMaxPlayers: number;
   arrivedToday: number;
