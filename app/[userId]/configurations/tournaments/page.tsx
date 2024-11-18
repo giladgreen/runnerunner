@@ -177,7 +177,7 @@ export default async function TournamentsSetupPage({
               <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required && tournament.max_players === 0
                   ? '--'
-                  : tournament.initial_stack}
+                  : tournament.initial_stack.toLocaleString()}
               </td>
               <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required && tournament.max_players === 0
