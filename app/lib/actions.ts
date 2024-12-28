@@ -1703,6 +1703,7 @@ async function sendSMS(recipient: string, confirmationCode: string) {
   console.log('### res.status', res.status);
   if (res.status === 200) {
     const text = await res.text();
+    console.log('### SMS response body', text);
     const body = JSON.parse(text);
     if (body.status === 1) {
       console.log('### SMS sent successfully');
