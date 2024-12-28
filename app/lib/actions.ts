@@ -1699,7 +1699,7 @@ async function sendSMS(recipient: string, confirmationCode: string) {
       key: SMS_API_KEY,
       user: senderPhone,
       pass: SMS_PASS,
-      sender: 'RunnerRunner',
+      sender: senderPhone,
       recipient,
       msg,
     }),
