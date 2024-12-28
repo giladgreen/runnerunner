@@ -1689,6 +1689,10 @@ export async function authenticate(
 async function sendSMS(recipient: string, confirmationCode: string) {
   const msg = `קוד האימות שלך הוא: ${confirmationCode}`;
   const url = `https://api.sms4free.co.il/ApiSMS/v2/SendSMS`;
+  console.log('### SMS_API_KEY:' + SMS_API_KEY);
+  console.log('### SMS_PASS:' + SMS_PASS);
+  console.log('### senderPhone:' + senderPhone);
+  console.log('### about to send sms for number:' + recipient+'. confirmationCode:', confirmationCode);
   const res = await fetch(url, {
     method: 'POST',
     body: JSON.stringify({
@@ -1711,7 +1715,7 @@ async function sendSMS(recipient: string, confirmationCode: string) {
     }
   }
 
-  console.log('### SMS sent failed');
+  console.log('### sending sms failed for number:' + recipient);
   return false;
 }
 
