@@ -1694,7 +1694,7 @@ async function sendSMS(recipient: string, confirmationCode: string) {
       key: SMS_API_KEY,
       user: senderPhone,
       pass: SMS_PASS,
-      sender: senderPhone,
+      sender: 'RunnerRunner',
       recipient,
       msg,
     }),
@@ -1729,7 +1729,7 @@ export async function validatePhone(
   await insertIntoPhoneConfirmations(phoneNumber, confirmationCode);
 
   //send sms to phone number with code
-  const smsSent = true;// await sendSMS(phoneNumber, confirmationCode);
+  const smsSent = await sendSMS(phoneNumber, confirmationCode);
 
   if (smsSent){
     console.log('### sms sent. confirmationCode', confirmationCode);
