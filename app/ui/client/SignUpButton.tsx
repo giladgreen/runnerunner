@@ -23,6 +23,7 @@ export default function SignUpButton({
     );
   }
 
+
   return (
     <div
       style={{
