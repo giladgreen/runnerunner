@@ -280,6 +280,7 @@ async function getPhoneConfirmationCode(phoneNumber: string) {
   return results.rows[0];
 }
 
+
 async function getPlayerByPhoneNumber(phoneNumber: string) {
   const playersResult = await sql<PlayerDB>`SELECT * FROM players AS P 
 JOIN (SELECT phone_number, sum(change) AS balance FROM history WHERE phone_number = ${phoneNumber} AND (type = 'credit_to_other' OR type ='credit' OR type ='prize') GROUP BY phone_number) AS H
