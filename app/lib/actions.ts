@@ -1699,10 +1699,9 @@ async function sendSMS(recipient: string, confirmationCode: string) {
       key: SMS_API_KEY,
       user: senderPhone,
       pass: SMS_PASS,
-      sender: senderPhone,
+      sender: 'Runner',
       recipient,
       msg,
-      Unknown: 'RunnerRunner'
     }),
   });
   console.log('### res.status', res.status);
