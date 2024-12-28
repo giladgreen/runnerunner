@@ -1,11 +1,11 @@
 'use client';
-import SignUpForm from '@/app/ui/client/SignUpForm';
+import CodeValidationForm from '@/app/ui/client/CodeValidationForm';
 import GeneralFormWrapper from '@/app/ui/client/GeneralFormWrapper';
 
-export default function SignUpPage() {
+export default function CodeValidationPage() {
   return (
     <GeneralFormWrapper>
-      <SignUpForm />
+      <CodeValidationForm />
     </GeneralFormWrapper>
   );
 }

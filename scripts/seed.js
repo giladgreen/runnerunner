@@ -108,6 +108,26 @@ async function seedTournaments(client) {
   }
 }
 
+async function seedPhoneConfirmations(client) {
+  try {
+    // Create the "phone_confirmations" table if it doesn't exist
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS phone_confirmations (
+        id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+        phone_number TEXT NOT NULL,
+        confirmation_code TEXT NOT NULL,
+        created_at timestamp NOT NULL DEFAULT now()
+      );
+    `;
+
+    console.log(`Created "phone_confirmations" table`);
+
+    return;
+  } catch (error) {
+    console.error('Error seeding phone_confirmations:', error);
+    throw error;
+  }
+}
 async function seedUsers(client) {
   try {
     // Create the "users" table if it doesn't exist
@@ -120,7 +140,7 @@ async function seedUsers(client) {
         is_admin BOOLEAN DEFAULT FALSE,
         is_worker BOOLEAN DEFAULT FALSE,
         refresh_enabled BOOLEAN DEFAULT FALSE,
-        created_at timestamp NOT NULL DEFAULT now()
+        created_at timestamp NOT NULL DEFAULT now(),
         last_logged_in_at timestamp NOT NULL DEFAULT now()
       );
     `;
@@ -555,6 +575,7 @@ async function seed() {
   const client = await db.connect();
   await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
   console.log('>> db connected');
+  await seedPhoneConfirmations(client);
   await seedUsers(client);
 
   await seedTournaments(client);
@@ -567,9 +588,6 @@ async function seed() {
   await seedImages(client);
   await seedFF(client);
 
-
-
-
   await client.end();
 }
 
@@ -579,7 +597,6 @@ cheat shit
   await client.sql`ALTER TABLE users ADD created_at timestamp DEFAULT now()`;
 
  */
-
 
 function tests() {
   console.log('>> tests seed');

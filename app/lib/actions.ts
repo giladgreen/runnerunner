@@ -30,8 +30,9 @@ import {
   getTodayShortDate,
   getUpdatedAtFormat,
 } from './serverDateUtils';
-import { saveUser } from './cache';
-
+const senderPhone = '0587869910'; // TODO
+const SMS_API_KEY = process.env.SMS_API_KEY;
+const SMS_PASS = process.env.SMS_PASS;
 const TARGET_MAIL = 'green.gilad+runner@gmail.com';
 let clearOldRsvpLastRun = getCurrentDate('2024-06-15T10:00:00.000Z').getTime();
 
@@ -106,6 +107,40 @@ export type State = {
   };
   message?: string | null;
 };
+
+async function getAllFlags(): Promise<FeatureFlagDB[]> {
+  const data = await sql<FeatureFlagDB>`SELECT * FROM feature_flags`;
+  return data.rows;
+}
+
+async function fetchFeatureFlags() {
+  const flagsResult = await getAllFlags();
+
+  const prizesEnabled = Boolean(
+    flagsResult.find((flag) => flag.flag_name === 'prizes')?.is_open,
+  );
+  const rsvpEnabled = Boolean(
+    flagsResult.find((flag) => flag.flag_name === 'rsvp')?.is_open,
+  );
+  const playerRsvpEnabled = Boolean(
+    flagsResult.find((flag) => flag.flag_name === 'player_can_rsvp')?.is_open,
+  );
+  const usePhoneValidation = Boolean(
+    flagsResult.find((flag) => flag.flag_name === 'use_phone_validation')
+      ?.is_open,
+  );
+  const importEnabled = Boolean(
+    flagsResult.find((flag) => flag.flag_name === 'import')?.is_open,
+  );
+
+  return {
+    prizesEnabled,
+    rsvpEnabled,
+    playerRsvpEnabled,
+    usePhoneValidation,
+    importEnabled,
+  };
+}
 
 async function getUserById(userId: string) {
   const resultFromCache = await cache.getUserById(userId);
@@ -221,6 +256,28 @@ async function insertIntoPlayers(
     await cancelTransaction();
     throw e;
   }
+}
+
+async function insertIntoPhoneConfirmations(phoneNumber: string, code: string) {
+  try {
+    await startTransaction();
+    await sql`
+          INSERT INTO phone_confirmations (phone_number, confirmation_code)
+          VALUES (${phoneNumber}, ${code})
+        `;
+
+    await commitTransaction();
+  } catch (e) {
+    await cancelTransaction();
+    throw e;
+  }
+}
+
+async function getPhoneConfirmationCode(phoneNumber: string) {
+  const results = await sql`
+          SELECT * FROM phone_confirmations ORDER BY created_at DESC LIMIT 1`;
+
+  return results.rows[0];
 }
 
 async function getPlayerByPhoneNumber(phoneNumber: string) {
@@ -1199,8 +1256,17 @@ export async function updateTournament(
     };
   }
 
-  const { name, buy_in, re_buy, max_players, rsvp_required, start_time, initial_stack, last_phase_for_rebuy, phase_length } =
-    validatedFields.data;
+  const {
+    name,
+    buy_in,
+    re_buy,
+    max_players,
+    rsvp_required,
+    start_time,
+    initial_stack,
+    last_phase_for_rebuy,
+    phase_length,
+  } = validatedFields.data;
   const date = getUpdatedAtFormat();
 
   try {
@@ -1271,8 +1337,18 @@ export async function createTournament(
     };
   }
 
-  const { day, name, buy_in, re_buy, max_players, rsvp_required, initial_stack, start_time, last_phase_for_rebuy, phase_length } =
-    validatedFields.data;
+  const {
+    day,
+    name,
+    buy_in,
+    re_buy,
+    max_players,
+    rsvp_required,
+    initial_stack,
+    start_time,
+    last_phase_for_rebuy,
+    phase_length,
+  } = validatedFields.data;
 
   try {
     const i =
@@ -1609,24 +1685,116 @@ export async function authenticate(
   }
 }
 
-export async function signUp(
-  user_json_url: string | null,
+async function sendSMS(recipient: string, confirmationCode: string) {
+  const msg = `קוד האימות שלך הוא: ${confirmationCode}`;
+  const url = `https://api.sms4free.co.il/ApiSMS/v2/SendSMS`;
+  const res = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      key: SMS_API_KEY,
+      user: senderPhone,
+      pass: SMS_PASS,
+      sender: senderPhone,
+      recipient,
+      msg,
+    }),
+  });
+  console.log('### res.status', res.status);
+  if (res.status === 200) {
+    const text = await res.text();
+    const body = JSON.parse(text);
+    if (body.status === 1) {
+      console.log('### SMS sent successfully');
+      return true;
+    }
+  }
+
+  console.log('### SMS sent failed');
+  return false;
+}
+
+export async function validatePhone(
   _prevState: string | undefined,
   formData: FormData,
 ): Promise<string | undefined> {
   noStore();
-  let user_phone_number;
-  if (user_json_url) {
-    const response = await fetch(user_json_url, { method: 'Get' });
-    // @ts-ignore
-    user_phone_number = (await response.json()).user_phone_number as string;
-  } else {
-    user_phone_number = formData.get('phone_number') as string;
-  }
+  let user_phone_number = formData.get('phone_number') as string;
 
   const phoneNumber = `${
     user_phone_number.startsWith('0') ? '' : '0'
   }${user_phone_number}`;
+
+  const confirmationCode = `${Math.floor(1000 + Math.random() * 9000)}`;
+
+  await insertIntoPhoneConfirmations(phoneNumber, confirmationCode);
+
+  //send sms to phone number with code
+  const smsSent = true;// await sendSMS(phoneNumber, confirmationCode);
+
+  if (smsSent){
+    console.log('### sms sent. confirmationCode', confirmationCode);
+    redirect(`/code_validation?phone_number=${phoneNumber}`);
+  }else{
+    console.error('## sendSMS failed');
+    redirect(`/phone_validation?error=sms_failed`);
+  }
+
+}
+
+export async function validateCode(
+  _prevState: string | undefined,
+  formData: FormData,
+): Promise<string | undefined> {
+  noStore();
+  let user_input_code = formData.get('code') as string;
+  console.log('### user_input_code', user_input_code);
+
+  let user_phone_number = formData.get('phone_number') as string;
+  const phoneNumber = `${
+    user_phone_number.startsWith('0') ? '' : '0'
+  }${user_phone_number}`;
+
+  console.log('### phoneNumber', phoneNumber);
+  const codeObject = await getPhoneConfirmationCode(phoneNumber);
+  if (!codeObject) {
+    console.log('### no codeObject');
+
+    redirect(`/phone_validation?error=wrong_code`);
+  } else {
+    const code = codeObject.confirmation_code;
+    console.log('### codeObject', codeObject);
+    console.log('### code', code);
+
+    if (code === user_input_code) {
+      redirect(`/signup?phone_number=${phoneNumber}&code=${code}`);
+    } else {
+      redirect(`/phone_validation?error=wrong_code`);
+    }
+  }
+}
+
+export async function signUp(
+  _prevState: string | undefined,
+  formData: FormData,
+): Promise<string | undefined> {
+  noStore();
+  const user_phone_number = formData.get('phone_number') as string;
+  const phoneNumber = `${
+    user_phone_number.startsWith('0') ? '' : '0'
+  }${user_phone_number}`;
+  const code = formData.get('code') as string;
+  const { usePhoneValidation } = await fetchFeatureFlags();
+  if (usePhoneValidation) {
+    const codeObject = await getPhoneConfirmationCode(phoneNumber);
+    if (!codeObject) {
+      console.log('### no codeObject');
+      return 'איראה שגיאה';
+    }
+    const dbCode = codeObject.confirmation_code;
+    if (dbCode !== code) {
+      return 'איראה שגיאה';
+    }
+  }
 
   const password = formData.get('password') as string;
   const username = formData.get('name') as string;
@@ -1955,11 +2123,16 @@ export async function rsvpPlayerForDay(
 ) {
   noStore();
   try {
-    console.log('## calling registerPlayerForDay', phone_number, date, tournamentId, val);
+    console.log(
+      '## calling registerPlayerForDay',
+      phone_number,
+      date,
+      tournamentId,
+      val,
+    );
 
     await registerPlayerForDay(phone_number, date, tournamentId, val);
     console.log('## calling registerPlayerForDay done');
-
   } catch (error) {
     console.error('rsvpPlayerForDay Error:', error);
     return false;

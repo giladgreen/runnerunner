@@ -10,6 +10,7 @@ export default function PlayerPagePlayerCreditHistory({
 }: {
   player: PlayerDB;
 }) {
+  console.log('PlayerPagePlayerCreditHistory');
   return (
     <div className="rtl" style={{ marginTop: 50 }}>
       <hr />

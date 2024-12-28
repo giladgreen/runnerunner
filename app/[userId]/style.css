@@ -4,11 +4,6 @@
   font-weight: bold;
   ext-decoration: underline;
 }
-.sign-up-top-header {
-  padding-left: 20px;
-  font-size: x-large;
-  color: white;
-}
 
 .sign-in-top-header {
   padding-left: 20px;
@@ -487,15 +482,15 @@
   right: -200px;
 }
 
-.user-tournament-rsvps{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: right;
-    margin: 15px;
+.user-tournament-rsvps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: right;
+  margin: 15px;
 }
-.user-tournament-rsvp-item{
+.user-tournament-rsvp-item {
   max-width: 400px;
-  margin:10px;
+  margin: 10px;
   border: 2px solid rgb(0, 112, 243);
   border-radius: 20px;
   padding-right: 10px;
@@ -587,12 +582,12 @@
     margin-bottom: 10px;
     display: flex;
   }
-  .user-tournament-rsvps{
+  .user-tournament-rsvps {
     display: block;
     margin: 0;
   }
-  .user-tournament-rsvp-item{
-    margin-top:10px;
+  .user-tournament-rsvp-item {
+    margin-top: 10px;
     border: 2px solid rgb(0, 112, 243);
     border-radius: 20px;
     padding-right: 10px;

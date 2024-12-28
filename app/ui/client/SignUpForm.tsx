@@ -14,11 +14,13 @@ import React, { useState } from 'react';
 
 export default function SignUpForm() {
   const searchParams = useSearchParams();
-  const user_json_url = searchParams.get('user_json_url');
-  const redirected = Boolean(user_json_url);
-  const signUpWithJsonUrl = signUp.bind(null, user_json_url as string);
-  const [errorMessage, dispatch] = useFormState(signUpWithJsonUrl, undefined);
-  const [password, setPasword] = useState('');
+  const phone_number = searchParams.get('phone_number') ?? '';
+  const readOnlyPhoneNumber = phone_number.length > 0;
+  const code = searchParams.get('code') ?? '';
+  // @ts-ignore
+  const [errorMessage, dispatch] = useFormState(signUp.bind(null), undefined);
+  const [password, setPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState(phone_number);
   const [regulationsApprove, setRegulationsApprove] = useState(false);
   const [marketingApprove, setMarketingApprove] = useState(false);
   const { pending } = useFormStatus();
@@ -33,26 +35,34 @@ export default function SignUpForm() {
           <b>צור חשבון</b>
         </div>
         <div className="w-full">
-          {!redirected && (
-            <div className="mt-4">
-              <label
-                className="mb-3 mt-5 block text-xs font-medium text-gray-900"
-                htmlFor="phone_number"
-              >
-                מספר טלפון
-              </label>
-              <div className="relative">
-                <input
-                  className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                  id="phone_number"
-                  type="text"
-                  name="phone_number"
-                  placeholder="מספר טלפון"
-                  required
-                />
-              </div>
+          <input
+            style={{ visibility: 'hidden', display: 'none' }}
+            id="code"
+            type="text"
+            name="code"
+            value={code}
+          />
+          <div className="mt-4">
+            <label
+              className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+              htmlFor="phone_number"
+            >
+              מספר טלפון
+            </label>
+            <div className="relative">
+              <input
+                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                id="phone_number"
+                type="text"
+                name="phone_number"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="מספר טלפון"
+                required
+                readOnly={readOnlyPhoneNumber}
+              />
             </div>
-          )}
+          </div>
           <div className="mt-4">
             <label htmlFor="name" className="mb-2 block text-sm font-medium">
               שם מלא
@@ -84,7 +94,7 @@ export default function SignUpForm() {
                 name="password"
                 placeholder="בחר סיסמא"
                 value={password}
-                onChange={(e) => setPasword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
               />

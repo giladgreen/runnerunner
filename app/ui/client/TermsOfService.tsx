@@ -1,6 +1,6 @@
 export default async function TermsOfService() {
   return (
-    <div className="terms-of-service" dir="rtl" style={{ overflow: 'scroll' }}>
+    <div className="terms-of-service" dir="rtl" style={{ overflow: 'scroll', paddingTop: 30 }}>
       <p dir="rtl" style={{ color: 'red' }}>
         <strong>
           <span>&nbsp;&nbsp;&nbsp;</span>
