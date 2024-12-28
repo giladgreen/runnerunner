@@ -10,7 +10,7 @@ import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 import Button from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
 import { Checkbox } from 'primereact/checkbox';
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 
 export default function SignUpForm() {
   const searchParams = useSearchParams();
