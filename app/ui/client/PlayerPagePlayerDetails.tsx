@@ -10,16 +10,14 @@ import PlayerPagePlayerCreditHistory from '@/app/ui/client/PlayerPagePlayerCredi
 
 export default function PlayerPagePlayerDetails({
   player,
-  showHistoryData
+  showCreditData
 }: {
   player: PlayerDB;
-  showHistoryData: boolean
+  showCreditData: boolean
 }) {
   const isDefaultImage =
     !player.image_url || player.image_url.includes('default.png');
 
-  console.log('player', player);
-  console.log('PlayerPagePlayerCreditHistory');
   return (
     <div>
       <div
@@ -55,7 +53,7 @@ export default function PlayerPagePlayerDetails({
           >
             {player.phone_number}
           </div>
-          <div>
+          { showCreditData && <div>
             <span style={{ fontSize: 40 }}>קרדיט:</span>
             <b style={{ marginRight: 5 }}>
               {player.balance < 0 ? 'חוב של' : ''}
@@ -69,10 +67,10 @@ export default function PlayerPagePlayerDetails({
             >
               <b> {formatCurrency(Math.abs(player.balance))}</b>
             </span>
-          </div>
+          </div>}
         </div>
       </div>
-      {showHistoryData && <PlayerPagePlayerCreditHistory player={player} />}
+      {showCreditData && <PlayerPagePlayerCreditHistory player={player} />}
     </div>
   );
 }

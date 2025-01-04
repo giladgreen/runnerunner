@@ -119,6 +119,9 @@ async function fetchFeatureFlags() {
   const prizesEnabled = Boolean(
     flagsResult.find((flag) => flag.flag_name === 'prizes')?.is_open,
   );
+  const playersSeeCreditEnabled = Boolean(
+    flagsResult.find((flag) => flag.flag_name === 'players_can_see_credit')?.is_open,
+  );
   const rsvpEnabled = Boolean(
     flagsResult.find((flag) => flag.flag_name === 'rsvp')?.is_open,
   );
@@ -139,6 +142,7 @@ async function fetchFeatureFlags() {
     playerRsvpEnabled,
     usePhoneValidation,
     importEnabled,
+    playersSeeCreditEnabled
   };
 }
 

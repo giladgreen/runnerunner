@@ -1,6 +1,8 @@
+const { kv}  = require('@vercel/kv');
+
 const { db, sql } = require('@vercel/postgres');
 ///SELECT indexname, tablename, indexdef FROM pg_indexes
-
+const local = process.env.LOCAL === 'true';
 const { users, tournaments } = require('./placeholder-data.js');
 const bcrypt = require('bcrypt');
 
@@ -452,6 +454,7 @@ async function seedFF(client) {
       { flag_name: 'prizes', is_open: true },
       { flag_name: 'player_can_rsvp', is_open: true },
       { flag_name: 'use_phone_validation', is_open: true },
+      { flag_name: 'players_can_see_credit', is_open: true },
     ];
 
     await Promise.all(
@@ -466,6 +469,23 @@ async function seedFF(client) {
     return {
       createTable,
     };
+  } catch (error) {
+    console.error('Error seeding feature_flags:', error);
+    throw error;
+  }
+}
+
+async function insertNewFF(client, flagToInsert, initValue) {
+  try {
+
+    await client.sql`INSERT INTO feature_flags (flag_name, is_open)
+        VALUES (${flagToInsert}, ${initValue});`
+
+    console.log(`new flag inserted: ${flagToInsert}`);
+
+    const flags = (await client.sql`SELECT * FROM feature_flags `).rows;
+
+    console.log('## updated flags:', flags);
   } catch (error) {
     console.error('Error seeding feature_flags:', error);
     throw error;
@@ -569,6 +589,14 @@ async function _deletePlayers(client) {
     );
   }
 }
+async function resetFlagsCache() {
+  try {
+    await kv.del(`${local ? 'local-' :''}entity-type-flags`, 'flag');
+    console.log('>> flags cache deleted');
+  } catch (e) {
+    console.error(e);
+  }
+}
 async function seed() {
   console.log('>> main start');
 
@@ -589,6 +617,8 @@ async function seed() {
   await seedFF(client);
 
   await client.end();
+
+  // await resetFlagsCache();
 }
 
 /*

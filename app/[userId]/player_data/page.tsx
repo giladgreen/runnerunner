@@ -21,7 +21,7 @@ export default async function PlayerDataPage({
   return (
     <div>
       <div className="rtl" style={{ marginTop: 20 }}>
-        <PlayerPagePlayerDetails player={player} showHistoryData={false}/>
+        <PlayerPagePlayerDetails player={player} showCreditData={false}/>
       </div>
       <div className="rtl" style={{ marginTop: 20 }}>
         <PlayerRegistrationPage params={{ ...params, isAdminPlayer: true }} />

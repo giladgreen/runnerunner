@@ -7,7 +7,7 @@ export default async function FlagsPage({
 }: {
   params: { userId: string };
 }) {
-  const { rsvpEnabled, playerRsvpEnabled, usePhoneValidation, prizesEnabled } =
+  const { rsvpEnabled, playerRsvpEnabled, usePhoneValidation, prizesEnabled, playersSeeCreditEnabled } =
     await fetchFeatureFlags();
   const user = await fetchUserById(params.userId);
   const isAdmin = user.is_admin;
@@ -65,6 +65,21 @@ export default async function FlagsPage({
                 <UpdateFeatureFlag
                   featureName={'prizes'}
                   currentValue={Boolean(prizesEnabled)}
+                  userId={params.userId}
+                />
+              </td>
+            </tr>
+            <tr
+              key={'PlayersSeeCreditEnabled'}
+              className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+            >
+              <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                <b>Players can See his Credit</b>
+              </td>
+              <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3">
+                <UpdateFeatureFlag
+                  featureName={'players_can_see_credit'}
+                  currentValue={Boolean(playersSeeCreditEnabled)}
                   userId={params.userId}
                 />
               </td>

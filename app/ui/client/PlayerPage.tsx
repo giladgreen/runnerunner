@@ -1,4 +1,4 @@
-import { fetchPlayerByUserId } from '@/app/lib/data';
+import { fetchFeatureFlags, fetchPlayerByUserId } from '@/app/lib/data';
 
 import React from 'react';
 import PlayerPagePlayerDetails from '@/app/ui/client/PlayerPagePlayerDetails';
@@ -9,6 +9,7 @@ export default async function PlayerPage({
 }: {
   params: { userId: string };
 }) {
+  const { playersSeeCreditEnabled } = await fetchFeatureFlags();
   const player = await fetchPlayerByUserId(params.userId);
   if (!player) {
     return <NoPlayerPage />;
@@ -16,7 +17,7 @@ export default async function PlayerPage({
 
   return (
     <div className="rtl" style={{ marginTop: 20 }}>
-      <PlayerPagePlayerDetails player={player} showHistoryData={true}/>
+      <PlayerPagePlayerDetails player={player} showCreditData={playersSeeCreditEnabled}/>
     </div>
   );
 }

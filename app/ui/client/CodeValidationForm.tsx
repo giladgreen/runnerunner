@@ -2,7 +2,6 @@
 import React from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
 import { validateCode } from '@/app/lib/actions';
-import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 import Button from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
 
@@ -34,6 +33,7 @@ export default function CodeValidationForm() {
                 name="code"
                 placeholder="הכנס קוד בעל 4 ספרות"
                 required
+                autoComplete="one-time-code"
               />
             </div>
           </div>

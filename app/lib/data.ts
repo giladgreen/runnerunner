@@ -1150,6 +1150,9 @@ export async function fetchFeatureFlags() {
     const prizesEnabled = Boolean(
       flagsResult.find((flag) => flag.flag_name === 'prizes')?.is_open,
     );
+    const playersSeeCreditEnabled = Boolean(
+      flagsResult.find((flag) => flag.flag_name === 'players_can_see_credit')?.is_open,
+    );
     const rsvpEnabled = Boolean(
       flagsResult.find((flag) => flag.flag_name === 'rsvp')?.is_open,
     );
@@ -1163,14 +1166,16 @@ export async function fetchFeatureFlags() {
     const importEnabled = Boolean(
       flagsResult.find((flag) => flag.flag_name === 'import')?.is_open,
     );
-    methodEnd('fetchFeatureFlags');
-    return {
+    const result = {
       prizesEnabled,
       rsvpEnabled,
       playerRsvpEnabled,
       usePhoneValidation,
       importEnabled,
+      playersSeeCreditEnabled,
     };
+    methodEnd('fetchFeatureFlags');
+    return result;
   } catch (error) {
     console.error('Database Error:', error);
     methodEnd('fetchFeatureFlags with error');
