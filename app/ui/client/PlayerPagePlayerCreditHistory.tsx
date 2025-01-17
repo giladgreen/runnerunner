@@ -12,7 +12,7 @@ export default function PlayerPagePlayerCreditHistory({
 }) {
   console.log('PlayerPagePlayerCreditHistory');
   return (
-    <div className="rtl" style={{ marginTop: 50 }}>
+    <div className="rtl player-page-player-credit-history" style={{ marginTop: 50 }}>
       <hr />
       <TournamentsHistoryTable player={player} />
       <hr />

@@ -36,7 +36,7 @@ export function RedSpinnerButton({
   const { pending } = useFormStatus();
 
   if (pending) {
-    return <Spinner size={33} />;
+    return <Spinner size={33} color="red"/>;
   }
 
   return (

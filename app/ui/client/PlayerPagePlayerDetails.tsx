@@ -1,7 +1,6 @@
 'use client';
 
 import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
-import Image from 'next/image';
 import React from 'react';
 import { PlayerDB } from '@/app/lib/definitions';
 import * as FlowbiteReact from 'flowbite-react';
@@ -21,7 +20,7 @@ export default function PlayerPagePlayerDetails({
   return (
     <div>
       <div
-        className="rtl"
+        className="rtl user-data-page"
         style={{ marginTop: 50, textAlign: 'center', zoom: 1.5 }}
       >
         <div style={{ marginTop: 10 }}>
@@ -49,7 +48,7 @@ export default function PlayerPagePlayerDetails({
           </div>
           <div
             className="truncate font-semibold"
-            style={{ margin: '2px 10px', zoom: 1.4, color: 'blue' }}
+            style={{ margin: '2px 10px', zoom: 1.4, color: 'red' }}
           >
             {player.phone_number}
           </div>

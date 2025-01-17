@@ -15,14 +15,14 @@ export default function TournamentsHistoryTable({
   console.log('## tournamentsData', tournamentsData);
 
   return (
-    <div className="rtl" style={{ marginTop: 30, marginBottom: 20 }}>
+    <div className="rtl" style={{ marginTop: 30, marginBottom: 20, background: 'transparent', color: 'white' }}>
       <div className="rtl" style={{ zoom: 2 }}>
         <u>
           <b>הסטוריית זכיות</b>
         </u>
       </div>
-      <table className="rtl min-w-full text-gray-900 md:table">
-        <thead className="rounded-lg text-left text-sm font-normal">
+      <table className="rtl min-w-full md:table">
+        <thead className="text-left text-sm font-normal">
           <tr>
             <th
               scope="col"
@@ -47,19 +47,20 @@ export default function TournamentsHistoryTable({
             </th>
           </tr>
         </thead>
-        <tbody className="rtl bg-white">
+        <tbody className="rtl">
           {tournamentsData?.map((tournamentData) => (
             <tr
+              style={{ backgroundColor: 'rgba(250,250,250,0.1)' }}
               key={tournamentData.date}
               className="w-full border-b py-1 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
             >
-              <td className="whitespace-nowrap px-1 py-2">
+              <td className="">
                 {tournamentData.date}
               </td>
-              <td className="whitespace-nowrap px-1 py-2">
+              <td className="">
                 {tournamentData.tournament_name}
               </td>
-              <td className="whitespace-nowrap px-1 py-2">
+              <td className="">
                 #{tournamentData.place}
               </td>
             </tr>

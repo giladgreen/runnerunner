@@ -22,16 +22,14 @@ const PlayerPageRegistrationSection = ({
       <div
         className="rtl rsvp-for-next-week"
       >
-        <img src="/runner-big.png"/>
         { (rsvpsForTheNextWeek) ? (<>
-          <div className="rtl" style={{ textAlign: 'center' }}>
+          <div className="rtl" style={{ textAlign: 'center', color: 'white' }}>
             <u>טורנירי השבוע הקרוב</u>
           </div>
           <div className="user-tournament-rsvps">{rsvpsForTheNextWeek}</div>
-        </>) : (<div className="rtl" style={{ textAlign: 'center' }}>
+        </>) : (<div className="rtl" style={{ textAlign: 'center', color: 'white' }}>
           <u>אין טורנירים נוספים השבוע</u>
         </div>)}
-
       </div>
     </div>
   );

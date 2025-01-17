@@ -3,10 +3,13 @@ import React from 'react';
 export default function Spinner({
   size,
   style = {},
+  color = '#2855FF',
 }: {
   size: number;
   style?: any;
+  color?: any;
 }) {
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -21,11 +24,11 @@ export default function Spinner({
         fy=".3125"
         gradientTransform="scale(1.5)"
       >
-        <stop offset="0" stopColor="#2855FF"></stop>
-        <stop offset=".3" stopColor="#2855FF" stopOpacity=".9"></stop>
-        <stop offset=".6" stopColor="#2855FF" stopOpacity=".6"></stop>
-        <stop offset=".8" stopColor="#2855FF" stopOpacity=".3"></stop>
-        <stop offset="1" stopColor="#2855FF" stopOpacity="0"></stop>
+        <stop offset="0" stopColor={color}></stop>
+        <stop offset=".3" stopColor={color} stopOpacity=".9"></stop>
+        <stop offset=".6" stopColor={color} stopOpacity=".6"></stop>
+        <stop offset=".8" stopColor={color} stopOpacity=".3"></stop>
+        <stop offset="1" stopColor={color} stopOpacity="0"></stop>
       </radialGradient>
       <circle
         transform-origin="center"
@@ -54,7 +57,7 @@ export default function Spinner({
         transform-origin="center"
         fill="none"
         opacity=".2"
-        stroke="#2855FF"
+        stroke={color}
         strokeWidth="23"
         strokeLinecap="round"
         cx="100"

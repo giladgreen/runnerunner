@@ -66,10 +66,11 @@ export default async function Layout({
   const showRsvp = rsvpEnabled && playerRsvpEnabled;
 
   return (
-    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-      <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
-      <div className="player-header">
-        <img src="/runner-white-logo.png" width={50} height={50} alt="runner" />
+    <div className="player-pages flex h-screen flex-col md:flex-row md:overflow-hidden">
+      <div className="flex-grow ">{children}</div>
+      <div className="player-header-div">
+        <div style={{color: 'red'}}>.</div>
+        <div className='player-header'>Runner Runner</div>
         <PlayerPageMenu
           showRsvp={showRsvp}
           prizesEnabled={prizesEnabled}

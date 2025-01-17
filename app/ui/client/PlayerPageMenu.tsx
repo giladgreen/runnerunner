@@ -84,13 +84,13 @@ export default function PlayerPageMenu({
               );
             })}
           <div
-            style={{ marginTop: 50, marginRight: 10 }}
+            style={{ marginTop: 50, marginRight: 10, cursor: 'pointer' }}
             onClick={() => {
               signout();
             }}
             className="flex"
           >
-            <ArrowRightOnRectangleIcon style={{ maxHeight: 30 }} />
+            <ArrowRightOnRectangleIcon style={{ maxHeight: 30, cursor: 'pointer' }} />
             יציאה
           </div>
         </div>

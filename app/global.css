@@ -3,12 +3,130 @@
 @import '@/app/signup/style.css';
 @import '@/app/[userId]/style.css';
 
+.general-page {
+  background-image: url('/full-page-back-with-logo.png');
+  background-size: cover; /* Adjusts the image to cover the entire element */
+  background-position: center; /* Centers the image */
+}
+
+.general-form-wrapper {
+  text-align: right;
+  margin-top: 1vh;
+  margin-left:10vw;
+  margin-right: 10vw;
+  padding: 0;
+
+}
+.general-form-logo{
+  padding: 0 135px;
+  margin-bottom: 35px;
+}
+
+.login-form {
+  color: #f7ffff;
+  border-radius: 15px;
+  background: linear-gradient(to bottom, #3c404b, #131d26);
+  box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.5); /* Adds a shadow with a slight blur */
+
+  padding-top: 10px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-bottom: 25px;
+  height: 55vh;
+
+  .login-input {
+    background-color: #585557 !important;
+    border-color: #777777 !important;
+    text-align: right;
+    color: #aaaaaa;
+    border-radius: 20px;
+  }
+  .login-input-icon{
+    color: #777777;
+  }
+  input::placeholder {
+    text-align: right;
+    color: #f7ffff;
+  }
+
+  .login-form-label{
+    margin-right: 13px;
+    margin-top: 20px;
+  }
+}
+
+.sign-in-button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 40px;
+
+}
+.forgot-password{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  direction: rtl;
+  font-size: 0.8em;
+  margin-top: 5px;
+}
+
+.do-not-have-account-yet{
+  margin-top: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  direction: rtl;
+  font-size: 0.8em;
+  margin-bottom: 7px;
+}
+
+.red-button {
+  direction: rtl !important;
+  background: #FF2222;
+  color: white;
+  padding: 2px 5px;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  border-radius: 20px;
+  font-size: 1.1em;
+  height: 35px;
+}
+
+.regular-button {
+  direction: rtl !important;
+  background: #000088;
+  color: white;
+  padding: 2px 15px;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  border-radius: 10px;
+  font-size: 1em;
+  height: 35px;
+}
+
+.login-error-msg{
+  direction: rtl;
+  color: red;
+  margin-top: 5px;
+}
+
+
 .bold {
   font-weight: bold;
 }
 .terms-of-service {
   margin: 10px;
   max-width: 60%;
+  background: black;
+  color: white;
 }
 .header-h1 {
   margin-top: 10px;
@@ -152,24 +270,17 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 
-.rsvp-for-next-week {
-  margin-top: 20px;
-  border: 4px solid #000072;
-  border-radius: 25px;
-  padding: 30px;
-  font-size: 1.3em;
-
-  img {
-    visibility: hidden;
-  }
-}
-
-.rsvp-for-next-week > img {
-  width: 1px;
-}
 
 .margin-bottom-wide{
   margin-bottom: 25px;
+}
+
+.user-data-page {
+  color: white;
+
+}
+.player-page-player-credit-history {
+  color: white !important;
 }
 
 @media only screen and (max-width: 600px) {
@@ -186,24 +297,75 @@ input[type='number']::-webkit-outer-spin-button {
     zoom: 1.7;
   }
 
-  .rsvp-for-next-week-page {
-    height: 120%;
-    background: #0070f344;
-  }
-
-  .rsvp-for-next-week {
-    margin-top: 45px;
-    border: 2px solid transparent;
-
-    padding: 10px;
-  }
-
-  .rsvp-for-next-week > img {
-    width: 100%;
-    visibility: visible;
-  }
 
   .p-6{
     padding: 0;
   }
 }
+
+@media only screen and (max-width: 600px) {
+  .general-page {
+    background-image: url('/back.png');
+    background-size: cover; /* Adjusts the image to cover the entire element */
+    background-position: center; /* Centers the image */
+  }
+  .general-form-wrapper{
+    margin-top: 14vh;
+    margin-left:10vw;
+    margin-right: 10vw;
+    padding: 0;
+  }
+  .general-form-logo {
+    padding: 0 35px;
+    margin-bottom: 35px;
+  }
+
+
+  .login-form {
+    border-radius: 15px;
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: 15px;
+    height: 40vh;
+
+    .login-input {
+      border-radius: 20px;
+    }
+
+    input::placeholder {
+
+    }
+
+    .login-form-label{
+      margin-right: 13px;
+      margin-top: 1px;
+    }
+  }
+
+  .sign-in-button{
+    margin-top: 22px;
+  }
+  .forgot-password{
+    font-size: 0.8em;
+    margin-top: 3px;
+  }
+
+  .do-not-have-account-yet{
+    margin-top: 25px;
+    font-size: 0.8em;
+    margin-bottom: 4px;
+  }
+
+  .red-button{
+    border-radius: 20px;
+    font-size: 1.1em;
+  }
+
+  .login-error-msg{
+    margin-top: 5px;
+  }
+}
+
+
+

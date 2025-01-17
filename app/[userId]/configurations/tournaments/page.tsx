@@ -121,9 +121,10 @@ export default async function TournamentsSetupPage({
           </tr>
         </thead>
         <tbody className="bg-white">
-          {tournaments?.map((tournament) => (
+          {tournaments?.map((tournament, index) => (
             <tr
               key={tournament.id}
+              style={{ background: index % 2 === 0 ? '#f9f9f9' : 'white' }}
               className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
             >
               <td className="cellular smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">

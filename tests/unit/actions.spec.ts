@@ -102,7 +102,7 @@ describe('actions', () => {
           });
 
           // act
-          await signUp(null, 'prevState', formData);
+          await signUp('prevState', formData);
 
           // assert
           const usersAfterSignup = await getAllUsers();
@@ -202,7 +202,7 @@ describe('actions', () => {
           process.env.LOCAL = 'true';
 
           // act
-          await signUp(null, 'prevState', formData);
+          await signUp('prevState', formData);
 
           const formData2 = getFormData({
             phone_number: PHONE,
@@ -210,7 +210,7 @@ describe('actions', () => {
             name: 'israel israeli',
             marketing_approve: 'on',
           });
-          const secondTryResult = await signUp(null, 'prevState', formData2);
+          const secondTryResult = await signUp('prevState', formData2);
           // assert
           expect(secondTryResult).toEqual(undefined);
         },

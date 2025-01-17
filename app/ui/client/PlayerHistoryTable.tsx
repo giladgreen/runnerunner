@@ -76,7 +76,7 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
           );
         })}
       </div>
-      <table className="rtl hidden min-w-full text-gray-900 md:table">
+      <table className="rtl hidden min-w-full md:table">
         <thead className="rtl rounded-lg text-left text-sm font-normal ">
           <tr>
             <th
@@ -124,7 +124,7 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
             </th>
           </tr>
         </thead>
-        <tbody className="rtl bg-white">
+        <tbody className="rtl">
           {historyLogs?.map((log) => (
             <tr
               key={player.id}
