@@ -128,8 +128,8 @@ export default function OpenSetPrizesCreditModalButton({
         onClick={() => {
           setShow(true);
         }}
-        className="pointer"
-        style={{ justifyContent: 'center', color: 'blue', marginLeft: 30 }}
+        className="pointer link-color"
+        style={{ justifyContent: 'center', marginLeft: 30 }}
       >
         <u> הגדר שווי קרדיט </u>
       </div>

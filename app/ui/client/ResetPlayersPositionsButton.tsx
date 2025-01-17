@@ -24,10 +24,9 @@ export default function ResetPlayersPositionsButton({
         onClick={() => {
           setShow(true);
         }}
-        className="pointer"
+        className="pointer link-color"
         style={{
           justifyContent: 'center',
-          color: 'blue',
           marginLeft: 0,
           marginBottom: 20,
         }}

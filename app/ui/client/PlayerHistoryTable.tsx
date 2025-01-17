@@ -37,13 +37,7 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
           return (
             <div
               key={log.id}
-              style={{
-                width: '100%',
-                padding: 20,
-                border: '1px solid gray',
-                borderRadius: 10,
-                marginBottom: 10,
-              }}
+              className="history-table-log"
             >
               <div className="flex ">
                 <div style={{ marginLeft: 3 }}> שינוי:</div>

@@ -41,15 +41,7 @@ export default function DeletePositionButton({
       />
       <button
         type="submit"
-        style={{
-          background: '#6666CCCC',
-          color: 'white',
-          width: 30,
-          height: 30,
-          borderRadius: 50,
-          textAlign: 'center',
-          cursor: 'pointer',
-        }}
+        className="delete-position-button"
       >
         #{player.position}
       </button>

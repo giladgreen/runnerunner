@@ -65,18 +65,7 @@ export default function PlayerPageMenu({
                   }}
                   key={link.name}
                   href={link.href}
-                  style={{
-                    marginTop: 10,
-                    color: 'white',
-                    display: 'flex',
-                    background:
-                      pathname === link.href
-                        ? 'rgba(255,255,255,0.2)'
-                        : 'transparent',
-                    padding: 10,
-                    borderRadius: 10,
-                    marginLeft: 8,
-                  }}
+                  className={`player-menu-item ${pathname === link.href ? 'player-menu-item-current' : ''}`}
                 >
                   <LinkIcon className="w-6" style={{ margin: '0 4px' }} />
                   <div>{link.name}</div>

@@ -29,7 +29,6 @@ export default function DeletePrizeInfoButton({
       >
         <button
           className="my-button delete-prize-button"
-          style={{ background: 'orange' }}
         >
           {text}
         </button>

@@ -62,14 +62,14 @@ function SetGivePrizeForm({
 
   const prizeWorthMoreWarning =
     selectedPrize && selectedPrize?.credit > creditWorth ? (
-      <div style={{ color: 'red', marginLeft: 6, marginTop: 7 }}>
+      <div className="error-message-color" style={{ marginLeft: 6, marginTop: 7 }}>
         {' '}
         * שווי הפרס גבוה משווי הקרדיט ב {formatCurrency(diff)}{' '}
       </div>
     ) : null;
   const creditWorthMoreWarning =
     selectedPrize && selectedPrize?.credit < creditWorth ? (
-      <div style={{ color: 'red', marginLeft: 6, marginTop: 7 }}>
+      <div className="error-message-color" style={{  marginLeft: 6, marginTop: 7 }}>
         {' '}
         * שווי הקרדיט גבוהה משווי הפרס ב {formatCurrency(diff)}{' '}
       </div>
@@ -167,7 +167,7 @@ function SetGivePrizeForm({
               {selectedPrize && (
                 <div className="flex">
                   <div style={{ marginLeft: 6 }}> פרס שנבחר:</div>
-                  <div style={{ fontWeight: 'bold', zoom: 1.2 }}>
+                  <div className="bold" style={{ zoom: 1.2 }}>
                     <b>{selectedPrize?.name} </b>
                   </div>
                 </div>
@@ -254,7 +254,7 @@ function SetGivePrizeForm({
 
               {creditWorth < 1 && (
                 <span
-                  className="mb-2 block text-sm font-medium"
+                  className="mb-2 block text-sm font-medium error-message-color"
                   style={{ textAlign: 'right', color: 'red' }}
                 >
                   * ערך חיובי בלבד

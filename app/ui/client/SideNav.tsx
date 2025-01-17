@@ -14,7 +14,7 @@ export default async function SideNav({ userId }: { userId: string }) {
   const homepage = `/${userId}`;
   return (
     <div className="fixed-side-nav rtl flex h-full flex-col px-3 py-4 md:px-2">
-      <Link className="rounded-md bg-blue-600" href={homepage}>
+      <Link className="rounded-md icon-background" href={homepage}>
         <div className="cellular" style={{ padding: 10 }}>
           <img
             src="/runner-white-logo.png"
@@ -35,11 +35,7 @@ export default async function SideNav({ userId }: { userId: string }) {
       </Link>
 
       <div
-        style={{
-          padding: 5,
-          color: 'rgb(47, 111, 235)',
-          textAlign: 'right',
-        }}
+        className="user-logged-in"
       >
         <span style={{ color: 'black' }}>מחובר כ: </span>
         <b> {user.name ?? user.phone_number}</b>

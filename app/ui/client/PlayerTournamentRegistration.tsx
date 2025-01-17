@@ -11,6 +11,8 @@ import { BookmarkIcon, BookmarkSlashIcon, CircleStackIcon } from '@heroicons/rea
 import { rsvpPlayerForDay } from '@/app/lib/actions';
 import Spinner from '@/app/ui/client/Spinner';
 
+//TODO: extract all style into classes
+
 const PlayerTournamentRegistration= ({
                                                        tournament,
                                                        stringDate,
@@ -40,16 +42,7 @@ const [pending, setPending] = React.useState(false);
       >
         {/* day and hour */}
         <div
-          style={{
-            width: '100%',
-            alignItems: 'right',
-            textAlign: 'right',
-            fontSize: 13,
-            paddingRight: 10,
-            paddingLeft: 10,
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
+          className="tournament-data"
         >
                 <span>
                   {' '}

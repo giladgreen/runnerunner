@@ -494,6 +494,10 @@
   margin-right: -60px;
 }
 .delete-prize-button {
+  background: orange;
+}
+.delete-tournament-button {
+  background: white;
 }
 .edit-prize-link {
 }
@@ -547,6 +551,11 @@
     color: black;
     padding: 30px;
     font-size: 1.3em;
+
+    .header {
+      color: white;
+      text-align: center;
+    }
   }
 
   .rsvp-for-next-week > img {
@@ -612,7 +621,7 @@
   z-index: 2000;
   width: 200px;
   height: 100vh;
-  background: linear-gradient(to bottom, #660000, #cc2222);
+  background: linear-gradient(to bottom, var(--red-dark), var(--red));
   color: white;
   position: fixed;
   right: 0;
@@ -648,6 +657,16 @@
   border-radius: 20px;
   padding-right: 10px;
   background: white;
+
+  .tournament-data {
+    width: 100%;
+    text-align: right;
+    font-size: 13px;
+    padding-right: 10px;
+    padding-left: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 @media only screen and (max-width: 600px) {

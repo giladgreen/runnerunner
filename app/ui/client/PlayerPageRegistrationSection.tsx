@@ -23,11 +23,11 @@ const PlayerPageRegistrationSection = ({
         className="rtl rsvp-for-next-week"
       >
         { (rsvpsForTheNextWeek) ? (<>
-          <div className="rtl" style={{ textAlign: 'center', color: 'white' }}>
+          <div className="rtl header" >
             <u>טורנירי השבוע הקרוב</u>
           </div>
           <div className="user-tournament-rsvps">{rsvpsForTheNextWeek}</div>
-        </>) : (<div className="rtl" style={{ textAlign: 'center', color: 'white' }}>
+        </>) : (<div className="rtl header" >
           <u>אין טורנירים נוספים השבוע</u>
         </div>)}
       </div>

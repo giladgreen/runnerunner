@@ -3,6 +3,22 @@
 @import '@/app/signup/style.css';
 @import '@/app/[userId]/style.css';
 
+:root {
+  --white: #f7ffff;
+  --white-dark: #f9f9f9;
+  --red: #b62230;
+  --red-dark: #861220;
+  --grey-light: #777777;
+  --grey: #3c404b;
+  --grey-dark: #131d26;
+  --black: #222222;
+  --grey-placeholder: #a1a1a1;
+}
+
+.login-input-icon{
+  color: var(--grey-light);
+}
+
 .general-page {
   background-image: url('/full-page-back-with-logo.png');
   background-size: cover; /* Adjusts the image to cover the entire element */
@@ -23,9 +39,9 @@
 }
 
 .login-form {
-  color: #f7ffff;
+  color: var(--white);
   border-radius: 15px;
-  background: linear-gradient(to bottom, #3c404b, #131d26);
+  background: linear-gradient(to bottom, var(--grey),var(--grey-dark) );
   box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.5); /* Adds a shadow with a slight blur */
 
   padding-top: 10px;
@@ -35,25 +51,26 @@
   height: 55vh;
 
   .login-input {
-    background-color: #585557 !important;
-    border-color: #777777 !important;
+    background-color: var(--grey-light) !important;
+    border-color: var(--grey-light) !important;
     text-align: right;
-    color: #aaaaaa;
+    color: var(--white);
     border-radius: 20px;
   }
   .login-input-icon{
-    color: #777777;
+    color: var(--white);
   }
-  input::placeholder {
-    text-align: right;
-    color: #f7ffff;
-  }
-
   .login-form-label{
     margin-right: 13px;
     margin-top: 20px;
   }
 }
+
+.login-form input::placeholder {
+  text-align: right;
+  color: var(--grey-placeholder) !important;
+}
+
 
 .sign-in-button{
   display: flex;
@@ -86,8 +103,8 @@
 
 .red-button {
   direction: rtl !important;
-  background: #FF2222;
-  color: white;
+  background: var(--red);
+  color: var(--white);
   padding: 2px 5px;
   display: flex !important;
   justify-content: center !important;
@@ -101,7 +118,7 @@
 .regular-button {
   direction: rtl !important;
   background: #000088;
-  color: white;
+  color: var(--white);
   padding: 2px 15px;
   display: flex !important;
   justify-content: center !important;
@@ -114,7 +131,7 @@
 
 .login-error-msg{
   direction: rtl;
-  color: red;
+  color: var(--red);
   margin-top: 5px;
 }
 
@@ -126,7 +143,7 @@
   margin: 10px;
   max-width: 60%;
   background: black;
-  color: white;
+  color: var(--white);
 }
 .header-h1 {
   margin-top: 10px;
@@ -269,31 +286,29 @@ input[type='number']::-webkit-outer-spin-button {
   width: 100%;
 }
 
-
-
 .margin-bottom-wide{
   margin-bottom: 25px;
 }
 
 .user-data-page {
-  color: white;
+  color: var(--white);
 
 }
 .image-border {
-  border: 1px solid black;
+  border: 1px solid var(--black);
 }
 .player-page-player-credit-history {
-  color: white !important;
+  color: var(--white) !important;
 }
 .TermsPageBackground {
-  background: black;
+  background: var(--black);
 }
 .PlayerDataPageBackground {
-  background: black;
+  background: var(--black);
 }
 .admin-menu-item {
   margin-top: 10px;
-  color: white;
+  color: var(--white);
   display: flex;
   padding: 10px;
   border-radius: 10px;
@@ -309,25 +324,55 @@ input[type='number']::-webkit-outer-spin-button {
 .link-color {
   color: blue;
 }
+.history-table-log {
+  width: 100%;
+  padding: 20px;
+  border: 1px solid gray;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.player-menu-item {
+  margin-top: 10px;
+  color: var(--white);
+  display: flex;
+  padding: 10px;
+  border-radius: 10px;
+  margin-left: 8px;
+  background: transparent;
+}
+
+.player-menu-item-current {
+    background: rgba(255,255,255,0.2);
+}
+
 .auto-player-pay-button {
-  border: 1px solid #e2e8f0;
-  border-radius: 3px;
+  border: 1px solid var(--white);
   margin-right: 0;
   margin-top: 0;
   width: 60px;
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-left-radius: 4px;
-  border-top-left-radius: 4px;
+  border-radius: 4px 0 0 4px;
   padding-top: 5px;
   padding-right: 10px;
 }
+.delete-position-button {
+  background: #6666CCCC;
+  color: var(--white);
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+  text-align: center;
+  cursor: pointer;
+}
+.error-message-color {
+  color: var(--red);
+}
 .table-row-background-color1 {
-  background: white;
+  background: var(--white);
 }
 
 .table-row-background-color2 {
-  background: #f9f9f9;
+  background: var(--white-dark);
 }
 
 .link-wrapper {

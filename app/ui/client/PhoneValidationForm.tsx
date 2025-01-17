@@ -32,10 +32,10 @@ export default function PhoneValidationForm() {
             <b>אימות מספר טלפון</b>
           </label>
           {error === 'wrong_code' && (
-            <div style={{ color: 'red' }}>האימות נכשל, נסה שנית</div>
+            <div className="error-message-color" >האימות נכשל, נסה שנית</div>
           )}
           {error === 'sms_failed' && (
-            <div style={{ color: 'red' }}>
+            <div className="error-message-color" >
               לא ניתן היה לשלוח את sms, בדקו שנית את המספר
             </div>
           )}

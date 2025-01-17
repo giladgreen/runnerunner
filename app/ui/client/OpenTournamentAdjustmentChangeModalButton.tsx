@@ -29,9 +29,7 @@ export default function OpenTournamentAdjustmentChangeModalButton({
         <span className="sr-only">הכנס</span>
         <div
           title="הכנס"
-          style={{
-            textAlign: 'center',
-          }}
+          style={{ textAlign: 'center' }}
         >
           <b>
             <div>שינוי ידני של הסכומים</div>

@@ -22,8 +22,8 @@ export default function DeleteTournamentButton({
         }}
       >
         <button
-          className="my-button delete-prize-button"
-          style={{ padding: 8, background: 'white' }}
+          className="my-button delete-tournament-button"
+          style={{ padding: 8 }}
         >
           <TrashIcon className="w-5" />
         </button>

@@ -101,7 +101,7 @@ export default function PrizesTable({
             >
               <Link href={`/${userId}/configurations/prizes/${prize.id}/edit`}>
                 <b>
-                  <u className="cellular" style={{ color: 'blue' }}>
+                  <u className="cellular link-color" >
                     {prize.name}
                   </u>
                 </b>
