@@ -41,7 +41,8 @@ export default async function PrizesPage({
     <div className="rtl">
       <a
         href={`/${params.userId}/configurations/prizes`}
-        style={{ marginTop: -15, color: 'blue' }}
+        className="link-color"
+        style={{ marginTop: -15 }}
       >
         <u>הגדרות פרסים</u>
       </a>

@@ -31,13 +31,14 @@ export default function CreateTournamentForm({
   return (
     <form action={dispatch}>
       <div
-        className="rtl rounded-md bg-gray-50 p-4 md:p-6"
-        style={{ textAlign: 'right' }}
+        className="rtl rounded-md bg-gray-50 p-4 md:p-6 align-text-right"
+
+
       >
         <label
           htmlFor="day"
-          className="mb-2 block text-sm font-medium"
-          style={{ textAlign: 'right' }}
+          className="mb-2 block text-sm font-medium align-text-right"
+
         >
           יום
         </label>
@@ -132,8 +133,8 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="name"
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
+
           >
             שם
           </label>
@@ -164,8 +165,8 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="start_time"
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
+
           >
             שעת התחלה
           </label>
@@ -196,8 +197,8 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="initial_stack"
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
+
           >
             ערימה התחלתית
           </label>
@@ -229,8 +230,8 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="buy_in"
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
+
           >
             עלות כניסה
           </label>
@@ -262,8 +263,8 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="re_buy"
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
+
           >
             עלות כניסה נוספת
           </label>
@@ -296,8 +297,8 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="phase_length"
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
+
           >
             משך שלב
           </label>
@@ -330,8 +331,8 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="last_phase_for_rebuy"
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
+
           >
             שלב אחרון לכניסה נוספת
           </label>
@@ -364,8 +365,8 @@ export default function CreateTournamentForm({
         <div className="rsvp-section mb-4">
           <label
             htmlFor="max_players"
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
+
           >
             מספר שחקנים מירבי
           </label>

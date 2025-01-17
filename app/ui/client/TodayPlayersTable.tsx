@@ -316,29 +316,29 @@ export default function TodayPlayersTable({
                   <tr>
                     <th
                       scope="col"
-                      className="px-4 py-5 font-medium sm:pl-6"
-                      style={{ textAlign: 'right' }}
+                      className="px-4 py-5 font-medium sm:pl-6 align-text-right"
+
                     >
                       שם
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-5 font-medium"
-                      style={{ textAlign: 'right' }}
+                      className="px-3 py-5 font-medium align-text-right"
+
                     >
                       טלפון
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-5 font-medium"
-                      style={{ textAlign: 'right' }}
+                      className="px-3 py-5 font-medium align-text-right"
+
                     >
                       קרדיט
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-5 font-medium"
-                      style={{ textAlign: 'right' }}
+                      className="px-3 py-5 font-medium align-text-right"
+
                     >
                       הערות
                     </th>
@@ -346,7 +346,7 @@ export default function TodayPlayersTable({
                       <th
                         scope="col"
                         className="px-3 py-5 font-medium"
-                        style={{ textAlign: 'right' }}
+
                       >
                         אישור הגעה
                       </th>
@@ -354,15 +354,15 @@ export default function TodayPlayersTable({
 
                     <th
                       scope="col"
-                      className="px-3 py-5 font-medium"
-                      style={{ textAlign: 'right' }}
+                      className="px-3 py-5 font-medium align-text-right"
+
                     >
                       הגיע
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-5 font-medium"
-                      style={{ textAlign: 'right' }}
+                      className="px-3 py-5 font-medium align-text-right"
+
                     >
                       כניסות
                     </th>
@@ -371,8 +371,8 @@ export default function TodayPlayersTable({
 
                     <th
                       scope="col"
-                      className="relative py-3 pl-6 pr-3"
-                      style={{ textAlign: 'right' }}
+                      className="relative py-3 pl-6 pr-3 align-text-right"
+
                     >
                       <span className="sr-only">עריכה</span>
                     </th>

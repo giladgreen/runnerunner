@@ -33,7 +33,7 @@ export default function UserGuideCreatePlayerPage() {
           width={1000}
           height={1}
           alt="create_player1"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
 
@@ -52,7 +52,7 @@ export default function UserGuideCreatePlayerPage() {
           width={300}
           height={1}
           alt="create_player2"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
 
@@ -72,7 +72,7 @@ export default function UserGuideCreatePlayerPage() {
           width={1000}
           height={1}
           alt="create_player3"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
     </div>

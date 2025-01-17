@@ -17,14 +17,13 @@ import { formatDateToLocal } from '@/app/lib/serverDateUtils';
 function TournamentsLink({ userId }: { userId: string }) {
   return (
     <div
-      className="config-section"
-      style={{ marginBottom: 20, textAlign: 'center', width: '100%' }}
+      className="config-section link-wrapper"
     >
       <a
         href={`/${userId}/configurations/tournaments`}
         className="flex h-10 items-center rounded-lg bg-blue-500 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:bg-blue-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
       >
-        <div style={{ textAlign: 'center', width: '100%' }}>לחץ כאן</div>
+        <div className="link-text">לחץ כאן</div>
       </a>
     </div>
   );
@@ -33,14 +32,13 @@ function TournamentsLink({ userId }: { userId: string }) {
 function PrizesInfoLink({ userId }: { userId: string }) {
   return (
     <div
-      className="config-section"
-      style={{ marginBottom: 20, textAlign: 'center', width: '100%' }}
+      className="config-section link-wrapper"
     >
       <a
         href={`/${userId}/configurations/prizes`}
         className="flex h-10 items-center rounded-lg bg-blue-500 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:bg-blue-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
       >
-        <div style={{ textAlign: 'center', width: '100%' }}>לחץ כאן</div>
+        <div className="link-text">לחץ כאן</div>
       </a>
     </div>
   );
@@ -49,14 +47,13 @@ function PrizesInfoLink({ userId }: { userId: string }) {
 function FeatureFlagsLink({ userId }: { userId: string }) {
   return (
     <div
-      className="config-section"
-      style={{ marginBottom: 20, textAlign: 'center', width: '100%' }}
+      className="config-section link-wrapper"
     >
       <a
         href={`/${userId}/configurations/flags`}
         className="flex h-10 items-center rounded-lg bg-blue-500 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:bg-blue-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
       >
-        <div style={{ textAlign: 'center', width: '100%' }}>לחץ כאן</div>
+        <div className="link-text">לחץ כאן</div>
       </a>
     </div>
   );
@@ -65,14 +62,13 @@ function FeatureFlagsLink({ userId }: { userId: string }) {
 function UserPermissionsLink({ userId }: { userId: string }) {
   return (
     <div
-      className="config-section"
-      style={{ marginBottom: 20, textAlign: 'center', width: '100%' }}
+      className="config-section link-wrapper"
     >
       <a
         href={`/${userId}/configurations/users`}
         className="flex h-10 items-center rounded-lg bg-blue-500 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 active:bg-blue-600 aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
       >
-        <div style={{ textAlign: 'center', width: '100%' }}>לחץ כאן</div>
+        <div className="link-text">לחץ כאן</div>
       </a>
     </div>
   );

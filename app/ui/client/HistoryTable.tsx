@@ -44,44 +44,44 @@ export default async function HistoryTable({
         <tr>
           <th
             scope="col"
-            className="smaller-on-mobile px-1 py-3 font-medium"
-            style={{ textAlign: 'right' }}
+            className="smaller-on-mobile px-1 py-3 font-medium align-text-right"
+
           >
             סכום
           </th>
           <th
             scope="col"
-            className="smaller-on-mobile px-1 py-3 font-medium"
-            style={{ textAlign: 'right' }}
+            className="smaller-on-mobile px-1 py-3 font-medium align-text-right"
+
           >
             סוג
           </th>
           <th
             scope="col"
-            className="smaller-on-mobile px-1 py-3 font-medium"
-            style={{ textAlign: 'right' }}
+            className="smaller-on-mobile px-1 py-3 font-medium align-text-right"
+
           >
             הערה
           </th>
 
           <th
             scope="col"
-            className="smaller-on-mobile px-1 py-3 font-medium"
-            style={{ textAlign: 'right' }}
+            className="smaller-on-mobile px-1 py-3 font-medium align-text-right"
+
           >
             קרדיט נוכחי
           </th>
           <th
             scope="col"
-            className="smaller-on-mobile px-3 py-5 font-medium"
-            style={{ textAlign: 'right' }}
+            className="smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
           >
             תאריך
           </th>
           <th
             scope="col"
-            className="wide-screen smaller-on-mobile px-3 py-5 font-medium"
-            style={{ textAlign: 'right' }}
+            className="wide-screen smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
           >
             עודכן על ידי
           </th>
@@ -103,14 +103,14 @@ export default async function HistoryTable({
               {formatCurrency(log.change)}
             </td>
             <td
-              className="smaller-on-mobile whitespace-nowrap px-1 py-2"
-              style={{ textAlign: 'right' }}
+              className="smaller-on-mobile whitespace-nowrap px-1 py-2 align-text-right"
+
             >
               {formatType(log.type)}
             </td>
             <td
-              className="smaller-on-mobile whitespace-nowrap px-1 py-2"
-              style={{ textAlign: 'right' }}
+              className="smaller-on-mobile whitespace-nowrap px-1 py-2 align-text-right"
+
             >
               {log.note}
             </td>
@@ -125,14 +125,14 @@ export default async function HistoryTable({
               {formatCurrency(log.currentBalance)}
             </td>
             <td
-              className="smaller-on-mobile-smaller whitespace-nowrap py-3 pl-6 pr-3"
-              style={{ textAlign: 'right' }}
+              className="smaller-on-mobile-smaller whitespace-nowrap py-3 pl-6 pr-3 align-text-right"
+
             >
               {formatDateToLocal(log.updated_at)}, {getTime(log.updated_at)}
             </td>
             <td
-              className="wide-screen whitespace-nowrap px-3 py-3"
-              style={{ textAlign: 'right' }}
+              className="wide-screen whitespace-nowrap px-3 py-3 align-text-right"
+
             >
               {log.updated_by}
             </td>

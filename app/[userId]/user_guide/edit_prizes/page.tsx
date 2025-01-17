@@ -34,7 +34,7 @@ export default function UserGuideEditPrizesPage() {
           width={800}
           height={1}
           alt="edit_prizes1"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
 
@@ -54,7 +54,7 @@ export default function UserGuideEditPrizesPage() {
           width={800}
           height={1}
           alt="edit_prizes2"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
 
@@ -74,7 +74,7 @@ export default function UserGuideEditPrizesPage() {
           width={500}
           height={1}
           alt="edit_prizes3"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
     </div>

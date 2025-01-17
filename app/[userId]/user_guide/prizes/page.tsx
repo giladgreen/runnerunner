@@ -36,7 +36,7 @@ export default function UserGuidePrizesPage() {
           width={200}
           height={1}
           alt="prizes1"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -55,7 +55,7 @@ export default function UserGuidePrizesPage() {
           width={500}
           height={1}
           alt="prizes2"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -74,7 +74,7 @@ export default function UserGuidePrizesPage() {
           width={900}
           height={1}
           alt="prizes3"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
 
@@ -93,7 +93,7 @@ export default function UserGuidePrizesPage() {
           width={300}
           height={1}
           alt="prizes4"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
 
@@ -125,7 +125,7 @@ export default function UserGuidePrizesPage() {
           width={1000}
           height={1}
           alt="prizes5"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -144,7 +144,7 @@ export default function UserGuidePrizesPage() {
       <div className="rtl flex " style={{ marginTop: 20 }}>
         על מנת ליצור ולערוך את הפרסים ושוויים, הסתכלו ב
         <Link href={link}>
-          <u style={{ color: 'blue' }}> יצירה ועריכת פרסים</u>
+          <u className="link-color"> יצירה ועריכת פרסים</u>
         </Link>
       </div>
     </div>

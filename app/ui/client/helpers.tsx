@@ -137,7 +137,7 @@ export async function getFinalTablePlayersContent(
           className="wide-screen"
           style={{ width: '40%', textAlign: 'center', margin: '0 20px' }}
         >
-          <div style={{ textAlign: 'right' }}>
+          <div className="align-text-right" >
             <Image
               src={finalTablePlayers[0].image_url}
               className="zoom-on-hover"
@@ -151,7 +151,7 @@ export async function getFinalTablePlayersContent(
               height={120}
               alt={`${finalTablePlayers[0].name}'s profile picture`}
             />
-            <b style={{ textAlign: 'right' }}>{finalTablePlayers[0].name}</b>
+            <b className="align-text-right" >{finalTablePlayers[0].name}</b>
           </div>
         </div>
       )}

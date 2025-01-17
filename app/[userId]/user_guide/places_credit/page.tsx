@@ -28,7 +28,7 @@ export default function UserGuidePlacesCreditPage() {
           width={900}
           height={10}
           alt="places_credit1"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -46,7 +46,7 @@ export default function UserGuidePlacesCreditPage() {
           width={400}
           height={10}
           alt="places_credit2"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -77,7 +77,7 @@ export default function UserGuidePlacesCreditPage() {
           width={400}
           height={10}
           alt="places_credit3"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div

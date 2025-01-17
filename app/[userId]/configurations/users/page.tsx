@@ -68,30 +68,26 @@ export default async function UsersPage({
           <tr>
             <th
                 scope="col"
-                className="thin-column px-4 py-5 font-medium sm:pl-6"
-                style={{textAlign: 'right'}}
+                className="thin-column px-4 py-5 font-medium sm:pl-6 align-text-right "
             >
               שם
             </th>
             <th
                 scope="col"
-                className="thin-column px-4 py-5 font-medium sm:pl-6"
-                style={{textAlign: 'right'}}
+                className="thin-column px-4 py-5 font-medium sm:pl-6 align-text-right "
             >
               מספר טלפון
             </th>
 
             <th
                 scope="col"
-                className="px-4 py-5 font-medium"
-                style={{textAlign: 'right'}}
+                className="px-4 py-5 font-medium align-text-right "
             >
               אדמין
             </th>
             <th
                 scope="col"
-                className="px-4 py-5 font-medium"
-                style={{textAlign: 'right'}}
+                className="px-4 py-5 font-medium align-text-right "
             >
               מתפעל
             </th>
@@ -102,8 +98,7 @@ export default async function UsersPage({
             ></th>
             <th
                 scope="col"
-                className="thin-column px-4 py-5 font-medium sm:pl-6"
-                style={{textAlign: 'right'}}
+                className="thin-column px-4 py-5 font-medium sm:pl-6align-text-right  "
             >
               נראה לאחרונה
             </th>
@@ -113,12 +108,10 @@ export default async function UsersPage({
           {users?.map((user) => (
               <tr
                   key={user.id}
-                  style={{textAlign: 'right'}}
-                  className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                  className="align-text-right  w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
               >
                 <td
-                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3"
-                    style={{textAlign: 'right'}}
+                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3 align-text-right "
                 >
                   {user.name}
                 </td>
@@ -126,35 +119,27 @@ export default async function UsersPage({
                     className="thin-column whitespace-nowrap py-3 pl-6 pr-3"
                     style={{textAlign: 'center'}}
                 >
-                  {/*{user.phone_number === 'alice' ? (*/}
-                  {/*    <span style={{color: '#888888'}}> חסוי</span>*/}
-                  {/*) : (*/}
-                  {/*    user.phone_number*/}
-                  {/*)}*/}
                   {user.phone_number}
                 </td>
 
                 <td
-                    className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3"
-                    style={{textAlign: 'right'}}
+                    className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3 align-text-right "
                 >
                   <UpdateAdminUser user={user} userId={params.userId}/>
                 </td>
                 <td
-                    className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3"
-                    style={{textAlign: 'right'}}
+                    className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3 align-text-right "
                 >
                   <UpdateWorkerUser user={user} userId={params.userId}/>
                 </td>
 
                 <td
-                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3"
-                    style={{textAlign: 'right'}}
+                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3 align-text-right "
                 >
                   <DeleteUser user={user} userId={params.userId}/>
                 </td>
                 <td
-                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3"
+                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3  "
                     style={{textAlign: 'center'}}
                 >
                   <Tooltip placement={'left'} content={formatDateToLocalWithTime(user.last_logged_in_at)} color="primary">

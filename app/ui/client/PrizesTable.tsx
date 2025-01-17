@@ -92,12 +92,12 @@ export default function PrizesTable({
         {orderedPrizes?.map((prize) => (
           <tr
             key={prize.id}
-            style={{ textAlign: 'right' }}
-            className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+
+            className="align-text-right w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
           >
             <td
-              className=" smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3"
-              style={{ textAlign: 'right' }}
+              className="align-text-right smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3"
+
             >
               <Link href={`/${userId}/configurations/prizes/${prize.id}/edit`}>
                 <b>
@@ -110,14 +110,14 @@ export default function PrizesTable({
             </td>
 
             <td
-              className=" smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3"
-              style={{ textAlign: 'right' }}
+              className="align-text-right smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3"
+
             >
               {formatCurrency(prize.credit)}
             </td>
             <td
-              className=" smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3"
-              style={{ textAlign: 'right' }}
+              className="align-text-right smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3"
+
             >
               {formatDateToLocalWithTime(prize.created_at)}
             </td>

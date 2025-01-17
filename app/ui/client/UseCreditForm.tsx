@@ -131,8 +131,7 @@ export default function UseCreditForm({
 
   return (
     <div
-      className="edit-player-modal-inner-div rtl"
-      style={{ textAlign: 'right' }}
+      className="edit-player-modal-inner-div rtl align-text-right"
     >
       <form action={dispatch} className="form-control">
         <div className="form-inner-control  rounded-md p-4 md:p-6">

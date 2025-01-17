@@ -35,7 +35,7 @@ export default function UserGuideCurrentTournamentPage() {
           width={1000}
           height={1}
           alt="general"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -75,7 +75,7 @@ export default function UserGuideCurrentTournamentPage() {
           width={400}
           height={1}
           alt="general"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -93,7 +93,7 @@ export default function UserGuideCurrentTournamentPage() {
           width={400}
           height={1}
           alt="general"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -105,7 +105,7 @@ export default function UserGuideCurrentTournamentPage() {
           width={400}
           height={1}
           alt="general"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -117,7 +117,7 @@ export default function UserGuideCurrentTournamentPage() {
           width={400}
           height={1}
           alt="general"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
     </div>

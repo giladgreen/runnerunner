@@ -28,7 +28,7 @@ export default function UserGuidePlacesPage() {
           width={300}
           height={1}
           alt="places1"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -46,7 +46,7 @@ export default function UserGuidePlacesPage() {
           width={500}
           height={1}
           alt="places2"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -64,7 +64,7 @@ export default function UserGuidePlacesPage() {
           width={900}
           height={1}
           alt="places3"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -82,7 +82,7 @@ export default function UserGuidePlacesPage() {
           width={500}
           height={1}
           alt="places4"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
     </div>

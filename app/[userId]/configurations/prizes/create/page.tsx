@@ -29,8 +29,7 @@ export default function CreateNewPrizesInfoPage({
   return (
     <form action={dispatch}>
       <div
-        className="rtl rounded-md bg-gray-50 p-4 md:p-6"
-        style={{ textAlign: 'right' }}
+        className="rtl rounded-md bg-gray-50 p-4 md:p-6 align-text-right"
       >
         {/* prize name */}
         <div className="mb-4">

@@ -16,7 +16,7 @@ export default function ExportPlayersWithMarketingInfoButton({
   return (
     <>
       <Button
-        style={{ textAlign: 'center', width: '100%' }}
+        className="link-text"
         onClick={() => {
           const todayDate = getTodayDate();
           const data = `name, phone number,
@@ -41,7 +41,7 @@ ${allowed_marketing_players.map((player) => {
           document.body.removeChild(link);
         }}
       >
-        <div style={{ textAlign: 'center', width: '100%' }}>לחץ כאן</div>
+        <div className="link-text">לחץ כאן</div>
       </Button>
       <input
         type="file"

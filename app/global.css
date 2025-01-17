@@ -279,10 +279,66 @@ input[type='number']::-webkit-outer-spin-button {
   color: white;
 
 }
+.image-border {
+  border: 1px solid black;
+}
 .player-page-player-credit-history {
   color: white !important;
 }
+.TermsPageBackground {
+  background: black;
+}
+.PlayerDataPageBackground {
+  background: black;
+}
+.admin-menu-item {
+  margin-top: 10px;
+  color: white;
+  display: flex;
+  padding: 10px;
+  border-radius: 10px;
+  margin-left: 8px;
+  background: transparent;
+}
+.admin-menu-item-current {
+  background: rgba(255,255,255,0.2);
+}
+.align-text-right {
+    text-align: right;
+}
+.link-color {
+  color: blue;
+}
+.auto-player-pay-button {
+  border: 1px solid #e2e8f0;
+  border-radius: 3px;
+  margin-right: 0;
+  margin-top: 0;
+  width: 60px;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
+  padding-top: 5px;
+  padding-right: 10px;
+}
+.table-row-background-color1 {
+  background: white;
+}
 
+.table-row-background-color2 {
+  background: #f9f9f9;
+}
+
+.link-wrapper {
+  margin-bottom: 20px;
+  text-align: center;
+  width: 100%;
+}
+.link-text {
+  text-align: center;
+  width: 100%;
+}
 @media only screen and (max-width: 600px) {
   .margin-bottom-wide{
     margin-bottom: 0;

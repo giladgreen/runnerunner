@@ -26,22 +26,22 @@ export default function TournamentsHistoryTable({
           <tr>
             <th
               scope="col"
-              className="px-1 py-3 font-medium"
-              style={{ textAlign: 'right' }}
+              className="px-1 py-3 font-medium align-text-right"
+
             >
               תאריך
             </th>
             <th
               scope="col"
-              className="px-1 py-3 font-medium"
-              style={{ textAlign: 'right' }}
+              className="px-1 py-3 font-medium align-text-right"
+
             >
               טורניר
             </th>
             <th
               scope="col"
-              className="px-1 py-3 font-medium"
-              style={{ textAlign: 'right' }}
+              className="px-1 py-3 font-medium align-text-right"
+
             >
               מקום
             </th>

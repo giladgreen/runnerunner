@@ -96,15 +96,15 @@ function SetGivePrizeForm({
       <form action={dispatch} className="form-control">
         {prizesEnabled ? (
           <label
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
+
           >
             תן פרס/קרדיט לשחקן
           </label>
         ) : (
           <label
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
+
           >
             תן קרדיט לשחקן
           </label>

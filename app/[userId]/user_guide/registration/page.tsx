@@ -47,7 +47,7 @@ export default function UserGuideRegistrationPage() {
           width={1200}
           height={1}
           alt="registration1"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -74,7 +74,7 @@ export default function UserGuideRegistrationPage() {
           width={1200}
           height={1}
           alt="registration2"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -92,7 +92,7 @@ export default function UserGuideRegistrationPage() {
           width={300}
           height={1}
           alt="registration3"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
 
@@ -112,7 +112,7 @@ export default function UserGuideRegistrationPage() {
           width={400}
           height={1}
           alt="registration4"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
 

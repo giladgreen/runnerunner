@@ -125,7 +125,7 @@ export default function ExportPlayersButton({
           saveOtherDataToFile(playersPlaces, prizes, tournaments, worker);
         }}
       >
-        <div style={{ textAlign: 'center', width: '100%' }}>לחץ כאן</div>
+        <div className="link-text">לחץ כאן</div>
       </Button>
       <input
         type="file"

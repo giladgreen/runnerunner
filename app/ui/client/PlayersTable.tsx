@@ -133,36 +133,36 @@ export default function PlayersTable({
                   <tr>
                     <th
                       scope="col"
-                      className="px-4 py-5 font-medium sm:pl-6"
-                      style={{ textAlign: 'right' }}
+                      className="px-4 py-5 font-medium sm:pl-6 align-text-right"
+
                     >
                       <Sort text="שם השחקן" sortTerm="name" />
                     </th>
                     <th
                       scope="col"
-                      className="font-mediu px-3 py-5 "
-                      style={{ textAlign: 'right' }}
+                      className="font-mediu px-3 py-5 align-text-right"
+
                     >
                       <Sort text="טלפון" sortTerm="phone" />
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-5 font-medium "
-                      style={{ textAlign: 'right' }}
+                      className="px-3 py-5 font-medium align-text-right"
+
                     >
                       <Sort text="קרדיט" sortTerm="balance" />
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-5 font-medium "
-                      style={{ textAlign: 'right' }}
+                      className="px-3 py-5 font-medium align-text-right"
+
                     >
                       <Sort text="הערות" sortTerm="notes" />
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-5 font-medium "
-                      style={{ textAlign: 'right' }}
+                      className="px-3 py-5 font-medium align-text-right"
+
                     >
                       <Sort text="תאריך עדכון" sortTerm="updated_at" />
                     </th>
@@ -175,8 +175,8 @@ export default function PlayersTable({
                             <th
                               key={todayTournament.id}
                               scope="col"
-                              className="px-3 py-5 font-medium"
-                              style={{ textAlign: 'right' }}
+                              className="px-3 py-5 font-medium align-text-right"
+
                             >
                               <div>אישור הגעה - {dayOfTheWeekToShow}</div>
                               <div>{todayTournament.name}</div>
@@ -186,8 +186,8 @@ export default function PlayersTable({
 
                     <th
                       scope="col"
-                      className="relative py-3 pl-6 pr-3"
-                      style={{ textAlign: 'right' }}
+                      className="relative py-3 pl-6 pr-3 align-text-right"
+
                     >
                       <span className="sr-only">Edit</span>
                     </th>
@@ -197,8 +197,8 @@ export default function PlayersTable({
                   {players?.map((player) => (
                     <tr
                       key={player.id}
-                      style={{ textAlign: 'right' }}
-                      className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+
+                      className="align-text-right w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                     >
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <Link href={`/${userId}/players/${player.id}/edit`}>

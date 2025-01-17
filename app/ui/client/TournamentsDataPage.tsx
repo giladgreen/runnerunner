@@ -42,11 +42,11 @@ export default async function TournamentsDataPage({
         <div className="text-center">עוד אין מידע להציג</div>
       )}
       {tournamentsFullData.length > 0 && (
-        <div style={{ textAlign: 'right' }}>
+        <div className="align-text-right" >
           {tournamentsFullData.length} טורנירים{' '}
         </div>
       )}
-      <div style={{ textAlign: 'right' }}> {tournamentsRange} </div>
+      <div className="align-text-right" > {tournamentsRange} </div>
       {tournamentsFullData.length > 0 && (
         <table
           className="min-w-full text-gray-900 md:table"
@@ -55,33 +55,33 @@ export default async function TournamentsDataPage({
           <thead className=" rounded-lg text-left text-sm font-normal">
             <tr>
               <th
-                className="smaller-on-mobile px-3 py-5 font-medium"
-                style={{ textAlign: 'right' }}
+                className="smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
               >
                 <b> טורניר</b>
               </th>
               <th
-                className="smaller-on-mobile px-3 py-5 font-medium"
-                style={{ textAlign: 'right' }}
+                className="smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
               >
                 <b>הכנסות</b>
               </th>
               <th
-                className="smaller-on-mobile px-1 py-5 font-medium"
-                style={{ textAlign: 'right' }}
+                className="smaller-on-mobile px-1 py-5 font-medium align-text-right"
+
               >
                 <b> שחקנים</b>
               </th>
               <th
-                className="smaller-on-mobile px-1 py-5 font-medium"
-                style={{ textAlign: 'right' }}
+                className="smaller-on-mobile px-1 py-5 font-medium align-text-right"
+
               >
                 <b>כניסות </b>
               </th>
 
               <th
-                className="smaller-on-mobile px-2 py-5 font-medium"
-                style={{ textAlign: 'right' }}
+                className="smaller-on-mobile px-2 py-5 font-medium align-text-right"
+
               >
                 <b>דירוג </b>
               </th>
@@ -107,8 +107,8 @@ export default async function TournamentsDataPage({
                 >
                   <th className="px-4 py-5 font-medium">
                     <div
-                      className="smaller-on-mobile"
-                      style={{ textAlign: 'right' }}
+                      className="smaller-on-mobile align-text-right"
+
                     >
                       {dateItem.tournamentName}
                     </div>
@@ -142,14 +142,14 @@ export default async function TournamentsDataPage({
                     {dayIncome}
                   </th>
                   <th
-                    className="smaller-on-mobile px-3 py-5 font-medium"
-                    style={{ textAlign: 'right' }}
+                    className="smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
                   >
                     {dateItem.players} שחקנים
                   </th>
                   <th
-                    className="smaller-on-mobile px-3 py-5 font-medium"
-                    style={{ textAlign: 'right' }}
+                    className="smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
                   >
                     {dateItem.entries - dateItem.reentries} כניסות{' '}
                     {dateItem.reentries > 0

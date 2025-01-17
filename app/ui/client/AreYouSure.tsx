@@ -13,8 +13,7 @@ export default function AreYouSure({
 }) {
   return (
     <div
-      className="confirmation-modal-wrapper rtl"
-      style={{ textAlign: 'right' }}
+      className="confirmation-modal-wrapper rtl align-text-right"
     >
       <div className="confirmation-modal">
         <div>

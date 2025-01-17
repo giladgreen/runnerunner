@@ -47,8 +47,7 @@ export function UseCreditForPrizeForm({
   return (
     <form action={dispatch} className="form-control">
       <label
-        className="mb-2 block text-sm font-medium"
-        style={{ textAlign: 'right' }}
+        className="mb-2 block text-sm font-medium align-text-right"
       >
         שימוש בקרדיט לטובת פרס
       </label>
@@ -57,8 +56,7 @@ export function UseCreditForPrizeForm({
         <div className="mb-4">
           <label
             htmlFor="change"
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
           >
             סכום
           </label>
@@ -95,8 +93,7 @@ export function UseCreditForPrizeForm({
         <div className="mb-4">
           <label
             htmlFor="note"
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
           >
             הערה
           </label>
@@ -192,8 +189,7 @@ export function AddToBalanceForm({
       style={{ margin: '5px 0' }}
     >
       <label
-        className="mb-2 block text-sm font-medium"
-        style={{ textAlign: 'right' }}
+        className="mb-2 block text-sm font-medium align-text-right"
       >
         הוספת קרדיט לשחקן
       </label>
@@ -202,8 +198,7 @@ export function AddToBalanceForm({
         <div className="mb-4">
           <label
             htmlFor="change"
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
           >
             סכום
           </label>
@@ -237,8 +232,7 @@ export function AddToBalanceForm({
         <div className="mb-4">
           <label
             htmlFor="note"
-            className="mb-2 block text-sm font-medium"
-            style={{ textAlign: 'right' }}
+            className="mb-2 block text-sm font-medium align-text-right"
           >
             הערה
           </label>

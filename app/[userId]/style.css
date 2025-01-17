@@ -33,6 +33,11 @@
   height: 100vh;
 }
 
+.hidden {
+  visibility: hidden;
+  display: none;
+}
+
 .edit-player-modal-hidden {
   visibility: hidden;
 }

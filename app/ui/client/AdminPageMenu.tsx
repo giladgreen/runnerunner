@@ -71,18 +71,7 @@ export default function AdminPageMenu({
                 }}
                 key={link.name}
                 href={link.href}
-                style={{
-                  marginTop: 10,
-                  color: 'white',
-                  display: 'flex',
-                  background:
-                    pathname === link.href
-                      ? 'rgba(255,255,255,0.2)'
-                      : 'transparent',
-                  padding: 10,
-                  borderRadius: 10,
-                  marginLeft: 8,
-                }}
+                className={`admin-menu-item ${pathname === link.href ? 'admin-menu-item-current':''}`}
               >
                 <LinkIcon className="w-6" style={{ margin: '0 4px' }} />
                 <div>{link.name}</div>

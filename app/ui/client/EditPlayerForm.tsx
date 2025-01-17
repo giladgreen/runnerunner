@@ -264,7 +264,7 @@ export default function EditPlayerForm({
             padding: 10,
           }}
         >
-          <div className="rtl" style={{ textAlign: 'right' }}>
+          <div className="rtl align-text-right" >
             <u>אישורי הגעה לשבוע הקרוב</u>
           </div>
           <div>{rsvpsForTheNextWeek}</div>

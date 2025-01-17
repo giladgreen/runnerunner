@@ -137,19 +137,7 @@ export default function AutoPlayerPayButton({
     <>
       {pending && (
         <div
-          style={{
-            border: '1px solid #e2e8f0',
-            borderRadius: 3,
-            marginRight: 0,
-            marginTop: 0,
-            width: 60,
-            borderBottomRightRadius: 0,
-            borderTopRightRadius: 0,
-            borderBottomLeftRadius: 4,
-            borderTopLeftRadius: 4,
-            paddingTop: 5,
-            paddingRight: 10,
-          }}
+          className="auto-player-pay-button"
         >
           <Spinner size={33} />
         </div>
@@ -165,26 +153,24 @@ export default function AutoPlayerPayButton({
             min={1}
             readOnly
             value={initialAmount}
-            style={{ visibility: 'hidden', display: 'none' }}
+            className="hidden"
           />
           <input
             id="note"
             name="note"
             type="text"
-            className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500 hidden"
             readOnly
             value={initialNote}
-            style={{ visibility: 'hidden', display: 'none' }}
           />
 
           <input
             id="type"
             name="type"
             type="text"
-            className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+            className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500 hidden"
             readOnly
             value={useCredit ? 'credit' : 'cash'}
-            style={{ visibility: 'hidden', display: 'none' }}
           />
 
           <Tooltip content={tooltipContent} color="primary">

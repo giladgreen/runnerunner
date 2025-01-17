@@ -27,7 +27,7 @@ export default function UserGuideTournamentsPage() {
           width={700}
           height={10}
           alt="tournaments1"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -46,7 +46,7 @@ export default function UserGuideTournamentsPage() {
           width={900}
           height={10}
           alt="tournaments2"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -77,7 +77,7 @@ export default function UserGuideTournamentsPage() {
           width={400}
           height={10}
           alt="tournaments3"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
     </div>

@@ -53,7 +53,7 @@ const SearchablePrizesDropdown = ({
   return (
     <div className="dropdown" key="prizeId">
       <div className="control">
-        <div className="selected-value rtl" style={{ textAlign: 'right' }}>
+        <div className="selected-value rtl align-text-right" >
           <input
             ref={inputRef}
             type="text"

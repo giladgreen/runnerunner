@@ -30,7 +30,7 @@ export default function UserGuideEntriesPage() {
           width={1200}
           height={1}
           alt="entries1"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -69,7 +69,7 @@ export default function UserGuideEntriesPage() {
           width={200}
           height={1}
           alt="entries2"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -87,7 +87,7 @@ export default function UserGuideEntriesPage() {
           width={500}
           height={1}
           alt="entries3"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
 
@@ -137,7 +137,7 @@ export default function UserGuideEntriesPage() {
           width={500}
           height={1}
           alt="entries4"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -162,7 +162,7 @@ export default function UserGuideEntriesPage() {
           width={200}
           height={1}
           alt="entries5"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div
@@ -180,7 +180,7 @@ export default function UserGuideEntriesPage() {
           width={500}
           height={1}
           alt="entries6"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
 
@@ -202,7 +202,7 @@ export default function UserGuideEntriesPage() {
           width={200}
           height={1}
           alt="entries7"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div className="flex w-full items-center justify-between ">
@@ -217,7 +217,7 @@ export default function UserGuideEntriesPage() {
           width={800}
           height={1}
           alt="entries8"
-          style={{ border: '1px solid black' }}
+          className="image-border"
         />
       </div>
       <div

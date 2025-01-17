@@ -81,44 +81,44 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
           <tr>
             <th
               scope="col"
-              className="px-4 py-5 font-medium sm:pl-6"
-              style={{ textAlign: 'right' }}
+              className="px-4 py-5 font-medium sm:pl-6 align-text-right"
+
             >
               שינוי
             </th>
             <th
               scope="col"
-              className="px-3 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className="px-3 py-5 font-medium align-text-right"
+
             >
               סוג
             </th>
             <th
               scope="col"
-              className="px-3 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className="px-3 py-5 font-medium align-text-right"
+
             >
               סיבה
             </th>
             <th
               scope="col"
-              className="px-3 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className="px-3 py-5 font-medium align-text-right"
+
             >
               קרדיט מעודכן
             </th>
 
             <th
               scope="col"
-              className="px-3 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className="px-3 py-5 font-medium align-text-right"
+
             >
               עודכן על ידי
             </th>
             <th
               scope="col"
-              className="px-3 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className="px-3 py-5 font-medium align-text-right"
+
             >
               תאריך עדכון
             </th>
@@ -131,8 +131,8 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
               className="rtl w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
             >
               <td
-                className="ltr rsvp-icon whitespace-nowrap px-3 py-3 "
-                style={{ textAlign: 'right' }}
+                className="ltr rsvp-icon whitespace-nowrap px-3 py-3 align-text-right"
+
               >
                 {formatCurrency(log.change)}
               </td>
@@ -143,8 +143,8 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
                 {log.note}
               </td>
               <td
-                className="ltr rsvp-icon whitespace-nowrap px-3 py-3 "
-                style={{ textAlign: 'right' }}
+                className="ltr rsvp-icon whitespace-nowrap px-3 py-3 align-text-right"
+
               >
                 {formatCurrency(log.currentBalance)}
               </td>

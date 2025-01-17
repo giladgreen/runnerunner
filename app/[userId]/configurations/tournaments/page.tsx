@@ -33,88 +33,88 @@ export default async function TournamentsSetupPage({
       </div>
 
       <table
-        className="rtl min-w-full text-gray-900 md:table"
-        style={{ textAlign: 'right' }}
+        className="rtl min-w-full text-gray-900 md:table align-text-right"
+
       >
         <thead
-          className="rounded-lg text-left text-sm font-normal"
-          style={{ textAlign: 'right' }}
+          className="rounded-lg text-left text-sm font-normal align-text-right"
+
         >
           <tr>
             <th
               scope="col"
-              className="smaller-on-mobile px-4 py-5 font-medium sm:pl-6 "
-              style={{ textAlign: 'right' }}
+              className="smaller-on-mobile px-4 py-5 font-medium sm:pl-6 align-text-right"
+
             >
               יום
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-4 py-5 font-medium sm:pl-6 "
-              style={{ textAlign: 'right' }}
+              className="smaller-on-mobile px-4 py-5 font-medium sm:pl-6 align-text-right"
+
             >
               שעה
             </th>
             <th
               scope="col"
-              className=" smaller-on-mobile px-2 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className=" smaller-on-mobile px-2 py-5 font-medium align-text-right"
+
             >
               שם
             </th>
             <th
               scope="col"
-              className=" smaller-on-mobile px-3 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className=" smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
             >
               עלות כניסה
             </th>
             <th
               scope="col"
-              className=" smaller-on-mobile px-3 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className=" smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
             >
               עלות כניסה נוספת
             </th>
             <th
               scope="col"
-              className=" smaller-on-mobile px-3 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className=" smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
             >
               ערימה התחלתית
             </th>
             <th
               scope="col"
-              className=" smaller-on-mobile px-3 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className=" smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
             >
               אורך שלב
             </th>
             <th
               scope="col"
-              className=" smaller-on-mobile px-3 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className=" smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
             >
               מספר שלבים שניתן לבצע כניסה מחדש
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-3 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className="smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
             >
               מספר שחקנים מירבי
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-3 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className="smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
             >
               נדרש אישור הגעה
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-3 py-5 font-medium"
-              style={{ textAlign: 'right' }}
+              className="smaller-on-mobile px-3 py-5 font-medium align-text-right"
+
             >
               <span className="sr-only">ערוך</span>
             </th>
@@ -124,13 +124,12 @@ export default async function TournamentsSetupPage({
           {tournaments?.map((tournament, index) => (
             <tr
               key={tournament.id}
-              style={{ background: index % 2 === 0 ? '#f9f9f9' : 'white' }}
-              className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+              className={`table-row-background-color${ (index % 2) +1}. w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg`}
             >
               <td className="cellular smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
                 <a
                   href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
-                  className="smaller-on-mobile rounded-md border p-2 hover:bg-gray-100"
+                  className="smaller-on-mobile rounded-md border p-2"
                   style={{
                     zoom: 1.2,
                     color: 'blue',

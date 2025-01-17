@@ -41,7 +41,7 @@ export default function CodeValidationForm() {
               </div>
             </div>
             <input
-              style={{ visibility: 'hidden', display: 'none' }}
+              className="hidden"
               id="phone_number"
               type="text"
               name="phone_number"

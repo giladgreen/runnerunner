@@ -37,7 +37,7 @@ export default function DeletePositionButton({
         step="1"
         value={0}
         onChange={() => {}}
-        style={{ visibility: 'hidden', display: 'none' }}
+        className="hidden"
       />
       <button
         type="submit"

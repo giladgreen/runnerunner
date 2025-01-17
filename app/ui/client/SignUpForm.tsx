@@ -37,8 +37,7 @@ export default function SignUpForm() {
 
           <div className="w-full">
             <input
-
-              style={{ visibility: 'hidden', display: 'none' }}
+              className="hidden"
               id="code"
               type="text"
               name="code"

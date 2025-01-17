@@ -12,7 +12,7 @@ export default function ImportPlayersButton() {
   return (
     <>
       <Button onClick={() => setShowConfirmation(true)}>
-        <div style={{ textAlign: 'center', width: '100%' }}>לחץ כאן</div>
+        <div className="link-text">לחץ כאן</div>
       </Button>
       <input
         type="file"
