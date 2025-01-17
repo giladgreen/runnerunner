@@ -523,6 +523,10 @@
     padding: 5px 15px 5px 5px;
     display: flex;
     justify-content: space-between;
+
+    .dot {
+      color: #CC3333;
+    }
     .player-header {
       font-size: 2em;
       font-weight: bold;

@@ -69,7 +69,7 @@ export default async function Layout({
     <div className="player-pages flex h-screen flex-col md:flex-row md:overflow-hidden">
       <div className="flex-grow ">{children}</div>
       <div className="player-header-div">
-        <div style={{color: 'red'}}>.</div>
+        <div className="dot">.</div>
         <div className='player-header'>Runner Runner</div>
         <PlayerPageMenu
           showRsvp={showRsvp}
