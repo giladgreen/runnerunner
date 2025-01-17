@@ -310,7 +310,7 @@ input[type='number']::-webkit-outer-spin-button {
     background-position: center; /* Centers the image */
   }
   .general-form-wrapper{
-    margin-top: 14vh;
+    margin-top: 9vh;
     margin-left:10vw;
     margin-right: 10vw;
     padding: 0;
