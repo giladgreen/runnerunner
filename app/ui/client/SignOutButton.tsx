@@ -76,13 +76,13 @@ export default function SignOutButton({
         className={
           playerScreen
             ? ''
-            : `rtl ${backgroundClass}  flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-100 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3`
+            : `rtl ${backgroundClass}  flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md  p-3 text-sm font-mediummd:flex-none md:justify-start md:p-2 md:px-3`
         }
         style={{ marginTop: playerScreen ? 5 : 0 }}
       >
         <ArrowRightOnRectangleIcon className={playerScreen ? 'w-10' : 'w-6'} />
         {!playerScreen && (
-          <div className="hidden md:block">{disconnectText}</div>
+          <div className=" md:block logout-color">{disconnectText}</div>
         )}
         {!playerScreen && idleTimeout > TIMEOUT_WARNING && idleTimeout > 0 && (
           <div className="hidden md:block" style={{ margin: '0 20px' }}>

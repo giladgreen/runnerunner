@@ -17,7 +17,7 @@ export default async function SideNav({ userId }: { userId: string }) {
       <Link className="rounded-md icon-background" href={homepage}>
         <div className="cellular" style={{ padding: 10 }}>
           <img
-            src="/runner-white-logo.png"
+            src="/logo.png"
             width={50}
             height={50}
             alt="runner"
@@ -25,7 +25,7 @@ export default async function SideNav({ userId }: { userId: string }) {
         </div>
         <div className="wide-screen" style={{ padding: '10px 0' }}>
           <img
-            src="/runner-white-logo.png"
+            src="/logo.png"
             width={166}
             height={166}
             alt="runner"
@@ -40,9 +40,9 @@ export default async function SideNav({ userId }: { userId: string }) {
         <span style={{ color: 'black' }}>מחובר כ: </span>
         <b> {user.name ?? user.phone_number}</b>
       </div>
-      <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
+      <div className="flex grow flex-row space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <NavLinks user={user} prizesEnabled={prizesEnabled} />
-        <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
+        <div className=" h-auto w-full grow rounded-md md:block"></div>
         <div
           className="cellular"
           style={{ width: isRegularUser ? '65vw' : '5vw' }}

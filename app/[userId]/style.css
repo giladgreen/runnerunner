@@ -527,14 +527,14 @@
     left: 0;
     width: 100vw;
     height: 60px;
-    background: #CC3333;
+    background: var(--red);
     color: white;
     padding: 5px 15px 5px 5px;
     display: flex;
     justify-content: space-between;
 
     .dot {
-      color: #CC3333;
+      color: var(--red);
     }
     .player-header {
       font-size: 2em;
@@ -632,7 +632,7 @@
   padding-right: 10px;
 }
 .player_page_menu_header {
-  border-bottom: 2px solid rgb(0, 50, 200);
+  border-bottom: 2px solid var(--white);
   height: 60px;
   padding-top: 16px;
 }

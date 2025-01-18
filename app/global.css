@@ -6,8 +6,9 @@
 :root {
   --white: #f7ffff;
   --white-dark: #f9f9f9;
+  --red-light: #c94455;
   --red: #b62230;
-  --red-dark: #861220;
+  --red-dark: #551220;
   --grey-light: #777777;
   --grey: #3c404b;
   --grey-dark: #131d26;
@@ -25,6 +26,33 @@
   background-position: center; /* Centers the image */
 }
 
+.admin-page-menu {
+  background: var(--red);
+}
+.logout-color{
+    color: var(--black);
+}
+@media only screen and (max-width: 600px) {
+  .admin-page-menu {
+    direction: rtl;
+    padding-right: 10px;
+    color: var(--white);
+  }
+}
+
+
+.side-menu-item{
+  color: var(--black);
+  background-color: var(--red-light);
+}
+.side-menu-item:hover{
+  color: var(--red-dark);
+  background-color: var(--white-dark);
+}
+.side-menu-item-selected {
+  color: var(--white);
+  background-color: var(--black);
+}
 .general-form-wrapper {
   text-align: right;
   margin-top: 1vh;
@@ -261,7 +289,7 @@
 .config-seperator {
   margin: 20px 0;
   height: 20px;
-  background-color: #0070f377;
+  background-color: var(--white);
 }
 .config-section {
   margin: 0 10px;

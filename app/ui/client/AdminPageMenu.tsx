@@ -35,7 +35,7 @@ export default function AdminPageMenu({
   );
 
   return (
-    <div>
+    <div className="admin-page-menu">
       <button
         className=""
         onClick={() => {

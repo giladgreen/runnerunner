@@ -38,12 +38,7 @@ export default async function Layout({
           </div>
           <div className="full-size-fixed-div">
             <div className="player-header ">
-              <img
-                src="/runner-white-logo.png"
-                width={50}
-                height={50}
-                alt="runner"
-              />
+
               <AdminPageMenu
                 userId={params.userId}
                 isAdmin={isAdmin}
