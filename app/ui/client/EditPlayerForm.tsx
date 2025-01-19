@@ -233,7 +233,7 @@ export default function EditPlayerForm({
         <CldUploadWidget
           signatureEndpoint="/api/sign-image"
           options={{ sources: ['local', 'url', 'camera'] }}
-          onUpload={(response) => {
+          onSuccess={(response) => {
             // @ts-ignore
             const url = response?.info?.url;
             setImageUrl(url);
