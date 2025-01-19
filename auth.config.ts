@@ -9,7 +9,6 @@ export const authConfig = {
   callbacks: {
     authorized: async ({ auth, request: { nextUrl } }) => {
       const loggedInUser = auth?.user;
-
       const isLoggedIn = !!loggedInUser;
       let isAdmin: boolean = false;
       let isWorker: boolean = false;
@@ -25,7 +24,9 @@ export const authConfig = {
         //  console.log('## userFromDB', userFromDB)
         userUUID = userFromDB?.id;
       }
-
+      if (userUUID ==='undefined') {
+        return false;
+      }
       if (isLoggedIn && !nextUrl.pathname.includes(userUUID!)) {
         return Response.redirect(
           new URL(
@@ -38,6 +39,8 @@ export const authConfig = {
       if (!isLoggedIn && nextUrl.pathname.length > 40) {
         return false;
       }
+
+
 
       return true;
     },

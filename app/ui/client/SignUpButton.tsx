@@ -11,7 +11,6 @@ export default function SignUpButton({
     return (
       <div
         className="red-button"
-
       >
         <a href="/phone_validation" >
          ליצירת חשבון
@@ -30,8 +29,9 @@ export default function SignUpButton({
       style={{
         color: 'white',
         borderRadius: 8,
-        backgroundColor: 'rgb(37, 137, 254)',
+        backgroundColor: 'var(--red-dark)',
         width: '100%',
+        textAlign: 'center',
         padding: '12px 25px 12px 25px',
       }}
     >

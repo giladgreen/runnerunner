@@ -70,7 +70,7 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
           );
         })}
       </div>
-      <table className="rtl hidden min-w-full md:table">
+      <table className="rtl hide-mobile min-w-full md:table">
         <thead className="rtl rounded-lg text-left  font-normal ">
           <tr>
             <th
