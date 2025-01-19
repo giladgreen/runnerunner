@@ -70,8 +70,8 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
           );
         })}
       </div>
-      <table className="rtl hide-mobile min-w-full md:table">
-        <thead className="rtl rounded-lg text-left  font-normal ">
+      <table className="rtl  min-w-full md:table hide-mobile">
+        <thead className="rtl rounded-lg text-left  font-normal hide-mobile">
           <tr>
             <th
               scope="col"
@@ -118,7 +118,7 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
             </th>
           </tr>
         </thead>
-        <tbody className="rtl">
+        <tbody className="rtl hide-mobile">
           {historyLogs?.map((log) => (
             <tr
               key={player.id}
