@@ -4,7 +4,7 @@ import { authConfig } from './auth.config';
 import { sql } from '@vercel/postgres';
 import type { UserDB } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
-import * as cache from '@/app/lib/cache';
+import * as cache from './app/lib/cache';
 async function updateUserLastLoggedInDate(phone_number: string,){
   await sql<UserDB>`UPDATE users SET last_logged_in_at = now() WHERE phone_number=${phone_number}`;
   const user =  (await sql<UserDB>`SELECT * FROM users WHERE phone_number=${phone_number}`).rows[0];

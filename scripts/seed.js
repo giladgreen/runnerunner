@@ -89,12 +89,12 @@ async function seedTournaments(client) {
         )
         .map(async (tournament) => {
           return client.sql`
-        INSERT INTO tournaments (day, name, buy_in, re_buy, max_players, rsvp_required,i)
+        INSERT INTO tournaments (day, name, buy_in, re_buy, max_players, rsvp_required,i, phase_length, last_phase_for_rebuy, initial_stack,start_time)
         VALUES (${tournament.day}, ${tournament.name}, ${
           tournament.buy_in
         }, ${Math.max(tournament.buy_in - 100, 0)}, ${tournament.max_players},${
           tournament.rsvp_required
-        }, ${tournament.i});
+        }, ${tournament.i}, 20, 10, 75000, '20:00');
       `;
         }),
     );
@@ -456,7 +456,7 @@ async function seedFF(client) {
       { flag_name: 'use_phone_validation', is_open: true },
       { flag_name: 'players_can_see_credit', is_open: true },
     ];
-
+    console.log(`about to insert flags`);
     await Promise.all(
       flagsToInsert
         .filter((flag) => !flags.find((f) => f.flag_name === flag.flag_name))
@@ -465,6 +465,7 @@ async function seedFF(client) {
         VALUES (${flag.flag_name}, ${flag.is_open});`;
         }),
     );
+    console.log(`after insert flags`);
 
     return {
       createTable,
@@ -617,7 +618,7 @@ async function seed() {
   await seedFF(client);
 
   await client.end();
-
+console.log('>> after client.end')
   // await resetFlagsCache();
 }
 

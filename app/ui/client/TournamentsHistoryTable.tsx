@@ -12,7 +12,7 @@ export default function TournamentsHistoryTable({
 
     return <div></div>;
   }
-  console.log('## tournamentsData', tournamentsData);
+
 
   return (
     <div className="rtl" style={{ marginTop: 30, marginBottom: 20, background: 'transparent', color: 'white' }}>

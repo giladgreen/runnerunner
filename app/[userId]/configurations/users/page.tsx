@@ -1,18 +1,15 @@
 import { lusitana } from '@/app/ui/fonts';
 import { Tooltip } from 'flowbite-react';
 import { fetchAllUsers, fetchUserById } from '@/app/lib/data';
-import React, { useState } from 'react';
+import React from 'react';
 import { UserDB } from '@/app/lib/definitions';
 import {
-  deleteTournament,
-  deleteUser,
   updateIsUserAdmin,
   updateIsUserAdminRefreshEnabled,
   updateIsUserWorker
 } from '@/app/lib/actions';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 import { formatDateToLocalWithTime, formatTimePassedSince } from '@/app/lib/serverDateUtils';
-import AreYouSure from '@/app/ui/client/AreYouSure';
 import DeleteUserButton from '@/app/ui/client/DeleteUserButton';
 
 export default async function UsersPage({

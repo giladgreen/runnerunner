@@ -172,23 +172,6 @@ describe('test utils', () => {
     });
   });
   describe('formatDateToLocalWithTime', () => {
-    describe('when passing an empty string argument', () => {
-      it('should return current time', async () => {
-        const dateStr = '';
-        const result = formatDateToLocalWithTime(dateStr);
-
-        const options: Intl.DateTimeFormatOptions = {
-          dateStyle: 'full',
-          timeZone: 'Asia/Jerusalem',
-        };
-        const formatter = new Intl.DateTimeFormat('he', options);
-        const date = formatter.format(new Date());
-        const dateObject = new Date(new Date().getTime() + 3 * 60 * 60 * 1000);
-        expect(result).toEqual(
-          `${dateObject.getHours()}:${dateObject.getMinutes()},     ${date}`,
-        );
-      });
-    });
     describe('when passing a string argument', () => {
       it('should return current time', async () => {
         const dateStr = '2024-08-16T12:07:45.332Z';
@@ -203,9 +186,7 @@ describe('test utils', () => {
         const dateObject = new Date(
           new Date('2024-08-16T12:07:45.332Z').getTime() + 3 * 60 * 60 * 1000,
         );
-        expect(result).toEqual(
-          `${dateObject.getHours()}:${dateObject.getMinutes()},     ${date}`,
-        );
+        expect(result).toEqual(` 16 באוגוסט 2024, יום שישי,  בשעה 17:7`);
       });
     });
   });

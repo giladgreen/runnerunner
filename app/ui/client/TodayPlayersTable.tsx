@@ -213,11 +213,11 @@ export default function TodayPlayersTable({
 
           <div className="inline-block min-w-full align-middle">
             <div className="w-full rounded-lg p-2 md:pt-0">
-              <div className="md:hidden">
+              <div className="md:hidden players-page-card">
                 {players?.map((player: PlayerDB) => (
                   <div
                     key={player.id}
-                    className="full-width w-full rounded-md bg-white"
+                    className="full-width w-full rounded-md"
                     style={{ marginBottom: 20, padding: 4 }}
                   >
                     <div className="flex items-center justify-between border-b pb-4">
