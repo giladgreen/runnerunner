@@ -74,7 +74,7 @@ export default function Card({
           />
         ) : null}
         <h3
-          className={`ml-2 text-center text-sm font-medium ${
+          className={`ml-2 text-center  font-medium ${
             spend ? 'center-text' : ''
           }`}
         >

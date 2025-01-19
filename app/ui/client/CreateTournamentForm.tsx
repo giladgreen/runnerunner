@@ -37,7 +37,7 @@ export default function CreateTournamentForm({
       >
         <label
           htmlFor="day"
-          className="mb-2 block text-sm font-medium align-text-right"
+          className="mb-2 block  font-medium align-text-right"
 
         >
           יום
@@ -133,7 +133,7 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="name"
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
 
           >
             שם
@@ -145,7 +145,7 @@ export default function CreateTournamentForm({
                 name="name"
                 defaultValue={'טורניר שקר כלשהו'}
                 placeholder="שם"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 tournament-edit-input"
                 aria-describedby="name-error"
               />
             </div>
@@ -153,7 +153,7 @@ export default function CreateTournamentForm({
             <div id="name-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.name &&
                 state?.errors.name.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -165,7 +165,7 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="start_time"
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
 
           >
             שעת התחלה
@@ -177,7 +177,7 @@ export default function CreateTournamentForm({
                 name="start_time"
                 defaultValue={'20:00'}
                 placeholder=" שעת התחלה"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 tournament-edit-input"
                 aria-describedby="start_time-error"
               />
             </div>
@@ -185,7 +185,7 @@ export default function CreateTournamentForm({
             <div id="start_time-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.start_time &&
                 state?.errors.start_time.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -197,7 +197,7 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="initial_stack"
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
 
           >
             ערימה התחלתית
@@ -211,7 +211,7 @@ export default function CreateTournamentForm({
                 min={0}
                 defaultValue={75000}
                 placeholder="ערימה התחלתית"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 tournament-edit-input"
                 aria-describedby="buy_in-error"
               />
             </div>
@@ -219,7 +219,7 @@ export default function CreateTournamentForm({
             <div id="initial_stack-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.initial_stack &&
                 state?.errors.initial_stack.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -230,7 +230,7 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="buy_in"
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
 
           >
             עלות כניסה
@@ -244,7 +244,7 @@ export default function CreateTournamentForm({
                 min={0}
                 defaultValue={250}
                 placeholder="כניסה"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 tournament-edit-input"
                 aria-describedby="buy_in-error"
               />
             </div>
@@ -252,7 +252,7 @@ export default function CreateTournamentForm({
             <div id="buy_in-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.buy_in &&
                 state?.errors.buy_in.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -263,7 +263,7 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="re_buy"
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
 
           >
             עלות כניסה נוספת
@@ -277,7 +277,7 @@ export default function CreateTournamentForm({
                 min={0}
                 defaultValue={150}
                 placeholder="כניסה מחדש"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 tournament-edit-input"
                 aria-describedby="re_buy-error"
               />
             </div>
@@ -285,7 +285,7 @@ export default function CreateTournamentForm({
             <div id="re_buy-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.re_buy &&
                 state?.errors.re_buy.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -297,7 +297,7 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="phase_length"
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
 
           >
             משך שלב
@@ -311,7 +311,7 @@ export default function CreateTournamentForm({
                 min={0}
                 defaultValue={15}
                 placeholder="משך שלב"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 tournament-edit-input"
                 aria-describedby="phase_length-error"
               />
             </div>
@@ -319,7 +319,7 @@ export default function CreateTournamentForm({
             <div id="phase_length-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.phase_length &&
                 state?.errors.phase_length.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -331,7 +331,7 @@ export default function CreateTournamentForm({
         <div className="mb-4">
           <label
             htmlFor="last_phase_for_rebuy"
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
 
           >
             שלב אחרון לכניסה נוספת
@@ -345,7 +345,7 @@ export default function CreateTournamentForm({
                 min={0}
                 defaultValue={10}
                 placeholder=" שלב אחרון לכניסה נוספת "
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 tournament-edit-input"
                 aria-describedby="last_phase_for_rebuy-error"
               />
             </div>
@@ -353,7 +353,7 @@ export default function CreateTournamentForm({
             <div id="last_phase_for_rebuy-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.last_phase_for_rebuy &&
                 state?.errors.last_phase_for_rebuy.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -365,7 +365,7 @@ export default function CreateTournamentForm({
         <div className="rsvp-section mb-4">
           <label
             htmlFor="max_players"
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
 
           >
             מספר שחקנים מירבי
@@ -379,16 +379,16 @@ export default function CreateTournamentForm({
                 min={0}
                 defaultValue={100}
                 placeholder="כמות מקסימלית של שחקנים"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                 aria-describedby="max_players-error"
               />
             </div>
-            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 tournament-edit-input" />
 
             <div id="max_players-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.max_players &&
                 state?.errors.max_players.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -396,7 +396,7 @@ export default function CreateTournamentForm({
           </div>
           <label
             htmlFor="rsvp_required"
-            className="mb-2 block text-sm font-medium"
+            className="mb-2 block  font-medium"
             style={{ marginTop: 10, textAlign: 'right' }}
           >
             האם נדרש אישור הגעה
@@ -414,7 +414,7 @@ export default function CreateTournamentForm({
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href={`/${userId}/configurations/tournaments`}
-          className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium  transition-colors "
+          className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors "
         >
           ביטול
         </Link>

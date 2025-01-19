@@ -23,7 +23,7 @@ export default async function TournamentsSetupPage({
 
   return (
     <div
-      className="config-section rtl"
+      className="config-section tournaments-config rtl"
       style={{ textAlign: 'right', marginRight: -40 }}
     >
       <div style={{ textAlign: 'right', marginRight: 50 }}>
@@ -37,7 +37,7 @@ export default async function TournamentsSetupPage({
 
       >
         <thead
-          className="rounded-lg text-left text-sm font-normal align-text-right"
+          className="rounded-lg text-left  font-normal align-text-right"
 
         >
           <tr>
@@ -124,7 +124,7 @@ export default async function TournamentsSetupPage({
           {tournaments?.map((tournament, index) => (
             <tr
               key={tournament.id}
-              className={`table-row-background-color${ (index % 2) +1}. w-full border-b py-3 text-sm last-of-type:border-none `}
+              className={`table-row-background-color${ (index % 2) +1}. w-full border-b py-3  last-of-type:border-none `}
             >
               <td className="cellular smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
                 <a

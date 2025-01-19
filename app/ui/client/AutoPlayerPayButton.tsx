@@ -138,9 +138,22 @@ export default function AutoPlayerPayButton({
     <>
       {pending && (
         <div
-          className="auto-player-pay-button"
+          // className="auto-player-pay-button"
         >
-          <RingLoader color="var(--white)" loading={true} size={35}/>
+          <Button
+            type="submit"
+            color="light"
+            disabled
+            className=""
+            style={{
+              borderBottomRightRadius: 0,
+              borderTopRightRadius: 0,
+              paddingTop: 0,
+              paddingBottom: 4,
+            }}
+          >
+            <RingLoader color="var(--black)" loading={true} size={20}/>
+          </Button>
         </div>
       )}
 
@@ -160,7 +173,7 @@ export default function AutoPlayerPayButton({
             id="note"
             name="note"
             type="text"
-            className="peer block w-full rounded-md border py-2 pl-10 text-sm outline-2  hidden"
+            className="peer block w-full rounded-md border py-2 pl-10  outline-2  hidden"
             readOnly
             value={initialNote}
           />
@@ -169,7 +182,7 @@ export default function AutoPlayerPayButton({
             id="type"
             name="type"
             type="text"
-            className="peer block w-full rounded-md border py-2 pl-10 text-sm outline-2  hidden"
+            className="peer block w-full rounded-md border py-2 pl-10  outline-2  hidden"
             readOnly
             value={useCredit ? 'credit' : 'cash'}
           />

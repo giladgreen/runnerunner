@@ -53,7 +53,7 @@ export default function CreatePlayerForm({
         <div className="my-form rtl rounded-md  p-4 md:p-6">
           {/* player Name */}
           <div className="mb-4">
-            <label htmlFor="name" className="mb-2 block text-sm font-medium">
+            <label htmlFor="name" className="mb-2 block  font-medium">
               שם
             </label>
             <div className="relative">
@@ -64,7 +64,7 @@ export default function CreatePlayerForm({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="הכנס שם"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                 aria-describedby="name-error"
               />
 
@@ -73,7 +73,7 @@ export default function CreatePlayerForm({
             <div id="player-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.name &&
                 state?.errors.name.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -84,7 +84,7 @@ export default function CreatePlayerForm({
           <div className="mb-4">
             <label
               htmlFor="phone_number"
-              className="mb-2 block text-sm font-medium"
+              className="mb-2 block  font-medium"
             >
               מספר טלפון
             </label>
@@ -96,7 +96,7 @@ export default function CreatePlayerForm({
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="הכנס מספר טלפון"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                 aria-describedby="phone_number-error"
               />
 
@@ -105,7 +105,7 @@ export default function CreatePlayerForm({
             <div id="phone_number-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.phone_number &&
                 state?.errors.phone_number.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -114,7 +114,7 @@ export default function CreatePlayerForm({
 
           {/* player initial balance */}
           <div className="mb-4">
-            <label htmlFor="balance" className="mb-2 block text-sm font-medium">
+            <label htmlFor="balance" className="mb-2 block  font-medium">
               קרדיט קיים
             </label>
             <div className="relative mt-2 rounded-md">
@@ -127,7 +127,7 @@ export default function CreatePlayerForm({
                   value={balance}
                   onChange={(e) => setBalance(Number(e.target.value))}
                   placeholder="הכנס קרדיט אם יש"
-                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                   aria-describedby="balance-error"
                 />
                 <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
@@ -135,7 +135,7 @@ export default function CreatePlayerForm({
               <div id="balance-error" aria-live="polite" aria-atomic="true">
                 {state?.errors?.balance &&
                   state?.errors.balance.map((error: string) => (
-                    <div className="mt-2 text-sm text-red-500" key={error}>
+                    <div className="mt-2  text-red-500" key={error}>
                       {error}
                     </div>
                   ))}
@@ -145,7 +145,7 @@ export default function CreatePlayerForm({
 
           {/* note */}
           <div className="mb-4">
-            <label htmlFor="note" className="mb-2 block text-sm font-medium">
+            <label htmlFor="note" className="mb-2 block  font-medium">
               הערה על הקרדיט הקיים
             </label>
             <div className="relative">
@@ -156,7 +156,7 @@ export default function CreatePlayerForm({
                 value={balanceNote}
                 onChange={(e) => setBalanceNote(e.target.value)}
                 placeholder="הערה"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                 aria-describedby="note-error"
               />
 
@@ -165,7 +165,7 @@ export default function CreatePlayerForm({
             <div id="note-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.note &&
                 state?.errors.note.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -174,7 +174,7 @@ export default function CreatePlayerForm({
 
           {/* general notes */}
           <div className="mb-4">
-            <label htmlFor="notes" className="mb-2 block text-sm font-medium">
+            <label htmlFor="notes" className="mb-2 block  font-medium">
               הערות על השחקן
             </label>
             <div className="relative">
@@ -183,7 +183,7 @@ export default function CreatePlayerForm({
                 name="notes"
                 type="text"
                 placeholder="הערות"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                 aria-describedby="note-error"
               />
 
@@ -192,7 +192,7 @@ export default function CreatePlayerForm({
             <div id="notes-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.notes &&
                 state?.errors.notes.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -203,7 +203,7 @@ export default function CreatePlayerForm({
           <div className="mb-4">
             <label
               htmlFor="image_url"
-              className="mb-2 block text-sm font-medium"
+              className="mb-2 block  font-medium"
             >
               כתובת תמונה
             </label>
@@ -213,7 +213,7 @@ export default function CreatePlayerForm({
                 name="image_url"
                 type="text"
                 value={imageUrl}
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                 aria-describedby="image_url-error"
               />
             </div>
@@ -232,7 +232,7 @@ export default function CreatePlayerForm({
         <div className="mt-6 flex justify-end gap-4">
           <Link
             href={`/${userId}/players`}
-            className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium "
+            className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium "
           >
             ביטול
           </Link>
@@ -240,7 +240,7 @@ export default function CreatePlayerForm({
         </div>
       </form>
       <div
-        className="flex h-10 items-center rounded-lg  px-4 text-sm font-medium "
+        className="flex h-10 items-center rounded-lg  px-4  font-medium "
         style={{ width: '130px' }}
       >
         <CldUploadWidget

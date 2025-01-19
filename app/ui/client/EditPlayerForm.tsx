@@ -95,7 +95,7 @@ export default function EditPlayerForm({
         <div className="rtl rounded-md  p-4 md:p-6">
           {/* player name */}
           <div className="mb-4">
-            <label htmlFor="name" className="mb-2 block text-sm font-medium">
+            <label htmlFor="name" className="mb-2 block  font-medium">
               שם השחקן
             </label>
             <div className="relative mt-2 rounded-md">
@@ -105,7 +105,7 @@ export default function EditPlayerForm({
                   name="name"
                   defaultValue={player.name}
                   placeholder="הכנס שם"
-                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                   aria-describedby="name-error"
                 />
               </div>
@@ -113,7 +113,7 @@ export default function EditPlayerForm({
               <div id="name-error" aria-live="polite" aria-atomic="true">
                 {state?.errors?.name &&
                   state?.errors.name.map((error: string) => (
-                    <div className="mt-2 text-sm text-red-500" key={error}>
+                    <div className="mt-2  text-red-500" key={error}>
                       {error}
                     </div>
                   ))}
@@ -124,7 +124,7 @@ export default function EditPlayerForm({
           <div className="mb-4">
             <label
               htmlFor="new_phone_number"
-              className="mb-2 block text-sm font-medium"
+              className="mb-2 block  font-medium"
             >
               מספר הטלפון של השחקן
             </label>
@@ -135,7 +135,7 @@ export default function EditPlayerForm({
                   name="new_phone_number"
                   defaultValue={player.phone_number}
                   placeholder="הכנס מספר"
-                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                   aria-describedby="new_phone_number-error"
                 />
               </div>
@@ -147,7 +147,7 @@ export default function EditPlayerForm({
               >
                 {state?.errors?.new_phone_number &&
                   state?.errors.new_phone_number.map((error: string) => (
-                    <div className="mt-2 text-sm text-red-500" key={error}>
+                    <div className="mt-2  text-red-500" key={error}>
                       {error}
                     </div>
                   ))}
@@ -156,7 +156,7 @@ export default function EditPlayerForm({
           </div>
           {/* player notes */}
           <div className="mb-4">
-            <label htmlFor="notes" className="mb-2 block text-sm font-medium">
+            <label htmlFor="notes" className="mb-2 block  font-medium">
               הערות
             </label>
             <div className="relative mt-2 rounded-md">
@@ -166,7 +166,7 @@ export default function EditPlayerForm({
                   name="notes"
                   defaultValue={player.notes}
                   placeholder="הערות"
-                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                   aria-describedby="notes-error"
                 />
               </div>
@@ -174,7 +174,7 @@ export default function EditPlayerForm({
               <div id="notes-error" aria-live="polite" aria-atomic="true">
                 {state?.errors?.notes &&
                   state?.errors.notes.map((error: string) => (
-                    <div className="mt-2 text-sm text-red-500" key={error}>
+                    <div className="mt-2  text-red-500" key={error}>
                       {error}
                     </div>
                   ))}
@@ -184,7 +184,7 @@ export default function EditPlayerForm({
         </div>
         {/* player image url */}
         <div className="rtl mb-4">
-          <label htmlFor="image_url" className="mb-2 block text-sm font-medium">
+          <label htmlFor="image_url" className="mb-2 block  font-medium">
             כתובת תמונה
           </label>
           <div className="relative">
@@ -194,7 +194,7 @@ export default function EditPlayerForm({
               type="text"
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
-              className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+              className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
               aria-describedby="image_url-error"
             />
           </div>
@@ -219,7 +219,7 @@ export default function EditPlayerForm({
         <div className="mt-6 flex justify-end gap-4">
           <Link
             href={`/${userId}/current_tournament`}
-            className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium "
+            className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium "
           >
             ביטול
           </Link>
@@ -227,7 +227,7 @@ export default function EditPlayerForm({
         </div>
       </form>
       <div
-        className="flex h-10 items-center rounded-lg  px-4 text-sm font-medium  transition-colors "
+        className="flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors "
         style={{ width: '130px' }}
       >
         <CldUploadWidget

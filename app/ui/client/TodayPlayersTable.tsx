@@ -188,7 +188,7 @@ export default function TodayPlayersTable({
         </button>
         <div className="search-input w-full">
           <input
-            className="rtl peer block w-full rounded-md border  py-[9px] pl-10 text-sm outline-2 "
+            className="rtl peer block w-full rounded-md border  py-[9px] pl-10  outline-2 "
             placeholder="חיפוש שחקן"
             onChange={(e) => {
               setQuery(e.target.value);
@@ -231,7 +231,7 @@ export default function TodayPlayersTable({
                             {player.name}
                           </div>
                         </div>
-                        <div className="text-sm ">{player.phone_number}</div>
+                        <div className=" ">{player.phone_number}</div>
                       </div>
                       <div className="flex justify-end gap-3">
                         <div className="flex">
@@ -313,7 +313,7 @@ export default function TodayPlayersTable({
               </div>
               <div className="general-table">
                 <table className=" rtl hide-mobile min-w-full  md:table">
-                  <thead className="table-header rtl rounded-lg text-left text-sm font-normal ">
+                  <thead className="table-header rtl rounded-lg text-left  font-normal ">
                   <tr>
                     <th
                       scope="col"
@@ -372,7 +372,7 @@ export default function TodayPlayersTable({
                   {players?.map((player: PlayerDB) => (
                     <tr
                       key={player.id}
-                      className="table-row  rtl w-full  py-3 text-sm last-of-type:border-none "
+                      className="table-row  rtl w-full  py-3  last-of-type:border-none "
                     >
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="font-large flex items-center gap-3">

@@ -33,7 +33,7 @@ export default function CreateNewPrizesInfoPage({
       >
         {/* prize name */}
         <div className="mb-4">
-          <label htmlFor="name" className="mb-2 block text-sm font-medium">
+          <label htmlFor="name" className="mb-2 block font-medium">
             שם
           </label>
           <div className="relative mt-2 rounded-md">
@@ -42,7 +42,7 @@ export default function CreateNewPrizesInfoPage({
                 id="name"
                 name="name"
                 placeholder="הכנס שם פרס"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10 outline-2 "
                 aria-describedby="name-error"
               />
             </div>
@@ -50,7 +50,7 @@ export default function CreateNewPrizesInfoPage({
             <div id="name-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.name &&
                 state?.errors.name.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2 text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -60,7 +60,7 @@ export default function CreateNewPrizesInfoPage({
 
         {/* prize extra */}
         <div className="mb-4">
-          <label htmlFor="extra" className="mb-2 block text-sm font-medium">
+          <label htmlFor="extra" className="mb-2 block font-medium">
             מידע נוסף
           </label>
           <div className="relative mt-2 rounded-md">
@@ -69,7 +69,7 @@ export default function CreateNewPrizesInfoPage({
                 id="extra"
                 name="extra"
                 placeholder="מידע נוסף אם יש"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10 outline-2 "
                 aria-describedby="extra-error"
               />
             </div>
@@ -77,7 +77,7 @@ export default function CreateNewPrizesInfoPage({
             <div id="extra-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.extra &&
                 state?.errors.extra.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2 text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -87,7 +87,7 @@ export default function CreateNewPrizesInfoPage({
 
         {/* prize credit */}
         <div className="mb-4">
-          <label htmlFor="credit" className="mb-2 block text-sm font-medium">
+          <label htmlFor="credit" className="mb-2 block font-medium">
             שווי בקרדיט
           </label>
           <div className="relative mt-2 rounded-md">
@@ -97,7 +97,7 @@ export default function CreateNewPrizesInfoPage({
                 name="credit"
                 type="number"
                 placeholder="הכנס שווי בקרדיט"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10 outline-2 "
                 aria-describedby="extra-error"
               />
             </div>
@@ -105,7 +105,7 @@ export default function CreateNewPrizesInfoPage({
             <div id="credit-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.credit &&
                 state?.errors.credit.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2 text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -117,7 +117,7 @@ export default function CreateNewPrizesInfoPage({
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href={prevPage}
-          className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium  transition-colors "
+          className="my-button-cancel flex h-10 items-center rounded-lg  px-4 font-medium  transition-colors "
         >
           ביטול
         </Link>

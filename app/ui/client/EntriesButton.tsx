@@ -51,7 +51,7 @@ const formatPlayerEntries = (
           <div />
         )
       }
-      color="success"
+      color="warning"
       contentColor={undefined}
       css={undefined}
       enterDelay={1200}

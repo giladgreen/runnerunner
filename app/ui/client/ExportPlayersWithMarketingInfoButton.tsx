@@ -15,8 +15,8 @@ export default function ExportPlayersWithMarketingInfoButton({
   );
   return (
     <>
-      <Button
-        className="link-text"
+      <button
+        className=""
         onClick={() => {
           const todayDate = getTodayDate();
           const data = `name, phone number,
@@ -41,8 +41,8 @@ ${allowed_marketing_players.map((player) => {
           document.body.removeChild(link);
         }}
       >
-        <div className="link-text">לחץ כאן</div>
-      </Button>
+        <div >לחץ כאן</div>
+      </button>
       <input
         type="file"
         id="fileInput"

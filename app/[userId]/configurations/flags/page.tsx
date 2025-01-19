@@ -25,7 +25,7 @@ export default async function FlagsPage({
 
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <table className="md:table">
-          <thead className="rounded-lg text-left text-sm font-normal">
+          <thead className="rounded-lg text-left  font-normal">
             <tr>
               <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
                 Feature
@@ -38,10 +38,10 @@ export default async function FlagsPage({
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white">
+          <tbody >
             <tr
               key={'PhoneEnabled'}
-              className="w-full border-b py-3 text-sm last-of-type:border-none  "
+              className="w-full border-b py-3  last-of-type:border-none  "
             >
               <td className="whitespace-nowrap py-3 pl-6 pr-3">
                 <b>Phone Validation</b>
@@ -56,7 +56,7 @@ export default async function FlagsPage({
             </tr>
             <tr
               key={'prizesEnabled'}
-              className="w-full border-b py-3 text-sm last-of-type:border-none  "
+              className="w-full border-b py-3  last-of-type:border-none  "
             >
               <td className="whitespace-nowrap py-3 pl-6 pr-3">
                 <b>Prizes</b>
@@ -71,7 +71,7 @@ export default async function FlagsPage({
             </tr>
             <tr
               key={'PlayersSeeCreditEnabled'}
-              className="w-full border-b py-3 text-sm last-of-type:border-none  "
+              className="w-full border-b py-3  last-of-type:border-none  "
             >
               <td className="whitespace-nowrap py-3 pl-6 pr-3">
                 <b>Players can See his Credit</b>
@@ -86,7 +86,7 @@ export default async function FlagsPage({
             </tr>
             <tr
               key={'RSVPEnabled'}
-              className="w-full border-b py-3 text-sm last-of-type:border-none  "
+              className="w-full border-b py-3  last-of-type:border-none  "
             >
               <td className="whitespace-nowrap py-3 pl-6 pr-3">
                 <b>RSVP</b>
@@ -102,7 +102,7 @@ export default async function FlagsPage({
             {rsvpEnabled && (
               <tr
                 key={'userRSVPEnabled'}
-                className="w-full border-b py-3 text-sm last-of-type:border-none  "
+                className="w-full border-b py-3  last-of-type:border-none  "
               >
                 <td className="whitespace-nowrap py-3 pl-6 pr-3">
                   <b>User RSVP</b>

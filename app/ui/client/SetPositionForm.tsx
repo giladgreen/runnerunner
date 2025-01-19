@@ -57,7 +57,7 @@ export default function SetPositionForm({
   return (
     <div className="edit-player-modal-inner-div">
       <form action={setPlayerPositionWithPlayerId} className="form-control">
-        <label className="mb-2 block text-sm font-medium">
+        <label className="mb-2 block  font-medium">
           הגדר מיקום שחקן
         </label>
         <div className="form-inner-control  rounded-md p-4 md:p-6">
@@ -65,7 +65,7 @@ export default function SetPositionForm({
           <div className="mb-4">
             <label
               htmlFor="position"
-              className="mb-2 block text-sm font-medium"
+              className="mb-2 block  font-medium"
             >
               מיקום
             </label>
@@ -81,7 +81,7 @@ export default function SetPositionForm({
                   placeholder="קבע מיקום"
                   value={position}
                   onChange={(e) => setPosition(+e.target.value)}
-                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                   aria-describedby="position-error"
                 />
                 <HashtagIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
@@ -96,7 +96,7 @@ export default function SetPositionForm({
       </form>
 
       {hide && (
-        <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
+        <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
           ביטול
         </button>
 

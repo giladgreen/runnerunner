@@ -76,7 +76,7 @@ export default function SignOutButton({
         className={
           playerScreen
             ? ''
-            : `rtl ${backgroundClass}  flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md  p-3 text-sm font-mediummd:flex-none md:justify-start md:p-2 md:px-3`
+            : `rtl ${backgroundClass}  flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md  p-3  font-mediummd:flex-none md:justify-start md:p-2 md:px-3`
         }
         style={{ marginTop: playerScreen ? 5 : 0 }}
       >

@@ -129,7 +129,7 @@ export default function UseCreditForm({
     }
 
     return (
-      <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
+      <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
         ביטול
       </button>
     );
@@ -138,13 +138,12 @@ export default function UseCreditForm({
   return (
     <div
       className="edit-player-modal-inner-div rtl align-text-right"
-      style={{ background: 'transparent' }}
     >
       <form action={dispatch} className="form-control">
         <div className="form-inner-control  rounded-md p-4 md:p-6">
           {/*  balance change */}
           <div className="mb-4">
-            <label htmlFor="change" className="mb-2 block text-sm font-medium">
+            <label htmlFor="change" className="mb-2 block  font-medium">
               סכום
             </label>
             <div className="relative mt-2 rounded-md">
@@ -156,7 +155,7 @@ export default function UseCreditForm({
                   step="1"
                   min={1}
                   placeholder="סכום"
-                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                   aria-describedby="change-error"
                   value={amount}
                   onChange={(e) => {
@@ -172,7 +171,7 @@ export default function UseCreditForm({
               <div id="change-error" aria-live="polite" aria-atomic="true">
                 {state1?.errors?.change &&
                   state1?.errors.change.map((error: string) => (
-                    <div className="mt-2 text-sm text-red-500" key={error}>
+                    <div className="mt-2  text-red-500" key={error}>
                       {error}
                     </div>
                   ))}
@@ -182,7 +181,7 @@ export default function UseCreditForm({
 
           {/* note */}
           <div className="mb-4">
-            <label htmlFor="note" className="mb-2 block text-sm font-medium">
+            <label htmlFor="note" className="mb-2 block  font-medium">
               סיבה
             </label>
             <div className="relative">
@@ -191,7 +190,7 @@ export default function UseCreditForm({
                 name="note"
                 type="text"
                 placeholder="הערה"
-                className="peer block w-full rounded-md border py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border py-2 pl-10  outline-2 "
                 aria-describedby="note-error"
                 required
                 value={note}
@@ -205,7 +204,7 @@ export default function UseCreditForm({
             <div id="note-error" aria-live="polite" aria-atomic="true">
               {state1?.errors?.note &&
                 state1?.errors.note.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -273,7 +272,7 @@ export default function UseCreditForm({
             <div className="mb-4">
               <label
                 htmlFor="player"
-                className="mb-2 block text-sm font-medium"
+                className="mb-2 block  font-medium"
                 style={{ margin: '7px 0 0 0' }}
               >
                 שחקן:
@@ -335,7 +334,7 @@ export default function UseCreditForm({
         >
           {/*  balance change 2 */}
           <div className="mb-4">
-            <label htmlFor="change2" className="mb-2 block text-sm font-medium">
+            <label htmlFor="change2" className="mb-2 block  font-medium">
               סכום שני
             </label>
             <div className="relative mt-2 rounded-md">
@@ -347,7 +346,7 @@ export default function UseCreditForm({
                   step="1"
                   min={0}
                   placeholder="סכום"
-                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                   aria-describedby="change2-error"
                   value={amount2}
                   onChange={(e) => {
@@ -363,7 +362,7 @@ export default function UseCreditForm({
               <div id="change2-error" aria-live="polite" aria-atomic="true">
                 {state1?.errors?.change2 &&
                   state1?.errors.change2.map((error: string) => (
-                    <div className="mt-2 text-sm text-red-500" key={error}>
+                    <div className="mt-2  text-red-500" key={error}>
                       {error}
                     </div>
                   ))}
@@ -373,7 +372,7 @@ export default function UseCreditForm({
 
           {/* note 2 */}
           <div className="mb-4">
-            <label htmlFor="note2" className="mb-2 block text-sm font-medium">
+            <label htmlFor="note2" className="mb-2 block  font-medium">
               סיבה
             </label>
             <div className="relative">
@@ -382,7 +381,7 @@ export default function UseCreditForm({
                 name="note2"
                 type="text"
                 placeholder="הערה"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                 aria-describedby="note-error"
                 required
                 value={note2}
@@ -396,7 +395,7 @@ export default function UseCreditForm({
             <div id="note2-error" aria-live="polite" aria-atomic="true">
               {state1?.errors?.note2 &&
                 state1?.errors.note2.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}

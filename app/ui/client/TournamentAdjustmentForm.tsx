@@ -73,7 +73,7 @@ export default function TournamentAdjustmentForm({
     }
 
     return (
-      <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
+      <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
         ביטול
       </button>
     );
@@ -88,7 +88,7 @@ export default function TournamentAdjustmentForm({
         <div className="form-inner-control  rounded-md p-4 md:p-6">
           {/*  change */}
           <div className="mb-4">
-            <label htmlFor="change" className="mb-2 block text-sm font-medium">
+            <label htmlFor="change" className="mb-2 block  font-medium">
               סכום
             </label>
             <div className="relative mt-2 rounded-md">
@@ -98,7 +98,7 @@ export default function TournamentAdjustmentForm({
                   name="change"
                   type="number"
                   placeholder="סכום"
-                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 placeholder:text-gray-500"
                   aria-describedby="change-error"
                 />
                 <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
@@ -108,7 +108,7 @@ export default function TournamentAdjustmentForm({
 
           {/* note */}
           <div className="mb-4">
-            <label htmlFor="note" className="mb-2 block text-sm font-medium">
+            <label htmlFor="note" className="mb-2 block  font-medium">
               סיבה
             </label>
             <div className="relative">
@@ -117,7 +117,7 @@ export default function TournamentAdjustmentForm({
                 name="note"
                 type="text"
                 placeholder="הערה"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 placeholder:text-gray-500"
                 aria-describedby="note-error"
                 required
                 value={note}

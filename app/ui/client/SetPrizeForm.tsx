@@ -40,11 +40,11 @@ export default function SetPrizeForm({
   return (
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
-        <label className="mb-2 block text-sm font-medium">פרס לשחקן</label>
+        <label className="mb-2 block  font-medium">פרס לשחקן</label>
         <div className="form-inner-control  rounded-md p-4 md:p-6">
           {/*  prize name */}
           <div className="mb-4">
-            <label htmlFor="prize" className="mb-2 block text-sm font-medium">
+            <label htmlFor="prize" className="mb-2 block  font-medium">
               פרס
             </label>
             <div className="relative mt-2 rounded-md">
@@ -59,7 +59,7 @@ export default function SetPrizeForm({
               <div id="prize-error" aria-live="polite" aria-atomic="true">
                 {state1?.errors?.prize &&
                   state1?.errors.prize.map((error: string) => (
-                    <div className="mt-2 text-sm text-red-500" key={error}>
+                    <div className="mt-2  text-red-500" key={error}>
                       {error}
                     </div>
                   ))}
@@ -72,7 +72,7 @@ export default function SetPrizeForm({
         </div>
       </form>
       {hide && (
-        <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
+        <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
           ביטול
         </button>
       )}

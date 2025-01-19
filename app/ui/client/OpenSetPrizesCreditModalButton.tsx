@@ -50,7 +50,7 @@ function SetPrizesCreditForm({
     >
       <form action={dispatch} className="form-control">
         <label
-          className="mb-2 block text-sm font-medium"
+          className="mb-2 block  font-medium"
           style={{ marginBottom: 5 }}
         >
           <div> הגדר שווי פרסים בקרדיט </div>
@@ -82,7 +82,7 @@ function SetPrizesCreditForm({
                     setBalances(newBalances);
                   }}
                   placeholder={`  שווי קרדיט של מקום #${player.position}  `}
-                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2"
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2"
                 />
               </div>
             );
@@ -94,7 +94,7 @@ function SetPrizesCreditForm({
         </div>
       </form>
       {hide && (
-        <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
+        <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
           ביטול
         </button>
       )}

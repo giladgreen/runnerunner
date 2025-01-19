@@ -50,7 +50,7 @@
 }
 
 .edit-player-modal-inner-div {
-  background: var(--white);
+  background: transparent;
   z-index: 911;
   position: fixed;
   top: 10vh;
@@ -311,6 +311,7 @@
 
 .give-credit-modal-button {
   font-size: 17px;
+
 }
 
 .cellular {
@@ -342,12 +343,13 @@
 }
 
 .highlight-on-hover {
-  color: #333333;
+  padding: 3px 10px;
+  color: var(--white);
+  background: var(--black);
 }
 
 .highlight-on-hover:hover {
-  background: rgb(0, 112, 243, 0.1);
-  /*color: white !important;*/
+  background:  var(--grey);
 }
 
 .prize-highlight-on-hover {
@@ -361,7 +363,6 @@
 
 .text-tournaments-data-page {
   color: #555555;
-  fontsize: 11;
 }
 
 .text-on-card {
@@ -369,7 +370,7 @@
   color: var(--white);
   width: 30px;
   height: 30px;
-  /*border-radius: 50px;*/
+  border-radius: 3px;
   text-align: center;
   margin-right: 10px;
 }
@@ -455,18 +456,20 @@
 }
 
 .tournaments-data-table {
+
   table {
     width: 100%;
     th {
-      border: 1px solid #44444455;
+      border: 1px solid var(--black);
       width: 110px;
-      text-align: left;
     }
   }
 }
 
 .tournaments-data-table-income-cell {
+
   table {
+    background: var(--black);
     width: 100%;
     th {
       border: none;
@@ -515,7 +518,7 @@
   background: orange;
 }
 .delete-tournament-button {
-  background: white;
+  background: var(--red);
 }
 .edit-prize-link {
 }
@@ -523,6 +526,8 @@
 .tournaments-total-income-font {
   font-size: 20px;
   font-weight: bold;
+  background: var(--grey-dark);
+  color: var(--white);
 }
 
 .give-credit-modal-button-b {

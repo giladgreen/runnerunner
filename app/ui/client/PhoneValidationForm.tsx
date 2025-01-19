@@ -43,7 +43,7 @@ export default function PhoneValidationForm() {
             <div className="mt-4">
               <div className="relative">
                 <input
-                  className="login-input peer block w-full rounded-md border py-[9px] pl-10 text-sm outline-2 "
+                  className="login-input peer block w-full rounded-md border py-[9px] pl-10  outline-2 "
                   id="phone_number"
                   type="text"
                   name="phone_number"
@@ -65,7 +65,7 @@ export default function PhoneValidationForm() {
             {errorMessage && (
               <>
                 <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-                <div className="text-sm text-red-500">{errorMessage}</div>
+                <div className=" text-red-500">{errorMessage}</div>
               </>
             )}
           </div>

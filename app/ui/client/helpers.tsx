@@ -58,8 +58,7 @@ export async function getFinalTablePlayersContent(
           return (
             <div
               key={finalTablePlayer.id}
-              className="highlight-on-hover flex items-center rounded-md border-b bg-white"
-              style={{ padding: '4px 0' }}
+              className="highlight-on-hover flex items-center rounded-md border-b"
             >
               <OpenGiveCreditModalButton
                 player={finalTablePlayer}
@@ -337,7 +336,7 @@ export function getDayIncome(dateItem: {
 }) {
   return (
     <div
-      className={`${lusitana.className} truncate  bg-white  text-center text-2xl`}
+      className={`${lusitana.className} truncate text-center text-2xl `}
     >
       <div>
         <div

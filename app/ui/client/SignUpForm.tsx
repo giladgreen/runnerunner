@@ -52,7 +52,7 @@ export default function SignUpForm() {
               </label>
               <div className="relative">
                 <input
-                  className="login-input peer block w-full  py-[9px] pl-10 text-sm outline-2 "
+                  className="login-input peer block w-full  py-[9px] pl-10  outline-2 "
                   id="phone_number"
                   type="text"
                   name="phone_number"
@@ -76,7 +76,7 @@ export default function SignUpForm() {
                   type="text"
                   minLength={5}
                   placeholder="הכנס שם מלא"
-                  className="login-input peer block w-full  py-2 pl-10 text-sm outline-2 "
+                  className="login-input peer block w-full  py-2 pl-10  outline-2 "
                 />
                 <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
               </div>
@@ -90,7 +90,7 @@ export default function SignUpForm() {
               </label>
               <div className="relative">
                 <input
-                  className="login-input peer block w-full  py-[9px] pl-10 text-sm outline-2 "
+                  className="login-input peer block w-full  py-[9px] pl-10  outline-2 "
                   id="password"
                   type="password"
                   name="password"
@@ -162,7 +162,7 @@ export default function SignUpForm() {
             {errorMessage && (
               <>
                 <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-                <div className="text-sm text-red-500">{errorMessage}</div>
+                <div className=" text-red-500">{errorMessage}</div>
               </>
             )}
           </div>

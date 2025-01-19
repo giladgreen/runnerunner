@@ -48,7 +48,7 @@ export function UseCreditForPrizeForm({
   return (
     <form action={dispatch} className="form-control">
       <label
-        className="mb-2 block text-sm font-medium align-text-right"
+        className="mb-2 block  font-medium align-text-right"
       >
         שימוש בקרדיט לטובת פרס
       </label>
@@ -57,7 +57,7 @@ export function UseCreditForPrizeForm({
         <div className="mb-4">
           <label
             htmlFor="change"
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
           >
             סכום
           </label>
@@ -70,7 +70,7 @@ export function UseCreditForPrizeForm({
                 step="1"
                 min={0}
                 placeholder="הכנס סכום"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                 aria-describedby="change-error"
                 onChange={(e) => {
                   setAmount(Number(e.target.value));
@@ -82,7 +82,7 @@ export function UseCreditForPrizeForm({
             <div id="change-error" aria-live="polite" aria-atomic="true">
               {state1?.errors?.change &&
                 state1?.errors.change.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -94,7 +94,7 @@ export function UseCreditForPrizeForm({
         <div className="mb-4">
           <label
             htmlFor="note"
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
           >
             הערה
           </label>
@@ -104,7 +104,7 @@ export function UseCreditForPrizeForm({
               name="note"
               type="text"
               placeholder="הערה"
-              className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+              className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
               aria-describedby="note-error"
               onChange={(e) => {
                 setNote(e.target.value);
@@ -118,7 +118,7 @@ export function UseCreditForPrizeForm({
           <div id="note-error" aria-live="polite" aria-atomic="true">
             {state1?.errors?.note &&
               state1?.errors.note.map((error: string) => (
-                <div className="mt-2 text-sm text-red-500" key={error}>
+                <div className="mt-2  text-red-500" key={error}>
                   {error}
                 </div>
               ))}
@@ -190,7 +190,7 @@ export function AddToBalanceForm({
       style={{ margin: '5px 0' }}
     >
       <label
-        className="mb-2 block text-sm font-medium align-text-right"
+        className="mb-2 block  font-medium align-text-right"
       >
         הוספת קרדיט לשחקן
       </label>
@@ -199,7 +199,7 @@ export function AddToBalanceForm({
         <div className="mb-4">
           <label
             htmlFor="change"
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
           >
             סכום
           </label>
@@ -213,7 +213,7 @@ export function AddToBalanceForm({
                 min={0}
                 required
                 placeholder="הכנס סכום"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                 aria-describedby="change-error"
               />
               <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
@@ -221,7 +221,7 @@ export function AddToBalanceForm({
             <div id="change-error" aria-live="polite" aria-atomic="true">
               {state2?.errors?.change &&
                 state2?.errors?.change.map((error: string) => (
-                  <div className="mt-2 text-sm text-red-500" key={error}>
+                  <div className="mt-2  text-red-500" key={error}>
                     {error}
                   </div>
                 ))}
@@ -233,7 +233,7 @@ export function AddToBalanceForm({
         <div className="mb-4">
           <label
             htmlFor="note"
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
           >
             הערה
           </label>
@@ -243,7 +243,7 @@ export function AddToBalanceForm({
               name="note"
               type="text"
               placeholder="הכנס סיבה"
-              className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+              className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
               aria-describedby="note-error"
             />
 
@@ -252,7 +252,7 @@ export function AddToBalanceForm({
           <div id="note-error" aria-live="polite" aria-atomic="true">
             {state2?.errors?.note &&
               state2?.errors.note.map((error: string) => (
-                <div className="mt-2 text-sm text-red-500" key={error}>
+                <div className="mt-2  text-red-500" key={error}>
                   {error}
                 </div>
               ))}

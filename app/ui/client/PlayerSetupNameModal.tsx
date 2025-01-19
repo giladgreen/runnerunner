@@ -27,7 +27,7 @@ export async function PlayerSetupNameModal({ player }: { player: PlayerDB }) {
         <div className="rounded-md  p-4 md:p-6">
           {/* player Name */}
           <div className="mb-4">
-            <label htmlFor="name" className="mb-2 block text-sm font-medium">
+            <label htmlFor="name" className="mb-2 block  font-medium">
               שם מלא
             </label>
             <div className="relative">
@@ -36,7 +36,7 @@ export async function PlayerSetupNameModal({ player }: { player: PlayerDB }) {
                 name="name"
                 type="text"
                 placeholder="שם"
-                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                 aria-describedby="name-error"
               />
               <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
@@ -47,7 +47,7 @@ export async function PlayerSetupNameModal({ player }: { player: PlayerDB }) {
                 state?.errors?.name &&
                   // @ts-ignore
                   state?.errors.name.map((error: string) => (
-                    <div className="mt-2 text-sm text-red-500" key={error}>
+                    <div className="mt-2  text-red-500" key={error}>
                       {error}
                     </div>
                   ))

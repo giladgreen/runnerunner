@@ -30,7 +30,7 @@ export default function CodeValidationForm() {
             <div className="mt-4">
               <div className="relative">
                 <input
-                  className="login-input peer block w-full rounded-md border  py-[9px] pl-10 text-sm outline-2 "
+                  className="login-input peer block w-full rounded-md border  py-[9px] pl-10  outline-2 "
                   id="code"
                   type="text"
                   name="code"

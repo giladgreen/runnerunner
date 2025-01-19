@@ -52,21 +52,21 @@ export default async function WhalePlayers({
                       />
 
                       <div className="min-w-0">
-                        <div className="truncate text-sm font-semibold md:text-base">
+                        <div className="truncate  font-semibold md:text-base">
                           {player.name}
                         </div>
-                        <div className="hidden text-sm sm:block">
+                        <div className="hidden  sm:block">
                           {player.phone_number}
                         </div>
                       </div>
                     </div>
                     <div
-                      className={`${lusitana.className} rtl truncate text-sm font-medium md:text-base`}
+                      className={`${lusitana.className} rtl truncate  font-medium md:text-base`}
                     >
                       {entries}
                     </div>
                     <div
-                      className={`${lusitana.className} ltr truncate text-sm font-medium md:text-base`}
+                      className={`${lusitana.className} ltr truncate  font-medium md:text-base`}
                       style={{
                         color: formatCurrencyColor(player.historyEntriesSum),
                       }}

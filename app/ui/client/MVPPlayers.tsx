@@ -47,16 +47,16 @@ export default async function MVPPlayers({
                         tournamentIds={tournamentsIds}
                       />
                       <div className="min-w-0">
-                        <div className="truncate text-sm font-semibold md:text-base">
+                        <div className="truncate  font-semibold md:text-base">
                           {player.name}
                         </div>
-                        <div className="hidden text-sm  sm:block">
+                        <div className="hidden   sm:block">
                           {player.phone_number}
                         </div>
                       </div>
                     </div>
                     <div
-                      className={`${lusitana.className} truncate text-sm font-medium md:text-base`}
+                      className={`${lusitana.className} truncate  font-medium md:text-base`}
                     >
                       {formatCurrency(player.balance)}
                     </div>

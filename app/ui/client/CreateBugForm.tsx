@@ -21,7 +21,7 @@ export default function CreateBugForm() {
         <div className="mb-4">
           <label
             htmlFor="description"
-            className="mb-2 block text-sm font-medium"
+            className="mb-2 block  font-medium"
           >
             תיאור התקלה
           </label>
@@ -29,7 +29,7 @@ export default function CreateBugForm() {
             <textarea
               id="description"
               name="description"
-              className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+              className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
               aria-describedby="description-error"
               required
               // @ts-ignore

@@ -38,7 +38,7 @@ export default function EditPrizeInfoForm({
         <div className="rtl rounded-md  p-4 md:p-6">
           {/* prize name */}
           <div className="mb-4">
-            <label htmlFor="name" className="mb-2 block text-sm font-medium">
+            <label htmlFor="name" className="mb-2 block  font-medium">
               שם
             </label>
             <div className="relative mt-2 rounded-md">
@@ -48,7 +48,7 @@ export default function EditPrizeInfoForm({
                   name="name"
                   defaultValue={prize.name}
                   placeholder="הכנס פרס"
-                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                   aria-describedby="name-error"
                 />
               </div>
@@ -56,7 +56,7 @@ export default function EditPrizeInfoForm({
               <div id="name-error" aria-live="polite" aria-atomic="true">
                 {state?.errors?.name &&
                   state?.errors.name.map((error: string) => (
-                    <div className="mt-2 text-sm text-red-500" key={error}>
+                    <div className="mt-2  text-red-500" key={error}>
                       {error}
                     </div>
                   ))}
@@ -66,7 +66,7 @@ export default function EditPrizeInfoForm({
 
           {/* prize extra */}
           <div className="mb-4">
-            <label htmlFor="extra" className="mb-2 block text-sm font-medium">
+            <label htmlFor="extra" className="mb-2 block  font-medium">
               עוד מידע
             </label>
             <div className="relative mt-2 rounded-md">
@@ -76,7 +76,7 @@ export default function EditPrizeInfoForm({
                   name="extra"
                   defaultValue={prize.extra}
                   placeholder="מידע נוסף"
-                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                   aria-describedby="extra-error"
                 />
               </div>
@@ -84,7 +84,7 @@ export default function EditPrizeInfoForm({
               <div id="extra-error" aria-live="polite" aria-atomic="true">
                 {state?.errors?.extra &&
                   state?.errors.extra.map((error: string) => (
-                    <div className="mt-2 text-sm text-red-500" key={error}>
+                    <div className="mt-2  text-red-500" key={error}>
                       {error}
                     </div>
                   ))}
@@ -94,7 +94,7 @@ export default function EditPrizeInfoForm({
 
           {/* prize credit */}
           <div className="rtl mb-4">
-            <label htmlFor="credit" className="mb-2 block text-sm font-medium">
+            <label htmlFor="credit" className="mb-2 block  font-medium">
               שווי בקרדיט
             </label>
             <div className="relative mt-2 rounded-md">
@@ -105,7 +105,7 @@ export default function EditPrizeInfoForm({
                   type="number"
                   defaultValue={prize.credit}
                   placeholder="שווי קרדיט"
-                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                   aria-describedby="extra-error"
                 />
               </div>
@@ -113,7 +113,7 @@ export default function EditPrizeInfoForm({
               <div id="credit-error" aria-live="polite" aria-atomic="true">
                 {state?.errors?.credit &&
                   state?.errors.credit.map((error: string) => (
-                    <div className="mt-2 text-sm text-red-500" key={error}>
+                    <div className="mt-2  text-red-500" key={error}>
                       {error}
                     </div>
                   ))}
@@ -125,7 +125,7 @@ export default function EditPrizeInfoForm({
         <div className="mt-6 flex justify-end gap-4">
           <Link
             href={prevPage}
-            className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium  transition-colors "
+            className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors "
           >
             ביטול
           </Link>

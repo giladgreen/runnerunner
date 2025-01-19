@@ -96,14 +96,14 @@ function SetGivePrizeForm({
       <form action={dispatch} className="form-control">
         {prizesEnabled ? (
           <label
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
 
           >
             תן פרס/קרדיט לשחקן
           </label>
         ) : (
           <label
-            className="mb-2 block text-sm font-medium align-text-right"
+            className="mb-2 block  font-medium align-text-right"
 
           >
             תן קרדיט לשחקן
@@ -232,7 +232,7 @@ function SetGivePrizeForm({
             <div className="give_user_credit_amount mb-4">
               <label
                 htmlFor="credit"
-                className="mb-2 block text-sm font-medium"
+                className="mb-2 block  font-medium"
                 style={{ textAlign: 'right', marginTop: 30 }}
               >
                 סכום
@@ -246,7 +246,7 @@ function SetGivePrizeForm({
                     value={creditWorth}
                     onChange={(e) => setCreditWorth(Number(e.target.value))}
                     placeholder="סכום "
-                    className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
+                    className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                     aria-describedby="prize-error"
                   />
                 </div>
@@ -254,7 +254,7 @@ function SetGivePrizeForm({
 
               {creditWorth < 1 && (
                 <span
-                  className="mb-2 block text-sm font-medium error-message-color"
+                  className="mb-2 block  font-medium error-message-color"
                   style={{ textAlign: 'right', color: 'red' }}
                 >
                   * ערך חיובי בלבד
@@ -271,7 +271,7 @@ function SetGivePrizeForm({
         </div>
       </form>
       {hide && (
-        <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
+        <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
           ביטול
         </button>
       )}

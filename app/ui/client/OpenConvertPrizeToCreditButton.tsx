@@ -46,13 +46,13 @@ function OpenConvertPrizeToCreditForm({
   return (
     <div className="edit-player-modal-inner-div">
       <form action={dispatch} className="form-control">
-        <label className="mb-2 block text-sm font-medium">
+        <label className="mb-2 block  font-medium">
           המרת פרס לקרדיט
         </label>
         <div className="form-inner-control  rounded-md p-4 md:p-6">
           <div className="mb-4">
             <label
-              className="mb-2 block text-sm font-medium"
+              className="mb-2 block  font-medium"
               style={{ textAlign: 'right', marginTop: 30 }}
             >
               פרס: {prizeName}
@@ -61,7 +61,7 @@ function OpenConvertPrizeToCreditForm({
           <div className="give_user_credit_amount mb-4">
             <label
               htmlFor="amount"
-              className="mb-2 block text-sm font-medium"
+              className="mb-2 block  font-medium"
               style={{ textAlign: 'right', marginTop: 30 }}
             >
               שווי קרדיט
@@ -81,7 +81,7 @@ function OpenConvertPrizeToCreditForm({
         </div>
       </form>
       {hide && (
-        <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
+        <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
           ביטול
         </button>
       )}

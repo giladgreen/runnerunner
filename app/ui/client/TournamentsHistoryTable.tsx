@@ -22,7 +22,7 @@ export default function TournamentsHistoryTable({
         </u>
       </div>
       <table className="rtl min-w-full md:table">
-        <thead className="text-left text-sm font-normal">
+        <thead className="text-left  font-normal">
           <tr>
             <th
               scope="col"
@@ -52,7 +52,7 @@ export default function TournamentsHistoryTable({
             <tr
               style={{ backgroundColor: 'rgba(250,250,250,0.1)' }}
               key={tournamentData.date}
-              className="w-full border-b py-1 text-sm last-of-type:border-none "
+              className="w-full border-b py-1  last-of-type:border-none "
             >
               <td className="">
                 {tournamentData.date}

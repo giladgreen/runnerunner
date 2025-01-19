@@ -27,7 +27,7 @@ export default function DeletePositionButton({
   return (
     <form
       action={setPlayerPositionWithPlayerId}
-      className="form-control"
+
       style={{ border: 'none' }}
     >
       <input

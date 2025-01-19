@@ -40,7 +40,7 @@ export default async function HistoryTable({
 
   return (
     <table className=" rtl min-w-full  md:table">
-      <thead className="rtl rounded-lg text-left text-sm font-normal">
+      <thead className="rtl rounded-lg text-left  font-normal">
         <tr>
           <th
             scope="col"
@@ -91,7 +91,7 @@ export default async function HistoryTable({
         {historyLog?.map((log) => (
           <tr
             key={log.id}
-            className="rtl w-full border-b py-1 text-sm last-of-type:border-none "
+            className="rtl w-full border-b py-1  last-of-type:border-none "
           >
             <td
               className="ltr smaller-on-mobile whitespace-nowrap px-1 py-2"

@@ -43,7 +43,7 @@ export default function SignInForm({
               </label>
               <div className="relative">
                 <input
-                  className="rtl login-input peer block w-full rounded-md border py-[9px] pl-10 text-sm outline-2"
+                  className="rtl login-input peer block w-full rounded-md border py-[9px] pl-10  outline-2"
                   id="phone_number"
                   type="tel"
                   name="email"
@@ -66,7 +66,7 @@ export default function SignInForm({
               </label>
               <div className="relative">
                 <input
-                  className="rtl login-input peer block w-full rounded-md border py-[9px] pl-10 text-sm outline-2"
+                  className="rtl login-input peer block w-full rounded-md border py-[9px] pl-10  outline-2"
                   id="password"
                   type="password"
                   name="password"
@@ -85,7 +85,7 @@ export default function SignInForm({
               aria-atomic="true"
             >
               <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-              <div className="text-sm text-red-500">{errorMessage}</div>
+              <div className=" text-red-500">{errorMessage}</div>
             </div>
           )}
           <SignInButton />

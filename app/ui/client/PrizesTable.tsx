@@ -42,7 +42,7 @@ export default function PrizesTable({
 
   return (
     <table className="rtl md:table">
-      <thead className="rtl rounded-lg text-left text-sm font-normal">
+      <thead className="rtl rounded-lg text-left  font-normal">
         <tr>
           <th
             scope="col"
@@ -93,7 +93,7 @@ export default function PrizesTable({
           <tr
             key={prize.id}
 
-            className="align-text-right w-full border-b py-3 text-sm last-of-type:border-none "
+            className="align-text-right w-full border-b py-3  last-of-type:border-none "
           >
             <td
               className="align-text-right smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3"

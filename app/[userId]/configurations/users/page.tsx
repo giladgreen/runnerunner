@@ -1,16 +1,19 @@
 import { lusitana } from '@/app/ui/fonts';
 import { Tooltip } from 'flowbite-react';
 import { fetchAllUsers, fetchUserById } from '@/app/lib/data';
-import React from 'react';
+import React, { useState } from 'react';
 import { UserDB } from '@/app/lib/definitions';
 import {
+  deleteTournament,
   deleteUser,
   updateIsUserAdmin,
   updateIsUserAdminRefreshEnabled,
-  updateIsUserWorker,
+  updateIsUserWorker
 } from '@/app/lib/actions';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 import { formatDateToLocalWithTime, formatTimePassedSince } from '@/app/lib/serverDateUtils';
+import AreYouSure from '@/app/ui/client/AreYouSure';
+import DeleteUserButton from '@/app/ui/client/DeleteUserButton';
 
 export default async function UsersPage({
   params,
@@ -62,32 +65,32 @@ export default async function UsersPage({
         </h1>
       </div>
 
-      <div className="rtl mt-4 flex items-center justify-between gap-2 md:mt-8">
+      <div className="rtl mt-4 flex  justify-between gap-2 md:mt-8 users-config">
         <table className="md:table">
-          <thead className="rounded-lg text-left text-sm font-normal">
+          <thead className="rounded-lg text-left  font-normal">
           <tr>
             <th
                 scope="col"
-                className="thin-column px-4 py-5 font-medium sm:pl-6 align-text-right "
+                className="thin-column px-4 py-5 font-medium sm:pl-6  "
             >
               שם
             </th>
             <th
                 scope="col"
-                className="thin-column px-4 py-5 font-medium sm:pl-6 align-text-right "
+                className="thin-column px-4 py-5 font-medium sm:pl-6  "
             >
               מספר טלפון
             </th>
 
             <th
                 scope="col"
-                className="px-4 py-5 font-medium align-text-right "
+                className="px-4 py-5 font-medium  "
             >
               אדמין
             </th>
             <th
                 scope="col"
-                className="px-4 py-5 font-medium align-text-right "
+                className="px-4 py-5 font-medium  "
             >
               מתפעל
             </th>
@@ -98,7 +101,7 @@ export default async function UsersPage({
             ></th>
             <th
                 scope="col"
-                className="thin-column px-4 py-5 font-medium sm:pl-6align-text-right  "
+                className="thin-column px-4 py-5 font-medium sm:pl-6  "
             >
               נראה לאחרונה
             </th>
@@ -108,39 +111,39 @@ export default async function UsersPage({
           {users?.map((user) => (
               <tr
                   key={user.id}
-                  className="align-text-right  w-full border-b py-3 text-sm last-of-type:border-none  "
+                  className="  w-full border-b py-3  last-of-type:border-none  "
               >
                 <td
-                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3 align-text-right "
+                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3  "
                 >
                   {user.name}
                 </td>
                 <td
                     className="thin-column whitespace-nowrap py-3 pl-6 pr-3"
-                    style={{textAlign: 'center'}}
+
                 >
                   {user.phone_number}
                 </td>
 
                 <td
-                    className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3 align-text-right "
+                    className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3  "
                 >
                   <UpdateAdminUser user={user} userId={params.userId}/>
                 </td>
                 <td
-                    className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3 align-text-right "
+                    className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3  "
                 >
                   <UpdateWorkerUser user={user} userId={params.userId}/>
                 </td>
 
                 <td
-                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3 align-text-right "
+                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3  "
                 >
-                  <DeleteUser user={user} userId={params.userId}/>
+                  <DeleteUserButton user={user} userId={params.userId}/>
                 </td>
                 <td
                     className="thin-column whitespace-nowrap py-3 pl-6 pr-3  "
-                    style={{textAlign: 'center'}}
+                    style={{minWidth: '350px'}}
                 >
                   <Tooltip placement={'left'} content={formatDateToLocalWithTime(user.last_logged_in_at)} color="primary">
                   {formatTimePassedSince(user.last_logged_in_at)}
@@ -224,32 +227,3 @@ function UpdateWorkerUser({ user, userId }: { user: UserDB; userId: string }) {
   );
 }
 
-function DeleteUser({ user, userId }: { user: UserDB; userId: string }) {
-  const deleteUserWithId = deleteUser.bind(null, {
-    id: user.id,
-    prevPage: `/${userId}/configurations/users`,
-  });
-
-  const onSubmit = async (_formData: FormData) => {
-    'use server';
-    await deleteUserWithId();
-  };
-
-  if (user.is_admin || user.is_worker) {
-    return null;
-  }
-  return (
-    <form action={onSubmit}>
-      <button
-        style={{
-          border: '1px solid black',
-          background: 'orange',
-          borderRadius: 5,
-          padding: '2px 6px',
-        }}
-      >
-        מחק משתמש
-      </button>
-    </form>
-  );
-}

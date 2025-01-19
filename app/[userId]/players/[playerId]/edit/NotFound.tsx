@@ -9,7 +9,7 @@ export default function NotFound({ params }: { params: { userId: string } }) {
       <div>Could not find the requested Player.</div>
       <Link
         href={`/${params.userId}/players`}
-        className="mt-4 rounded-md  px-4 py-2 text-sm text-white transition-colors "
+        className="mt-4 rounded-md  px-4 py-2  text-white transition-colors "
       >
         Go Back
       </Link>

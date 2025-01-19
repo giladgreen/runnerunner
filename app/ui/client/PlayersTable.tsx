@@ -83,7 +83,7 @@ export default function PlayersTable({
                         {player.name}
                       </div>
                     </div>
-                    <div className="text-sm ">
+                    <div >
                       {player.phone_number}
                     </div>
                     {rsvpEnabled &&
@@ -130,7 +130,7 @@ export default function PlayersTable({
             {tableView && (
               <div  className="general-table min-w-full" style={{ marginTop: 20 }}>
                 <table className=" min-w-full md:table">
-                  <thead className="table-header rounded-lg text-left text-sm font-normal">
+                  <thead className="table-header rounded-lg text-left t font-normal">
                   <tr>
                     <th
                       scope="col"
@@ -199,7 +199,7 @@ export default function PlayersTable({
                     <tr
                       key={player.id}
 
-                      className="table-row align-text-right w-full border-b py-3 text-sm last-of-type:border-none "
+                      className="table-row align-text-right w-full border-b py-3 t last-of-type:border-none "
                     >
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <Link href={`/${userId}/players/${player.id}/edit`}>

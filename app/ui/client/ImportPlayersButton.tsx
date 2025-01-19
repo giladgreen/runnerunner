@@ -11,9 +11,9 @@ export default function ImportPlayersButton() {
 
   return (
     <>
-      <Button onClick={() => setShowConfirmation(true)}>
-        <div className="link-text">לחץ כאן</div>
-      </Button>
+      <button onClick={() => setShowConfirmation(true)}>
+        <div style={{ zoom: 1.5}}><u>לחץ כאן</u></div>
+      </button>
       <input
         type="file"
         id="fileInput"

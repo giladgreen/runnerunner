@@ -49,45 +49,45 @@ export default async function TournamentsDataPage({
       <div className="align-text-right" > {tournamentsRange} </div>
       {tournamentsFullData.length > 0 && (
         <table
-          className="min-w-full  md:table"
+          className="min-w-full md:table tournaments-table"
           style={{ marginRight: -10 }}
         >
-          <thead className=" rounded-lg text-left text-sm font-normal">
+          <thead className="header-row rounded-lg   font-normal">
             <tr>
               <th
-                className="smaller-on-mobile px-3 py-5 font-medium align-text-right"
+                className="smaller-on-mobile px-3 py-5 font-medium"
 
               >
                 <b> טורניר</b>
               </th>
               <th
-                className="smaller-on-mobile px-3 py-5 font-medium align-text-right"
+                className="smaller-on-mobile px-3 py-5 font-medium"
 
               >
                 <b>הכנסות</b>
               </th>
               <th
-                className="smaller-on-mobile px-1 py-5 font-medium align-text-right"
+                className="smaller-on-mobile px-1 py-5 font-medium"
 
               >
                 <b> שחקנים</b>
               </th>
               <th
-                className="smaller-on-mobile px-1 py-5 font-medium align-text-right"
+                className="smaller-on-mobile px-1 py-5 font-medium"
 
               >
                 <b>כניסות </b>
               </th>
 
               <th
-                className="smaller-on-mobile px-2 py-5 font-medium align-text-right"
+                className="smaller-on-mobile px-2 py-5 font-medium "
 
               >
                 <b>דירוג </b>
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white">
+          <tbody >
             {tournamentsFullData.map(async (dateItem) => {
               const dayIncome = getDayIncome(dateItem);
               const date = dateItem.date;
@@ -103,11 +103,11 @@ export default async function TournamentsDataPage({
               return (
                 <tr
                   key={dateItem.date}
-                  className="w-full border-b py-3 text-sm last-of-type:border-none "
+                  className="w-full border-b py-3  last-of-type:border-none data-row"
                 >
                   <th className="px-4 py-5 font-medium">
                     <div
-                      className="smaller-on-mobile align-text-right"
+                      className="smaller-on-mobile "
 
                     >
                       {dateItem.tournamentName}
@@ -117,14 +117,13 @@ export default async function TournamentsDataPage({
                       style={{
                         marginBottom: 20,
                         marginTop: 10,
-                        textAlign: 'right',
                       }}
                     >
                       {formatDateToLocal(dateItem.date)}
                     </div>
                     <div
                       className="cellular smaller-on-mobile"
-                      style={{ marginTop: 10, textAlign: 'right' }}
+                      style={{ marginTop: 10 }}
                     >
                       {`${dateItem.date.slice(5, 7)} / ${dateItem.date.slice(
                         8,
@@ -133,7 +132,7 @@ export default async function TournamentsDataPage({
                     </div>
                     <div
                       className="cellular"
-                      style={{ marginTop: 5, textAlign: 'right' }}
+                      style={{ marginTop: 5 }}
                     >
                       {dateItem.date.slice(0, 4)}
                     </div>
