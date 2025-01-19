@@ -29,7 +29,7 @@ export default function CreateBugForm() {
             <textarea
               id="description"
               name="description"
-              className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
+              className="peer block w-full rounded-md border  py-2 pl-10  outline-2 bugs-edit-input"
               aria-describedby="description-error"
               required
               // @ts-ignore

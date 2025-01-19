@@ -457,6 +457,9 @@ body{
     text-align: right;
   }
 }
+.bugs-edit-input,
+.prizes-edit-input,
+.player-edit-input,
 .tournament-edit-input{
     background-color: var(--white-dark) !important;
     color: var(--black) !important;

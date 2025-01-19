@@ -105,7 +105,7 @@ export default function EditPlayerForm({
                   name="name"
                   defaultValue={player.name}
                   placeholder="הכנס שם"
-                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 player-edit-input"
                   aria-describedby="name-error"
                 />
               </div>
@@ -135,7 +135,7 @@ export default function EditPlayerForm({
                   name="new_phone_number"
                   defaultValue={player.phone_number}
                   placeholder="הכנס מספר"
-                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 player-edit-input"
                   aria-describedby="new_phone_number-error"
                 />
               </div>
@@ -166,7 +166,7 @@ export default function EditPlayerForm({
                   name="notes"
                   defaultValue={player.notes}
                   placeholder="הערות"
-                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
+                  className="peer block w-full rounded-md border  py-2 pl-10  outline-2 player-edit-input"
                   aria-describedby="notes-error"
                 />
               </div>
@@ -194,7 +194,7 @@ export default function EditPlayerForm({
               type="text"
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
-              className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
+              className="peer block w-full rounded-md border  py-2 pl-10  outline-2 player-edit-input"
               aria-describedby="image_url-error"
             />
           </div>
