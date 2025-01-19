@@ -21,7 +21,7 @@ export default function DeletePlayerButton({
   return (
     <div>
       <button
-        className="rounded-md border p-2 hover:bg-gray-100"
+        className=" link-button rounded-md border p-2 "
         onClick={() => {
           setShowConfirmation(true);
         }}

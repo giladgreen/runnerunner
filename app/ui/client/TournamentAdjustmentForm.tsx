@@ -6,6 +6,7 @@ import { TournamentAdjustmentLog } from '@/app/lib/actions';
 import { useFormState, useFormStatus } from 'react-dom';
 import { useEffect, useState } from 'react';
 import Spinner from '@/app/ui/client/Spinner';
+import { RingLoader } from 'react-spinners';
 
 export default function TournamentAdjustmentForm({
   hide,
@@ -53,7 +54,7 @@ export default function TournamentAdjustmentForm({
     }, [pending]);
 
     if (pending) {
-      return <Spinner size={40} style={{ marginRight: 30 }} />;
+      return <RingLoader color="var(--white)" loading={true} size={40} style={{ marginRight: 30 }} />;
     }
     return (
       <Button
@@ -72,9 +73,9 @@ export default function TournamentAdjustmentForm({
     }
 
     return (
-      <Button onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
+      <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
         ביטול
-      </Button>
+      </button>
     );
   }
 
@@ -97,10 +98,10 @@ export default function TournamentAdjustmentForm({
                   name="change"
                   type="number"
                   placeholder="סכום"
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                   aria-describedby="change-error"
                 />
-                <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+                <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
               </div>
             </div>
           </div>
@@ -116,7 +117,7 @@ export default function TournamentAdjustmentForm({
                 name="note"
                 type="text"
                 placeholder="הערה"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 aria-describedby="note-error"
                 required
                 value={note}
@@ -125,7 +126,7 @@ export default function TournamentAdjustmentForm({
                 }}
               />
 
-              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             </div>
           </div>
 

@@ -404,7 +404,7 @@ export function getDayIncome(dateItem: {
                     data-tooltip="קרדיט"
                     title="קרדיט"
                   >
-                    <CreditCardIcon className="h-6 w-9 text-gray-700" />
+                    <CreditCardIcon className="h-6 w-9 " />
                   </div>
                 </th>
                 <th scope="col">
@@ -413,7 +413,7 @@ export function getDayIncome(dateItem: {
                     data-tooltip="מזומן"
                     title="מזומן"
                   >
-                    <WalletIcon className="h-6 w-9 text-gray-700" />
+                    <WalletIcon className="h-6 w-9 " />
                   </div>
                 </th>
                 <th scope="col">
@@ -422,7 +422,7 @@ export function getDayIncome(dateItem: {
                     data-tooltip="העברה"
                     title="העברה"
                   >
-                    <ArrowLeftOnRectangleIcon className="h-6 w-9 text-gray-700" />
+                    <ArrowLeftOnRectangleIcon className="h-6 w-9 " />
                   </div>
                 </th>
               </tr>

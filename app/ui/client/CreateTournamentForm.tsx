@@ -31,7 +31,7 @@ export default function CreateTournamentForm({
   return (
     <form action={dispatch}>
       <div
-        className="rtl rounded-md bg-gray-50 p-4 md:p-6 align-text-right"
+        className="rtl rounded-md  p-4 md:p-6 align-text-right"
 
 
       >
@@ -145,11 +145,11 @@ export default function CreateTournamentForm({
                 name="name"
                 defaultValue={'טורניר שקר כלשהו'}
                 placeholder="שם"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="name-error"
               />
             </div>
-            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             <div id="name-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.name &&
                 state?.errors.name.map((error: string) => (
@@ -177,11 +177,11 @@ export default function CreateTournamentForm({
                 name="start_time"
                 defaultValue={'20:00'}
                 placeholder=" שעת התחלה"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="start_time-error"
               />
             </div>
-            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             <div id="start_time-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.start_time &&
                 state?.errors.start_time.map((error: string) => (
@@ -211,11 +211,11 @@ export default function CreateTournamentForm({
                 min={0}
                 defaultValue={75000}
                 placeholder="ערימה התחלתית"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="buy_in-error"
               />
             </div>
-            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             <div id="initial_stack-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.initial_stack &&
                 state?.errors.initial_stack.map((error: string) => (
@@ -244,11 +244,11 @@ export default function CreateTournamentForm({
                 min={0}
                 defaultValue={250}
                 placeholder="כניסה"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="buy_in-error"
               />
             </div>
-            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             <div id="buy_in-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.buy_in &&
                 state?.errors.buy_in.map((error: string) => (
@@ -277,11 +277,11 @@ export default function CreateTournamentForm({
                 min={0}
                 defaultValue={150}
                 placeholder="כניסה מחדש"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="re_buy-error"
               />
             </div>
-            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             <div id="re_buy-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.re_buy &&
                 state?.errors.re_buy.map((error: string) => (
@@ -311,11 +311,11 @@ export default function CreateTournamentForm({
                 min={0}
                 defaultValue={15}
                 placeholder="משך שלב"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="phase_length-error"
               />
             </div>
-            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             <div id="phase_length-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.phase_length &&
                 state?.errors.phase_length.map((error: string) => (
@@ -345,11 +345,11 @@ export default function CreateTournamentForm({
                 min={0}
                 defaultValue={10}
                 placeholder=" שלב אחרון לכניסה נוספת "
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="last_phase_for_rebuy-error"
               />
             </div>
-            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             <div id="last_phase_for_rebuy-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.last_phase_for_rebuy &&
                 state?.errors.last_phase_for_rebuy.map((error: string) => (
@@ -379,11 +379,11 @@ export default function CreateTournamentForm({
                 min={0}
                 defaultValue={100}
                 placeholder="כמות מקסימלית של שחקנים"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="max_players-error"
               />
             </div>
-            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
 
             <div id="max_players-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.max_players &&
@@ -414,7 +414,7 @@ export default function CreateTournamentForm({
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href={`/${userId}/configurations/tournaments`}
-          className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+          className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium  transition-colors "
         >
           ביטול
         </Link>

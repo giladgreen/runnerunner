@@ -49,7 +49,7 @@ export default async function TournamentsDataPage({
       <div className="align-text-right" > {tournamentsRange} </div>
       {tournamentsFullData.length > 0 && (
         <table
-          className="min-w-full text-gray-900 md:table"
+          className="min-w-full  md:table"
           style={{ marginRight: -10 }}
         >
           <thead className=" rounded-lg text-left text-sm font-normal">
@@ -103,7 +103,7 @@ export default async function TournamentsDataPage({
               return (
                 <tr
                   key={dateItem.date}
-                  className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                  className="w-full border-b py-3 text-sm last-of-type:border-none "
                 >
                   <th className="px-4 py-5 font-medium">
                     <div

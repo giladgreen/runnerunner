@@ -84,17 +84,17 @@ export default function RSVPAndArrivalCardWrapper({
             <tr>
               <th scope="col">
                 <div className="table-item" data-tooltip="קרדיט" title="קרדיט">
-                  <CreditCardIcon className="h-6 w-9 text-gray-700" />
+                  <CreditCardIcon className="h-6 w-9 " />
                 </div>
               </th>
               <th scope="col">
                 <div className="table-item" data-tooltip="מזומן" title="מזומן">
-                  <WalletIcon className="h-6 w-9 text-gray-700" />
+                  <WalletIcon className="h-6 w-9 " />
                 </div>
               </th>
               <th scope="col">
                 <div className="table-item" data-tooltip="העברה" title="העברה">
-                  <ArrowLeftOnRectangleIcon className="h-6 w-9 text-gray-700" />
+                  <ArrowLeftOnRectangleIcon className="h-6 w-9 " />
                 </div>
               </th>
             </tr>

@@ -8,19 +8,26 @@
 .sign-in-top-header {
   padding-left: 20px;
   font-size: x-large;
-  color: white;
+  color: var(--white);
 }
 
 .form-control {
-  border: 2px solid rgb(0, 112, 243);
+  background: linear-gradient(to bottom, var(--grey),var(--grey-dark) );
+  box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.5); /* Adds a shadow with a slight blur */
   border-radius: 6px;
   padding: 12px;
-  background: white;
-  box-shadow: 0 0 0 3px white;
+  background: var(--black);
+  color: var(--white);
 }
 
 .form-inner-control {
-  background: rgb(0, 112, 243, 0.2);
+  background: var(--grey);
+  color: var(--white);
+  input[type='number'],
+  input[type='text'] {
+    background: var(--grey);
+    color: var(--white);
+  }
 }
 
 .edit-player-modal {
@@ -43,7 +50,7 @@
 }
 
 .edit-player-modal-inner-div {
-  background: white;
+  background: var(--white);
   z-index: 911;
   position: fixed;
   top: 10vh;
@@ -106,10 +113,10 @@
 
   }
   a{
-    color: white !important;
+    color: var(--white) !important;
   }
   a:visited {
-    color: white !important;
+    color: var(--white) !important;
   }
 }
 
@@ -189,6 +196,7 @@
 .dropdown .selected-value input {
   line-height: 1.5;
   font-size: 1rem;
+  color: var(--white);
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 2px;
@@ -320,9 +328,16 @@
 }
 .my-button {
   padding: 4px;
-  border: #7f7f7f 1px solid;
-  background: #00666633;
+  background: var(--blue);
   border-radius: 4px;
+  margin-left: 5px;
+}
+
+.my-button-cancel {
+  padding: 4px 8px;
+  background: var(--grey);
+  color: var(--white);
+  border-radius: 5px;
   margin-left: 5px;
 }
 
@@ -350,8 +365,8 @@
 }
 
 .text-on-card {
-  background: #6666ccaa;
-  color: white;
+  background: var(--red);
+  color: var(--white);
   width: 30px;
   height: 30px;
   /*border-radius: 50px;*/
@@ -362,6 +377,8 @@
 .card-body-one-line {
   padding: 50px;
   font-size: 40px;
+  background: var(--black);
+  color: var(--white);
 }
 
 .prize-row {
@@ -460,6 +477,7 @@
 
 .card {
   margin-bottom: 10px;
+  background: var(--red)
 }
 
 .font-large {
@@ -773,7 +791,7 @@
   }
 
   .card {
-    border: 2px solid rgb(0, 112, 243);
+    border: 2px solid var(--red-dark);
     margin-bottom: 10px;
   }
 
@@ -786,9 +804,13 @@
     padding: 0;
     max-height: 80px;
     font-size: 20px;
+    background: var(--black);
+    color: var(--white);
   }
 
   .card-body {
+    background: var(--black);
+    color: var(--white);
     padding: 0;
     max-height: 1126px;
     font-size: 20px;

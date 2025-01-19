@@ -25,7 +25,7 @@ export default function SetPrizeAsNotReadyToBeDelivered({
   return (
     <div style={{ marginLeft: 10 }}>
       <button
-        className="pointer move-up-down-button rounded-md border p-2 hover:bg-gray-100"
+        className="pointer move-up-down-button rounded-md border p-2 "
         onClick={() => {
           setPrizeAsNotReadyToBeDeliveredWithId();
         }}

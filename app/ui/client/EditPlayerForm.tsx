@@ -11,6 +11,7 @@ import AreYouSure from '@/app/ui/client/AreYouSure';
 import Spinner from '@/app/ui/client/Spinner';
 import * as FlowbiteReact from 'flowbite-react';
 import { getRSVPSForTheNextWeek } from '@/app/lib/clientUtils';
+import { RingLoader } from 'react-spinners';
 
 export default function EditPlayerForm({
   player,
@@ -68,7 +69,7 @@ export default function EditPlayerForm({
             className="pointer"
           >
             {isDeletePlayerPending ? (
-              <Spinner size={30} />
+              <RingLoader color="var(--white)" loading={true} size={30}/>
             ) : (
               <RedSpinnerButton text="מחק שחקן" />
             )}
@@ -91,7 +92,7 @@ export default function EditPlayerForm({
         </div>
       )}
       <form action={dispatch}>
-        <div className="rtl rounded-md bg-gray-50 p-4 md:p-6">
+        <div className="rtl rounded-md  p-4 md:p-6">
           {/* player name */}
           <div className="mb-4">
             <label htmlFor="name" className="mb-2 block text-sm font-medium">
@@ -104,11 +105,11 @@ export default function EditPlayerForm({
                   name="name"
                   defaultValue={player.name}
                   placeholder="הכנס שם"
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                   aria-describedby="name-error"
                 />
               </div>
-              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
               <div id="name-error" aria-live="polite" aria-atomic="true">
                 {state?.errors?.name &&
                   state?.errors.name.map((error: string) => (
@@ -134,11 +135,11 @@ export default function EditPlayerForm({
                   name="new_phone_number"
                   defaultValue={player.phone_number}
                   placeholder="הכנס מספר"
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                   aria-describedby="new_phone_number-error"
                 />
               </div>
-              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
               <div
                 id="new_phone_number-error"
                 aria-live="polite"
@@ -165,11 +166,11 @@ export default function EditPlayerForm({
                   name="notes"
                   defaultValue={player.notes}
                   placeholder="הערות"
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                   aria-describedby="notes-error"
                 />
               </div>
-              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
               <div id="notes-error" aria-live="polite" aria-atomic="true">
                 {state?.errors?.notes &&
                   state?.errors.notes.map((error: string) => (
@@ -193,7 +194,7 @@ export default function EditPlayerForm({
               type="text"
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
-              className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
               aria-describedby="image_url-error"
             />
           </div>
@@ -218,7 +219,7 @@ export default function EditPlayerForm({
         <div className="mt-6 flex justify-end gap-4">
           <Link
             href={`/${userId}/current_tournament`}
-            className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+            className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium "
           >
             ביטול
           </Link>
@@ -226,7 +227,7 @@ export default function EditPlayerForm({
         </div>
       </form>
       <div
-        className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+        className="flex h-10 items-center rounded-lg  px-4 text-sm font-medium  transition-colors "
         style={{ width: '130px' }}
       >
         <CldUploadWidget
@@ -244,6 +245,7 @@ export default function EditPlayerForm({
           {({ open }) => {
             return (
               <button
+                className="my-button"
                 onClick={() => {
                   open();
                 }}

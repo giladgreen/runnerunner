@@ -42,11 +42,15 @@ export default function CreatePlayerForm({
   const [balance, setBalance] = useState(0);
   // @ts-ignore
   const error = state?.error;
-
+  // @ts-ignore
+  const onImageUploaded = (response)=>{
+  // @ts-ignore
+  setImageUrl(response?.info?.url);
+}
   return (
     <>
       <form action={dispatch}>
-        <div className="rtl rounded-md bg-gray-50 p-4 md:p-6">
+        <div className="my-form rtl rounded-md  p-4 md:p-6">
           {/* player Name */}
           <div className="mb-4">
             <label htmlFor="name" className="mb-2 block text-sm font-medium">
@@ -60,11 +64,11 @@ export default function CreatePlayerForm({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="הכנס שם"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="name-error"
               />
 
-              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             </div>
             <div id="player-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.name &&
@@ -92,11 +96,11 @@ export default function CreatePlayerForm({
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="הכנס מספר טלפון"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="phone_number-error"
               />
 
-              <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             </div>
             <div id="phone_number-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.phone_number &&
@@ -123,10 +127,10 @@ export default function CreatePlayerForm({
                   value={balance}
                   onChange={(e) => setBalance(Number(e.target.value))}
                   placeholder="הכנס קרדיט אם יש"
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                   aria-describedby="balance-error"
                 />
-                <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+                <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
               </div>
               <div id="balance-error" aria-live="polite" aria-atomic="true">
                 {state?.errors?.balance &&
@@ -152,11 +156,11 @@ export default function CreatePlayerForm({
                 value={balanceNote}
                 onChange={(e) => setBalanceNote(e.target.value)}
                 placeholder="הערה"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="note-error"
               />
 
-              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             </div>
             <div id="note-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.note &&
@@ -179,11 +183,11 @@ export default function CreatePlayerForm({
                 name="notes"
                 type="text"
                 placeholder="הערות"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="note-error"
               />
 
-              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             </div>
             <div id="notes-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.notes &&
@@ -209,7 +213,7 @@ export default function CreatePlayerForm({
                 name="image_url"
                 type="text"
                 value={imageUrl}
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="image_url-error"
               />
             </div>
@@ -228,7 +232,7 @@ export default function CreatePlayerForm({
         <div className="mt-6 flex justify-end gap-4">
           <Link
             href={`/${userId}/players`}
-            className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+            className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium "
           >
             ביטול
           </Link>
@@ -236,21 +240,18 @@ export default function CreatePlayerForm({
         </div>
       </form>
       <div
-        className="flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200"
+        className="flex h-10 items-center rounded-lg  px-4 text-sm font-medium "
         style={{ width: '130px' }}
       >
         <CldUploadWidget
           signatureEndpoint="/api/sign-image"
           options={{ sources: ['local', 'url', 'camera'] }}
-          onUpload={(response) => {
-            // @ts-ignore
-            const url = response?.info?.url;
-            setImageUrl(url);
-          }}
+          onSuccess={onImageUploaded}
         >
           {({ open }) => {
             return (
               <button
+                className="my-button"
                 onClick={() => {
                   open();
                 }}

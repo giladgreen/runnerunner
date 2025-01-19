@@ -122,7 +122,7 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
           {historyLogs?.map((log) => (
             <tr
               key={player.id}
-              className="rtl w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+              className="rtl w-full border-b py-3 text-sm last-of-type:border-none  "
             >
               <td
                 className="ltr rsvp-icon whitespace-nowrap px-3 py-3 align-text-right"

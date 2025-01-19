@@ -62,7 +62,7 @@ export default function PlayersTable({
       </div>
 
       <div className="inline-block min-w-full align-middle">
-        <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
+        <div className="rounded-lg  p-2 md:pt-0">
           {/* mobile view */}
           <div className="md:hidden">
             {players?.map((player) => (
@@ -83,7 +83,7 @@ export default function PlayersTable({
                         {player.name}
                       </div>
                     </div>
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm ">
                       {player.phone_number}
                     </div>
                     {rsvpEnabled &&
@@ -126,10 +126,11 @@ export default function PlayersTable({
           </div>
 
           {/* web view */}
-          <div>
+          <div className="hide-mobile">
             {tableView && (
-              <table className="hidden min-w-full text-gray-900 md:table">
-                <thead className="rounded-lg text-left text-sm font-normal">
+              <div  className="general-table min-w-full" style={{ marginTop: 20 }}>
+                <table className=" min-w-full md:table">
+                  <thead className="table-header rounded-lg text-left text-sm font-normal">
                   <tr>
                     <th
                       scope="col"
@@ -192,13 +193,13 @@ export default function PlayersTable({
                       <span className="sr-only">Edit</span>
                     </th>
                   </tr>
-                </thead>
-                <tbody className="bg-white">
+                  </thead>
+                  <tbody className="table-body">
                   {players?.map((player) => (
                     <tr
                       key={player.id}
 
-                      className="align-text-right w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                      className="table-row align-text-right w-full border-b py-3 text-sm last-of-type:border-none "
                     >
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <Link href={`/${userId}/players/${player.id}/edit`}>
@@ -272,13 +273,14 @@ export default function PlayersTable({
                       </td>
                     </tr>
                   ))}
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
             )}
 
             {!tableView && (
               <div
-                className="hidden min-w-full text-gray-900 md:table"
+                className=" min-w-full  md:table"
                 style={{ marginTop: 20 }}
               >
                 <div className="grid grid-cols-8 gap-2">

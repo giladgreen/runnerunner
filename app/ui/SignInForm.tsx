@@ -7,11 +7,12 @@ import {
   ExclamationCircleIcon,
   ArrowLeftIcon,
 } from '@heroicons/react/24/outline';
-import { RedButton } from '@/app/ui/client/Button';
+import Button, { RedButton } from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Spinner from '@/app/ui/client/Spinner';
 import SignUpButton from '@/app/ui/client/SignUpButton';
+import { RingLoader } from 'react-spinners';
 
 export default function SignInForm({
   usePhoneValidation,
@@ -103,10 +104,9 @@ export default function SignInForm({
 
 function SignInButton() {
   const { pending } = useFormStatus();
-
   return (
     <RedButton className="sign-in-button mt-4 w-full">
-      {pending ? (<Spinner size={24} color="white"/>) : 'התחבר'}
+      {pending ? (<RingLoader color="var(--white)" loading={true} size={35}/>) : 'התחבר'}
       {pending ? '' : <ArrowLeftIcon
         className="ml-auto h-5 w-5 "
         style={{ margin: '0 10px' }}

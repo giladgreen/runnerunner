@@ -10,6 +10,7 @@ import BlurFade from '@/app/ui/components/ui/blur-fade';
 import { BookmarkIcon, BookmarkSlashIcon, CircleStackIcon } from '@heroicons/react/24/solid';
 import { rsvpPlayerForDay } from '@/app/lib/actions';
 import Spinner from '@/app/ui/client/Spinner';
+import { RingLoader } from 'react-spinners';
 
 //TODO: extract all style into classes
 
@@ -322,7 +323,7 @@ const [pending, setPending] = React.useState(false);
 
                </u>}
                 {pending && <div style={{ textAlign:'left', alignItems:'left', width:'100%', paddingRight:'70%' }}>
-                  <Spinner size={33}/>
+                  <RingLoader color="var(--white)" loading={true} size={35}/>
                 </div>}
               </div>
 

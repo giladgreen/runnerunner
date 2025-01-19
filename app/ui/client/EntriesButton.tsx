@@ -10,6 +10,7 @@ import Spinner from '@/app/ui/client/Spinner';
 import { Tooltip } from '@nextui-org/react';
 import { Tooltip as BlackTooltip } from 'flowbite-react';
 import Snackbar, {SnackbarCloseReason} from "@mui/material/Snackbar";
+import { RingLoader } from 'react-spinners';
 
 const formatPlayerEntries = (
   entries: number,
@@ -21,7 +22,7 @@ const formatPlayerEntries = (
 
 
     if (isPending) {
-    return <Spinner size={30} />;
+    return <RingLoader color="var(--white)" loading={true} size={30}/>;
   }
 
   if (entries < 1) {

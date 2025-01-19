@@ -10,6 +10,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import Spinner from '@/app/ui/client/Spinner';
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import { RingLoader } from 'react-spinners';
 
 export default function AutoPlayerPayButton({
   player,
@@ -139,7 +140,7 @@ export default function AutoPlayerPayButton({
         <div
           className="auto-player-pay-button"
         >
-          <Spinner size={33} />
+          <RingLoader color="var(--white)" loading={true} size={35}/>
         </div>
       )}
 
@@ -159,7 +160,7 @@ export default function AutoPlayerPayButton({
             id="note"
             name="note"
             type="text"
-            className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500 hidden"
+            className="peer block w-full rounded-md border py-2 pl-10 text-sm outline-2  hidden"
             readOnly
             value={initialNote}
           />
@@ -168,7 +169,7 @@ export default function AutoPlayerPayButton({
             id="type"
             name="type"
             type="text"
-            className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500 hidden"
+            className="peer block w-full rounded-md border py-2 pl-10 text-sm outline-2  hidden"
             readOnly
             value={useCredit ? 'credit' : 'cash'}
           />

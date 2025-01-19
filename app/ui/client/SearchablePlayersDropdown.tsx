@@ -112,7 +112,7 @@ const SearchablePlayersDropdown = ({
             onClick={toggle}
           />
           {selectedVal && (
-            <div style={{ marginLeft: 5, marginTop: 5 }}>
+            <div className="other_player_name" style={{ marginLeft: 5, marginTop: 5 }}>
               ({selectedVal.name})
             </div>
           )}

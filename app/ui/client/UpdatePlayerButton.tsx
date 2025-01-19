@@ -12,7 +12,7 @@ export default function UpdatePlayerButton({
   return (
     <Link
       href={`/${userId}/players/${id}/edit`}
-      className="rounded-md border p-2 hover:bg-gray-100"
+      className="link-button rounded-md border p-2 "
     >
       <PencilIcon className="w-5" />
     </Link>

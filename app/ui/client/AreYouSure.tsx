@@ -24,13 +24,13 @@ export default function AreYouSure({
         )}
         <div className="confirmation-modal-buttons">
           <button
-            className="confirmation-modal-button rounded-md border p-2 hover:bg-gray-100"
+            className="confirmation-modal-button rounded-md border p-2 "
             onClick={onCancel}
           >
             <span style={{ fontSize: 20 }}>שיניתי דעתי</span>
           </button>
           <button
-            className="confirmation-modal-button rounded-md border p-2 hover:bg-gray-100"
+            className="confirmation-modal-button rounded-md border p-2 "
             onClick={() => {
               onConfirm();
             }}

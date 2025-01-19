@@ -12,6 +12,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Spinner from '@/app/ui/client/Spinner';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
+import { RingLoader } from 'react-spinners';
 
 export function UseCreditForPrizeForm({
   player,
@@ -69,14 +70,14 @@ export function UseCreditForPrizeForm({
                 step="1"
                 min={0}
                 placeholder="הכנס סכום"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="change-error"
                 onChange={(e) => {
                   setAmount(Number(e.target.value));
                 }}
                 value={amount}
               />
-              <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             </div>
             <div id="change-error" aria-live="polite" aria-atomic="true">
               {state1?.errors?.change &&
@@ -103,7 +104,7 @@ export function UseCreditForPrizeForm({
               name="note"
               type="text"
               placeholder="הערה"
-              className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
               aria-describedby="note-error"
               onChange={(e) => {
                 setNote(e.target.value);
@@ -112,7 +113,7 @@ export function UseCreditForPrizeForm({
               value={note}
             />
 
-            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
           </div>
           <div id="note-error" aria-live="polite" aria-atomic="true">
             {state1?.errors?.note &&
@@ -155,7 +156,7 @@ function UseCreditButton() {
   const { pending } = useFormStatus();
 
   if (pending) {
-    return <Spinner size={33} />;
+    return <RingLoader color="var(--white)" loading={true} size={33}/>;
   }
   return <Button type="submit">השתמש בקרדיט</Button>;
 }
@@ -212,10 +213,10 @@ export function AddToBalanceForm({
                 min={0}
                 required
                 placeholder="הכנס סכום"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="change-error"
               />
-              <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             </div>
             <div id="change-error" aria-live="polite" aria-atomic="true">
               {state2?.errors?.change &&
@@ -242,11 +243,11 @@ export function AddToBalanceForm({
               name="note"
               type="text"
               placeholder="הכנס סיבה"
-              className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
               aria-describedby="note-error"
             />
 
-            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
           </div>
           <div id="note-error" aria-live="polite" aria-atomic="true">
             {state2?.errors?.note &&

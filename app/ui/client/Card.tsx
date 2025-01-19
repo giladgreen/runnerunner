@@ -63,14 +63,12 @@ export default function Card({
 
   return (
     <div
-      className={`card rounded-xl p-2 shadow-sm ${
-        green ? 'bg-green-200' : orange ? 'bg-red-300' : 'bg-blue-200'
-      }`}
+      className={`card rounded-xl p-2 shadow-sm`}
     >
       <div className="rtl card-header flex p-4 text-center">
         {Icon ? (
           <Icon
-            className="h-5 w-5 text-gray-700"
+            className="h-5 w-5 "
             size={18}
             style={{ marginLeft: 4 }}
           />
@@ -86,7 +84,7 @@ export default function Card({
       <div
         className={`${
           lusitana.className
-        } truncate rounded-xl bg-white px-4 py-4 text-center text-2xl ${
+        } truncate rounded-xl px-4 py-4 text-center text-2xl ${
           oneLine ? 'card-body-one-line' : 'card-body'
         }`}
       >

@@ -172,7 +172,7 @@ export default function TodayPlayersTable({
     <>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <button
-          className="pointer rounded-md border p-2 hover:bg-gray-100"
+          className="pointer rounded-md border p-2 "
           onClick={() => {
             setQuery('');
           }}
@@ -186,14 +186,16 @@ export default function TodayPlayersTable({
             />
           </Tooltip>
         </button>
-        <input
-          className="rtl peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-          placeholder="חיפוש שחקן"
-          onChange={(e) => {
-            setQuery(e.target.value);
-          }}
-          value={query}
-        />
+        <div className="search-input w-full">
+          <input
+            className="rtl peer block w-full rounded-md border  py-[9px] pl-10 text-sm outline-2 "
+            placeholder="חיפוש שחקן"
+            onChange={(e) => {
+              setQuery(e.target.value);
+            }}
+            value={query}
+          />
+        </div>
 
         <CreateNewTodayPlayerButton params={{ userId, query }} />
       </div>
@@ -210,7 +212,7 @@ export default function TodayPlayersTable({
           </div>
 
           <div className="inline-block min-w-full align-middle">
-            <div className="w-full rounded-lg bg-gray-50 p-2 md:pt-0">
+            <div className="w-full rounded-lg p-2 md:pt-0">
               <div className="md:hidden">
                 {players?.map((player: PlayerDB) => (
                   <div
@@ -229,9 +231,7 @@ export default function TodayPlayersTable({
                             {player.name}
                           </div>
                         </div>
-                        <div className="text-sm text-gray-500">
-                          {player.phone_number}
-                        </div>
+                        <div className="text-sm ">{player.phone_number}</div>
                       </div>
                       <div className="flex justify-end gap-3">
                         <div className="flex">
@@ -311,58 +311,49 @@ export default function TodayPlayersTable({
                   </div>
                 ))}
               </div>
-              <table className="rtl hidden min-w-full text-gray-900 md:table">
-                <thead className="rtl rounded-lg text-left text-sm font-normal ">
+              <div className="general-table">
+                <table className=" rtl hide-mobile min-w-full  md:table">
+                  <thead className="table-header rtl rounded-lg text-left text-sm font-normal ">
                   <tr>
                     <th
                       scope="col"
-                      className="px-4 py-5 font-medium sm:pl-6 align-text-right"
-
+                      className="align-text-right px-4 py-5 font-medium sm:pl-6"
                     >
                       שם
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-5 font-medium align-text-right"
-
+                      className="align-text-right px-3 py-5 font-medium"
                     >
                       טלפון
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-5 font-medium align-text-right"
-
+                      className="align-text-right px-3 py-5 font-medium"
                     >
                       קרדיט
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-5 font-medium align-text-right"
-
+                      className="align-text-right px-3 py-5 font-medium"
                     >
                       הערות
                     </th>
                     {rsvpEnabled && isRsvpRequired && currentTournament && (
-                      <th
-                        scope="col"
-                        className="px-3 py-5 font-medium"
-
-                      >
+                      <th scope="col" className="px-3 py-5 font-medium">
                         אישור הגעה
                       </th>
                     )}
 
                     <th
                       scope="col"
-                      className="px-3 py-5 font-medium align-text-right"
-
+                      className="align-text-right px-3 py-5 font-medium"
                     >
                       הגיע
                     </th>
                     <th
                       scope="col"
-                      className="px-3 py-5 font-medium align-text-right"
-
+                      className="align-text-right px-3 py-5 font-medium"
                     >
                       כניסות
                     </th>
@@ -371,18 +362,17 @@ export default function TodayPlayersTable({
 
                     <th
                       scope="col"
-                      className="relative py-3 pl-6 pr-3 align-text-right"
-
+                      className="align-text-right relative py-3 pl-6 pr-3"
                     >
                       <span className="sr-only">עריכה</span>
                     </th>
                   </tr>
-                </thead>
-                <tbody className="rtl bg-white">
+                  </thead>
+                  <tbody className="table-body rtl ">
                   {players?.map((player: PlayerDB) => (
                     <tr
                       key={player.id}
-                      className="rtl w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                      className="table-row  rtl w-full  py-3 text-sm last-of-type:border-none "
                     >
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="font-large flex items-center gap-3">
@@ -479,8 +469,9 @@ export default function TodayPlayersTable({
                       </td>
                     </tr>
                   ))}
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

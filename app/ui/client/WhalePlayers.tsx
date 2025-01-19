@@ -22,21 +22,23 @@ export default async function WhalePlayers({
         <h2 className={`${lusitana.className} rtl mb-4 text-xl md:text-2xl`}>
           לוויתנים
         </h2>
-        <div className="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
-          <div className="bg-white px-6">
+        <div className="flex grow flex-col justify-between rounded-xl  p-4">
+          <div className=" player-table px-6">
             {whales.map((player: PlayerDB, i) => {
               let entries = ` ${player.historyEntriesCount}`;
               entries += ` כניסות `;
 
               return (
                 <Link
+
                   key={player.id}
                   href={`/${userId}/players/${player.id}/edit`}
                 >
                   <div
+
                     key={player.id}
                     className={clsx(
-                      'flex flex-row items-center justify-between py-4',
+                      'flex flex-row items-center justify-between py-4 player-table-row',
                       {
                         'border-t': i !== 0,
                       },
@@ -53,7 +55,7 @@ export default async function WhalePlayers({
                         <div className="truncate text-sm font-semibold md:text-base">
                           {player.name}
                         </div>
-                        <div className="hidden text-sm text-gray-500 sm:block">
+                        <div className="hidden text-sm sm:block">
                           {player.phone_number}
                         </div>
                       </div>

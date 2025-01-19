@@ -27,7 +27,7 @@ export default function OpenPrizeModalButton({
   return (
     <div>
       <button
-        className="pointer rounded-md border p-2 hover:bg-gray-100"
+        className="pointer rounded-md border p-2 "
         onClick={() => {
           setShow(true);
         }}

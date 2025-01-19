@@ -2,7 +2,7 @@
 import Button, { RedButton } from '@/app/ui/client/Button';
 import { useFormStatus } from 'react-dom';
 import React from 'react';
-import Spinner from '@/app/ui/client/Spinner';
+import { RingLoader } from "react-spinners";
 
 export default function SpinnerButton({
   text,
@@ -16,7 +16,9 @@ export default function SpinnerButton({
   const { pending } = useFormStatus();
 
   if (pending) {
-    return <Spinner size={33} />;
+    return <Button disabled={true} id={id}>
+              <RingLoader color="var(--white)" loading={true} size={35}/>
+       </Button>
   }
 
   return (
@@ -36,7 +38,7 @@ export function RedSpinnerButton({
   const { pending } = useFormStatus();
 
   if (pending) {
-    return <Spinner size={33} color="red"/>;
+    return <RingLoader color="var(--red)" loading={true} size={35}/>;
   }
 
   return (

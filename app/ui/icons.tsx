@@ -2,18 +2,13 @@
 import Image from 'next/image';
 
 export function TickIcon({ size }: { size: number }) {
-  return (
-    <Image src="/blue_tick.png" width={size} height={size} alt="blue_tick" />
-  );
+
+  return (<span style={{ color: 'var(--white)', margin:'0 2px' }}>✔</span>);
 }
 
 export function DoubleTicksIcon({ size }: { size: number }) {
-  return (
-    <Image
-      src="/blue_double_ticks.png"
-      width={size}
-      height={size}
-      alt="blue_double_ticks"
-    />
-  );
+  return (<div style={{ color: 'var(--grey-lighter)', margin: '0 2px' }}>
+    <span style={{ marginLeft: -9, color: 'var(--white)' }}>✔</span>
+    <span>✔</span>
+  </div>);
 }

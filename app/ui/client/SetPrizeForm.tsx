@@ -72,9 +72,9 @@ export default function SetPrizeForm({
         </div>
       </form>
       {hide && (
-        <Button onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
+        <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
           ביטול
-        </Button>
+        </button>
       )}
     </div>
   );

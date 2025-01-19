@@ -9,7 +9,7 @@ export default function Button({ children, className, ...rest }: ButtonProps) {
     <button
       {...rest}
       className={clsx(
-        'flex h-10 items-center regular-button',
+        'my-button flex h-10 items-center regular-button',
         className,
       )}
     >

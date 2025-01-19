@@ -52,7 +52,7 @@ export default function TournamentsHistoryTable({
             <tr
               style={{ backgroundColor: 'rgba(250,250,250,0.1)' }}
               key={tournamentData.date}
-              className="w-full border-b py-1 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+              className="w-full border-b py-1 text-sm last-of-type:border-none "
             >
               <td className="">
                 {tournamentData.date}

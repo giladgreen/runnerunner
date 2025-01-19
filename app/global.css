@@ -3,19 +3,76 @@
 @import '@/app/signup/style.css';
 @import '@/app/[userId]/style.css';
 
+
 :root {
   --white: #f7ffff;
   --white-dark: #f9f9f9;
+  --white-darker: #cccccc;
   --red-light: #c94455;
   --red: #b62230;
   --red-dark: #551220;
+  --grey-lighter: #929292;
   --grey-light: #777777;
   --grey: #3c404b;
   --grey-dark: #131d26;
+  --grey-darker: #272727;
   --black: #222222;
   --grey-placeholder: #a1a1a1;
+  --blue: #3495d4;
 }
 
+.breadcrumb {
+  color: var(--white-darker);
+}
+.breadcrumb-active {
+  color: var(--red-light);
+}
+
+
+body{
+  background: var(--black);
+  color: var(--white);
+
+}
+.player-table{
+  background: var(--grey-darker);
+  padding: 10px;
+}
+.player-table-row{
+  /*background: var(--black);*/
+}
+.other_player_name{
+  color: var(--white);
+}
+.my-form{
+  input[type="text"], input[type="password"], input[type="email"], input[type="number"]{
+    background-color: var(--white-dark) !important;
+    color: var(--black) !important;
+  }
+}
+.search-input{
+  input{
+    background-color: var(--white) !important;
+    color: var(--black) !important;
+  }
+}
+.general-table{
+  background: var(--red);
+  border-radius: 10px;
+  padding: 0 10px 5px 10px;
+  .table-header{
+      background: var(--red);
+      color: var(--white);
+  }
+  .table-body{
+    background: var(--white-dark);
+    color: var(--black);
+
+    .table-row{
+      border-bottom: 3px solid var(--red);
+    }
+  }
+}
 .login-input-icon{
   color: var(--grey-light);
 }
@@ -31,6 +88,13 @@
 }
 .logout-color{
     color: var(--black);
+}
+
+.link-button{
+  background-color: var(--white-dark);
+}
+.link-button:hover{
+  background-color: var(--white-darker);
 }
 @media only screen and (max-width: 600px) {
   .admin-page-menu {
@@ -145,7 +209,7 @@
 
 .regular-button {
   direction: rtl !important;
-  background: #000088;
+  background: var(--blue);
   color: var(--white);
   padding: 2px 15px;
   display: flex !important;
@@ -209,7 +273,9 @@
   text-align: center;
   padding: 5px 10px;
   z-index: 99;
-
+  border: 2px solid var(--red);
+  background: var(--black);
+  color: var(--white);
 }
 .zoom-on-hover:hover {
   transform: scale(2);

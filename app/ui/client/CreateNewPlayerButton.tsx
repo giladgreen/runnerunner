@@ -12,7 +12,7 @@ export default function CreateNewPlayerButton({
   return (
     <Link
       href={`/${params.userId}/players/create`}
-      className="pointer rounded-md border p-2 hover:bg-gray-100"
+      className="pointer rounded-md border p-2 "
     >
       <Tooltip content="צור שחקן חדש" color="primary">
         <UserPlusIcon className="h-5 md:ml-4" cursor="copy" />

@@ -63,7 +63,7 @@ export default async function UsersPage({
       </div>
 
       <div className="rtl mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <table className=" text-gray-900 md:table">
+        <table className="md:table">
           <thead className="rounded-lg text-left text-sm font-normal">
           <tr>
             <th
@@ -108,7 +108,7 @@ export default async function UsersPage({
           {users?.map((user) => (
               <tr
                   key={user.id}
-                  className="align-text-right  w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+                  className="align-text-right  w-full border-b py-3 text-sm last-of-type:border-none  "
               >
                 <td
                     className="thin-column whitespace-nowrap py-3 pl-6 pr-3 align-text-right "

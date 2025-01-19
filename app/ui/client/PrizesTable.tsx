@@ -41,7 +41,7 @@ export default function PrizesTable({
   }, [orderBy]);
 
   return (
-    <table className="rtl text-gray-900 md:table">
+    <table className="rtl md:table">
       <thead className="rtl rounded-lg text-left text-sm font-normal">
         <tr>
           <th
@@ -93,7 +93,7 @@ export default function PrizesTable({
           <tr
             key={prize.id}
 
-            className="align-text-right w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
+            className="align-text-right w-full border-b py-3 text-sm last-of-type:border-none "
           >
             <td
               className="align-text-right smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3"

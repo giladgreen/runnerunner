@@ -33,7 +33,7 @@ export default async function TournamentsSetupPage({
       </div>
 
       <table
-        className="rtl min-w-full text-gray-900 md:table align-text-right"
+        className="rtl min-w-full  md:table align-text-right"
 
       >
         <thead
@@ -124,7 +124,7 @@ export default async function TournamentsSetupPage({
           {tournaments?.map((tournament, index) => (
             <tr
               key={tournament.id}
-              className={`table-row-background-color${ (index % 2) +1}. w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg`}
+              className={`table-row-background-color${ (index % 2) +1}. w-full border-b py-3 text-sm last-of-type:border-none `}
             >
               <td className="cellular smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
                 <a
@@ -205,7 +205,7 @@ export default async function TournamentsSetupPage({
                 <div className="smaller-on-mobile edit-tournament-link flex justify-end gap-3">
                   <Link
                     href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
-                    className="smaller-on-mobile rounded-md border p-2 hover:bg-gray-100"
+                    className="smaller-on-mobile rounded-md border p-2 "
                   >
                     <PencilIcon className="w-5" />
                   </Link>

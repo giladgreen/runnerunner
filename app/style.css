@@ -9,7 +9,7 @@ body {
 .homepage-top-header {
   padding-left: 40px;
   font-size: x-large;
-  color: white;
+  color: var(--white);
 }
 
 .fixed-side-nav {

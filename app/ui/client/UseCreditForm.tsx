@@ -10,6 +10,7 @@ import SearchablePlayersDropdown from '@/app/ui/client/SearchablePlayersDropdown
 import Spinner from '@/app/ui/client/Spinner';
 import { getCurrentDate } from '@/app/lib/clientDateUtils';
 import { Switch } from '@nextui-org/react';
+import { RingLoader } from 'react-spinners';
 
 export default function UseCreditForm({
   players,
@@ -104,8 +105,13 @@ export default function UseCreditForm({
     }, [isPending, wasTrue]);
 
     if (pending) {
-      return <Spinner size={40} style={{ marginRight: 30 }} />;
+      return  <Button
+        disabled={true}
+      >
+        <RingLoader color="var(--white)" loading={true} size={33}  />
+      </Button>
     }
+
     return (
       <Button
         type="submit"
@@ -123,15 +129,16 @@ export default function UseCreditForm({
     }
 
     return (
-      <Button onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
+      <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4 text-sm font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
         ביטול
-      </Button>
+      </button>
     );
   }
 
   return (
     <div
       className="edit-player-modal-inner-div rtl align-text-right"
+      style={{ background: 'transparent' }}
     >
       <form action={dispatch} className="form-control">
         <div className="form-inner-control  rounded-md p-4 md:p-6">
@@ -149,7 +156,7 @@ export default function UseCreditForm({
                   step="1"
                   min={1}
                   placeholder="סכום"
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                   aria-describedby="change-error"
                   value={amount}
                   onChange={(e) => {
@@ -160,7 +167,7 @@ export default function UseCreditForm({
                     setAmount(Number(e.target.value));
                   }}
                 />
-                <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+                <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
               </div>
               <div id="change-error" aria-live="polite" aria-atomic="true">
                 {state1?.errors?.change &&
@@ -184,7 +191,7 @@ export default function UseCreditForm({
                 name="note"
                 type="text"
                 placeholder="הערה"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border py-2 pl-10 text-sm outline-2 "
                 aria-describedby="note-error"
                 required
                 value={note}
@@ -193,7 +200,7 @@ export default function UseCreditForm({
                 }}
               />
 
-              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             </div>
             <div id="note-error" aria-live="polite" aria-atomic="true">
               {state1?.errors?.note &&
@@ -340,7 +347,7 @@ export default function UseCreditForm({
                   step="1"
                   min={0}
                   placeholder="סכום"
-                  className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                   aria-describedby="change2-error"
                   value={amount2}
                   onChange={(e) => {
@@ -351,7 +358,7 @@ export default function UseCreditForm({
                     setAmount2(Number(e.target.value));
                   }}
                 />
-                <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+                <BanknotesIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
               </div>
               <div id="change2-error" aria-live="polite" aria-atomic="true">
                 {state1?.errors?.change2 &&
@@ -375,7 +382,7 @@ export default function UseCreditForm({
                 name="note2"
                 type="text"
                 placeholder="הערה"
-                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border  py-2 pl-10 text-sm outline-2 "
                 aria-describedby="note-error"
                 required
                 value={note2}
@@ -384,7 +391,7 @@ export default function UseCreditForm({
                 }}
               />
 
-              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
+              <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
             </div>
             <div id="note2-error" aria-live="polite" aria-atomic="true">
               {state1?.errors?.note2 &&
