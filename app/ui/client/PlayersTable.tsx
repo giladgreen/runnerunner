@@ -126,7 +126,7 @@ export default function PlayersTable({
           </div>
 
           {/* web view */}
-          <div className="hide-mobile">
+          <div className="mobile-on-hide">
             {tableView && (
               <div  className="general-table min-w-full" style={{ marginTop: 20 }}>
                 <table className=" min-w-full md:table">

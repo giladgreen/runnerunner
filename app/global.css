@@ -55,6 +55,7 @@ body{
   color: var(--white);
 
 }
+
 .tournaments-table{
   direction: rtl;
   background: var(--grey-darker);
@@ -155,10 +156,21 @@ body{
   background-color: var(--white-darker);
 }
 @media only screen and (max-width: 600px) {
+  .mobile-on-hide {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
   .admin-page-menu {
     direction: rtl;
     padding-right: 10px;
     color: var(--white);
+  }
+
+  .main-layout {
+    padding-top: 70px;
+    padding-right: 8px;
+    padding-left: 8px;
   }
 }
 

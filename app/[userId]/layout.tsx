@@ -31,8 +31,7 @@ export default async function Layout({
 
         <div className="cellular flex h-screen flex-col md:flex-row md:overflow-hidden">
           <div
-            className="flex-grow p-6 md:overflow-y-auto md:p-12"
-            style={{ paddingTop: 90 }}
+            className="flex-grow md:overflow-y-auto md:p-12 main-layout"
           >
             {children}
           </div>

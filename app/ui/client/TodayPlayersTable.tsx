@@ -311,8 +311,8 @@ export default function TodayPlayersTable({
                   </div>
                 ))}
               </div>
-              <div className="general-table">
-                <table className=" rtl min-w-full  md:table hide-mobile">
+              <div className="general-table mobile-on-hide">
+                <table className=" rtl min-w-full  md:table ">
                   <thead className="table-header rtl rounded-lg text-left  font-normal ">
                   <tr>
                     <th
