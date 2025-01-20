@@ -35,25 +35,42 @@ export default function ImportPlayersButton() {
               reader.onload = async function (e) {
                 const fileContent = (e?.target?.result ?? '') as string;
                 const phoneNumbers = {} as any;
+                const fileLines = fileContent
+                  .split('\n');
 
-                const players = fileContent
-                  .split('\n')
+                const firstLine = fileLines[0];
+                const firstLineParts = firstLine.split(',');
+                if (firstLine.includes('name') && firstLine.includes('balance')) {
+                  nameColumnIndex = firstLineParts.findIndex((item) =>
+                    item.includes('name'),
+                  );
+                }else{
+                  if (!isNaN(Number(firstLineParts[0].trim().replaceAll('-', '')))) {
+                    nameColumnIndex = 1;
+                  }else{
+                    nameColumnIndex = 0;
+                  }
+                }
+
+                const players = fileLines
                   .map((line: string) => {
                     if (line.trim().length === 0) {
                       return false;
                     }
                     if (line.includes('name') && line.includes('balance')) {
-                      const lineParts = line.split(',');
-                      nameColumnIndex = lineParts.findIndex((item) =>
-                        item.includes('name'),
-                      );
                       return false;
                     }
+                    if (line.includes('שם') && line.includes('קרדיט')) {
+                      return false;
+                    }
+                    const phoneNumberIndex = 1 - nameColumnIndex;
+
                     const parts = line.split(',');
 
-                    let phoneNumber = parts[nameColumnIndex === 0 ? 1 : 0]
+                    let phoneNumber = parts[phoneNumberIndex]
                       .trim()
                       .replaceAll('-', '');
+
                     if (!phoneNumber.startsWith('0')) {
                       phoneNumber = '0' + phoneNumber;
                     }

@@ -54,7 +54,7 @@ export default function UserGuideRegistrationPage() {
         className="flex w-full items-center justify-between "
         style={{ marginTop: 20 }}
       >
-        ואז לסמן בעמודה המתאימה -ירוק פירושו רשום
+        ואז לסמן בעמודה המתאימה
       </div>
 
       <div

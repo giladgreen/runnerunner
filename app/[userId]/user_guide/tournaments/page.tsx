@@ -74,7 +74,7 @@ export default function UserGuideTournamentsPage() {
       >
         <Image
           src="/user_guide/tournaments/3.png"
-          width={400}
+          width={900}
           height={10}
           alt="tournaments3"
           className="image-border"

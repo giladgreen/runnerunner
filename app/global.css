@@ -19,6 +19,8 @@
   --black: #222222;
   --grey-placeholder: #a1a1a1;
   --blue: #3495d4;
+  --blue-light: #6894d7;
+  --green: #57b86a;
 }
 /* Scrollbar track */
 ::-webkit-scrollbar {

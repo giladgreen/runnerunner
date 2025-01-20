@@ -206,6 +206,8 @@ export default function TodayPlayersTable({
               display: 'flex',
               justifyContent: 'space-between',
               textAlign: 'right',
+              marginBottom: 10,
+              marginRight: 15
             }}
           >
             {header}

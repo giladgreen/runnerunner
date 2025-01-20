@@ -42,7 +42,7 @@ export default function CreateNewPrizesInfoPage({
                 id="name"
                 name="name"
                 placeholder="הכנס שם פרס"
-                className="peer block w-full rounded-md border  py-2 pl-10 outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10 outline-2 prizes-edit-input"
                 aria-describedby="name-error"
               />
             </div>
@@ -69,7 +69,7 @@ export default function CreateNewPrizesInfoPage({
                 id="extra"
                 name="extra"
                 placeholder="מידע נוסף אם יש"
-                className="peer block w-full rounded-md border  py-2 pl-10 outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10 outline-2 prizes-edit-input"
                 aria-describedby="extra-error"
               />
             </div>
@@ -97,7 +97,7 @@ export default function CreateNewPrizesInfoPage({
                 name="credit"
                 type="number"
                 placeholder="הכנס שווי בקרדיט"
-                className="peer block w-full rounded-md border  py-2 pl-10 outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10 outline-2 prizes-edit-input"
                 aria-describedby="extra-error"
               />
             </div>

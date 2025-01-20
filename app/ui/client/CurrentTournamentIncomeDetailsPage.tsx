@@ -53,15 +53,15 @@ export default function CurrentTournamentIncomeDetailsPage({
   };
 
   const cashStyle = {
-    color: '#00AA00',
+    color: 'var(--green)',
   };
 
   const wireStyle = {
-    color: '#0000BB',
+    color: 'var(--blue-light)',
   };
 
   const creditStyle = {
-    color: '#AA0033',
+    color: 'var(--red-light)',
   };
 
   return (
@@ -272,7 +272,7 @@ export default function CurrentTournamentIncomeDetailsPage({
                   style={{ ...rowsStyle, ...creditStyle }}
                   className="full-width flex w-full items-center justify-between"
                 >
-                  כניסות בקדריט: ₪{todayCreditIncome}
+                  כניסות בקרדיט: ₪{todayCreditIncome}
                 </div>
                 <hr style={rowsStyle}></hr>
                 <div style={{ ...rowsStyle, ...cashStyle }}>
