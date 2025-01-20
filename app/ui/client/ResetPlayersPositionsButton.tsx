@@ -24,7 +24,7 @@ export default function ResetPlayersPositionsButton({
         onClick={() => {
           setShow(true);
         }}
-        className="pointer link-color"
+        className="pointer link-color reset-credit-button"
         style={{
           justifyContent: 'center',
           marginLeft: 0,

@@ -88,7 +88,7 @@ export default function PrizesTable({
           </th>
         </tr>
       </thead>
-      <tbody className="rtl bg-white">
+      <tbody className="rtl ">
         {orderedPrizes?.map((prize) => (
           <tr
             key={prize.id}

@@ -211,14 +211,15 @@ export default function TodayPlayersTable({
             {header}
           </div>
 
-          <div className="inline-block min-w-full align-middle">
-            <div className="w-full rounded-lg p-2 md:pt-0">
-              <div className="md:hidden players-page-card">
+          <div className="inline-block min-w-full align-middle" >
+            <div className="w-full rounded-lg p-2 md:pt-0" style={{ background: 'var(--black)'}}>
+              {/*mobile view*/}
+              <div className="md:hidden players-page-card" style={{ background: 'var(--black)'}}>
                 {players?.map((player: PlayerDB) => (
                   <div
                     key={player.id}
                     className="full-width w-full rounded-md"
-                    style={{ marginBottom: 20, padding: 4 }}
+                    style={{ marginBottom: 20, padding: 10, background: 'var(--white)' }}
                   >
                     <div className="flex items-center justify-between border-b pb-4">
                       <div>
@@ -311,7 +312,8 @@ export default function TodayPlayersTable({
                   </div>
                 ))}
               </div>
-              <div className="general-table mobile-on-hide">
+              {/*web view*/}
+              <div className="general-table hide-on-mobile">
                 <table className=" rtl min-w-full  md:table ">
                   <thead className="table-header rtl rounded-lg text-left  font-normal ">
                   <tr>

@@ -37,8 +37,8 @@ export async function getFinalTablePlayersContent(
     isTournamentsDataPage && finalTablePlayers.find((p) => !p.hasReceived);
   if (!finalTablePlayers || finalTablePlayers.length === 0) return null;
   const textClass = isTournamentsDataPage
-    ? 'text-tournaments-data-page'
-    : 'text-on-card';
+    ? 'text-tournaments-data-page item'
+    : 'text-on-card item';
 
   return (
     <div
@@ -58,7 +58,7 @@ export async function getFinalTablePlayersContent(
           return (
             <div
               key={finalTablePlayer.id}
-              className="highlight-on-hover flex items-center rounded-md border-b"
+              className="highlight-on-hover flex items-center rounded-md border-b final-table-player-data"
             >
               <OpenGiveCreditModalButton
                 player={finalTablePlayer}
@@ -76,7 +76,7 @@ export async function getFinalTablePlayersContent(
               {!isTournamentsDataPage && (
                 <Image
                   src={finalTablePlayer.image_url}
-                  className="zoom-on-hover wide-screen"
+                  className="zoom-on-hover wide-screen item"
                   style={{
                     marginLeft: 10,
                     marginRight: 20,
@@ -92,7 +92,7 @@ export async function getFinalTablePlayersContent(
               )}
 
               <div
-                className="wide-screen"
+                className="wide-screen item"
                 style={{
                   fontSize: isTournamentsDataPage ? 11 : 20,
                   marginLeft: 20,
@@ -102,7 +102,7 @@ export async function getFinalTablePlayersContent(
               </div>
 
               <div
-                className="wide-screen"
+                className="wide-screen item"
                 style={{
                   fontSize: isTournamentsDataPage ? 11 : 20,
                   marginRight: 20,
@@ -112,12 +112,26 @@ export async function getFinalTablePlayersContent(
               </div>
 
               <div
-                className="cellular-block rtl"
+                className="cellular-block rtl item"
                 style={{ textAlign: 'right', marginRight: 4, marginLeft: 7 }}
               >
                 <div>{finalTablePlayer.name}</div>
                 <div>{finalTablePlayer.phone_number}</div>
               </div>
+              {!isTournamentsDataPage && (
+                <Image
+                  src={finalTablePlayer.image_url}
+                  className="cellular"
+                  style={{
+                    marginLeft: 10,
+                    marginRight: 70,
+                    marginTop: 5,
+                  }}
+                  width={40}
+                  height={50}
+                  alt={`${finalTablePlayer.name}'s profile picture`}
+                />
+              )}
             </div>
           );
         })}

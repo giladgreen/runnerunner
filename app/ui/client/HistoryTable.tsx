@@ -87,7 +87,7 @@ export default async function HistoryTable({
           </th>
         </tr>
       </thead>
-      <tbody className="rtl bg-white">
+      <tbody className="rtl ">
         {historyLog?.map((log) => (
           <tr
             key={log.id}

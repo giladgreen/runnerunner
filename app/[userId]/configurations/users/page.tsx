@@ -68,7 +68,7 @@ export default async function UsersPage({
           <tr>
             <th
                 scope="col"
-                className="thin-column px-4 py-5 font-medium sm:pl-6  "
+                className="px-4 py-5 font-medium sm:pl-6 user-name-column"
             >
               שם
             </th>
@@ -94,59 +94,61 @@ export default async function UsersPage({
 
             <th
                 scope="col"
-                className="thin-column px-3 py-5 font-medium"
+                className="thin-column px-3 py-5 font-medium hide-on-mobile"
             ></th>
             <th
                 scope="col"
-                className="thin-column px-4 py-5 font-medium sm:pl-6  "
+                className="thin-column px-4 py-5 font-medium sm:pl-6  hide-on-mobile"
             >
               נראה לאחרונה
             </th>
           </tr>
           </thead>
-          <tbody className="rtl bg-white">
+          <tbody className="rtl ">
           {users?.map((user) => (
+            <>
               <tr
-                  key={user.id}
-                  className="  w-full border-b py-3  last-of-type:border-none  "
-              >
-                <td
-                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3  "
+                    key={user.id}
+                    className="  w-full border-b py-3  last-of-type:border-none  "
                 >
-                  {user.name}
-                </td>
-                <td
-                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3"
+                  <td
+                      className="whitespace-nowrap py-3 pl-6 pr-3 user-name-column "
+                  >
+                    {user.name}
+                  </td>
+                  <td
+                      className="thin-column whitespace-nowrap py-3 pl-6 pr-3"
 
-                >
-                  {user.phone_number}
-                </td>
+                  >
+                    {user.phone_number}
+                  </td>
 
-                <td
-                    className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3  "
-                >
-                  <UpdateAdminUser user={user} userId={params.userId}/>
-                </td>
-                <td
-                    className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3  "
-                >
-                  <UpdateWorkerUser user={user} userId={params.userId}/>
-                </td>
+                  <td
+                      className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3  "
+                  >
+                    <UpdateAdminUser user={user} userId={params.userId}/>
+                  </td>
+                  <td
+                      className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3  "
+                  >
+                    <UpdateWorkerUser user={user} userId={params.userId}/>
+                  </td>
 
-                <td
-                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3  "
-                >
-                  <DeleteUserButton user={user} userId={params.userId}/>
-                </td>
-                <td
-                    className="thin-column whitespace-nowrap py-3 pl-6 pr-3  "
-                    style={{minWidth: '350px'}}
-                >
-                  <Tooltip placement={'left'} content={formatDateToLocalWithTime(user.last_logged_in_at)} color="primary">
-                  {formatTimePassedSince(user.last_logged_in_at)}
-                  </Tooltip>
-                </td>
-              </tr>
+                  <td
+                      className="thin-column whitespace-nowrap py-3 pl-6 pr-3  hide-on-mobile"
+                  >
+                    <DeleteUserButton user={user} userId={params.userId}/>
+                  </td>
+                  <td
+                      className="thin-column whitespace-nowrap py-3 pl-6 pr-3 hide-on-mobile "
+                      style={{minWidth: '350px'}}
+                  >
+                    <Tooltip placement={'left'} content={formatDateToLocalWithTime(user.last_logged_in_at)} color="primary">
+                    {formatTimePassedSince(user.last_logged_in_at)}
+                    </Tooltip>
+                  </td>
+                </tr>
+            </>
           ))}
           </tbody>
         </table>

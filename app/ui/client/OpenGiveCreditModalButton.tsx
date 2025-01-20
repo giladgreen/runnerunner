@@ -303,7 +303,7 @@ export default function OpenGiveCreditModalButton({
     setShow(false);
   };
   return (
-    <div className="give-credit-modal-button" style={{ marginRight: 2 }}>
+    <div className="give-credit-modal-button item" style={{ marginRight: 2 }}>
       {hasReceived && <TickIcon size={20} />}
       {!hasReceived && (
         <button

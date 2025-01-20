@@ -50,8 +50,6 @@ export default async function HomePage({
           contents={contents}
           userId={params.userId}
         />
-
-        <hr style={{ marginBottom: 30, marginTop: 10 }} />
         <GeneralPlayersCardWrapper />
         <div
           className={`rtl mt-6 grid grid-cols-1 gap-6 md:grid-cols-5 lg:grid-cols-${hasWhales ? 12 : 8}`}

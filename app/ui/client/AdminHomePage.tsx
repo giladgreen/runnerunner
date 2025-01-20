@@ -32,7 +32,7 @@ export default function AdminHomePage({
         </div>
         <div
           key={todayTournament.id}
-          style={{ marginBottom: 10, borderBottom: '2px solid black' }}
+          style={{ marginBottom: 10 }}
         >
           {todayHasTournament && (
             <RSVPAndArrivalCardWrapper

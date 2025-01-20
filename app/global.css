@@ -155,8 +155,33 @@ body{
 .link-button:hover{
   background-color: var(--white-darker);
 }
+
+.final-table-player-data {
+  background: var(--black);
+  padding: 3px;
+  margin-bottom: 2px;
+  color: var(--white);
+  width: 75vw;
+  border: none;
+
+  .item{
+    margin-left: 10px;
+  }
+}
+.reset-credit-button{
+  font-size: 20px;
+}
+.user-name-column {
+  max-width: 170px !important;
+}
 @media only screen and (max-width: 600px) {
-  .mobile-on-hide {
+  .final-table-player-data{
+    width: 87vw;
+  }
+  .reset-credit-button{
+    font-size: 27px;
+  }
+  .hide-on-mobile {
     display: none !important;
     visibility: hidden !important;
   }
@@ -165,12 +190,38 @@ body{
     direction: rtl;
     padding-right: 10px;
     color: var(--white);
+    border-bottom: 1px solid var(--black);
   }
 
   .main-layout {
     padding-top: 70px;
     padding-right: 8px;
     padding-left: 8px;
+  }
+
+  .tournaments-config-mobile-items{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    color: var(--white);
+    background: var(--black);
+    padding-right: 50px;
+    .item{
+      padding-right: 30px;
+      display: flex;
+      flex-direction: column;
+      margin-top: 10px;
+      background: var(--red);
+
+      font-size: 12px;
+    }
+  }
+
+  .user-name-column {
+    max-width: 110px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 

@@ -814,7 +814,7 @@
   }
 
   .card-body {
-    background: var(--black);
+    /*background: var(--black);*/
     color: var(--white);
     padding: 0;
     max-height: 1126px;

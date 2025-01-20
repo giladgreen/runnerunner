@@ -32,8 +32,109 @@ export default async function TournamentsSetupPage({
         </b>
       </div>
 
+      {/*mobile view*/}
+      <div className="cellular tournaments-config-mobile-items">
+        {tournaments?.map((tournament, index) => (
+          <div
+            key={tournament.id}
+            className={`item`}
+          >
+              <a
+                href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
+                className="smaller-on-mobile rounded-md border p-2"
+                style={{
+                  zoom: 1.2,
+                  color: 'blue',
+                  border: '0 solid transparent',
+                }}
+              >
+                <b>
+                  <u>
+                    {
+                      tournament.name
+                    }
+                  </u>
+                </b>
+              </a>
+
+
+              <b>
+                {
+                  // @ts-ignore
+                  TRANSLATIONS[tournament.day]
+                }
+              </b>
+              <div>
+                כניסה ראשונה:
+              {tournament.rsvp_required && tournament.max_players === 0
+                ? '--'
+                : formatCurrency(tournament.buy_in)}
+              </div>
+            <div>
+             כניסה נוספת:
+              {tournament.rsvp_required && tournament.max_players === 0
+                ? '--'
+                : formatCurrency(tournament.re_buy)}
+            </div>
+            <div>
+              ערימה התחלתית:
+              {tournament.rsvp_required && tournament.max_players === 0
+                ? '--'
+                : tournament.initial_stack.toLocaleString()}
+            </div>
+            <div>
+              אורך שלב:
+              {tournament.rsvp_required && tournament.max_players === 0
+                ? '--'
+                : tournament.phase_length}
+            </div>
+            <div>
+              שלה אחרון לכניסות:
+              {tournament.rsvp_required && tournament.max_players === 0
+                ? '--'
+                : tournament.last_phase_for_rebuy}
+
+            </div>
+            <div>
+              מספר מקסימלי של שחקנים:
+              {tournament.rsvp_required && tournament.max_players === 0
+                ? '--'
+                : tournament.max_players}
+            </div>
+            <div>
+              חייב ברישום:
+              {tournament.rsvp_required && tournament.max_players === 0
+                ? '--'
+                : tournament.rsvp_required
+                  ? 'כן'
+                  : 'לא '}
+            </div>
+
+              <div className="flex justify-end gap-3"  style={{ marginTop: -10, marginBottom:10, marginLeft:10}}>
+                {tournament.day_has_more_then_one && (
+                  <div style={{ border: '1px solid white', borderRadius: 5, padding: 0 }}>
+                    <DeleteTournamentButton
+                      tournamentId={tournament.id}
+                      userId={params.userId}
+                    />
+                  </div>
+                )}
+                <Link
+                  href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
+                  className=" rounded-md border p-2 "
+
+                >
+                  <PencilIcon className="w-5" />
+                </Link>
+
+              </div>
+          </div>
+        ))}
+      </div>
+
+      {/*web view*/}
       <table
-        className="rtl min-w-full  md:table align-text-right"
+        className="rtl min-w-full  md:table align-text-right hide-on-mobile"
 
       >
         <thead
@@ -120,7 +221,7 @@ export default async function TournamentsSetupPage({
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white">
+        <tbody >
           {tournaments?.map((tournament, index) => (
             <tr
               key={tournament.id}
