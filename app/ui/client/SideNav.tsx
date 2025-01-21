@@ -51,8 +51,9 @@ export default async function SideNav({ userId }: { userId: string }) {
         <SignOutButton
           signOut={async () => {
             'use server';
-
+            console.log('user is signing out..')
             await signOut({ redirect: true, redirectTo: '/' });
+            console.log('after sign out')
           }}
         />
       </div>

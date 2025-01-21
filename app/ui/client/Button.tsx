@@ -18,12 +18,12 @@ export default function Button({ children, className, ...rest }: ButtonProps) {
   );
 }
 
-export function RedButton({ children, className, ...rest }: ButtonProps) {
+export function RedButton({ children, className, disabled, ...rest }: ButtonProps) {
   return (
     <button
       {...rest}
       className={clsx(
-        'h-10 items-center red-button',
+        `h-10 items-center ${disabled ? 'red-button-disabled' : 'red-button'}`,
         className,
       )}
     >

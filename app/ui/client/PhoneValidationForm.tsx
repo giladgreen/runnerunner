@@ -2,8 +2,7 @@
 import React from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
 import { validatePhone } from '@/app/lib/actions';
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
-import { ArrowLeftIcon } from '@heroicons/react/20/solid';
+import { ExclamationCircleIcon, PhoneIcon } from '@heroicons/react/24/outline';
 import { RedButton } from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
 
@@ -35,7 +34,7 @@ export default function PhoneValidationForm() {
             <div className="error-message-color" >האימות נכשל, נסה שנית</div>
           )}
           {error === 'sms_failed' && (
-            <div className="error-message-color" >
+            <div className="error-message-color no-sms-error" >
               לא ניתן היה לשלוח את sms, בדקו שנית את המספר
             </div>
           )}
@@ -50,6 +49,7 @@ export default function PhoneValidationForm() {
                   placeholder="מספר טלפון"
                   required
                 />
+                <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 login-input-icon" />
               </div>
             </div>
           </div>

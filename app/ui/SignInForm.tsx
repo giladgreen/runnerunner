@@ -5,12 +5,10 @@ import {
   PhoneIcon,
   KeyIcon,
   ExclamationCircleIcon,
-  ArrowLeftIcon,
 } from '@heroicons/react/24/outline';
-import Button, { RedButton } from '@/app/ui/client/Button';
+import { RedButton } from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
-import Spinner from '@/app/ui/client/Spinner';
 import SignUpButton from '@/app/ui/client/SignUpButton';
 import { RingLoader } from 'react-spinners';
 
@@ -43,7 +41,7 @@ export default function SignInForm({
               </label>
               <div className="relative">
                 <input
-                  className="rtl login-input peer block w-full rounded-md border py-[9px] pl-10  outline-2"
+                  className="rtl login-input peer block w-full rounded-md border py-[9px] pl-10  outline-2 signin-input"
                   id="phone_number"
                   type="tel"
                   name="email"
@@ -107,10 +105,7 @@ function SignInButton() {
   return (
     <RedButton className="sign-in-button mt-4 w-full">
       {pending ? (<RingLoader color="var(--white)" loading={true} size={35}/>) : 'התחבר'}
-      {pending ? '' : <ArrowLeftIcon
-        className="ml-auto h-5 w-5 "
-        style={{ margin: '0 10px' }}
-      />}
+      {pending ? '' : <span className="left-arrow">   &larr;</span>}
     </RedButton>
   );
 }

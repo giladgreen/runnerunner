@@ -15,10 +15,7 @@ export default function SignUpButton({
         <a href="/phone_validation" >
          ליצירת חשבון
         </a>
-        <ArrowLeftIcon
-          className="ml-auto h-5 w-5 "
-          style={{ margin: '0 10px' }}
-        />
+        <span className="left-arrow" >   &larr;</span>
       </div>
     );
   }

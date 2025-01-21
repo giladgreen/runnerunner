@@ -4,7 +4,7 @@ import { signUp } from '@/app/lib/actions';
 import {
   KeyIcon,
   ExclamationCircleIcon,
-  PencilIcon,
+  PencilIcon, PhoneIcon
 } from '@heroicons/react/24/outline';
 import { ArrowLeftIcon } from '@heroicons/react/20/solid';
 import Button, { RedButton } from '@/app/ui/client/Button';
@@ -24,6 +24,7 @@ export default function SignUpForm() {
   const [regulationsApprove, setRegulationsApprove] = useState(false);
   const [marketingApprove, setMarketingApprove] = useState(false);
   const { pending } = useFormStatus();
+
   return (
     <div className="login-form">
       <form action={dispatch} className="rtl space-y-3">
@@ -62,11 +63,14 @@ export default function SignUpForm() {
                   required
                   readOnly={readOnlyPhoneNumber}
                 />
+                <PhoneIcon className="login-input-icon pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2" />
               </div>
             </div>
             <div className="mt-4">
-              <label htmlFor="name"
-                     className="login-form-label mb-3 mt-5 block text-xs font-medium">
+              <label
+                htmlFor="name"
+                className="login-form-label mb-3 mt-5 block text-xs font-medium"
+              >
                 שם מלא
               </label>
               <div className="relative">
@@ -78,7 +82,7 @@ export default function SignUpForm() {
                   placeholder="הכנס שם מלא"
                   className="login-input peer block w-full  py-2 pl-10  outline-2 "
                 />
-                <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
+                <PencilIcon className="login-input-icon pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2" />
               </div>
             </div>
             <div className="mt-4">
@@ -87,6 +91,7 @@ export default function SignUpForm() {
                 htmlFor="password"
               >
                 סיסמא
+
               </label>
               <div className="relative">
                 <input
@@ -100,7 +105,7 @@ export default function SignUpForm() {
                   required
                   minLength={6}
                 />
-                <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 0" />
+                <KeyIcon className="0 login-input-icon pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2" />
               </div>
             </div>
             <div
@@ -115,7 +120,7 @@ export default function SignUpForm() {
                 onChange={(e) => setRegulationsApprove(!!e.checked)}
               />
               <label
-                className="login-form-label mb-3 mt-5 block text-xs font-medium"
+                className="login-form-checkbox-label mb-3 mt-5 block text-xs font-medium"
                 htmlFor="regulations_approve"
                 style={{ marginRight: 7 }}
               >
@@ -126,6 +131,7 @@ export default function SignUpForm() {
                   </a>
                 </u>
                 <span> מועדון לקוחות</span>
+
                 {/* Approve customer club regulations */}
               </label>
             </div>
@@ -138,7 +144,7 @@ export default function SignUpForm() {
                 onChange={(e) => setMarketingApprove(!!e.checked)}
               />
               <label
-                className="login-form-label mb-3 mt-5 block text-xs font-medium"
+                className="login-form-checkbox-label mb-3 mt-5 block text-xs font-medium"
                 htmlFor="regulations_approve"
                 style={{ marginRight: 7 }}
               >
@@ -151,6 +157,7 @@ export default function SignUpForm() {
             aria-disabled={
               pending || !regulationsApprove || password.length < 1
             }
+            disabled={pending || !regulationsApprove || password.length < 1}
           >
             {pending ? 'המתן..' : 'הירשם'}
           </RedButton>

@@ -22,7 +22,14 @@ return (
             {children}
           </div>
         </div>
-        <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
+        <div className="flex items-center justify-center  md:w-3/5 md:px-28 md:py-12 hide-on-mobile"
+             style={{ marginTop: -90 }}>
+          <Image
+            src="/logo.png"
+            width={600}
+            height={600}
+            alt="runner"
+          />
         </div>
       </div>
     </main>

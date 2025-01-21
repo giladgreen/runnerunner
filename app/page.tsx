@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import SignUpButton from '@/app/ui/client/SignUpButton';
 import { fetchFeatureFlags } from '@/app/lib/data';
 import SignInForm from '@/app/ui/SignInForm';
 
@@ -17,12 +16,18 @@ export default async function HomePage() {
             src="/logo.png"
             width={400}
             height={400}
-            className="block md:hidden general-form-logo"
+            className="block md:hidden general-form-logo cellular"
             alt="runner"
           />
           <SignInForm usePhoneValidation={usePhoneValidation} />
         </div>
-        <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
+        <div className="flex items-center justify-center  md:w-3/5 md:px-28 md:py-12 hide-on-mobile" style={{ marginTop:-90}}>
+          <Image
+            src="/logo.png"
+            width={600}
+            height={600}
+            alt="runner"
+          />
         </div>
       </div>
     </main>

@@ -48,7 +48,7 @@ export default function PlayerPagePlayerDetails({
           </div>
           <div
             className="truncate font-semibold"
-            style={{ margin: '2px 10px', zoom: 1.4, color: 'red' }}
+            style={{ margin: '2px 10px', zoom: 1.7, color: 'var(--grey-light)' }}
           >
             {player.phone_number}
           </div>

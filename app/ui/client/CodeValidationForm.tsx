@@ -4,6 +4,7 @@ import { useFormState, useFormStatus } from 'react-dom';
 import { validateCode } from '@/app/lib/actions';
 import Button, { RedButton } from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
+import { KeyIcon } from '@heroicons/react/24/outline';
 
 export default function CodeValidationForm() {
   const searchParams = useSearchParams();
@@ -38,6 +39,8 @@ export default function CodeValidationForm() {
                   required
                   autoComplete="one-time-code"
                 />
+                <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 login-input-icon" />
+
               </div>
             </div>
             <input
