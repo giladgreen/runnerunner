@@ -12,7 +12,7 @@ export const formatCurrency = (balance: number) => {
 };
 
 export const formatCurrencyColor = (balance: number) => {
-  return balance > 0 ? 'green' : balance === 0 ? 'gray' : 'red';
+  return balance > 0 ? 'var(--green)' : balance === 0 ? 'var(--grey-light)' : 'var(--red)';
 };
 
 export const formatType = (type: string) => {

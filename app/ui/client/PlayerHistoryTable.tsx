@@ -1,5 +1,5 @@
 'use client';
-import { formatCurrency, formatType } from '@/app/lib/utils';
+import { formatCurrency, formatCurrencyColor, formatType } from '@/app/lib/utils';
 import { PlayerDB } from '@/app/lib/definitions';
 import { formatDateToLocal, getTime } from '@/app/lib/clientDateUtils';
 import React from 'react';
@@ -32,6 +32,7 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
 
   return (
     <div style={{ width: '100%' }}>
+      {/*mobile view*/}
       <div className="md:hidden">
         {historyLogs.map((log) => {
           return (
@@ -39,10 +40,9 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
               key={log.id}
               className="history-table-log"
             >
-              <div className="flex ">
+              <div className="flex rtl">
                 <div style={{ marginLeft: 3 }}> שינוי:</div>
-                <div style={{ marginLeft: 30 }}>
-                  {' '}
+                <div style={{ marginLeft: 30, color: formatCurrencyColor(log.change), direction:'ltr' }}>
                   {formatCurrency(log.change)}
                 </div>
                 <div style={{ marginLeft: 3 }}>סוג:</div>
@@ -54,8 +54,8 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
               </div>
               <div>
                 <div className="flex ">
-                  <div style={{ marginLeft: 3 }}> קרדיט מעודכן:</div>
-                  <div> {formatCurrency(log.currentBalance)}</div>
+                  <div style={{ marginLeft: 3,  }}> קרדיט מעודכן:</div>
+                  <div style={{ color: formatCurrencyColor(log.currentBalance), direction:'ltr'}}> {formatCurrency(log.currentBalance)}</div>
                 </div>
                 <div>
                   {formatDateToLocal(log.updated_at)}, {getTime(log.updated_at)}
@@ -126,7 +126,7 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
             >
               <td
                 className="ltr rsvp-icon whitespace-nowrap px-3 py-3 align-text-right"
-
+                style={{ color: formatCurrencyColor(log.change), direction:'ltr'}}
               >
                 {formatCurrency(log.change)}
               </td>
@@ -138,7 +138,7 @@ export default function PlayerHistoryTable({ player }: { player: PlayerDB }) {
               </td>
               <td
                 className="ltr rsvp-icon whitespace-nowrap px-3 py-3 align-text-right"
-
+                style={{ color: formatCurrencyColor(log.currentBalance), direction:'ltr'}}
               >
                 {formatCurrency(log.currentBalance)}
               </td>

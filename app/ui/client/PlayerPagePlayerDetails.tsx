@@ -48,25 +48,33 @@ export default function PlayerPagePlayerDetails({
           </div>
           <div
             className="truncate font-semibold"
-            style={{ margin: '2px 10px', zoom: 1.7, color: 'var(--grey-light)' }}
+            style={{
+              margin: '2px 10px',
+              zoom: 1.7,
+              color: 'var(--grey-light)',
+            }}
           >
             {player.phone_number}
           </div>
-          { showCreditData && <div>
-            <span style={{ fontSize: 40 }}>קרדיט:</span>
-            <b style={{ marginRight: 5 }}>
-              {player.balance < 0 ? 'חוב של' : ''}
-            </b>
-            <span
-              className="truncate font-semibold"
-              style={{
-                zoom: 2.2,
-                color: formatCurrencyColor(player.balance),
-              }}
-            >
-              <b> {formatCurrency(Math.abs(player.balance))}</b>
-            </span>
-          </div>}
+          {showCreditData && (
+            <div>
+              <div style={{ fontSize: 30 }}>קרדיט:</div>
+              <div style={{ fontSize: 22 }}>
+                <b>{player.balance < 0 ? 'חוב של' : ''}</b>
+              </div>
+
+              <span
+                className="truncate font-semibold"
+                style={{
+                  fontSize: 33,
+                  // zoom: 2.2,
+                  color: formatCurrencyColor(player.balance),
+                }}
+              >
+                <b> {formatCurrency(Math.abs(player.balance))}</b>
+              </span>
+            </div>
+          )}
         </div>
       </div>
       {showCreditData && <PlayerPagePlayerCreditHistory player={player} />}
