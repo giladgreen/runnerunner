@@ -43,7 +43,7 @@
 
 /* Scrollbar thumb on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background-color: greenyellow;
+  background-color: var(--red);
 }
 
 .breadcrumb {
@@ -149,7 +149,7 @@ body{
 .admin-page-menu {
   background: var(--red);
 }
-.logout-color{
+.logout-color {
     color: var(--black);
 }
 

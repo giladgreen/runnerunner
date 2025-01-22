@@ -627,11 +627,13 @@
 
 @keyframes red_blinking_background_anim {
   to {
-    background-color: #e50000aa;
-    color: white;
+    background-color: var(--white);
   }
 }
 
+.regular_background {
+  background-color: var(--red-light)
+}
 .red_blinking_background {
   animation-delay: 1s;
   animation-duration: 2s;
@@ -639,6 +641,7 @@
   animation-direction: alternate;
   animation-name: red_blinking_background_anim;
 }
+
 
 .player_page_menu {
   z-index: 2000;
@@ -699,10 +702,6 @@
 
   .player_page_menu_closed {
     right: -50vw;
-  }
-
-  .red_blinking_background {
-    background: transparent;
   }
 
   .move-up-down-button {

@@ -1,5 +1,5 @@
 'use client';
-import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
+import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import React, { useCallback, useEffect, useState } from 'react';
 import AreYouSure from '@/app/ui/client/AreYouSure';
 const MINUTE = 60;
@@ -64,6 +64,8 @@ export default function SignOutButton({
   if (!playerScreen) {
     if (idleTimeout > TIMEOUT_WARNING || !isInside) {
       backgroundClass = 'red_blinking_background';
+    } else {
+      backgroundClass = 'regular_background';
     }
   }
 
@@ -80,7 +82,7 @@ export default function SignOutButton({
         }
         style={{ marginTop: playerScreen ? 5 : 0 }}
       >
-        <ArrowRightOnRectangleIcon className={playerScreen ? 'w-10' : 'w-6'} />
+        <ArrowUpRightIcon className={`logout-color ${playerScreen ? 'w-10' : 'w-6'}`} />
         {!playerScreen && (
           <div className=" md:block logout-color">{disconnectText}</div>
         )}
