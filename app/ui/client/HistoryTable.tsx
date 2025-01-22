@@ -98,6 +98,7 @@ export default async function HistoryTable({
               style={{
                 textAlign: 'right',
                 color: formatCurrencyColor(log.change),
+                direction:'ltr'
               }}
             >
               {formatCurrency(log.change)}
@@ -119,6 +120,7 @@ export default async function HistoryTable({
               className="ltr smaller-on-mobile whitespace-nowrap px-1 py-2"
               style={{
                 textAlign: 'right',
+                direction:'ltr',
                 color: formatCurrencyColor(log.currentBalance),
               }}
             >

@@ -67,9 +67,7 @@ export default async function WhalePlayers({
                     </div>
                     <div
                       className={`${lusitana.className} ltr truncate  font-medium md:text-base`}
-                      style={{
-                        color: formatCurrencyColor(player.historyEntriesSum),
-                      }}
+                      style={{ color: formatCurrencyColor(player.historyEntriesSum), direction:'ltr'}}
                     >
                       {formatCurrency(player.historyEntriesSum)}
                     </div>

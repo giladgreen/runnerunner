@@ -79,6 +79,7 @@ const SearchablePlayersDropdown = ({
               marginLeft: 30,
               paddingTop: 10,
               color: formatCurrencyColor(option.balance),
+              direction:'ltr'
             }}
           >
             <b> {formatCurrency(option.balance)}</b>

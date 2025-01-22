@@ -84,7 +84,7 @@ const SearchablePrizesDropdown = ({
                   <b>{option.name}</b>
                 </div>
               </div>
-              <div style={{ marginLeft: 30, color: 'black' }}>
+              <div style={{ marginLeft: 30, color: 'black', direction:'ltr' }}>
                 <b> {formatCurrency(option.credit)}</b>
               </div>
             </div>

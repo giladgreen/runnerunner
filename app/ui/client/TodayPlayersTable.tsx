@@ -403,7 +403,7 @@ export default function TodayPlayersTable({
                           color: formatCurrencyColor(player.balance),
                         }}
                       >
-                        <Link href={getLink(player)} className="font-large">
+                        <Link href={getLink(player)} className="font-large" style={{ color: formatCurrencyColor(player.balance), direction:'ltr'}}>
                           {formatCurrency(player.balance)}
                         </Link>
                       </td>

@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { lusitana } from '@/app/ui/fonts';
 import { fetchMVPPlayers } from '@/app/lib/data';
-import { formatCurrency } from '@/app/lib/utils';
+import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { PlayersSkeleton } from '@/app/ui/skeletons';
@@ -57,6 +57,7 @@ export default async function MVPPlayers({
                     </div>
                     <div
                       className={`${lusitana.className} truncate  font-medium md:text-base`}
+                      style={{ color: formatCurrencyColor(player.balance), direction:'ltr'}}
                     >
                       {formatCurrency(player.balance)}
                     </div>

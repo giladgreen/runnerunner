@@ -225,9 +225,7 @@ export default function PlayersTable({
                         <Link
                           href={`/${userId}/players/${player.id}/edit`}
                           className="font-large ltr"
-                          style={{
-                            color: formatCurrencyColor(player.balance),
-                          }}
+                          style={{ color: formatCurrencyColor(player.balance), direction:'ltr'}}
                         >
                           {formatCurrency(player.balance)}
                         </Link>
@@ -308,7 +306,7 @@ export default function PlayersTable({
                         }}
                       >
                         <b>{player.name.slice(0, 14)}</b>
-                        <p className="text-default-500">
+                        <p style={{ color: formatCurrencyColor(player.balance), direction:'ltr'}}>
                           {formatCurrency(player.balance)}
                         </p>
                       </div>
