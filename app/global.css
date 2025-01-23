@@ -141,7 +141,7 @@ body{
 }
 
 .general-page {
-  background-image: url('/full-page-back-with-no-logo.png');
+  background-image: url('/full-page-back-no-logo.png');
   background-size: cover; /* Adjusts the image to cover the entire element */
   background-position: center; /* Centers the image */
 }
