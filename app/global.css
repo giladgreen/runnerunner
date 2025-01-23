@@ -705,6 +705,7 @@ input[type='number']::-webkit-outer-spin-button {
   }
 }
 
+
 @media only screen and (max-width: 600px) {
   .general-page {
     background-image: url('/back.png');
