@@ -220,8 +220,8 @@ export default function TodayPlayersTable({
                 {players?.map((player: PlayerDB) => (
                   <div
                     key={player.id}
-                    className="full-width w-full rounded-md"
-                    style={{ marginBottom: 20, padding: 10, background: 'var(--white)' }}
+                    className="full-width w-full rounded-md player-card"
+
                   >
                     <div className="flex items-center justify-between border-b pb-4">
                       <div>
@@ -295,6 +295,7 @@ export default function TodayPlayersTable({
                           <EntriesButton
                             player={player}
                             updatePlayer={updatePlayer}
+                            invert
                           />
                         </div>
                       )}

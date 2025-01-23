@@ -16,11 +16,9 @@ const formatPlayerEntries = (
   isPending: boolean,
   prevEntriesTooltipText?: string[],
   undoTooltipText?: string,
+  invert?: boolean
 ) => {
-
-
-
-    if (isPending) {
+  if (isPending) {
     return <SpinningChip color="var(--white)"  size={20}/>;
   }
 
@@ -57,15 +55,15 @@ const formatPlayerEntries = (
       placement="bottom"
     >
       <BlackTooltip content={undoTooltipText} color="default">
-          <div>
+          <div className={invert ? `mobile-entries-wrapper${entries < 3 ? '' : '-disabled'}` :''}>
               <Image
                   src={`/${map[entries]}.png`}
                   alt={`players entries: ${entries}`}
-                  className="zoom-on-hover mr-4"
+                  className="zoom-on-hover mr-4 hide-on-mobile"
                   width={35}
                   height={35}
               />
-
+              <div className="cellular">{entries}</div>
           </div>
 
 
@@ -77,9 +75,11 @@ const formatPlayerEntries = (
 export default function EntriesButton({
   player,
   updatePlayer,
+  invert
 }: {
   player: PlayerDB;
   updatePlayer: (p: PlayerDB) => void;
+  invert?: boolean;
 }) {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -116,6 +116,7 @@ export default function EntriesButton({
             isPending,
             player.entriesTooltipText,
             player.undoEntriesTooltipText,
+            invert
 
         )}
       </div>

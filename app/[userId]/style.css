@@ -836,11 +836,16 @@
   }
 
   .card-body-one-line {
+    direction: rtl;
     padding: 0;
     max-height: 80px;
-    font-size: 20px;
+    font-size: 19px;
     background: var(--black);
     color: var(--white);
+max-width: 90vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .card-body {
