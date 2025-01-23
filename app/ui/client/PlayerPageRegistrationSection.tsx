@@ -18,7 +18,6 @@ const PlayerPageRegistrationSection = ({
   );
 
   return (
-    <div>
       <div
         className="rtl rsvp-for-next-week"
       >
@@ -31,7 +30,6 @@ const PlayerPageRegistrationSection = ({
           <u>אין טורנירים נוספים השבוע</u>
         </div>)}
       </div>
-    </div>
   );
 }
 

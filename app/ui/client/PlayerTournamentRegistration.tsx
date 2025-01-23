@@ -69,13 +69,7 @@ const [pending, setPending] = React.useState(false);
         </div>
         {/* first data section: players count + phase long + first phase blinds  */}
         <div
-          style={{
-            width: '95%',
-            margin: 10,
-            background: '#cfcfcf44',
-            borderRadius: 5,
-            padding: 6,
-          }}
+          className="tournament-data-section"
         >
           <div
             style={{
@@ -143,13 +137,7 @@ const [pending, setPending] = React.useState(false);
         </div>
         {/* second data section: stuck size, entry, re-entry, late reg  */}
         <div
-          style={{
-            width: '95%',
-            margin: 10,
-            background: '#cfcfcf44',
-            borderRadius: 5,
-            padding: 6,
-          }}
+          className="tournament-data-section"
         >
           <div
             style={{
@@ -236,13 +224,7 @@ const [pending, setPending] = React.useState(false);
 
         {/* third data section: registry  */}
         <div
-          style={{
-            width: '95%',
-            margin: 10,
-            background: isPlayerRsvpForDate ? '#ccffcc44':'#ffcccc44',
-            borderRadius: 5,
-            padding: 6,
-          }}
+          className={`tournament-data-registration-section ${isPlayerRsvpForDate ? 'tournament-data-registered-section' : registrationNeeded ? 'tournament-data-not-registered-section' : 'tournament-data-no-registration-needed-section'}`}
         >
           <div
             style={{

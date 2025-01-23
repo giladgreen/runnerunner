@@ -569,15 +569,18 @@
 
 .rsvp-for-next-week-page {
   height: 100%;
-  background: black;
+  background-image: url('/full-page-back-no-logo.png');
+  background-size: cover; /* Adjusts the image to cover the entire element */
+  background-position: center; /* Centers the image */
   .rsvp-for-next-week {
     color: black;
     padding: 30px;
     font-size: 1.3em;
 
     .header {
-      color: white;
+      color: var(--white);
       text-align: center;
+      font-size: 1.6em;
     }
   }
 
@@ -605,7 +608,8 @@
 
   .rsvp-for-next-week-page {
     height: 120%;
-
+    background-image: unset;
+    background: black;
     .rsvp-for-next-week {
       margin-top: 45px;
       border: 2px solid transparent;
@@ -676,13 +680,42 @@
   justify-content: right;
   margin: 15px;
 }
+.tournament-data-section{
+  background: var(--grey);
+  width: 95%;
+  margin: 10px;
+  border-radius: 5px;
+  padding: 6px;
+}
+.tournament-data-registration-section {
+  width: 95%;
+  margin: 10px;
+  border-radius: 5px;
+  padding: 6px;
+}
+
+.tournament-data-registered-section {
+  background: var(--green-registered);
+}
+
+.tournament-data-not-registered-section {
+  background: var(--red);
+}
+
+.tournament-data-no-registration-needed-section {
+  background: var(--grey-dark);
+}
+
+
+
 .user-tournament-rsvp-item {
   max-width: 400px;
+  color: var(--white);
   margin: 10px;
-  border: 2px solid rgb(0, 112, 243);
+  border: 2px solid var(--red);
   border-radius: 20px;
-  padding-right: 10px;
-  background: white;
+
+  background: var(--black);
 
   .tournament-data {
     width: 100%;
@@ -782,10 +815,8 @@
   }
   .user-tournament-rsvp-item {
     margin-top: 10px;
-    border: 2px solid rgb(0, 112, 243);
     border-radius: 20px;
-    padding-right: 10px;
-    background: white;
+    padding-left: 5px;
   }
   .give-credit-modal-button {
     font-size: 12px;

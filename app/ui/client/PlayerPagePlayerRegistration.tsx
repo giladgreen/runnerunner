@@ -15,20 +15,20 @@ export default function PlayerPagePlayerRegistration({
 }) {
   return (
     <div className="rsvp-for-next-week-page" >
-    <div  style={{ marginTop: 50 }} className="rtl">
-      <div style={{ marginTop: 10 }}>
-        {showRsvp ? (
-          <div>
-            <PlayerPageRegistrationSection
-              player={player}
-              thisWeekTournaments={thisWeekTournaments}
-            />
-          </div>
-        ) : (
-          <div>לא נתמך זמנית</div>
-        )}
+      <div  style={{ marginTop: 50 }} className="rtl">
+        <div style={{ marginTop: 10 }}>
+          {showRsvp ? (
+            <div>
+              <PlayerPageRegistrationSection
+                player={player}
+                thisWeekTournaments={thisWeekTournaments}
+              />
+            </div>
+          ) : (
+            <div>לא נתמך זמנית</div>
+          )}
+        </div>
       </div>
-    </div>
     </div>
   );
 }
