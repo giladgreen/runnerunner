@@ -1,16 +1,15 @@
 'use client';
 import { Tooltip, Button } from 'flowbite-react';
 import { LogDB, PlayerDB, TournamentDB } from '@/app/lib/definitions';
-
+// @ts-ignore
+import { Circle as SpinningChip } from 'react-awesome-spinners'
 import React from 'react';
 import { createPlayerUsageLog } from '@/app/lib/actions';
 import { getCurrentDate } from '@/app/lib/clientDateUtils';
 import { useFormState } from 'react-dom';
 import { usePathname, useSearchParams } from 'next/navigation';
-import Spinner from '@/app/ui/client/Spinner';
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { RingLoader } from 'react-spinners';
 
 export default function AutoPlayerPayButton({
   player,
@@ -144,15 +143,9 @@ export default function AutoPlayerPayButton({
             type="submit"
             color="light"
             disabled
-            className=""
-            style={{
-              borderBottomRightRadius: 0,
-              borderTopRightRadius: 0,
-              paddingTop: 0,
-              paddingBottom: 4,
-            }}
+            className="SpinningChipWrappingButton"
           >
-            <RingLoader color="var(--black)" loading={true} size={20}/>
+            <SpinningChip color="black"  size={19} />
           </Button>
         </div>
       )}

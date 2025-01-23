@@ -1,5 +1,6 @@
 'use client';
-
+// @ts-ignore
+import { Circle as SpinningChip } from 'react-awesome-spinners'
 import { PencilIcon, BanknotesIcon } from '@heroicons/react/24/outline';
 import Button from '@/app/ui/client/Button';
 import {
@@ -10,9 +11,7 @@ import { useFormState, useFormStatus } from 'react-dom';
 import { PlayerDB } from '@/app/lib/definitions';
 import React, { useState } from 'react';
 import Image from 'next/image';
-import Spinner from '@/app/ui/client/Spinner';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
-import { RingLoader } from 'react-spinners';
 
 export function UseCreditForPrizeForm({
   player,
@@ -156,7 +155,7 @@ function UseCreditButton() {
   const { pending } = useFormStatus();
 
   if (pending) {
-    return <RingLoader color="var(--white)" loading={true} size={33}/>;
+    return <SpinningChip color="var(--white)"  size={20}/>;
   }
   return <Button type="submit">השתמש בקרדיט</Button>;
 }

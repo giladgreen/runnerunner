@@ -1,8 +1,9 @@
 'use client';
+// @ts-ignore
+import { Circle as SpinningChip } from 'react-awesome-spinners'
 import Button, { RedButton } from '@/app/ui/client/Button';
 import { useFormStatus } from 'react-dom';
 import React from 'react';
-import { RingLoader } from "react-spinners";
 
 export default function SpinnerButton({
   text,
@@ -17,7 +18,7 @@ export default function SpinnerButton({
 
   if (pending) {
     return <Button disabled={true} id={id}>
-              <RingLoader color="var(--white)" loading={true} size={35}/>
+              <SpinningChip color="var(--white)"  size={20}/>
        </Button>
   }
 
@@ -38,7 +39,10 @@ export function RedSpinnerButton({
   const { pending } = useFormStatus();
 
   if (pending) {
-    return <RingLoader color="var(--red)" loading={true} size={35}/>;
+    return  <RedButton type="submit" onClick={onClick}>
+      <SpinningChip color="var(--red)"  size={20}/>
+    </RedButton>
+
   }
 
   return (

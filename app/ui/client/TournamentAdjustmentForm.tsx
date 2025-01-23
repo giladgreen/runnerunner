@@ -1,12 +1,12 @@
 'use client';
-
+// @ts-ignore
+import { Circle as SpinningChip } from 'react-awesome-spinners'
 import { PencilIcon, BanknotesIcon } from '@heroicons/react/24/outline';
 import Button from '@/app/ui/client/Button';
 import { TournamentAdjustmentLog } from '@/app/lib/actions';
 import { useFormState, useFormStatus } from 'react-dom';
 import { useEffect, useState } from 'react';
-import Spinner from '@/app/ui/client/Spinner';
-import { RingLoader } from 'react-spinners';
+
 
 export default function TournamentAdjustmentForm({
   hide,
@@ -54,7 +54,7 @@ export default function TournamentAdjustmentForm({
     }, [pending]);
 
     if (pending) {
-      return <RingLoader color="var(--white)" loading={true} size={40} style={{ marginRight: 30 }} />;
+      return <SpinningChip color="var(--white)"  size={20} style={{ marginRight: 30 }} />;
     }
     return (
       <Button

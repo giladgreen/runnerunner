@@ -60,7 +60,15 @@ body{
   color: var(--white);
 
 }
-
+.SpinningChipWrappingButton{
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  padding-top: 0;
+  padding-bottom: 10px;
+  background: var(--white);
+  height: 42px !important;
+  width: 64px !important;
+}
 .tournaments-table{
   direction: rtl;
   background: var(--grey-darker);

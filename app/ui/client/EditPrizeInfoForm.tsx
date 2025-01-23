@@ -1,14 +1,14 @@
 'use client';
 import React from 'react';
+// @ts-ignore
+import { Circle as SpinningChip } from 'react-awesome-spinners'
 import { updatePrizeInfo } from '@/app/lib/actions';
 import { PrizeInfoDB } from '@/app/lib/definitions';
 import Link from 'next/link';
 import Button from '@/app/ui/client/Button';
 import { useFormState, useFormStatus } from 'react-dom';
 import { PencilIcon } from '@heroicons/react/24/outline';
-import Spinner from '@/app/ui/client/Spinner';
 import DeletePrizeInfoButton from '@/app/ui/client/DeletePrizeInfoButton';
-import { RingLoader } from 'react-spinners';
 
 export default function EditPrizeInfoForm({
   userId,
@@ -147,7 +147,7 @@ function UpdatePrizeButton() {
   const { pending } = useFormStatus();
 
   if (pending) {
-    return <Button type="submit"><RingLoader color="var(--white)" loading={true} size={35}/></Button>;
+    return <Button type="submit"><SpinningChip color="var(--white)"  size={20}/></Button>;
   }
   return <Button type="submit">עדכון</Button>;
 }

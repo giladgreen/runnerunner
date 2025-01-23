@@ -1,4 +1,6 @@
 'use client';
+// @ts-ignore
+import { Circle as SpinningChip } from 'react-awesome-spinners'
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/app/lib/actions';
 import {
@@ -10,7 +12,6 @@ import { RedButton } from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import SignUpButton from '@/app/ui/client/SignUpButton';
-import { RingLoader } from 'react-spinners';
 
 export default function SignInForm({
   usePhoneValidation,
@@ -104,7 +105,7 @@ function SignInButton() {
   const { pending } = useFormStatus();
   return (
     <RedButton className="sign-in-button mt-4 w-full">
-      {pending ? (<RingLoader color="var(--white)" loading={true} size={35}/>) : 'התחבר'}
+      {pending ? ( <SpinningChip color="var(--white)" size={30}/>) : 'התחבר'}
       {pending ? '' : <span className="left-arrow">   &larr;</span>}
     </RedButton>
   );

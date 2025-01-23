@@ -1,16 +1,15 @@
 'use client';
-
+// @ts-ignore
+import { Circle as SpinningChip } from 'react-awesome-spinners'
 import { PlayerDB } from '@/app/lib/definitions';
 import { undoPlayerLastLog } from '@/app/lib/actions';
 import Image from 'next/image';
 import { usePathname, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import AreYouSure from '@/app/ui/client/AreYouSure';
-import Spinner from '@/app/ui/client/Spinner';
 import { Tooltip } from '@nextui-org/react';
 import { Tooltip as BlackTooltip } from 'flowbite-react';
 import Snackbar, {SnackbarCloseReason} from "@mui/material/Snackbar";
-import { RingLoader } from 'react-spinners';
 
 const formatPlayerEntries = (
   entries: number,
@@ -22,7 +21,7 @@ const formatPlayerEntries = (
 
 
     if (isPending) {
-    return <RingLoader color="var(--white)" loading={true} size={30}/>;
+    return <SpinningChip color="var(--white)"  size={20}/>;
   }
 
   if (entries < 1) {

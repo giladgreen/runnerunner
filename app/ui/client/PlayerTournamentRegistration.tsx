@@ -1,5 +1,7 @@
 'use client';
 import React from 'react';
+// @ts-ignore
+import { Circle as SpinningChip } from 'react-awesome-spinners'
 import {
  ArrowDownLeftIcon, BanknotesIcon,
    ClockIcon, UsersIcon
@@ -9,10 +11,6 @@ import { PlayerDB, TournamentDB, TRANSLATIONS } from '@/app/lib/definitions';
 import BlurFade from '@/app/ui/components/ui/blur-fade';
 import { BookmarkIcon, BookmarkSlashIcon, CircleStackIcon } from '@heroicons/react/24/solid';
 import { rsvpPlayerForDay } from '@/app/lib/actions';
-import Spinner from '@/app/ui/client/Spinner';
-import { RingLoader } from 'react-spinners';
-
-//TODO: extract all style into classes
 
 const PlayerTournamentRegistration= ({
                                                        tournament,
@@ -22,7 +20,7 @@ const PlayerTournamentRegistration= ({
                                                        isPlayerRsvpForDate,dayOfTheWeek
 }: {tournament: TournamentDB,stringDate:string, player:PlayerDB, index: number, isPlayerRsvpForDate:boolean, dayOfTheWeek:string})=>  {
 const page =  usePathname();
-const [pending, setPending] = React.useState(false);
+ const [pending, setPending] = React.useState(false);
   const registrationNeeded = tournament.rsvp_required;
   const tournamentMaxPlayers = tournament.max_players;
   const tournamentCurrentRegisteredPlayers = tournament.rsvpForToday;
@@ -305,7 +303,7 @@ const [pending, setPending] = React.useState(false);
 
                </u>}
                 {pending && <div style={{ textAlign:'left', alignItems:'left', width:'100%', paddingRight:'70%' }}>
-                  <RingLoader color="var(--white)" loading={true} size={35}/>
+                  <SpinningChip color="var(--white)" size={20} />
                 </div>}
               </div>
 

@@ -1,5 +1,6 @@
 'use client';
-
+// @ts-ignore
+import { Circle as SpinningChip } from 'react-awesome-spinners'
 import { PencilIcon, BanknotesIcon } from '@heroicons/react/24/outline';
 import Button from '@/app/ui/client/Button';
 import { createPlayerUsageLog } from '@/app/lib/actions';
@@ -7,10 +8,9 @@ import { useFormState, useFormStatus } from 'react-dom';
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
 import { useEffect, useState } from 'react';
 import SearchablePlayersDropdown from '@/app/ui/client/SearchablePlayersDropdown';
-import Spinner from '@/app/ui/client/Spinner';
 import { getCurrentDate } from '@/app/lib/clientDateUtils';
 import { Switch } from '@nextui-org/react';
-import { RingLoader } from 'react-spinners';
+
 
 export default function UseCreditForm({
   players,
@@ -108,7 +108,7 @@ export default function UseCreditForm({
       return  <Button
         disabled={true}
       >
-        <RingLoader color="var(--white)" loading={true} size={33}  />
+        <SpinningChip color="var(--white)" size={20}  />
       </Button>
     }
 

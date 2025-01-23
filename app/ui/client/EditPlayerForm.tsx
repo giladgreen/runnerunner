@@ -1,4 +1,6 @@
 'use client';
+// @ts-ignore
+import { Circle as SpinningChip } from 'react-awesome-spinners'
 import { deletePlayer, updatePlayer } from '@/app/lib/actions';
 import { CldUploadWidget } from 'next-cloudinary';
 import { PlayerDB, TournamentDB } from '@/app/lib/definitions';
@@ -8,10 +10,8 @@ import { PencilIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 import SpinnerButton, { RedSpinnerButton } from '@/app/ui/client/SpinnerButton';
 import AreYouSure from '@/app/ui/client/AreYouSure';
-import Spinner from '@/app/ui/client/Spinner';
 import * as FlowbiteReact from 'flowbite-react';
 import { getRSVPSForTheNextWeek } from '@/app/lib/clientUtils';
-import { RingLoader } from 'react-spinners';
 
 export default function EditPlayerForm({
   player,
@@ -69,7 +69,7 @@ export default function EditPlayerForm({
             className="pointer"
           >
             {isDeletePlayerPending ? (
-              <RingLoader color="var(--white)" loading={true} size={30}/>
+              <SpinningChip color="var(--white)"  size={20}/>
             ) : (
               <RedSpinnerButton text="מחק שחקן" />
             )}
