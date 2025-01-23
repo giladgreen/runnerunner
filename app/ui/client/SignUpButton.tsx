@@ -10,7 +10,7 @@ export default function SignUpButton({
   if (usePhoneValidation) {
     return (
       <div
-        className="red-button"
+        className="red-button create-account-button"
       >
         <a href="/phone_validation" >
          ליצירת חשבון
