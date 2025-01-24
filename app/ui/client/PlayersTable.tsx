@@ -69,6 +69,7 @@ export default function PlayersTable({
               <div
                 key={player.id}
                 className="players-page-card mb-2 w-full rounded-md p-4"
+                style={{ fontSize: 24 }}
               >
                 <div className="flex items-center justify-between border-b pb-4 ">
                   <div>
@@ -77,11 +78,13 @@ export default function PlayersTable({
                         <Avatar
                           player={player}
                           tournamentIds={todayTournaments.map((t) => t.id)}
+                          style={{ zoom: 1.5}}
                         />
                       </Link>
                       <div style={{ margin: '0 10px', zoom: 1.5 }}>
                         {player.name}
                       </div>
+
                     </div>
                     <div >
                       {player.phone_number}
