@@ -320,7 +320,7 @@ export default async function TournamentsSetupPage({
           ))}
         </tbody>
       </table>
-      <div style={{ textAlign: 'right', marginTop: 150 }}>
+      <div style={{ textAlign: 'right', marginTop: 150, marginRight:50, marginBottom:20 }}>
         <Link href={`/${params.userId}/configurations/tournaments/create`}>
           <Button className="my-button">צור טורניר חדש</Button>
         </Link>
