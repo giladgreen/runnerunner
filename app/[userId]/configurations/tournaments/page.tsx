@@ -43,8 +43,7 @@ export default async function TournamentsSetupPage({
                 href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
                 className="smaller-on-mobile rounded-md border p-2"
                 style={{
-                  zoom: 1.2,
-                  color: 'blue',
+                  zoom: 1.4,
                   border: '0 solid transparent',
                 }}
               >
@@ -122,7 +121,6 @@ export default async function TournamentsSetupPage({
                 <Link
                   href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
                   className=" rounded-md border p-2 "
-
                 >
                   <PencilIcon className="w-5" />
                 </Link>
@@ -144,77 +142,77 @@ export default async function TournamentsSetupPage({
           <tr>
             <th
               scope="col"
-              className="smaller-on-mobile px-4 py-5 font-medium sm:pl-6 align-text-right"
+              className="px-4 py-5 font-medium sm:pl-6 align-text-right"
 
             >
               יום
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-4 py-5 font-medium sm:pl-6 align-text-right"
+              className="px-4 py-5 font-medium sm:pl-6 align-text-right"
 
             >
               שעה
             </th>
             <th
               scope="col"
-              className=" smaller-on-mobile px-2 py-5 font-medium align-text-right"
+              className=" px-2 py-5 font-medium align-text-right"
 
             >
               שם
             </th>
             <th
               scope="col"
-              className=" smaller-on-mobile px-3 py-5 font-medium align-text-right"
+              className=" px-3 py-5 font-medium align-text-right"
 
             >
               עלות כניסה
             </th>
             <th
               scope="col"
-              className=" smaller-on-mobile px-3 py-5 font-medium align-text-right"
+              className=" px-3 py-5 font-medium align-text-right"
 
             >
               עלות כניסה נוספת
             </th>
             <th
               scope="col"
-              className=" smaller-on-mobile px-3 py-5 font-medium align-text-right"
+              className=" px-3 py-5 font-medium align-text-right"
 
             >
               ערימה התחלתית
             </th>
             <th
               scope="col"
-              className=" smaller-on-mobile px-3 py-5 font-medium align-text-right"
+              className=" px-3 py-5 font-medium align-text-right"
 
             >
               אורך שלב
             </th>
             <th
               scope="col"
-              className=" smaller-on-mobile px-3 py-5 font-medium align-text-right"
+              className=" px-3 py-5 font-medium align-text-right"
 
             >
               מספר שלבים שניתן לבצע כניסה מחדש
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-3 py-5 font-medium align-text-right"
+              className=" px-3 py-5 font-medium align-text-right"
 
             >
               מספר שחקנים מירבי
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-3 py-5 font-medium align-text-right"
+              className=" px-3 py-5 font-medium align-text-right"
 
             >
               נדרש אישור הגעה
             </th>
             <th
               scope="col"
-              className="smaller-on-mobile px-3 py-5 font-medium align-text-right"
+              className=" px-3 py-5 font-medium align-text-right"
 
             >
               <span className="sr-only">ערוך</span>
@@ -227,10 +225,10 @@ export default async function TournamentsSetupPage({
               key={tournament.id}
               className={`table-row-background-color${ (index % 2) +1}. w-full border-b py-3  last-of-type:border-none `}
             >
-              <td className="cellular smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
+              <td className="cellular whitespace-nowrap py-3 pl-6 pr-3">
                 <a
                   href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
-                  className="smaller-on-mobile rounded-md border p-2"
+                  className=" rounded-md border p-2"
                   style={{
                     zoom: 1.2,
                     color: 'blue',
@@ -247,7 +245,7 @@ export default async function TournamentsSetupPage({
                   </b>
                 </a>
               </td>
-              <td className="wide-screen smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
+              <td className="wide-screen whitespace-nowrap py-3 pl-6 pr-3">
                 <b>
                   {
                     // @ts-ignore
@@ -255,58 +253,58 @@ export default async function TournamentsSetupPage({
                   }
                 </b>
               </td>
-              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required && tournament.max_players === 0
                   ? '--'
                   : tournament.start_time}
               </td>
-              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required && tournament.max_players === 0
                   ? '--'
                   : tournament.name}
               </td>
-              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required && tournament.max_players === 0
                   ? '--'
                   : formatCurrency(tournament.buy_in)}
               </td>
-              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required && tournament.max_players === 0
                   ? '--'
                   : formatCurrency(tournament.re_buy)}
               </td>
-              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required && tournament.max_players === 0
                   ? '--'
                   : tournament.initial_stack.toLocaleString()}
               </td>
-              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required && tournament.max_players === 0
                   ? '--'
                   : tournament.phase_length}
               </td>
-              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required && tournament.max_players === 0
                   ? '--'
                   : tournament.last_phase_for_rebuy}
               </td>
-              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required && tournament.max_players === 0
                   ? '--'
                   : tournament.max_players}
               </td>
-              <td className="smaller-on-mobile whitespace-nowrap px-3 py-3">
+              <td className="whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required && tournament.max_players === 0
                   ? '--'
                   : tournament.rsvp_required
                     ? 'כן'
                     : 'לא '}
               </td>
-              <td className="wide-screen smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
-                <div className="smaller-on-mobile edit-tournament-link flex justify-end gap-3">
+              <td className="wide-screen whitespace-nowrap py-3 pl-6 pr-3">
+                <div className=" edit-tournament-link flex justify-end gap-3">
                   <Link
                     href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
-                    className="smaller-on-mobile rounded-md border p-2 "
+                    className=" rounded-md border p-2 "
                   >
                     <PencilIcon className="w-5" />
                   </Link>

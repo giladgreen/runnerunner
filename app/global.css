@@ -235,13 +235,15 @@ body{
     color: var(--white);
     background: var(--black);
     padding-right: 50px;
+
     .item{
       padding-right: 30px;
       display: flex;
       flex-direction: column;
       margin-top: 10px;
-      background: var(--red);
-
+      background: var(--grey-darker);
+      border: 2px solid var(--red);
+      border-radius: 7px;
       font-size: 12px;
     }
   }

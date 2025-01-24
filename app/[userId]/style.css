@@ -518,7 +518,7 @@
   background: orange;
 }
 .delete-tournament-button {
-  background: var(--red);
+  background: transparent;
 }
 .edit-prize-link {
 }
