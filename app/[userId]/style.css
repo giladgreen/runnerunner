@@ -385,6 +385,14 @@
   font-size: 40px;
   background: var(--black);
   color: var(--white);
+
+}
+
+.card-body-one-line-long-number {
+  padding: 50px;
+  font-size: 24px;
+  background: var(--black);
+  color: var(--white);
 }
 
 .prize-row {
@@ -847,7 +855,7 @@
     font-size: 19px;
     background: var(--black);
     color: var(--white);
-max-width: 90vw;
+    max-width: 90vw;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

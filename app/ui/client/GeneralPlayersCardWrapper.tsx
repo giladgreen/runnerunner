@@ -20,6 +20,7 @@ export default async function GeneralPlayersCardWrapper() {
           value={<NumberTicker value={totalPlayersDebt} useCurrency/>}
           type="money"
           oneLine
+          longValue={Math.abs(totalPlayersDebt) > 99999}
         />
         <Card
           title="שחקנים עם חוב"
@@ -33,6 +34,7 @@ export default async function GeneralPlayersCardWrapper() {
           value={<NumberTicker value={totalRunnerDebt} useCurrency/>}
           type="money"
           oneLine
+          longValue={Math.abs(totalRunnerDebt) > 99999}
         />
         <Card
           title="סה״כ שחקנים"

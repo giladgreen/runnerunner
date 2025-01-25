@@ -33,8 +33,7 @@ export default function Card({
   spend,
   empty,
   oneLine,
-  green,
-  orange,
+  longValue
 }: {
   title: string | JSX.Element;
   value: number | string | JSX.Element;
@@ -54,8 +53,7 @@ export default function Card({
   spend?: boolean;
   empty?: boolean;
   oneLine?: boolean;
-  green?: boolean;
-  orange?: boolean;
+  longValue?: boolean;
 }) {
   if (empty) return <div className={`rounded-xl  p-2 shadow-sm`}></div>;
 
@@ -85,7 +83,7 @@ export default function Card({
         className={`${
           lusitana.className
         } truncate rounded-xl px-4 py-4 text-center text-2xl ${
-          oneLine ? 'card-body-one-line' : 'card-body'
+          oneLine ? (longValue ? 'card-body-one-line-long-number' : 'card-body-one-line') : 'card-body'
         }`}
       >
         {value}
