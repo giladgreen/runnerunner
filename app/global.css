@@ -301,7 +301,7 @@ body{
   padding-right: 20px;
   padding-left: 20px;
   padding-bottom: 25px;
-  height: 55vh;
+  min-height: 50vh;
 
   .login-input {
     background-color: var(--grey-mid) !important;
@@ -349,7 +349,7 @@ body{
 }
 
 .do-not-have-account-yet{
-  margin-top: 120px;
+  margin-top: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
