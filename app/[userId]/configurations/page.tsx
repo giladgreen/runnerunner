@@ -13,6 +13,7 @@ import Card from '@/app/ui/client/Card';
 import DeleteBugButton from '@/app/ui/client/DeleteBugButton';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 import { formatDateToLocal } from '@/app/lib/serverDateUtils';
+import CalcCashPrizes from '@/app/ui/client/CalcCashPrizes';
 
 function TournamentsLink({ userId }: { userId: string }) {
   return (
@@ -73,6 +74,7 @@ function UserPermissionsLink({ userId }: { userId: string }) {
     </div>
   );
 }
+
 
 function ReportBugForm({ bugs, userId }: { bugs: BugDB[]; userId: string }) {
   return (
@@ -230,6 +232,7 @@ export default async function ConfigurationPage({
           />
         )}
       </div>
+      <CalcCashPrizes />
       <ReportBugForm bugs={bugs} userId={params.userId} />
     </div>
   );

@@ -60,6 +60,15 @@ body{
   color: var(--white);
 
 }
+
+.calc-table{
+  background: var(--grey-darker);
+  border: 1px solid var(--red);
+  td{
+    border: 1px solid var(--red);
+    padding:10px;
+  }
+}
 .SpinningChipWrappingButton{
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
