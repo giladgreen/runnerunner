@@ -18,6 +18,8 @@
   padding: 12px;
   background: var(--black);
   color: var(--white);
+
+
 }
 
 .form-inner-control {
@@ -56,6 +58,9 @@
   top: 6vh;
   left: 35vw;
   width: 30vw;
+
+  overflow-y: auto !important;
+  max-height: 90vh;
 }
 
 .rsvp-section {
