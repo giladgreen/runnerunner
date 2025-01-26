@@ -159,7 +159,7 @@ body{
 }
 
 .general-page {
-  background-image: url('/full-page-back-no-logo.png');
+  background-image: url('/backgroung-web.png');
   background-size: cover; /* Adjusts the image to cover the entire element */
   background-position: center; /* Centers the image */
 }
@@ -758,7 +758,7 @@ input[type='number']::-webkit-outer-spin-button {
 
 @media only screen and (max-width: 600px) {
   .general-page {
-    background-image: url('/back.png');
+    background-image: url('/background-cell.png');
     background-size: cover; /* Adjusts the image to cover the entire element */
     background-position: center; /* Centers the image */
   }

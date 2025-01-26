@@ -552,7 +552,7 @@
 }
 
 .player-pages {
-  background-image: url('/full-page-back-no-logo.png');
+  background-image: url('/backgroung-web.png');
   background-size: cover; /* Adjusts the image to cover the entire element */
   background-position: center; /* Centers the image */
   padding: 0 20px;
@@ -582,7 +582,7 @@
 
 .rsvp-for-next-week-page {
   height: 100%;
-  background-image: url('/full-page-back-no-logo.png');
+  background-image: url('/backgroung-web.png');
   background-size: cover; /* Adjusts the image to cover the entire element */
   background-position: center; /* Centers the image */
   .rsvp-for-next-week {
