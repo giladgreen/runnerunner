@@ -4,348 +4,260 @@ import React from 'react';
 import { Circle as SpinningChip } from 'react-awesome-spinners'
 import {
  ArrowDownLeftIcon, BanknotesIcon,
-   ClockIcon, UsersIcon
+    UsersIcon
 } from '@heroicons/react/24/outline';
 import { usePathname } from 'next/navigation';
 import { PlayerDB, TournamentDB, TRANSLATIONS } from '@/app/lib/definitions';
 import BlurFade from '@/app/ui/components/ui/blur-fade';
 import { BookmarkIcon, BookmarkSlashIcon, CircleStackIcon } from '@heroicons/react/24/solid';
 import { rsvpPlayerForDay } from '@/app/lib/actions';
+import ClockIcon from '@/app/ui/client/ClockIcon';
+import SandClockIcon from '@/app/ui/client/SandClockIcon';
+import FirstStageIcon from '@/app/ui/client/FirstStageIcon';
+import InitialStackIcon from '@/app/ui/client/InitialStackIcon';
+import StackSizeIcon from '@/app/ui/client/StackSizeIcon';
+import DollarCircleIcon from '@/app/ui/client/DollarCircleIcon';
+import RsvpArrowIcon from '@/app/ui/client/RsvpArrowIcon';
 
-const PlayerTournamentRegistration= ({
-                                                       tournament,
-                                                       stringDate,
-                                                       player,
-                                                       index,
-                                                       isPlayerRsvpForDate,dayOfTheWeek
-}: {tournament: TournamentDB,stringDate:string, player:PlayerDB, index: number, isPlayerRsvpForDate:boolean, dayOfTheWeek:string})=>  {
-const page =  usePathname();
- const [pending, setPending] = React.useState(false);
+function getDate(date: string) {
+  //date: YYYY-MM-DD
+  const dateArray = date.split('-');
+  const year = dateArray[0].slice(2);
+  const month = dateArray[1].startsWith('0') ? dateArray[1].slice(1) : dateArray[1];
+  const day = dateArray[2].startsWith('0') ? dateArray[2].slice(1) : dateArray[2];
+  return `${day}.${month}.${year}`;
+}
+const PlayerTournamentRegistration = ({
+  tournament,
+  stringDate,
+  player,
+  index,
+  isPlayerRsvpForDate,
+  dayOfTheWeek,
+}: {
+  tournament: TournamentDB;
+  stringDate: string;
+  player: PlayerDB;
+  index: number;
+  isPlayerRsvpForDate: boolean;
+  dayOfTheWeek: string;
+}) => {
+  const page = usePathname();
+  const [pending, setPending] = React.useState(false);
   const registrationNeeded = tournament.rsvp_required;
   const tournamentMaxPlayers = tournament.max_players;
   const tournamentCurrentRegisteredPlayers = tournament.rsvpForToday;
-  const placesLeft =
-    tournamentMaxPlayers - tournamentCurrentRegisteredPlayers;
+  const placesLeft = tournamentMaxPlayers - tournamentCurrentRegisteredPlayers;
 
-  const timeBeforeLastRebuy = (tournament.last_phase_for_rebuy + 2 ) * tournament.phase_length;
+  const timeBeforeLastRebuy =
+    (tournament.last_phase_for_rebuy + 2) * tournament.phase_length;
   const date = new Date('2024-01-01T' + tournament.start_time + ':00');
-  const endDate = new Date(date.getTime() + (timeBeforeLastRebuy * 60_000));
-  const endDateTime = endDate.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+  const endDate = new Date(date.getTime() + timeBeforeLastRebuy * 60_000);
+  const endDateTime = endDate.toLocaleTimeString('he-IL', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
-  return  <BlurFade key={tournament.id} delay={index * 0.6}>
-    <div className="user-tournament-rsvp-item">
-      <div
-        key={tournament.id}
-        className="tournament_rsvp_line"
-        style={{ display: 'block', margin: '15px 0' }}
-      >
-        {/* day and hour */}
-        <div
-          className="tournament-data"
-        >
-                <span>
-                  {' '}
-                  {
-                    // @ts-ignore
-                    TRANSLATIONS[dayOfTheWeek]
-                  }{' '}
-                </span>
-          <div style={{ display: 'flex' }}>
-            {tournament.start_time}
-            <ClockIcon style={{ width: 20, marginRight: 6 }} />
+  const tournamentDate = getDate(stringDate);
+  return (
+    <BlurFade key={tournament.id} delay={index * 0.4}>
+      <div className="user-tournament-rsvp-item">
+        <div key={tournament.id} className="tournament_rsvp_line">
+          <div className="tournament_name">
+            <b>{tournament.name}</b>
           </div>
-        </div>
-        {/* tournament name */}
-        <div
-          style={{
-            width: '100%',
-            alignItems: 'center',
-            textAlign: 'center',
-          }}
-        >
-          <b>{tournament.name}</b>
-        </div>
-        {/* first data section: players count + phase long + first phase blinds  */}
-        <div
-          className="tournament-data-section"
-        >
-          <div
-            style={{
-              display: 'block',
-              alignItems: 'right',
-              textAlign: 'right',
-              paddingRight: 0,
-              fontSize: 15,
-            }}
-          >
-            <div
-              style={{
-                width: '100%',
-                alignItems: 'right',
-                textAlign: 'right',
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: 5,
-              }}
-            >
-              <div style={{ display: 'flex' }}>
-                <UsersIcon style={{ width: 20, marginLeft: 6 }} />
-                שחקנים
-              </div>
-              {tournamentCurrentRegisteredPlayers}
-              /
-              {tournamentMaxPlayers}
-            </div>
+          <div className="tournament_description">{tournament.description}</div>
 
-            <div
-              style={{
-                width: '100%',
-                alignItems: 'right',
-                textAlign: 'right',
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: 5,
-              }}
-            >
+          {/* day and hour */}
+          <div className="tournament_time">
+            <div className="tournament_time-clock">
+              {' '}
+              <ClockIcon />
+            </div>
+            <span className="tournament_time-start_time">
+              {' '}
+              {tournament.start_time}
+            </span>
+            <span className="tournament_time-day-of-week">
+              {
+                // @ts-ignore
+                TRANSLATIONS[dayOfTheWeek]
+              }
+            </span>
+            <span>{tournamentDate}</span>
+          </div>
+
+          <div className="tournament_divider" />
+
+          {/* first data section: players count + phase long + first phase blinds  */}
+          <div className="tournament-section">
+            <div className="tournament-section-row">
               <div style={{ display: 'flex' }}>
-                <ClockIcon style={{ width: 20, marginLeft: 6 }} />
+                <div className="tournament-section-row-icon">
+                  <SandClockIcon />
+                </div>
                 משך שלב
               </div>
-              {tournament.phase_length}  דקות
+              {tournament.phase_length} דק׳
             </div>
-
-            <div
-              style={{
-                width: '100%',
-                alignItems: 'right',
-                textAlign: 'right',
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}
-            >
+            <div className="tournament-section-row">
               <div style={{ display: 'flex' }}>
-                <BanknotesIcon style={{ width: 20, marginLeft: 6 }} />
+                <div className="tournament-section-row-icon">
+                  <FirstStageIcon />
+                </div>
                 שלב ראשון
               </div>
-              200
-              /
-              100
+              100/200
             </div>
-          </div>
-        </div>
-        {/* second data section: stuck size, entry, re-entry, late reg  */}
-        <div
-          className="tournament-data-section"
-        >
-          <div
-            style={{
-              display: 'block',
-              alignItems: 'right',
-              textAlign: 'right',
-              paddingRight: 0,
-              fontSize: 15,
-            }}
-          >
-            <div
-              style={{
-                width: '100%',
-                alignItems: 'right',
-                textAlign: 'right',
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: 5,
-              }}
-            >
+            <div className="tournament-section-row">
               <div style={{ display: 'flex' }}>
-                <CircleStackIcon style={{ width: 20, marginLeft: 6 }} />
+                <div className="tournament-section-row-icon">
+                  <InitialStackIcon />
+                </div>
                 ערימה התחלתית
               </div>
-              { tournament.initial_stack.toLocaleString()}
+              {tournament.initial_stack.toLocaleString()}
             </div>
+          </div>
 
-            <div
-              style={{
-                width: '100%',
-                alignItems: 'right',
-                textAlign: 'right',
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: 5,
-              }}
-            >
+          <div className="tournament-section">
+            <div className="tournament-section-row">
               <div style={{ display: 'flex' }}>
-                <BanknotesIcon style={{ width: 20, marginLeft: 6 }} />
-                כניסה ראשונה
+                <div className="tournament-section-row-icon">
+                  <DollarCircleIcon />
+                </div>
+                עלות כניסה ראשונה
               </div>
               ₪{tournament.buy_in}
             </div>
-
-            <div
-              style={{
-                width: '100%',
-                alignItems: 'right',
-                textAlign: 'right',
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: 5,
-              }}
-            >
+            <div className="tournament-section-row">
               <div style={{ display: 'flex' }}>
-                <BanknotesIcon style={{ width: 20, marginLeft: 6 }} />
-                כניסה נוספת
+                <div className="tournament-section-row-icon">
+                  <DollarCircleIcon />
+                </div>
+                עלות כניסה נוספת
               </div>
               ₪{tournament.re_buy}
             </div>
-            <div
-              style={{
-                width: '100%',
-                alignItems: 'right',
-                textAlign: 'right',
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}
-            >
+            <div className="tournament-section-row">
               <div style={{ display: 'flex' }}>
-                <ClockIcon style={{ width: 20, marginLeft: 6 }} />
-                כניסה מאוחרת, עד שלב
-               <span style={{ margin: '0 3px' }}> {tournament.last_phase_for_rebuy}</span>
+                <div className="tournament-section-row-icon tournament-section-row-icon-clock">
+                  <ClockIcon />
+                </div>
+                כניסה מאוחרת
               </div>
 
               <div style={{ display: 'flex' }}>
-                ±
-                {endDateTime}
+                עד שלב {tournament.last_phase_for_rebuy}
               </div>
-
             </div>
           </div>
-        </div>
-
-        {/* third data section: registry  */}
-        <div
-          className={`tournament-data-registration-section ${isPlayerRsvpForDate ? 'tournament-data-registered-section' : registrationNeeded ? 'tournament-data-not-registered-section' : 'tournament-data-no-registration-needed-section'}`}
-        >
           <div
-            style={{
-              display: 'block',
-              alignItems: 'right',
-              textAlign: 'right',
-              paddingRight: 0,
-              fontSize: 15,
-            }}
+            className={`tournament-rsvp-status-section ${registrationNeeded ? (isPlayerRsvpForDate ? 'tournament-rsvp-status-section-registered' : 'tournament-rsvp-status-section-unregistered') : 'tournament-rsvp-status-section-no-registration-needed'}`}
           >
+            <div style={{ width: 20, position: 'relative', top: 9 }}>
+              <RsvpArrowIcon />
+            </div>
+            {registrationNeeded
+              ? isPlayerRsvpForDate
+                ? 'אתה רשום לטורניר '
+                : ' אינך רשום לטורניר'
+              : 'אין צורך ברישום'}
+          </div>
+
+          {registrationNeeded && (
             <div
-              style={{
-                width: '100%',
-                alignItems: 'right',
-                textAlign: 'right',
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: 5,
+              className={`tournament-rsvp-button-section ${isPlayerRsvpForDate ? 'tournament-rsvp-button-section-registered' : 'tournament-rsvp-button-section-unregistered'}`}
+              onClick={() => {
+                setPending(true);
+                rsvpPlayerForDay(
+                  player.phone_number,
+                  stringDate,
+                  tournament.id,
+                  !isPlayerRsvpForDate,
+                  page,
+                );
+                setTimeout(() => {
+                  setPending(false);
+                }, 1200);
               }}
             >
-              <div style={{ display: 'flex' }}>
-                <ArrowDownLeftIcon
-                  style={{ width: 20, marginLeft: 6 }}
-                />
-                <b>רישום</b>
-              </div>
+              {!pending && ( <>
+                {isPlayerRsvpForDate ? 'לביטול הרשמה' : 'להרשמה'}
+                <span > &larr;</span>
+              </>)}
+                {pending && (  <SpinningChip color="var(--white)" size={20} />)}
+
             </div>
+          )}
 
-            <div
-              style={{
-                width: '100%',
-                alignItems: 'right',
-                textAlign: 'right',
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: 5,
-              }}
-            >
-              <div style={{ display: 'flex' }}>
-                {isPlayerRsvpForDate ? (
-                  <BookmarkIcon style={{ width: 20, marginLeft: 6 }} />
-                ) : (
-                  <BookmarkSlashIcon
-                    style={{ width: 20, marginLeft: 6 }}
-                  />
-                )}
-                {registrationNeeded ? (isPlayerRsvpForDate ? 'אתה רשום לטורניר זה' : ' אינך רשום לטורניר') : 'אין צורך ברישום'}
-              </div>
-            </div>
+          {/*          {pending && (*/}
+          {/*            <div*/}
+          {/*              style={{*/}
+          {/*                textAlign: 'left',*/}
+          {/*                alignItems: 'left',*/}
+          {/*                width: '100%',*/}
+          {/*                paddingRight: '70%',*/}
+          {/*              }}*/}
+          {/*            >*/}
+          {/*              <SpinningChip color="var(--white)" size={20} />*/}
+          {/*            </div>*/}
+          {/*          )}*/}
+          {/*        </div>*/}
+          {/*      </div>*/}
+          {/*    )}*/}
+          {/*    {!registrationNeeded && (*/}
+          {/*      <div*/}
+          {/*        style={{*/}
+          {/*          width: '100%',*/}
+          {/*          alignItems: 'right',*/}
+          {/*          textAlign: 'right',*/}
+          {/*          display: 'flex',*/}
+          {/*          justifyContent: 'space-between',*/}
+          {/*        }}*/}
+          {/*      >*/}
+          {/*        <div*/}
+          {/*          style={{*/}
+          {/*            textAlign: 'left',*/}
+          {/*            alignItems: 'left',*/}
+          {/*            width: '100%',*/}
+          {/*            fontSize: 20,*/}
+          {/*            cursor: 'pointer',*/}
+          {/*            color: 'transparent',*/}
+          {/*          }}*/}
+          {/*        >*/}
+          {/*          ...*/}
+          {/*        </div>*/}
+          {/*      </div>*/}
+          {/*    )}*/}
+          {/*    {registrationNeeded && placesLeft < 1 && (*/}
+          {/*      <div*/}
+          {/*        style={{*/}
+          {/*          width: '100%',*/}
+          {/*          alignItems: 'right',*/}
+          {/*          textAlign: 'right',*/}
+          {/*          display: 'flex',*/}
+          {/*          justifyContent: 'space-between',*/}
+          {/*        }}*/}
+          {/*      >*/}
+          {/*        <div*/}
+          {/*          style={{*/}
+          {/*            textAlign: 'left',*/}
+          {/*            alignItems: 'left',*/}
+          {/*            width: '100%',*/}
+          {/*            fontSize: 20,*/}
+          {/*          }}*/}
+          {/*        >*/}
+          {/*          <b> לא נותרו מקומות</b>*/}
+          {/*        </div>*/}
+          {/*      </div>*/}
+          {/*    )}*/}
+          {/*  </div>*/}
+          {/*</div>*/}
+        </div>
+      </div>
+    </BlurFade>
+  );
+};
 
-            {registrationNeeded && placesLeft > 0 && <div
-              style={{
-                width: '100%',
-                alignItems: 'right',
-                textAlign: 'right',
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}
-            >
-              <div style={{ textAlign:'left', alignItems:'left', width:'100%', fontSize:20, cursor:'pointer' }}>
-                {!pending && <u
-                  onClick={()=>{
-                    setPending(true);
-                    console.log('## calling rsvpPlayerForDay', player.phone_number, stringDate, tournament.id, !isPlayerRsvpForDate);
-                    rsvpPlayerForDay(
-                      player.phone_number,
-                      stringDate,
-                      tournament.id,
-                      !isPlayerRsvpForDate,
-                      page,
-                    );
-                    setTimeout(()=>{
-                      setPending(false);
-                    },2300);
-                  }}
-                >
-                 { isPlayerRsvpForDate ? ' לביטול רישום' : ' לרישום לטורניר'}
-
-               </u>}
-                {pending && <div style={{ textAlign:'left', alignItems:'left', width:'100%', paddingRight:'70%' }}>
-                  <SpinningChip color="var(--white)" size={20} />
-                </div>}
-              </div>
-
-            </div>}
-            {!registrationNeeded && <div
-              style={{
-                width: '100%',
-                alignItems: 'right',
-                textAlign: 'right',
-                display: 'flex',
-                justifyContent: 'space-between',
-
-              }}
-            >
-              <div style={{ textAlign: 'left', alignItems: 'left', width: '100%', fontSize: 20, cursor: 'pointer', color: 'transparent' }}>
-                ...
-              </div>
-
-              </div>
-              }
-              {registrationNeeded && placesLeft < 1 && <div
-                style={{
-                  width: '100%',
-                  alignItems: 'right',
-                  textAlign: 'right',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <div style={{ textAlign: 'left', alignItems: 'left', width: '100%', fontSize: 20 }}>
-                  <b> לא נותרו מקומות</b>
-
-                </div>
-
-              </div>}
-            </div>
-              </div>
-              </div>
-              </div>
-              </BlurFade>
-
-            }
-
-
-            export default PlayerTournamentRegistration;
+export default PlayerTournamentRegistration;

@@ -121,6 +121,7 @@ export type TournamentDB = {
   id: string;
   i?: number;
   name: string;
+  description: string;
   date: string;
   day: string;
   start_time: string;

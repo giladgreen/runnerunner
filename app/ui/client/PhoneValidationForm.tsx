@@ -2,10 +2,10 @@
 import React from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
 import { validatePhone } from '@/app/lib/actions';
-import { ExclamationCircleIcon, PhoneIcon } from '@heroicons/react/24/outline';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { RedButton } from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
-
+import PhoneIcon from '@/app/ui/client/PhoneIcon';
 export default function PhoneValidationForm() {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
@@ -49,7 +49,7 @@ export default function PhoneValidationForm() {
                   placeholder="מספר טלפון"
                   required
                 />
-                <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 login-input-icon" />
+                <PhoneIcon />
               </div>
             </div>
           </div>

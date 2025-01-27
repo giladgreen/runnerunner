@@ -4,14 +4,16 @@ import { Circle as SpinningChip } from 'react-awesome-spinners'
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/app/lib/actions';
 import {
-  PhoneIcon,
-  KeyIcon,
+  // PhoneIcon,
+  // KeyIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { RedButton } from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import SignUpButton from '@/app/ui/client/SignUpButton';
+import KeyIcon from '@/app/ui/client/KeyIcon';
+import PhoneIcon from '@/app/ui/client/PhoneIcon';
 
 export default function SignInForm({
   usePhoneValidation,
@@ -53,7 +55,7 @@ export default function SignInForm({
                   placeholder="הכנס מספר טלפון"
                   required
                 />
-                <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 login-input-icon" />
+                <PhoneIcon />
               </div>
             </div>
             <div className="mt-4">
@@ -73,7 +75,7 @@ export default function SignInForm({
                   required
                   minLength={6}
                 />
-                <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 login-input-icon" />
+                <KeyIcon  />
               </div>
             </div>
           </div>

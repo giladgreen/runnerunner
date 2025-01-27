@@ -3,6 +3,9 @@ import { fetchFeatureFlags, fetchUserById } from '@/app/lib/data';
 import { signOut } from '@/auth';
 import PlayerPageMenu from '@/app/ui/client/PlayerPageMenu';
 import AdminPageMenu from '@/app/ui/client/AdminPageMenu';
+import React from 'react';
+import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
+import ExitButton from '@/app/ui/client/ExitButton';
 
 export default async function Layout({
   children,
@@ -61,21 +64,29 @@ export default async function Layout({
 
   return (
     <div className="player-pages flex h-screen flex-col md:flex-row md:overflow-hidden">
-      <div className="flex-grow ">{children}</div>
       <div className="player-header-div">
-        <div className="dot">.</div>
-        <div className='player-header'>Runner Runner</div>
-        <PlayerPageMenu
-          showRsvp={showRsvp}
-          prizesEnabled={prizesEnabled}
-          userId={params.userId}
-          signout={async () => {
-            'use server';
+        <ExitButton signout={async () => {
+          'use server';
+          await signOut({ redirect: true, redirectTo: '/' });
+        }} />
+        <div className="icon">
+          <img src="/logo.png" width={177} height={120} />
+        </div>
+        <div className="dot">.....</div>
+        {/*<PlayerPageMenu*/}
+        {/*  showRsvp={showRsvp}*/}
+        {/*  prizesEnabled={prizesEnabled}*/}
+        {/*  userId={params.userId}*/}
+        {/*  signout={async () => {*/}
+        {/*    'use server';*/}
 
-            await signOut({ redirect: true, redirectTo: '/' });
-          }}
-        />
+        {/*    await signOut({ redirect: true, redirectTo: '/' });*/}
+        {/*  }}*/}
+        {/*/>*/}
+
+
       </div>
+      <div className="flex-grow player-page-body">{children}</div>
     </div>
   );
 }

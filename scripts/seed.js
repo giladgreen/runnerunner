@@ -13,6 +13,7 @@ async function seedTournaments(client) {
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         day TEXT NOT NULL,
         name TEXT NOT NULL,
+        description TEXT,
         i INT NOT NULL,
         buy_in INT NOT NULL,
         re_buy INT NOT NULL,
@@ -31,6 +32,7 @@ async function seedTournaments(client) {
         id UUID PRIMARY KEY NOT NULL,
         day TEXT NOT NULL,
         name TEXT NOT NULL,
+        description TEXT,
         i INT NOT NULL,
         buy_in INT NOT NULL,
         re_buy INT NOT NULL,
@@ -89,8 +91,8 @@ async function seedTournaments(client) {
         )
         .map(async (tournament) => {
           return client.sql`
-        INSERT INTO tournaments (day, name, buy_in, re_buy, max_players, rsvp_required,i, phase_length, last_phase_for_rebuy, initial_stack,start_time)
-        VALUES (${tournament.day}, ${tournament.name}, ${
+        INSERT INTO tournaments (day, name, description, buy_in, re_buy, max_players, rsvp_required,i, phase_length, last_phase_for_rebuy, initial_stack,start_time)
+        VALUES (${tournament.day}, ${tournament.name},  ${tournament.description}, ${
           tournament.buy_in
         }, ${Math.max(tournament.buy_in - 100, 0)}, ${tournament.max_players},${
           tournament.rsvp_required

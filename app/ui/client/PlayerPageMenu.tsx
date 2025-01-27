@@ -32,7 +32,7 @@ export default function PlayerPageMenu({
         }}
       >
         <span className="sr-only">תפריט</span>
-        <Bars3Icon className="w-8" style={{ marginTop: 7, marginRight: -7 }} />
+        <Bars3Icon className="w-8" style={{ marginTop: 7, marginRight: -7, zoom: 1.3 }} />
       </button>
 
       <div

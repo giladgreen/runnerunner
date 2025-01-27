@@ -552,48 +552,61 @@
 }
 
 .player-pages {
-  background-image: url('/backgroung-web.png');
-  background-size: cover; /* Adjusts the image to cover the entire element */
+  background-image: url('/t-backgroung-web.png');
+  background-size: 100% 100%;
   background-position: center; /* Centers the image */
-  padding: 0 20px;
-  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 0;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+
+  .player-page-body{
+    position: absolute;
+    width: 100vw;
+    top: 191px;
+    left: 0;
+    padding-top: 30px;
+    max-height: calc(100vh - 191px);
+    overflow-y: auto; /* Enable vertical scrolling */
+  }
   .player-header-div {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    height: 60px;
-    background: var(--red);
+    height: 191px;
+    background: var(--grey-darker);
     color: white;
     padding: 5px 15px 5px 5px;
     display: flex;
     justify-content: space-between;
+    box-shadow: 0 4px 10px -2px black; /* Adds a black shadow at the bottom */
 
     .dot {
-      color: var(--red);
+      color: var(--grey-dark);
     }
-    .player-header {
-      font-size: 2em;
-      font-weight: bold;
+    .icon {
+     padding-top: 30px;
     }
   }
+
 
 }
 
 .rsvp-for-next-week-page {
-  height: 100%;
-  background-image: url('/backgroung-web.png');
-  background-size: cover; /* Adjusts the image to cover the entire element */
-  background-position: center; /* Centers the image */
+
   .rsvp-for-next-week {
-    color: black;
     padding: 30px;
     font-size: 1.3em;
-
     .header {
       color: var(--white);
-      text-align: center;
+      text-align: right;
       font-size: 1.6em;
+      margin-right: 30px;
+      font-weight: bold;
+      margin-bottom: 40px;
     }
   }
 
@@ -606,10 +619,6 @@
 @media only screen and (max-width: 600px) {
   .player-pages{
     min-height: 3000px;
-    background-color: black;
-    background-image: unset;
-    background-size: unset; /* Adjusts the image to cover the entire element */
-    background-position: unset; /* Centers the image */
     .player-header-div {
       padding: 5px 15px 5px 5px;
       .player-header {
@@ -620,13 +629,8 @@
   }
 
   .rsvp-for-next-week-page {
-    height: 120%;
-    background-image: unset;
-    background: black;
+    background-image: url('/t-backgroung-cell.png');
     .rsvp-for-next-week {
-      margin-top: 45px;
-      border: 2px solid transparent;
-
       padding: 10px;
     }
 
@@ -693,55 +697,225 @@
   justify-content: right;
   margin: 15px;
 }
-.tournament-data-section{
-  background: var(--grey);
-  width: 95%;
-  margin: 10px;
-  border-radius: 5px;
-  padding: 6px;
-}
-.tournament-data-registration-section {
-  width: 95%;
-  margin: 10px;
-  border-radius: 5px;
-  padding: 6px;
-}
-
-.tournament-data-registered-section {
-  background: var(--green-registered);
-}
-
-.tournament-data-not-registered-section {
-  background: var(--red);
-}
-
-.tournament-data-no-registration-needed-section {
-  background: var(--grey-dark);
-}
-
 
 
 .user-tournament-rsvp-item {
-  max-width: 400px;
+  width: 438px;
+
+  margin: 20px;
+  background: linear-gradient(to bottom, var(--back_to), var(--back_from));
   color: var(--white);
-  margin: 10px;
-  border: 2px solid var(--red);
   border-radius: 20px;
+  padding: 15px 30px;
+}
+.tournament_rsvp_line {
+  display: block;
+  margin: 15px 0;
 
-  background: var(--black);
-
-  .tournament-data {
-    width: 100%;
-    text-align: right;
-    font-size: 13px;
-    padding-right: 10px;
-    padding-left: 10px;
+  .tournament_name{
+    font-size: 27px;
+    height:30px;
+    width: 360px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tournament_description{
+    margin-top: 10px;
+    font-size: 17px;
+    height: 30px;
+    margin-bottom:5px;
+    width: 360px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tournament_time{
     display: flex;
-    justify-content: space-between;
+    background: var(--red);
+    border-radius: 20px;
+    font-size: 16px;
+    width: 225px;
+
+    .tournament_time-clock {
+       margin: 5px 8px 0 7px;
+      zoom:1.1;
+    }
+    .tournament_time-start_time {
+      margin-left: 7px;
+    }
+    .tournament_time-day-of-week {
+      margin-left: 7px;
+      margin-right: 7px;
+    }
+  }
+
+  .tournament_divider{
+    margin-top:20px;
+    margin-bottom: 20px;
+    margin-right:-5px;
+    background: #ffffff11;
+    width: 389px;
+    height: 2px;
+  }
+
+
+  .tournament-section{
+    margin-bottom: 18px;
+    background: #ffffff11;
+    border-radius: 15px;
+    width: 389px;
+    /*height: 85px;*/
+
+    padding: 16px 20px 1px 20px;
+
+
+    display: block;
+    align-items: start;
+    text-align: right;
+
+    font-size: 15px;
+
+    .tournament-section-row{
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+
+      .tournament-section-row-icon {
+        width: 25px;
+      }
+      .tournament-section-row-icon-clock{
+        padding-top: 3px;
+        zoom:1.2;
+      }
+    }
+  }
+
+  .tournament-rsvp-status-section{
+    margin-bottom: 18px;
+    border-radius: 15px;
+    width: 389px;
+    height: 48px;
+    padding: 10px 20px 1px 20px;
+    align-items: start;
+    text-align: right;
+    font-size: 18px;
+    display: flex;
+  }
+
+  .tournament-rsvp-status-section-unregistered{
+    background: var(--unregistered);
+  }
+  .tournament-rsvp-status-section-registered{
+    background: var(--registered);
+  }
+  .tournament-rsvp-status-section-no-registration-needed{
+    background: var(--no-registration-needed);
+  }
+
+  .tournament-rsvp-button-section{
+    margin-bottom: 18px;
+    border: 2px solid var(--red);
+    border-radius: 25px;
+    width: 389px;
+    height: 53px;
+    padding: 8px 20px 1px 20px;
+    display: block;
+    align-items: center;
+    text-align: center;
+    font-size: 20px;
+
+    span{
+      margin: -3px 5px 0;
+    }
+  }
+
+  .tournament-rsvp-button-section-unregistered{
+    background: var(--red);
+    cursor: pointer;
+  }
+  .tournament-rsvp-button-section-registered{
+    background: var(--black);
+    cursor: pointer;
   }
 }
-
 @media only screen and (max-width: 600px) {
+  .user-tournament-rsvp-item {
+    width: 340px;
+    margin: 20px;
+    border-radius: 15px;
+    padding: 10px 18px 10px 5px;
+  }
+  .tournament_rsvp_line {
+    display: block;
+    margin: 15px 0;
+
+    .tournament_name{
+      font-size: 24px;
+      width: 330px;
+    }
+    .tournament_description{
+      width: 330px;
+    }
+    .tournament_time{
+      font-size: 16px;
+      width: 225px;
+    }
+
+    .tournament_divider{
+      margin-right:0;
+      background: #ffffff11;
+      width: 301px;
+    }
+
+    .tournament-section{
+      border-radius: 13px;
+      width: 301px;
+
+      .tournament-section-row{
+
+        margin-bottom: 13px;
+
+        .tournament-section-row-icon {
+          width: 25px;
+        }
+      }
+    }
+
+    .tournament-rsvp-status-section{
+      margin-bottom: 18px;
+      border-radius: 15px;
+      width: 301px;
+    }
+
+    .tournament-rsvp-button-section{
+      margin-bottom: 18px;
+      border: 2px solid var(--red);
+      border-radius: 25px;
+      width: 301px;
+      height: 53px;
+      padding: 8px 20px 1px 20px;
+      display: block;
+      align-items: center;
+      text-align: center;
+      font-size: 20px;
+
+      span{
+        margin: -3px 5px 0;
+      }
+    }
+
+    .tournament-rsvp-button-section-unregistered{
+      background: var(--red);
+      cursor: pointer;
+    }
+    .tournament-rsvp-button-section-registered{
+      background: var(--black);
+      cursor: pointer;
+    }
+  }
+
   .player_page_menu {
     width: 50vw;
   }
@@ -818,19 +992,12 @@
     }
   }
 
-  .tournament_rsvp_line {
-    margin-bottom: 10px;
-    display: flex;
-  }
+
   .user-tournament-rsvps {
     display: block;
     margin: 0;
   }
-  .user-tournament-rsvp-item {
-    margin-top: 10px;
-    border-radius: 20px;
-    padding-left: 5px;
-  }
+
   .give-credit-modal-button {
     font-size: 12px;
     img {

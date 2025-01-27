@@ -11,11 +11,14 @@
   --red-light: #c94455;
   --red: #b62230;
   --red-dark: #551220;
+  --unregistered: #C44B5677;
+  --no-registration-needed: #C44B5655;
+  --registered: #69CE8977;
   --grey-lighter: #a5abb0;
   --grey-light: #636a71;
   --grey: #393e45;
   --grey-dark: #131d26;
-  --grey-darker: #272727;
+  --grey-darker: #242729;
   --black: #222222;
   --grey-placeholder: #a1a1a1;
   --blue: #3495d4;
@@ -23,7 +26,11 @@
   --green: #57b86a;
   --green-registered: #286e34;
 
-  --grey-mid: #3b4248
+  --grey-mid: #3b4248;
+
+
+  --back_from: #121C25;
+  --back_to: #3A4249;
 }
 /* Scrollbar track */
 ::-webkit-scrollbar {
@@ -158,9 +165,19 @@ body{
   color: var(--grey-light);
 }
 
+.custom-icon-phone{
+  zoom: 1.4;
+  left: 6px !important;
+}
+
+.custom-icon-key{
+  zoom: 2;
+  left: 0 !important;
+}
+
 .general-page {
   background-image: url('/backgroung-web.png');
-  background-size: cover; /* Adjusts the image to cover the entire element */
+  background-size: 100% 100%;
   background-position: center; /* Centers the image */
 }
 
@@ -201,8 +218,26 @@ body{
      margin: -3px 10px 0;
      font-size: 1.8em;
 }
-
+.ExitButton{
+  margin-top: 20px;
+  margin-left: 10px;
+  cursor: pointer;
+  color: var(--white);
+  font-size: 20px;
+  display: flex;
+}
 @media only screen and (max-width: 600px) {
+  /* Scrollbar track */
+  ::-webkit-scrollbar {
+    width: 1px;
+  }
+
+  .ExitButton{
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 12px;
+    font-weight: bold;
+  }
   .create-account-button{
     margin-bottom: 25px;
   }
@@ -759,7 +794,7 @@ input[type='number']::-webkit-outer-spin-button {
 @media only screen and (max-width: 600px) {
   .general-page {
     background-image: url('/background-cell.png');
-    background-size: cover; /* Adjusts the image to cover the entire element */
+    background-size: 100% 100%;
     background-position: center; /* Centers the image */
   }
   .general-form-wrapper{

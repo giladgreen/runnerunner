@@ -2,15 +2,15 @@
 import { useFormState, useFormStatus } from 'react-dom';
 import { signUp } from '@/app/lib/actions';
 import {
-  KeyIcon,
   ExclamationCircleIcon,
-  PencilIcon, PhoneIcon
+  PencilIcon,
 } from '@heroicons/react/24/outline';
-import { ArrowLeftIcon } from '@heroicons/react/20/solid';
-import Button, { RedButton } from '@/app/ui/client/Button';
+import  { RedButton } from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
 import { Checkbox } from 'primereact/checkbox';
-import React, { useState, Suspense } from 'react';
+import React, { useState } from 'react';
+import KeyIcon from '@/app/ui/client/KeyIcon';
+import PhoneIcon from '@/app/ui/client/PhoneIcon';
 
 export default function SignUpForm() {
   const searchParams = useSearchParams();
@@ -63,7 +63,7 @@ export default function SignUpForm() {
                   required
                   readOnly={readOnlyPhoneNumber}
                 />
-                <PhoneIcon className="login-input-icon pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2" />
+                <PhoneIcon />
               </div>
             </div>
             <div className="mt-4">
@@ -105,7 +105,7 @@ export default function SignUpForm() {
                   required
                   minLength={6}
                 />
-                <KeyIcon className="0 login-input-icon pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2" />
+                <KeyIcon  />
               </div>
             </div>
             <div

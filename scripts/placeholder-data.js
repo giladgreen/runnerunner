@@ -210,6 +210,7 @@ const tournaments = [
   {
     day: 'Sunday',
     name: 'טורניר קיסריה',
+    description: 'טורניר קיסריה',
     buy_in: 300,
     max_players: 100,
     rsvp_required: true,
@@ -218,6 +219,7 @@ const tournaments = [
   {
     day: 'Sunday',
     name: 'טורניר פתח תקווה',
+    description: 'טורניר פתח תקווה',
     buy_in: 250,
     max_players: 150,
     rsvp_required: true,
@@ -226,6 +228,7 @@ const tournaments = [
   {
     day: 'Monday',
     name: 'טורניר תל אביב',
+    description: 'טורניר תל אביב',
     buy_in: 300,
     max_players: 100,
     rsvp_required: true,
@@ -234,6 +237,7 @@ const tournaments = [
   {
     day: 'Tuesday',
     name: 'טורניר רעננה',
+    description: 'טורניר רעננה',
     buy_in: 300,
     max_players: 100,
     rsvp_required: true,
@@ -242,6 +246,7 @@ const tournaments = [
   {
     day: 'Wednesday',
     name: 'טורניר כפר סבא',
+    description: 'טורניר כפר סבא',
     buy_in: 250,
     max_players: 100,
     rsvp_required: true,
@@ -250,6 +255,7 @@ const tournaments = [
   {
     day: 'Thursday',
     name: 'טורניר ראשל״צ',
+    description: 'טורניר ראשל״צ',
     buy_in: 400,
     max_players: 100,
     rsvp_required: true,
@@ -258,6 +264,7 @@ const tournaments = [
   {
     day: 'Friday',
     name: '',
+    description: '',
     buy_in: 200,
     max_players: 0,
     rsvp_required: true,
@@ -266,6 +273,7 @@ const tournaments = [
   {
     day: 'Saturday',
     name: 'טורניר ראשל״צ',
+    description: 'טורניר ראשל״צ',
     buy_in: 250,
     max_players: 100,
     rsvp_required: false,

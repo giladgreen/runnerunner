@@ -161,6 +161,37 @@ export default function CreateTournamentForm({
           </div>
         </div>
 
+        {/* tournament description */}
+        <div className="mb-4">
+          <label
+            htmlFor="description"
+            className="mb-2 block font-medium align-text-right"
+          >
+            תיאור
+          </label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <input
+                id="description"
+                name="description"
+                defaultValue={' שקר כלשהו'}
+                placeholder="תיאור"
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 tournament-edit-input"
+                aria-describedby="description-error"
+              />
+            </div>
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
+            <div id="description-error" aria-live="polite" aria-atomic="true">
+              {state?.errors?.description &&
+                state?.errors.description.map((error: string) => (
+                  <div className="mt-2  text-red-500" key={error}>
+                    {error}
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+
         {/* tournament time */}
         <div className="mb-4">
           <label

@@ -35,42 +35,38 @@ export default async function TournamentsSetupPage({
       {/*mobile view*/}
       <div className="cellular tournaments-config-mobile-items">
         {tournaments?.map((tournament, index) => (
-          <div
-            key={tournament.id}
-            className={`item`}
-          >
-              <a
-                href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
-                className="smaller-on-mobile rounded-md border p-2"
-                style={{
-                  zoom: 1.4,
-                  border: '0 solid transparent',
-                }}
-              >
-                <b>
-                  <u>
-                    {
-                      tournament.name
-                    }
-                  </u>
-                </b>
-              </a>
-
-
-              <b>
-                {
-                  // @ts-ignore
-                  TRANSLATIONS[tournament.day]
-                }
-              </b>
+          <div key={tournament.id} className={`item`}>
+            <a
+              href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
+              className="smaller-on-mobile rounded-md border p-2"
+              style={{
+                zoom: 1.7,
+                border: '0 solid transparent',
+              }}
+            >
               <div>
-                כניסה ראשונה:
+                <b>
+                  <u>{tournament.name}</u>
+                </b>
+              </div>
+              <div> {tournament.description}</div>
+
+            </a>
+
+            <b>
+              {
+                // @ts-ignore
+                TRANSLATIONS[tournament.day]
+              }
+            </b>
+            <div>
+              כניסה ראשונה:
               {tournament.rsvp_required && tournament.max_players === 0
                 ? '--'
                 : formatCurrency(tournament.buy_in)}
-              </div>
+            </div>
             <div>
-             כניסה נוספת:
+              כניסה נוספת:
               {tournament.rsvp_required && tournament.max_players === 0
                 ? '--'
                 : formatCurrency(tournament.re_buy)}
@@ -92,7 +88,6 @@ export default async function TournamentsSetupPage({
               {tournament.rsvp_required && tournament.max_players === 0
                 ? '--'
                 : tournament.last_phase_for_rebuy}
-
             </div>
             <div>
               מספר מקסימלי של שחקנים:
@@ -109,121 +104,88 @@ export default async function TournamentsSetupPage({
                   : 'לא '}
             </div>
 
-              <div className="flex justify-end gap-3"  style={{ marginTop: -10, marginBottom:10, marginLeft:10}}>
-                {tournament.day_has_more_then_one && (
-                  <div style={{ border: '1px solid white', borderRadius: 5, padding: 0 }}>
-                    <DeleteTournamentButton
-                      tournamentId={tournament.id}
-                      userId={params.userId}
-                    />
-                  </div>
-                )}
-                <Link
-                  href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
-                  className=" rounded-md border p-2 "
+            <div
+              className="flex justify-end gap-3"
+              style={{ marginTop: -10, marginBottom: 10, marginLeft: 10 }}
+            >
+              {tournament.day_has_more_then_one && (
+                <div
+                  style={{
+                    border: '1px solid white',
+                    borderRadius: 5,
+                    padding: 0,
+                  }}
                 >
-                  <PencilIcon className="w-5" />
-                </Link>
-
-              </div>
+                  <DeleteTournamentButton
+                    tournamentId={tournament.id}
+                    userId={params.userId}
+                  />
+                </div>
+              )}
+              <Link
+                href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
+                className=" rounded-md border p-2 "
+              >
+                <PencilIcon className="w-5" />
+              </Link>
+            </div>
           </div>
         ))}
       </div>
 
       {/*web view*/}
-      <table
-        className="rtl min-w-full  md:table align-text-right hide-on-mobile"
-
-      >
-        <thead
-          className="rounded-lg text-left  font-normal align-text-right"
-
-        >
+      <table className="rtl align-text-right  hide-on-mobile min-w-full md:table">
+        <thead className="align-text-right rounded-lg  text-left font-normal">
           <tr>
             <th
               scope="col"
-              className="px-4 py-5 font-medium sm:pl-6 align-text-right"
-
+              className="align-text-right px-4 py-5 font-medium sm:pl-6"
             >
               יום
             </th>
             <th
               scope="col"
-              className="px-4 py-5 font-medium sm:pl-6 align-text-right"
-
+              className="align-text-right px-4 py-5 font-medium sm:pl-6"
             >
               שעה
             </th>
-            <th
-              scope="col"
-              className=" px-2 py-5 font-medium align-text-right"
-
-            >
+            <th scope="col" className=" align-text-right px-2 py-5 font-medium">
               שם
             </th>
-            <th
-              scope="col"
-              className=" px-3 py-5 font-medium align-text-right"
-
-            >
+            <th scope="col" className=" align-text-right px-2 py-5 font-medium">
+              תיאור
+            </th>
+            <th scope="col" className=" align-text-right px-3 py-5 font-medium">
               עלות כניסה
             </th>
-            <th
-              scope="col"
-              className=" px-3 py-5 font-medium align-text-right"
-
-            >
+            <th scope="col" className=" align-text-right px-3 py-5 font-medium">
               עלות כניסה נוספת
             </th>
-            <th
-              scope="col"
-              className=" px-3 py-5 font-medium align-text-right"
-
-            >
+            <th scope="col" className=" align-text-right px-3 py-5 font-medium">
               ערימה התחלתית
             </th>
-            <th
-              scope="col"
-              className=" px-3 py-5 font-medium align-text-right"
-
-            >
+            <th scope="col" className=" align-text-right px-3 py-5 font-medium">
               אורך שלב
             </th>
-            <th
-              scope="col"
-              className=" px-3 py-5 font-medium align-text-right"
-
-            >
+            <th scope="col" className=" align-text-right px-3 py-5 font-medium">
               מספר שלבים שניתן לבצע כניסה מחדש
             </th>
-            <th
-              scope="col"
-              className=" px-3 py-5 font-medium align-text-right"
-
-            >
+            <th scope="col" className=" align-text-right px-3 py-5 font-medium">
               מספר שחקנים מירבי
             </th>
-            <th
-              scope="col"
-              className=" px-3 py-5 font-medium align-text-right"
-
-            >
+            <th scope="col" className=" align-text-right px-3 py-5 font-medium">
               נדרש אישור הגעה
             </th>
-            <th
-              scope="col"
-              className=" px-3 py-5 font-medium align-text-right"
-
-            >
+            <th scope="col" className=" align-text-right px-3 py-5 font-medium">
               <span className="sr-only">ערוך</span>
             </th>
           </tr>
         </thead>
-        <tbody >
+        <tbody>
           {tournaments?.map((tournament, index) => (
             <tr
               key={tournament.id}
-              className={`table-row-background-color${ (index % 2) +1}. w-full border-b py-3  last-of-type:border-none `}
+              className={`table-row-background-color${(index % 2) + 1}. w-full border-b py-3  last-of-type:border-none `}
             >
               <td className="cellular whitespace-nowrap py-3 pl-6 pr-3">
                 <a
@@ -262,6 +224,11 @@ export default async function TournamentsSetupPage({
                 {tournament.rsvp_required && tournament.max_players === 0
                   ? '--'
                   : tournament.name}
+              </td>
+              <td className="whitespace-nowrap px-3 py-3">
+                {tournament.rsvp_required && tournament.max_players === 0
+                  ? '--'
+                  : tournament.description}
               </td>
               <td className="whitespace-nowrap px-3 py-3">
                 {tournament.rsvp_required && tournament.max_players === 0
@@ -320,7 +287,14 @@ export default async function TournamentsSetupPage({
           ))}
         </tbody>
       </table>
-      <div style={{ textAlign: 'right', marginTop: 150, marginRight:50, marginBottom:20 }}>
+      <div
+        style={{
+          textAlign: 'right',
+          marginTop: 150,
+          marginRight: 50,
+          marginBottom: 20,
+        }}
+      >
         <Link href={`/${params.userId}/configurations/tournaments/create`}>
           <Button className="my-button">צור טורניר חדש</Button>
         </Link>

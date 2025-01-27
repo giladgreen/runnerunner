@@ -15,8 +15,8 @@ export default function PlayerPagePlayerRegistration({
 }) {
   return (
     <div className="rsvp-for-next-week-page" >
-      <div  style={{ marginTop: 50 }} className="rtl">
-        <div style={{ marginTop: 10 }}>
+      <div  className="rtl">
+        <div >
           {showRsvp ? (
             <div>
               <PlayerPageRegistrationSection
