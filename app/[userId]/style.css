@@ -584,9 +584,7 @@
     justify-content: space-between;
     box-shadow: 0 4px 10px -2px black; /* Adds a black shadow at the bottom */
 
-    .dot {
-      color: var(--grey-dark);
-    }
+
     .icon {
      padding-top: 30px;
     }
@@ -594,7 +592,12 @@
 
 
 }
-
+.logged-in-player {
+  color: var(--grey-light);
+  margin-top: 20px;
+  margin-right: 10px;
+  font-size: 20px;
+}
 .rsvp-for-next-week-page {
 
   .rsvp-for-next-week {
@@ -617,8 +620,18 @@
 }
 
 @media only screen and (max-width: 600px) {
+  .logged-in-player {
+    margin-top: 10px;
+    margin-right: 10px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
   .player-pages{
-    min-height: 3000px;
+    background-image: url('/t-backgroung-web.png');
+    background-size: contain;
+    height: 100vh;
+    width: 322vw;
     .player-header-div {
       padding: 5px 15px 5px 5px;
       .player-header {
@@ -629,14 +642,8 @@
   }
 
   .rsvp-for-next-week-page {
-    background-image: url('/t-backgroung-cell.png');
     .rsvp-for-next-week {
       padding: 10px;
-    }
-
-    .rsvp-for-next-week > img {
-      width: 100%;
-      visibility: visible;
     }
   }
 }

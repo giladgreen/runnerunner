@@ -1,10 +1,8 @@
 import SideNav from '@/app/ui/client/SideNav';
 import { fetchFeatureFlags, fetchUserById } from '@/app/lib/data';
 import { signOut } from '@/auth';
-import PlayerPageMenu from '@/app/ui/client/PlayerPageMenu';
 import AdminPageMenu from '@/app/ui/client/AdminPageMenu';
 import React from 'react';
-import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
 import ExitButton from '@/app/ui/client/ExitButton';
 
 export default async function Layout({
@@ -19,6 +17,7 @@ export default async function Layout({
 
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
+  const playerName = user.name;
   const isAdminPlayer = (isAdmin || isWorker) && user.is_player;
   if (isAdmin || isWorker) {
     return (
@@ -72,7 +71,7 @@ export default async function Layout({
         <div className="icon">
           <img src="/logo.png" width={177} height={120} />
         </div>
-        <div className="dot">.....</div>
+        <div className="logged-in-player ">{playerName}</div>
         {/*<PlayerPageMenu*/}
         {/*  showRsvp={showRsvp}*/}
         {/*  prizesEnabled={prizesEnabled}*/}
