@@ -25,7 +25,8 @@ export default async function PlayerRegistrationPage({
     <PlayerPagePlayerRegistration
       player={player}
       thisWeekTournaments={tournaments}
-      showRsvp={showRsvp}
+      showRsvp={rsvpEnabled}
+      playerRsvpEnabled={playerRsvpEnabled}
     />
   );
 }

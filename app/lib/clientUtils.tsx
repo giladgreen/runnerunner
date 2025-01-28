@@ -13,6 +13,7 @@ export function getRSVPSForTheNextWeek(
   tournaments: TournamentDB[],
   player: PlayerDB,
   isPlayerPage: boolean,
+  playerRsvpEnabled: boolean,
 ) {
   const dayOfTheWeek = getDayOfTheWeek();
   const days = [
@@ -111,7 +112,7 @@ export function getRSVPSForTheNextWeek(
       }
 
 
-      return <PlayerTournamentRegistration key={tournament.id} dayOfTheWeek={dayOfTheWeek} tournament={tournament} stringDate={stringDate} index={index} player={player} isPlayerRsvpForDate={isPlayerRsvpForDate}/>
+      return <PlayerTournamentRegistration key={tournament.id} dayOfTheWeek={dayOfTheWeek} tournament={tournament} stringDate={stringDate} index={index} player={player} isPlayerRsvpForDate={isPlayerRsvpForDate} playerRsvpEnabled={playerRsvpEnabled}/>
 
     });
 

@@ -7,10 +7,12 @@ import PlayerPageRegistrationSection from '@/app/ui/client/PlayerPageRegistratio
 export default function PlayerPagePlayerRegistration({
   player,
   showRsvp,
+  playerRsvpEnabled,
   thisWeekTournaments,
 }: {
   player: PlayerDB;
   showRsvp: boolean;
+  playerRsvpEnabled: boolean;
   thisWeekTournaments: TournamentDB[];
 }) {
   return (
@@ -21,6 +23,7 @@ export default function PlayerPagePlayerRegistration({
             <div>
               <PlayerPageRegistrationSection
                 player={player}
+                playerRsvpEnabled={playerRsvpEnabled}
                 thisWeekTournaments={thisWeekTournaments}
               />
             </div>

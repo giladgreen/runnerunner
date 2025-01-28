@@ -7,7 +7,9 @@ import { getRSVPSForTheNextWeek } from '@/app/lib/clientUtils';
 const PlayerPageRegistrationSection = ({
   player,
   thisWeekTournaments,
+  playerRsvpEnabled,
 }: {
+  playerRsvpEnabled: boolean;
   player: PlayerDB;
   thisWeekTournaments: TournamentDB[];
 })=> {
@@ -15,6 +17,7 @@ const PlayerPageRegistrationSection = ({
     thisWeekTournaments,
     player,
     true,
+    playerRsvpEnabled
   );
 
   return (

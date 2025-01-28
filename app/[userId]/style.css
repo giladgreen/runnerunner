@@ -593,10 +593,16 @@
 
 }
 .logged-in-player {
-  color: var(--grey-light);
+text-align: center;
   margin-top: 20px;
   margin-right: 10px;
   font-size: 20px;
+  .logged-in-player-name{
+    color: var(--grey-light);
+  }
+  .logged-in-player-credit{
+    margin-top: 5px;
+  }
 }
 .rsvp-for-next-week-page {
 
@@ -625,6 +631,7 @@
     margin-right: 10px;
     font-size: 12px;
     font-weight: bold;
+
   }
 
   .player-pages{

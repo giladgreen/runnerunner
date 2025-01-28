@@ -34,12 +34,14 @@ const PlayerTournamentRegistration = ({
   index,
   isPlayerRsvpForDate,
   dayOfTheWeek,
+  playerRsvpEnabled,
 }: {
   tournament: TournamentDB;
   stringDate: string;
   player: PlayerDB;
   index: number;
   isPlayerRsvpForDate: boolean;
+  playerRsvpEnabled: boolean;
   dayOfTheWeek: string;
 }) => {
   const page = usePathname();
@@ -49,14 +51,14 @@ const PlayerTournamentRegistration = ({
   const tournamentCurrentRegisteredPlayers = tournament.rsvpForToday;
   const placesLeft = tournamentMaxPlayers - tournamentCurrentRegisteredPlayers;
 
-  const timeBeforeLastRebuy =
-    (tournament.last_phase_for_rebuy + 2) * tournament.phase_length;
-  const date = new Date('2024-01-01T' + tournament.start_time + ':00');
-  const endDate = new Date(date.getTime() + timeBeforeLastRebuy * 60_000);
-  const endDateTime = endDate.toLocaleTimeString('he-IL', {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  // const timeBeforeLastRebuy =
+  //   (tournament.last_phase_for_rebuy + 2) * tournament.phase_length;
+  // const date = new Date('2024-01-01T' + tournament.start_time + ':00');
+  // const endDate = new Date(date.getTime() + timeBeforeLastRebuy * 60_000);
+  // const endDateTime = endDate.toLocaleTimeString('he-IL', {
+  //   hour: '2-digit',
+  //   minute: '2-digit',
+  // });
 
   const tournamentDate = getDate(stringDate);
   return (
@@ -165,9 +167,9 @@ const PlayerTournamentRegistration = ({
               : 'אין צורך ברישום'}
           </div>
 
-          {registrationNeeded && (
+          {registrationNeeded && playerRsvpEnabled && (
             <div
-              className={`tournament-rsvp-button-section ${isPlayerRsvpForDate ? 'tournament-rsvp-button-section-registered' : 'tournament-rsvp-button-section-unregistered'}`}
+              className={`tournament-rsvp-button-section ${isPlayerRsvpForDate || placesLeft === 0 ? 'tournament-rsvp-button-section-registered' : 'tournament-rsvp-button-section-unregistered'}`}
               onClick={() => {
                 setPending(true);
                 rsvpPlayerForDay(
@@ -182,78 +184,18 @@ const PlayerTournamentRegistration = ({
                 }, 1200);
               }}
             >
-              {!pending && ( <>
+              {!pending && placesLeft > 0 && ( <>
                 {isPlayerRsvpForDate ? 'לביטול הרשמה' : 'להרשמה'}
                 <span > &larr;</span>
               </>)}
+              {!pending && placesLeft === 0 && ( <>
+                לא נותרו מקומות להערב
+              </>)}
+
                 {pending && (  <SpinningChip color="var(--white)" size={20} />)}
 
             </div>
           )}
-
-          {/*          {pending && (*/}
-          {/*            <div*/}
-          {/*              style={{*/}
-          {/*                textAlign: 'left',*/}
-          {/*                alignItems: 'left',*/}
-          {/*                width: '100%',*/}
-          {/*                paddingRight: '70%',*/}
-          {/*              }}*/}
-          {/*            >*/}
-          {/*              <SpinningChip color="var(--white)" size={20} />*/}
-          {/*            </div>*/}
-          {/*          )}*/}
-          {/*        </div>*/}
-          {/*      </div>*/}
-          {/*    )}*/}
-          {/*    {!registrationNeeded && (*/}
-          {/*      <div*/}
-          {/*        style={{*/}
-          {/*          width: '100%',*/}
-          {/*          alignItems: 'right',*/}
-          {/*          textAlign: 'right',*/}
-          {/*          display: 'flex',*/}
-          {/*          justifyContent: 'space-between',*/}
-          {/*        }}*/}
-          {/*      >*/}
-          {/*        <div*/}
-          {/*          style={{*/}
-          {/*            textAlign: 'left',*/}
-          {/*            alignItems: 'left',*/}
-          {/*            width: '100%',*/}
-          {/*            fontSize: 20,*/}
-          {/*            cursor: 'pointer',*/}
-          {/*            color: 'transparent',*/}
-          {/*          }}*/}
-          {/*        >*/}
-          {/*          ...*/}
-          {/*        </div>*/}
-          {/*      </div>*/}
-          {/*    )}*/}
-          {/*    {registrationNeeded && placesLeft < 1 && (*/}
-          {/*      <div*/}
-          {/*        style={{*/}
-          {/*          width: '100%',*/}
-          {/*          alignItems: 'right',*/}
-          {/*          textAlign: 'right',*/}
-          {/*          display: 'flex',*/}
-          {/*          justifyContent: 'space-between',*/}
-          {/*        }}*/}
-          {/*      >*/}
-          {/*        <div*/}
-          {/*          style={{*/}
-          {/*            textAlign: 'left',*/}
-          {/*            alignItems: 'left',*/}
-          {/*            width: '100%',*/}
-          {/*            fontSize: 20,*/}
-          {/*          }}*/}
-          {/*        >*/}
-          {/*          <b> לא נותרו מקומות</b>*/}
-          {/*        </div>*/}
-          {/*      </div>*/}
-          {/*    )}*/}
-          {/*  </div>*/}
-          {/*</div>*/}
         </div>
       </div>
     </BlurFade>

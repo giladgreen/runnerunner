@@ -1,9 +1,11 @@
 import SideNav from '@/app/ui/client/SideNav';
-import { fetchFeatureFlags, fetchUserById } from '@/app/lib/data';
+import { fetchFeatureFlags, fetchPlayerByUserId, fetchUserById } from '@/app/lib/data';
 import { signOut } from '@/auth';
 import AdminPageMenu from '@/app/ui/client/AdminPageMenu';
 import React from 'react';
 import ExitButton from '@/app/ui/client/ExitButton';
+import { lusitana } from '@/app/ui/fonts';
+import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 
 export default async function Layout({
   children,
@@ -12,12 +14,13 @@ export default async function Layout({
   children: React.ReactNode;
   params: { userId: string };
 }) {
-  const [user, { rsvpEnabled, playerRsvpEnabled, prizesEnabled }] =
+  const [user, { rsvpEnabled, playerRsvpEnabled, prizesEnabled, playersSeeCreditEnabled }] =
     await Promise.all([fetchUserById(params.userId), fetchFeatureFlags()]);
 
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
   const playerName = user.name;
+
   const isAdminPlayer = (isAdmin || isWorker) && user.is_player;
   if (isAdmin || isWorker) {
     return (
@@ -59,19 +62,32 @@ export default async function Layout({
     );
   }
 
-  const showRsvp = rsvpEnabled && playerRsvpEnabled;
-
+  const player = await fetchPlayerByUserId(params.userId);
   return (
     <div className="player-pages flex h-screen flex-col md:flex-row md:overflow-hidden">
       <div className="player-header-div">
-        <ExitButton signout={async () => {
-          'use server';
-          await signOut({ redirect: true, redirectTo: '/' });
-        }} />
+        <ExitButton
+          signout={async () => {
+            'use server';
+            await signOut({ redirect: true, redirectTo: '/' });
+          }}
+        />
         <div className="icon">
           <img src="/logo.png" width={177} height={120} />
         </div>
-        <div className="logged-in-player ">{playerName}</div>
+        <div className="logged-in-player ">
+          <div className="logged-in-player-name ">{playerName}</div>
+          { playersSeeCreditEnabled && player && <div
+            className="logged-in-player-credit "
+              style={{
+              color: formatCurrencyColor(player.balance),
+          }}
+            >
+          {formatCurrency(player.balance)}
+        </div>
+
+            }
+        </div>
         {/*<PlayerPageMenu*/}
         {/*  showRsvp={showRsvp}*/}
         {/*  prizesEnabled={prizesEnabled}*/}
@@ -82,10 +98,8 @@ export default async function Layout({
         {/*    await signOut({ redirect: true, redirectTo: '/' });*/}
         {/*  }}*/}
         {/*/>*/}
-
-
       </div>
-      <div className="flex-grow player-page-body">{children}</div>
+      <div className="player-page-body flex-grow">{children}</div>
     </div>
   );
 }

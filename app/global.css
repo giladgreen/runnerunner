@@ -362,7 +362,11 @@ body{
   text-align: right;
   color: var(--grey-placeholder) !important;
 }
-
+@media only screen and (max-width: 600px) {
+  .login-form {
+    min-height: 55vh;
+  }
+}
 
 .sign-in-button{
   display: flex;
