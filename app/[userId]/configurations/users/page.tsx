@@ -121,7 +121,7 @@ export default async function UsersPage({
                       className="thin-column whitespace-nowrap py-3 pl-6 pr-3"
 
                   >
-                    {confidNumbers.find( num => num === user.phone_number) ? '*********' : user.phone_number}
+                    {confidNumbers.find( num => num === user.phone_number) ? '************' : user.phone_number}
                   </td>
 
                   <td
