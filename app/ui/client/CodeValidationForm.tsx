@@ -1,6 +1,8 @@
 'use client';
-import React from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import React, { useState } from 'react';
+// @ts-ignore
+import { Circle as SpinningChip } from 'react-awesome-spinners'
+import { useFormState } from 'react-dom';
 import { validateCode } from '@/app/lib/actions';
 import { RedButton } from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
@@ -13,7 +15,8 @@ export default function CodeValidationForm() {
     validateCode.bind(null),
     undefined,
   );
-  const { pending } = useFormStatus();
+  const [pending, setPending] = useState(false);
+
   return (
     <div className="login-form">
       <form
@@ -51,8 +54,13 @@ export default function CodeValidationForm() {
               value={phone_number}
             />
           </div>
-          <RedButton className="mt-4 w-full" aria-disabled={pending}>
-            {pending ? 'המתן..' : 'שלח'}
+          <RedButton className="mt-4 w-full" aria-disabled={pending} onClick={()=>{
+            setPending(true);
+            setTimeout(() => {
+              setPending(false);
+            },2000);
+          }}>
+            {pending ? <SpinningChip color="var(--white)"  size={20} /> : 'שלח'}
           </RedButton>
         </div>
       </form>

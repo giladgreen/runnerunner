@@ -1,6 +1,8 @@
 'use client';
-import React from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import React, { useState } from 'react';
+// @ts-ignore
+import { Circle as SpinningChip } from 'react-awesome-spinners'
+import { useFormState } from 'react-dom';
 import { validatePhone } from '@/app/lib/actions';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { RedButton } from '@/app/ui/client/Button';
@@ -15,8 +17,8 @@ export default function PhoneValidationForm() {
     validatePhone.bind(null),
     undefined,
   );
-  const { pending } = useFormStatus();
-  console.log('## pending',pending)
+  const [pending, setPending] = useState(false);
+
   return (
     <div className="login-form">
       <form
@@ -54,8 +56,13 @@ export default function PhoneValidationForm() {
               </div>
             </div>
           </div>
-          <RedButton className="mt-4 w-full" aria-disabled={pending}>
-            {pending ? 'המתן..' : 'אימות'}
+          <RedButton className="mt-4 w-full" aria-disabled={pending} onClick={()=>{
+            setPending(true);
+            setTimeout(() => {
+              setPending(false);
+            },2000);
+          }}>
+            {pending ? <SpinningChip color="var(--white)"  size={20} /> : 'אימות'}
           </RedButton>
 
           <div

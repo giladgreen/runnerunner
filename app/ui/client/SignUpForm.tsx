@@ -1,5 +1,7 @@
 'use client';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useFormState } from 'react-dom';
+// @ts-ignore
+import { Circle as SpinningChip } from 'react-awesome-spinners'
 import { signUp } from '@/app/lib/actions';
 import {
   ExclamationCircleIcon,
@@ -23,7 +25,7 @@ export default function SignUpForm() {
   const [phoneNumber, setPhoneNumber] = useState(phone_number);
   const [regulationsApprove, setRegulationsApprove] = useState(false);
   const [marketingApprove, setMarketingApprove] = useState(false);
-  const { pending } = useFormStatus();
+  const [pending, setPending] = useState(false);
 
   return (
     <div className="login-form">
@@ -154,12 +156,14 @@ export default function SignUpForm() {
           </div>
           <RedButton
             className="mt-4 w-full"
-            aria-disabled={
-              pending || !regulationsApprove || password.length < 1
-            }
-            disabled={pending || !regulationsApprove || password.length < 1}
+            onClick={()=>{
+              setPending(true);
+              setTimeout(() => {
+                setPending(false);
+              },2000);
+            }}
           >
-            {pending ? 'המתן..' : 'הירשם'}
+            {pending ? <SpinningChip color="var(--white)"  size={20} /> : 'הירשם'}
           </RedButton>
           <div
             className="flex h-8 items-end space-x-1"
