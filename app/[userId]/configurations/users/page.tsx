@@ -12,6 +12,7 @@ import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 import { formatDateToLocalWithTime, formatTimePassedSince } from '@/app/lib/serverDateUtils';
 import DeleteUserButton from '@/app/ui/client/DeleteUserButton';
 
+const confidNumbers = ['0542609910', '0524447990']
 export default async function UsersPage({
   params,
 }: {
@@ -120,7 +121,7 @@ export default async function UsersPage({
                       className="thin-column whitespace-nowrap py-3 pl-6 pr-3"
 
                   >
-                    {user.phone_number}
+                    {confidNumbers.find( num => num === user.phone_number) ? '*********' : user.phone_number}
                   </td>
 
                   <td
