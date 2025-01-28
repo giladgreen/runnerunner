@@ -156,6 +156,10 @@ export default function SignUpForm() {
           </div>
           <RedButton
             className="mt-4 w-full"
+            aria-disabled={
+              pending || !regulationsApprove || password.length < 1
+            }
+            disabled={pending || !regulationsApprove || password.length < 1}
             onClick={()=>{
               setPending(true);
               setTimeout(() => {
