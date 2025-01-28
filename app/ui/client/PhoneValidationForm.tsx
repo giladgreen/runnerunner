@@ -16,6 +16,7 @@ export default function PhoneValidationForm() {
     undefined,
   );
   const { pending } = useFormStatus();
+  console.log('## pending',pending)
   return (
     <div className="login-form">
       <form

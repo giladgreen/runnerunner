@@ -56,6 +56,7 @@ export default function EditPlayerForm({
     tournaments,
     player,
     false,
+    true,
   );
 
   return (
