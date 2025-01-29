@@ -5,7 +5,7 @@ import {
   ArrowRightOnRectangleIcon,
   Bars3Icon,
 } from '@heroicons/react/24/outline';
-import { Nevigationlinks } from '@/app/ui/client/NavLinks';
+import { Navigationlinks } from '@/app/ui/client/NavLinks';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -26,7 +26,7 @@ export default function AdminPageMenu({
 }) {
   const [showMenu, setShowMenu] = useState(false);
   const pathname = usePathname();
-  const linksToShow = Nevigationlinks(userId).filter(
+  const linksToShow = Navigationlinks(userId).filter(
     (link) =>
       ((link.admin && isAdmin) ||
         (link.worker && isWorker) ||

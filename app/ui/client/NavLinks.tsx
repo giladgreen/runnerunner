@@ -17,7 +17,7 @@ import ClipboardDocumentCheckIcon from '@heroicons/react/24/outline/ClipboardDoc
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
-export const Nevigationlinks = (userId: string) => [
+export const Navigationlinks = (userId: string) => [
   {
     name: 'עמוד הבית',
     href: `/${userId}`,
@@ -116,7 +116,7 @@ export default function NavLinks({
 
   return (
     <>
-      {Nevigationlinks(user.id)
+      {Navigationlinks(user.id)
         .filter(
           (link) =>
             (!link.prizesLink || prizesEnabled) &&

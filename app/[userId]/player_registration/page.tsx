@@ -19,7 +19,6 @@ export default async function PlayerRegistrationPage({
 
   const tournaments = await fetchTournaments();
   const { rsvpEnabled, playerRsvpEnabled } = await fetchFeatureFlags();
-  const showRsvp = rsvpEnabled && playerRsvpEnabled;
 
   return (
     <PlayerPagePlayerRegistration

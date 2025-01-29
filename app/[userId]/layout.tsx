@@ -4,7 +4,6 @@ import { signOut } from '@/auth';
 import AdminPageMenu from '@/app/ui/client/AdminPageMenu';
 import React from 'react';
 import ExitButton from '@/app/ui/client/ExitButton';
-import { lusitana } from '@/app/ui/fonts';
 import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 
 export default async function Layout({
@@ -14,7 +13,7 @@ export default async function Layout({
   children: React.ReactNode;
   params: { userId: string };
 }) {
-  const [user, { rsvpEnabled, playerRsvpEnabled, prizesEnabled, playersSeeCreditEnabled }] =
+  const [user, { prizesEnabled, playersSeeCreditEnabled }] =
     await Promise.all([fetchUserById(params.userId), fetchFeatureFlags()]);
 
   const isAdmin = user.is_admin;
@@ -88,16 +87,6 @@ export default async function Layout({
 
             }
         </div>
-        {/*<PlayerPageMenu*/}
-        {/*  showRsvp={showRsvp}*/}
-        {/*  prizesEnabled={prizesEnabled}*/}
-        {/*  userId={params.userId}*/}
-        {/*  signout={async () => {*/}
-        {/*    'use server';*/}
-
-        {/*    await signOut({ redirect: true, redirectTo: '/' });*/}
-        {/*  }}*/}
-        {/*/>*/}
       </div>
       <div className="player-page-body flex-grow">{children}</div>
     </div>

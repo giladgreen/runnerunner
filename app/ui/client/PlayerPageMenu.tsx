@@ -5,7 +5,7 @@ import {
   ArrowRightOnRectangleIcon,
   Bars3Icon,
 } from '@heroicons/react/24/outline';
-import { Nevigationlinks } from '@/app/ui/client/NavLinks';
+import { Navigationlinks } from '@/app/ui/client/NavLinks';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -49,7 +49,7 @@ export default function PlayerPageMenu({
           <ArrowRightIcon style={{ maxHeight: 30 }} />
         </div>
         <div className="player_page_menu_body">
-          {Nevigationlinks(userId)
+          {Navigationlinks(userId)
             .filter(
               (link) => link.player && (!link.prizesLink || prizesEnabled),
             )
