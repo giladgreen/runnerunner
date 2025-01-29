@@ -5,6 +5,7 @@ import AdminPageMenu from '@/app/ui/client/AdminPageMenu';
 import React from 'react';
 import ExitButton from '@/app/ui/client/ExitButton';
 import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
+import PlayerHeaderLinkSection from '@/app/ui/client/PlayerHeaderLinkSection';
 
 export default async function Layout({
   children,
@@ -18,7 +19,6 @@ export default async function Layout({
 
   const isAdmin = user.is_admin;
   const isWorker = user.is_worker;
-  const playerName = user.name;
 
   const isAdminPlayer = (isAdmin || isWorker) && user.is_player;
   if (isAdmin || isWorker) {
@@ -62,6 +62,10 @@ export default async function Layout({
   }
 
   const player = await fetchPlayerByUserId(params.userId);
+
+
+  const playerName = user.name ?? player?.name;
+
   return (
     <div className="player-pages flex h-screen flex-col md:flex-row md:overflow-hidden">
       <div className="player-header-div">
@@ -74,19 +78,8 @@ export default async function Layout({
         <div className="icon">
           <img src="/logo.png" width={177} height={120} />
         </div>
-        <div className="logged-in-player ">
-          <div className="logged-in-player-name ">{playerName}</div>
-          { playersSeeCreditEnabled && player && <div
-            className="logged-in-player-credit "
-              style={{
-              color: formatCurrencyColor(player.balance),
-          }}
-            >
-          {formatCurrency(player.balance)}
-        </div>
+        <PlayerHeaderLinkSection userId={params.userId} playerName={playerName} player={player} playersSeeCreditEnabled={playersSeeCreditEnabled}/>
 
-            }
-        </div>
       </div>
       <div className="player-page-body flex-grow">{children}</div>
     </div>
