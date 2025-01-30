@@ -16,7 +16,7 @@ export default async function PlayerPage({
   }
 
   return (
-    <div className="rtl" style={{ marginTop: 20 }}>
+    <div className="rtl" >
       <PlayerPagePlayerDetails player={player} showCreditData={playersSeeCreditEnabled}/>
     </div>
   );

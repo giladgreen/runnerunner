@@ -21,7 +21,7 @@ export default function PlayerHeaderLinkSection({
   const isInPlayerDataPage = window.location.pathname.includes('player_registration') || window.location.pathname === '/'
   if (isInPlayerDataPage) {
     return (
-      <div className="logged-in-player ">
+      <div className="logged-in-player right">
         <div className="logged-in-player-name ">{playerName}</div>
         {playersSeeCreditEnabled && player && (
           <div

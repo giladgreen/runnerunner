@@ -579,11 +579,25 @@
     height: 191px;
     background: var(--grey-darker);
     color: white;
-    padding: 5px 15px 5px 5px;
+    padding: 5px 0 5px 5px;
     display: flex;
     justify-content: space-between;
+    /*align-items: center;*/
     box-shadow: 0 4px 10px -2px black; /* Adds a black shadow at the bottom */
 
+    .right,
+    .left{
+      width: 15vw;
+    }
+    .right{
+      /*background: white;*/
+      padding-right: 0;
+      align-items: start;
+    }
+    .center{
+      margin-left: auto;
+      margin-right: auto;
+    }
 
     .icon {
      padding-top: 30px;
@@ -593,7 +607,7 @@
 
 }
 .logged-in-player {
-text-align: center;
+  text-align: right;
   margin-top: 20px;
   margin-right: 10px;
   font-size: 20px;
@@ -601,7 +615,9 @@ text-align: center;
     color: var(--grey-light);
   }
   .logged-in-player-credit{
+    text-align: right;
     margin-top: 5px;
+    margin-right: 10px;
   }
 }
 .rsvp-for-next-week-page {
@@ -640,9 +656,13 @@ text-align: center;
     height: 322vh;
     width: 100vw;
     .player-header-div {
-      padding: 5px 15px 5px 5px;
+      padding: 5px 0 5px 5px;
       .player-header {
        font-size: 1.8em;
+      }
+      .right,
+      .left{
+        width: 25vw;
       }
     }
 

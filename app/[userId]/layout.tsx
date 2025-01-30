@@ -74,7 +74,7 @@ export default async function Layout({
             await signOut({ redirect: true, redirectTo: '/' });
           }}
         />
-        <div className="icon">
+        <div className="icon center">
           <img src="/logo.png" width={177} height={120} />
         </div>
         <PlayerHeaderLinkSection userId={params.userId} playerName={playerName} player={player} playersSeeCreditEnabled={playersSeeCreditEnabled}/>

@@ -21,9 +21,9 @@ export default function PlayerPagePlayerDetails({
     <div>
       <div
         className="rtl user-data-page"
-        style={{ marginTop: 50, textAlign: 'center', zoom: 1.5 }}
+        style={{ marginTop: 0, textAlign: 'center' }}
       >
-        <div style={{ marginTop: 10 }}>
+        <div style={{ marginTop: 0 }}>
           <FlowbiteReact.Avatar
             img={isDefaultImage ? undefined : player.image_url}
             placeholderInitials={

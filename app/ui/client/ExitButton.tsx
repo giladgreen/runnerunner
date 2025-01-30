@@ -12,7 +12,7 @@ export default function ExitButton({
       onClick={() => {
         signout();
       }}
-      className="ExitButton"
+      className="ExitButton left"
     >
       התנתק
     </div>
