@@ -14,6 +14,10 @@ export default function PlayerHeaderLinkSection({
   player?: PlayerDB | null;
   playersSeeCreditEnabled: boolean;
 }) {
+  const isOnNoPage = window.location.pathname === '/';
+  if (isOnNoPage) {
+    location.reload();
+  }
   const isInPlayerDataPage = window.location.pathname.includes('player_registration') || window.location.pathname === '/'
   if (isInPlayerDataPage) {
     return (

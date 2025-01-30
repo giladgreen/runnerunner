@@ -225,6 +225,7 @@ body{
   color: var(--white);
   font-size: 20px;
   display: flex;
+  max-height: 40px;
 }
 @media only screen and (max-width: 600px) {
   /* Scrollbar track */

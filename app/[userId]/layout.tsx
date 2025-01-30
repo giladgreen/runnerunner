@@ -4,7 +4,6 @@ import { signOut } from '@/auth';
 import AdminPageMenu from '@/app/ui/client/AdminPageMenu';
 import React from 'react';
 import ExitButton from '@/app/ui/client/ExitButton';
-import { formatCurrency, formatCurrencyColor } from '@/app/lib/utils';
 import PlayerHeaderLinkSection from '@/app/ui/client/PlayerHeaderLinkSection';
 
 export default async function Layout({

@@ -637,8 +637,8 @@ text-align: center;
   .player-pages{
     background-image: url('/t-backgroung-web.png');
     background-size: contain;
-    height: 100vh;
-    width: 322vw;
+    height: 322vh;
+    width: 100vw;
     .player-header-div {
       padding: 5px 15px 5px 5px;
       .player-header {
