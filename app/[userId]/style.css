@@ -572,6 +572,7 @@
     overflow-y: auto; /* Enable vertical scrolling */
   }
   .player-header-div {
+    z-index: 99999;
     position: fixed;
     top: 0;
     left: 0;
@@ -653,7 +654,7 @@
   .player-pages{
     background-image: url('/t-backgroung-web.png');
     background-size: contain;
-    height: 322vh;
+    height: 122vh;
     width: 100vw;
     .player-header-div {
       padding: 5px 0 5px 5px;
