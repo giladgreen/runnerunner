@@ -128,7 +128,7 @@ export default function SignUpForm() {
               >
                 <span> מאשר</span>
                 <u>
-                  <a href="/terms" style={{ color: 'blue', margin: '0 4px' }}>
+                  <a href="/terms" target="_blank" style={{ color: 'blue', margin: '0 4px' }}>
                     תקנון
                   </a>
                 </u>
