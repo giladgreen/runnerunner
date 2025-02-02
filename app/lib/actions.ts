@@ -1508,15 +1508,18 @@ export async function deletePlayer({
       await sql<LogDB>`SELECT * FROM history WHERE phone_number = ${phone_number}`
     ).rows;
 
-    sql`INSERT INTO deleted_players (id, name, phone_number, notes, image_url, allowed_marketing, updated_at) 
-VALUES (${player.id}, ${player.name}, ${player.phone_number}, ${player.notes}, ${player.image_url}, ${player.allowed_marketing}, ${player.updated_at})`;
-
+    const existingDeletedPlayer = await sql<PlayerDB>`SELECT * FROM deleted_players WHERE phone_number = ${player.phone_number}`;
+    if (existingDeletedPlayer?.rows.length < 1) {
+      sql`INSERT INTO deleted_players (id, name, phone_number, notes, image_url, allowed_marketing, updated_at) 
+        VALUES (${player.id}, ${player.name}, ${player.phone_number}, ${player.notes}, ${player.image_url}, ${player.allowed_marketing}, ${player.updated_at})`;
+    }
     await Promise.all(
       playerHistory.map((historyLog) => {
         return sql`INSERT INTO deleted_history (id, phone_number, change , type, note , archive , other_player_phone_number, updated_by, updated_at, tournament_id ) 
       VALUES (${historyLog.id}, ${historyLog.phone_number}, ${historyLog.change}, ${historyLog.type}, ${historyLog.note}, ${historyLog.archive}, ${historyLog.other_player_phone_number}, ${historyLog.updated_by}, ${historyLog.updated_at}, ${historyLog.tournament_id})`;
       }),
     );
+
     await sql`DELETE FROM history WHERE phone_number = ${phone_number}`;
     await sql`DELETE FROM players WHERE id = ${id}`;
     await commitTransaction();
@@ -2063,8 +2066,11 @@ export async function deleteUser({
       return;
     }
 
-    await sql`INSERT INTO deleted_users (id, phone_number, password, name, is_admin, is_worker) 
+    const existingDeletedUser = (await sql<UserDB>`SELECT * FROM deleted_users WHERE phone_number = ${user.phone_number}`).rows[0];
+    if (!existingDeletedUser){
+      await sql`INSERT INTO deleted_users (id, phone_number, password, name, is_admin, is_worker) 
 VALUES (${user.id}, ${user.phone_number},  ${user.password}, ${user.name}, ${user.is_admin}, ${user.is_worker})`;
+    }
 
     await cache.removeUserById(id);
     await sql`DELETE FROM users WHERE id = ${id}`;
