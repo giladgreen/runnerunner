@@ -20,7 +20,7 @@ import {
   PrizeInfoDB,
   BugDB,
   TournamentsAdjustmentsDB,
-  FeatureFlagDB,
+  FeatureFlagDB, ChangeLogDB
 } from './definitions';
 
 import { signIn } from '../../auth';
@@ -216,6 +216,13 @@ function insertIntoBugs(description: string) {
 
 function insertIntoImages(phoneNumber: string, imageUrls: string) {
   return sql`INSERT INTO images (phone_number, image_url) VALUES (${phoneNumber}, ${imageUrls})`;
+}
+
+function insertChangeLog(changeLog: ChangeLogDB){
+  return sql`INSERT INTO change_log 
+(changed_entity, changed_entity_id, changed_entity_before, changed_entity_after, changed_by, changed_by_name) 
+VALUES 
+(${changeLog.changed_entity}, ${changeLog.changed_entity_id}, ${changeLog.changed_entity_before}, ${changeLog.changed_entity_after}, ${changeLog.changed_by}, ${changeLog.changed_by_name})`;
 }
 
 function insertIntoHistory(
@@ -463,7 +470,7 @@ async function createPlayerLog(
       message: 'שדה חסר, אין אפשרות לסיים את הפעולה',
     };
   }
-  console.log('## createPlayerLog, no errors');
+
 
   const isSplit = validatedFields.data.split === 'true';
   const user = await getUserById(userId);
@@ -533,7 +540,7 @@ async function createPlayerLog(
             `;
     }
     if (isSplit) {
-      console.log('## createPlayerLog, split');
+
       const results =
         await sql`SELECT * FROM history WHERE phone_number = ${player.phone_number} ORDER BY updated_at DESC LIMIT 1`;
       const historyLogId = results.rows[0].id;
@@ -1130,10 +1137,11 @@ export async function updatePlayer(
     (formData.get('new_phone_number') ?? oldPhoneNumber) as string
   ).replaceAll('-', '');
   newPhoneNumber = `${newPhoneNumber.startsWith('0') ? '' : '0'}${newPhoneNumber}`;
+
   const { name, notes } = validatedFields.data;
   const user = await getUserById(userId);
   const changeLog = {
-    changed_entity: 'player',
+    changed_entity: 'player:change',
     changed_entity_id: id,
     changed_entity_before: JSON.stringify({
       name: player.name,
@@ -1149,7 +1157,7 @@ export async function updatePlayer(
     }),
     changed_by: userId,
     changed_by_name: user ? user.name : 'unknown',
-  }
+  } as ChangeLogDB;
 
   let imageHasChanged = false;
 
@@ -1170,8 +1178,10 @@ export async function updatePlayer(
   }
 
   const date = getUpdatedAtFormat();
+
   try {
     if (imageHasChanged) {
+      await startTransaction();
       await sql`
       UPDATE players
       SET name = ${name},
@@ -1198,10 +1208,8 @@ export async function updatePlayer(
     }
 
 
-    await sql`INSERT INTO change_log 
-(changed_entity, changed_entity_id, changed_entity_before, changed_entity_after, changed_by) 
-VALUES 
-(${changeLog.changed_entity}, ${changeLog.changed_entity_id}, ${changeLog.changed_entity_before}, ${changeLog.changed_entity_after}, ${changeLog.changed_by})`;
+    await insertChangeLog(changeLog);
+    await commitTransaction();
 
   } catch (error) {
     console.error('## updatePlayer error', error);
@@ -1519,9 +1527,11 @@ export async function deletePrizeInfo({
 export async function deletePlayer({
   id,
   prevPage,
+  userId,
 }: {
   id: string;
   prevPage: string;
+  userId: string;
 }) {
   noStore();
   try {
@@ -1531,6 +1541,21 @@ export async function deletePlayer({
     if (!player) {
       return;
     }
+
+    const user = await getUserById(userId);
+    const changeLog = {
+      changed_entity: 'player:deleted',
+      changed_entity_id: id,
+      changed_entity_before: JSON.stringify({
+        name: player.name,
+        notes: player.notes,
+        image_url: player.image_url,
+        phone_number: player.phone_number
+      }),
+      changed_by: userId,
+      changed_by_name: user ? user.name : 'unknown',
+    } as ChangeLogDB;
+
     const { phone_number } = player;
     const playerHistory = (
       await sql<LogDB>`SELECT * FROM history WHERE phone_number = ${phone_number}`
@@ -1550,6 +1575,8 @@ export async function deletePlayer({
 
     await sql`DELETE FROM history WHERE phone_number = ${phone_number}`;
     await sql`DELETE FROM players WHERE id = ${id}`;
+
+    await insertChangeLog(changeLog);
     await commitTransaction();
     sendEmail(
       TARGET_MAIL,
@@ -2182,7 +2209,7 @@ export async function rsvpPlayerForDay(
     );
 
     await registerPlayerForDay(phone_number, date, tournamentId, val);
-    console.log('## calling registerPlayerForDay done');
+
   } catch (error) {
     console.error('rsvpPlayerForDay Error:', error);
     return false;

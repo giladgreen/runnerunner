@@ -35,6 +35,7 @@ export default async function PrizesInfoPage({
           {
             label: 'פרסים',
             href: `/${params.userId}/configurations/prizes`,
+            active: true,
           },
         ]}
       />

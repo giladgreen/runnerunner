@@ -6,6 +6,7 @@ import { PencilIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
+import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 
 export default function CreateNewPrizesInfoPage({
   params,
@@ -27,6 +28,26 @@ export default function CreateNewPrizesInfoPage({
   );
 
   return (
+    <div>
+      <Breadcrumbs
+        breadcrumbs={[
+          { label: '.', href: `/${params.userId}` },
+          {
+            label: 'הגדרות',
+            href: `/${params.userId}/configurations`,
+          },
+          {
+            label: 'פרסים',
+            href: `/${params.userId}/configurations/prizes`,
+          },
+          {
+            label: 'יצירת פרס חדש',
+            href: `/${params.userId}/configurations/prizes/create`,
+            active: true,
+          },
+        ]}
+      />
+
     <form action={dispatch}>
       <div
         className="rtl rounded-md p-4 md:p-6 align-text-right"
@@ -124,5 +145,6 @@ export default function CreateNewPrizesInfoPage({
         <SpinnerButton text="צור פרס" />
       </div>
     </form>
+    </div>
   );
 }

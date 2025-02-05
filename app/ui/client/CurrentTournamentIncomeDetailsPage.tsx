@@ -35,7 +35,6 @@ export default function CurrentTournamentIncomeDetailsPage({
       if (!refreshEnabled) {
         return;
       }
-      console.log('## refreshing page');
       window.location.reload();
     }, 30_000);
 

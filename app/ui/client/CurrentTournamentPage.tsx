@@ -9,7 +9,6 @@ import FinalTablePlayers from '@/app/ui/client/FinalTablePlayers';
 import RegisterSave from '@/app/ui/client/RegisterSave';
 import PlayersPrizes from '@/app/ui/client/PlayersPrizes';
 import TodayPlayersTable from '@/app/ui/client/TodayPlayersTable';
-import {AnimatedGradientText} from "@/app/ui/components/ui/animated-gradient-text";
 
 export default function CurrentTournamentPage({
   todayTournaments,
@@ -37,7 +36,6 @@ export default function CurrentTournamentPage({
       if (!refreshEnabled) {
         return;
       }
-      console.log('## refreshing page');
       window.location.reload();
     }, 30_000);
 

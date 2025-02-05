@@ -1,19 +1,14 @@
 import {
-  fetchAllBugs,
   fetchAllPlayersForExport,
   fetchFeatureFlags,
   fetchUserById,
 } from '@/app/lib/data';
 import ImportPlayersButton from '@/app/ui/client/ImportPlayersButton';
-import { BugDB, PlayerDB } from '@/app/lib/definitions';
+import { PlayerDB } from '@/app/lib/definitions';
 import React from 'react';
-import CreateBugForm from '@/app/ui/client/CreateBugForm';
 import ExportPlayersWithMarketingInfoButton from '@/app/ui/client/ExportPlayersWithMarketingInfoButton';
 import Card from '@/app/ui/client/Card';
-import DeleteBugButton from '@/app/ui/client/DeleteBugButton';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
-import { formatDateToLocal } from '@/app/lib/serverDateUtils';
-import CalcCashPrizes from '@/app/ui/client/CalcCashPrizes';
 
 function TournamentsLink({ userId }: { userId: string }) {
   return (
@@ -22,6 +17,50 @@ function TournamentsLink({ userId }: { userId: string }) {
     >
       <a
         href={`/${userId}/configurations/tournaments`}
+        className="flex h-10 items-center rounded-lg  px-4  font-medium text-white transition-colors  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2  aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
+      >
+        <div >לחץ כאן</div>
+      </a>
+    </div>
+  );
+}
+function CalcLink({ userId }: { userId: string }) {
+  return (
+    <div
+      className="config-section-link  "
+    >
+      <a
+        href={`/${userId}/configurations/calc`}
+        className="flex h-10 items-center rounded-lg  px-4  font-medium text-white transition-colors  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2  aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
+      >
+        <div >לחץ כאן</div>
+      </a>
+    </div>
+  );
+}
+
+function BugsLink({ userId }: { userId: string }) {
+  return (
+    <div
+      className="config-section-link  "
+    >
+      <a
+        href={`/${userId}/configurations/bugs`}
+        className="flex h-10 items-center rounded-lg  px-4  font-medium text-white transition-colors  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2  aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
+      >
+        <div >לחץ כאן</div>
+      </a>
+    </div>
+  );
+}
+
+function ChangeLogsLink({ userId }: { userId: string }) {
+  return (
+    <div
+      className="config-section-link  "
+    >
+      <a
+        href={`/${userId}/configurations/change-logs`}
         className="flex h-10 items-center rounded-lg  px-4  font-medium text-white transition-colors  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2  aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
       >
         <div >לחץ כאן</div>
@@ -76,43 +115,6 @@ function UserPermissionsLink({ userId }: { userId: string }) {
 }
 
 
-function ReportBugForm({ bugs, userId }: { bugs: BugDB[]; userId: string }) {
-  return (
-    <div
-      className="config-section rtl"
-      style={{ marginTop: 130, textAlign: 'right' }}
-    >
-      <h1 className="text-2xl">דיווח על תקלה</h1>
-      <CreateBugForm />
-      <hr style={{ marginTop: 20, marginBottom: 10 }} />
-      <div>
-        <div>
-          <u>{bugs.length > 0 ? 'בעיות ידועות:' : ''}</u>
-        </div>
-        <div>
-          {bugs.map((bug) => (
-            <div
-              key={bug.id}
-              style={{
-                marginTop: 20,
-                border: '1px solid #CCCCCC',
-                padding: 5,
-                borderRadius: 8,
-              }}
-            >
-              <div>
-                <DeleteBugButton id={bug.id} userId={userId} />
-                <div> {formatDateToLocal(bug.updated_at)}</div>
-                <div>{bug.description}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default async function ConfigurationPage({
   params,
 }: {
@@ -126,7 +128,7 @@ export default async function ConfigurationPage({
   }
   const importEnabled = user.is_admin && user.phone_number === '0587869910';
   const ffEnabled = importEnabled;
-  const bugs = await fetchAllBugs();
+
   const players = await fetchAllPlayersForExport();
   const { prizesEnabled } = await fetchFeatureFlags();
   //TODO::: fix export here..
@@ -152,21 +154,6 @@ export default async function ConfigurationPage({
         className="full-width rtl grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
         style={{ marginBottom: 20 }}
       >
-        {/*        {tournaments.map(t => <Card key={t.id}*/}
-        {/*            title={`${t.name} -*/}
-        {/*"ייצוא קרדיט שחקנים לקובץ CSV"`}*/}
-        {/*            value={*/}
-        {/*              <ExportPlayersButton*/}
-        {/*                  players={players as PlayerDB[]}*/}
-        {/*                  playersPlaces={t.playersPlaces}*/}
-        {/*                  tournaments={tournaments}*/}
-        {/*                  prizes={prizes}*/}
-        {/*              />*/}
-        {/*            }*/}
-        {/*            type="export"*/}
-
-        {/*        />)}*/}
-
         <Card
           title="ייצוא רשימת שחקנים שאישרו תוכן שיווקי"
           value={
@@ -193,7 +180,24 @@ export default async function ConfigurationPage({
           type="tournament"
           oneLine
         />
-
+        <Card
+          title="חישוב פרסים במזומן"
+          value={<CalcLink userId={params.userId} />}
+          type="tournament"
+          oneLine
+        />
+        <Card
+          title="דיווח על באגים"
+          value={<BugsLink userId={params.userId} />}
+          type="tournament"
+          oneLine
+        />
+        <Card
+          title="מעקב שינויים"
+          value={<ChangeLogsLink userId={params.userId} />}
+          type="tournament"
+          oneLine
+        />
         {isAdmin && (
           <Card
             title="הרשאות משתמשים"
@@ -232,8 +236,8 @@ export default async function ConfigurationPage({
           />
         )}
       </div>
-      <CalcCashPrizes />
-      <ReportBugForm bugs={bugs} userId={params.userId} />
+
+
     </div>
   );
 }

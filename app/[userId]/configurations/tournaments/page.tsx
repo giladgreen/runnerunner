@@ -7,6 +7,7 @@ import { TRANSLATIONS } from '@/app/lib/definitions';
 import DeleteTournamentButton from '@/app/ui/client/DeleteTournamentButton';
 import { Button } from 'primereact/button';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
+import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 
 export default async function TournamentsSetupPage({
   params,
@@ -26,6 +27,21 @@ export default async function TournamentsSetupPage({
       className="config-section tournaments-config rtl"
       style={{ textAlign: 'right', marginRight: -40 }}
     >
+      <Breadcrumbs
+        breadcrumbs={[
+          { label: '.', href: `/${params.userId}` },
+          {
+            label: 'הגדרות',
+            href: `/${params.userId}/configurations`,
+          },
+          {
+            label: 'טורנירים',
+            href: `/${params.userId}/configurations/tournaments`,
+            active: true,
+          },
+        ]}
+      />
+
       <div style={{ textAlign: 'right', marginRight: 50 }}>
         <b>
           <u>טורנירים:</u>

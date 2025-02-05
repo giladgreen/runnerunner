@@ -4,7 +4,7 @@ import React from 'react';
 import CreateTournamentForm from '@/app/ui/client/CreateTournamentForm';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 
-export default async function CreatePlayerPage({
+export default async function CreateTournamentPage({
   params,
 }: {
   params: { userId: string };
@@ -19,7 +19,15 @@ export default async function CreatePlayerPage({
     <main>
       <Breadcrumbs
         breadcrumbs={[
-          { label: 'טורנירים', href: `/${params.userId}/tournaments` },
+          { label: '.', href: `/${params.userId}` },
+          {
+            label: 'הגדרות',
+            href: `/${params.userId}/configurations`,
+          },
+          {
+            label: 'טורנירים',
+            href: `/${params.userId}/configurations/tournaments`,
+          },
           {
             label: 'יצירת טורניר',
             href: `/${params.userId}/configurations/tournaments/create`,

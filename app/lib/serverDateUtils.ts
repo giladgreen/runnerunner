@@ -38,9 +38,10 @@ export const formatDateToLocalWithTime = (
   const dateObject = getCurrentDate(
     getCurrentDate(dateStr).getTime() + 2 * HOUR,
   );
-  const time = `${dateObject.getHours()}:${dateObject.getMinutes()}`;
-  const dateparts = date.split(',');
-  return `${dateparts[1]}, ${dateparts[0]},  בשעה ${time}`;
+  const minutes = dateObject.getMinutes();
+  const time = `${dateObject.getHours()}:${minutes < 10 ? '0' : ''}${minutes}`;
+  const dateParts = date.split(',');
+  return `${dateParts[1]}, ${dateParts[0]},  בשעה ${time}`;
 };
 
 export const getTime = (dateStr: string) => {

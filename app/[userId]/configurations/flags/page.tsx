@@ -1,6 +1,7 @@
 import { fetchFeatureFlags, fetchUserById } from '@/app/lib/data';
 import React from 'react';
 import { updateFFValue } from '@/app/lib/actions';
+import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 
 export default async function FlagsPage({
   params,
@@ -15,6 +16,21 @@ export default async function FlagsPage({
   if (!isAdmin) return null;
   return (
     <div className="w-full">
+      <Breadcrumbs
+        breadcrumbs={[
+          { label: '.', href: `/${params.userId}` },
+          {
+            label: 'הגדרות',
+            href: `/${params.userId}/configurations`,
+          },
+          {
+            label: 'דגלים',
+            href: `/${params.userId}/configurations/flags`,
+            active: true,
+          },
+        ]}
+      />
+
       <div className="flex w-full items-center justify-between">
         <h1 className={`text-2xl`}>
           <b>

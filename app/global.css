@@ -55,9 +55,11 @@
 }
 
 .breadcrumb {
+  font-size: 60%;
   color: var(--white-darker);
 }
 .breadcrumb-active {
+  font-size: 80%;
   color: var(--red-light);
 }
 
@@ -138,10 +140,27 @@ body{
     color: var(--black) !important;
   }
 }
-.search-input{
+
+.search-input {
   input{
     background-color: var(--white) !important;
     color: var(--black) !important;
+  }
+}
+.table-with-borders {
+    background: var(--grey-darker);
+    color: var(--white);
+  table{
+    border-collapse: collapse;
+    width: 100%;
+    th{
+      border: 1px solid var(--white);
+      padding: 10px;
+    }
+    td{
+      border: 1px solid var(--white);
+      padding: 10px;
+    }
   }
 }
 .general-table{
@@ -618,7 +637,7 @@ body{
     text-align: right;
   }
 }
-
+.general-input,
 .bugs-edit-input,
 .prizes-edit-input,
 .player-edit-input,

@@ -8,7 +8,6 @@ export default function TournamentsHistoryTable({
 }) {
   const tournamentsData = player.tournamentsData;
   if (tournamentsData.length === 0) {
-    console.log('## no tournamentsData');
 
     return <div></div>;
   }

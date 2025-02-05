@@ -21,7 +21,12 @@ export default async function tournamentEditPage({
           },
           {
             label: 'טורנירים',
-            href: `/${params.userId}/configurations/tournament`,
+            href: `/${params.userId}/configurations/tournaments`,
+          },
+          {
+            label: tournament.name,
+            href: `/${params.userId}/configurations/tournaments/${tournament.id}/edit`,
+            active: true,
           },
         ]}
       />

@@ -40,6 +40,7 @@ export default function EditPlayerForm({
   const deletePlayerWithId = deletePlayer.bind(null, {
     id: player.id,
     prevPage: '/',
+    userId,
   });
   const [imageUrl, setImageUrl] = useState(
     player.image_url ?? '/players/default.png',

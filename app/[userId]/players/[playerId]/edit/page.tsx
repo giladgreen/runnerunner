@@ -59,7 +59,6 @@ export default async function EditPlayerPage({
           {
             label: 'עריכת שחקן',
             href: `/${params.userId}/players/${playerId}/edit`,
-            active: true,
           },
           {
             label: player.name,

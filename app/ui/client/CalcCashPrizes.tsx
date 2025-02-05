@@ -25,7 +25,6 @@ const options = array
 });
 
 
-console.log('## options', options);
 export default function CalcCashPrizes() {
   const [totalAmount, setTotalAmount] = React.useState(0);
   const [minPrize, setMinPrize] = React.useState(4000);
@@ -34,7 +33,6 @@ export default function CalcCashPrizes() {
   let numberOfPeople = 0;
   const object = options.find((option) => (option.calc(1) * adjustedAmount / 100 ) > minPrize);
   if (object) {
-    console.log('## object', object);
      numberOfPeople = object.numberOfPlayers;
     const calcFunction =object.calc;
      values = Array.from({ length: numberOfPeople }, (_, i) => {
@@ -45,7 +43,6 @@ export default function CalcCashPrizes() {
          amount
        }
      });
-    console.log('## values', values);
 
   }
 
@@ -53,16 +50,16 @@ export default function CalcCashPrizes() {
     <div>
       <div
         className="config-section rtl"
-        style={{ marginTop: 130, textAlign: 'right' }}
+        style={{ marginTop: 20, textAlign: 'right' }}
       >
         <h1 className="text-2xl">חישוב פרסים במזומן</h1>
-        <div className="config-section" style={{ width: '100%', fontSize: 17 }}>
+        <div className="config-section" style={{ width: '100%', fontSize: 17, marginTop: 20}}>
           <div>הכנס פרס מינימלי למקום הראשון</div>
           <input
             min={0}
             type="number"
             id="minPrize"
-            style={{ color: 'var(--black)' }}
+            style={{ color: 'var(--black)', marginBottom: 20, marginTop: 5 }}
             value={minPrize}
             onChange={(e) => {
               setMinPrize(Number(e.target.value));
@@ -73,7 +70,7 @@ export default function CalcCashPrizes() {
             min={0}
             type="number"
             id="totalAmout"
-            style={{ color: 'var(--black)' }}
+            style={{ color: 'var(--black)', marginTop: 5 }}
             value={totalAmount}
             onChange={(e) => {
               setTotalAmount(Number(e.target.value));

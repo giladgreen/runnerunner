@@ -515,7 +515,6 @@ async function insertNewFF(client, flagToInsert, initValue) {
 
     const flags = (await client.sql`SELECT * FROM feature_flags `).rows;
 
-    console.log('## updated flags:', flags);
   } catch (error) {
     console.error('Error seeding feature_flags:', error);
     throw error;

@@ -19,9 +19,10 @@ export default function EditPrizeInfoForm({
   prevPage: string;
   userId: string;
 }) {
+
   const initialState = { message: null, errors: {} };
   const updatePrizeInfoWithId = updatePrizeInfo.bind(null, {
-    prizeId: prize.id,
+    prizeId: prize?.id,
     prevPage,
   });
 
@@ -32,17 +33,21 @@ export default function EditPrizeInfoForm({
     initialState,
   );
 
+  if (!prize){
+    return 'פרס לא נמצא';
+  }
+
   return (
     <div className="rtl">
       <form action={dispatch}>
-        <div className="rtl rounded-md  p-4 md:p-6">
+        <div  className="rtl  rounded-md  p-4 md:p-6">
           {/* prize name */}
           <div className="mb-4">
             <label htmlFor="name" className="mb-2 block  font-medium">
               שם
             </label>
             <div className="relative mt-2 rounded-md">
-              <div className="relative">
+              <div className="relative general-input">
                 <input
                   id="name"
                   name="name"
@@ -70,7 +75,7 @@ export default function EditPrizeInfoForm({
               עוד מידע
             </label>
             <div className="relative mt-2 rounded-md">
-              <div className="relative">
+              <div className="relative general-input">
                 <input
                   id="extra"
                   name="extra"
@@ -98,7 +103,7 @@ export default function EditPrizeInfoForm({
               שווי בקרדיט
             </label>
             <div className="relative mt-2 rounded-md">
-              <div className="relative">
+              <div className="relative general-input">
                 <input
                   id="credit"
                   name="credit"

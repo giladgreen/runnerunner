@@ -3,7 +3,7 @@ import { unstable_noStore as noStore } from 'next/cache';
 import * as cache from './cache';
 import {
   BugDB,
-  BuyInDB,
+  BuyInDB, ChangeLogDB,
   Counts,
   FeatureFlagDB,
   ImageDB,
@@ -15,7 +15,7 @@ import {
   TournamentDB,
   TournamentsAdjustmentsDB,
   UserDB,
-  WinnerDB,
+  WinnerDB
 } from './definitions';
 import { sumArrayByProp, positionComparator, usersComparator } from './utils';
 import { redirect } from 'next/navigation';
@@ -82,6 +82,14 @@ async function getAllFlags(): Promise<FeatureFlagDB[]> {
 async function getAllBugs() {
   const data = await sql<BugDB>`SELECT * FROM bugs`;
   return data.rows;
+}
+async function getAllChangeLogs() {
+  const data = await sql<ChangeLogDB>`SELECT * FROM change_log ORDER BY changed_at DESC`;
+  return data.rows.map((log) => ({
+    ...log,
+    before: log.changed_entity_before ? JSON.parse(log.changed_entity_before) : {},
+    after: log.changed_entity_after ? JSON.parse(log.changed_entity_after) : {}
+  }));
 }
 async function getAllPrizes() {
   const prizesResult =
@@ -1070,6 +1078,19 @@ export async function fetchAllBugs() {
     // @ts-ignore
     methodEnd('fetchAllBugs with error', error?.message);
     throw new Error('Failed to fetchAllBugs.');
+  }
+}
+export async function fetchAllChangeLogs() {
+  methodStart();
+  noStore();
+  try {
+    const result = await getAllChangeLogs();
+    methodEnd('fetchAllChangeLogs');
+    return result;
+  } catch (error) {
+    // @ts-ignore
+    methodEnd('fetchAllChangeLogs with error', error?.message);
+    throw new Error('Failed to fetchAllChangeLogs.');
   }
 }
 export async function fetchAllPlayersForExport() {

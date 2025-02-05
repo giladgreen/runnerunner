@@ -49,6 +49,7 @@ export default async function UsersPage({
           {
             label: 'משתמשים',
             href: `/${params.userId}/configurations/users`,
+            active: true,
           },
         ]}
       />

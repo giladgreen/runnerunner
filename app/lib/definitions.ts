@@ -167,6 +167,19 @@ export type BugDB = {
   updated_at: string;
 };
 
+export type ChangeLogDB = {
+  id: string;
+  changed_entity: string;
+  changed_entity_id: string;
+  changed_entity_before: string;
+  changed_entity_after: string;
+  before: any,
+  after: any,
+  changed_by: string,
+  changed_by_name: string,
+  changed_at: string,
+};
+
 export const TRANSLATIONS = {
   Sunday: 'יום ראשון',
   Monday: 'יום שני',

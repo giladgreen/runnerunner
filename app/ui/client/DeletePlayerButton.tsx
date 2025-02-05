@@ -15,6 +15,7 @@ export default function DeletePlayerButton({
   const deletePlayerWithId = deletePlayer.bind(null, {
     id,
     prevPage: `/${userId}/players/`,
+    userId,
   });
   const [showConfirmation, setShowConfirmation] = useState(false);
 
