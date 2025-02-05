@@ -16,6 +16,7 @@ export default function DeletePrizeInfoButton({
   const deletePrizeInfoWithId = deletePrizeInfo.bind(null, {
     prizeId: prize.id,
     prevPage: `/${userId}/configurations/prizes`,
+    userId,
   });
   const [showConfirmation, setShowConfirmation] = useState(false);
 

@@ -24,6 +24,7 @@ export default function EditPrizeInfoForm({
   const updatePrizeInfoWithId = updatePrizeInfo.bind(null, {
     prizeId: prize?.id,
     prevPage,
+    userId,
   });
 
   // @ts-ignore

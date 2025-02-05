@@ -1502,11 +1502,13 @@ export async function createPrizeInfo(
 }
 
 export async function updatePrizeInfo(
-  { prizeId, prevPage }: { prizeId: string; prevPage: string },
+  { prizeId, prevPage, userId }: { prizeId: string; prevPage: string ; userId: string },
   _prevState: State,
   formData: FormData,
 ) {
   noStore();
+  const user = await getUserById(userId);
+
   const name = (formData.get('name') as string) ?? '';
   const extra = (formData.get('extra') as string) ?? '';
   const credit = (formData.get('credit') as string) ?? '';
@@ -1528,8 +1530,30 @@ export async function updatePrizeInfo(
   }
 
   try {
-    await sql`UPDATE prizes_info SET name = ${name}, extra = ${extra}, credit = ${credit}, created_at = ${getUpdatedAtFormat()} WHERE id = ${prizeId}`;
+    const existingPrize = (await sql`SELECT * FROM prizes_info WHERE id = ${prizeId}`).rows[0];
+    if (existingPrize) {
+      await startTransaction();
+      const changeLog = {
+        changed_entity: 'prize:change',
+        changed_entity_id: prizeId,
+        changed_entity_before: JSON.stringify(existingPrize),
+        changed_entity_after: JSON.stringify({
+          ...existingPrize,
+          name,
+          extra,
+          credit,
+        }),
+        changed_by: userId,
+        changed_by_name: user ? user.name : 'unknown',
+      } as ChangeLogDB;
+
+
+      await sql`UPDATE prizes_info SET name = ${name}, extra = ${extra}, credit = ${credit}, created_at = ${getUpdatedAtFormat()} WHERE id = ${prizeId}`;
+      await insertChangeLog(changeLog);
+      await commitTransaction();
+    }
   } catch (error) {
+    await cancelTransaction();
     return { message: 'איראה שגיאה' };
   } finally {
     revalidatePath(prevPage);
@@ -1540,20 +1564,36 @@ export async function updatePrizeInfo(
 export async function deletePrizeInfo({
   prizeId,
   prevPage,
+  userId
 }: {
   prizeId: string;
   prevPage: string;
+  userId: string;
 }) {
   noStore();
   try {
-    await startTransaction();
     const prizeInfo = (
       await sql<PrizeInfoDB>`select * FROM prizes_info WHERE id = ${prizeId}`
     ).rows[0];
-    await sql`INSERT INTO deleted_prizes_info (id, name, extra,credit,created_at) VALUES (${prizeInfo.id},${prizeInfo.name},${prizeInfo.extra},${prizeInfo.credit},${prizeInfo.created_at})`;
-    await sql`DELETE FROM prizes_info WHERE id = ${prizeId}`;
 
-    await commitTransaction();
+    if (prizeInfo) {
+      const user = await getUserById(userId);
+      const changeLog = {
+        changed_entity: 'prize:deleted',
+        changed_entity_id: prizeId,
+        changed_entity_before: JSON.stringify(prizeInfo),
+        changed_by: userId,
+        changed_by_name: user ? user.name : 'unknown',
+      } as ChangeLogDB;
+
+      await startTransaction();
+      await sql`INSERT INTO deleted_prizes_info (id, name, extra,credit,created_at) VALUES (${prizeInfo.id},${prizeInfo.name},${prizeInfo.extra},${prizeInfo.credit},${prizeInfo.created_at})`;
+      await sql`DELETE FROM prizes_info WHERE id = ${prizeId}`;
+
+      await insertChangeLog(changeLog);
+      await commitTransaction();
+    }
+
   } catch (error) {
     await cancelTransaction();
     return { message: 'איראה שגיאה' };
