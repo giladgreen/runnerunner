@@ -1,17 +1,17 @@
 import React from 'react';
 import { fetchAllChangeLogs } from '@/app/lib/data';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
-import PlayerChangeLogs from '@/app/ui/client/PlayerChangeLogs';
+import TournamentChangeLogs from '@/app/ui/client/TournamentChangeLogs';
 
-export default async function PlayersChangeLogsPage({
+export default async function TournamentsChangeLogsPage({
                                                      params,
                                                    }: {
   params: { userId: string };
 }){
   const changeLogs = await fetchAllChangeLogs();
 
-  const playersChangedLogs = changeLogs.filter((changeLog) => changeLog.changed_entity === 'player:change');
-  const playersDeletedLogs = changeLogs.filter((changeLog) => changeLog.changed_entity === 'player:deleted');
+  const tournamentsChangedLogs = changeLogs.filter((changeLog) => changeLog.changed_entity === 'tournament:change');
+  const tournamentsDeletedLogs = changeLogs.filter((changeLog) => changeLog.changed_entity === 'tournament:deleted');
   return (
     <div className="rtl">
       <Breadcrumbs
@@ -26,14 +26,14 @@ export default async function PlayersChangeLogsPage({
             href: `/${params.userId}/configurations/change-logs`,
           },
           {
-            label: 'שחקנים',
-            href: `/${params.userId}/configurations/change-logs/players`,
+            label: 'טורנירים',
+            href: `/${params.userId}/configurations/change-logs/tournaments`,
             active: true,
           },
         ]}
       />
 
-     <PlayerChangeLogs playersChangedLogs={playersChangedLogs} playersDeletedLogs={playersDeletedLogs} />
+     <TournamentChangeLogs tournamentsChangedLogs={tournamentsChangedLogs} tournamentsDeletedLogs={tournamentsDeletedLogs} />
     </div>
   );
 }

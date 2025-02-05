@@ -83,7 +83,7 @@ export default function PlayerChangeLogs({
                 </td>
 
                 <td className="whitespace-nowrap px-3 py-3">
-                  {changeLog.before.name !== changeLog.after.name && (
+                  {changeLog.before.name !== changeLog.after.name ? (
                     <div>
                       <div>
                         <u>לפני:</u>
@@ -97,11 +97,11 @@ export default function PlayerChangeLogs({
 
                       <div>{changeLog.after.name}</div>
                     </div>
-                  )}
+                  ) : (changeLog.before.name)}
                 </td>
                 <td className="whitespace-nowrap px-3 py-3">
                   {changeLog.before.phone_number !==
-                    changeLog.after.phone_number && (
+                    changeLog.after.phone_number ? (
                       <div>
                         <div>
                           <u>לפני:</u>
@@ -115,10 +115,10 @@ export default function PlayerChangeLogs({
 
                         <div>{changeLog.after.phone_number}</div>
                       </div>
-                    )}
+                    ) : (changeLog.before.phone_number)}
                 </td>
                 <td className="whitespace-nowrap px-3 py-3">
-                  {changeLog.before.note !== changeLog.after.note && (
+                  {changeLog.before.note !== changeLog.after.note ? (
                     <div>
                       <div>
                         <u>לפני:</u>
@@ -129,7 +129,7 @@ export default function PlayerChangeLogs({
                       </div>
                       <div>{changeLog.after.note}</div>
                     </div>
-                  )}
+                  ) : (changeLog.before.note)}
                 </td>
                 <td className="whitespace-nowrap px-3 py-3">
                   <img

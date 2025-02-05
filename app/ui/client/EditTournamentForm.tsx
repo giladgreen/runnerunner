@@ -26,6 +26,7 @@ export default function EditTournamentForm({
   const updateTournamentWithId = updateTournament.bind(null, {
     id: tournament.id,
     prevPage,
+    userId,
   });
 
   const [state, dispatch] = useFormState(updateTournamentWithId, initialState);

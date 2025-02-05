@@ -1212,6 +1212,7 @@ export async function updatePlayer(
     await commitTransaction();
 
   } catch (error) {
+    await cancelTransaction();
     console.error('## updatePlayer error', error);
     return { message: 'איראה שגיאה' };
   } finally {
@@ -1232,6 +1233,14 @@ export async function deleteTournament(
       await sql`SELECT * FROM tournaments WHERE id = ${tournamentId}`
     ).rows[0];
     if (tournamentToDelete) {
+      const changeLog = {
+        changed_entity: 'tournament:deleted',
+        changed_entity_id: tournamentId,
+        changed_entity_before: JSON.stringify(tournamentToDelete),
+        changed_by: userId,
+        changed_by_name: user ? user.name : 'unknown',
+      } as ChangeLogDB;
+await startTransaction();
       await sql`INSERT INTO deleted_tournaments (id,day,name, i, buy_in,re_buy,max_players, rsvp_required, deleted_by ) 
         VALUES (${tournamentToDelete.id},${tournamentToDelete.day},${
           tournamentToDelete.name
@@ -1242,6 +1251,9 @@ export async function deleteTournament(
         },${user ? (user.name ?? user.phone_number ?? userId) : userId})`;
 
       await sql`DELETE FROM tournaments WHERE id = ${tournamentId}`;
+
+      await insertChangeLog(changeLog);
+      await commitTransaction();
       sendEmail(
         TARGET_MAIL,
         'tournaments deleted',
@@ -1249,6 +1261,7 @@ export async function deleteTournament(
       );
     }
   } catch (error) {
+    await cancelTransaction();
     console.error('## deleteTournament error', error);
     return { message: 'איראה שגיאה' };
   } finally {
@@ -1256,8 +1269,9 @@ export async function deleteTournament(
     redirect(prevPage);
   }
 }
+
 export async function updateTournament(
-  { id, prevPage }: { id: string; prevPage: string },
+  { id, prevPage, userId }: { id: string; prevPage: string, userId: string },
   _prevState: State,
   formData: FormData,
 ) {
@@ -1312,17 +1326,41 @@ export async function updateTournament(
     phase_length,
   } = validatedFields.data;
   const date = getUpdatedAtFormat();
-
+  await startTransaction();
   try {
     const tournamentToUpdate = (
       await sql`SELECT * FROM tournaments WHERE id = ${id}`
     ).rows[0];
     if (tournamentToUpdate) {
+      const user = await getUserById(userId);
+      const changeLog = {
+        changed_entity: 'tournament:change',
+        changed_entity_id: id,
+        changed_entity_before: JSON.stringify(tournamentToUpdate),
+        changed_entity_after: JSON.stringify({
+          ...tournamentToUpdate,
+          name,
+          description,
+          buy_in,
+          re_buy,
+          max_players,
+          rsvp_required,
+          start_time,
+          initial_stack,
+          last_phase_for_rebuy,
+          phase_length,
+        }),
+        changed_by: userId,
+        changed_by_name: user ? user.name : 'unknown',
+      } as ChangeLogDB;
+
       await sql`
       UPDATE tournaments
       SET name = ${name},description = ${description}, buy_in = ${buy_in},re_buy = ${re_buy},last_phase_for_rebuy = ${last_phase_for_rebuy},phase_length = ${phase_length},initial_stack=${initial_stack},start_time=${start_time}, max_players = ${max_players},rsvp_required=${rsvp_required}, updated_at=${date}
       WHERE id = ${id}
     `;
+      await insertChangeLog(changeLog);
+      await commitTransaction()
       sendEmail(
         TARGET_MAIL,
         'tournaments update',
@@ -1330,6 +1368,7 @@ export async function updateTournament(
       );
     }
   } catch (error) {
+    await cancelTransaction();
     console.error('## updateTournament error', error);
     return { message: 'איראה שגיאה' };
   } finally {

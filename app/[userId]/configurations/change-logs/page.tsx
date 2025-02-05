@@ -1,11 +1,7 @@
 import React from 'react';
 import { fetchAllChangeLogs } from '@/app/lib/data';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
-import { formatDateToLocal } from '@/app/lib/serverDateUtils';
 
-const typeMapping = {
-  player: 'שחקן',
-}
 export default async function ChangeLogsPage({
                                                      params,
                                                    }: {
@@ -37,14 +33,14 @@ export default async function ChangeLogsPage({
           שחקנים
         </a>
       </li>
-      {/*<li style={{ marginTop: 10 }}>*/}
-      {/*  <a*/}
-      {/*    href={`/${params.userId}/configurations/change-logs/tournaments`}*/}
-      {/*    className=""*/}
-      {/*  >*/}
-      {/*    טורנירים*/}
-      {/*  </a>*/}
-      {/*</li>*/}
+      <li style={{ marginTop: 10 }}>
+        <a
+          href={`/${params.userId}/configurations/change-logs/tournaments`}
+          className=""
+        >
+          טורנירים
+        </a>
+      </li>
     </ul>
 
   </div>
