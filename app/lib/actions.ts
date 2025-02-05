@@ -1240,7 +1240,7 @@ export async function deleteTournament(
         changed_by: userId,
         changed_by_name: user ? user.name : 'unknown',
       } as ChangeLogDB;
-await startTransaction();
+      await startTransaction();
       await sql`INSERT INTO deleted_tournaments (id,day,name, i, buy_in,re_buy,max_players, rsvp_required, deleted_by ) 
         VALUES (${tournamentToDelete.id},${tournamentToDelete.day},${
           tournamentToDelete.name
