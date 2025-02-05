@@ -318,6 +318,33 @@ async function seedHistory(client) {
     throw error;
   }
 }
+async function seedChangeLog(client) {
+  try {
+    // Create the "change_log" table if it doesn't exist
+    const createTable = await client.sql`
+      CREATE TABLE IF NOT EXISTS change_log (
+         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+         changed_entity TEXT NOT NULL,
+         changed_entity_id TEXT NOT NULL,
+         changed_entity_before TEXT,
+         changed_entity_after TEXT,
+         changed_by TEXT,
+         changed_by_name TEXT,
+         changed_at timestamp with time zone NOT NULL DEFAULT now()
+      );
+    `;
+
+
+    console.log(`Created "change_log" table`);
+
+    return {
+      createTable,
+    };
+  } catch (error) {
+    console.error('Error seeding change_log:', error);
+    throw error;
+  }
+}
 
 async function seedWinners(client) {
   try {
@@ -608,6 +635,7 @@ async function seed() {
   console.log('>> db connected');
   await seedPhoneConfirmations(client);
   await seedUsers(client);
+  await seedChangeLog(client);
 
   await seedTournaments(client);
   await createBugReportTable(client);

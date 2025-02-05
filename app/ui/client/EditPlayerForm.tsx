@@ -34,6 +34,7 @@ export default function EditPlayerForm({
   const initialState2 = { message: null, errors: {} };
   const updatePlayerWithId = updatePlayer.bind(null, {
     id: player.id,
+    userId,
     prevPage: `/${userId}/players`,
   });
   const deletePlayerWithId = deletePlayer.bind(null, {

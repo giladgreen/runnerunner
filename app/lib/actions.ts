@@ -1089,7 +1089,7 @@ export async function setPlayerPrize(
 }
 
 export async function updatePlayer(
-  { id, prevPage }: { id: string; prevPage: string },
+  { id, prevPage, userId }: { id: string; prevPage: string, userId: string },
   _prevState: State,
   formData: FormData,
 ) {
@@ -1125,8 +1125,32 @@ export async function updatePlayer(
     };
   }
   const image_url = formData.get('image_url') as string;
-
+  const oldPhoneNumber = player.phone_number;
+  let newPhoneNumber = (
+    (formData.get('new_phone_number') ?? oldPhoneNumber) as string
+  ).replaceAll('-', '');
+  newPhoneNumber = `${newPhoneNumber.startsWith('0') ? '' : '0'}${newPhoneNumber}`;
   const { name, notes } = validatedFields.data;
+  const user = await getUserById(userId);
+  const changeLog = {
+    changed_entity: 'player',
+    changed_entity_id: id,
+    changed_entity_before: JSON.stringify({
+      name: player.name,
+      notes: player.notes,
+      image_url: player.image_url,
+      phone_number: player.phone_number
+    }),
+    changed_entity_after: JSON.stringify({
+      name,
+      notes,
+      image_url,
+      phone_number: newPhoneNumber
+    }),
+    changed_by: userId,
+    changed_by_name: user ? user.name : 'unknown',
+  }
+
   let imageHasChanged = false;
 
   try {
@@ -1163,11 +1187,8 @@ export async function updatePlayer(
       updated_at=${date}
       WHERE id = ${id} `;
     }
-    const oldPhoneNumber = player.phone_number;
-    let newPhoneNumber = (
-      (formData.get('new_phone_number') ?? oldPhoneNumber) as string
-    ).replaceAll('-', '');
-    newPhoneNumber = `${newPhoneNumber.startsWith('0') ? '' : '0'}${newPhoneNumber}`;
+
+
     if (newPhoneNumber && newPhoneNumber !== oldPhoneNumber) {
       await sql`UPDATE players SET phone_number = ${newPhoneNumber} WHERE phone_number = ${oldPhoneNumber} `;
       await sql`UPDATE history SET phone_number = ${newPhoneNumber} WHERE phone_number = ${oldPhoneNumber} `;
@@ -1175,6 +1196,13 @@ export async function updatePlayer(
       await sql`UPDATE prizes SET phone_number = ${newPhoneNumber} WHERE phone_number = ${oldPhoneNumber} `;
       await sql`UPDATE images SET phone_number = ${newPhoneNumber} WHERE phone_number = ${oldPhoneNumber} `;
     }
+
+
+    await sql`INSERT INTO change_log 
+(changed_entity, changed_entity_id, changed_entity_before, changed_entity_after, changed_by) 
+VALUES 
+(${changeLog.changed_entity}, ${changeLog.changed_entity_id}, ${changeLog.changed_entity_before}, ${changeLog.changed_entity_after}, ${changeLog.changed_by})`;
+
   } catch (error) {
     console.error('## updatePlayer error', error);
     return { message: 'איראה שגיאה' };
