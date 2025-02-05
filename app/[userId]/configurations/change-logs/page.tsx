@@ -1,5 +1,5 @@
 import React from 'react';
-import { fetchAllChangeLogs } from '@/app/lib/data';
+import { fetchAllChangeLogs, fetchFeatureFlags } from '@/app/lib/data';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 
 export default async function ChangeLogsPage({
@@ -7,7 +7,8 @@ export default async function ChangeLogsPage({
                                                    }: {
   params: { userId: string };
 }){
-  const changeLogs = await fetchAllChangeLogs();
+
+  const { prizesEnabled } = await fetchFeatureFlags();
 
   return <div>
     <Breadcrumbs
@@ -41,6 +42,14 @@ export default async function ChangeLogsPage({
           טורנירים
         </a>
       </li>
+      {prizesEnabled && <li style={{ marginTop: 10 }}>
+        <a
+          href={`/${params.userId}/configurations/change-logs/prizes`}
+          className=""
+        >
+          פרסים
+        </a>
+      </li>}
     </ul>
 
   </div>
