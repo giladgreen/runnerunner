@@ -13,12 +13,15 @@ import AdminHomePage from '@/app/ui/client/AdminHomePage';
 import { getFinalTablePlayersContent } from '@/app/ui/client/helpers';
 import { getDayOfTheWeek, getTodayShortDate } from '@/app/lib/serverDateUtils';
 import WhalePlayers from '@/app/ui/client/WhalePlayers';
+import CssChange from '@/app/ui/client/CssChange';
 
 export default async function HomePage({
   params,
 }: {
   params: { userId: string };
 }) {
+
+
   const { prizesEnabled } = await fetchFeatureFlags();
   const user = await fetchUserById(params.userId);
   const isAdmin = user.is_admin;
@@ -50,6 +53,7 @@ export default async function HomePage({
           contents={contents}
           userId={params.userId}
         />
+        <CssChange/>
         <GeneralPlayersCardWrapper />
         <div
           className={`rtl mt-6 grid grid-cols-1 gap-6 md:grid-cols-5 lg:grid-cols-${hasWhales ? 12 : 8}`}
