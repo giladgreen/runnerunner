@@ -519,21 +519,7 @@ async function createPlayerLog(
               }, ${change}, ${otherHistoryNote}, ${'credit_to_other'}, ${username}, '', ${tournamentId})
             `;
     } else {
-      console.log(
-        '## createPlayerLog, insert into history',
-        'phone_number',
-        player.phone_number,
-        'change',
-        change,
-        'note',
-        note,
-        'type',
-        type,
-        'updated_by',
-        username,
-        'tournament_id',
-        tournamentId,
-      );
+
       await sql`
               INSERT INTO history (phone_number, change, note, type, updated_by, tournament_id)
               VALUES (${player.phone_number}, ${change}, ${note}, ${type}, ${username}, ${tournamentId})

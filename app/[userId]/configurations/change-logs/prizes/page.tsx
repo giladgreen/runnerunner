@@ -1,7 +1,6 @@
 import React from 'react';
 import { fetchAllChangeLogs } from '@/app/lib/data';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
-import TournamentChangeLogs from '@/app/ui/client/TournamentChangeLogs';
 import PrizeChangeLogs from '@/app/ui/client/PrizeChangeLogs';
 
 export default async function TournamentsChangeLogsPage({

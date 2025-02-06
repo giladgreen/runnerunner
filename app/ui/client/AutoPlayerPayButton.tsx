@@ -60,8 +60,10 @@ export default function AutoPlayerPayButton({
   );
 
   const useCredit = initialAmount <= player.balance;
+  const useBothCreditAndCash = initialAmount > player.balance && player.balance > 0;
 
   const prevUsedCredit = useCredit ? true : todayHistory[todayHistory.length -1]?.type === 'credit';
+  const prevUsedCreditAmount = useCredit ? 0 : todayHistory[todayHistory.length -1]?.change ?? 0;
   const getTooltipContent = () => {
     if (maxRebuyReached) {
       return 'שחקן הגיע למספר הכניסות המירבי';
@@ -75,7 +77,15 @@ export default function AutoPlayerPayButton({
     }
     if (useCredit) {
       result += ' מהקרדיט';
-    } else {
+    } else if (useBothCreditAndCash){
+      result += '.  ';
+      result += '₪';
+      result += player.balance;
+      result += ' מהקרדיט ו-';
+      result += '₪';
+      result += initialAmount - player.balance;
+      result += ' במזומן ';
+    } else{
       result += ' במזומן';
     }
 
@@ -94,14 +104,16 @@ export default function AutoPlayerPayButton({
       updated_at: new Date(),
       id: `${new Date().getTime()}`,
       phone_number: player.phone_number,
-      change: initialAmount,
+      change: useBothCreditAndCash? player.balance : initialAmount,
+      change2: useBothCreditAndCash? initialAmount - player.balance : undefined,
       note: initialNote,
-      type: useCredit ? 'credit' : 'cash',
+      note2: useBothCreditAndCash ? 'שחקן פיצל כניסה' : undefined,
+      type: useCredit || useBothCreditAndCash ? 'credit' : 'cash',
+      type2: useBothCreditAndCash ? 'cash' : undefined,
     } as unknown as LogDB);
 
-    const newBalance = useCredit
-      ? player.balance - initialAmount
-      : player.balance;
+    const newBalance = useCredit ? player.balance - initialAmount : (useBothCreditAndCash ? 0 : player.balance);
+
     const arrived = tournamentId ? tournamentId : undefined;
 
     setTimeout(() => {
@@ -133,93 +145,115 @@ export default function AutoPlayerPayButton({
     setOpen(false);
   };
 
-  return (
-    <>
-      {pending && (
-        <div
-          // className="auto-player-pay-button"
+  if (pending) {
+    return (
+      <div
+      >
+        <Button
+          type="submit"
+          color="light"
+          disabled
+          className="SpinningChipWrappingButton"
         >
-          <Button
-            type="submit"
-            color="light"
-            disabled
-            className="SpinningChipWrappingButton"
+          <SpinningChip color="black" size={19} />
+        </Button>
+      </div>
+    );
+  }
+  return (
+    <form onSubmit={onButtonClick} action={dispatch}>
+      <input
+        id="change"
+        name="change"
+        type="number"
+        readOnly
+        value={useBothCreditAndCash ? player.balance : initialAmount}
+        className="hidden"
+      />
+      <input
+        id="change2"
+        name="change2"
+        type="number"
+        readOnly
+        value={useBothCreditAndCash ? initialAmount - player.balance : undefined}
+        className="hidden"
+      />
+      <input
+        id="note"
+        name="note"
+        type="text"
+        className="hidden"
+        readOnly
+        value={initialNote}
+      />
+      <input
+        id="note2"
+        name="note2"
+        type="text"
+        className="hidden"
+        value={useBothCreditAndCash ? 'שחקן פיצל כניסה' : undefined}
+      />
+
+      <input
+        id="type"
+        name="type"
+        type="text"
+        className="hidden"
+        readOnly
+        value={useCredit || useBothCreditAndCash ? 'credit' : 'cash'}
+      />
+      <input
+        id="type2"
+        name="type2"
+        className="hidden"
+        type="text"
+        value={useBothCreditAndCash ? 'cash' : undefined}
+      />
+      <input
+        id="split"
+        name="split"
+        className="hidden"
+        type="text"
+        value={useBothCreditAndCash ? 'true' : 'false'}
+      />
+      <Tooltip content={tooltipContent} color="primary">
+        <Button
+          type="submit"
+          color="light"
+          disabled={maxRebuyReached}
+          className={maxRebuyReached ? ' gray-on-hover bg-gray-500' : ''}
+          style={{
+            borderBottomRightRadius: 0,
+            borderTopRightRadius: 0,
+            paddingTop: 0,
+            paddingBottom: 4,
+          }}
+        >
+          <span style={{ fontSize: 29 }}>₪</span>
+        </Button>
+        <Snackbar
+          className="only-wide-screen"
+          open={open}
+          autoHideDuration={2000}
+          onClose={handleClose}
+        >
+          <Alert
+            icon={false}
+            severity="success"
+            variant="filled"
+            sx={{ width: '100%' }}
           >
-            <SpinningChip color="black"  size={19} />
-          </Button>
-        </div>
-      )}
-
-      {!pending && (
-        <form onSubmit={onButtonClick} action={dispatch}>
-          <input
-            id="change"
-            name="change"
-            type="number"
-            step="1"
-            min={1}
-            readOnly
-            value={initialAmount}
-            className="hidden"
-          />
-          <input
-            id="note"
-            name="note"
-            type="text"
-            className="peer block w-full rounded-md border py-2 pl-10  outline-2  hidden"
-            readOnly
-            value={initialNote}
-          />
-
-          <input
-            id="type"
-            name="type"
-            type="text"
-            className="peer block w-full rounded-md border py-2 pl-10  outline-2  hidden"
-            readOnly
-            value={useCredit ? 'credit' : 'cash'}
-          />
-
-          <Tooltip content={tooltipContent} color="primary">
-            <Button
-              type="submit"
-              color="light"
-              disabled={maxRebuyReached}
-              className={maxRebuyReached ? ' gray-on-hover bg-gray-500' : ''}
-              style={{
-                borderBottomRightRadius: 0,
-                borderTopRightRadius: 0,
-                paddingTop: 0,
-                paddingBottom: 4,
-              }}
-            >
-              <span style={{ fontSize: 29 }}>₪</span>
-            </Button>
-            <Snackbar
-              className="only-wide-screen"
-              open={open}
-              autoHideDuration={2000}
-              onClose={handleClose}
-            >
-              <Alert
-                icon={false}
-                  severity="success"
-                  variant="filled"
-                  sx={{width: '100%'}}
-              >
-                <span style={{fontSize: 20}}>
+                <span style={{ fontSize: 20 }}>
                   {' '}
                   <b>{player.name}</b>{' '}
                   {' נכנס ב ' +
-                      '₪' +
-                      prevAmount +
-                      (prevUsedCredit ? ' מהקרדיט' : ' במזומן')}{' '}
+                    '₪' +
+                    prevAmount +
+                    (prevUsedCredit && player.balance === 0 && prevUsedCreditAmount > 0 && prevUsedCreditAmount < prevAmount ? 'בקרדיט ומזומן': (prevUsedCredit ? ' מהקרדיט' : ' במזומן'))}{' '}
                 </span>
-              </Alert>
-            </Snackbar>
-          </Tooltip>
-        </form>
-      )}
-    </>
+          </Alert>
+        </Snackbar>
+      </Tooltip>
+    </form>
   );
 }
