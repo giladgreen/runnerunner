@@ -9,6 +9,7 @@ import FinalTablePlayers from '@/app/ui/client/FinalTablePlayers';
 import RegisterSave from '@/app/ui/client/RegisterSave';
 import PlayersPrizes from '@/app/ui/client/PlayersPrizes';
 import TodayPlayersTable from '@/app/ui/client/TodayPlayersTable';
+import CssChange from '@/app/ui/client/CssChange';
 
 export default function CurrentTournamentPage({
   todayTournaments,
@@ -51,6 +52,7 @@ export default function CurrentTournamentPage({
 
     return (
       <div className="full-width w-full">
+        <CssChange/>
         <RegisterSave players={allPlayers} />
         <div className="full-width flex w-full items-center justify-between">
           <TodayTournamentNameCardWrapper todayTournament={todayTournament} />
@@ -95,6 +97,7 @@ export default function CurrentTournamentPage({
 
   return (
     <div className="rtl">
+      <CssChange/>
       <Tabs>
         <TabList>
           {todayTournaments.map((todayTournament) => (
