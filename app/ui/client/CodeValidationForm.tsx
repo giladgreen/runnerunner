@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // @ts-ignore
 import { Circle as SpinningChip } from 'react-awesome-spinners'
 import { useFormState } from 'react-dom';
@@ -17,6 +17,33 @@ export default function CodeValidationForm() {
   );
   const [pending, setPending] = useState(false);
   const [code, setCode] = useState("");
+
+  // useEffect(() => {
+  //   if ('OTPCredential' in window) {
+  //     const ac = new AbortController();
+  //
+  //     navigator.credentials.get({
+  //       // @ts-ignore
+  //       otp: { transport: ['sms'] },
+  //       signal: ac.signal
+  //     }).then((otp) => {
+  //       // @ts-ignore
+  //       if (otp && otp.code) {
+  //         // @ts-ignore
+  //         setCode(otp.code);
+  //         // @ts-ignore
+  //         document.getElementById('send-button').click();
+  //       }
+  //     }).catch(err => {
+  //       console.error(err);
+  //     });
+  //
+  //     return () => {
+  //       ac.abort();
+  //     };
+  //   }
+  // }, []);
+
   return (
     <div className="login-form">
       <form
@@ -39,6 +66,7 @@ export default function CodeValidationForm() {
                   autoFocus
                   onCompleted={(code) => {
                     if (code.length === 4 && !pending && code.match(/^\d{4}$/)) {
+                      // @ts-ignore
                       document.getElementById('send-button').click();
                     }
                   }}
