@@ -3,7 +3,11 @@
 @import '@/app/signup/style.css';
 @import '@/app/[userId]/style.css';
 
-
+body{
+  --ReactInputVerificationCode-itemWidth:	5.2vw;
+  --ReactInputVerificationCode-itemHeight:	5.2vw;
+  --ReactInputVerificationCode-itemSpacing:	2vw;
+}
 :root {
   --white: #dde1e5;
   --white-dark: #f9f9f9;
@@ -28,7 +32,16 @@
   --grey-mid: #3b4248;
   --back_from: #121C25;
   --back_to: #3A4249;
+
 }
+@media only screen and (max-width: 600px) {
+  body {
+    --ReactInputVerificationCode-itemWidth:	3.5rem;
+    --ReactInputVerificationCode-itemHeight:	4rem;
+    --ReactInputVerificationCode-itemSpacing:	1rem;
+  }
+}
+
 /* Scrollbar track */
 ::-webkit-scrollbar {
   width: 12px;
