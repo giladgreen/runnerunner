@@ -32,8 +32,11 @@ export default function CodeValidationForm() {
         if (otp && otp.code) {
           // @ts-ignore
           setCode(otp.code);
-          // @ts-ignore
-          document.getElementById('send-button').click();
+
+          setTimeout(()=>{
+            // @ts-ignore
+            document.getElementById('send-button').click();
+          }, 1200)
         }
       }).catch(err => {
         console.error(err);
@@ -65,10 +68,15 @@ export default function CodeValidationForm() {
                   onChange={setCode}
                   value={code}
                   autoFocus
-                  onCompleted={(code) => {
-                    if (code.length === 4 && !pending && code.match(/^\d{4}$/)) {
-                      // @ts-ignore
-                      document.getElementById('send-button').click();
+                  onCompleted={(innerCode) => {
+                    if (innerCode.length === 4 && !pending && innerCode.match(/^\d{4}$/)) {
+                      console.log('##### full code is:', innerCode);
+                      setCode(innerCode);
+                      setTimeout(()=>{
+                        // @ts-ignore
+                        document.getElementById('send-button').click();
+                      }, 500)
+
                     }
                   }}
                 />
