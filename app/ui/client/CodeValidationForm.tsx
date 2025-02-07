@@ -36,7 +36,7 @@ export default function CodeValidationForm() {
                 <input
                   className="login-input peer block w-full rounded-md border  py-[9px] pl-10  outline-2 "
                   id="code"
-                  type="text"
+                  type="number"
                   name="code"
                   placeholder="הכנס קוד בעל 4 ספרות"
                   required

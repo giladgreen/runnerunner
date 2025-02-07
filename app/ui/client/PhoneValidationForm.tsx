@@ -47,7 +47,7 @@ export default function PhoneValidationForm() {
                 <input
                   className="login-input peer block w-full rounded-md border py-[9px] pl-10  outline-2 "
                   id="phone_number"
-                  type="text"
+                  type="tel"
                   name="phone_number"
                   placeholder="מספר טלפון"
                   required
