@@ -1886,6 +1886,7 @@ export async function validateCode(
 ): Promise<string | undefined> {
   noStore();
   let user_input_code = formData.get('code') as string;
+
   console.log('### user_input_code', user_input_code);
 
   let user_phone_number = formData.get('phone_number') as string;

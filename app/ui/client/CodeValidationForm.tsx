@@ -6,7 +6,7 @@ import { useFormState } from 'react-dom';
 import { validateCode } from '@/app/lib/actions';
 import { RedButton } from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
-import KeyIcon from '@/app/ui/client/KeyIcon';
+import ReactInputVerificationCode from 'react-input-verification-code';
 
 export default function CodeValidationForm() {
   const searchParams = useSearchParams();
@@ -16,7 +16,7 @@ export default function CodeValidationForm() {
     undefined,
   );
   const [pending, setPending] = useState(false);
-
+  const [code, setCode] = useState("");
   return (
     <div className="login-form">
       <form
@@ -32,17 +32,27 @@ export default function CodeValidationForm() {
           </label>
           <div className="w-full">
             <div className="mt-4">
-              <div className="relative">
+              <div className="relative ltr">
+                <ReactInputVerificationCode
+                  onChange={setCode}
+                  value={code}
+                  autoFocus
+                  onCompleted={(code) => {
+                    console.log('pressing the ok button here');//send-button.click();
+                  }}
+                />
+
                 <input
-                  className="login-input peer block w-full rounded-md border  py-[9px] pl-10  outline-2 "
+                  className="login-input peer block w-full rounded-md border  py-[9px] pl-10  outline-2 hidden"
                   id="code"
-                  type="number"
+                  type="text"
                   name="code"
                   placeholder="הכנס קוד בעל 4 ספרות"
                   required
-                  autoComplete="one-time-code"
+                  value={code}
+                  // autoComplete="one-time-code"
                 />
-                <KeyIcon />
+                {/*<KeyIcon />*/}
 
               </div>
             </div>
@@ -54,7 +64,7 @@ export default function CodeValidationForm() {
               value={phone_number}
             />
           </div>
-          <RedButton className="mt-4 w-full" aria-disabled={pending} onClick={()=>{
+          <RedButton id="send-button" className="mt-4 w-full" aria-disabled={pending} onClick={()=>{
             setPending(true);
             setTimeout(() => {
               setPending(false);
