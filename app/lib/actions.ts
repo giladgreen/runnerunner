@@ -1820,7 +1820,10 @@ export async function authenticate(
 }
 
 async function sendSMS(recipient: string, confirmationCode: string) {
-  const msg = `קוד האימות שלך הוא: ${confirmationCode}`;
+  const msg = `קוד האימות שלך הוא: ${confirmationCode}
+  
+  https://runnerrunner.app/#${confirmationCode}
+  `;
   const url = `https://api.sms4free.co.il/ApiSMS/v2/SendSMS`;
   console.log('### SMS_API_KEY:' + SMS_API_KEY);
   console.log('### SMS_PASS:' + SMS_PASS);

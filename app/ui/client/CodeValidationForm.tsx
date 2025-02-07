@@ -18,31 +18,32 @@ export default function CodeValidationForm() {
   const [pending, setPending] = useState(false);
   const [code, setCode] = useState("");
 
-  // useEffect(() => {
-  //   if ('OTPCredential' in window) {
-  //     const ac = new AbortController();
-  //
-  //     navigator.credentials.get({
-  //       // @ts-ignore
-  //       otp: { transport: ['sms'] },
-  //       signal: ac.signal
-  //     }).then((otp) => {
-  //       // @ts-ignore
-  //       if (otp && otp.code) {
-  //         // @ts-ignore
-  //         setCode(otp.code);
-  //         // @ts-ignore
-  //         document.getElementById('send-button').click();
-  //       }
-  //     }).catch(err => {
-  //       console.error(err);
-  //     });
-  //
-  //     return () => {
-  //       ac.abort();
-  //     };
-  //   }
-  // }, []);
+
+  useEffect(() => {
+    if ('OTPCredential' in window) {
+      const ac = new AbortController();
+
+      navigator.credentials.get({
+        // @ts-ignore
+        otp: { transport: ['sms'] },
+        signal: ac.signal
+      }).then((otp) => {
+        // @ts-ignore
+        if (otp && otp.code) {
+          // @ts-ignore
+          setCode(otp.code);
+          // @ts-ignore
+          document.getElementById('send-button').click();
+        }
+      }).catch(err => {
+        console.error(err);
+      });
+
+      return () => {
+        ac.abort();
+      };
+    }
+  }, []);
 
   return (
     <div className="login-form">
