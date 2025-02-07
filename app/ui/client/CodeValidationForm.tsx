@@ -8,6 +8,7 @@ import { RedButton } from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
 import ReactInputVerificationCode from 'react-input-verification-code';
 
+
 export default function CodeValidationForm() {
   const searchParams = useSearchParams();
   const phone_number = searchParams.get('phone_number') as string;
