@@ -36,9 +36,9 @@ body{
 }
 @media only screen and (max-width: 600px) {
   body {
-    --ReactInputVerificationCode-itemWidth:	3.5rem;
-    --ReactInputVerificationCode-itemHeight:	4rem;
-    --ReactInputVerificationCode-itemSpacing:	1rem;
+    --ReactInputVerificationCode-itemWidth:	3.9rem;
+    --ReactInputVerificationCode-itemHeight: 3.9rem;
+    --ReactInputVerificationCode-itemSpacing: 1rem;
   }
 }
 

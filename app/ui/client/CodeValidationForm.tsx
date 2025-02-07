@@ -8,7 +8,6 @@ import { RedButton } from '@/app/ui/client/Button';
 import { useSearchParams } from 'next/navigation';
 import ReactInputVerificationCode from 'react-input-verification-code';
 
-
 export default function CodeValidationForm() {
   const searchParams = useSearchParams();
   const phone_number = searchParams.get('phone_number') as string;
@@ -39,7 +38,9 @@ export default function CodeValidationForm() {
                   value={code}
                   autoFocus
                   onCompleted={(code) => {
-                    console.log('pressing the ok button here');//send-button.click();
+                    if (code.length === 4 && !pending && code.match(/^\d{4}$/)) {
+                      document.getElementById('send-button').click();
+                    }
                   }}
                 />
 
