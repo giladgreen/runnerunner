@@ -1865,7 +1865,7 @@ export async function validatePhone(
     const date = new Date(phoneConfirmationCodeObject.created_at);
     const now = new Date();
     const diff = now.getTime() - date.getTime() - TWO_HOURS;
-    if (diff < 1000 * 30) {
+    if (diff < 1000 * 15) {
       console.log('### too many requests', phoneNumber);
       redirect(`/phone_validation?error=try_again_later`);
       return 'יותר מדי בקשות בזמן קצר';
