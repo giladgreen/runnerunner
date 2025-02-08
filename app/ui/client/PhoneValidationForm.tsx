@@ -41,6 +41,11 @@ export default function PhoneValidationForm() {
               לא ניתן היה לשלוח את sms, בדקו שנית את המספר
             </div>
           )}
+          {error === 'try_again_later' && (
+            <div className="error-message-color no-sms-error" >
+              איראה שגיאה, נסו שנית מאוחר יותר
+            </div>
+          )}
           <div className="w-full">
             <div className="mt-4">
               <div className="relative">

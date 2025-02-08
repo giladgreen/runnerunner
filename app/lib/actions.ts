@@ -20,7 +20,9 @@ import {
   PrizeInfoDB,
   BugDB,
   TournamentsAdjustmentsDB,
-  FeatureFlagDB, ChangeLogDB
+  FeatureFlagDB,
+  ChangeLogDB,
+  PhoneConfirmationCodeData
 } from './definitions';
 
 import { signIn } from '../../auth';
@@ -35,7 +37,7 @@ const SMS_API_KEY = process.env.SMS_API_KEY;
 const SMS_PASS = process.env.SMS_PASS;
 const TARGET_MAIL = 'green.gilad+runner@gmail.com';
 let clearOldRsvpLastRun = getCurrentDate('2024-06-15T10:00:00.000Z').getTime();
-
+const TWO_HOURS = 1000 * 60 * 60 * 2;
 const SUPER_ADMINS = ['0587869910', '0524803571', '0543138583'];
 const ADMINS = [
   '0587869910',
@@ -270,23 +272,15 @@ async function insertIntoPlayers(
 }
 
 async function insertIntoPhoneConfirmations(phoneNumber: string, code: string) {
-  try {
-    await startTransaction();
-    await sql`
+  await sql`
           INSERT INTO phone_confirmations (phone_number, confirmation_code)
           VALUES (${phoneNumber}, ${code})
         `;
-
-    await commitTransaction();
-  } catch (e) {
-    await cancelTransaction();
-    throw e;
-  }
 }
 
 async function getPhoneConfirmationCode(phoneNumber: string) {
-  const results = await sql`
-          SELECT * FROM phone_confirmations ORDER BY created_at DESC LIMIT 1`;
+  const results = await sql<PhoneConfirmationCodeData>`
+          SELECT * FROM phone_confirmations WHERE phone_number = ${phoneNumber} ORDER BY created_at DESC LIMIT 1`;
 
   return results.rows[0];
 }
@@ -407,14 +401,14 @@ async function deleteTournamentAdjustmentLog(
       return;
     }
     await startTransaction();
-    console.log('>> before remove tournament adjustment');
+
     await sql`INSERT INTO deleted_tournaments_adjustments 
           (id, tournament_id, type, change, reason, updated_by, deleted_by) 
           VALUES
            (${adjustment.id},${adjustment.tournament_id},${adjustment.type},${adjustment.change},${adjustment.reason},${adjustment.updated_by},${username})`;
 
     await sql`DELETE FROM tournaments_adjustments WHERE id = ${adjustmentId}`;
-    console.log('>> after remove tournament adjustment');
+
     await commitTransaction();
   } catch (error) {
     console.error('>> deleteTournamentAdjustmentLog Error:', error);
@@ -1825,9 +1819,9 @@ async function sendSMS(recipient: string, confirmationCode: string) {
   https://runnerrunner.app/#${confirmationCode}
   `;
   const url = `https://api.sms4free.co.il/ApiSMS/v2/SendSMS`;
-  console.log('### SMS_API_KEY:' + SMS_API_KEY);
-  console.log('### SMS_PASS:' + SMS_PASS);
-  console.log('### senderPhone:' + senderPhone);
+  // console.log('### SMS_API_KEY:' + SMS_API_KEY);
+  // console.log('### SMS_PASS:' + SMS_PASS);
+  // console.log('### senderPhone:' + senderPhone);
   console.log('### about to send sms for number:' + recipient+'. confirmationCode:', confirmationCode);
   const res = await fetch(url, {
     method: 'POST',
@@ -1866,6 +1860,18 @@ export async function validatePhone(
     user_phone_number.startsWith('0') ? '' : '0'
   }${user_phone_number}`;
 
+  const phoneConfirmationCodeObject = await getPhoneConfirmationCode(phoneNumber);
+  if (phoneConfirmationCodeObject) {
+    const date = new Date(phoneConfirmationCodeObject.created_at);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime() - TWO_HOURS;
+    if (diff < 1000 * 30) {
+      console.log('### too many requests', phoneNumber);
+      redirect(`/phone_validation?error=try_again_later`);
+      return 'יותר מדי בקשות בזמן קצר';
+    }
+  }
+
   const confirmationCode = `${Math.floor(1000 + Math.random() * 9000)}`;
 
   await insertIntoPhoneConfirmations(phoneNumber, confirmationCode);
@@ -1874,7 +1880,7 @@ export async function validatePhone(
   const smsSent = await sendSMS(phoneNumber, confirmationCode);
 
   if (smsSent){
-    console.log('### sms sent. confirmationCode', confirmationCode);
+    console.log('### sms sent. phoneNumber: ',phoneNumber, ' confirmationCode', confirmationCode);
     redirect(`/code_validation?phone_number=${phoneNumber}`);
   }else{
     console.error('## sendSMS failed');
@@ -1897,7 +1903,7 @@ export async function validateCode(
     user_phone_number.startsWith('0') ? '' : '0'
   }${user_phone_number}`;
 
-  console.log('### phoneNumber', phoneNumber);
+  console.log('### user phone number', phoneNumber);
   const codeObject = await getPhoneConfirmationCode(phoneNumber);
   if (!codeObject) {
     console.log('### no codeObject');

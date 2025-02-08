@@ -25,6 +25,13 @@ export type TournamentPlayerData = {
   place: number;
 };
 
+export type PhoneConfirmationCodeData = {
+  id: string;
+  phone_number: string;
+  confirmation_code: string;
+  created_at: string;
+};
+
 export type PlayerDB = {
   id: string;
   name: string;
