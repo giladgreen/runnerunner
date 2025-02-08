@@ -1868,7 +1868,7 @@ export async function validatePhone(
     console.log('### diff', diff, 'milli,     or ', diff / 1000, ' seconds ');
     // const diff = now.getTime() - date.getTime() - TWO_HOURS;
     if (diff < 1000 * 15 && diff > 0) {
-      console.log('### too many requests', phoneNumber);
+      console.log('### too many requests. phone: ', phoneNumber, 'last code sent ',(diff / 1000),'second ago');
       redirect(`/phone_validation?error=try_again_later`);
       return 'יותר מדי בקשות בזמן קצר';
     }
