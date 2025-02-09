@@ -2,13 +2,10 @@
 
 import { PlayerDB } from '@/app/lib/definitions';
 import React, { useState } from 'react';
-
 import { setPrizesCreditWorth } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import Button from '@/app/ui/client/Button';
 import { usePathname, useSearchParams } from 'next/navigation';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
-import { CreditCardIcon } from '@heroicons/react/24/solid';
 
 function SetPrizesCreditForm({
   players,

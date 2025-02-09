@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { convertPrizeToCredit } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import Button from '@/app/ui/client/Button';
 import SearchablePrizesDropdown from '@/app/ui/client/SearchablePrizesDropdown';
 import { PrizeInfoDB } from '@/app/lib/definitions';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';

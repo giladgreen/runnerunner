@@ -1,0 +1,203 @@
+/* Loader.css */
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    position: relative;
+    --time: 7s;
+    --color-a: var(--white);
+    --color-b: var(--blue);
+    zoom: 2;
+}
+
+.chip {
+    width: 20px;
+    height: 5px;
+    border: 1px solid black;
+    border-radius: 50% / 10%;
+    margin: 0; /* Start with no margin */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+    position: relative;
+    /*animation: coinMargin 4s infinite;*/
+}
+#chip4{
+    top: 0;
+    left: +20px;
+    background-color: var(--color-a);
+    animation: chip4Animation var(--time) infinite;
+}
+@keyframes chip4Animation {
+    0% {
+        transform: translate(0,0);
+    }
+    16% {
+        transform: translate(-10px, -15px);
+    }
+    33% {
+        transform: translate(0,0);
+    }
+    50% {
+        transform: translate(-10px, -15px);
+    }
+    67% {
+        transform: translate(0,0);
+    }
+    84% {
+        transform: translate(-10px, -15px);
+    }
+    100% {
+        transform: translate(0,0);
+    }
+}
+
+#chip5{
+    top: 5px;
+    left: +40px;
+    background-color: var(--color-a);
+    animation: chip5Animation var(--time) infinite;
+}
+@keyframes chip5Animation {
+    0% {
+        transform: translate(0,0);
+    }
+    16% {
+        transform: translate(-10px, -10px);
+    }
+    33% {
+        transform: translate(0,+5px);
+    }
+    50% {
+        transform: translate(-10px, 0);
+    }
+    67% {
+        transform: translate(-20px,0);
+    }
+    84%{
+        transform: translate(-10px, -5px);
+    }
+    100% {
+        transform: translate(0,0);
+    }
+}
+#chip6{
+    top: 10px;
+    left: +60px;
+    background-color: var(--color-a);
+    animation: chip6Animation var(--time) infinite;
+}
+@keyframes chip6Animation {
+    0% {
+        transform: translate(0,0);
+    }
+    16% {
+        transform: translate(-10px, -5px);
+    }
+    33% {
+        transform: translate(-20px,-5px);
+    }
+    50% {
+        transform: translate(-10px, -10px);
+    }
+    67% {
+        transform: translate(-20px, -10px);
+    }
+    84%{
+        transform: translate(-10px,-20px);
+    }
+    100% {
+        transform: translate(0,0);
+    }
+}
+
+#chip1{
+    top: 0;
+    left: -60px;
+    background-color: var(--color-b);
+    animation: chip1Animation var(--time) infinite;
+}
+@keyframes chip1Animation {
+    0% {
+        transform: translate(0,0);
+    }
+    16% {
+        transform: translate(+10px, -10px);
+    }
+    33% {
+        transform: translate(+20px,+5px);
+    }
+    50% {
+        transform: translate(10px, -5px);
+    }
+    67% {
+        transform: translate(+20px, +10px);
+    }
+    84%{
+        transform: translate(10px, +5px);
+    }
+    100% {
+        transform: translate(0,0);
+    }
+}
+
+#chip2{
+    top: 5px;
+    left: -40px;
+    background-color: var(--color-b);
+    animation: chip2Animation var(--time) infinite;
+
+}
+@keyframes chip2Animation {
+    0% {
+        transform: translate(0,0);
+    }
+    16% {
+        transform: translate(+10px, -5px);
+    }
+    33% {
+        transform: translate(0,-5px);
+    }
+    50% {
+        transform: translate(+10px, -15px);
+    }
+    67% {
+        transform: translate(+20px,0);
+    }
+    84%{
+        transform: translate(+10px, -10px);
+    }
+    100% {
+        transform: translate(0,0);
+    }
+}
+
+#chip3{
+    top: 10px;
+    left: -20px;
+    background-color: var(--color-b);
+    animation: chip3Animation var(--time) infinite;
+}
+@keyframes chip3Animation {
+    0% {
+        transform: translate(0,0);
+    }
+    16% {
+        transform: translate(+10px, 0);
+    }
+    33% {
+        transform: translate(0,0);
+    }
+    50% {
+        transform: translate(+10px, 0);
+    }
+    67% {
+        transform: translate(0,0);
+    }
+    84%{
+        transform: translate(+10px, 0);
+    }
+    100% {
+        transform: translate(0,0);
+    }
+}

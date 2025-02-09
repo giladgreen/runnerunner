@@ -1,7 +1,7 @@
 'use client';
 
 import { PlayerDB } from '@/app/lib/definitions';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { savePlayersDataToFile } from '@/app/ui/client/ExportPlayersButton';
 
 export default function RegisterSave({ players }: { players: PlayerDB[] }) {

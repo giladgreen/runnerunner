@@ -2,25 +2,18 @@
 import React from 'react';
 // @ts-ignore
 import { Circle as SpinningChip } from 'react-awesome-spinners'
-import {
- ArrowDownLeftIcon, BanknotesIcon,
-    UsersIcon
-} from '@heroicons/react/24/outline';
 import { usePathname } from 'next/navigation';
 import { PlayerDB, TournamentDB, TRANSLATIONS } from '@/app/lib/definitions';
 import BlurFade from '@/app/ui/components/ui/blur-fade';
-import { BookmarkIcon, BookmarkSlashIcon, CircleStackIcon } from '@heroicons/react/24/solid';
 import { rsvpPlayerForDay } from '@/app/lib/actions';
 import ClockIcon from '@/app/ui/client/ClockIcon';
 import SandClockIcon from '@/app/ui/client/SandClockIcon';
 import FirstStageIcon from '@/app/ui/client/FirstStageIcon';
 import InitialStackIcon from '@/app/ui/client/InitialStackIcon';
-import StackSizeIcon from '@/app/ui/client/StackSizeIcon';
 import DollarCircleIcon from '@/app/ui/client/DollarCircleIcon';
 import RsvpArrowIcon from '@/app/ui/client/RsvpArrowIcon';
 
 function getDate(date: string) {
-  //date: YYYY-MM-DD
   const dateArray = date.split('-');
   const year = dateArray[0].slice(2);
   const month = dateArray[1].startsWith('0') ? dateArray[1].slice(1) : dateArray[1];
@@ -50,15 +43,6 @@ const PlayerTournamentRegistration = ({
   const tournamentMaxPlayers = tournament.max_players;
   const tournamentCurrentRegisteredPlayers = tournament.rsvpForToday;
   const placesLeft = tournamentMaxPlayers - tournamentCurrentRegisteredPlayers;
-
-  // const timeBeforeLastRebuy =
-  //   (tournament.last_phase_for_rebuy + 2) * tournament.phase_length;
-  // const date = new Date('2024-01-01T' + tournament.start_time + ':00');
-  // const endDate = new Date(date.getTime() + timeBeforeLastRebuy * 60_000);
-  // const endDateTime = endDate.toLocaleTimeString('he-IL', {
-  //   hour: '2-digit',
-  //   minute: '2-digit',
-  // });
 
   const tournamentDate = getDate(stringDate);
   return (

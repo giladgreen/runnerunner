@@ -1,7 +1,5 @@
 'use client';
 
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-
 export default function SignUpButton({
   usePhoneValidation,
 }: {

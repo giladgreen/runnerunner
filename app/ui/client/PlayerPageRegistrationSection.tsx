@@ -29,6 +29,7 @@ const PlayerPageRegistrationSection = ({
             טורנירי השבוע הקרוב
           </div>
           <div className="user-tournament-rsvps">{rsvpsForTheNextWeek}</div>
+
         </>) : (<div className="rtl header" >
           <u>אין טורנירים נוספים השבוע</u>
         </div>)}

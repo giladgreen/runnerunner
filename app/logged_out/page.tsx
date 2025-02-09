@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { Button } from 'primereact/button';
 import React from 'react';
 
 export default async function LoggedOutPage({

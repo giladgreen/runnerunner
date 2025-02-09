@@ -4,8 +4,6 @@ import { Circle as SpinningChip } from 'react-awesome-spinners'
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/app/lib/actions';
 import {
-  // PhoneIcon,
-  // KeyIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { RedButton } from '@/app/ui/client/Button';

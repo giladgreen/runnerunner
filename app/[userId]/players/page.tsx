@@ -14,7 +14,6 @@ import {
 import GeneralPlayersCardWrapper from '@/app/ui/client/GeneralPlayersCardWrapper';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 import { getDayOfTheWeek } from '@/app/lib/serverDateUtils';
-import { TRANSLATIONS } from '@/app/lib/definitions';
 
 export default async function Page({
   searchParams,

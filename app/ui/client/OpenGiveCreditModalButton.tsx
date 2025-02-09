@@ -6,7 +6,6 @@ import React, { useState } from 'react';
 import { TickIcon } from '@/app/ui/icons';
 import { givePlayerPrizeOrCredit } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import Button from '@/app/ui/client/Button';
 import SearchablePrizesDropdown from '@/app/ui/client/SearchablePrizesDropdown';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
 import { CreditCardIcon } from '@heroicons/react/24/outline';

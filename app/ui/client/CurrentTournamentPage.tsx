@@ -113,9 +113,6 @@ export default function CurrentTournamentPage({
                   className="current_tournament_fly_card"
                 >
                   {todayTournament.name}
-                  {/*<AnimatedGradientText>*/}
-                  {/*   {todayTournament.name}*/}
-                  {/*</AnimatedGradientText>*/}
                 </div>
                 <RegisterSave players={allPlayers}/>
                 <div className="full-width flex w-full items-center justify-between">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { fetchAllChangeLogs, fetchFeatureFlags } from '@/app/lib/data';
+import { fetchFeatureFlags } from '@/app/lib/data';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 
 export default async function ChangeLogsPage({

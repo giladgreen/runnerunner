@@ -4,7 +4,6 @@ import { CardsSkeleton } from '@/app/ui/skeletons';
 import Card from '@/app/ui/client/Card';
 import NumberTicker from "@/app/ui/components/ui/number-ticker";
 
-
 export default async function GeneralPlayersCardWrapper() {
   const {
     totalNumberOfPlayers,

@@ -1,9 +1,7 @@
 'use client';
 
 import { HashtagIcon } from '@heroicons/react/24/outline';
-import Button from '@/app/ui/client/Button';
 import { setPlayerPosition } from '@/app/lib/actions';
-import SpinnerButton from '@/app/ui/client/SpinnerButton';
 import { useEffect, useMemo, useState } from 'react';
 import { PlayerDB } from '@/app/lib/definitions';
 import { ConfettiButton } from '@/app/ui/components/ui/confetti';

@@ -5,10 +5,7 @@ import {
   fetchUserById,
 } from '@/app/lib/data';
 import React from 'react';
-import Link from 'next/link';
-import { Button } from 'primereact/button';
 import {
-  getPlayersPrizesContent,
   getPlayersPrizesContents,
 } from '@/app/ui/client/helpers';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';

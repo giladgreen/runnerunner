@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-const MIN_PRIZE = 4000;
 const array = Array.from({ length: 15 }, (_, i) => 20 - i);
 
 function distributePercentages(numPeople: number) {

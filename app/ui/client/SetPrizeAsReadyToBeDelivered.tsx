@@ -5,7 +5,6 @@ import React from 'react';
 import { setPrizeAsReadyToBeDelivered } from '@/app/lib/actions';
 import {
   ArrowDownOnSquareIcon,
-  ArrowUpOnSquareIcon,
 } from '@heroicons/react/24/outline';
 import { Tooltip } from 'flowbite-react';
 

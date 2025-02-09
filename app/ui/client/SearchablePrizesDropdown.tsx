@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { PlayerDB, PrizeInfoDB } from '@/app/lib/definitions';
-import Image from 'next/image';
+import { PrizeInfoDB } from '@/app/lib/definitions';
 import { formatCurrency } from '@/app/lib/utils';
 
 const SearchablePrizesDropdown = ({

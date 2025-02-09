@@ -3,7 +3,6 @@ import { getFinalTablePlayersContent } from '@/app/ui/client/helpers';
 import { getDayIncome } from '@/app/ui/client/helpers';
 import {
   formatDateToLocal,
-  getTodayShortDate,
 } from '@/app/lib/serverDateUtils';
 import { dateComparator } from '@/app/lib/utils';
 

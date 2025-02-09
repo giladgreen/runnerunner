@@ -5,9 +5,8 @@ import React from 'react';
 
 import { usePathname, useSearchParams } from 'next/navigation';
 import SetPrizeForm from '@/app/ui/client/SetPrizeForm';
-import { GiftIcon, HashtagIcon } from '@heroicons/react/24/solid';
+import { GiftIcon } from '@heroicons/react/24/solid';
 import { Tooltip } from 'flowbite-react';
-import { CreditCardIcon } from '@heroicons/react/24/outline';
 
 export default function OpenPrizeModalButton({
   player,
