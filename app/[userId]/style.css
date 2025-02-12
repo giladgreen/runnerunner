@@ -48,6 +48,12 @@
   left: 35vw;
   width: 30vw;
 }
+@media only screen and (max-width: 600px) {
+  .edit-player-modal-inner-div {
+    left: 5vw;
+    width: 90vw;
+  }
+}
 .edit-player-modal-wrapper {
     position: fixed;
     top: 0;
@@ -76,7 +82,13 @@
   }
 
 }
-
+@media only screen and (max-width: 600px) {
+  .edit-player-modal-wrapper {
+    .edit-player-modal {
+      width: 90vw;
+    }
+  }
+}
 
 .hidden {
   visibility: hidden;
