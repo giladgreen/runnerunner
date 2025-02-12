@@ -764,6 +764,7 @@ export async function setPlayerPosition(
   formData: FormData,
 ) {
   noStore();
+
   const newPosition = Number(formData.get('position') as string);
 
   if (isNaN(newPosition) || newPosition < 0) {
