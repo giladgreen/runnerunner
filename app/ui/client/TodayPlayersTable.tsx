@@ -239,6 +239,13 @@ export default function TodayPlayersTable({
                       </div>
                       <div className="flex justify-end gap-3">
                         <div className="flex">
+                          <AutoPlayerPayButton
+                            player={player}
+                            userId={userId}
+                            tournaments={tournaments}
+                            tournamentId={tournamentId}
+                            updatePlayer={updatePlayer}
+                          />
                           <OpenCreditModalButton
                             players={playersWithEnoughCredit}
                             player={player}
@@ -247,13 +254,7 @@ export default function TodayPlayersTable({
                             tournaments={tournaments}
                             tournamentId={tournamentId}
                           />
-                          <AutoPlayerPayButton
-                            player={player}
-                            userId={userId}
-                            tournaments={tournaments}
-                            tournamentId={tournamentId}
-                            updatePlayer={updatePlayer}
-                          />
+
                         </div>
 
                         <OpenPositionModalButton

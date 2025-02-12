@@ -29,7 +29,7 @@ export default function OpenCreditModalButton({
     setShow(false);
   };
   const buttonStyle =  {
-    width: 22,
+      width: 22,
       borderBottomRightRadius: 0,
       borderTopRightRadius: 0,
       borderLeft: '1px soild',

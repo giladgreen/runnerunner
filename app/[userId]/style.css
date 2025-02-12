@@ -31,7 +31,23 @@
     color: var(--white);
   }
 }
-
+.edit-player-position-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000000bb;
+  z-index: 99999;
+  padding-top: 5vh;
+  display: flex;
+  justify-content: center;
+}
+.edit-player-modal-inner-div {
+  top: 10vh;
+  left: 35vw;
+  width: 30vw;
+}
 .edit-player-modal-wrapper {
     position: fixed;
     top: 0;
