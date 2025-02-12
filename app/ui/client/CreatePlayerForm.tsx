@@ -1,8 +1,6 @@
 'use client';
 import { CldImage, CldUploadWidget } from 'next-cloudinary';
 import { useSearchParams } from 'next/navigation';
-
-import Link from 'next/link';
 import {
   PencilIcon,
   PhoneIcon,
@@ -14,11 +12,11 @@ import React, { useState } from 'react';
 import SpinnerButton from '@/app/ui/client/SpinnerButton';
 
 export default function CreatePlayerForm({
-  userId,
   prevPage,
+  close
 }: {
-  userId: string;
   prevPage: string;
+  close: ()=>void;
 }) {
   const initialState = { message: null, errors: {} };
   const searchParams = useSearchParams();
@@ -40,15 +38,14 @@ export default function CreatePlayerForm({
   const [balanceNote, setBalanceNote] = useState('שחקן חדש');
   const [imageUrl, setImageUrl] = useState('');
   const [balance, setBalance] = useState(0);
-  // @ts-ignore
-  const error = state?.error;
+
   // @ts-ignore
   const onImageUploaded = (response)=>{
   // @ts-ignore
   setImageUrl(response?.info?.url);
 }
   return (
-    <>
+    <div className="CreatePlayerForm">
       <form action={dispatch}>
         <div className="my-form rtl rounded-md  p-4 md:p-6">
           {/* player Name */}
@@ -230,18 +227,20 @@ export default function CreatePlayerForm({
         </div>
 
         <div className="mt-6 flex justify-end gap-4">
-          <Link
-            href={`/${userId}/players`}
-            className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium "
+          <div
+            onClick={close}
+            className="my-button-cancel pointer flex h-10 items-center rounded-lg  px-4  font-medium "
           >
             ביטול
-          </Link>
-          <SpinnerButton text="צור שחקן" />
+          </div>
+          <SpinnerButton text="צור שחקן" onClick={()=>{
+            setTimeout(close, 2000);
+          }}/>
         </div>
       </form>
-      <div
+       <div
         className="flex h-10 items-center rounded-lg  px-4  font-medium "
-        style={{ width: '130px' }}
+        style={{ width: '130px', zIndex:999999999 }}
       >
         <CldUploadWidget
           signatureEndpoint="/api/sign-image"
@@ -262,6 +261,6 @@ export default function CreatePlayerForm({
           }}
         </CldUploadWidget>
       </div>
-    </>
+    </div>
   );
 }

@@ -501,6 +501,41 @@ body{
   background: rgb(224, 242, 254);
 }
 
+.CreatePlayerFormWrapper{
+  position: fixed;
+  top: 0;
+  left: 0;
+    width: 100vw;
+    height: 100vh;
+  background: #000000bb;
+  z-index: 99999;
+  padding-top: 5vh;
+    display: flex;
+    justify-content: center;
+
+  .CreatePlayerForm{
+    color: var(--white);
+    border-radius: 15px;
+    background: linear-gradient(to bottom, var(--grey),var(--grey-dark) );
+    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.5); /* Adds a shadow with a slight blur */
+    width: 40vw;
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: 25px;
+    min-height: 50vh;
+    max-height: 85vh;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .CreatePlayerFormWrapper{
+    padding-top: 7vh;
+    .CreatePlayerForm{
+      width: 90vw;
+    }
+  }
+}
+
 .full-size-fixed-div {
   background: transparent;
   z-index: 910;
@@ -598,6 +633,10 @@ body{
 }
 .pointer {
   cursor: pointer;
+}
+
+.copy_pointer {
+  cursor: copy;
 }
 
 .config-seperator {

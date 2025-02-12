@@ -59,7 +59,7 @@ export default async function Page({
       <div className="rtl mt-4 flex items-center justify-between gap-2 md:mt-8">
         <Search placeholder="חיפוש שחקן" />
 
-        <CreateNewPlayerButton params={params} />
+        <CreateNewPlayerButton currentPage={`/${params.userId}/players`}/>
       </div>
       <Suspense key={query + currentPage} fallback={<PlayersTableSkeleton />}>
         <PlayersTable

@@ -10,13 +10,13 @@ import { PlayerDB, PrizeInfoDB, TournamentDB } from '@/app/lib/definitions';
 import OpenPositionModalButton from '@/app/ui/client/OpenPositionModalButton';
 import OpenPrizeModalButton from '@/app/ui/client/OpenPrizeModalButton';
 import EntriesButton from '@/app/ui/client/EntriesButton';
-import CreateNewTodayPlayerButton from '@/app/ui/client/CreateNewTodayPlayerButton';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { usePathname, useSearchParams } from 'next/navigation';
 import DeletePositionButton from '@/app/ui/client/DeletePositionButton';
 import { getDayOfTheWeek } from '@/app/lib/clientDateUtils';
 import Avatar from '@/app/ui/client/Avatar';
 import AutoPlayerPayButton from '@/app/ui/client/AutoPlayerPayButton';
+import CreateNewPlayerButton from '@/app/ui/client/CreateNewPlayerButton';
 
 function getMinPosition(players: PlayerDB[]) {
   const positions = players
@@ -196,8 +196,7 @@ export default function TodayPlayersTable({
             value={query}
           />
         </div>
-
-        <CreateNewTodayPlayerButton params={{ userId, query }} />
+        <CreateNewPlayerButton currentPage={prevPage}/>
       </div>
       <div className="rtl mt-4 flex items-center justify-between gap-2 md:mt-8">
         <div className="full-width rtl mt-6 flow-root">
