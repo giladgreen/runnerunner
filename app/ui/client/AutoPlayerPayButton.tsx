@@ -145,6 +145,13 @@ export default function AutoPlayerPayButton({
     setOpen(false);
   };
 
+  const buttonStyle =  {
+       borderBottomLeftRadius: 0,
+      borderTopLeftRadius: 0,
+      paddingTop: 0,
+      paddingBottom: 4,
+    borderLeft: 0,
+  }
   if (pending) {
     return (
       <div
@@ -154,6 +161,7 @@ export default function AutoPlayerPayButton({
           color="light"
           disabled
           className="SpinningChipWrappingButton"
+          style={buttonStyle}
         >
           <SpinningChip color="black" size={19} />
         </Button>
@@ -222,12 +230,7 @@ export default function AutoPlayerPayButton({
           color="light"
           disabled={maxRebuyReached}
           className={maxRebuyReached ? ' gray-on-hover bg-gray-500' : ''}
-          style={{
-            borderBottomRightRadius: 0,
-            borderTopRightRadius: 0,
-            paddingTop: 0,
-            paddingBottom: 4,
-          }}
+          style={buttonStyle}
         >
           <span style={{ fontSize: 29 }}>₪</span>
         </Button>

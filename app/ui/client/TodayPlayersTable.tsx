@@ -17,6 +17,8 @@ import { getDayOfTheWeek } from '@/app/lib/clientDateUtils';
 import Avatar from '@/app/ui/client/Avatar';
 import AutoPlayerPayButton from '@/app/ui/client/AutoPlayerPayButton';
 import CreateNewPlayerButton from '@/app/ui/client/CreateNewPlayerButton';
+import OpenPlayerEditPageButton from '@/app/ui/client/OpenPlayerEditPageButton';
+import QuickPlayerEditButton from '@/app/ui/client/QuickPlayerEditButton';
 
 function getMinPosition(players: PlayerDB[]) {
   const positions = players
@@ -384,17 +386,11 @@ export default function TodayPlayersTable({
                             player={player}
                             tournamentIds={[currentTournament?.id]}
                           />
-
-                          <Link href={getLink(player)}>
                             <div className="font-large">{player.name}</div>
-                          </Link>
                         </div>
                       </td>
                       <td className="font-large whitespace-nowrap px-3 py-3">
-                        <Link href={getLink(player)}>
-                          {' '}
                           {player.phone_number}
-                        </Link>
                       </td>
                       <td
                         className={`ltr whitespace-nowrap px-3 py-3`}
@@ -403,12 +399,12 @@ export default function TodayPlayersTable({
                           color: formatCurrencyColor(player.balance),
                         }}
                       >
-                        <Link href={getLink(player)} className="font-large" style={{ color: formatCurrencyColor(player.balance), direction:'ltr'}}>
+                        <div className="font-large" style={{ color: formatCurrencyColor(player.balance), direction:'ltr'}}>
                           {formatCurrency(player.balance)}
-                        </Link>
+                        </div>
                       </td>
                       <td className="whitespace-nowrap px-3 py-3">
-                        <Link href={getLink(player)}>{player.notes}</Link>
+                       {player.notes}
                       </td>
 
                       {rsvpEnabled && isRsvpRequired && currentTournament && (
@@ -439,6 +435,13 @@ export default function TodayPlayersTable({
                       <td className="whitespace-nowrap py-3 pl-6 pr-3">
                         <div className="flex justify-end gap-3">
                           <div className="flex">
+                            <AutoPlayerPayButton
+                              updatePlayer={updatePlayer}
+                              player={player}
+                              userId={userId}
+                              tournaments={tournaments}
+                              tournamentId={tournamentId}
+                            />
                             <OpenCreditModalButton
                               players={playersWithEnoughCredit}
                               player={player}
@@ -447,14 +450,17 @@ export default function TodayPlayersTable({
                               tournaments={tournaments}
                               tournamentId={tournamentId}
                             />
-                            <AutoPlayerPayButton
-                              updatePlayer={updatePlayer}
-                              player={player}
-                              userId={userId}
-                              tournaments={tournaments}
-                              tournamentId={tournamentId}
-                            />
                           </div>
+                          <QuickPlayerEditButton
+                            currentPage={prevPage}
+                            userId={userId}
+                            player={player}
+                          />
+                          <OpenPlayerEditPageButton
+                            playerId={player.id}
+                            userId={userId}
+                          />
+
 
                           <OpenPositionModalButton
                             player={player}

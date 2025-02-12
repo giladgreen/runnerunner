@@ -501,7 +501,8 @@ body{
   background: rgb(224, 242, 254);
 }
 
-.CreatePlayerFormWrapper{
+.CreatePlayerFormWrapper,
+.EditPlayerFormWrapper{
   position: fixed;
   top: 0;
   left: 0;
@@ -513,7 +514,8 @@ body{
     display: flex;
     justify-content: center;
 
-  .CreatePlayerForm{
+  .CreatePlayerForm,
+  .EditPlayerForm {
     color: var(--white);
     border-radius: 15px;
     background: linear-gradient(to bottom, var(--grey),var(--grey-dark) );
@@ -528,9 +530,11 @@ body{
   }
 }
 @media only screen and (max-width: 600px) {
-  .CreatePlayerFormWrapper{
+  .CreatePlayerFormWrapper,
+  .EditPlayerFormWrapper{
     padding-top: 7vh;
-    .CreatePlayerForm{
+    .CreatePlayerForm,
+    .EditPlayerForm {
       width: 90vw;
     }
   }

@@ -28,37 +28,54 @@ export default function OpenCreditModalButton({
   const close = () => {
     setShow(false);
   };
+  const buttonStyle =  {
+    width: 22,
+      borderBottomRightRadius: 0,
+      borderTopRightRadius: 0,
+      borderLeft: '1px soild',
+  }
+  if (show) {
+    return (
+      <div>
+        <Tooltip content="הכנס שחקן" color="primary">
+          <Button
+            onClick={() => {
+              setShow(true);
+            }}
+            color="light"
+            style={buttonStyle}
+          >
+            <HiOutlineDotsVertical className=" h-5 w-5" />
+          </Button>
+        </Tooltip>
+        <div className="edit-player-modal-wrapper">
 
-  return (
-    <div>
-      <Tooltip content="הכנס שחקן" color="primary">
-        <Button
-          onClick={() => {
-            setShow(true);
-          }}
-          color="light"
-          style={{
-            width: 24,
-            borderBottomLeftRadius: 0,
-            borderTopLeftRadius: 0,
-            borderLeft: 0,
-          }}
-        >
-          <HiOutlineDotsVertical className=" h-5 w-5" />
-        </Button>
-      </Tooltip>
-      <div className={show ? 'edit-player-modal' : 'hidden'}>
-        <UseCreditForm
-          players={players}
-          player={player}
-          tournaments={tournaments}
-          hide={close}
-          prevPage={prevPage}
-          userId={userId}
-          setQuery={setQuery}
-          tournamentId={tournamentId}
-        />
+            <UseCreditForm
+              players={players}
+              player={player}
+              tournaments={tournaments}
+              hide={close}
+              prevPage={prevPage}
+              userId={userId}
+              setQuery={setQuery}
+              tournamentId={tournamentId}
+            />
+
+        </div>
       </div>
-    </div>
+    );
+  }
+  return (
+    <Tooltip content="הכנס שחקן" color="primary">
+      <Button
+        onClick={() => {
+          setShow(true);
+        }}
+        color="light"
+        style={buttonStyle}
+      >
+        <HiOutlineDotsVertical className=" h-5 w-5" />
+      </Button>
+    </Tooltip>
   );
 }

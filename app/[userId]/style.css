@@ -32,15 +32,35 @@
   }
 }
 
-.edit-player-modal {
-  background: rgba(0, 0, 0, 0.75);
-  z-index: 910;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+.edit-player-modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000000bb;
+    z-index: 99999;
+    padding-top: 5vh;
+    display: flex;
+    justify-content: center;
+
+  .edit-player-modal {
+    color: var(--white);
+    border-radius: 15px;
+    background: linear-gradient(to bottom, var(--grey),var(--grey-dark) );
+    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.5); /* Adds a shadow with a slight blur */
+    width: 40vw;
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: 25px;
+    min-height: 50vh;
+    height: 85vh;
+    overflow-y: auto !important;
+  }
+
 }
+
 
 .hidden {
   visibility: hidden;
@@ -51,17 +71,6 @@
   visibility: hidden;
 }
 
-.edit-player-modal-inner-div {
-  background: transparent;
-  z-index: 911;
-  position: fixed;
-  top: 6vh;
-  left: 35vw;
-  width: 30vw;
-
-  overflow-y: auto !important;
-  max-height: 90vh;
-}
 
 .rsvp-section {
   svg {

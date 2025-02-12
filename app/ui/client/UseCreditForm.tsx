@@ -137,9 +137,9 @@ export default function UseCreditForm({
 
   return (
     <div
-      className="edit-player-modal-inner-div rtl align-text-right"
+      className="edit-player-modal rtl align-text-right"
     >
-      <form action={dispatch} className="form-control">
+      <form action={dispatch} >
         <div className="form-inner-control  rounded-md p-4 md:p-6">
           {/*  balance change */}
           <div className="mb-4">
