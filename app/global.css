@@ -812,9 +812,11 @@ input[type='number']::-webkit-outer-spin-button {
     color: var(--white);
 
     .player-card{
-      margin-bottom: 20px;
-      padding: 10px;
-      background: var(--grey-light);
+      border: 2px solid var(--grey-light);
+      border-radius: 7px;
+      margin-bottom: 15px;
+      padding: 8px 9px 1px 7px;
+      background: var(--grey-dark);
     }
   }
 

@@ -198,7 +198,7 @@ export default function TodayPlayersTable({
             value={query}
           />
         </div>
-        <CreateNewPlayerButton currentPage={prevPage}/>
+        <CreateNewPlayerButton currentPage={prevPage} />
       </div>
       <div className="rtl mt-4 flex items-center justify-between gap-2 md:mt-8">
         <div className="full-width rtl mt-6 flow-root">
@@ -208,21 +208,26 @@ export default function TodayPlayersTable({
               justifyContent: 'space-between',
               textAlign: 'right',
               marginBottom: 10,
-              marginRight: 15
+              marginRight: 15,
             }}
           >
             {header}
           </div>
 
-          <div className="inline-block min-w-full align-middle" >
-            <div className="w-full rounded-lg p-2 md:pt-0" style={{ background: 'var(--black)'}}>
+          <div className="inline-block min-w-full align-middle">
+            <div
+              className="w-full rounded-lg p-2 md:pt-0"
+              style={{ background: 'var(--black)' }}
+            >
               {/*mobile view*/}
-              <div className="md:hidden players-page-card" style={{ background: 'var(--black)'}}>
+              <div
+                className="players-page-card md:hidden"
+                style={{ background: 'var(--black)' }}
+              >
                 {players?.map((player: PlayerDB) => (
                   <div
                     key={player.id}
-                    className="full-width w-full rounded-md player-card"
-
+                    className="full-width player-card w-full rounded-md"
                   >
                     <div className="flex items-center justify-between border-b pb-4">
                       <div>
@@ -254,7 +259,6 @@ export default function TodayPlayersTable({
                             tournaments={tournaments}
                             tournamentId={tournamentId}
                           />
-
                         </div>
 
                         <OpenPositionModalButton
@@ -304,14 +308,14 @@ export default function TodayPlayersTable({
                     </div>
                     {rsvpEnabled && isRsvpRequired && currentTournament && (
                       <div
-                        style={{ marginTop: 10 }}
-                        className="flex w-full items-center justify-between pt-4"
+                        style={{ marginTop: 7 }}
+                        className="flex w-full items-center justify-start pt-4"
                       >
-                        רישום לטורניר
                         <RSVPButton
                           player={player}
                           tournamentId={currentTournament.id!}
                         />
+                        <span style={{ marginRight: 6 }}>רישום לטורניר</span>
                       </div>
                     )}
                   </div>
@@ -321,165 +325,170 @@ export default function TodayPlayersTable({
               <div className="general-table hide-on-mobile">
                 <table className=" rtl min-w-full  md:table ">
                   <thead className="table-header rtl rounded-lg text-left  font-normal ">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="align-text-right px-4 py-5 font-medium sm:pl-6"
-                    >
-                      שם
-                    </th>
-                    <th
-                      scope="col"
-                      className="align-text-right px-3 py-5 font-medium"
-                    >
-                      טלפון
-                    </th>
-                    <th
-                      scope="col"
-                      className="align-text-right px-3 py-5 font-medium"
-                    >
-                      קרדיט
-                    </th>
-                    <th
-                      scope="col"
-                      className="align-text-right px-3 py-5 font-medium"
-                    >
-                      הערות
-                    </th>
-                    {rsvpEnabled && isRsvpRequired && currentTournament && (
-                      <th scope="col" className="px-3 py-5 font-medium">
-                        אישור הגעה
+                    <tr>
+                      <th
+                        scope="col"
+                        className="align-text-right px-4 py-5 font-medium sm:pl-6"
+                      >
+                        שם
                       </th>
-                    )}
+                      <th
+                        scope="col"
+                        className="align-text-right px-3 py-5 font-medium"
+                      >
+                        טלפון
+                      </th>
+                      <th
+                        scope="col"
+                        className="align-text-right px-3 py-5 font-medium"
+                      >
+                        קרדיט
+                      </th>
+                      <th
+                        scope="col"
+                        className="align-text-right px-3 py-5 font-medium"
+                      >
+                        הערות
+                      </th>
+                      {rsvpEnabled && isRsvpRequired && currentTournament && (
+                        <th scope="col" className="px-3 py-5 font-medium">
+                          אישור הגעה
+                        </th>
+                      )}
 
-                    <th
-                      scope="col"
-                      className="align-text-right px-3 py-5 font-medium"
-                    >
-                      הגיע
-                    </th>
-                    <th
-                      scope="col"
-                      className="align-text-right px-3 py-5 font-medium"
-                    >
-                      כניסות
-                    </th>
+                      <th
+                        scope="col"
+                        className="align-text-right px-3 py-5 font-medium"
+                      >
+                        הגיע
+                      </th>
+                      <th
+                        scope="col"
+                        className="align-text-right px-3 py-5 font-medium"
+                      >
+                        כניסות
+                      </th>
 
-                    <th scope="col" className="px-3 py-5 font-medium"></th>
+                      <th scope="col" className="px-3 py-5 font-medium"></th>
 
-                    <th
-                      scope="col"
-                      className="align-text-right relative py-3 pl-6 pr-3"
-                    >
-                      <span className="sr-only">עריכה</span>
-                    </th>
-                  </tr>
+                      <th
+                        scope="col"
+                        className="align-text-right relative py-3 pl-6 pr-3"
+                      >
+                        <span className="sr-only">עריכה</span>
+                      </th>
+                    </tr>
                   </thead>
                   <tbody className="table-body rtl ">
-                  {players?.map((player: PlayerDB) => (
-                    <tr
-                      key={player.id}
-                      className="table-row  rtl w-full  py-3  last-of-type:border-none "
-                    >
-                      <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                        <div className="font-large flex items-center gap-3">
-                          <Avatar
-                            player={player}
-                            tournamentIds={[currentTournament?.id]}
-                          />
-                            <div className="font-large">{player.name}</div>
-                        </div>
-                      </td>
-                      <td className="font-large whitespace-nowrap px-3 py-3">
-                          {player.phone_number}
-                      </td>
-                      <td
-                        className={`ltr whitespace-nowrap px-3 py-3`}
-                        style={{
-                          textAlign: 'right',
-                          color: formatCurrencyColor(player.balance),
-                        }}
+                    {players?.map((player: PlayerDB) => (
+                      <tr
+                        key={player.id}
+                        className="rtl  table-row w-full  py-3  last-of-type:border-none "
                       >
-                        <div className="font-large" style={{ color: formatCurrencyColor(player.balance), direction:'ltr'}}>
-                          {formatCurrency(player.balance)}
-                        </div>
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3">
-                       {player.notes}
-                      </td>
+                        <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                          <div className="font-large flex items-center gap-3">
+                            <Avatar
+                              player={player}
+                              tournamentIds={[currentTournament?.id]}
+                            />
+                            <div className="font-large">{player.name}</div>
+                          </div>
+                        </td>
+                        <td className="font-large whitespace-nowrap px-3 py-3">
+                          {player.phone_number}
+                        </td>
+                        <td
+                          className={`ltr whitespace-nowrap px-3 py-3`}
+                          style={{
+                            textAlign: 'right',
+                            color: formatCurrencyColor(player.balance),
+                          }}
+                        >
+                          <div
+                            className="font-large"
+                            style={{
+                              color: formatCurrencyColor(player.balance),
+                              direction: 'ltr',
+                            }}
+                          >
+                            {formatCurrency(player.balance)}
+                          </div>
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-3">
+                          {player.notes}
+                        </td>
 
-                      {rsvpEnabled && isRsvpRequired && currentTournament && (
-                        <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
-                          <RSVPButton
+                        {rsvpEnabled && isRsvpRequired && currentTournament && (
+                          <td className="rsvp-icon pointer whitespace-nowrap px-3 py-3">
+                            <RSVPButton
+                              player={player}
+                              tournamentId={currentTournament.id!}
+                            />
+                          </td>
+                        )}
+                        <td className="rsvp-icon whitespace-nowrap px-3 py-3 ">
+                          {player.arrived === currentTournament?.id ? '✔️' : ''}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-3 ">
+                          <EntriesButton
                             player={player}
-                            tournamentId={currentTournament.id!}
+                            updatePlayer={updatePlayer}
                           />
                         </td>
-                      )}
-                      <td className="rsvp-icon whitespace-nowrap px-3 py-3 ">
-                        {player.arrived === currentTournament?.id ? '✔️' : ''}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3 ">
-                        <EntriesButton
-                          player={player}
-                          updatePlayer={updatePlayer}
-                        />
-                      </td>
 
-                      <td className="whitespace-nowrap px-3 py-3 ">
-                        <DeletePositionButton
-                          player={player}
-                          prevPage={prevPage}
-                        />
-                      </td>
+                        <td className="whitespace-nowrap px-3 py-3 ">
+                          <DeletePositionButton
+                            player={player}
+                            prevPage={prevPage}
+                          />
+                        </td>
 
-                      <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                        <div className="flex justify-end gap-3">
-                          <div className="flex">
-                            <AutoPlayerPayButton
-                              updatePlayer={updatePlayer}
-                              player={player}
+                        <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                          <div className="flex justify-end gap-3">
+                            <div className="flex">
+                              <AutoPlayerPayButton
+                                updatePlayer={updatePlayer}
+                                player={player}
+                                userId={userId}
+                                tournaments={tournaments}
+                                tournamentId={tournamentId}
+                              />
+                              <OpenCreditModalButton
+                                players={playersWithEnoughCredit}
+                                player={player}
+                                userId={userId}
+                                setQuery={setQuery}
+                                tournaments={tournaments}
+                                tournamentId={tournamentId}
+                              />
+                            </div>
+                            <QuickPlayerEditButton
+                              currentPage={prevPage}
                               userId={userId}
-                              tournaments={tournaments}
+                              player={player}
+                            />
+                            <OpenPlayerEditPageButton
+                              playerId={player.id}
+                              userId={userId}
+                            />
+
+                            <OpenPositionModalButton
+                              player={player}
+                              initPosition={minPosition}
                               tournamentId={tournamentId}
                             />
-                            <OpenCreditModalButton
-                              players={playersWithEnoughCredit}
-                              player={player}
-                              userId={userId}
-                              setQuery={setQuery}
-                              tournaments={tournaments}
-                              tournamentId={tournamentId}
-                            />
+
+                            {prizesEnabled && (
+                              <OpenPrizeModalButton
+                                player={player}
+                                prizesInformation={prizesInformation}
+                                tournamentId={tournamentId}
+                              />
+                            )}
                           </div>
-                          <QuickPlayerEditButton
-                            currentPage={prevPage}
-                            userId={userId}
-                            player={player}
-                          />
-                          <OpenPlayerEditPageButton
-                            playerId={player.id}
-                            userId={userId}
-                          />
-
-
-                          <OpenPositionModalButton
-                            player={player}
-                            initPosition={minPosition}
-                            tournamentId={tournamentId}
-                          />
-
-                          {prizesEnabled && (
-                            <OpenPrizeModalButton
-                              player={player}
-                              prizesInformation={prizesInformation}
-                              tournamentId={tournamentId}
-                            />
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
