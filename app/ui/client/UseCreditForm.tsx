@@ -127,19 +127,17 @@ export default function UseCreditForm({
     if (isPending) {
       return null;
     }
-
+//my-button flex h-10 items-center regular-button
     return (
-      <button className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium" onClick={hide} style={{ marginTop: -52, marginRight: 20 }}>
+      <button className="my-button-cancel flex h-10 items-center " onClick={hide} style={{ marginTop: -52, marginRight: 0 }}>
         ביטול
       </button>
     );
   }
 
   return (
-    <div
-      className="edit-player-modal rtl align-text-right"
-    >
-      <form action={dispatch} >
+    <div className="UseCreditForm rtl align-text-right">
+      <form action={dispatch}>
         <div className="form-inner-control  rounded-md p-4 md:p-6">
           {/*  balance change */}
           <div className="mb-4">
@@ -268,27 +266,27 @@ export default function UseCreditForm({
           </div>
 
           {/* other player */}
-          {type === 'credit_by_other' && (
-            <div className="mb-4">
-              <label
-                htmlFor="player"
-                className="mb-2 block  font-medium"
-                style={{ margin: '7px 0 0 0' }}
-              >
-                שחקן:
-              </label>
-              <div className="relative">
-                <SearchablePlayersDropdown
-                  playerId={player.id}
-                  players={players.filter(
-                    (p) => p.id !== player.id && p.balance > 0,
-                  )}
-                  selectedVal={otherPlayer}
-                  handleChange={(val: any) => setOtherPlayer(val)}
-                />
-              </div>
+          <div className="mb-4" style={{
+            visibility: type === 'credit_by_other' ? undefined : 'hidden',
+          }}>
+            <label
+              htmlFor="player"
+              className="mb-2 block  font-medium"
+              style={{ margin: '7px 0 0 0' }}
+            >
+              שחקן:
+            </label>
+            <div className="relative"  >
+              <SearchablePlayersDropdown
+                playerId={player.id}
+                players={players.filter(
+                  (p) => p.id !== player.id && p.balance > 0,
+                )}
+                selectedVal={otherPlayer}
+                handleChange={(val: any) => setOtherPlayer(val)}
+              />
             </div>
-          )}
+          </div>
         </div>
         {maxRebuyReached && (
           <div style={{ color: 'red' }}>
@@ -328,7 +326,6 @@ export default function UseCreditForm({
         <div
           className="form-inner-control  rounded-md p-4 md:p-6"
           style={{
-            display: isSplit ? undefined : 'none',
             visibility: isSplit ? undefined : 'hidden',
           }}
         >

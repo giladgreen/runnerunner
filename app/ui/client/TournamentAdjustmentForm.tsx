@@ -81,7 +81,7 @@ export default function TournamentAdjustmentForm({
 
   return (
     <div
-      className="edit-player-modal-inner-div rtl align-text-right"
+      className="TournamentAdjustmentForm rtl align-text-right"
 
     >
       <form action={dispatch} className="form-control">

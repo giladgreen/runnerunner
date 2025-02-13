@@ -53,7 +53,7 @@ export default function SetPositionForm({
 
 
   return (
-    <div className="edit-player-modal-inner-div">
+    <div className="SetPositionForm">
       <form action={setPlayerPositionWithPlayerId} className="form-control">
         <label className="mb-2 block  font-medium">
           הגדר מיקום שחקן

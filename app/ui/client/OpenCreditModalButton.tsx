@@ -34,22 +34,23 @@ export default function OpenCreditModalButton({
       borderTopRightRadius: 0,
       borderLeft: '1px soild',
   }
+  const button =  <Tooltip content="הכנס שחקן" color="primary">
+    <Button
+      onClick={() => {
+        setShow(true);
+      }}
+      color="light"
+      style={buttonStyle}
+    >
+      <HiOutlineDotsVertical className=" h-5 w-5" />
+    </Button>
+  </Tooltip>
+
   if (show) {
     return (
       <div>
-        <Tooltip content="הכנס שחקן" color="primary">
-          <Button
-            onClick={() => {
-              setShow(true);
-            }}
-            color="light"
-            style={buttonStyle}
-          >
-            <HiOutlineDotsVertical className=" h-5 w-5" />
-          </Button>
-        </Tooltip>
-        <div className="edit-player-modal-wrapper">
-
+        {button}
+        <div className="UseCreditFormWrapper">
             <UseCreditForm
               players={players}
               player={player}
@@ -65,17 +66,5 @@ export default function OpenCreditModalButton({
       </div>
     );
   }
-  return (
-    <Tooltip content="הכנס שחקן" color="primary">
-      <Button
-        onClick={() => {
-          setShow(true);
-        }}
-        color="light"
-        style={buttonStyle}
-      >
-        <HiOutlineDotsVertical className=" h-5 w-5" />
-      </Button>
-    </Tooltip>
-  );
+  return button;
 }

@@ -43,7 +43,7 @@ function SetPrizesCreditForm({
   ]);
   return (
     <div
-      className="edit-player-modal-inner-div rtl align-text-right"
+      className="SetPrizesCreditForm rtl align-text-right"
     >
       <form action={dispatch} className="form-control">
         <label
@@ -116,31 +116,43 @@ export default function OpenSetPrizesCreditModalButton({
   const close = () => {
     setShow(false);
   };
+  const button = <div
+    onClick={() => {
+      setShow(true);
+    }}
+    className="pointer link-color"
+    style={{ justifyContent: 'center', marginLeft: 30 }}
+  >
+    <u> הגדר שווי קרדיט </u>
+  </div>
+
+  if (show){
+    return (
+      <div
+        className="give-credit-modal-button"
+        style={{ marginRight: 10, marginTop: 30 }}
+      >
+        {button}
+
+        <div className="SetPrizesCreditFormWrapper">
+          <SetPrizesCreditForm
+            date={date}
+            players={players}
+            hide={close}
+            prevPage={prevPage}
+            tournamentId={tournamentId}
+            tournamentName={tournamentName}
+          />
+        </div>
+      </div>
+    );
+  }
   return (
     <div
       className="give-credit-modal-button"
       style={{ marginRight: 10, marginTop: 30 }}
     >
-      <div
-        onClick={() => {
-          setShow(true);
-        }}
-        className="pointer link-color"
-        style={{ justifyContent: 'center', marginLeft: 30 }}
-      >
-        <u> הגדר שווי קרדיט </u>
-      </div>
-
-      <div className={show ? 'edit-player-modal' : 'hidden'}>
-        <SetPrizesCreditForm
-          date={date}
-          players={players}
-          hide={close}
-          prevPage={prevPage}
-          tournamentId={tournamentId}
-          tournamentName={tournamentName}
-        />
-      </div>
+      {button}
     </div>
   );
 }

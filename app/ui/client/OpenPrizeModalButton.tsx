@@ -23,28 +23,35 @@ export default function OpenPrizeModalButton({
   const close = () => {
     setShow(false);
   };
+  const button = <button
+    className="pointer rounded-md border p-2 "
+    onClick={() => {
+      setShow(true);
+    }}
+  >
+    <Tooltip content="פרס" color="primary">
+      <GiftIcon className="w-6" />
+    </Tooltip>
+  </button>
+  if (show) {
+    return (
+      <div>
+        {button}
+        <div className="SetPrizeFormWrapper">
+          <SetPrizeForm
+            player={player}
+            hide={close}
+            prevPage={prevPage}
+            prizesInformation={prizesInformation}
+            tournamentId={tournamentId}
+          />
+        </div>
+      </div>
+    );
+  }
   return (
     <div>
-      <button
-        className="pointer rounded-md border p-2 "
-        onClick={() => {
-          setShow(true);
-        }}
-      >
-        <Tooltip content="פרס" color="primary">
-          <GiftIcon className="w-6" />
-        </Tooltip>
-      </button>
-
-      <div className={show ? 'edit-player-modal' : 'hidden'}>
-        <SetPrizeForm
-          player={player}
-          hide={close}
-          prevPage={prevPage}
-          prizesInformation={prizesInformation}
-          tournamentId={tournamentId}
-        />
-      </div>
+      {button}
     </div>
   );
 }

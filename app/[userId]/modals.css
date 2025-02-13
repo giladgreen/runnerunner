@@ -1,0 +1,133 @@
+.full-size-fixed-div {
+  background: transparent;
+  z-index: 910;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 10vh;
+}
+
+.UseCreditFormWrapper,
+.SetPrizeFormWrapper,
+.SetPositionFormWrapper,
+.SetPrizesCreditFormWrapper,
+.SetGivePrizeFormWrapper,
+.OpenConvertPrizeToCreditFormWrapper,
+.CreatePlayerFormWrapper,
+.EditPlayerFormWrapper{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000000bb;
+  z-index: 99999;
+  padding-top: 5vh;
+  display: flex;
+  justify-content: center;
+
+  .UseCreditForm,
+  .SetPositionForm,
+  .SetPrizeForm,
+  .SetPrizesCreditForm,
+  .SetGivePrizeForm,
+  .OpenConvertPrizeToCreditForm,
+  .CreatePlayerForm,
+  .EditPlayerForm {
+    color: var(--white);
+    border-radius: 15px;
+    background: linear-gradient(to bottom, var(--grey),var(--grey-dark) );
+    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.5); /* Adds a shadow with a slight blur */
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: 25px;
+    width: 40vw;
+  }
+  .UseCreditForm{
+    height: 87vh;
+  }
+  .SetPositionForm {
+    height: 40vh;
+  }
+
+  .SetPrizeForm{
+    height: 30vh;
+  }
+  .CreatePlayerForm{
+    height: 80vh;
+  }
+  .EditPlayerForm {
+    height: 50vh;
+  }
+  .SetGivePrizeForm {
+    height: 50vh;
+    width: 30vw;
+  }
+  .SetPrizesCreditForm{
+    width: 30vw;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .UseCreditFormWrapper,
+  .SetPrizeFormWrapper,
+  .SetPositionFormWrapper,
+  .SetPrizesCreditFormWrapper,
+  .SetGivePrizeFormWrapper,
+  .OpenConvertPrizeToCreditFormWrapper,
+  .CreatePlayerFormWrapper,
+  .EditPlayerFormWrapper{
+    padding-top: 7vh;
+    .UseCreditForm,
+    .SetPositionForm,
+    .SetPrizesCreditForm,
+    .SetPrizeForm,
+    .SetGivePrizeForm,
+    .OpenConvertPrizeToCreditForm,
+    .CreatePlayerForm,
+    .EditPlayerForm {
+      width: 90vw;
+    }
+
+  }
+}
+
+
+
+.edit-player-modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000000bb;
+  z-index: 99999;
+  padding-top: 5vh;
+  display: flex;
+  justify-content: center;
+
+  .edit-player-modal {
+    color: var(--white);
+    border-radius: 15px;
+    background: linear-gradient(to bottom, var(--grey),var(--grey-dark) );
+    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.5); /* Adds a shadow with a slight blur */
+    width: 40vw;
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: 25px;
+    min-height: 50vh;
+    height: 85vh;
+    overflow-y: auto !important;
+  }
+
+}
+@media only screen and (max-width: 600px) {
+  .edit-player-modal-wrapper {
+    .edit-player-modal {
+      width: 90vw;
+    }
+  }
+}

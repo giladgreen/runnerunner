@@ -91,7 +91,7 @@ function SetGivePrizeForm({
   );
 
   return (
-    <div className="edit-player-modal-inner-div">
+    <div className="SetGivePrizeForm">
       <form action={dispatch} className="form-control">
         {prizesEnabled ? (
           <label
@@ -301,6 +301,41 @@ export default function OpenGiveCreditModalButton({
   const close = () => {
     setShow(false);
   };
+
+  if (show) {
+    return (
+      <div className="give-credit-modal-button item" style={{ marginRight: 2 }}>
+        {hasReceived && <TickIcon size={20} />}
+        {!hasReceived && (
+          <button
+            className="pointer give-credit-modal-button-b rounded-md border p-2 "
+            onClick={() => {
+              setShow(true);
+            }}
+          >
+            <Tooltip content="המר לקרדיט" color="primary">
+              <CreditCardIcon className="w-6" title="המר לקרדיט" />
+            </Tooltip>
+          </button>
+        )}
+        {!hasReceived && (
+          <div className="SetGivePrizeFormWrapper">
+            <SetGivePrizeForm
+              prizesEnabled={prizesEnabled}
+              player={player}
+              hide={close}
+              prevPage={prevPage}
+              stringDate={stringDate}
+              userId={userId}
+              prizesInformation={prizesInformation}
+              tournamentId={tournamentId}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="give-credit-modal-button item" style={{ marginRight: 2 }}>
       {hasReceived && <TickIcon size={20} />}
@@ -315,20 +350,6 @@ export default function OpenGiveCreditModalButton({
             <CreditCardIcon className="w-6" title="המר לקרדיט" />
           </Tooltip>
         </button>
-      )}
-      {!hasReceived && (
-        <div className={show ? 'edit-player-modal' : 'hidden'}>
-          <SetGivePrizeForm
-            prizesEnabled={prizesEnabled}
-            player={player}
-            hide={close}
-            prevPage={prevPage}
-            stringDate={stringDate}
-            userId={userId}
-            prizesInformation={prizesInformation}
-            tournamentId={tournamentId}
-          />
-        </div>
       )}
     </div>
   );

@@ -22,23 +22,25 @@ export default function OpenPositionModalButton({
     setShow(false);
   };
 
+  const button = <Button
+    onClick={() => {
+      if (enableButton) {
+        setShow(true);
+      }
+    }}
+    color="light"
+    disabled={!enableButton}
+  >
+    <span style={{ fontSize: 24 }}>#</span>
+  </Button>;
+
   if (show){
     return (
       <div>
         <Tooltip content="קבע מיקום" color="primary">
-          <Button
-            onClick={() => {
-              if (enableButton) {
-                setShow(true);
-              }
-            }}
-            color="light"
-            disabled={!enableButton}
-          >
-            <span style={{ fontSize: 24 }}>#</span>
-          </Button>
+          {button}
         </Tooltip>
-        <div className="edit-player-position-modal">
+        <div className="SetPositionFormWrapper">
           <SetPositionForm
             player={player}
             hide={close}
@@ -52,17 +54,7 @@ export default function OpenPositionModalButton({
   }
   return (
       <Tooltip content="קבע מיקום" color="primary">
-        <Button
-          onClick={() => {
-            if (enableButton) {
-              setShow(true);
-            }
-          }}
-          color="light"
-          disabled={!enableButton}
-        >
-          <span style={{ fontSize: 24 }}>#</span>
-        </Button>
+        {button}
       </Tooltip>
   );
 }

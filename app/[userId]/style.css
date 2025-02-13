@@ -18,8 +18,6 @@
   padding: 12px;
   background: var(--black);
   color: var(--white);
-
-
 }
 
 .form-inner-control {
@@ -31,64 +29,6 @@
     color: var(--white);
   }
 }
-.edit-player-position-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: #000000bb;
-  z-index: 99999;
-  padding-top: 5vh;
-  display: flex;
-  justify-content: center;
-}
-.edit-player-modal-inner-div {
-  top: 10vh;
-  left: 35vw;
-  width: 30vw;
-}
-@media only screen and (max-width: 600px) {
-  .edit-player-modal-inner-div {
-    left: 5vw;
-    width: 90vw;
-  }
-}
-.edit-player-modal-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: #000000bb;
-    z-index: 99999;
-    padding-top: 5vh;
-    display: flex;
-    justify-content: center;
-
-  .edit-player-modal {
-    color: var(--white);
-    border-radius: 15px;
-    background: linear-gradient(to bottom, var(--grey),var(--grey-dark) );
-    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.5); /* Adds a shadow with a slight blur */
-    width: 40vw;
-    padding-top: 10px;
-    padding-right: 20px;
-    padding-left: 20px;
-    padding-bottom: 25px;
-    min-height: 50vh;
-    height: 85vh;
-    overflow-y: auto !important;
-  }
-
-}
-@media only screen and (max-width: 600px) {
-  .edit-player-modal-wrapper {
-    .edit-player-modal {
-      width: 90vw;
-    }
-  }
-}
 
 .hidden {
   visibility: hidden;
@@ -97,6 +37,18 @@
 
 .edit-player-modal-hidden {
   visibility: hidden;
+}
+
+.TournamentAdjustmentForm {
+  top: 10vh;
+  left: 35vw;
+  width: 30vw;
+}
+@media only screen and (max-width: 600px) {
+  .TournamentAdjustmentForm {
+    left: 5vw;
+    width: 90vw;
+  }
 }
 
 
@@ -315,29 +267,45 @@
   margin-right: 6px;
 }
 
-.confirmation-modal-wrapper {
+.confirmation-modal-first-wrapper {
+  direction: rtl;
+  text-align: right;
   background: rgba(0, 0, 0, 0.75);
-  z-index: 920;
+  z-index: 999997;
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
+
+  .confirmation-modal-second-wrapper {
+    z-index: 999998;
+    background: var(--red);
+    border-radius: 16px;
+    padding: 10px;
+    position: fixed;
+    top: 30vh;
+    width: 50vw;
+    left: 25vw;
+
+
+    .confirmation-modal {
+      z-index: 999999;
+      border: 4px solid var(--white);
+      border-radius: 16px;
+      padding: 15px;
+      background: var(--black);
+
+      text-align: center;
+      color: var(--white);
+    }
+
+  }
+
 }
 
-.confirmation-modal {
-  border: 2px solid rgb(0, 112, 243);
-  border-radius: 6px;
-  padding: 15px;
-  background: white;
-  box-shadow: 0 0 0 3px white;
-  text-align: center;
-  color: black;
-  position: fixed;
-  top: 30vh;
-  width: 60vw;
-  left: 25vw;
-}
+
+
 
 .confirmation-modal-buttons {
   display: flex;
@@ -346,9 +314,13 @@
 }
 
 .confirmation-modal-button {
-  padding: 5px;
+  padding: 5px 7px;
   margin: 5px;
-  min-width: 40px;
+  min-width: 50px;
+  font-size: 20px;
+  border: 1px solid var(--grey-lighter);
+  border-radius: 10px;
+  background: var(--grey-dark);
 }
 
 .give-credit-modal-button {
@@ -377,10 +349,17 @@
 }
 
 .my-button-cancel {
-  padding: 4px 8px;
+  direction: rtl !important;
   background: var(--grey);
   color: var(--white);
-  border-radius: 5px;
+  padding: 2px 15px;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  border-radius: 10px;
+  font-size: 1em;
+  height: 35px;
   margin-left: 5px;
 }
 
@@ -1114,9 +1093,6 @@
     justify-content: space-around;
   }
 
-  .edit-player-modal-inner-div {
-    top: 10vh;
-    left: 10vw;
-    width: 80vw;
-  }
+
+
 }

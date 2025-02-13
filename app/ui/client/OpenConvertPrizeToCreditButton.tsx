@@ -43,7 +43,7 @@ function OpenConvertPrizeToCreditForm({
   );
 
   return (
-    <div className="edit-player-modal-inner-div">
+    <div className="OpenConvertPrizeToCreditForm">
       <form action={dispatch} className="form-control">
         <label className="mb-2 block  font-medium">
           המרת פרס לקרדיט
@@ -107,33 +107,46 @@ export default function OpenConvertPrizeToCreditButton({
   const close = () => {
     setShow(false);
   };
+  const button = <button
+    className="pointer move-up-down-button rounded-md border p-2 "
+    onClick={() => {
+      setShow(true);
+    }}
+  >
+    <Tooltip content="המר לקרדיט" color="primary">
+      <CreditCardIcon className="w-6" title="המר לקרדיט" />
+    </Tooltip>
+  </button>
+
+  if (show){
+    return (
+      <div
+        className="give-credit-modal-button "
+        style={{ marginRight: 5, marginLeft: 10 }}
+      >
+        {button}
+
+        <div className="OpenConvertPrizeToCreditFormWrapper">
+          <OpenConvertPrizeToCreditForm
+            hide={close}
+            prevPage={prevPage}
+            prizeId={prizeId}
+            prizeName={prizeName}
+            userId={userId}
+            prizesInformation={prizesInformation}
+            tournamentId={tournamentId}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="give-credit-modal-button"
       style={{ marginRight: 5, marginLeft: 10 }}
     >
-      <button
-        className="pointer move-up-down-button rounded-md border p-2 "
-        onClick={() => {
-          setShow(true);
-        }}
-      >
-        <Tooltip content="המר לקרדיט" color="primary">
-          <CreditCardIcon className="w-6" title="המר לקרדיט" />
-        </Tooltip>
-      </button>
-
-      <div className={show ? 'edit-player-modal' : 'hidden'}>
-        <OpenConvertPrizeToCreditForm
-          hide={close}
-          prevPage={prevPage}
-          prizeId={prizeId}
-          prizeName={prizeName}
-          userId={userId}
-          prizesInformation={prizesInformation}
-          tournamentId={tournamentId}
-        />
-      </div>
+      {button}
     </div>
   );
 }
