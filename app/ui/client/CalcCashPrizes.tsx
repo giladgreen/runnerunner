@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Loader from '@/app/ui/client/Loader';
 const array = Array.from({ length: 15 }, (_, i) => 20 - i);
 
 function distributePercentages(numPeople: number) {
@@ -46,13 +47,14 @@ export default function CalcCashPrizes() {
   }
 
   return (
-    <div>
+    <div style={{ display: 'flex', direction: 'rtl' }}>
+
       <div
         className="config-section rtl"
         style={{ marginTop: 20, textAlign: 'right' }}
       >
         <h1 className="text-2xl">חישוב פרסים במזומן</h1>
-        <div className="config-section" style={{ width: '100%', fontSize: 17, marginTop: 20}}>
+        <div className="config-section" style={{ width: '100%', fontSize: 17, marginTop: 20 }}>
           <div>הכנס פרס מינימלי למקום הראשון</div>
           <input
             min={0}
@@ -77,7 +79,7 @@ export default function CalcCashPrizes() {
           />
 
           {numberOfPeople > 0 && (
-            <div>הסכום נטו לחלוקה:{adjustedAmount}	₪</div>
+            <div>הסכום נטו לחלוקה:{adjustedAmount} ₪</div>
           )}
           {numberOfPeople > 0 && (
             <div>מספר האנשים שיקבלו פרס:{numberOfPeople}</div>
@@ -96,9 +98,9 @@ export default function CalcCashPrizes() {
                 <tbody>
                 {values.map((value, index) => (
                   <tr key={index}>
-                    <td>{index+1}</td>
+                    <td>{index + 1}</td>
                     <td>{value.percentage}%</td>
-                    <td>{Math.floor( value.amount / 100) * 100}	₪</td>
+                    <td>{Math.floor(value.amount / 100) * 100} ₪</td>
                   </tr>
                 ))}
                 </tbody>
@@ -107,6 +109,10 @@ export default function CalcCashPrizes() {
           )}
         </div>
       </div>
+      <div style={{ zoom: 2}} className="hide-on-mobile">
+        <Loader />
+      </div>
+
     </div>
   );
 
