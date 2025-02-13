@@ -65,7 +65,7 @@ function OpenConvertPrizeToCreditForm({
             >
               שווי קרדיט
             </label>
-            <div className="relative mt-2 rounded-md">
+            <div className="relative mt-2 rounded-md" style={{ color: 'var(--black)'}}>
               <SearchablePrizesDropdown
                 showPrizeName={false}
                 prizes={prizesInformation}
@@ -76,7 +76,11 @@ function OpenConvertPrizeToCreditForm({
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-4">
-          <SpinnerButton text="עדכון" onClick={() => hide?.()} />
+          <SpinnerButton text="עדכון" onClick={() => {
+            if (hide){
+              setTimeout(hide, 100);
+            }
+          }} />
         </div>
       </form>
       {hide && (

@@ -104,7 +104,7 @@ export default function EditPrizeInfoForm({
               שווי בקרדיט
             </label>
             <div className="relative mt-2 rounded-md">
-              <div className="relative general-input">
+              <div className="relative general-input" style={{ color: 'var(--black)'}}>
                 <input
                   id="credit"
                   name="credit"

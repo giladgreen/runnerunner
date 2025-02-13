@@ -89,10 +89,10 @@ export default function SetPositionForm({
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-4">
-          <ConfettiButton  style={{ marginTop: -52, marginRight: 20 }} onClick={()=>{
-            setTimeout(()=>{
-              hide?.()
-            },100)
+          <ConfettiButton  style={{ marginTop: -52, marginRight: 20 }} onClick={() => {
+            if (hide){
+              setTimeout(hide, 100);
+            }
           }} particleCount={particleCount}>עדכן</ConfettiButton>
         </div>
       </form>

@@ -63,6 +63,7 @@ const SearchablePrizesDropdown = ({
               handleChange(null);
             }}
             onClick={toggle}
+            style={{ color: 'var(--black)'}}
           />
         </div>
         <div className={`arrow ${isOpen ? 'open' : ''}`}></div>

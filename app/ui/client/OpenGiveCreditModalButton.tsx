@@ -266,7 +266,11 @@ function SetGivePrizeForm({
         </div>
 
         <div className="mt-6 flex justify-end gap-4">
-          <SpinnerButton text="עדכון" onClick={() => hide?.()} />
+          <SpinnerButton text="עדכון" onClick={() => {
+            if (hide){
+              setTimeout(hide, 100);
+            }
+          }} />
         </div>
       </form>
       {hide && (

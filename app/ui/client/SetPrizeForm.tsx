@@ -67,7 +67,11 @@ export default function SetPrizeForm({
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-4">
-          <SpinnerButton text="עדכן" onClick={() => hide?.()} />
+          <SpinnerButton text="עדכן" onClick={() =>{
+            if (hide){
+              setTimeout(hide, 100);
+            }
+          }} />
         </div>
       </form>
       {hide && (
