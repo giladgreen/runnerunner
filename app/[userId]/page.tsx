@@ -47,11 +47,12 @@ export default async function HomePage({
     const todayTournamentsIds = todayTournaments.map((t) => t.id);
     return (
       <div>
-        <AdminHomePage
-          todayTournaments={todayTournaments as TournamentDB[]}
-          contents={contents}
-          userId={params.userId}
-        />
+        {/* Show today's tournaments data: */}
+        {/*<AdminHomePage*/}
+        {/*  todayTournaments={todayTournaments as TournamentDB[]}*/}
+        {/*  contents={contents}*/}
+        {/*  userId={params.userId}*/}
+        {/*/>*/}
 
         <GeneralPlayersCardWrapper />
         <div
