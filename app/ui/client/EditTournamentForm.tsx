@@ -16,10 +16,12 @@ export default function EditTournamentForm({
   tournament,
   userId,
   prevPage,
+  hide
 }: {
   tournament: TournamentDB;
   userId: string;
   prevPage: string;
+  hide?: ()=>void;
 }) {
   const initialState = { message: null, errors: {} };
 
@@ -33,7 +35,7 @@ export default function EditTournamentForm({
   const [rsvpRequired, setRsvpRequired] = useState(tournament.rsvp_required);
 
   return (
-    <form action={dispatch}>
+    <form action={dispatch} className={ hide ? 'EditTournamentForm' : undefined}>
       <div
         className="rtl rounded-md  p-4 md:p-6 align-text-right"
 
@@ -370,15 +372,30 @@ export default function EditTournamentForm({
         </div>
       </div>
 
-      <div className="mt-6 flex justify-end gap-4">
+      <div className="mt-6 flex " style={{justifyContent: 'space-between'}}>
+        {
+          hide ? (
+              <div
+              onClick={hide}
+                className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors "
+              >
+                ביטול
+              </div>
+            ) :
         <Link
           href={`/${userId}/configurations/tournaments`}
           className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors "
         >
           ביטול
         </Link>
-        <SpinnerButton text="עדכן טורניר" />
+        }
+        <SpinnerButton text="עדכן טורניר" onClick={()=>{
+          if (hide){
+            setTimeout(hide, 1000)
+          }
+        }}/>
       </div>
+
     </form>
   );
 }

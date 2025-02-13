@@ -8,6 +8,7 @@ import DeleteTournamentButton from '@/app/ui/client/DeleteTournamentButton';
 import { Button } from 'primereact/button';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
+import OpenTournamentEditModalButton from '@/app/ui/client/OpenTournamentEditModalButton';
 
 export default async function TournamentsSetupPage({
   params,
@@ -287,10 +288,15 @@ export default async function TournamentsSetupPage({
                 <div className=" edit-tournament-link flex justify-end gap-3">
                   <Link
                     href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
-                    className=" rounded-md border p-2 "
+                    className="cellular rounded-md border p-2 "
                   >
                     <PencilIcon className="w-5" />
                   </Link>
+                  <div className="hide-on-mobile">
+                    <OpenTournamentEditModalButton userId={params.userId} tournament={tournament}/>
+                  </div>
+
+
                   {tournament.day_has_more_then_one && (
                     <DeleteTournamentButton
                       tournamentId={tournament.id}
