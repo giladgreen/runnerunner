@@ -819,6 +819,9 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 @media only screen and (max-width: 600px) {
+  .config-item {
+    box-shadow: 0 0 20px 5px rgba(244, 244, 244, 0.1); /* Adds a shadow with a slight blur */
+  }
   .mobile-entries-wrapper{
     background: var(--white-darker);
     color: var(--black);
