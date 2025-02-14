@@ -65,7 +65,6 @@ import {
   getAllRSVPs,
   getAllDeletedRSVPs,
 } from '../helpers/dbHelper';
-import assert from 'node:assert';
 
 describe('actions', () => {
   const PHONE = '0587869900';
@@ -356,7 +355,7 @@ describe('actions', () => {
           const newMaxPlayers = 200;
           const newRsvpRequired = false;
           await updateTournament(
-            { id: tournament.id, prevPage: 'prevPage' },
+            { id: tournament.id, prevPage: 'prevPage', userId },
             {} as State,
             getFormData({
               name: newName,
@@ -450,7 +449,7 @@ describe('actions', () => {
           const newCredit = '999';
           //act
           await updatePrizeInfo(
-            { prizeId: prizeInfo.id, prevPage: 'prevPage' },
+            { prizeId: prizeInfo.id, prevPage: 'prevPage', userId },
             {} as State,
             getFormData({ name: newName, extra: newExtra, credit: newCredit }),
           );
@@ -466,6 +465,7 @@ describe('actions', () => {
           await deletePrizeInfo({
             prizeId: prizeInfo.id,
             prevPage: 'prevPage',
+            userId,
           });
 
           const deletedPrizeInfoAfterDelete: PrizeInfoDB[] =
@@ -592,7 +592,7 @@ describe('actions', () => {
             const newNotes = 'some new notes';
             //act
             await updatePlayer(
-              { id: createdPlayer.id, prevPage: 'prevPage' },
+              { id: createdPlayer.id, prevPage: 'prevPage', userId },
               {} as State,
               getFormData({
                 name: newName,
@@ -611,7 +611,7 @@ describe('actions', () => {
             expect(updatedPlayer?.name).toEqual(newName);
 
             // act
-            await deletePlayer({ id: createdPlayer.id, prevPage: '' });
+            await deletePlayer({ id: createdPlayer.id, prevPage: 'prevPage', userId });
 
             const playersAfterDelete: PlayerDB[] = await getAllPlayers();
             expect(playersAfterDelete).toEqual([]);

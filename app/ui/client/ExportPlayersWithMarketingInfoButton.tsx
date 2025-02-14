@@ -14,14 +14,21 @@ export default function ExportPlayersWithMarketingInfoButton({
   );
   return (
     <>
+      <input
+        type="file"
+        id="fileInput"
+        style={{ display: 'none' }}
+        accept=".csv"
+
+      />
       <button
         className=""
         onClick={() => {
           const todayDate = getTodayDate();
           const data = `name, phone number,
 ${allowed_marketing_players.map((player) => {
-  return `${player.name},${player.phone_number}`;
-}).join(`
+            return `${player.name},${player.phone_number}`;
+          }).join(`
 `)}`;
           const filename = `${allowed_marketing_players.length}_allowed_marketing_players_${todayDate}.csv`;
           const blob = new Blob([data], {
@@ -40,14 +47,9 @@ ${allowed_marketing_players.map((player) => {
           document.body.removeChild(link);
         }}
       >
-        <div >לחץ כאן</div>
+        <div>ייצוא רשימת שחקנים שאישרו תוכן שיווקי</div>
       </button>
-      <input
-        type="file"
-        id="fileInput"
-        style={{ display: 'none' }}
-        accept=".csv"
-      />
+
     </>
   );
 }

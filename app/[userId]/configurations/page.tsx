@@ -9,6 +9,14 @@ import React from 'react';
 import ExportPlayersWithMarketingInfoButton from '@/app/ui/client/ExportPlayersWithMarketingInfoButton';
 import Card from '@/app/ui/client/Card';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
+import {
+  ArchiveBoxArrowDownIcon,
+  BanknotesIcon,
+  GiftIcon,
+  PuzzlePieceIcon,
+  UserGroupIcon,
+  BugAntIcon, FlagIcon, ArrowDownOnSquareStackIcon
+} from '@heroicons/react/24/outline';
 
 function TournamentsLink({ userId }: { userId: string }) {
   return (
@@ -17,9 +25,8 @@ function TournamentsLink({ userId }: { userId: string }) {
     >
       <a
         href={`/${userId}/configurations/tournaments`}
-        className="flex h-10 items-center rounded-lg  px-4  font-medium text-white transition-colors  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2  aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
-      >
-        <div >לחץ כאן</div>
+        className="items-center text-section"      >
+        ניהול טורנירים
       </a>
     </div>
   );
@@ -31,9 +38,8 @@ function CalcLink({ userId }: { userId: string }) {
     >
       <a
         href={`/${userId}/configurations/calc`}
-        className="flex h-10 items-center rounded-lg  px-4  font-medium text-white transition-colors  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2  aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
-      >
-        <div >לחץ כאן</div>
+        className="items-center text-section"      >
+        חישוב פרסים במזומן
       </a>
     </div>
   );
@@ -46,9 +52,8 @@ function BugsLink({ userId }: { userId: string }) {
     >
       <a
         href={`/${userId}/configurations/bugs`}
-        className="flex h-10 items-center rounded-lg  px-4  font-medium text-white transition-colors  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2  aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
-      >
-        <div >לחץ כאן</div>
+        className="items-center text-section"      >
+        דיווח על באגים
       </a>
     </div>
   );
@@ -61,9 +66,8 @@ function ChangeLogsLink({ userId }: { userId: string }) {
     >
       <a
         href={`/${userId}/configurations/change-logs`}
-        className="flex h-10 items-center rounded-lg  px-4  font-medium text-white transition-colors  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2  aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
-      >
-        <div >לחץ כאן</div>
+        className="items-center text-section"      >
+        מעקב שינויים
       </a>
     </div>
   );
@@ -72,13 +76,13 @@ function ChangeLogsLink({ userId }: { userId: string }) {
 function PrizesInfoLink({ userId }: { userId: string }) {
   return (
     <div
-      className="config-section-link "
-    >
+      className="config-section-link ">
       <a
         href={`/${userId}/configurations/prizes`}
-        className="flex h-10 items-center rounded-lg  px-4  font-medium text-white transition-colors  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2  aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
+        className="items-center text-section"
+
       >
-        <div >לחץ כאן</div>
+       הגדרות פרסים
       </a>
     </div>
   );
@@ -91,9 +95,8 @@ function FeatureFlagsLink({ userId }: { userId: string }) {
     >
       <a
         href={`/${userId}/configurations/flags`}
-        className="flex h-10 items-center rounded-lg  px-4  font-medium text-white transition-colors  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2  aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
-      >
-        <div >לחץ כאן</div>
+        className="items-center text-section"      >
+        Feature Flags
       </a>
     </div>
   );
@@ -106,9 +109,8 @@ function UserPermissionsLink({ userId }: { userId: string }) {
     >
       <a
         href={`/${userId}/configurations/users`}
-        className="flex h-10 items-center rounded-lg  px-4  font-medium text-white transition-colors  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2  aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
-      >
-        <div >לחץ כאן</div>
+        className="items-center text-section"      >
+        הרשאות משתמשים
       </a>
     </div>
   );
@@ -131,14 +133,7 @@ export default async function ConfigurationPage({
 
   const players = await fetchAllPlayersForExport();
   const { prizesEnabled } = await fetchFeatureFlags();
-  //TODO::: fix export here..
-  // const images = await fetchAllImagesForExport();
-  // const tournaments = await fetchTournamentsByDay();
-  // for (const tournament of tournaments) {
-  //   tournament.playersPlaces = await  fetchFinalTablePlayers(tournament.id);
-  // }
-  // const { chosenPrizes } = await fetchPlayersPrizes();
-  // const prizes = chosenPrizes;
+
 
   return (
     <div className="full-width rtl" style={{ marginBottom: 20 }}>
@@ -154,90 +149,96 @@ export default async function ConfigurationPage({
         className="full-width rtl grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
         style={{ marginBottom: 20 }}
       >
-        <Card
-          title="ייצוא רשימת שחקנים שאישרו תוכן שיווקי"
-          value={
+        <div className="config-item">
+          <div className="text-section ">
             <ExportPlayersWithMarketingInfoButton
               players={players as PlayerDB[]}
             />
-          }
-          type="export"
-          oneLine
-        />
-
+          </div>
+          <div className="config-item-icon-div">
+            <ArchiveBoxArrowDownIcon className="h-5 w-5" />
+          </div>
+        </div>
         {prizesEnabled && (
-          <Card
-            title="הגדרות פרסים"
-            value={<PrizesInfoLink userId={params.userId} />}
-            type="prize"
-            oneLine
-          />
+          <div className="config-item">
+            <div className="text-section ">
+              <PrizesInfoLink userId={params.userId} />
+            </div>
+            <div className="config-item-icon-div">
+              <GiftIcon className="h-5 w-5" />
+            </div>
+          </div>
         )}
 
-        <Card
-          title=" ניהול טורנירים"
-          value={<TournamentsLink userId={params.userId} />}
-          type="tournament"
-          oneLine
-        />
-        <Card
-          title="חישוב פרסים במזומן"
-          value={<CalcLink userId={params.userId} />}
-          type="tournament"
-          oneLine
-        />
-        <Card
-          title="דיווח על באגים"
-          value={<BugsLink userId={params.userId} />}
-          type="tournament"
-          oneLine
-        />
-        <Card
-          title="מעקב שינויים"
-          value={<ChangeLogsLink userId={params.userId} />}
-          type="tournament"
-          oneLine
-        />
-        {isAdmin && (
-          <Card
-            title="הרשאות משתמשים"
-            value={<UserPermissionsLink userId={params.userId} />}
-            type="players"
-            oneLine
-          />
-        )}
+        <div className="config-item">
+          <div className="text-section ">
+            <TournamentsLink userId={params.userId} />
+          </div>
+          <div className="config-item-icon-div">
+            <PuzzlePieceIcon className="h-5 w-5" />
+          </div>
+        </div>
+
+        <div className="config-item">
+          <div className="text-section ">
+            <ChangeLogsLink userId={params.userId} />
+          </div>
+          <div className="config-item-icon-div">
+            <BanknotesIcon className="h-5 w-5" />
+          </div>
+        </div>
+
+        <div className="config-item">
+          <div className="text-section ">
+            <UserPermissionsLink userId={params.userId} />
+          </div>
+          <div className="config-item-icon-div">
+            <UserGroupIcon className="h-5 w-5" />
+          </div>
+        </div>
+
+        <div className="config-item">
+          <div className="text-section ">
+            <CalcLink userId={params.userId} />
+          </div>
+          <div className="config-item-icon-div">
+            <BanknotesIcon className="h-5 w-5" />
+          </div>
+        </div>
+
+        <div className="config-item">
+          <div className="text-section ">
+            <BugsLink userId={params.userId} />
+          </div>
+          <div className="config-item-icon-div">
+            <BugAntIcon className="h-5 w-5" />
+          </div>
+        </div>
 
         {ffEnabled && (
-          <Card
-            title="feature flags"
-            value={<FeatureFlagsLink userId={params.userId} />}
-            type="flags"
-            oneLine
-          />
+          <div className="config-item">
+            <div className="text-section ">
+              <FeatureFlagsLink userId={params.userId} />
+            </div>
+            <div className="config-item-icon-div">
+              <FlagIcon className="h-5 w-5" />
+            </div>
+          </div>
         )}
 
         {importEnabled && (
-          <Card
-            title="ייבוא שחקנים מקובץ CSV"
-            value={
-              <div
-                className="config-section"
-                style={{ width: '100%', fontSize: 17 }}
-              >
-                <div>כל שורה בקובץ צריכה להיות מהצורה:</div>
-                <div style={{ marginBottom: 15 }}>
-                  <b>מספר טלפון, שם מלא, קרדיט, הערות</b>
-                </div>
+          <div className="config-item">
+            <div className="text-section ">
                 <ImportPlayersButton />
-              </div>
-            }
-            type="import"
-            oneLine
-          />
+            </div>
+            <div className="config-item-icon-div">
+              <ArrowDownOnSquareStackIcon className="h-5 w-5" />
+            </div>
+          </div>
         )}
+
+
       </div>
-
-
     </div>
   );
 }

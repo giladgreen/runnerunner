@@ -782,6 +782,42 @@ input[type='number']::-webkit-outer-spin-button {
   text-align: center;
   width: 100%;
 }
+
+.config-item{
+    background: var(--grey-darker);
+    border: 2px solid var(--red);
+    border-radius: 7px;
+    padding: 10px 20px 1px 20px;
+    color: var(--white);
+    font-size: 25px;
+
+    box-shadow: 0 0 20px 10px rgba(244, 244, 244, 0.3); /* Adds a shadow with a slight blur */
+    margin-left: 10px;
+    height: 150px;
+
+    text-align: center;
+    .text-section {
+      height: 86px;
+      text-align: center;
+      align-content: center;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .config-item-icon-div {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+
+      svg {
+        zoom: 1.8;
+      }
+
+    }
+}
+
 @media only screen and (max-width: 600px) {
   .mobile-entries-wrapper{
     background: var(--white-darker);

@@ -13,7 +13,6 @@ import {
 import { PlayerDB, UserDB } from '../..//app/lib/definitions';
 import {
   formatDateToLocal,
-  getCurrentDate,
   getDayOfTheWeek,
   getTime,
   getTodayShortDate,

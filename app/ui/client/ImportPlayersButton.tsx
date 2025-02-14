@@ -11,7 +11,7 @@ export default function ImportPlayersButton() {
   return (
     <>
       <button onClick={() => setShowConfirmation(true)}>
-        <div style={{ zoom: 1.5}}><u>לחץ כאן</u></div>
+        ייבוא שחקנים מקובץ CSV
       </button>
       <input
         type="file"
