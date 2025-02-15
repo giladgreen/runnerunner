@@ -138,7 +138,7 @@ export default function CreateNewPrizesInfoPage({
       <div className="mt-6 flex justify-end gap-4">
         <Link
           href={prevPage}
-          className="my-button-cancel flex h-10 items-center rounded-lg  px-4 font-medium  transition-colors "
+          className="my-button-cancel flex h-10 items-center rounded-lg  px-4 font-medium  transition-colors pointer"
         >
           ביטול
         </Link>

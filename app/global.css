@@ -791,7 +791,7 @@ input[type='number']::-webkit-outer-spin-button {
     color: var(--white);
     font-size: 25px;
 
-    box-shadow: 0 0 20px 10px rgba(244, 244, 244, 0.3); /* Adds a shadow with a slight blur */
+    box-shadow: 0 0 15px 4px rgba(244, 244, 244, 0.3); /* Adds a shadow with a slight blur */
     margin-left: 10px;
     height: 150px;
 

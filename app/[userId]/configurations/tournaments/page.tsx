@@ -5,10 +5,10 @@ import { PencilIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { TRANSLATIONS } from '@/app/lib/definitions';
 import DeleteTournamentButton from '@/app/ui/client/DeleteTournamentButton';
-import { Button } from 'primereact/button';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 import OpenTournamentEditModalButton from '@/app/ui/client/OpenTournamentEditModalButton';
+import OpenCreateTournamentModalButton from '@/app/ui/client/OpenCreateTournamentModalButton';
 
 export default async function TournamentsSetupPage({
   params,
@@ -286,15 +286,9 @@ export default async function TournamentsSetupPage({
               </td>
               <td className="wide-screen whitespace-nowrap py-3 pl-6 pr-3">
                 <div className=" edit-tournament-link flex justify-end gap-3">
-                  <Link
-                    href={`/${params.userId}/configurations/tournaments/${tournament.id}/edit`}
-                    className="cellular rounded-md border p-2 "
-                  >
-                    <PencilIcon className="w-5" />
-                  </Link>
-                  <div className="hide-on-mobile">
-                    <OpenTournamentEditModalButton userId={params.userId} tournament={tournament}/>
-                  </div>
+
+                  <OpenTournamentEditModalButton userId={params.userId} tournament={tournament}/>
+
 
 
                   {tournament.day_has_more_then_one && (
@@ -312,14 +306,12 @@ export default async function TournamentsSetupPage({
       <div
         style={{
           textAlign: 'right',
-          marginTop: 150,
-          marginRight: 50,
+          marginTop: 50,
+          marginRight: 20,
           marginBottom: 20,
         }}
       >
-        <Link href={`/${params.userId}/configurations/tournaments/create`}>
-          <Button className="my-button">צור טורניר חדש</Button>
-        </Link>
+        <OpenCreateTournamentModalButton userId={params.userId}/>
       </div>
     </div>
   );

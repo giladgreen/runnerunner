@@ -129,7 +129,7 @@ export default function UseCreditForm({
     }
 //my-button flex h-10 items-center regular-button
     return (
-      <button className="my-button-cancel flex h-10 items-center " onClick={hide} style={{ marginTop: -52, marginRight: 0 }}>
+      <button className="my-button-cancel flex h-10 items-center pointer" onClick={hide} style={{ marginTop: -52, marginRight: 0 }}>
         ביטול
       </button>
     );

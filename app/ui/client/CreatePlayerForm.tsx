@@ -229,7 +229,7 @@ export default function CreatePlayerForm({
         <div className="mt-6 flex justify-end gap-4">
           <div
             onClick={close}
-            className="my-button-cancel pointer flex h-10 items-center rounded-lg  px-4  font-medium "
+            className="my-button-cancel pointer flex h-10 items-center rounded-lg  px-4  font-medium pointer"
           >
             ביטול
           </div>

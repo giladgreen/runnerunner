@@ -8,6 +8,7 @@
   height: 10vh;
 }
 
+.CreateTournamentFormWrapper,
 .EditTournamentFormWrapper,
 .UseCreditFormWrapper,
 .SetPrizeFormWrapper,
@@ -28,6 +29,7 @@
   display: flex;
   justify-content: center;
 
+  .CreateTournamentForm,
   .EditTournamentForm,
   .UseCreditForm,
   .SetPositionForm,
@@ -47,6 +49,7 @@
     padding-bottom: 25px;
     width: 40vw;
   }
+  .CreateTournamentForm,
   .EditTournamentForm{
     padding-top: 0;
     /*font-size: 63%;*/

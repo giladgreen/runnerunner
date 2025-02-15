@@ -11,9 +11,11 @@ import SpinnerButton from '@/app/ui/client/SpinnerButton';
 export default function CreateTournamentForm({
   userId,
   prevPage,
+  hide
 }: {
   userId: string;
   prevPage: string;
+  hide?: ()=>void;
 }) {
   const initialState = { message: null, errors: {} };
 
@@ -29,7 +31,7 @@ export default function CreateTournamentForm({
   const [day, setDay] = useState('Sunday');
 
   return (
-    <form action={dispatch}>
+    <form action={dispatch} className={hide ? 'CreateTournamentForm' : undefined}>
       <div
         className="rtl rounded-md  p-4 md:p-6 align-text-right"
 
@@ -410,11 +412,11 @@ export default function CreateTournamentForm({
                 min={0}
                 defaultValue={100}
                 placeholder="כמות מקסימלית של שחקנים"
-                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
+                className="peer block w-full rounded-md border  py-2 pl-10  outline-2 tournament-edit-input"
                 aria-describedby="max_players-error"
               />
             </div>
-            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 tournament-edit-input" />
+            <PencilIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 " />
 
             <div id="max_players-error" aria-live="polite" aria-atomic="true">
               {state?.errors?.max_players &&
@@ -443,13 +445,25 @@ export default function CreateTournamentForm({
       </div>
 
       <div className="mt-6 flex justify-end gap-4">
-        <Link
+        {hide ? (<div>
+          <button
+            className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors pointer"
+            onClick={hide}
+          >
+            ביטול
+          </button>
+        </div>) : (<Link
           href={`/${userId}/configurations/tournaments`}
-          className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors "
+          className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors pointer"
         >
           ביטול
-        </Link>
-        <SpinnerButton text="צור טורניר" />
+        </Link>)}
+
+        <SpinnerButton text="צור טורניר" onClick={()=>{
+          if (hide) {
+            setTimeout(hide, 1000);
+          }
+        }}/>
       </div>
     </form>
   );

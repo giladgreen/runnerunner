@@ -222,7 +222,7 @@ export default function EditPlayerForm({
         <div className="mt-6 flex justify-end gap-4">
           <Link
             href={`/${userId}/current_tournament`}
-            className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium "
+            className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium pointer"
           >
             ביטול
           </Link>

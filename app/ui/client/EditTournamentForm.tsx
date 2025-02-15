@@ -377,14 +377,14 @@ export default function EditTournamentForm({
           hide ? (
               <div
               onClick={hide}
-                className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors "
+                className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors pointer"
               >
                 ביטול
               </div>
             ) :
         <Link
           href={`/${userId}/configurations/tournaments`}
-          className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors "
+          className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors pointer "
         >
           ביטול
         </Link>
