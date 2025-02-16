@@ -7,7 +7,6 @@ import ImportPlayersButton from '@/app/ui/client/ImportPlayersButton';
 import { PlayerDB } from '@/app/lib/definitions';
 import React from 'react';
 import ExportPlayersWithMarketingInfoButton from '@/app/ui/client/ExportPlayersWithMarketingInfoButton';
-import Card from '@/app/ui/client/Card';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 import {
   ArchiveBoxArrowDownIcon,
@@ -17,104 +16,6 @@ import {
   UserGroupIcon,
   BugAntIcon, FlagIcon, ArrowDownOnSquareStackIcon
 } from '@heroicons/react/24/outline';
-
-function TournamentsLink({ userId }: { userId: string }) {
-  return (
-    <div
-      className="config-section-link  "
-    >
-      <a
-        href={`/${userId}/configurations/tournaments`}
-        className="items-center text-section"      >
-        ניהול טורנירים
-      </a>
-    </div>
-  );
-}
-function CalcLink({ userId }: { userId: string }) {
-  return (
-    <div
-      className="config-section-link  "
-    >
-      <a
-        href={`/${userId}/configurations/calc`}
-        className="items-center text-section"      >
-        חישוב פרסים במזומן
-      </a>
-    </div>
-  );
-}
-
-function BugsLink({ userId }: { userId: string }) {
-  return (
-    <div
-      className="config-section-link  "
-    >
-      <a
-        href={`/${userId}/configurations/bugs`}
-        className="items-center text-section"      >
-        דיווח על באגים
-      </a>
-    </div>
-  );
-}
-
-function ChangeLogsLink({ userId }: { userId: string }) {
-  return (
-    <div
-      className="config-section-link  "
-    >
-      <a
-        href={`/${userId}/configurations/change-logs`}
-        className="items-center text-section"      >
-        מעקב שינויים
-      </a>
-    </div>
-  );
-}
-
-function PrizesInfoLink({ userId }: { userId: string }) {
-  return (
-    <div
-      className="config-section-link ">
-      <a
-        href={`/${userId}/configurations/prizes`}
-        className="items-center text-section"
-
-      >
-       הגדרות פרסים
-      </a>
-    </div>
-  );
-}
-
-function FeatureFlagsLink({ userId }: { userId: string }) {
-  return (
-    <div
-      className="config-section-link "
-    >
-      <a
-        href={`/${userId}/configurations/flags`}
-        className="items-center text-section"      >
-        Feature Flags
-      </a>
-    </div>
-  );
-}
-
-function UserPermissionsLink({ userId }: { userId: string }) {
-  return (
-    <div
-      className="config-section-link "
-    >
-      <a
-        href={`/${userId}/configurations/users`}
-        className="items-center text-section"      >
-        הרשאות משתמשים
-      </a>
-    </div>
-  );
-}
 
 
 export default async function ConfigurationPage({
@@ -159,85 +60,117 @@ export default async function ConfigurationPage({
             <ArchiveBoxArrowDownIcon className="h-5 w-5" />
           </div>
         </div>
+
+
         {prizesEnabled && (
+        <a
+          href={`/${params.userId}/configurations/prizes`}
+          className="text-section pointer items-center"
+        >
           <div className="config-item">
-            <div className="text-section ">
-              <PrizesInfoLink userId={params.userId} />
+            <div className="text-section config-section-link">
+              הגדרות פרסים
             </div>
             <div className="config-item-icon-div">
               <GiftIcon className="h-5 w-5" />
             </div>
           </div>
+        </a>
         )}
-
-        <div className="config-item">
-          <div className="text-section ">
-            <TournamentsLink userId={params.userId} />
-          </div>
-          <div className="config-item-icon-div">
-            <PuzzlePieceIcon className="h-5 w-5" />
-          </div>
-        </div>
-
-        <div className="config-item">
-          <div className="text-section ">
-            <ChangeLogsLink userId={params.userId} />
-          </div>
-          <div className="config-item-icon-div">
-            <BanknotesIcon className="h-5 w-5" />
-          </div>
-        </div>
-
-        <div className="config-item">
-          <div className="text-section ">
-            <UserPermissionsLink userId={params.userId} />
-          </div>
-          <div className="config-item-icon-div">
-            <UserGroupIcon className="h-5 w-5" />
-          </div>
-        </div>
-
-        <div className="config-item">
-          <div className="text-section ">
-            <CalcLink userId={params.userId} />
-          </div>
-          <div className="config-item-icon-div">
-            <BanknotesIcon className="h-5 w-5" />
-          </div>
-        </div>
-
-        <div className="config-item">
-          <div className="text-section ">
-            <BugsLink userId={params.userId} />
-          </div>
-          <div className="config-item-icon-div">
-            <BugAntIcon className="h-5 w-5" />
-          </div>
-        </div>
-
-        {ffEnabled && (
+        <a
+          href={`/${params.userId}/configurations/tournaments`}
+          className="text-section pointer items-center"
+        >
           <div className="config-item">
-            <div className="text-section ">
-              <FeatureFlagsLink userId={params.userId} />
+            <div className="text-section config-section-link">
+              ניהול טורנירים
             </div>
             <div className="config-item-icon-div">
-              <FlagIcon className="h-5 w-5" />
+              <PuzzlePieceIcon className="h-5 w-5" />
             </div>
           </div>
+        </a>
+
+        <a
+          href={`/${params.userId}/configurations/change-logs`}
+          className="text-section pointer items-center"
+        >
+          <div className="config-item">
+            <div className="text-section config-section-link">
+              מעקב שינויים
+            </div>
+            <div className="config-item-icon-div">
+              <BanknotesIcon className="h-5 w-5" />
+            </div>
+          </div>
+        </a>
+        <a
+          href={`/${params.userId}/configurations/users`}
+          className="text-section pointer items-center"
+        >
+          <div className="config-item">
+            <div className="text-section config-section-link">
+              הרשאות משתמשים
+            </div>
+            <div className="config-item-icon-div">
+              <UserGroupIcon className="h-5 w-5" />
+            </div>
+          </div>
+        </a>
+        <a
+          href={`/${params.userId}/configurations/calc`}
+          className="text-section pointer items-center"
+        >
+          <div className="config-item">
+            <div className="text-section config-section-link">
+              חישוב פרסים במזומן
+            </div>
+            <div className="config-item-icon-div">
+              <BanknotesIcon className="h-5 w-5" />
+            </div>
+          </div>
+        </a>
+        <a
+          href={`/${params.userId}/configurations/bugs`}
+          className="text-section pointer items-center"
+        >
+          <div className="config-item">
+            <div className="text-section config-section-link">
+              דיווח על באגים
+            </div>
+            <div className="config-item-icon-div">
+              <BugAntIcon className="h-5 w-5" />
+            </div>
+          </div>
+        </a>
+
+        {ffEnabled && (
+          <a
+            href={`/${params.userId}/configurations/flags`}
+            className="text-section pointer items-center"
+          >
+            <div className="config-item">
+              <div className="text-section config-section-link">
+                Feature Flags
+              </div>
+              <div className="config-item-icon-div">
+                <FlagIcon className="h-5 w-5" />
+              </div>
+            </div>
+          </a>
         )}
+
 
         {importEnabled && (
           <div className="config-item">
             <div className="text-section ">
-                <ImportPlayersButton />
+              <ImportPlayersButton />
             </div>
             <div className="config-item-icon-div">
               <ArrowDownOnSquareStackIcon className="h-5 w-5" />
             </div>
           </div>
         )}
-
-
       </div>
     </div>
   );
