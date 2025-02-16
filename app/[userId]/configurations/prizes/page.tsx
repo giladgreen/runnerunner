@@ -1,12 +1,12 @@
+import React from 'react';
 import { lusitana } from '@/app/ui/fonts';
 import { fetchPrizesInfo, fetchUserById } from '@/app/lib/data';
-import React from 'react';
-import Link from 'next/link';
-import { Button } from 'primereact/button';
+
 import Breadcrumbs from '@/app/ui/client/Breadcrumbs';
 import NoPermissionsPage from '@/app/ui/client/NoPermissionsPage';
 
 import PrizesTable from '@/app/ui/client/PrizesTable';
+import OpenCreatePrizeModalButton from '@/app/ui/client/OpenCreatePrizeModalButton';
 
 export default async function PrizesInfoPage({
   params,
@@ -52,10 +52,8 @@ export default async function PrizesInfoPage({
         </h1>
       </div>
       <div>
-        <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-          <Link href={`/${params.userId}/configurations/prizes/create`}>
-            <Button className="my-button">הכנס פרטי פרס חדש</Button>
-          </Link>
+        <div className="">
+          <OpenCreatePrizeModalButton prizes={prizes}/>
         </div>
       </div>
       {prizesCount > 0 && (

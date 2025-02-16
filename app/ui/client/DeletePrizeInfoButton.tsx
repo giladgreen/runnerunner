@@ -3,6 +3,8 @@ import { PrizeInfoDB } from '@/app/lib/definitions';
 import { deletePrizeInfo } from '@/app/lib/actions';
 import React, { useState } from 'react';
 import AreYouSure from '@/app/ui/client/AreYouSure';
+import { Tooltip } from 'flowbite-react';
+import { Button } from 'primereact/button';
 
 export default function DeletePrizeInfoButton({
   prize,
@@ -20,20 +22,23 @@ export default function DeletePrizeInfoButton({
   });
   const [showConfirmation, setShowConfirmation] = useState(false);
 
+
   return (
     <div>
-      <div
-        className="pointer"
+      <button
+        className="pointer rounded-md  p-2 "
         onClick={() => {
           setShowConfirmation(true);
         }}
       >
-        <button
-          className="my-button delete-prize-button"
-        >
-          {text}
-        </button>
-      </div>
+        <Tooltip content="מחק פרס" color="primary">
+
+          <Button className="my-button delete-prize-button">
+            {text}
+            </Button>
+
+        </Tooltip>
+      </button>
       {showConfirmation && (
         <AreYouSure
           onConfirm={() => {

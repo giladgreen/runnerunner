@@ -257,7 +257,25 @@ body{
   display: flex;
   max-height: 40px;
 }
+
+.prizes-table{
+
+}
 @media only screen and (max-width: 600px) {
+  .prizes-table{
+    /*font-size: 15px;*/
+    table{
+      td{
+        padding: 1px;
+      }
+    }
+
+    .edit_prize_button {
+      margin-right: -30px;
+      font-size: 11px;
+    }
+  }
+
   /* Scrollbar track */
   ::-webkit-scrollbar {
     width: 1px;

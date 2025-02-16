@@ -8,6 +8,8 @@
   height: 10vh;
 }
 
+.CreatePrizeFormWrapper,
+.EditPrizeInfoFormWrapper,
 .CreateTournamentFormWrapper,
 .EditTournamentFormWrapper,
 .UseCreditFormWrapper,
@@ -29,6 +31,8 @@
   display: flex;
   justify-content: center;
 
+  .CreatePrizeForm,
+  .EditPrizeInfoForm,
   .CreateTournamentForm,
   .EditTournamentForm,
   .UseCreditForm,
@@ -59,6 +63,14 @@
   .UseCreditForm{
     height: 87vh;
   }
+  .CreatePrizeForm {
+    height: 50vh;
+  }
+
+  .EditPrizeInfoForm {
+    height: 50vh;
+  }
+
   .SetPositionForm {
     height: 40vh;
   }
@@ -135,6 +147,8 @@
 }
 
 @media only screen and (max-width: 600px) {
+  .CreatePrizeFormWrapper,
+  .EditPrizeInfoFormWrapper,
   .EditTournamentFormWrapper,
   .UseCreditFormWrapper,
   .SetPrizeFormWrapper,
@@ -145,6 +159,8 @@
   .CreatePlayerFormWrapper,
   .EditPlayerFormWrapper{
     padding-top: 7vh;
+    .CreatePrizeForm,
+    .EditPrizeInfoForm,
     .EditTournamentForm,
     .UseCreditForm,
     .SetPositionForm,

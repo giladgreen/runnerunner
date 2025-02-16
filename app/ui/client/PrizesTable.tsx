@@ -4,9 +4,9 @@ import { formatCurrency } from '@/app/lib/utils';
 import { PrizeInfoDB } from '@/app/lib/definitions';
 import React, { useEffect } from 'react';
 import { formatDateToLocalWithTime } from '@/app/lib/serverDateUtils';
-import { Button } from 'primereact/button';
 import DeletePrizeInfoButton from '@/app/ui/client/DeletePrizeInfoButton';
 import Link from 'next/link';
+import OpenEditPrizeModalButton from '@/app/ui/client/OpenEditPrizeModalButton';
 
 export default function PrizesTable({
   prizes,
@@ -38,10 +38,10 @@ export default function PrizesTable({
     });
 
     setOrderedPrizes(temp);
-  }, [orderBy]);
+  }, [orderBy, prizes]);
 
   return (
-    <table className="rtl md:table">
+    <table className="rtl md:table prizes-table">
       <thead className="rtl rounded-lg text-left  font-normal">
         <tr>
           <th
@@ -116,18 +116,13 @@ export default function PrizesTable({
               {formatCurrency(prize.credit)}
             </td>
             <td
-              className="align-text-right smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3"
+              className="align-text-right smaller-on-mobile-smaller whitespace-nowrap py-3 pl-6 pr-3"
 
             >
               {formatDateToLocalWithTime(prize.created_at)}
             </td>
-            <td className="smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
-              <Link
-                className="wide-screen edit-prize-link"
-                href={`/${userId}/configurations/prizes/${prize.id}/edit`}
-              >
-                <Button className="my-button">עריכה</Button>
-              </Link>
+            <td className=" whitespace-nowrap py-3 pl-6 pr-3">
+              <OpenEditPrizeModalButton prize={prize} prizes={prizes} userId={userId} />
             </td>
             <td className="wide-screen smaller-on-mobile whitespace-nowrap py-3 pl-6 pr-3">
               <DeletePrizeInfoButton prize={prize} userId={userId} />

@@ -41,7 +41,7 @@ export default async function PrizesPage({
         className="link-color"
         style={{ marginTop: -15 }}
       >
-        <u>הגדרות פרסים</u>
+        <u>עבור לעמוד הגדרות פרסים</u>
       </a>
       <div style={{ marginTop: 30 }}>
         <PlayersPrizesPage

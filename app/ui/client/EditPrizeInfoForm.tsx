@@ -13,11 +13,15 @@ import DeletePrizeInfoButton from '@/app/ui/client/DeletePrizeInfoButton';
 export default function EditPrizeInfoForm({
   userId,
   prize,
+  prizes,
   prevPage,
+  hide,
 }: {
+  prizes: PrizeInfoDB[];
   prize: PrizeInfoDB;
   prevPage: string;
   userId: string;
+  hide?: ()=>void;
 }) {
 
   const initialState = { message: null, errors: {} };
@@ -27,20 +31,24 @@ export default function EditPrizeInfoForm({
     userId,
   });
 
+  const [name,setName] = React.useState(prize.name);
+  const [extra,setExtra] = React.useState(prize.extra);
+  const [credit,setCredit] = React.useState(prize.credit);
+
   // @ts-ignore
   const [state, dispatch] = useFormState(
     // @ts-ignore
     updatePrizeInfoWithId,
     initialState,
   );
-
+  const { pending } = useFormStatus();
   if (!prize){
     return 'פרס לא נמצא';
   }
 
   return (
     <div className="rtl">
-      <form action={dispatch}>
+      <form action={dispatch} className={hide? 'EditPrizeInfoForm' : undefined}>
         <div  className="rtl  rounded-md  p-4 md:p-6">
           {/* prize name */}
           <div className="mb-4">
@@ -52,7 +60,8 @@ export default function EditPrizeInfoForm({
                 <input
                   id="name"
                   name="name"
-                  defaultValue={prize.name}
+                  value={name}
+                  onChange={(e)=>setName(e.target.value)}
                   placeholder="הכנס פרס"
                   className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                   aria-describedby="name-error"
@@ -80,7 +89,8 @@ export default function EditPrizeInfoForm({
                 <input
                   id="extra"
                   name="extra"
-                  defaultValue={prize.extra}
+                  value={extra}
+                  onChange={(e)=>setExtra(e.target.value)}
                   placeholder="מידע נוסף"
                   className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                   aria-describedby="extra-error"
@@ -109,7 +119,8 @@ export default function EditPrizeInfoForm({
                   id="credit"
                   name="credit"
                   type="number"
-                  defaultValue={prize.credit}
+                  value={credit}
+                  onChange={(e)=>setCredit(Number(e.target.value))}
                   placeholder="שווי קרדיט"
                   className="peer block w-full rounded-md border  py-2 pl-10  outline-2 "
                   aria-describedby="extra-error"
@@ -129,16 +140,44 @@ export default function EditPrizeInfoForm({
         </div>
 
         <div className="mt-6 flex justify-end gap-4">
-          <Link
-            href={prevPage}
-            className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors pointer"
-          >
-            ביטול
-          </Link>
-          <UpdatePrizeButton />
+          {
+            hide ? (  <div
+              onClick={hide}
+              className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors pointer"
+            >
+              ביטול
+            </div>) : (  <Link
+              href={prevPage}
+              className="my-button-cancel flex h-10 items-center rounded-lg  px-4  font-medium  transition-colors pointer"
+            >
+              ביטול
+            </Link>)
+          }
+
+          <Button type="submit"
+                  onClick={()=>{
+                    if (pending){
+                      return;
+                    }
+                    if (prizes){
+                      const prizeToUpdate = prizes.find(p=>p.id !== prize.id);
+                      if (prizeToUpdate) {
+                        prizeToUpdate.name = name;
+                        prizeToUpdate.extra = extra;
+                        prizeToUpdate.credit = credit;
+                      }
+                    }
+                    if (hide){
+                      setTimeout(hide, 500)
+                    }}} >
+
+
+            {pending ? <SpinningChip color="var(--white)"  size={20}/> : 'עדכון'}
+          </Button>
+
         </div>
       </form>
-      <div className="cellular" style={{ marginTop: 50, marginRight: 30 }}>
+      <div className="cellular" style={{ marginTop: -50, marginRight: 35 }}>
         <DeletePrizeInfoButton
           prize={prize}
           userId={userId}
@@ -149,11 +188,3 @@ export default function EditPrizeInfoForm({
   );
 }
 
-function UpdatePrizeButton() {
-  const { pending } = useFormStatus();
-
-  if (pending) {
-    return <Button type="submit"><SpinningChip color="var(--white)"  size={20}/></Button>;
-  }
-  return <Button type="submit">עדכון</Button>;
-}

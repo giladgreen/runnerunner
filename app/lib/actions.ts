@@ -1455,7 +1455,14 @@ export async function createPrizeInfo(
   const name = (formData.get('name') as string) ?? '';
   const extra = (formData.get('extra') as string) ?? '';
   const credit = (formData.get('credit') as string) ?? '';
+console.log(`
 
+
+name: ${name}
+prevPage: ${prevPage}
+
+
+`)
   if (!name || name.trim().length < 1) {
     return {
       errors: {
