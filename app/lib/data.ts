@@ -907,17 +907,23 @@ export async function fetchFilteredPlayers(
         ({ phone_number }) => phone_number === player.phone_number,
       );
       player.historyCount = historyCount?.count ?? 0;
-      const rsvps = allRsvps.filter(
+
+      console.log('#### player:', player)
+      console.log('#### allRsvps:', allRsvps)
+
+      const rsvps = allRsvps ? allRsvps.filter(
         ({ phone_number }) => phone_number === player.phone_number,
-      );
-      player.rsvps = rsvps.map(({ date, tournament_id }) => ({
+      ) : [];
+      console.log('#### rsvps:', rsvps);
+
+      player.rsvps = rsvps ? rsvps.map(({ date, tournament_id }) => ({
         date,
         tournamentId: tournament_id,
-      }));
+      })) : [];
 
-      player.rsvpForToday = rsvps.find(
+      player.rsvpForToday = rsvps ? rsvps.find(
         ({ date }) => date === todayDate,
-      )?.tournament_id;
+      )?.tournament_id : undefined;
     });
     methodEnd('fetchFilteredPlayers');
     return players;
@@ -1254,12 +1260,16 @@ export async function fetchPlayerByUserId(userId: string) {
   try {
     const user = await getUserById(userId);
     if (!user) {
+      console.log('>>>>> User not found');
       return null;
     }
 
     const playerPhoneNumber = user.phone_number;
     const player = await getPlayerByPhoneNumber(playerPhoneNumber);
-
+    if (!player){
+      console.log('>>>>> player not found');
+      return null;
+    }
     const rsvps = (await sql<RSVPDB>`SELECT * FROM rsvp;`).rows.filter(
       ({ phone_number }) => phone_number === player.phone_number,
     );

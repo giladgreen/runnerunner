@@ -34,7 +34,7 @@ export default async function PrizesInfoEditPage({
           },
         ]}
       />
-    <EditPrizeInfoForm prize={prize} prevPage={prevPage} userId={userId} />
+    <EditPrizeInfoForm prize={prize} prizes={prizes} prevPage={prevPage} userId={userId} />
 
     </div>
   );
