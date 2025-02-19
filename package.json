@@ -16,7 +16,7 @@
     "start": "next start ",
     "test": "node ./scripts/test-pre-seed.js && jest tests/unit",
     "test:coverage": "node ./scripts/test-pre-seed.js && jest tests/unit --coverage",
-    "release": "standard-version"
+    "release": "npx standard-version --skip.tag --skip.changelog"
   },
   "dependencies": {
     "@babel/preset-env": "^7.24.7",
