@@ -7,8 +7,6 @@ export default function CssChange() {
     console.log('### changing colors')
     // @ts-ignore
     import('@/app/gilad.css');
-  } else{
-    console.log('>>>> using basic color schema')
   }
   return (
     <div></div>

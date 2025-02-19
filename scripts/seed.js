@@ -145,7 +145,8 @@ async function seedUsers(client) {
         is_worker BOOLEAN DEFAULT FALSE,
         refresh_enabled BOOLEAN DEFAULT FALSE,
         created_at timestamp NOT NULL DEFAULT now(),
-        last_logged_in_at timestamp NOT NULL DEFAULT now()
+        last_logged_in_at timestamp NOT NULL DEFAULT now(),
+        logged_in_count INT DEFAULT 0, 
       );
     `;
 
@@ -645,6 +646,8 @@ async function seed() {
   await seedPrizes(client);
   await seedImages(client);
   await seedFF(client);
+
+
 
   await client.end();
 console.log('>> after client.end')

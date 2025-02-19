@@ -13,6 +13,7 @@ export type UserDB = {
   is_player: boolean;
   created_at: string;
   last_logged_in_at: string;
+  logged_in_count: number;
 };
 
 export type ImageDB = {

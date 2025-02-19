@@ -36,7 +36,6 @@ export default async function UsersPage({
     );
   }
 
-
   return (
     <div className="w-full">
       <Breadcrumbs
@@ -64,94 +63,98 @@ export default async function UsersPage({
         </h1>
       </div>
 
-      <div className="rtl mt-4 flex  justify-between gap-2 md:mt-8 users-config">
+      <div className="rtl users-config mt-4  flex justify-between gap-2 md:mt-8">
         <table className="md:table">
           <thead className="rounded-lg text-left  font-normal">
-          <tr>
-            <th
+            <tr>
+              <th
                 scope="col"
-                className="px-4 py-5 font-medium sm:pl-6 user-name-column"
-            >
-              שם
-            </th>
-            <th
+                className="user-name-column px-4 py-5 font-medium sm:pl-6"
+              >
+                שם
+              </th>
+              <th
                 scope="col"
                 className="thin-column px-4 py-5 font-medium sm:pl-6  "
-            >
-              מספר טלפון
-            </th>
+              >
+                מספר טלפון
+              </th>
 
-            <th
-                scope="col"
-                className="px-4 py-5 font-medium  "
-            >
-              אדמין
-            </th>
-            <th
-                scope="col"
-                className="px-4 py-5 font-medium  "
-            >
-              מתפעל
-            </th>
+              <th scope="col" className="px-4 py-5 font-medium  ">
+                אדמין
+              </th>
+              <th scope="col" className="px-4 py-5 font-medium  ">
+                מתפעל
+              </th>
 
-            <th
+              <th
                 scope="col"
-                className="thin-column px-3 py-5 font-medium hide-on-mobile"
-            ></th>
-            <th
+                className="thin-column hide-on-mobile px-3 py-5 font-medium"
+              ></th>
+              <th
                 scope="col"
-                className="thin-column px-4 py-5 font-medium sm:pl-6  hide-on-mobile"
-            >
-              נראה לאחרונה
-            </th>
-          </tr>
+                className="thin-column hide-on-mobile px-4 py-5 font-medium  sm:pl-6"
+              >
+                נראה לאחרונה
+              </th>
+              <th
+                scope="col"
+                className="thin-column hide-on-mobile px-4 py-5 font-medium  sm:pl-6"
+              ></th>
+            </tr>
           </thead>
           <tbody className="rtl ">
-          {users?.map((user) => (
-            <>
-              <tr
-                    key={user.id}
-                    className="  w-full border-b py-3  last-of-type:border-none  "
+            {users?.map((user) => (
+              <>
+                <tr
+                  key={user.id}
+                  className="  w-full border-b py-3  last-of-type:border-none  "
                 >
-                  <td
-                      className="whitespace-nowrap py-3 pl-6 pr-3 user-name-column "
-                  >
+                  <td className="user-name-column whitespace-nowrap py-3 pl-6 pr-3 ">
                     {user.name}
                   </td>
-                  <td
-                      className="thin-column whitespace-nowrap py-3 pl-6 pr-3"
-
-                  >
-                    {confidNumbers.find( num => num === user.phone_number) ? '************' : user.phone_number}
+                  <td className="thin-column whitespace-nowrap py-3 pl-6 pr-3">
+                    {confidNumbers.find((num) => num === user.phone_number)
+                      ? '************'
+                      : user.phone_number}
                   </td>
 
-                  <td
-                      className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3  "
-                  >
-                    <UpdateAdminUser user={user} userId={params.userId}/>
+                  <td className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3  ">
+                    <UpdateAdminUser user={user} userId={params.userId} />
                   </td>
-                  <td
-                      className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3  "
-                  >
-                    <UpdateWorkerUser user={user} userId={params.userId}/>
+                  <td className="thin-column whitespace-nowrap px-4 py-3 pl-6 pr-3  ">
+                    <UpdateWorkerUser user={user} userId={params.userId} />
                   </td>
 
-                  <td
-                      className="thin-column whitespace-nowrap py-3 pl-6 pr-3  hide-on-mobile"
-                  >
-                    <DeleteUserButton user={user} userId={params.userId}/>
+                  <td className="thin-column hide-on-mobile whitespace-nowrap py-3 pl-6  pr-3">
+                    <DeleteUserButton user={user} userId={params.userId} />
                   </td>
                   <td
-                      className="thin-column whitespace-nowrap py-3 pl-6 pr-3 hide-on-mobile "
-                      style={{minWidth: '350px'}}
+                    className="thin-column hide-on-mobile whitespace-nowrap py-3 pl-6 pr-3 "
+                    style={{ minWidth: '350px' }}
                   >
-                    <Tooltip placement={'left'} content={formatDateToLocalWithTime(user.last_logged_in_at)} color="primary">
-                    {formatTimePassedSince(user.last_logged_in_at)}
+                    <Tooltip
+                      placement={'left'}
+                      content={formatDateToLocalWithTime(
+                        user.last_logged_in_at,
+                      )}
+                      color="primary"
+                    >
+                      {formatTimePassedSince(user.last_logged_in_at)}
+                    </Tooltip>
+                  </td>
+                  <td className="thin-column hide-on-mobile whitespace-nowrap py-3 pl-6  pr-3">
+                    <Tooltip
+                      placement={'left'}
+                      content={user.logged_in_count}
+                      color="primary"
+                    >
+                     <span style={{ color: 'var(--black)', padding: '0 15px 0 0'}}> {user.logged_in_count > 0 ? user.logged_in_count : ''}</span>
                     </Tooltip>
                   </td>
                 </tr>
-            </>
-          ))}
+              </>
+            ))}
           </tbody>
         </table>
       </div>
@@ -159,7 +162,7 @@ export default async function UsersPage({
   );
 }
 
-function UpdateAdminUser({user, userId}: { user: UserDB; userId: string }) {
+function UpdateAdminUser({ user, userId }: { user: UserDB; userId: string }) {
   const updateIsUserAdminWithId = updateIsUserAdmin.bind(null, {
     id: user.id,
     prevPage: `/${userId}/configurations/users`,
