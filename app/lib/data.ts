@@ -473,16 +473,23 @@ async function fetchXPlayers(x: string, getXPlayers: () => PlayerDB[]) {
   methodStart();
   noStore();
   try {
-    const [players, todayHistoryUnfiltered, rsvp] = await Promise.all([
+    const [players, todayHistoryUnfiltered, rsvp, allUsers] = await Promise.all([
       getXPlayers(),
       getTodayHistory(),
       getAllRsvps(),
+      getAllUsers()
     ]);
     const todayHistory = todayHistoryUnfiltered.filter(
       ({ type }) => type != 'prize' && type != 'credit_to_other',
     );
 
     const result = await fetchTopPlayers(players, rsvp, todayHistory);
+    result.forEach((player) => {
+      const user = allUsers.find(
+        ({ phone_number }) => phone_number === player.phone_number,
+      );
+      player.hasUser = Boolean(user);
+    });
     methodEnd(x);
     return result;
   } catch (e) {
